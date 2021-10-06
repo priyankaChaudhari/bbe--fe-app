@@ -3,41 +3,38 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { components } from 'react-select';
+
 import $ from 'jquery';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
-
-import AdPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceView/AdPerformanceChart';
-
-import {
-  WhiteCard,
-  PageLoader,
-  DropDownIndicator,
-  CustomDateModal,
-} from '../../../../common';
-
-import {
-  dateOptions,
-  SponsoredAdTypeOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
 
 import SponsoredFilter from './SponsoredFilter';
 import SponsoredAdMetric from './SponsoredAdMetrics';
-
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-
+import SponsoredKeyContribution from './SponsoredKeyContribution';
+import AdPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceView/AdPerformanceChart';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import {
   getManagersList,
   getAdManagerAdminGraphData,
   getKeyContributionData,
 } from '../../../../api';
-import SponsoredKeyContribution from './SponsoredKeyContribution';
+import {
+  WhiteCard,
+  PageLoader,
+  DropDownIndicator,
+  CustomDateModal,
+} from '../../../../common';
+import {
+  dateOptions,
+  SponsoredAdTypeOptions,
+  noGraphDataMessage,
+} from '../../../../constants/CompanyPerformanceConstants';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 
@@ -167,7 +164,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     if (response.current && response.current.length) {
       response.current.forEach((item, index) => {
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
-        // let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
         if (response.previous && index < response.previous.length) {
           tempData[index].date = currentReportDate;
@@ -502,15 +498,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       setAdFilters({ daily: false, weekly: true, month: true });
       setAdGroupBy('weekly');
     }
-    // else if (diffDays > 60 && diffDays <= 180) {
-    //   temp = 'weekly';
-    //   setAdFilters({ daily: false, weekly: true, month: true });
-    //   setAdGroupBy('weekly');
-    // } else if (diffDays > 180) {
-    //   temp = 'weekly';
-    //   setAdFilters({ daily: false, weekly: true, month: true });
-    //   setAdGroupBy('weekly');
-    // }
 
     if (dailyFactFlag === 'custom') {
       sd = `${startDate.getDate()}-${

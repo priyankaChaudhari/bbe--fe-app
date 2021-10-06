@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { WhiteCheckMark, CheckboxCheck } from '../theme/images/index';
+
+import { WhiteCheckMark, CheckboxCheck } from '../theme/images';
 
 const CheckBoxList = styled.div`
   &.reassign-brand {

@@ -119,6 +119,7 @@ const TableMobileViewWrapper = styled.div`
     max-width: 270px;
     min-height: 20px;
     margin-top: 5px;
+    text-transform: capitalize;
   }
   .CompanyId {
     font-size: ${Theme.extraNormal};

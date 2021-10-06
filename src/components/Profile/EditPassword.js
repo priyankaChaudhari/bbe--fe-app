@@ -1,16 +1,15 @@
-/* eslint-disable import/no-cycle */
 import React, { useState } from 'react';
 
-import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
 import { FormField, Button, ErrorMsg, PageLoader } from '../../common';
-import { userDetails } from '../../constants/FieldConstants';
-import { updatePassword } from '../../api/index';
-import { CloseEyeIcon, smallEyeIcon } from '../../theme/images/index';
+import { userDetails } from '../../constants';
+import { updatePassword } from '../../api';
+import { CloseEyeIcon, smallEyeIcon } from '../../theme/images';
 
 export default function EditPassword({ userInfo }) {
   const { register, handleSubmit, errors, watch, reset } = useForm();

@@ -2,16 +2,19 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import ReactTooltip from 'react-tooltip';
 import Modal from 'react-modal';
+import $ from 'jquery';
+import dayjs from 'dayjs';
+import Select, { components } from 'react-select';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import { useHistory } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-import $ from 'jquery';
-import dayjs from 'dayjs';
-import Select, { components } from 'react-select';
 
 import Theme from '../../../theme/Theme';
 import NoRecordFound from '../../../common/NoRecordFound';
+import CustomerListTablet from './CustomerListTablet';
+import CustomerListFilters from './CustomerListFilters';
+import CustomerListLeftSidePanel from './CustomerListLeftSidePanel';
 import {
   CommonPagination,
   PageLoader,
@@ -21,6 +24,8 @@ import {
   GetInitialName,
 } from '../../../common';
 import {
+  PATH_AGREEMENT,
+  PATH_CUSTOMER_DETAILS,
   performanceSortOptions,
   sadSortOptions,
   dadSortOptions,
@@ -28,7 +33,7 @@ import {
   sortByOrderOptions,
   options,
   timeFrameFilters,
-} from '../../../constants/FieldConstants';
+} from '../../../constants';
 import {
   CountDayClock,
   CloseIcon,
@@ -41,15 +46,16 @@ import {
   UpDowGrayArrow,
   SortUp,
   CaretUp,
-} from '../../../theme/images/index';
-import CustomerListTablet from './CustomerListTablet';
-import { getCustomerList, getGrowthStrategist, getStatus } from '../../../api';
-import { getManagersList, getSellerType } from '../../../api/ChoicesApi';
-import { getcontract } from '../../../api/AgreementApi';
-import { PATH_AGREEMENT, PATH_CUSTOMER_DETAILS } from '../../../constants';
+} from '../../../theme/images';
+import {
+  getCustomerList,
+  getGrowthStrategist,
+  getStatus,
+  getManagersList,
+  getSellerType,
+  getcontract,
+} from '../../../api';
 import { CustomerListPage } from '../../../theme/CustomerListStyle';
-import CustomerListFilters from './CustomerListFilters';
-import CustomerListLeftSidePanel from './CustomerListLeftSidePanel';
 
 const salesSortOptions = sortOptions.concat(performanceSortOptions);
 const sponsorAdSortOptions = sortOptions.concat(sadSortOptions);
@@ -1691,9 +1697,11 @@ export default function CustomerList() {
           }
           alt="logo"
         />
-        <div className="company-name">{name}</div>
-        <div className="user-name">
-          {bgs.first_name} {bgs.last_name}
+        <div className="company-info-details customer-details">
+          <div className="company-name">{name}</div>
+          <div className="user-name">
+            {bgs.first_name} {bgs.last_name}
+          </div>
         </div>
       </>
     );

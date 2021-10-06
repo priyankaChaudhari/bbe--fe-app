@@ -3,8 +3,10 @@ import axiosInstance from '../axios';
 import {
   API_CUSTOMER,
   API_AD_MANAGER_ADMIN_DASHBOARD,
+  API_AD_DASHBOARD,
   API_DSP_INVOICES,
   API_DSP_BILLING,
+  API_CUSTOMER_CONTRACT,
 } from '../constants/ApiConstants';
 
 export async function getAdManagerAdminGraphData(
@@ -47,8 +49,13 @@ export async function getAdManagerAdminGraphData(
     };
   }
 
+  const url =
+    dashboardType === 'sponsored-dashboard'
+      ? API_AD_DASHBOARD
+      : API_AD_MANAGER_ADMIN_DASHBOARD;
+
   const result = await axiosInstance
-    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}${dashboardType}/`, { params })
+    .get(`${url}${dashboardType}/`, { params })
     .then((response) => {
       return response;
     })
@@ -180,6 +187,7 @@ export async function getFinanceInvoices(
   timeFilterType,
   timeFilter,
   page,
+  selectedNavigation,
 ) {
   let params = {
     page,
@@ -222,6 +230,18 @@ export async function getFinanceInvoices(
       invoice_status: status,
     };
   }
+
+  if (selectedNavigation === 'revShare') {
+    params = {
+      ...params,
+      invoice_type: 'rev share',
+    };
+  } else {
+    params = {
+      ...params,
+      invoice_type: 'dsp service',
+    };
+  }
   let result = {};
   result = await axiosInstance
     .get(`${API_DSP_INVOICES}`, { params })
@@ -234,7 +254,12 @@ export async function getFinanceInvoices(
   return result;
 }
 
-export async function getDSPFinances(timeFilter, startDate, endDate) {
+export async function getDSPFinances(
+  timeFilter,
+  startDate,
+  endDate,
+  selectedNavigation,
+) {
   let params = {};
 
   if (timeFilter === 'custom') {
@@ -243,6 +268,18 @@ export async function getDSPFinances(timeFilter, startDate, endDate) {
       start_month_year: startDate,
       end_month_year: endDate,
       timeframe: timeFilter,
+    };
+  }
+
+  if (selectedNavigation === 'revShare') {
+    params = {
+      ...params,
+      invoice_type: 'rev share',
+    };
+  } else {
+    params = {
+      ...params,
+      invoice_type: 'dsp service',
     };
   }
 
@@ -321,6 +358,33 @@ export async function getDSPBillingMetrics(timeFilter, startDate, endDate) {
   let result = {};
   result = await axiosInstance
     .get(`${API_DSP_BILLING}bill-detail/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getEnableInvoices(page) {
+  const params = { is_invoicing_enable: 'False', page };
+  let result = {};
+
+  result = await axiosInstance
+    .get(`${API_CUSTOMER_CONTRACT}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function setEnableInvoices(id) {
+  const result = await axiosInstance
+    .patch(`${API_CUSTOMER_CONTRACT}${id}/`, { is_invoicing_enable: true })
     .then((response) => {
       return response;
     })

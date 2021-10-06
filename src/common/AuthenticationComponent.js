@@ -1,12 +1,33 @@
 /* eslint no-else-return: "off" */
 
 import React, { useEffect } from 'react';
-import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
+import { useIdleTimer } from 'react-idle-timer';
+import { useSelector, useDispatch } from 'react-redux';
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
+import Header from './Header';
+import LeftSideBar from './LeftSideBar';
+import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
 import { userMe } from '../store/actions/index';
+import { Summary } from '../components/OnBoardingCustomer';
+import { clearToken } from '../store/actions/userState';
+import { ContractContainer } from '../components/Contract';
+import { PageLoader, PageNotFound } from './index';
+import { ArticleDetails, ArticleList } from '../components/KnowledgeBase';
+import {
+  CustomerListTablet,
+  ProductDelegation,
+  CustomerList,
+} from '../components/Customer';
+import { DashboardContainer } from '../components/BrandPartner';
+import {
+  BrandAssetSummary,
+  BrandAssetUpload,
+  DelegationUpload,
+  BrandAssetsPreview,
+} from '../components/BrandAssetGathering';
 import {
   PATH_CUSTOMER_LIST,
   PATH_LOGIN,
@@ -18,8 +39,6 @@ import {
   PATH_ARTICLE_DETAILS,
   PATH_CUSTOMER_LIST_TABLET,
   PATH_BGS_DASHBOARD,
-  PATH_TEAM_MEMBER,
-  PATH_TABLET_TEAM_MEMBER,
   PATH_SUMMARY,
   PATH_SPONSORED_DASHBOARD,
   PATH_CHOOSE_BRAND_DELEGATE,
@@ -33,31 +52,6 @@ import {
   PATH_FINANCE_DASHBOARD,
 } from '../constants/index';
 
-import {
-  CustomerListTablet,
-  ProductDelegation,
-  CustomerMainContainer,
-  CustomerList,
-} from '../components/Customer';
-
-import { PageLoader, PageNotFound } from './index';
-import Header from './Header';
-import LeftSideBar from './LeftSideBar';
-import { ContractContainer } from '../components/Contract';
-import { ArticleDetails, ArticleList } from '../components/KnowledgeBase';
-import {
-  TeamMember,
-  TabletTeamMember,
-  DashboardContainer,
-} from '../components/BrandPartner';
-import { Summary } from '../components/OnBoardingCustomer';
-import {
-  BrandAssetSummary,
-  BrandAssetUpload,
-  DelegationUpload,
-  BrandAssetsPreview,
-} from '../components/BrandAssetGathering';
-
 const _ = require('lodash');
 
 export default function AuthenticationComponent() {
@@ -67,6 +61,16 @@ export default function AuthenticationComponent() {
   const userInfo = useSelector((state) => state.userState.userInfo);
   const dispatch = useDispatch();
   const history = useHistory();
+
+  const handleOnIdle = () => {
+    dispatch(clearToken());
+  };
+
+  useIdleTimer({
+    timeout: 1800000,
+    onIdle: handleOnIdle,
+    debounce: 500,
+  });
 
   useEffect(() => {
     if (
@@ -171,9 +175,10 @@ export default function AuthenticationComponent() {
               component={DashboardContainer}
             />
           ) : null}
-
+          {/* 
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
-          <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} />
+          <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}
+
           {/* On-Boarding Customer */}
           <Route path={PATH_SUMMARY} component={Summary} />
           {/* Brand Assets */}

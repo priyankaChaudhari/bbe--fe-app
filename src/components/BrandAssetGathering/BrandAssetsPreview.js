@@ -1,17 +1,20 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import { useForm } from 'react-hook-form';
+
+import Theme from '../../theme/Theme';
 import {
   HeaderDownloadFuntionality,
   PageLoader,
   FormField,
   Button,
   CommonPagination,
+  ErrorMsg,
+  PdfAnnotator,
 } from '../../common';
-import ErrorMsg from '../../common/ErrorMsg';
-import PdfAnnotator from '../../common/PdfAnnotator';
 import { GroupUser } from '../../theme/Global';
 import {
   CloseIcon,
@@ -21,13 +24,12 @@ import {
   AnnotationGoal,
   RedTrashIcon,
 } from '../../theme/images';
-import Theme from '../../theme/Theme';
 import {
   storeNewCommentData,
   getCommentsData,
   deleteComment,
   updateComment,
-} from '../../api/BrandAssestsApi';
+} from '../../api';
 
 function BrandAssetsPreview({
   showAssetPreview,
@@ -965,7 +967,6 @@ const BrandAssetsPreviewBody = styled.div`
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  // margin-top: 50%;
 
   &.annotation-modal {
     background: #abafb8;
@@ -985,9 +986,6 @@ const BrandAssetsPreviewBody = styled.div`
   .assetPreviewImg {
     position: absolute;
     top: 30%;
-    // background-color: ${Theme.gray8};
-    // width: 500px;
-    // height: 250px;
     display: flex;
     justify-content: center;
 
@@ -1026,7 +1024,6 @@ const BrandAssetsPreviewBody = styled.div`
     height: 50px;
     position: absolute;
     top: 40%;
-    // margin-top: 40px;
     cursor: pointer;
     &.pervious-img {
       left: 29px;
@@ -1047,7 +1044,6 @@ const BrandAssetsPreviewBody = styled.div`
   }
 
   @media only screen and (max-width: 991px) {
-    // margin-top: 40%;
     .assetPreviewImg {
       top: 35%;
 
@@ -1058,7 +1054,6 @@ const BrandAssetsPreviewBody = styled.div`
     }
   }
   @media only screen and (max-width: 767px) {
-    // margin-top: 50%;
     .assetPreviewImg {
       max-width: 200px;
       height: 100px;
@@ -1087,11 +1082,9 @@ const BrandAssetsPreviewBody = styled.div`
     }
   }
   @media only screen and (max-width: 480px) {
-    // margin-top: 65%;
     .assetPreviewImg {
       max-width: 170px;
       height: 100px;
-      // top: 50%;
       left: auto;
       .image-thumbnail {
         max-width: 170px;
@@ -1227,11 +1220,8 @@ const BrandAssetPdf = styled.div`
       padding-right: 0;
       background: ${Theme.white} !important;
 
-      // .react-pdf__Page {
-      //
-      // }
       .react-pdf__Page {
-       box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1); !important;
+        box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1) !important;
         background: ${Theme.white} !important;
         margin-bottom: 10px !important;
 
@@ -1257,13 +1247,11 @@ const BrandAssetPdf = styled.div`
         color: black;
         margin-top: -70px;
       }
-      @media only screen and (min-width: 1500px) {
-        // padding-right: 400px;
-      }
+
       @media only screen and (max-width: 991px) {
         padding-left: 0px !important;
         padding-right: 0;
-         max-width: 550px;
+        max-width: 550px;
 
         .react-pdf__Page {
           &:first-child {
@@ -1282,9 +1270,9 @@ const BrandAssetPdf = styled.div`
       }
     }
   }
-   @media only screen and (min-width: 1920px) {
-     max-width: 950px;
-   }
+  @media only screen and (min-width: 1920px) {
+    max-width: 950px;
+  }
   @media only screen and (max-width: 991px) {
     margin-top: -16px;
     min-height: 100px;
@@ -1310,10 +1298,6 @@ const Footer = styled.div`
     bottom: 0px;
   }
 
-  // &.pdf-footer {
-  //   width: 23%;
-  //   bottom: 179px;
-  // }
   @media only screen and (max-width: 991px) {
     width: 100%;
   }

@@ -21,7 +21,8 @@ export const API_CREDENTIALS = '/credentials/';
 export const API_BGS = '/bgs/';
 export const API_AMAZON_DETAILS = '/merchant/';
 export const API_DELETE_MARKETPLACE = `${API_AMAZON_DETAILS}delete-marketplace/`;
-export const API_PERFORMANCE = '/performance/';
+// export const API_PERFORMANCE = '/performance/';
+export const API_PERFORMANCE = '/sales-performance/';
 export const API_MARKETPLACES = '/marketplaces/';
 export const API_ALL_MARKETPLACES = '/marketplaces/all-marketplace/';
 export const API_AD_PERFORMANCE = '/performance-metrics/';
@@ -31,6 +32,8 @@ export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
 
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
+export const API_AD_DASHBOARD = '/ad-dashboard/';
+
 export const API_DSP_INVOICES = '/invoice/';
 export const API_DSP_BILLING = '/bill/';
 

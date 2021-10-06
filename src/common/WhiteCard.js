@@ -27,7 +27,9 @@ export const WhiteCard = styled.div`
     max-width: 80%;
     width: 100%;
     word-break: keep-all;
-    
+     &.one-time-service {
+      max-width: 75%;
+    }
   }
 
   .company-contract-height {
@@ -312,7 +314,7 @@ export const WhiteCard = styled.div`
 
   }
   .decrease-rate {
-    color: ${Theme.darkRed};
+    color: ${Theme.red};
     font-size: ${Theme.extraNormal};
     font-weight: 300;
     .red-arrow {
@@ -508,7 +510,7 @@ export const WhiteCard = styled.div`
         margin-left: -2px;
 
         &.down {
-          color: ${Theme.darkRed};
+          color: ${Theme.red};
         }
         .red-arrow{
            width: 14px;
@@ -614,7 +616,7 @@ export const WhiteCard = styled.div`
         margin-left: -2px;
 
         &.down {
-          color: ${Theme.darkRed};
+          color: ${Theme.red};
         }
 
         &.grey {
@@ -993,6 +995,10 @@ export const WhiteCard = styled.div`
       }
        .contract-status {
          max-width: 85%;
+
+         &.one-time-service {
+           max-width: 80%;
+         }
        }
     }
   @media only screen and (max-width: 1150px) {
@@ -1014,15 +1020,18 @@ export const WhiteCard = styled.div`
        }
        .contract-status {
          max-width: 70%;
+          &.one-time-service {
+            max-width: 65%;
+          }
        }
    }
  @media only screen and (max-width: 991px) {
   .brand-logo-details{
     text-align: left;
-  //  max-width: 350px;
+
   } 
    .company-label-info {
-
+     max-width: 500px;
      margin-top: 10px;
 
      &:first-child {
@@ -1112,7 +1121,6 @@ export const WhiteCard = styled.div`
 
         &.mid-width {
           width: 100px;
-          // width:100%;
 
            &.website {
             margin-left: 5px;

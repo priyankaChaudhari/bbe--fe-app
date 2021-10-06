@@ -2,11 +2,12 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 
+import Theme from '../../../theme/Theme';
 import {
   ContractEmailIcon,
   DefaultUser,
   NextActivityLogo,
-} from '../../../theme/images/index';
+} from '../../../theme/images';
 import { GroupUser } from '../../../theme/Global';
 import {
   CommonPagination,
@@ -14,7 +15,6 @@ import {
   Status,
   WhiteCard,
 } from '../../../common';
-import Theme from '../../../theme/Theme';
 
 export default function Activity({
   isLoading,

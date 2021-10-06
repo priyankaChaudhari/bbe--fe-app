@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import DSPInvoicesList from './DSPInvoicesList';
@@ -7,7 +7,7 @@ import DSPPartnersList from './DSPPartnersList';
 import DSPInvoices from './DSPInvoices';
 import { BackToTop, Tabs } from '../../../../common';
 
-export default function DSPInvoiceContainer() {
+export default function DSPInvoiceContainer({ selectedNavigation }) {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const [viewComponent, setViewComponent] = useState('invoices');
@@ -29,6 +29,7 @@ export default function DSPInvoiceContainer() {
         setTimeFrame={setTimeFrame}
         setTimeFrameType={setTimeFrameType}
         setIsTimeFrameChange={setIsTimeFrameChange}
+        selectedNavigation={selectedNavigation}
       />
       {!isDesktop && (
         <Tabs>
@@ -61,6 +62,7 @@ export default function DSPInvoiceContainer() {
             setIsTimeFrameChange={setIsTimeFrameChange}
             isDesktop={isDesktop}
             isTablet={isTablet}
+            selectedNavigation={selectedNavigation}
           />
         ) : (
           <DSPPartnersList
@@ -72,6 +74,7 @@ export default function DSPInvoiceContainer() {
             setIsTimeFrameChange={setIsTimeFrameChange}
             isDesktop={isDesktop}
             isTablet={isTablet}
+            selectedNavigation={selectedNavigation}
           />
         )}
         <div className="col-12 mt-5">
@@ -82,5 +85,7 @@ export default function DSPInvoiceContainer() {
   );
 }
 
-DSPInvoiceContainer.defaultProps = {};
-DSPInvoiceContainer.propTypes = {};
+DSPInvoiceContainer.defaultProps = {
+  selectedNavigation: 'revShare',
+};
+DSPInvoiceContainer.propTypes = { selectedNavigation: string };

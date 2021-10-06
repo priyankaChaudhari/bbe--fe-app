@@ -1,8 +1,7 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState, useEffect, useCallback } from 'react';
 
-import Select, { components } from 'react-select';
 import PropTypes from 'prop-types';
+import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
 
 import {
@@ -15,12 +14,8 @@ import {
   GetInitialName,
   CheckBoxList,
 } from '../../common';
-import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images/index';
-import {
-  addCustomerMember,
-  getRoles,
-  userCustomerRoleList,
-} from '../../api/index';
+import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images';
+import { addCustomerMember, getRoles, userCustomerRoleList } from '../../api';
 
 export default function AddTeamMember({
   id,

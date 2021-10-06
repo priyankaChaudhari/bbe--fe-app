@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
+import { TrashIcons } from '../../theme/images';
+import { getCustomerDetails, userMe } from '../../store/actions';
+import {
+  askSomeoneData,
+  updateAskSomeoneData,
+  updateCustomerDetails,
+  updateUserMe,
+} from '../../api';
+import {
+  PATH_SUMMARY,
+  PATH_THANKS,
+  socialIcons,
+  stepPath,
+} from '../../constants';
 import {
   OnBoardingBody,
   ContractFormField,
@@ -12,16 +26,6 @@ import {
   PageLoader,
   ErrorMsg,
 } from '../../common';
-import {
-  askSomeoneData,
-  updateAskSomeoneData,
-  updateCustomerDetails,
-  updateUserMe,
-} from '../../api';
-import { getCustomerDetails, userMe } from '../../store/actions';
-import { SocialIcons, stepPath } from '../../constants/FieldConstants';
-import { PATH_SUMMARY, PATH_THANKS } from '../../constants';
-import { TrashIcons } from '../../theme/images';
 
 export default function CompanyDigital({
   setIsLoading,
@@ -226,7 +230,7 @@ export default function CompanyDigital({
         <div className="label-title mb-1 mt-4">Social</div>
 
         <div className="row">
-          {SocialIcons.map((item) => (
+          {socialIcons.map((item) => (
             <React.Fragment key={item.key}>
               <div className="col-4 mt-3 pr-0">
                 <span>

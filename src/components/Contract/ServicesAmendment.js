@@ -1,6 +1,8 @@
 import React from 'react';
+
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+
 import Theme from '../../theme/Theme';
 import { ArrowRightIcon } from '../../theme/images/index';
 import {
@@ -9,7 +11,7 @@ import {
   DSPAddendumDetails,
   ListingOptimization,
   remainingFieldsOfContract,
-} from '../../constants/FieldConstants';
+} from '../../constants';
 
 function ServicesAmendment({ amendmentData }) {
   const allFields = [

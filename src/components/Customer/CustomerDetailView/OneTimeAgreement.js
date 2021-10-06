@@ -1,13 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { Button, WhiteCard } from '../../../common';
+import { Button, WhiteCard, PageLoader } from '../../../common';
 import { PATH_AGREEMENT } from '../../../constants';
-import { AddIcons, FileContract, ServiceIcon } from '../../../theme/images';
-import { createContract } from '../../../api';
+import {
+  AddIcons,
+  DeleteIcon,
+  FileContract,
+  ServiceIcon,
+} from '../../../theme/images';
+import { createContract, deleteContract } from '../../../api';
+import { getAccountDetails } from '../../../store/actions/accountState';
 
-export default function OneTimeAgreement({ agreements, id, history }) {
+export default function OneTimeAgreement({
+  agreements,
+  id,
+  history,
+  setViewComponent,
+}) {
+  const loader = useSelector((state) => state.accountState.isLoading);
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(false);
+
   const addNewOneTime = () => {
     const data = {
       customer_id: id,
@@ -23,8 +39,25 @@ export default function OneTimeAgreement({ agreements, id, history }) {
       });
     });
   };
+  const onDeleteContract = (contractId) => {
+    setIsLoading(true);
+    deleteContract(contractId).then((res) => {
+      console.log(' in dlete contract res', res);
+      setIsLoading(false);
 
-  return (
+      setViewComponent('past');
+      dispatch(getAccountDetails(id));
+    });
+  };
+  return loader || isLoading ? (
+    <PageLoader
+      component="agrement-details"
+      color="#FF5933"
+      type="detail"
+      width={40}
+      height={40}
+    />
+  ) : (
     <>
       <div
         className=" mt-4  mb-3 cursor "
@@ -50,7 +83,7 @@ export default function OneTimeAgreement({ agreements, id, history }) {
             agreements.map((agreement) => (
               <WhiteCard className="mt-3 mb-3 selected-card" key={agreement.id}>
                 <div className="row">
-                  <div className="col-lg-9 col-md-8 col-12">
+                  <div className="col-lg-8 col-md-7 col-12">
                     <img
                       width="48px"
                       className="solid-icon"
@@ -72,7 +105,7 @@ export default function OneTimeAgreement({ agreements, id, history }) {
                     agreement.contract_status.value === 'active') &&
                   agreement.contract_url === null ? null : (
                     <div
-                      className="col-lg-3  pl-0 col-md-4 col-12 text-right"
+                      className="col-lg-3  pl-lg-0 pr-lg-2 col-md-4 col-12 text-right"
                       role="presentation"
                       onClick={() =>
                         localStorage.setItem('agreementID', agreement.id)
@@ -100,6 +133,18 @@ export default function OneTimeAgreement({ agreements, id, history }) {
                       </Link>
                     </div>
                   )}
+                  <img
+                    style={{
+                      position: 'absolute',
+                      top: '30px',
+                      right: '15px',
+                      cursor: 'pointer',
+                    }}
+                    role="presentation"
+                    src={DeleteIcon}
+                    alt="delete"
+                    onClick={() => onDeleteContract(agreement.id)}
+                  />
                   <div className="straight-line horizontal-line pt-3 mb-3" />
                 </div>
 
@@ -134,6 +179,7 @@ OneTimeAgreement.propTypes = {
     length: PropTypes.number,
     map: PropTypes.func,
   }).isRequired,
+  setViewComponent: PropTypes.func.isRequired,
   history: PropTypes.shape({
     location: PropTypes.shape({
       pathname: PropTypes.string,

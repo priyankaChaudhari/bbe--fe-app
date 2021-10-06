@@ -5,23 +5,49 @@
 /* eslint-disable no-param-reassign */
 
 import React, { useState, useEffect, useRef } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 
 import styled from 'styled-components';
 import queryString from 'query-string';
 import ReactTooltip from 'react-tooltip';
 import Select from 'react-select';
 import Modal from 'react-modal';
-
-import { Progress } from 'react-sweet-progress';
-import 'react-sweet-progress/lib/style.css';
-
-import { toast, ToastContainer } from 'react-toastify';
-import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import $ from 'jquery';
+import 'react-sweet-progress/lib/style.css';
+import { Progress } from 'react-sweet-progress';
+import { useDropzone } from 'react-dropzone';
+import { useHistory, useParams } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
 
 import Theme from '../../theme/Theme';
+import BrandAssetsPreview from './BrandAssetsPreview';
+import axiosInstance from '../../axios';
+import {
+  deleteDocument,
+  getDocuments,
+  getBrandAssetsDetail,
+  getBrandAssetsSummary,
+  updateBrandAssetStep,
+} from '../../api';
+import {
+  PATH_BRAND_ASSET,
+  PATH_BRAND_ASSET_SUMMARY,
+  PATH_CUSTOMER_DETAILS,
+  PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
+  PATH_UNAUTHORIZED_BRAND_ASSET,
+  API_DOCUMENTS,
+  brandSteps,
+} from '../../constants';
+import {
+  Button,
+  CheckBox,
+  HeaderDownloadFuntionality,
+  PageLoader,
+  UnauthorizedHeader,
+  ModalBox,
+  ActionDropDown,
+  DropDownIndicator,
+} from '../../common';
 import {
   GrayCheckIcon,
   OrangeCheckMark,
@@ -35,33 +61,6 @@ import {
   WhiteArrowRight,
   FileCloud,
 } from '../../theme/images';
-import {
-  Button,
-  CheckBox,
-  HeaderDownloadFuntionality,
-  PageLoader,
-  UnauthorizedHeader,
-  ModalBox,
-  ActionDropDown,
-  DropDownIndicator,
-} from '../../common';
-import {
-  PATH_BRAND_ASSET,
-  PATH_BRAND_ASSET_SUMMARY,
-  PATH_CUSTOMER_DETAILS,
-  PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
-  PATH_UNAUTHORIZED_BRAND_ASSET,
-} from '../../constants';
-import { BrandSteps } from '../../constants/FieldConstants';
-import axiosInstance from '../../axios';
-import { API_DOCUMENTS } from '../../constants/ApiConstants';
-import { deleteDocument, getDocuments } from '../../api';
-import {
-  getBrandAssetsDetail,
-  getBrandAssetsSummary,
-  updateBrandAssetStep,
-} from '../../api/BrandAssestsApi';
-import BrandAssetsPreview from './BrandAssetsPreview';
 
 const viewOptions = [
   { value: 'brand-logo', label: 'Brand Logo' },
@@ -362,10 +361,10 @@ export default function BrandAssetUpload() {
   }, []);
 
   useEffect(() => {
-    setSelectedStep(BrandSteps.find((op) => op.url === params.step));
+    setSelectedStep(brandSteps.find((op) => op.url === params.step));
     const docType =
-      BrandSteps.find((op) => op.url === params.step) &&
-      BrandSteps.find((op) => op.url === params.step).key;
+      brandSteps.find((op) => op.url === params.step) &&
+      brandSteps.find((op) => op.url === params.step).key;
     if (
       selectedDropdown &&
       selectedDropdown.dropdownValue &&
@@ -985,7 +984,7 @@ export default function BrandAssetUpload() {
         history={history.location.pathname}>
         <div className="label-heading mb-3">Your BrandSteps</div>
         <ul className="asset-check-list">
-          {BrandSteps.map((item) => (
+          {brandSteps.map((item) => (
             <li
               className="cursor"
               key={item.key}
@@ -1563,7 +1562,7 @@ const BrandAssetSideBar = styled.div`
   .asset-check-list {
     list-style-type: none;
     padding: 0;
-    marging: 0;
+    margin: 0;
     li {
       margin-bottom: 15px;
 
@@ -1664,6 +1663,14 @@ const CheckSelectImage = styled.div`
   position: relative;
 
   .image-thumbnail {
+    // max-height: 100%;
+    // max-width: 100%;
+    // position: absolute;
+    // top: 0;
+    // bottom: 0;
+    // left: 0;
+    // right: 0;
+    // margin: auto;
     width: 170px;
     height: 170px;
     border-radius: 8px;

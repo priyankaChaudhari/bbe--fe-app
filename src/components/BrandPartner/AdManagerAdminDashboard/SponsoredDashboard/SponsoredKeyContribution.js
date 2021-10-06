@@ -1,25 +1,24 @@
 import React from 'react';
 
-import { arrayOf, bool, func, string, objectOf } from 'prop-types';
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import { arrayOf, bool, func, string, objectOf } from 'prop-types';
 
 import { Tabs, WhiteCard, Table, PageLoader, Status } from '../../../../common';
 import { TabletViewManager } from '../../../../theme/Global';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
   UpDowGrayArrow,
 } from '../../../../theme/images/index';
-
 import {
   keyContributionConstant,
   noGraphDataMessage,
   keyContributionHeaders,
   metricsCurrency,
 } from '../../../../constants/CompanyPerformanceConstants';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 
 const _ = require('lodash');
 

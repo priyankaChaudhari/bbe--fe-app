@@ -3,7 +3,7 @@ const Theme = {
   white: '#ffffff',
   red: '#D60000',
   lightRed: '#fbf2f2',
-  darkRed: '#D60000',
+  darkRed: '#d63649',
   pink: '#f6d2c9',
   lightPink: '#ffded6',
   yellow: '#f7c137',
@@ -69,10 +69,6 @@ const Theme = {
   mediumRes: '20px',
   titleRes: '21px',
 
-  // extraMedium: '20px',
-  // large: '22px',
-  // extraLarge: '24px',
-
   /* Title font size */
 
   largeTitleFontSize: '48px',
@@ -90,14 +86,6 @@ const Theme = {
   smallTitleFontSizeRes: '32px',
   secondaryTitleFontSizeRes: '27px',
   textFontSizeRes: '20px',
-
-  // modalTitleFontSize: '23px',
-  // primaryTitleFontSize: '60px',
-  // secondaryTitleFontSize: '56px',
-  // tertiaryTitleFontSize: '36px',
-
-  // eLargeCountFontSize: '80px',
-  // LargeCountFontSize: '74px',
 
   /* Font family */
   baseFontFamily: 'Noah Regular',

@@ -3,19 +3,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+
 import axios from 'axios';
-import { useMediaQuery } from 'react-responsive';
 import cloneDeep from 'lodash/cloneDeep';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
+import { useHistory, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
+import { useMediaQuery } from 'react-responsive';
+
 import PdfViewer from '../../common/PdfViewer';
 import Theme from '../../theme/Theme';
-
 import AgreementSidePanel from '../../common/AgreementSidePanel';
 import Agreement from './Agreement';
 import ServicesAmendment from './ServicesAmendment';
@@ -24,6 +25,9 @@ import Addendum from './Addendum';
 import Statement from './Statement';
 import Discount from './Discount';
 import ContractFooter from './ContractFooter';
+import RequestSignature from './RequestSignature';
+import THAD_SIGN_IMG from '../../constants/ThadSignImg';
+import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
 import {
   PageLoader,
   PageNotFound,
@@ -37,10 +41,6 @@ import {
   getServicesFee,
   getAmendment,
 } from '../../api/AgreementApi';
-import RequestSignature from './RequestSignature';
-import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
-import { PATH_CUSTOMER_DETAILS, PATH_CUSTOMER_LIST } from '../../constants';
-import THAD_SIGN_IMG from '../../constants/ThadSignImg';
 import {
   updateAccountDetails,
   createMarketplace,
@@ -60,18 +60,19 @@ import {
   getThresholdType,
   getYoyPercentage,
 } from '../../api';
-import {
-  AgreementSign,
-  AddendumSign,
-  RecurringLanguage,
-  Recurring90DaysLanguage,
-} from '../../constants/AgreementSign';
+
 import {
   AgreementDetails,
   StatementDetails,
   DSPAddendumDetails,
   additionaMarketplaceAmount,
-} from '../../constants/FieldConstants';
+  AgreementSign,
+  AddendumSign,
+  RecurringLanguage,
+  Recurring90DaysLanguage,
+  PATH_CUSTOMER_DETAILS,
+  PATH_CUSTOMER_LIST,
+} from '../../constants';
 
 const customStyles = {
   content: {
@@ -80,6 +81,7 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     maxWidth: '600px ',
+    minHeight: '170px',
     width: '100% ',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
@@ -3042,6 +3044,7 @@ export default function ContractContainer() {
         amendmentData={amendmentData}
         sidebarSection={sidebarSection}
         setSidebarSection={setSidebarSection}
+        checkContractStatus={checkContractStatus}
       />
     );
   };

@@ -12,13 +12,13 @@ const Tabs = styled.div`
 
     li {
       display: inline-block;
-      margin-right: 50px;
-      padding-bottom: 15px;
+      margin-right: 10px;
       font-weight: normal;
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
       font-family: ${Theme.baseFontFamily};
       cursor: pointer;
+      padding: 0 15px 15px 15px;
 
       &:last-child {
         margin-right: 0;
@@ -29,7 +29,6 @@ const Tabs = styled.div`
       }
 
       &.active {
-        padding-bottom: 16px;
         border-bottom: 2px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};
@@ -39,7 +38,9 @@ const Tabs = styled.div`
    @media only screen and (max-width: 768px) { 
      .tabs {
     li {
-      margin-right: 20px;
+      margin-right: 5px;
+      padding: 10px 10px 10px 10px;
+      font-size: ${Theme.normal};
     }
    }
 `;

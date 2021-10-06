@@ -1,21 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { shape, string } from 'prop-types';
 
-import { Tabs } from '../../../../common';
 import DSPInvoices from './DSPInvoices/DSPInvoices';
 import BillingDetails from './BillingDetails/BillingDetails';
+import { Tabs } from '../../../../common';
 
-const BillingContainer = ({ id, userInfo, onBoardingId, customerStatus }) => {
-  const [viewComponent, setViewComponent] = useState('DSPInvoices');
+const BillingContainer = ({
+  id,
+  userInfo,
+  onBoardingId,
+  customerStatus,
+  redirectType,
+}) => {
+  const [viewComponent, setViewComponent] = useState('rev share');
+
+  useEffect(() => {
+    if (redirectType === 'dspInvoicing') {
+      setViewComponent('dsp service');
+    } else {
+      setViewComponent('rev share');
+    }
+  }, [redirectType]);
 
   return (
     <div className="col-lg-6 col-12">
       <Tabs>
         <ul className="tabs">
           <li
-            className={viewComponent === 'DSPInvoices' ? 'active' : ''}
-            onClick={() => setViewComponent('DSPInvoices')}
+            className={viewComponent === 'rev share' ? 'active' : ''}
+            onClick={() => setViewComponent('rev share')}
+            role="presentation">
+            Rev Share Invoices
+          </li>
+          <li
+            className={viewComponent === 'dsp service' ? 'active' : ''}
+            onClick={() => setViewComponent('dsp service')}
             role="presentation">
             DSP Invoices
           </li>
@@ -29,8 +49,8 @@ const BillingContainer = ({ id, userInfo, onBoardingId, customerStatus }) => {
           )}
         </ul>
       </Tabs>
-      {viewComponent === 'DSPInvoices' ? (
-        <DSPInvoices id={id} userInfo={userInfo} />
+      {viewComponent === 'dsp service' || viewComponent === 'rev share' ? (
+        <DSPInvoices invoiceType={viewComponent} id={id} userInfo={userInfo} />
       ) : (
         <BillingDetails
           id={id}
@@ -47,6 +67,7 @@ export default BillingContainer;
 BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
+  redirectType: null,
 };
 
 BillingContainer.propTypes = {
@@ -56,4 +77,5 @@ BillingContainer.propTypes = {
   }).isRequired,
   onBoardingId: string,
   customerStatus: string,
+  redirectType: string,
 };

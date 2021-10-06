@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
 
 import ReadMoreAndLess from 'react-read-more-less';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
 
-import { EditOrangeIcon, CloseIcon } from '../../../theme/images/index';
-import { GroupUser } from '../../../theme/Global';
-import { SocialIcons } from '../../../constants/FieldConstants';
-import { GetInitialName, WhiteCard } from '../../../common';
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
+import { GroupUser } from '../../../theme/Global';
+import { socialIcons } from '../../../constants';
+import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
+import { GetInitialName, WhiteCard } from '../../../common';
 
 export default function CompanyDetail({
   customer,
@@ -121,7 +121,7 @@ export default function CompanyDetail({
         <div className="label mt-3">Social Accounts</div>
 
         <ul className="social-media-icons">
-          {SocialIcons.map((item) => generateSocialIcon(item))}
+          {socialIcons.map((item) => generateSocialIcon(item))}
         </ul>
       </WhiteCard>
     );

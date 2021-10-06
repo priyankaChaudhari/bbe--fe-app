@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 
 import Select, { components } from 'react-select';
 import styled from 'styled-components';
@@ -9,8 +7,13 @@ import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
 import DatePicker from 'react-date-picker';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
+import Theme from '../../../theme/Theme';
+import PastAgreement from './PastAgreement';
+import OneTimeAgreement from './OneTimeAgreement';
 import {
   PageLoader,
   WhiteCard,
@@ -31,10 +34,14 @@ import {
   CaretUp,
   DisabledRecurring,
 } from '../../../theme/images';
-import { PATH_AGREEMENT } from '../../../constants';
-import PastAgreement from './PastAgreement';
+import {
+  PATH_AGREEMENT,
+  contractOptions,
+  draftContractOptions,
+  agreementOptions,
+  pauseAgreementOptions,
+} from '../../../constants';
 import { getAccountDetails } from '../../../store/actions/accountState';
-import OneTimeAgreement from './OneTimeAgreement';
 import {
   createTransactionData,
   createContract,
@@ -43,13 +50,6 @@ import {
   savePauseAgreement,
   getPauseAgreement,
 } from '../../../api';
-import Theme from '../../../theme/Theme';
-import {
-  contractOptions,
-  draftContractOptions,
-  agreementOptions,
-  pauseAgreementOptions,
-} from '../../../constants/FieldConstants';
 
 export default function AgreementDetails({
   id,
@@ -885,6 +885,7 @@ export default function AgreementDetails({
                   )}
                   id={id}
                   history={history}
+                  setViewComponent={setViewComponent}
                 />
               )}
             </>

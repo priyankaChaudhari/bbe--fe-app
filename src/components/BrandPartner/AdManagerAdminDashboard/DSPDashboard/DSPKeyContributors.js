@@ -7,25 +7,23 @@ import { arrayOf, bool, func, objectOf, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 
-import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
-import {
-  contributionColorSet,
-  dspTabOptions,
-} from '../../../../constants/DashboardConstants';
-import {
-  noGraphDataMessage,
-  keyContributionHeaders,
-  metricsCurrency,
-} from '../../../../constants/CompanyPerformanceConstants';
+import Theme from '../../../../theme/Theme';
 import { TabletViewManager } from '../../../../theme/Global';
+import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
   UpDowGrayArrow,
 } from '../../../../theme/images';
-import Theme from '../../../../theme/Theme';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import {
+  PATH_CUSTOMER_DETAILS,
+  contributionColorSet,
+  dspTabOptions,
+  noGraphDataMessage,
+  keyContributionHeaders,
+  metricsCurrency,
+} from '../../../../constants';
 
 const DSPKeyContributors = ({
   selectedKeyContribution,

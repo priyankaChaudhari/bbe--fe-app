@@ -1,31 +1,33 @@
-/* eslint-disable jsx-a11y/label-has-for */
 /* eslint-disable react/prop-types */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 
-import styled from 'styled-components';
-import { components } from 'react-select';
 import $ from 'jquery';
+import debounce from 'lodash.debounce';
+import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
-import { bool, func, string } from 'prop-types';
+import { bool, func, objectOf, string } from 'prop-types';
 
+import DSPInvoiceTabs from './DSPInvoiceTabs';
+import EnableInvoiceing from './EnableInvoiceing';
+import DSPInvoiceFilters from './DSPInvoiceFilters';
+import TableMobileView from '../../../../common/TableMobileView';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import {
+  PartnersStatusOptions,
+  PartnersSortByOptions,
+} from '../../../../constants/DashboardConstants';
 import {
   WhiteCard,
   Table,
   DropDownIndicator,
   PageLoader,
   CommonPagination,
+  NoData,
 } from '../../../../common';
-import { CompanyDefaultUser } from '../../../../theme/images/index';
-import DSPInvoiceFilters from './DSPInvoiceFilters';
-import TableMobileView from '../../../../common/TableMobileView';
-import {
-  PartnersStatusOptions,
-  PartnersSortByOptions,
-} from '../../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../../api';
-import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
-import DSPInvoiceTabs from './DSPInvoiceTabs';
 
 export default function DSPPartnersList({
   timeFrame,
@@ -36,6 +38,7 @@ export default function DSPPartnersList({
   viewComponent,
   isDesktop,
   isTablet,
+  selectedNavigation,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('any');
@@ -64,6 +67,7 @@ export default function DSPPartnersList({
         timeFrameType,
         timeFrame,
         page,
+        selectedNavigation,
       ).then((res) => {
         if (res && res.status === 400) {
           setPartnerLoader(false);
@@ -78,7 +82,7 @@ export default function DSPPartnersList({
         }
       });
     },
-    [timeFrameType, timeFrame],
+    [timeFrameType, timeFrame, selectedNavigation],
   );
 
   useEffect(() => {
@@ -146,9 +150,18 @@ export default function DSPPartnersList({
     };
   };
 
+  const debouncedSave = useCallback(
+    debounce(
+      (searchKey, status, sortBy, page) =>
+        getPartners(searchKey, status, sortBy, page),
+      500,
+    ),
+    [],
+  );
+
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    getPartners(event.target.value, selectedStatus, selectedSortBy.value, 1);
+    debouncedSave(event.target.value, selectedStatus, selectedSortBy.value, 1);
   };
 
   const handleResetFilter = () => {
@@ -203,7 +216,7 @@ export default function DSPPartnersList({
               ':id',
               item.customer && item.customer.id,
             ),
-            'finance',
+            selectedNavigation,
           )
         }
         key={item.id}>
@@ -218,7 +231,9 @@ export default function DSPPartnersList({
             }
             alt="logo"
           />
-          <div className="company-name">{item.customer.name}</div>
+          <div className="company-info-details">
+            <div className="company-name">{item.customer.name}</div>
+          </div>
         </td>
         <td className="product-table-body">
           ${bindAmount(item.total_outstanding, 2, true)}
@@ -287,7 +302,7 @@ export default function DSPPartnersList({
                     ':id',
                     item.customer && item.customer.id,
                   ),
-                  'finance',
+                  selectedNavigation,
                 )
               }
               key={item.id}
@@ -337,69 +352,80 @@ export default function DSPPartnersList({
       </div>
       <div className="col-lg-9">
         {isDesktop || isTablet ? (
-          <WhiteCard className="d-lg-block d-md-block d-none">
-            <div className="row">
-              <div className="col-9 ">
-                <div className="black-heading-title mt-3">Partners</div>{' '}
-              </div>
-              <div
-                id="BT-finace-dah-invoice-partners"
-                className="col-3  text-right">
-                {renderSortByDropDown()}
-              </div>
-            </div>
-            <div className="straight-line horizontal-line  mt-3 mb-1" />
+          <>
+            {selectedNavigation === 'revShare' ? (
+              <EnableInvoiceing view="desktop" />
+            ) : null}
 
-            {partnerLoader ? (
-              <PageLoader
-                component="performance-graph"
-                color="#FF5933"
-                type="detail"
-                width={40}
-                height={40}
-              />
-            ) : partnerData && partnerData.length > 0 ? (
-              <>
-                {renderPartnersTable()}
-                <CommonPagination
-                  count={partnerCount}
-                  pageNumber={pageNumber}
-                  handlePageChange={handlePageChange}
+            <WhiteCard className="d-lg-block d-md-block d-none">
+              <div className="row">
+                <div className="col-9 ">
+                  <div className="black-heading-title mt-3">Partners</div>{' '}
+                </div>
+                <div
+                  id="BT-finace-dah-invoice-partners"
+                  className="col-3  text-right">
+                  {renderSortByDropDown()}
+                </div>
+              </div>
+              <div className="straight-line horizontal-line  mt-3 mb-1" />
+
+              {partnerLoader ? (
+                <PageLoader
+                  component="performance-graph"
+                  color="#FF5933"
+                  type="detail"
+                  width={40}
+                  height={40}
                 />
-              </>
-            ) : (
-              <NoData>No partners Found</NoData>
-            )}
-          </WhiteCard>
+              ) : partnerData && partnerData.length > 0 ? (
+                <>
+                  {renderPartnersTable()}
+                  <CommonPagination
+                    count={partnerCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              ) : (
+                <NoData>No partners Found</NoData>
+              )}
+            </WhiteCard>
+          </>
         ) : (
           // for mobile view
-          <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
-            <div className="row mt-2">
-              <div className="col-5 pl-4 mt-3 ">
-                <div className="black-heading-title ">Invoices</div>{' '}
+          <>
+            {selectedNavigation === 'revShare' ? (
+              <EnableInvoiceing view="mobile" />
+            ) : null}
+            <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
+              <div className="row mt-2">
+                <div className="col-5 pl-4 mt-3 ">
+                  <div className="black-heading-title ">Invoices</div>{' '}
+                </div>
+                <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
               </div>
-              <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
-            </div>
 
-            {partnerLoader ? (
-              <PageLoader
-                component="performance-graph"
-                color="#FF5933"
-                type="detail"
-                width={40}
-                height={40}
-              />
-            ) : (
-              <>
-                {renderTabletInvoicesTable()}
-                <CommonPagination
-                  count={partnerCount}
-                  pageNumber={pageNumber}
-                  handlePageChange={handlePageChange}
+              {partnerLoader ? (
+                <PageLoader
+                  component="performance-graph"
+                  color="#FF5933"
+                  type="detail"
+                  width={40}
+                  height={40}
                 />
-              </>
-            )}
-          </div>
+              ) : (
+                <>
+                  {renderTabletInvoicesTable()}
+                  <CommonPagination
+                    count={partnerCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              )}
+            </div>
+          </>
         )}
       </div>
     </>
@@ -408,15 +434,20 @@ export default function DSPPartnersList({
 
 DSPPartnersList.defaultProps = {
   onTabClick: () => {},
+  selectedNavigation: '',
+  timeFrame: {},
+  timeFrameType: '',
+  isTimeFrameChange: false,
+  setIsTimeFrameChange: () => {},
 };
 DSPPartnersList.propTypes = {
   onTabClick: func,
   viewComponent: string.isRequired,
   isDesktop: bool.isRequired,
   isTablet: bool.isRequired,
+  selectedNavigation: string,
+  timeFrame: objectOf(string, string),
+  timeFrameType: string,
+  isTimeFrameChange: bool,
+  setIsTimeFrameChange: func,
 };
-
-const NoData = styled.div`
-  margin: 3em;
-  text-align: center;
-`;

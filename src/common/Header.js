@@ -1,42 +1,21 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable import/no-cycle */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 
 import Modal from 'react-modal';
 import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
+import PropTypes from 'prop-types';
 import $ from 'jquery';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive';
-import PropTypes from 'prop-types';
 
 import Theme from '../theme/Theme';
-import {
-  NextLogo,
-  EditIcons,
-  LogOutIcons,
-  CloseIcon,
-  // NotificationBell,
-  // ActiveNotificationBell,
-  // CompanyDefaultUser,
-  LightBulb,
-  ReadBookIcon,
-  MenuIcon,
-  ReadBookIconActive,
-  OrganizationIcon,
-  OrganizationActiveIcon,
-  SpeedometerActive,
-  Speedometer,
-  HelpDeskIcon,
-  HandShake,
-} from '../theme/images/index';
-
-import { logout, showProfileLoader, userMe } from '../store/actions/userState';
 import { EditProfile } from '../components/Profile';
 import { createArticle } from '../api';
+import { logout, showProfileLoader, userMe } from '../store/actions/userState';
 import { PageLoader, ModalBox, Button, FormField, SuccessMsg } from './index';
 import {
   PATH_ARTICLE_LIST,
@@ -47,8 +26,26 @@ import {
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
+  helpDeskLink,
+  managementLink,
+  PATH_ACCOUNT_SETUP,
 } from '../constants';
-import { helpDeskLink, managementLink } from '../constants/FieldConstants';
+import {
+  NextLogo,
+  EditIcons,
+  LogOutIcons,
+  CloseIcon,
+  LightBulb,
+  ReadBookIcon,
+  MenuIcon,
+  ReadBookIconActive,
+  OrganizationIcon,
+  OrganizationActiveIcon,
+  SpeedometerActive,
+  Speedometer,
+  HelpDeskIcon,
+  HandShake,
+} from '../theme/images';
 
 export default function Header({ type, userInfo }) {
   const history = useHistory();
@@ -179,9 +176,10 @@ export default function Header({ type, userInfo }) {
   return (
     <div
       className={
-        userInfo &&
-        userInfo.role === 'Customer' &&
-        !history.location.pathname.includes('/brand-asset/')
+        (userInfo &&
+          userInfo.role === 'Customer' &&
+          !history.location.pathname.includes('/brand-asset/')) ||
+        history.location.pathname.includes(PATH_ACCOUNT_SETUP)
           ? 'common-header-sticky  '
           : history.location.pathname.includes('/brand-asset/')
           ? 'header-hide  '

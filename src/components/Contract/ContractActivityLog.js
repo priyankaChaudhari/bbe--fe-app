@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
 import {
   FileIcon,
@@ -29,7 +30,10 @@ function ContractActivityLog({
   setPageNumber,
   getContractActivityLogInfo,
   loader,
+  checkContractStatus,
 }) {
+  const loggedInuserInfo = useSelector((state) => state.userState.userInfo);
+
   const getContractStatusData = (type) => {
     const status =
       (agreementData &&
@@ -551,7 +555,24 @@ function ContractActivityLog({
             ))}
 
             {activityCount > 10 ? (
-              <Footer className="pdf-footer">
+              <Footer
+                className="pdf-footer"
+                bottom={
+                  checkContractStatus()
+                    ? ((agreementData &&
+                        agreementData.contract_status &&
+                        agreementData.contract_status.value ===
+                          'pending for cancellation') ||
+                        (agreementData &&
+                          agreementData.contract_status &&
+                          agreementData.contract_status.value ===
+                            'active pending for pause')) &&
+                      loggedInuserInfo &&
+                      loggedInuserInfo.role === 'BGS Manager'
+                      ? '80px'
+                      : '0px'
+                    : '80px'
+                }>
                 <CommonPagination
                   count={activityCount}
                   pageNumber={pageNumber || 1}
@@ -584,6 +605,7 @@ ContractActivityLog.defaultProps = {
   setPageNumber: () => {},
   getContractActivityLogInfo: () => {},
   loader: false,
+  checkContractStatus: () => {},
 };
 
 ContractActivityLog.propTypes = {
@@ -602,22 +624,23 @@ ContractActivityLog.propTypes = {
   setPageNumber: PropTypes.func,
   getContractActivityLogInfo: PropTypes.func,
   loader: PropTypes.bool,
+  checkContractStatus: PropTypes.func,
 };
 
 const Footer = styled.div`
-  // border: 1px solid ${Theme.gray7};
-  // bottom: ${(props) => (props.PdfSidebar ? '0' : '80px')};
-  // background: ${Theme.white};
-  // box-shadow: ${Theme.boxShadow};
-  // position: fixed;
-  // min-height: 60px;
-  // z-index: 2;
-  // width: 336px;
+  border-top: 1px solid ${Theme.gray7};
+  bottom: ${(props) => (props.bottom ? props.bottom : '0px')};
+  background: ${Theme.white};
+  box-shadow: ${Theme.boxShadow};
+  position: fixed;
+  min-height: 60px;
+  z-index: 2;
+  width: 336px;
 
-  // @media only screen and (max-width: 991px) {
-  //   width: 100%;
-  // }
-  // @media only screen and (min-width: 1500px) {
-  //   width: 400px;
-  // }
+  @media only screen and (max-width: 991px) {
+    width: 100%;
+  }
+  @media only screen and (min-width: 1500px) {
+    width: 405px;
+  }
 `;

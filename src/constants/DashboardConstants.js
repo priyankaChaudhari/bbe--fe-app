@@ -1,3 +1,9 @@
+export const financeNavigationOptions = [
+  { key: 'revShare', value: 'Rev Share Invoicing' },
+  { key: 'dspInvoicing', value: 'DSP Invoicing' },
+  { key: 'dspBilling', value: 'DSP Billing' },
+];
+
 export const dspColorSet = {
   dspImpressions: '#0045B4',
   dspSpend: '#8C54FF',

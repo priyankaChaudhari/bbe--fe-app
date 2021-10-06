@@ -1,7 +1,9 @@
 import React from 'react';
+
 import styled from 'styled-components';
+
 import Theme from '../theme/Theme';
-import { ArrowUp } from '../theme/images/index';
+import { ArrowUp } from '../theme/images';
 
 export default function BackToTop() {
   return (

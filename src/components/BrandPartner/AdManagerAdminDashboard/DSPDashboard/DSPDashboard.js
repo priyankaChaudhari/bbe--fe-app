@@ -29,10 +29,7 @@ import {
 } from '../../../../api';
 import useBindDSPResponseData from '../../../../hooks/useBindDspData';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import {
-  dateOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+import { dateOptions, noGraphDataMessage } from '../../../../constants';
 
 const currentDate = new Date();
 currentDate.setDate(currentDate.getDate() - 2);
@@ -334,16 +331,6 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       setDSPFilters({ daily: false, weekly: true, month: true });
       setDSPGroupBy('weekly');
     }
-
-    // } else if (diffDays > 60 && diffDays <= 180) {
-    //   temp = 'weekly';
-    //   setDSPFilters({ daily: false, weekly: true, month: true });
-    //   setDSPGroupBy('weekly');
-    // } else if (diffDays > 180) {
-    //   temp = 'weekly';
-    //   setDSPFilters({ daily: false, weekly: true, month: true });
-    //   setDSPGroupBy('weekly');
-    // }
 
     if (value === 'custom') {
       sd = `${startDate.getDate()}-${

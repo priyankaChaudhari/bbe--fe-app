@@ -1,23 +1,16 @@
 /* eslint-disable no-unused-expressions */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 
 import queryString from 'query-string';
 import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
-import {
-  OnBoardingBody,
-  ContractFormField,
-  Button,
-  PageLoader,
-  ModalBox,
-  ErrorMsg,
-  CheckBox,
-} from '../../common';
+import { userMe } from '../../store/actions';
+import { CloseIcon, VideoCall } from '../../theme/images';
 import {
   askSomeoneData,
   updateAskSomeoneData,
@@ -31,13 +24,18 @@ import {
   PATH_SUMMARY,
   PATH_THANKS,
   PATH_UNAUTHORIZED_AMAZON_MERCHANT,
+  amazonSellerAccountDetails,
+  amazonVendorAccountDetails,
 } from '../../constants';
-import { userMe } from '../../store/actions';
 import {
-  AmazonSellerAccountDetails,
-  AmazonVendorAccountDetails,
-} from '../../constants/FieldConstants';
-import { CloseIcon } from '../../theme/images';
+  OnBoardingBody,
+  ContractFormField,
+  Button,
+  PageLoader,
+  ModalBox,
+  ErrorMsg,
+  CheckBox,
+} from '../../common';
 
 export default function AmazonMerchant({
   setIsLoading,
@@ -60,6 +58,12 @@ export default function AmazonMerchant({
   setFormData,
   formData,
 }) {
+  const customVideostyle = {
+    width: '16px',
+    marginRight: '6px',
+    verticalAlign: 'text-bottom',
+    cursor: 'pointer',
+  };
   const history = useHistory();
   const dispatch = useDispatch();
   const params = queryString.parse(history.location.search);
@@ -430,7 +434,8 @@ export default function AmazonMerchant({
             : 'Vendor Code'}{' '}
         </strong>{' '}
         below.
-        <p className="info-text-gray m-0 mb-4 ">
+        <p className="info-text-gray mt-1 mb-4 ">
+          <img style={customVideostyle} src={VideoCall} alt="video" />
           <span
             className="video-link cursor"
             onClick={() => setShowVideo({ [part]: true })}
@@ -571,7 +576,8 @@ export default function AmazonMerchant({
         <p className="account-steps m-0">Part {part}</p>
         Navigate to Settings &gt; Account Info and enter your{' '}
         <strong>Advertiser Name</strong> and <strong>ID</strong> below.
-        <p className="info-text-gray m-0 mb-4 ">
+        <p className="info-text-gray mt-1 mb-4 ">
+          <img style={customVideostyle} src={VideoCall} alt="video" />
           <span
             className="video-link cursor"
             onClick={() => setShowVideo({ [part]: true })}
@@ -721,8 +727,8 @@ export default function AmazonMerchant({
                 ) : (
                   <>
                     {generateAmazon(1)}
-                    {generateAccountType(2, AmazonSellerAccountDetails)}
-                    {generateAdvertiser(3, AmazonSellerAccountDetails)}
+                    {generateAccountType(2, amazonSellerAccountDetails)}
+                    {generateAdvertiser(3, amazonSellerAccountDetails)}
                   </>
                 )}
                 <div className="straight-line horizontal-line spacing mt-4 mb-4" />
@@ -732,8 +738,8 @@ export default function AmazonMerchant({
                 ) : (
                   <>
                     {generateAmazon(4)}
-                    {generateAccountType(5, AmazonVendorAccountDetails)}
-                    {generateAdvertiser(6, AmazonVendorAccountDetails)}
+                    {generateAccountType(5, amazonVendorAccountDetails)}
+                    {generateAdvertiser(6, amazonVendorAccountDetails)}
                   </>
                 )}
               </>
@@ -743,14 +749,14 @@ export default function AmazonMerchant({
                 {generateAccountType(
                   2,
                   marketplaceDetails.type === 'Seller'
-                    ? AmazonSellerAccountDetails
-                    : AmazonVendorAccountDetails,
+                    ? amazonSellerAccountDetails
+                    : amazonVendorAccountDetails,
                 )}
                 {generateAdvertiser(
                   3,
                   marketplaceDetails.type === 'Seller'
-                    ? AmazonSellerAccountDetails
-                    : AmazonVendorAccountDetails,
+                    ? amazonSellerAccountDetails
+                    : amazonVendorAccountDetails,
                 )}
               </>
             )}

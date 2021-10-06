@@ -1,12 +1,26 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import $ from 'jquery';
-import styled from 'styled-components';
 import dayjs from 'dayjs';
+import debounce from 'lodash.debounce';
 import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
 import { func, string, bool, objectOf } from 'prop-types';
 
+import DSPInvoiceFilters from './DSPInvoiceFilters';
+import Theme from '../../../../theme/Theme';
+import DSPInvoiceTabs from './DSPInvoiceTabs';
+import TableMobileView from '../../../../common/TableMobileView';
+import { CompanyDefaultUser } from '../../../../theme/images/index';
+import { getFinanceInvoices } from '../../../../api';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
+import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
+import {
+  InvoicesStatusOptions,
+  InvoicesSortByOptions,
+  StatusColorSet,
+} from '../../../../constants/DashboardConstants';
 import {
   WhiteCard,
   Table,
@@ -14,20 +28,8 @@ import {
   DropDownIndicator,
   PageLoader,
   CommonPagination,
+  NoData,
 } from '../../../../common';
-import TableMobileView from '../../../../common/TableMobileView';
-import { CompanyDefaultUser } from '../../../../theme/images/index';
-import DSPInvoiceFilters from './DSPInvoiceFilters';
-import {
-  InvoicesStatusOptions,
-  InvoicesSortByOptions,
-  StatusColorSet,
-} from '../../../../constants/DashboardConstants';
-import { getFinanceInvoices } from '../../../../api';
-import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
-import Theme from '../../../../theme/Theme';
-import DSPInvoiceTabs from './DSPInvoiceTabs';
 
 export default function DSPInvoicesList({
   timeFrame,
@@ -38,6 +40,7 @@ export default function DSPInvoicesList({
   viewComponent,
   isDesktop,
   isTablet,
+  selectedNavigation,
 }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('any');
@@ -65,6 +68,7 @@ export default function DSPInvoicesList({
         timeFrameType,
         timeFrame,
         page,
+        selectedNavigation,
       ).then((res) => {
         if (res && res.status === 400) {
           setInvoiceLoader(false);
@@ -79,7 +83,7 @@ export default function DSPInvoicesList({
         }
       });
     },
-    [timeFrameType, timeFrame],
+    [timeFrameType, timeFrame, selectedNavigation],
   );
 
   useEffect(() => {
@@ -98,9 +102,18 @@ export default function DSPInvoicesList({
     isTimeFrameChange,
   ]);
 
+  const debouncedSave = useCallback(
+    debounce(
+      (searchKey, status, sortBy, page) =>
+        getInvoices(searchKey, status, sortBy, page),
+      500,
+    ),
+    [],
+  );
+
   const onHandleSearch = (event) => {
     setSearchQuery(event.target.value);
-    getInvoices(event.target.value, selectedStatus, selectedSortBy.value, 1);
+    debouncedSave(event.target.value, selectedStatus, selectedSortBy.value, 1);
   };
 
   const handleResetFilter = () => {
@@ -199,7 +212,7 @@ export default function DSPInvoicesList({
               ':id',
               item.customer && item.customer.id,
             ),
-            'finance',
+            selectedNavigation,
           )
         }>
         <td className="product-body">
@@ -213,11 +226,13 @@ export default function DSPInvoicesList({
             }
             alt="logo"
           />
-          <div className="company-name">
-            {item.customer && item.customer.name}
-          </div>
-          <div className="status">
-            {item.invoice_type} | #{item.invoiced_id}
+          <div className="company-info-details">
+            <div className="company-name">
+              {item.customer && item.customer.name}
+            </div>
+            <div className="status">
+              {item.invoice_type} | #{item.invoiced_id}
+            </div>
           </div>
         </td>
         <td className="product-table-body">
@@ -228,7 +243,7 @@ export default function DSPInvoicesList({
         <td className="product-table-body text-right">
           <Status
             className="float-right"
-            label={item.invoice_status}
+            label={item.invoice_status.replace(' )', ')')}
             backgroundColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
           />
           <div className="clear-fix" />
@@ -281,7 +296,7 @@ export default function DSPInvoicesList({
                     ':id',
                     item.customer && item.customer.id,
                   ),
-                  'finance',
+                  selectedNavigation,
                 )
               }
               key={item.invoiced_id}
@@ -295,7 +310,7 @@ export default function DSPInvoicesList({
               labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
               label2="DUE"
               labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
-              status={item.invoice_status}
+              status={item.invoice_status.replace(' )', ')')}
               statusColor={StatusColorSet[item.invoice_status.split(' ')[0]]}
             />
           ))
@@ -327,51 +342,19 @@ export default function DSPInvoicesList({
       <div className="col-lg-9">
         {isDesktop || isTablet ? (
           // for dekstop/tablet View
-          <>
-            <WhiteCard className="d-lg-block d-md-block d-none">
-              <div className="row">
-                <div className="col-9 ">
-                  <div className="black-heading-title mt-3">Invoices</div>{' '}
-                </div>
-                <div
-                  id="BT-finace-dah-invoice-dropdown"
-                  className="col-3  text-right">
-                  {renderSortByDropDown()}
-                </div>
-              </div>
-              <div className="straight-line horizontal-line  mt-3 mb-1" />
 
-              {invoiceLoader ? (
-                <PageLoader
-                  component="performance-graph"
-                  color={Theme.orange}
-                  type="detail"
-                  width={40}
-                  height={40}
-                />
-              ) : invoiceData && invoiceData.length > 0 ? (
-                <>
-                  {renderInvoicesTable()}
-                  <CommonPagination
-                    count={invoiceCount}
-                    pageNumber={pageNumber}
-                    handlePageChange={handlePageChange}
-                  />
-                </>
-              ) : (
-                <NoData>No Invoices Found</NoData>
-              )}
-            </WhiteCard>
-          </>
-        ) : (
-          // for mobile View
-          <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
-            <div className="row mt-2">
-              <div className="col-5 pl-4 mt-3 ">
-                <div className="black-heading-title ">Invoices</div>{' '}
+          <WhiteCard className="d-lg-block d-md-block d-none">
+            <div className="row">
+              <div className="col-9 ">
+                <div className="black-heading-title mt-3">Invoices</div>{' '}
               </div>
-              <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
+              <div
+                id="BT-finace-dah-invoice-dropdown"
+                className="col-3  text-right">
+                {renderSortByDropDown()}
+              </div>
             </div>
+            <div className="straight-line horizontal-line  mt-3 mb-1" />
 
             {invoiceLoader ? (
               <PageLoader
@@ -381,17 +364,50 @@ export default function DSPInvoicesList({
                 width={40}
                 height={40}
               />
-            ) : (
+            ) : invoiceData && invoiceData.length > 0 ? (
               <>
-                {renderTabletInvoicesTable()}
+                {renderInvoicesTable()}
                 <CommonPagination
                   count={invoiceCount}
                   pageNumber={pageNumber}
                   handlePageChange={handlePageChange}
                 />
               </>
+            ) : (
+              <NoData>No Invoices Found</NoData>
             )}
-          </div>
+          </WhiteCard>
+        ) : (
+          // for mobile View
+          <>
+            <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">
+              <div className="row mt-2">
+                <div className="col-5 pl-4 mt-3 ">
+                  <div className="black-heading-title ">Invoices</div>{' '}
+                </div>
+                <div className="col-7  pr-4 mb-3">{renderSortByDropDown()}</div>
+              </div>
+
+              {invoiceLoader ? (
+                <PageLoader
+                  component="performance-graph"
+                  color={Theme.orange}
+                  type="detail"
+                  width={40}
+                  height={40}
+                />
+              ) : (
+                <>
+                  {renderTabletInvoicesTable()}
+                  <CommonPagination
+                    count={invoiceCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              )}
+            </div>
+          </>
         )}
       </div>
     </>
@@ -405,6 +421,7 @@ DSPInvoicesList.defaultProps = {
   timeFrameType: '',
   isTimeFrameChange: false,
   setIsTimeFrameChange: () => {},
+  selectedNavigation: '',
 };
 DSPInvoicesList.propTypes = {
   data: func,
@@ -416,9 +433,5 @@ DSPInvoicesList.propTypes = {
   timeFrameType: string,
   isTimeFrameChange: bool,
   setIsTimeFrameChange: func,
+  selectedNavigation: string,
 };
-
-const NoData = styled.div`
-  margin: 3em;
-  text-align: center;
-`;

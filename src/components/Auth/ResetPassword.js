@@ -5,10 +5,10 @@ import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
 import queryString from 'query-string';
 
-import { ArrowIcons, NextLogo } from '../../theme/images/index';
+import { ArrowIcons, NextLogo } from '../../theme/images';
 import { Button, FormField, PageLoader, ErrorMsg } from '../../common';
 import { PATH_LOGIN } from '../../constants';
-import { resetPassword } from '../../api/index';
+import { resetPassword } from '../../api';
 import { showResetPasswordMsg } from '../../store/actions/userState';
 import { FormContainer } from '../../theme/Global';
 
