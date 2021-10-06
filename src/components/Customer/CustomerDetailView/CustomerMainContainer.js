@@ -10,11 +10,17 @@ import { Link, useParams, useHistory } from 'react-router-dom';
 
 import Activity from './Activity';
 import Theme from '../../../theme/Theme';
+import CompanyDetail from './CompanyDetail';
 import AccountDetails from './AccountDetails';
+import ShowTeamMembers from './ShowTeamMembers';
+import AgreementDetails from './AgreementDetails';
 import CustomerTabDetails from './CustomerTabDetails';
+import CustomerDetailsBody from './CustomerDetailStyles';
+import RecentActivityNotes from './RecentActivityNotes';
 import useActivityLog from '../../../hooks/useActivityLog';
 import BillingContainer from './BillingContainer/BillingContainer';
 import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
+import { ProductCatalog } from '../index';
 import { SetupCheckList } from '../../BrandAssetGathering/index';
 import { LeftArrowIcon } from '../../../theme/images';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
@@ -35,14 +41,6 @@ import {
   WhiteCard,
   GetInitialName,
 } from '../../../common';
-import {
-  AgreementDetails,
-  CompanyDetail,
-  ProductCatalog,
-  CustomerDetailsBody,
-  RecentActivityNotes,
-  ShowTeamMembers,
-} from '../index';
 import {
   getCustomerActivityLog,
   getCustomerMembers,

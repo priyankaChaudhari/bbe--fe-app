@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import copy from 'copy-to-clipboard';
-import PropTypes from 'prop-types';
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
+import { func, shape, arrayOf } from 'prop-types';
 
 import {
   ContractFormField,
@@ -33,7 +33,7 @@ export default function AmazonAccount({
   const { Option, SingleValue } = components;
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
-  const [amazonDetails, setAmazonDetails] = useState([]);
+  const [amazonDetails, setAmazonDetails] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({});
   const [showBtn, setShowBtn] = useState(false);
@@ -428,7 +428,7 @@ AmazonAccount.defaultProps = {
 };
 
 AmazonAccount.propTypes = {
-  customStyles: PropTypes.objectOf(PropTypes.object),
-  marketplaceData: PropTypes.arrayOf(PropTypes.array).isRequired,
-  getActivityLogInfo: PropTypes.func.isRequired,
+  customStyles: shape({}),
+  marketplaceData: arrayOf(shape({})).isRequired,
+  getActivityLogInfo: func.isRequired,
 };

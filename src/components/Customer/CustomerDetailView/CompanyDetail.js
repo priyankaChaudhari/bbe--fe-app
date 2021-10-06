@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import ReadMoreAndLess from 'react-read-more-less';
-import PropTypes from 'prop-types';
 import Modal from 'react-modal';
+import { func, shape, arrayOf, string } from 'prop-types';
 
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
@@ -242,14 +242,14 @@ CompanyDetail.defaultProps = {
 };
 
 CompanyDetail.propTypes = {
-  id: PropTypes.string,
-  customer: PropTypes.shape({
-    id: PropTypes.string,
-    description: PropTypes.string,
-    brand: PropTypes.string,
-    phone_number: PropTypes.string,
-    merchant_id: PropTypes.string,
+  id: string,
+  customer: shape({
+    id: string,
+    description: string,
+    brand: string,
+    phone_number: string,
+    merchant_id: string,
   }).isRequired,
-  getActivityLogInfo: PropTypes.func.isRequired,
-  marketplaceData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  getActivityLogInfo: func.isRequired,
+  marketplaceData: arrayOf(shape({})).isRequired,
 };
