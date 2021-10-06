@@ -7,7 +7,7 @@ import { DashboardCard } from '../../../theme/Global';
 import { financeNavigationOptions } from '../../../constants/DashboardConstants';
 
 export default function FinanceDashboardContainer() {
-  const [viewComponent, setViewComponent] = useState('dspInvoicing');
+  const [viewComponent, setViewComponent] = useState('revShare');
 
   const renderComponent = () => {
     switch (viewComponent) {
