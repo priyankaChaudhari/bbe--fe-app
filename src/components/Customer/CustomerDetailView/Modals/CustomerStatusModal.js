@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Modal from 'react-modal';
-import { func, shape, bool } from 'prop-types';
+import { func, shape, bool, string } from 'prop-types';
 
 import CustomerStatus from '../CustomerStatus';
 import { CloseIcon } from '../../../../theme/images';
@@ -43,7 +43,7 @@ CustomerStatusModal.propTypes = {
   statusModal: shape({
     show: bool,
   }).isRequired,
-  customStyles: func,
+  customStyles: shape({}),
   setStatusModal: func,
-  customer: func.isRequired,
+  customer: shape({ id: string }).isRequired,
 };

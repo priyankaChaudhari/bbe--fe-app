@@ -329,5 +329,5 @@ EditTeamMember.propTypes = {
   userInfo: shape({
     role: string,
   }).isRequired,
-  getActivityLogInfo: shape([{ id: string }]).isRequired,
+  getActivityLogInfo: func.isRequired,
 };

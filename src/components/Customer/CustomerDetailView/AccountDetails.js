@@ -306,6 +306,6 @@ AccountDetails.propTypes = {
   setShowModal: func,
   setStatusModal: func,
   showModal: bool.isRequired,
-  customStyles: func,
+  customStyles: shape({}),
   IsSaveDataClicked: func,
 };

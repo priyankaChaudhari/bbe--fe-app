@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
-import { string, func, shape, bool } from 'prop-types';
+import { string, func, shape, bool, arrayOf } from 'prop-types';
 
 import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images';
 import { addCustomerMember, getRoles, userCustomerRoleList } from '../../api';
@@ -428,5 +428,5 @@ AddTeamMember.propTypes = {
     requestApproval: bool,
   }).isRequired,
   setAgreementDetailModal: func,
-  getActivityLogInfo: shape([{ id: string }]).isRequired,
+  getActivityLogInfo: arrayOf(shape({})).isRequired,
 };

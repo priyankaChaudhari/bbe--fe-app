@@ -12,6 +12,7 @@ import ProductCatalog from './ProductCatalog/ProductCatalog';
 import ProductDelegation from './ProductCatalog/ProductDelegation';
 import CustomerDetailsBody from './CustomerDetailView/CustomerDetailStyles';
 import RecentActivityNotes from './CustomerDetailView/RecentActivityNotes';
+import ShowTeamMembers from './CustomerDetailView/ShowTeamMembers';
 
 export {
   CustomerList,
@@ -28,4 +29,5 @@ export {
   ProductDelegation,
   CustomerDetailsBody,
   RecentActivityNotes,
+  ShowTeamMembers,
 };

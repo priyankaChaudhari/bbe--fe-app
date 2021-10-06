@@ -5,7 +5,7 @@ import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { func, bool, string, shape, number } from 'prop-types';
+import { func, bool, string, shape, number, arrayOf } from 'prop-types';
 
 import CheckPhoneNumber from '../../../common/CheckPhoneNumber';
 import { editCompanyFields } from '../../../constants';
@@ -766,10 +766,6 @@ EditCompanyDetails.propTypes = {
   setScrollDown: func.isRequired,
   scrollDown: bool,
   customerDetails: func.isRequired,
-  getContactData: shape([{ id: string }]).isRequired,
-  contactInfo: shape([
-    {
-      length: number,
-    },
-  ]).isRequired,
+  getContactData: func.isRequired,
+  contactInfo: arrayOf(shape({ length: number })).isRequired,
 };

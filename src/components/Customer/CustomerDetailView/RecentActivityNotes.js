@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { func, shape, string, bool } from 'prop-types';
+import { func, shape, string, bool, arrayOf } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import { GroupUser } from '../../../theme/Global';
@@ -88,7 +88,7 @@ export default function RecentActivityNotes({
                   <>
                     {noteData &&
                       noteData.slice(0, 3).map((item) => (
-                        <>
+                        <React.Fragment key={item.id}>
                           {item && item.user ? (
                             <GroupUser className="mb-3" key={item.id}>
                               {images.find(
@@ -131,7 +131,7 @@ export default function RecentActivityNotes({
                               <div className="clear-fix" />
                             </GroupUser>
                           ) : null}
-                        </>
+                        </React.Fragment>
                       ))}
                   </>
                 )}
@@ -230,16 +230,20 @@ export default function RecentActivityNotes({
   );
 }
 
+RecentActivityNotes.defaultProps = {
+  activityData: null,
+};
+
 RecentActivityNotes.propTypes = {
   id: string.isRequired,
   isLoading: shape({
     loader: bool,
     type: string,
   }).isRequired,
-  activityData: shape([{ id: string }]).isRequired,
+  activityData: arrayOf(shape({})),
   activityDetail: func.isRequired,
   getActivityInitials: func.isRequired,
-  images: shape([{ id: string }]).isRequired,
+  images: arrayOf(shape({})).isRequired,
   setViewComponent: func.isRequired,
   role: string.isRequired,
   showNotesModal: shape({

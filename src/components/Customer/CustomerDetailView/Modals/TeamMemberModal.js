@@ -63,7 +63,7 @@ export default function TeamMemberModal({
 TeamMemberModal.defaultProps = {
   setShowMemberList: () => {},
   getCustomerMemberList: () => {},
-  userInfo: () => {},
+  userInfo: {},
   customStyles: {},
   setAgreementDetailModal: () => {},
 };
@@ -76,8 +76,11 @@ TeamMemberModal.propTypes = {
     add: bool,
   }).isRequired,
   getCustomerMemberList: func,
-  userInfo: func,
-  customStyles: func,
+  userInfo: shape({
+    role: string,
+    id: string,
+  }),
+  customStyles: shape({}),
   setAgreementDetailModal: func,
-  getActivityLogInfo: shape([{ id: string }]).isRequired,
+  getActivityLogInfo: func.isRequired,
 };

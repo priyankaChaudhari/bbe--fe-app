@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import NumberFormat from 'react-number-format';
 import Select, { components } from 'react-select';
-import { func, shape, string } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 
 import InputSelect from '../../../common/InputSelect';
 import CropUploadImage from '../../../common/CropUploadImage';
@@ -217,7 +217,7 @@ export default function EditAccountDetails({
 
 EditAccountDetails.defaultProps = {
   id: '',
-  setDocumentImage: [],
+  setDocumentImage: {},
   IsSaveDataClicked: () => {},
   customerDetails: () => {},
 };
@@ -228,11 +228,7 @@ EditAccountDetails.propTypes = {
   customer: shape({
     id: string,
   }).isRequired,
-  setDocumentImage: shape([
-    {
-      id: string,
-    },
-  ]),
+  setDocumentImage: arrayOf(shape({})),
   getActivityLogInfo: func.isRequired,
   IsSaveDataClicked: func,
   customerDetails: func,

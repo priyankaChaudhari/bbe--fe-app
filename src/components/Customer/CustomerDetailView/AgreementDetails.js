@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
-import Select, { components } from 'react-select';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
 import DatePicker from 'react-date-picker';
+import Select, { components } from 'react-select';
+import { toast } from 'react-toastify';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
+import { func, string, shape } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import PastAgreement from './PastAgreement';
 import OneTimeAgreement from './OneTimeAgreement';
+import { getAccountDetails } from '../../../store/actions/accountState';
 import {
   PageLoader,
   WhiteCard,
@@ -41,7 +42,6 @@ import {
   agreementOptions,
   pauseAgreementOptions,
 } from '../../../constants';
-import { getAccountDetails } from '../../../store/actions/accountState';
 import {
   createTransactionData,
   createContract,
@@ -999,29 +999,14 @@ export default function AgreementDetails({
 }
 
 AgreementDetails.propTypes = {
-  id: PropTypes.string.isRequired,
-  agreements: PropTypes.shape({
-    id: PropTypes.string,
-    contract_type: PropTypes.string,
-    length: PropTypes.shape({
-      label: PropTypes.string,
-    }),
-    end_date: PropTypes.string,
-    additional_marketplaces: PropTypes.arrayOf(PropTypes.object),
-    additional_monthly_services: PropTypes.arrayOf(PropTypes.object),
-    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
-    primary_marketplace: PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string,
-    }),
-  }).isRequired,
-  userId: PropTypes.string.isRequired,
-  setShowMemberList: PropTypes.func.isRequired,
-  setShowModal: PropTypes.func.isRequired,
-  showModal: PropTypes.objectOf(PropTypes.object).isRequired,
-  userRole: PropTypes.string.isRequired,
-  customerStatus: PropTypes.string.isRequired,
-  getActivityLogInfo: PropTypes.func.isRequired,
+  id: string.isRequired,
+  userId: string.isRequired,
+  setShowMemberList: func.isRequired,
+  setShowModal: func.isRequired,
+  showModal: shape({}).isRequired,
+  userRole: string.isRequired,
+  customerStatus: string.isRequired,
+  getActivityLogInfo: func.isRequired,
 };
 
 const CustomerDetailCoppase = styled.div`

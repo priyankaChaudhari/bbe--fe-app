@@ -1,9 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable react/no-danger */
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-import ReactTooltip from 'react-tooltip';
 import 'react-toastify/dist/ReactToastify.css';
 import Select from 'react-select';
 import { toast } from 'react-toastify';
@@ -14,10 +12,11 @@ import Activity from './Activity';
 import Theme from '../../../theme/Theme';
 import AccountDetails from './AccountDetails';
 import CustomerTabDetails from './CustomerTabDetails';
+import useActivityLog from '../../../hooks/useActivityLog';
 import BillingContainer from './BillingContainer/BillingContainer';
 import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
 import { SetupCheckList } from '../../BrandAssetGathering/index';
-import { LeftArrowIcon, PlusIcon } from '../../../theme/images';
+import { LeftArrowIcon } from '../../../theme/images';
 import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
 import {
   getCustomerDetails,
@@ -31,10 +30,10 @@ import {
 } from './Modals';
 import {
   PageLoader,
-  GetInitialName,
   PageNotFound,
   BackToTop,
   WhiteCard,
+  GetInitialName,
 } from '../../../common';
 import {
   AgreementDetails,
@@ -42,6 +41,7 @@ import {
   ProductCatalog,
   CustomerDetailsBody,
   RecentActivityNotes,
+  ShowTeamMembers,
 } from '../index';
 import {
   getCustomerActivityLog,
@@ -100,6 +100,7 @@ export default function CustomerMainContainer() {
   const [agreementDetailModal, setAgreementDetailModal] = useState({
     pause: false,
   });
+  const activityDetail = useActivityLog(viewComponent);
 
   let viewOptions = [
     { value: 'performance', label: 'Performance' },
@@ -228,290 +229,14 @@ export default function CustomerMainContainer() {
   }
 
   const getActivityInitials = (user) => {
-    const firstName =
-      (user &&
-        user.split(' ').slice(0, 2) &&
-        user.split(' ').slice(0, 2)[0].charAt(0)) ||
-      '';
-    const lastName =
-      (user &&
-        user.split(' ').slice(0, 2) &&
-        user.split(' ').slice(0, 2)[1].charAt(0)) ||
-      '';
-
-    return firstName + lastName;
-  };
-
-  const displayMixedLog = (logUser, msg, header) => {
-    return msg.map((item, index) => {
-      if (index === 0 && header !== '') {
-        return (
-          <>
-            {index === 0 ? logUser : ''}
-            <span>updated </span> {header}
-          </>
-        );
-      }
-      const field = item && item.split('from')[0];
-
-      let oldValue = item && item.split('from')[1].split(' to ')[0];
-      let newValue =
-        item && item.split('from')[1].split(' to ')[1].split(', ,')[0];
-
-      if (
-        item.includes('annual revenue') ||
-        item.includes('number of employees') ||
-        item.includes('monthly retainer') ||
-        item.includes('sales threshold') ||
-        item.includes('fee') ||
-        item.includes('discount amount') ||
-        item.includes('billing cap')
-        //  ||
-        // item.includes('custom amazon store price')
-      ) {
-        oldValue = oldValue.replace('.00', '');
-        newValue = newValue.replace('.00', '');
-        oldValue =
-          oldValue && oldValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-        newValue =
-          newValue && newValue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-      }
-      return (
-        <>
-          {index === 0 ? logUser : ''}
-          <span>updated {field || ''} from </span> {oldValue || ''}
-          <span> to </span> {newValue === '' ? 'None' : newValue}
-        </>
-      );
-    });
-  };
-
-  const displayLog = (logUser, field, oldValue, newValue) => {
-    return (
-      <>
-        {logUser || ''}
-        <span>updated {field || ''} from </span> {oldValue || ''}
-        <span> to </span> {newValue === '' ? 'None' : newValue}
-      </>
-    );
-  };
-
-  const activityDetail = (item, showAllActivity = false) => {
-    let activityMessage = '';
-    let logUser;
-    let field;
-    let oldValue;
-    let newValue = '';
-    let mixedLog = false;
-    let customerSetupHeader = '';
-    if (
-      item &&
-      item.history_change_reason.includes('created new record by company name')
-    ) {
-      activityMessage = item.history_change_reason.split(
-        'created new record by company name',
-      );
-      return (
-        <>
-          {activityMessage[0]}
-          <span>created new record by company name</span>
-          {activityMessage[1]}
-        </>
-      );
+    if (user) {
+      const userDetail = {
+        first_name: user.split(' ')[0],
+        last_name: user.split(' ')[1],
+      };
+      return <GetInitialName userInfo={userDetail} type="activity" />;
     }
-    if (item.history_change_reason.includes('deleted')) {
-      activityMessage = item.history_change_reason.split('deleted');
-      if (item.history_change_reason.includes('deleted note')) {
-        return (
-          <>
-            {activityMessage[0]}
-            <span>deleted</span>
-
-            <span
-              dangerouslySetInnerHTML={{
-                __html:
-                  viewComponent === 'activity' && showAllActivity
-                    ? activityMessage &&
-                      activityMessage.length &&
-                      activityMessage[1]
-                    : activityMessage &&
-                      activityMessage.length &&
-                      activityMessage[1] &&
-                      activityMessage[1].slice(0, 80),
-              }}
-            />
-            {/* {activityMessage[1]} */}
-          </>
-        );
-      }
-      return (
-        <>
-          {activityMessage[0]}
-          <span>deleted</span>
-          {activityMessage[1]}
-        </>
-      );
-    }
-    if (item.history_change_reason.includes('updated addendum')) {
-      activityMessage = item.history_change_reason.split('updated addendum');
-      return (
-        <>
-          {activityMessage[0]}
-          <span>updated </span>
-          addendum
-        </>
-      );
-    }
-    if (item && item.history_change_reason.includes('updated')) {
-      activityMessage = item.history_change_reason.split('updated');
-      const msg = activityMessage[0];
-      logUser = msg;
-      if (
-        activityMessage[1] &&
-        activityMessage[1].includes('Amazon account names and id')
-      ) {
-        const msg1 = activityMessage[1];
-        customerSetupHeader = msg1;
-        field = activityMessage[2] && activityMessage[2].split('from')[0];
-        oldValue =
-          activityMessage[2] &&
-          activityMessage[2].split('from')[1].split(' to ')[0];
-        newValue =
-          activityMessage[2] &&
-          activityMessage[2].split('from')[1].split(' to ')[1].split(', ,')[0];
-      } else {
-        field = activityMessage[1] && activityMessage[1].split('from')[0];
-        oldValue =
-          activityMessage[1] &&
-          activityMessage[1].split('from')[1].split(' to ')[0];
-        newValue =
-          activityMessage[1] &&
-          activityMessage[1].split('from')[1].split(' to ')[1].split(', ,')[0];
-      }
-
-      if (activityMessage && activityMessage.length > 2) {
-        mixedLog = true;
-        activityMessage.shift();
-      }
-
-      if (
-        !mixedLog &&
-        ((item && item.history_change_reason.includes('annual revenue')) ||
-          (item &&
-            item.history_change_reason.includes('number of employees')) ||
-          (item && item.history_change_reason.includes('monthly retainer')) ||
-          (item && item.history_change_reason.includes('sales threshold')) ||
-          (item && item.history_change_reason.includes('fee')) ||
-          (item && item.history_change_reason.includes('discount amount')) ||
-          (item &&
-            item.history_change_reason.includes('custom amazon store price')) ||
-          (item && item.history_change_reason.includes('billing cap')))
-      ) {
-        let fromAmount = '';
-        let toAmount = '';
-        let rowAmount = [];
-        if (
-          activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[0] !== ''
-        ) {
-          const temp = activityMessage[1].split(' from ')[1].split(' to ')[0];
-          rowAmount = temp;
-          if (rowAmount.split('.')[1] === '00') {
-            const amt = rowAmount.split('.')[0];
-            fromAmount = amt;
-          } else {
-            fromAmount = rowAmount;
-          }
-        }
-        if (
-          activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[1] !== ''
-        ) {
-          const temp = activityMessage[1].split(' from ')[1].split(' to ')[1];
-          rowAmount = temp;
-          if (rowAmount.split('.')[1] === '00') {
-            const amt = rowAmount.split('.')[0];
-            toAmount = amt;
-          } else {
-            toAmount = rowAmount;
-          }
-        }
-        return (
-          <>
-            {activityMessage && activityMessage[0]}
-            <span>
-              updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
-              from{' '}
-            </span>{' '}
-            {fromAmount === ''
-              ? 'None'
-              : fromAmount &&
-                fromAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            <span> to </span>{' '}
-            {toAmount === ''
-              ? 'None'
-              : toAmount &&
-                toAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </>
-        );
-      }
-
-      return activityMessage && activityMessage[1].includes('addendum')
-        ? item.history_change_reason
-        : mixedLog
-        ? displayMixedLog(logUser, activityMessage, customerSetupHeader)
-        : displayLog(logUser, field, oldValue, newValue);
-    }
-    if (item && item.history_change_reason.includes('requested for')) {
-      activityMessage = item.history_change_reason.split('requested for');
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>requested for</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
-    }
-    if (item && item.history_change_reason.includes('added')) {
-      activityMessage = item.history_change_reason.split('added');
-      let value;
-      if (
-        item &&
-        item.history_change_reason.includes('Amazon Store Package Custom')
-      ) {
-        value = activityMessage[1].split('as');
-        return (
-          <>
-            {activityMessage && activityMessage[0]}
-            <span>added</span>
-            {value && value[0]}
-            as
-            {value &&
-              value[1] &&
-              value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </>
-        );
-      }
-
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>added</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
-    }
-    if (item && item.history_change_reason.includes('removed')) {
-      activityMessage = item.history_change_reason.split('removed');
-      return (
-        <>
-          {activityMessage && activityMessage[0]}
-          <span>removed</span>
-          {activityMessage && activityMessage[1]}
-        </>
-      );
-    }
-    return item && item.history_change_reason ? item.history_change_reason : '';
+    return '';
   };
 
   const handlePageChange = (currentPage) => {
@@ -557,67 +282,11 @@ export default function CustomerMainContainer() {
                       ''
                     )}
                   </div>
-                  <div className="col-6 mt-4 text-right">
-                    {' '}
-                    {userInfo && userInfo.role !== 'Customer' ? (
-                      <div className="add-more-people">
-                        {memberData &&
-                          memberData.map((item) => (
-                            <React.Fragment key={item.id}>
-                              <div
-                                className="add-more-people cursor "
-                                data-tip
-                                data-for={item.id}
-                                onClick={() =>
-                                  setShowMemberList({
-                                    show: true,
-                                    add: false,
-                                    modal: true,
-                                  })
-                                }
-                                role="presentation">
-                                <GetInitialName
-                                  userInfo={item.user_profile}
-                                  type="team"
-                                />
-                              </div>
-
-                              <ReactTooltip
-                                place="bottom"
-                                id={item.id}
-                                aria-haspopup="true">
-                                <strong>
-                                  {(item.user_profile &&
-                                    item.user_profile.first_name) ||
-                                    ' '}{' '}
-                                  {(item.user_profile &&
-                                    item.user_profile.last_name) ||
-                                    ' '}
-                                </strong>
-                                <p style={{ color: 'white', fontSize: '11px' }}>
-                                  {item.user_profile && item.user_profile.role}
-                                </p>
-                              </ReactTooltip>
-                            </React.Fragment>
-                          ))}
-
-                        <div
-                          className="add-more-people btn-add-team cursor"
-                          role="presentation"
-                          onClick={() =>
-                            setShowMemberList({
-                              show: true,
-                              add: true,
-                              modal: true,
-                            })
-                          }>
-                          <img src={PlusIcon} alt="add" />
-                        </div>
-                      </div>
-                    ) : (
-                      ''
-                    )}
-                  </div>
+                  <ShowTeamMembers
+                    role={userInfo && userInfo.role}
+                    setShowMemberList={setShowMemberList}
+                    memberData={memberData}
+                  />
                 </div>
 
                 <div className="row mt-5 pt-2">
