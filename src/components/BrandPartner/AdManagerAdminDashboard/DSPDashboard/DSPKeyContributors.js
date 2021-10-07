@@ -257,7 +257,7 @@ const DSPKeyContributors = ({
             }
             alt="logo"
           />
-          <div className="company-name">
+          <div className="company-name ">
             {itemData && itemData.company_name}
           </div>
           <div className="status">
@@ -366,8 +366,10 @@ const DSPKeyContributors = ({
             }
             alt="logo"
           />
-          <div className="company-name">{itemData.customer_name}</div>
-          <div className="status">{itemData.ad_manager}</div>
+          <div className="company-info-details">
+            <div className="company-name">{itemData.customer_name}</div>
+            <div className="status">{itemData.ad_manager}</div>
+          </div>
         </td>
         <td className="product-body">
           {itemData && itemData.current

@@ -256,7 +256,7 @@ export default function AccountDetails({
             {customer && customer.contract_status}
           </div>
         )}
-        <div className="straight-line horizontal-line mb-3 mt-4" />
+        <div className="straight-line horizontal-line mb-3 mt-4 d-lg-block d-none" />
       </div>
       <Modal
         isOpen={showModal}
