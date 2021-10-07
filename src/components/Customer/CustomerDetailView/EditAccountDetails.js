@@ -16,8 +16,8 @@ export default function EditAccountDetails({
   setDocumentImage,
   getActivityLogInfo,
   IsSaveDataClicked,
-  customerDetails,
   customer,
+  setCustomer,
   id,
 }) {
   const [countries, setCountries] = useState([]);
@@ -37,10 +37,10 @@ export default function EditAccountDetails({
 
   useEffect(() => {
     getCountry().then((response) => {
-      setCountries(response.data);
+      setCountries(response && response.data);
     });
     getCategories().then((category) => {
-      setCategories(category.data);
+      setCategories(category && category.data);
     });
   }, []);
 
@@ -141,7 +141,7 @@ export default function EditAccountDetails({
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
-        customerDetails(id);
+        setCustomer(response && response.data);
         getActivityLogInfo();
         setIsLoading({ loader: false, type: 'button' });
         IsSaveDataClicked(true);
@@ -219,7 +219,6 @@ EditAccountDetails.defaultProps = {
   id: '',
   setDocumentImage: {},
   IsSaveDataClicked: () => {},
-  customerDetails: () => {},
 };
 
 EditAccountDetails.propTypes = {
@@ -231,5 +230,5 @@ EditAccountDetails.propTypes = {
   setDocumentImage: arrayOf(shape({})),
   getActivityLogInfo: func.isRequired,
   IsSaveDataClicked: func,
-  customerDetails: func,
+  setCustomer: func.isRequired,
 };

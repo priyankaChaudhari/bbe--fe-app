@@ -293,7 +293,7 @@ export default function CustomerMainContainer() {
                       <AccountDetails
                         id={id}
                         setShowModal={setShowModal}
-                        userInfo={userInfo}
+                        role={userInfo && userInfo.role}
                         setStatusModal={setStatusModal}
                         customerData={customer}
                         showModal={showModal}
