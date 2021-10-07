@@ -291,7 +291,6 @@ const SponsoredKeyContribution = ({
           )
         }>
         <td className="product-body">
-          {' '}
           <img
             className="company-logo"
             src={
@@ -304,16 +303,20 @@ const SponsoredKeyContribution = ({
             }
             alt="logo"
           />
-          <div className="company-name">
-            {itemData && itemData.company_name}
-          </div>
-          <div className="status">
-            {`${
-              itemData && itemData.ad_manager && itemData.ad_manager.first_name
-            }
+          <div className="company-info-details">
+            <div className="company-name">
+              {itemData && itemData.company_name}
+            </div>
+            <div className="status">
+              {`${
+                itemData &&
+                itemData.ad_manager &&
+                itemData.ad_manager.first_name
+              }
             ${
               itemData && itemData.ad_manager && itemData.ad_manager.last_name
             }`}
+            </div>
           </div>
         </td>
         <td className="product-body">
@@ -413,8 +416,10 @@ const SponsoredKeyContribution = ({
             }
             alt="logo"
           />
-          <div className="company-name">{itemData.customer_name}</div>
-          <div className="status">{itemData.ad_manager}</div>
+          <div className="company-info-details">
+            <div className="company-name">{itemData.customer_name}</div>
+            <div className="status">{itemData.ad_manager}</div>
+          </div>
         </td>
         <td className="product-body">
           {itemData && itemData.current

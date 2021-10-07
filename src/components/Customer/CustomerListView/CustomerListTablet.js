@@ -227,7 +227,7 @@ export default function CustomerListTablet({
               </div>
             </div>
 
-            <div className="straight-line horizontal-line pt-3 " />
+            {/* <div className="straight-line horizontal-line pt-3 " /> */}
           </div>
         </WhiteCard>
       );

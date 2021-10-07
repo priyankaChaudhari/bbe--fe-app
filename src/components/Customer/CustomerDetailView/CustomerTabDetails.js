@@ -21,7 +21,7 @@ export default function CustomerTabDetails({
 }) {
   const dispatch = useDispatch();
   return (
-    <ul className="left-details-card ">
+    <ul className="left-details-card d-lg-block d-none">
       {role === 'Customer' ? (
         <li
           onClick={() => {
