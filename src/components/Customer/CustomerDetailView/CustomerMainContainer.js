@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 
-import Select from 'react-select';
 import 'react-toastify/dist/ReactToastify.css';
+import Select from 'react-select';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, useHistory } from 'react-router-dom';
