@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 
 import Modal from 'react-modal';
 import Select, { components } from 'react-select';
@@ -20,7 +20,7 @@ export default function AccountDetails({
   id,
   customerData,
   setShowModal,
-  userInfo,
+  role,
   setStatusModal,
   showModal,
   getActivityLogInfo,
@@ -42,6 +42,10 @@ export default function AccountDetails({
       }
     });
   }, [id]);
+
+  useEffect(() => {
+    if (role === 'Customer') customerDetails();
+  }, [customerDetails, role]);
 
   const checkStatus = () => {
     if (customer && customer.status) {
@@ -177,7 +181,7 @@ export default function AccountDetails({
             <span className="company-status inactive ">
               {customer && customer.status && customer.status.label}
             </span>
-          ) : userInfo && userInfo.role === 'Customer' ? (
+          ) : role === 'Customer' ? (
             <span
               className="company-status"
               style={{
@@ -276,9 +280,9 @@ export default function AccountDetails({
             setDocumentImage={customer.documents}
             getActivityLogInfo={getActivityLogInfo}
             IsSaveDataClicked={IsSaveDataClicked}
-            customerDetails={customerDetails}
             id={id}
             customer={customer}
+            setCustomer={setCustomer}
           />
         </ModalBox>
       </Modal>
@@ -297,9 +301,7 @@ AccountDetails.defaultProps = {
 AccountDetails.propTypes = {
   id: string,
   getActivityLogInfo: func.isRequired,
-  userInfo: shape({
-    role: string,
-  }).isRequired,
+  role: string.isRequired,
   customerData: shape({
     id: string,
   }).isRequired,

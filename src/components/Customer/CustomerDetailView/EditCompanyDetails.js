@@ -38,7 +38,7 @@ export default function EditCompanyDetails({
   getActivityLogInfo,
   scrollDown,
   setScrollDown,
-  customerDetails,
+  setDetail,
   detail,
   getContactData,
   contactInfo,
@@ -85,7 +85,7 @@ export default function EditCompanyDetails({
     setClearSocialInput({ ...clearSocialInput, [key]: null });
     updateCustomerDetails(detail.id, { [key]: null }).then((response) => {
       if (response && response.status === 200) {
-        customerDetails();
+        setDetail(response && response.data);
         toast.success('Social Media URL removed.');
         getActivityLogInfo();
         setIsLoading({ loader: false, type: 'page' });
@@ -253,7 +253,7 @@ export default function EditCompanyDetails({
       } else if (response && response.status === 200) {
         toast.success('Changes Saved!');
         setIsLoading({ loader: false, type: 'button' });
-        customerDetails();
+        setDetail(response && response.data);
         getActivityLogInfo();
         setShowModal(false);
       }
@@ -765,7 +765,7 @@ EditCompanyDetails.propTypes = {
   getActivityLogInfo: func.isRequired,
   setScrollDown: func.isRequired,
   scrollDown: bool,
-  customerDetails: func.isRequired,
+  setDetail: func.isRequired,
   getContactData: func.isRequired,
   contactInfo: arrayOf(shape({ length: number })).isRequired,
 };
