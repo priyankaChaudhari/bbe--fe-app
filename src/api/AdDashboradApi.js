@@ -198,7 +198,7 @@ export async function getFinanceInvoices(
     if (type === 'partner') {
       params = {
         ...params,
-        sort: `${sortBy}`,
+        sort: `-${sortBy}`,
       };
     } else {
       params = {
