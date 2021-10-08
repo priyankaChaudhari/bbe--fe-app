@@ -1,7 +1,31 @@
 import React, { useEffect } from 'react';
+
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
+
 import GlobalStyle from './theme/css/GlobalStyle';
 
+import WarningComponent from './common/WarningComponent';
+import UnauthorizedHeader from './common/UnauthorizedHeader';
+import AuthenticationComponent from './common/AuthenticationComponent';
+import MainContainer from './components/OnBoardingCustomer/MainContainer';
+import { ProdFavicon } from './theme/images';
+import { ProductDelegation } from './components/Customer';
+import { HelloSignComponent } from './components/Contract';
+import { Login, ForgotPassword, ResetPassword } from './components/Auth';
+import {
+  BrandAssetSummary,
+  BrandAssetUpload,
+  DelegationUpload,
+} from './components/BrandAssetGathering';
+import {
+  AmazonDeveloperAccess,
+  AmazonMerchant,
+  BillingInfo,
+  CompanyDigital,
+  CreateAccount,
+  Info,
+  Thanks,
+} from './components/OnBoardingCustomer';
 import {
   PATH_FORGOT_PASSWORD,
   PATH_LOGIN,
@@ -23,29 +47,6 @@ import {
   PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
   PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE,
 } from './constants';
-import AuthenticationComponent from './common/AuthenticationComponent';
-import { Login, ForgotPassword, ResetPassword } from './components/Auth';
-
-import { HelloSignComponent } from './components/Contract';
-import WarningComponent from './common/WarningComponent';
-import UnauthorizedHeader from './common/UnauthorizedHeader';
-import {
-  AmazonDeveloperAccess,
-  AmazonMerchant,
-  BillingInfo,
-  CompanyDigital,
-  CreateAccount,
-  Info,
-  Thanks,
-} from './components/OnBoardingCustomer';
-import MainContainer from './components/OnBoardingCustomer/MainContainer';
-import {
-  BrandAssetSummary,
-  BrandAssetUpload,
-  DelegationUpload,
-} from './components/BrandAssetGathering';
-import { ProductDelegation } from './components/Customer';
-import { ProdFavicon } from './theme/images';
 
 export default function App() {
   useEffect(() => {
@@ -67,9 +68,11 @@ export default function App() {
         <Route path={PATH_FORGOT_PASSWORD} component={ForgotPassword} />
         <Route path={PATH_RESET_PASSWORD} component={ResetPassword} />
         <Route path={PATH_UNAUTHORIZED_HEADER} component={UnauthorizedHeader} />
+
         {/* Contract */}
         <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} />
         <Route path={PATH_WARNING} component={WarningComponent} />
+
         {/* Onboarding Customer */}
         <Route path={PATH_ACCOUNT_SETUP_CHOOSE} exact component={Info} />
         <Route path={PATH_ACCOUNT_SETUP} component={MainContainer} />
