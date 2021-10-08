@@ -1,14 +1,15 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+
+import PropTypes from 'prop-types';
+import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
-import PropTypes from 'prop-types';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 am4core.useTheme(am4themes_dataviz);
-// am4core.useTheme(am4themes_animated);
 am4core.color('red');
 const _ = require('lodash');
 

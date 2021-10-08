@@ -1,5 +1,5 @@
-import { metricsNameForAPI } from '../constants/CompanyPerformanceConstants';
 import axiosInstance from '../axios';
+import { metricsNameForAPI } from '../constants/CompanyPerformanceConstants';
 import {
   API_CUSTOMER,
   API_AD_MANAGER_ADMIN_DASHBOARD,
@@ -7,6 +7,7 @@ import {
   API_DSP_INVOICES,
   API_DSP_BILLING,
   API_CUSTOMER_CONTRACT,
+  API_SALES_DASHBOARD,
 } from '../constants/ApiConstants';
 
 export async function getAdManagerAdminGraphData(
@@ -164,6 +165,48 @@ export async function getDspPacingDahboardData(
   let result = {};
   result = await axiosInstance
     .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}dsp-pacing/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getSalesGraphData(
+  dailyFacts,
+  groupBy,
+  marketplace,
+  user,
+  startDate,
+  endDate,
+  userInfo,
+) {
+  let selectedUser = '';
+  if (userInfo && userInfo.role === 'BGS Manager') {
+    selectedUser = user;
+  } else {
+    selectedUser = userInfo && userInfo.id;
+  }
+
+  let params = {
+    daily_facts: dailyFacts,
+    group_by: groupBy,
+    marketplace,
+    user: selectedUser,
+  };
+
+  if (startDate && endDate) {
+    params = {
+      ...params,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
+
+  const result = await axiosInstance
+    .get(`${API_SALES_DASHBOARD}`, { params })
     .then((response) => {
       return response;
     })

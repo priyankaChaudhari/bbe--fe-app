@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { arrayOf, bool, func, string, objectOf } from 'prop-types';
 
-import { Tabs, WhiteCard, Table, PageLoader, Status } from '../../../../common';
 import { TabletViewManager } from '../../../../theme/Global';
 import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import {
@@ -19,21 +18,25 @@ import {
   keyContributionHeaders,
   metricsCurrency,
 } from '../../../../constants/CompanyPerformanceConstants';
-
-const _ = require('lodash');
+import {
+  Tabs,
+  WhiteCard,
+  Table,
+  PageLoader,
+  Status,
+  NoData,
+} from '../../../../common';
 
 const SalesKeyContribution = ({
   keyContributionLoader,
   isDesktop,
   contributionData,
   selectedContributionOption,
-  selectedAdManager,
   handleContributionOptions,
-  selectedAdMetrics,
   selectedTabMetrics,
   handleOnMetricsTabChange,
   currencySymbol,
-  selectedAdDF,
+  selectedSalesDF,
 }) => {
   const history = useHistory();
 
@@ -43,16 +46,12 @@ const SalesKeyContribution = ({
     Low: '#F4F6FC',
   };
 
-  const tabOptions = {
-    adSales: 'Ad Sales',
-    adSpend: 'Ad Spend',
-    adConversion: 'Ad Conversion Rate',
-    impressions: 'Impressions',
-    adCos: 'ACOS',
-    adRoas: 'ROAS',
-    adClicks: 'Clicks',
-    adClickRate: 'Click Through Rate',
-  };
+  const tabOptions = [
+    { value: 'revenue', label: 'Revenue' },
+    { value: 'traffic', label: 'Traffic' },
+    { value: 'conversion', label: 'Conversion' },
+    { value: 'unitsSold', label: 'Units Sold' },
+  ];
 
   const returnMetricsValue = (value) => {
     let decimalDigits = 2;
@@ -83,42 +82,14 @@ const SalesKeyContribution = ({
     return '0';
   };
 
-  const renderAdPerformanceDifference = (actualValue, grayArrow, metrics) => {
-    const value = actualValue;
-    let selectedClass = '';
-    let selectedArrow = '';
-
+  const renderAdPerformanceDifference = (value) => {
     if (value) {
-      if (metrics === 'ACOS') {
-        if (value.toString().includes('-')) {
-          selectedClass = 'increase-rate';
-          selectedArrow = ArrowUpIcon;
-        } else {
-          selectedClass = 'decrease-rate';
-          selectedArrow = ArrowDownIcon;
-        }
-      } else if (grayArrow) {
-        if (value.toString().includes('-')) {
-          selectedClass = 'decrease-rate grey';
-          selectedArrow = UpDowGrayArrow;
-        } else {
-          selectedClass = 'increase-rate grey';
-          selectedArrow = UpDowGrayArrow;
-        }
-      } else if (value.toString().includes('-')) {
-        selectedClass = 'decrease-rate';
-        selectedArrow = ArrowDownIcon;
-      } else {
-        selectedClass = 'increase-rate';
-        selectedArrow = ArrowUpIcon;
-      }
-
       if (value.toString().includes('-')) {
         return (
           <>
-            <div className={selectedClass}>
+            <div className="decrease-rate">
               {' '}
-              <img className="red-arrow" src={selectedArrow} alt="arrow-up" />
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
               {`${Number(value.toString().split('-')[1]).toFixed(2)} %`}
             </div>
           </>
@@ -127,10 +98,10 @@ const SalesKeyContribution = ({
 
       return (
         <>
-          <div className={selectedClass}>
+          <div className="increase-rate">
             <img
               className="green-arrow"
-              src={selectedArrow}
+              src={ArrowUpIcon}
               width="14px"
               alt="arrow-up"
             />
@@ -143,10 +114,7 @@ const SalesKeyContribution = ({
   };
 
   const renderKeyContributionOptions = () => {
-    const keyTabOptions =
-      selectedAdManager === 'all'
-        ? keyContributionConstant.noAdManagerSelected
-        : keyContributionConstant.adManagerSelected;
+    const keyTabOptions = keyContributionConstant.adManagerSelected;
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
@@ -174,22 +142,17 @@ const SalesKeyContribution = ({
   };
 
   const renderKeyContributionTabs = () => {
-    let selectedTab = selectedTabMetrics;
-    if (selectedAdMetrics[selectedTabMetrics] === undefined) {
-      const selctedArray = _.keys(selectedAdMetrics);
-      // eslint-disable-next-line prefer-destructuring
-      selectedTab = selctedArray[0];
-      handleOnMetricsTabChange(selectedTab);
-    }
+    const selectedTab = selectedTabMetrics;
+
     return (
       <Tabs>
         <ul className="tabs">
-          {_.keys(selectedAdMetrics).map((item) => (
+          {tabOptions.map((item) => (
             <li
-              className={selectedTab === item ? 'active' : ''}
-              onClick={() => handleOnMetricsTabChange(item)}
+              className={selectedTab === item.value ? 'active' : ''}
+              onClick={() => handleOnMetricsTabChange(item.value)}
               role="presentation">
-              {tabOptions[item]}
+              {item.label}
             </li>
           ))}
         </ul>
@@ -243,18 +206,18 @@ const SalesKeyContribution = ({
           CUSTOMER
         </th>
         <th width="18%" className="product-header">
-          AD SALES
+          TOTAL SALES
         </th>
         <th width="18%" className="product-header">
-          AD SPEND
+          TRAFFIC
         </th>
         <th width="18%" className="product-header">
           {' '}
-          AD IMPRESSIONS
+          CONVERSION
         </th>
         <th width="28%" className="product-header">
           {' '}
-          ACOS
+          UNITS SOLD
         </th>
       </tr>
     ) : (
@@ -332,8 +295,6 @@ const SalesKeyContribution = ({
               itemData.sponsored_ad_performance &&
               itemData.sponsored_ad_performance.difference_data &&
               itemData.sponsored_ad_performance.difference_data.ad_sales,
-            false,
-            'AdSales',
           )}
         </td>
         <td className="product-body">
@@ -351,8 +312,6 @@ const SalesKeyContribution = ({
               itemData.sponsored_ad_performance &&
               itemData.sponsored_ad_performance.difference_data &&
               itemData.sponsored_ad_performance.difference_data.ad_spend,
-            true,
-            'AdSpend',
           )}
         </td>
         <td>
@@ -369,8 +328,6 @@ const SalesKeyContribution = ({
               itemData.sponsored_ad_performance &&
               itemData.sponsored_ad_performance.difference_data &&
               itemData.sponsored_ad_performance.difference_data.impressions,
-            false,
-            'AdImpressions',
           )}
         </td>
         <td>
@@ -387,8 +344,6 @@ const SalesKeyContribution = ({
               itemData.sponsored_ad_performance &&
               itemData.sponsored_ad_performance.difference_data &&
               itemData.sponsored_ad_performance.difference_data.acos,
-            false,
-            'ACOS',
           )}
         </td>
       </tr>
@@ -542,7 +497,7 @@ const SalesKeyContribution = ({
           </div>
           {renderKeyContributionOptions()}
         </div>
-        {selectedAdDF.value === 'custom' &&
+        {selectedSalesDF.value === 'custom' &&
         selectedContributionOption !== 'keyMetrics' ? (
           <NoData>
             Top contributors cannot be calculated when using custom dates.
@@ -551,7 +506,7 @@ const SalesKeyContribution = ({
           <>
             {selectedContributionOption !== 'keyMetrics'
               ? renderKeyContributionTabs()
-              : ''}
+              : null}
 
             {keyContributionLoader ? (
               <PageLoader
@@ -573,6 +528,7 @@ const SalesKeyContribution = ({
       </WhiteCard>
     );
   };
+
   return <Wrapper>{renderKeyContributors()}</Wrapper>;
 };
 
@@ -581,15 +537,14 @@ export default SalesKeyContribution;
 SalesKeyContribution.defaultProps = {
   keyContributionLoader: false,
   isDesktop: false,
+  currencySymbol: '',
   contributionData: {},
   selectedContributionOption: {},
-  selectedAdManager: {},
-  handleContributionOptions: () => {},
-  selectedAdMetrics: {},
   selectedTabMetrics: {},
-  selectedAdDF: {},
+  selectedSalesDF: {},
+
   handleOnMetricsTabChange: () => {},
-  currencySymbol: '',
+  handleContributionOptions: () => {},
 };
 
 SalesKeyContribution.propTypes = {
@@ -597,13 +552,12 @@ SalesKeyContribution.propTypes = {
   isDesktop: bool,
   contributionData: arrayOf(Array),
   selectedContributionOption: string,
-  selectedAdManager: string,
-  handleContributionOptions: func,
-  selectedAdMetrics: string,
   selectedTabMetrics: string,
-  handleOnMetricsTabChange: func,
-  selectedAdDF: objectOf(Object),
+  selectedSalesDF: objectOf(Object),
   currencySymbol: string,
+
+  handleContributionOptions: func,
+  handleOnMetricsTabChange: func,
 };
 
 const Wrapper = styled.div`
@@ -613,9 +567,4 @@ const Wrapper = styled.div`
   .statusContainer {
     margin-top: 0px !important;
   }
-`;
-
-const NoData = styled.div`
-  margin: 3em;
-  text-align: center;
 `;

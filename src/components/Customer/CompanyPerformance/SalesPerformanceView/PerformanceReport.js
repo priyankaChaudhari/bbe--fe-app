@@ -1,14 +1,14 @@
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState, useCallback } from 'react';
-import { func, instanceOf, string } from 'prop-types';
-import dayjs from 'dayjs';
-import * as am4core from '@amcharts/amcharts4/core';
 
+import dayjs from 'dayjs';
+import styled from 'styled-components';
+import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import Select, { components } from 'react-select';
-import styled from 'styled-components';
+import { func, instanceOf, string } from 'prop-types';
 import {
   LineChart,
   ResponsiveContainer,
@@ -23,6 +23,17 @@ import {
   Cell,
 } from 'recharts';
 
+import SalesPerformanceChart from './SalePerformanceChart';
+import Theme from '../../../../theme/Theme';
+import CardMetrics from '../../../../common/CardMetrics';
+import { DropDown } from '../DropDown';
+import { getPerformance, getBuyBoxChartData } from '../../../../api';
+import { ArrowUpIcon, ArrowDownIcon, CaretUp } from '../../../../theme/images';
+import {
+  dateOptions,
+  bbDateOptions,
+  noGraphDataMessage,
+} from '../../../../constants/CompanyPerformanceConstants';
 import {
   DropDownSelect,
   WhiteCard,
@@ -30,26 +41,11 @@ import {
   CustomDateModal,
   Tabs,
   ToggleButton,
+  NoData,
 } from '../../../../common';
-import { getPerformance, getBuyBoxChartData } from '../../../../api';
-
-import {
-  ArrowUpIcon,
-  ArrowDownIcon,
-  CaretUp,
-} from '../../../../theme/images/index';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-import { DropDown } from '../DropDown';
-import {
-  dateOptions,
-  bbDateOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
-import SalesPerformanceChart from './SalePerformanceChart';
-import Theme from '../../../../theme/Theme';
-import CardMetrics from '../../../../common/CardMetrics';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -1424,7 +1420,6 @@ PerformanceReport.propTypes = {
   setViewComponent: func,
 };
 const ViewData = styled.div`
- 
   .view-data-for {
     margin-right: 60px;
     font-weight: normal;
@@ -1438,10 +1433,6 @@ const ViewData = styled.div`
     .view-data-for {
       text-align: center;
       padding-bottom: 10px;
+    }
   }
-`;
-
-const NoData = styled.div`
-  margin: 3em;
-  text-align: center;
 `;

@@ -31,13 +31,6 @@ export default function AdManagerAdminContainer({ userInfo }) {
     return flag;
   };
 
-  // const setTab =
-  //   userInfo &&
-  //   (userInfo.role === 'Ad Manager Admin' ||
-  //     userInfo.role === 'Sponsored Advertising Ad Manager' ||
-  //     userInfo.role === 'Hybrid Ad Manager')
-  //     ? 'sponsored'
-  //     : 'dsp';
   const [viewComponent, setViewComponent] = useState(setTab);
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const getMarketPlace = useCallback(() => {
@@ -128,37 +121,9 @@ export default function AdManagerAdminContainer({ userInfo }) {
                 DSP Advertising
               </li>
             ) : null}
-
-            {/* {userInfo.role !== 'DSP Ad Manager' ? (
-              <li
-                className={viewComponent === 'sponsored' ? 'active' : ''}
-                onClick={() => setViewComponent('sponsored')}
-                role="presentation">
-                Sponsored Advertising
-              </li>
-            ) : null}
-            {userInfo.role !== 'Sponsored Advertising Ad Manager' ? (
-              <li
-                className={viewComponent === 'dsp' ? 'active' : ''}
-                onClick={() => setViewComponent('dsp')}
-                role="presentation">
-                DSP Advertising
-              </li>
-            ) : null} */}
           </ul>
         </Tabs>
         {renderComponent(viewComponent)}
-        {viewComponent === 'sponsored' ? (
-          <SponsoredDashboard
-            marketplaceChoices={marketplaceChoices}
-            userInfo={userInfo}
-          />
-        ) : (
-          <DSPDashboard
-            marketplaceChoices={marketplaceChoices}
-            userInfo={userInfo}
-          />
-        )}
       </div>
     </DashboardCard>
   );

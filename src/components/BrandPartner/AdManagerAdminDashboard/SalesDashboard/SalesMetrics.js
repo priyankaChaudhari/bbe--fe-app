@@ -12,18 +12,18 @@ const _ = require('lodash');
 
 const SalesMetrics = ({
   currencySymbol,
-  selectedAdMetrics,
-  setSelectedAdMetrics,
-  adCurrentTotal,
+  selectedSalesMetrics,
+  setSelectedSalesMetrics,
+  salesCurrentTotal,
   addThousandComma,
-  adPreviousTotal,
-  adDifference,
+  salesPreviousTotal,
+  salesDifference,
 }) => {
   const setBoxClasses = (name, classValue) => {
     let selectedClass = '';
-    if (Object.prototype.hasOwnProperty.call(selectedAdMetrics, name)) {
+    if (Object.prototype.hasOwnProperty.call(selectedSalesMetrics, name)) {
       selectedClass = `order-chart-box ${classValue} fix-height`;
-    } else if (_.size(selectedAdMetrics) === 4) {
+    } else if (_.size(selectedSalesMetrics) === 4) {
       selectedClass = 'order-chart-box fix-height disabled';
     } else {
       selectedClass = 'order-chart-box fix-height';
@@ -33,13 +33,13 @@ const SalesMetrics = ({
 
   const setBoxToggle = (name) => {
     if (
-      Object.prototype.hasOwnProperty.call(selectedAdMetrics, name) &&
-      _.size(selectedAdMetrics) > 1
+      Object.prototype.hasOwnProperty.call(selectedSalesMetrics, name) &&
+      _.size(selectedSalesMetrics) > 1
     ) {
-      setSelectedAdMetrics(_.omit(selectedAdMetrics, [name]));
-    } else if (_.size(selectedAdMetrics) < 4) {
-      setSelectedAdMetrics(
-        _.omit(_.assign(selectedAdMetrics, { [name]: true })),
+      setSelectedSalesMetrics(_.omit(selectedSalesMetrics, [name]));
+    } else if (_.size(selectedSalesMetrics) < 4) {
+      setSelectedSalesMetrics(
+        _.omit(_.assign(selectedSalesMetrics, { [name]: true })),
       );
     }
   };
@@ -50,32 +50,34 @@ const SalesMetrics = ({
       <div className="row mr-1 ml-1">
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
           <div
-            id="BT-sponsored-adsalescard"
-            onClick={() => setBoxToggle('adSales')}
+            id="BT-sale-revenuecard"
+            onClick={() => setBoxToggle('revenue')}
             role="presentation"
-            className={setBoxClasses('adSales', 'ad-sales-active')}>
-            <div className="chart-name">Ad Sales</div>
+            className={setBoxClasses('revenue', 'ad-sales-active')}>
+            <div className="chart-name">Total Sales</div>
             <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.ad_sales
-                ? `${currencySign}${addThousandComma(adCurrentTotal.ad_sales)}`
+              {salesCurrentTotal && salesCurrentTotal.revenue
+                ? `${currencySign}${addThousandComma(
+                    salesCurrentTotal.revenue,
+                  )}`
                 : `${currencySign}0.00`}
             </div>
             <div className="vs">
-              {adPreviousTotal && adPreviousTotal.ad_sales
+              {salesPreviousTotal && salesPreviousTotal.revenue
                 ? `vs ${currencySign}${addThousandComma(
-                    adPreviousTotal.ad_sales,
+                    salesPreviousTotal.revenue,
                   )}`
                 : `vs ${currencySign}0.00`}
             </div>
-            {adDifference && adDifference.ad_sales ? (
-              adDifference.ad_sales >= 0 ? (
+            {salesDifference && salesDifference.revenue ? (
+              salesDifference.revenue >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {adDifference.ad_sales}%
+                  {salesDifference.revenue}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -84,7 +86,7 @@ const SalesMetrics = ({
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {adDifference.ad_sales.toString().replace('-', '')}%
+                  {salesDifference.revenue.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -94,32 +96,30 @@ const SalesMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
-            id="BT-sponsored-adspendcard"
+            id="BT-sale-trafficcard"
             role="presentation"
-            onClick={() => setBoxToggle('adSpend')}
-            className={setBoxClasses('adSpend', 'ad-spend-active')}>
-            <div className="chart-name">Ad Spend</div>
+            onClick={() => setBoxToggle('traffic')}
+            className={setBoxClasses('traffic', 'ad-spend-active')}>
+            <div className="chart-name">Traffic</div>
             <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.ad_spend
-                ? `${currencySign}${addThousandComma(adCurrentTotal.ad_spend)}`
-                : `${currencySign}0.00`}
+              {salesCurrentTotal && salesCurrentTotal.traffic
+                ? `${addThousandComma(salesCurrentTotal.traffic)}`
+                : `0.00`}
             </div>
             <div className="vs">
-              {adPreviousTotal && adPreviousTotal.ad_spend
-                ? `vs ${currencySign}${addThousandComma(
-                    adPreviousTotal.ad_spend,
-                  )}`
-                : `vs ${currencySign}0.00`}
+              {salesPreviousTotal && salesPreviousTotal.traffic
+                ? `vs ${addThousandComma(salesPreviousTotal.traffic)}`
+                : `vs 0.00`}
             </div>
-            {adDifference && adDifference.ad_spend ? (
-              adDifference.ad_spend >= 0 ? (
+            {salesDifference && salesDifference.traffic ? (
+              salesDifference.traffic >= 0 ? (
                 <div className="perentage-value grey mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={UpDowGrayArrow}
                     alt="arrow-down"
                   />
-                  {adDifference.ad_spend}%
+                  {salesDifference.traffic}%
                 </div>
               ) : (
                 <div className="perentage-value grey mt-3 pt-1">
@@ -128,7 +128,7 @@ const SalesMetrics = ({
                     src={UpDowGrayArrow}
                     alt="arrow-down"
                   />
-                  {adDifference.ad_spend.toString().replace('-', '')}%
+                  {salesDifference.traffic.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -138,30 +138,30 @@ const SalesMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3">
           <div
-            id="BT-sponsored-adconversioncard"
-            onClick={() => setBoxToggle('adConversion')}
+            id="BT-sale-conversioncard"
+            onClick={() => setBoxToggle('conversion')}
             role="presentation"
-            className={setBoxClasses('adConversion', 'ad-conversion-active')}>
-            <div className="chart-name">Ad Conversion Rate</div>
+            className={setBoxClasses('conversion', 'ad-conversion-active')}>
+            <div className="chart-name">Conversion</div>
             <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.ad_conversion_rate
-                ? `${addThousandComma(adCurrentTotal.ad_conversion_rate)}%`
+              {salesCurrentTotal && salesCurrentTotal.conversion
+                ? `${addThousandComma(salesCurrentTotal.conversion)}%`
                 : `0.00%`}
             </div>
             <div className="vs">
-              {adPreviousTotal && adPreviousTotal.ad_conversion_rate
-                ? `vs ${addThousandComma(adPreviousTotal.ad_conversion_rate)}%`
+              {salesPreviousTotal && salesPreviousTotal.conversion
+                ? `vs ${addThousandComma(salesPreviousTotal.conversion)}%`
                 : `vs 0.00%`}
             </div>
-            {adDifference && adDifference.ad_conversion_rate ? (
-              adDifference.ad_conversion_rate >= 0 ? (
+            {salesDifference && salesDifference.conversion ? (
+              salesDifference.conversion >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {adDifference.ad_conversion_rate}%
+                  {salesDifference.conversion}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -170,7 +170,7 @@ const SalesMetrics = ({
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {adDifference.ad_conversion_rate.toString().replace('-', '')}%
+                  {salesDifference.conversion.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -180,30 +180,30 @@ const SalesMetrics = ({
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <div
-            id="BT-sponsored-impressionscard"
-            onClick={() => setBoxToggle('impressions')}
+            id="BT-sale-unitsoldcard"
+            onClick={() => setBoxToggle('unitsSold')}
             role="presentation"
-            className={setBoxClasses('impressions', 'impression-active')}>
-            <div className="chart-name">Impressions</div>
+            className={setBoxClasses('unitsSold', 'impression-active')}>
+            <div className="chart-name">units Sold</div>
             <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.impressions
-                ? addThousandComma(adCurrentTotal.impressions, 0)
+              {salesCurrentTotal && salesCurrentTotal.units_sold
+                ? addThousandComma(salesCurrentTotal.units_sold, 0)
                 : `0`}
             </div>
             <div className="vs">
-              {adPreviousTotal && adPreviousTotal.impressions
-                ? `vs ${addThousandComma(adPreviousTotal.impressions, 0)}`
+              {salesPreviousTotal && salesPreviousTotal.units_sold
+                ? `vs ${addThousandComma(salesPreviousTotal.units_sold, 0)}`
                 : `vs 0`}
             </div>
-            {adDifference && adDifference.impressions ? (
-              adDifference.impressions >= 0 ? (
+            {salesDifference && salesDifference.units_sold ? (
+              salesDifference.units_sold >= 0 ? (
                 <div className="perentage-value mt-3 pt-1">
                   <img
                     className="green-arrow"
                     src={ArrowUpIcon}
                     alt="arrow-down"
                   />
-                  {addThousandComma(adDifference.impressions)}%
+                  {addThousandComma(salesDifference.units_sold)}%
                 </div>
               ) : (
                 <div className="perentage-value down mt-3 pt-1">
@@ -212,180 +212,7 @@ const SalesMetrics = ({
                     src={ArrowDownIcon}
                     alt="arrow-down"
                   />
-                  {adDifference.impressions.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
-        </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-          <div
-            id="BT-sponsored-Acoscard"
-            onClick={() => setBoxToggle('adCos')}
-            role="presentation"
-            className={setBoxClasses('adCos', 'ad-cos-active')}>
-            <div className="chart-name">ACos</div>
-            <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.acos
-                ? `${addThousandComma(adCurrentTotal.acos)}%`
-                : `0.00%`}
-            </div>
-            <div className="vs">
-              {adPreviousTotal && adPreviousTotal.acos
-                ? `vs ${addThousandComma(adPreviousTotal.acos)}%`
-                : `vs 0.00%`}
-            </div>
-            {adDifference && adDifference.acos ? (
-              adDifference.acos >= 0 ? (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.acos}%
-                </div>
-              ) : (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.acos.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
-        </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div
-            id="BT-sponsored-Roascard"
-            onClick={() => setBoxToggle('adRoas', 'ad')}
-            role="presentation"
-            className={setBoxClasses('adRoas', 'ad-roas-active', 'ad')}>
-            <div className="chart-name">RoAS</div>
-            <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.roas
-                ? `${currencySign}${addThousandComma(adCurrentTotal.roas)}`
-                : `${currencySign}0.00`}
-            </div>
-            <div className="vs">
-              {' '}
-              {adPreviousTotal && adPreviousTotal.roas
-                ? `vs ${currencySign}${addThousandComma(adPreviousTotal.roas)}`
-                : `vs ${currencySign}0.00`}
-            </div>
-            {adDifference && adDifference.roas ? (
-              adDifference.roas >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.roas}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.roas.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
-        </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div
-            id="BT-sponsored-clickcard"
-            onClick={() => setBoxToggle('adClicks', 'ad')}
-            role="presentation"
-            className={setBoxClasses('adClicks', 'ad-click-active', 'ad')}>
-            <div className="chart-name">Clicks</div>
-            <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.clicks
-                ? addThousandComma(adCurrentTotal.clicks, 0)
-                : '0'}
-            </div>
-            <div className="vs">
-              {adPreviousTotal && adPreviousTotal.clicks
-                ? `vs ${addThousandComma(adPreviousTotal.clicks, 0)}`
-                : `vs 0`}
-            </div>
-            {adDifference && adDifference.clicks ? (
-              adDifference.clicks >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.clicks}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.clicks.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
-        </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div
-            id="BT-sponsored-clickratecard"
-            onClick={() => setBoxToggle('adClickRate', 'ad')}
-            role="presentation"
-            className={setBoxClasses(
-              'adClickRate',
-              'ad-clickrate-active',
-              'ad',
-            )}>
-            <div className="chart-name">Click through rate</div>
-            <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.ctr
-                ? `${addThousandComma(adCurrentTotal.ctr)}%`
-                : `0.00%`}
-            </div>
-            <div className="vs">
-              {adPreviousTotal && adPreviousTotal.ctr
-                ? `vs ${addThousandComma(adPreviousTotal.ctr)}%`
-                : `vs 0.00%`}
-            </div>
-            {adDifference && adDifference.ctr ? (
-              adDifference.ctr >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.ctr}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {adDifference.ctr.toString().replace('-', '')}%
+                  {salesDifference.units_sold.toString().replace('-', '')}%
                 </div>
               )
             ) : (
@@ -396,6 +223,7 @@ const SalesMetrics = ({
       </div>
     );
   };
+
   return <>{renderAdMetrics()}</>;
 };
 
@@ -403,20 +231,23 @@ export default SalesMetrics;
 
 SalesMetrics.defaultProps = {
   currencySymbol: {},
-  setSelectedAdMetrics: () => {},
-  selectedAdMetrics: {},
-  adCurrentTotal: {},
+  selectedSalesMetrics: {},
+  salesCurrentTotal: {},
+  salesPreviousTotal: {},
+  salesDifference: {},
+
   addThousandComma: () => {},
-  adPreviousTotal: {},
-  adDifference: {},
+  setSelectedSalesMetrics: () => {},
 };
 
 SalesMetrics.propTypes = {
   currencySymbol: string,
-  setSelectedAdMetrics: func,
-  selectedAdMetrics: instanceOf(Object),
-  adCurrentTotal: instanceOf(Object),
+
+  selectedSalesMetrics: instanceOf(Object),
+  salesCurrentTotal: instanceOf(Object),
+  salesPreviousTotal: instanceOf(Object),
+  salesDifference: instanceOf(Object),
+
   addThousandComma: func,
-  adPreviousTotal: instanceOf(Object),
-  adDifference: instanceOf(Object),
+  setSelectedSalesMetrics: func,
 };
