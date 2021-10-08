@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import Theme from './Theme';
 
 export const CustomerListPage = styled.div`
