@@ -3,7 +3,15 @@ import React from 'react';
 import Modal from 'react-modal';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
-import { bool, func, object, oneOfType, shape, string } from 'prop-types';
+import {
+  bool,
+  func,
+  object,
+  oneOfType,
+  shape,
+  string,
+  instanceOf,
+} from 'prop-types';
 
 import { CloseIcon } from '../theme/images';
 import ModalBox from './ModalBox';
@@ -109,5 +117,5 @@ CustomDateModal.propTypes = {
     endDate: oneOfType([Date, string, object]).isRequired,
   }),
   title: string,
-  currentDate: todaysDate,
+  currentDate: instanceOf(Date),
 };

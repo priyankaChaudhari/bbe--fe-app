@@ -1,9 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import { string, func, shape, bool } from 'prop-types';
 
 import AddTeamMember from './AddTeamMember';
+import { TrashIcons, AddIcons, CloseIcon } from '../../theme/images';
+import {
+  deleteCustomerMember,
+  getCustomerMembers,
+  updateCustomerMember,
+} from '../../api';
 import {
   Button,
   CommonPagination,
@@ -12,12 +18,6 @@ import {
   SuccessMsg,
   GetInitialName,
 } from '../../common';
-import { TrashIcons, AddIcons, CloseIcon } from '../../theme/images';
-import {
-  deleteCustomerMember,
-  getCustomerMembers,
-  updateCustomerMember,
-} from '../../api';
 
 export default function EditTeamMember({
   id,
@@ -26,6 +26,7 @@ export default function EditTeamMember({
   showMemberList,
   setTeamDeleteModal,
   userInfo,
+  getActivityLogInfo,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [removeMember, setRemoveMember] = useState({
@@ -55,8 +56,8 @@ export default function EditTeamMember({
   );
 
   useEffect(() => {
-    getMembers(1);
-  }, [getMembers]);
+    if (showMemberList.show && showMemberList.modal) getMembers(1);
+  }, [getMembers, showMemberList.show, showMemberList.modal]);
 
   const deleteMember = () => {
     setRemoveMember({ ...removeMember, show: true });
@@ -65,6 +66,7 @@ export default function EditTeamMember({
       toast.success('Team Member Removed.');
       setIsLoading({ loader: false, type: 'button' });
       getCustomerMemberList();
+      getActivityLogInfo();
       getMembers(1);
       setRemoveMember({ id: '', name: '', show: false });
       setShowSuccessMsg(true);
@@ -86,6 +88,7 @@ export default function EditTeamMember({
         getMembers(pageNumber);
         setShowBtn(false);
         getCustomerMemberList();
+        getActivityLogInfo();
       } else {
         setIsLoading({ loader: false, type: 'button' });
       }
@@ -315,15 +318,16 @@ EditTeamMember.defaultProps = {
 };
 
 EditTeamMember.propTypes = {
-  id: PropTypes.string,
-  getCustomerMemberList: PropTypes.func,
-  setShowMemberList: PropTypes.func,
-  showMemberList: PropTypes.shape({
-    show: PropTypes.bool,
-    add: PropTypes.bool,
+  id: string,
+  getCustomerMemberList: func,
+  setShowMemberList: func,
+  showMemberList: shape({
+    show: bool,
+    add: bool,
   }),
-  setTeamDeleteModal: PropTypes.func,
-  userInfo: PropTypes.shape({
-    role: PropTypes.string,
+  setTeamDeleteModal: func,
+  userInfo: shape({
+    role: string,
   }).isRequired,
+  getActivityLogInfo: func.isRequired,
 };

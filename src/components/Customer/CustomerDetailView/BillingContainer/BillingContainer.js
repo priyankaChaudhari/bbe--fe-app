@@ -13,15 +13,13 @@ const BillingContainer = ({
   customerStatus,
   redirectType,
 }) => {
-  // const [viewComponent, setViewComponent] = useState('rev share');
-  const [viewComponent, setViewComponent] = useState('dsp service');
+  const [viewComponent, setViewComponent] = useState('rev share');
 
   useEffect(() => {
     if (redirectType === 'dspInvoicing') {
       setViewComponent('dsp service');
     } else {
-      // setViewComponent('rev share');
-      setViewComponent('dsp service');
+      setViewComponent('rev share');
     }
   }, [redirectType]);
 
@@ -29,12 +27,12 @@ const BillingContainer = ({
     <div className="col-lg-6 col-12">
       <Tabs>
         <ul className="tabs">
-          {/* <li
+          <li
             className={viewComponent === 'rev share' ? 'active' : ''}
             onClick={() => setViewComponent('rev share')}
             role="presentation">
             Rev Share Invoices
-          </li> */}
+          </li>
           <li
             className={viewComponent === 'dsp service' ? 'active' : ''}
             onClick={() => setViewComponent('dsp service')}

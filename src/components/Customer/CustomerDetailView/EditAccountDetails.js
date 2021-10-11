@@ -1,26 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
 import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
 import Select, { components } from 'react-select';
-import { useDispatch } from 'react-redux';
+import { arrayOf, func, shape, string } from 'prop-types';
 
 import InputSelect from '../../../common/InputSelect';
 import CropUploadImage from '../../../common/CropUploadImage';
 import { editAccountFields } from '../../../constants';
 import { SortDownIcon } from '../../../theme/images';
-import { getCustomerDetails } from '../../../store/actions/customerState';
 import { getCategories, getCountry, updateCustomerDetails } from '../../../api';
 import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
 
 export default function EditAccountDetails({
-  customer,
   setShowModal,
   setDocumentImage,
   getActivityLogInfo,
   IsSaveDataClicked,
+  customer,
+  setCustomer,
+  id,
 }) {
-  const dispatch = useDispatch();
   const [countries, setCountries] = useState([]);
   const [categories, setCategories] = useState([]);
   const [formData, setFormData] = useState({});
@@ -38,10 +37,10 @@ export default function EditAccountDetails({
 
   useEffect(() => {
     getCountry().then((response) => {
-      setCountries(response.data);
+      setCountries(response && response.data);
     });
     getCategories().then((category) => {
-      setCategories(category.data);
+      setCategories(category && category.data);
     });
   }, []);
 
@@ -142,7 +141,7 @@ export default function EditAccountDetails({
         setApiError(response && response.data);
         setShowModal(true);
       } else if (response && response.status === 200) {
-        dispatch(getCustomerDetails(customer.id));
+        setCustomer(response && response.data);
         getActivityLogInfo();
         setIsLoading({ loader: false, type: 'button' });
         IsSaveDataClicked(true);
@@ -160,7 +159,7 @@ export default function EditAccountDetails({
           <div className="row">
             <CropUploadImage
               type="customer"
-              id={customer.id}
+              id={id}
               setDocumentImage={setDocumentImage}
             />
 
@@ -218,18 +217,18 @@ export default function EditAccountDetails({
 
 EditAccountDetails.defaultProps = {
   id: '',
-  setDocumentImage: [],
+  setDocumentImage: {},
   IsSaveDataClicked: () => {},
 };
 
 EditAccountDetails.propTypes = {
-  setShowModal: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  customer: PropTypes.shape({
-    id: PropTypes.string,
+  setShowModal: func.isRequired,
+  id: string,
+  customer: shape({
+    id: string,
   }).isRequired,
-
-  setDocumentImage: PropTypes.arrayOf(PropTypes.object),
-  getActivityLogInfo: PropTypes.func.isRequired,
-  IsSaveDataClicked: PropTypes.func,
+  setDocumentImage: arrayOf(shape({})),
+  getActivityLogInfo: func.isRequired,
+  IsSaveDataClicked: func,
+  setCustomer: func.isRequired,
 };

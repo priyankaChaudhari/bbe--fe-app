@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import ReadMoreAndLess from 'react-read-more-less';
-import PropTypes from 'prop-types';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
+import { func, shape, arrayOf, string } from 'prop-types';
 
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
+import { getCustomerDetails, getCustomerContactDetails } from '../../../api';
 import { GroupUser } from '../../../theme/Global';
 import { socialIcons } from '../../../constants';
 import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
-import { GetInitialName, WhiteCard } from '../../../common';
+import { GetInitialName, PageLoader, WhiteCard } from '../../../common';
 
 export default function CompanyDetail({
   customer,
   id,
-  getAmazon,
   getActivityLogInfo,
   marketplaceData,
 }) {
@@ -33,17 +32,41 @@ export default function CompanyDetail({
       transform: 'translate(-50%, -50%)',
     },
   };
-  const contactInfo = useSelector((state) => state.customerState.contactData);
+
   const [showModal, setShowModal] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
+  const [detail, setDetail] = useState(customer);
+  const [contactInfo, setContactInfo] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const getContactData = useCallback(() => {
+    getCustomerContactDetails(id).then((res) => {
+      setContactInfo(res && res.data);
+      setIsLoading(false);
+    });
+  }, [id]);
+
+  const customerDetails = useCallback(() => {
+    setIsLoading(true);
+    getCustomerDetails(id).then((res) => {
+      if (res && res.status === 200) {
+        setDetail(res && res.data);
+        getContactData();
+      }
+    });
+  }, [id, getContactData]);
+
+  useEffect(() => {
+    customerDetails();
+  }, [id, getContactData, customerDetails]);
 
   const generateSocialIcon = (item) => {
     const fields = [];
-    if (customer && customer[item.key]) {
+    if (detail && detail[item.key]) {
       fields.push(
-        <li key={customer && customer[item.key]}>
+        <li key={detail && detail[item.key]}>
           <a
-            href={customer && customer[item.key]}
+            href={detail && detail[item.key]}
             rel="noopener noreferrer"
             target="_blank">
             <img
@@ -116,7 +139,7 @@ export default function CompanyDetail({
         </div>
 
         <div className="label">Phone Number</div>
-        <div className="label-info">{customer.phone_number}</div>
+        <div className="label-info">{detail.phone_number}</div>
 
         <div className="label mt-3">Social Accounts</div>
 
@@ -129,89 +152,103 @@ export default function CompanyDetail({
 
   return (
     <>
-      <div className="col-lg-6 col-12 mb-3">
-        <WhiteCard>
-          <div className="row">
-            <div className="col-10">
-              <span className="black-heading-title  ">Company Description</span>
-              <br />
-              <br />
+      {isLoading ? (
+        <PageLoader
+          component="customer-details"
+          color="#FF5933"
+          type="detail"
+          width={40}
+          height={40}
+        />
+      ) : (
+        <div className="col-lg-6 col-12 mb-3">
+          <WhiteCard>
+            <div className="row">
+              <div className="col-10">
+                <span className="black-heading-title  ">
+                  Company Description
+                </span>
+                <br />
+                <br />
 
-              <span className="normal-text">
-                {' '}
-                <ReadMoreAndLess
-                  className="read-more-content"
-                  charLimit={150}
-                  readMoreText="Read more"
-                  readLessText="Read less">
-                  {`${
-                    customer.description === null ? '' : customer.description
-                  }${' '}` || ''}
-                </ReadMoreAndLess>
-              </span>
+                <span className="normal-text">
+                  {' '}
+                  <ReadMoreAndLess
+                    className="read-more-content"
+                    charLimit={150}
+                    readMoreText="Read more"
+                    readLessText="Read less">
+                    {`${
+                      detail.description === null ? '' : detail.description
+                    }${' '}` || ''}
+                  </ReadMoreAndLess>
+                </span>
+              </div>
+            </div>
+            <div
+              className=" edit-details"
+              onClick={() => {
+                setShowModal(true);
+              }}
+              role="presentation">
+              <img src={EditOrangeIcon} alt="" />
+              Edit
+            </div>
+          </WhiteCard>
+          <div className="row ">
+            <div className="col-lg-6 col-md-6 col-12 mt-3">
+              <WhiteCard>
+                <p className="black-heading-title card-title mt-0">Brands</p>
+                <p className="no-result-found">
+                  {(detail && detail.brand) || 'No brands added'}
+                </p>
+                <div
+                  className="edit-details"
+                  onClick={() => setShowModal(true)}
+                  role="presentation">
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
+              </WhiteCard>
+              <>{getContactCard()}</>
+              <>{getSocialIcons()}</>
+            </div>
+
+            <div className="col-lg-6 col-md-6 col-12 mt-3">
+              <AmazonAccount
+                marketplaceData={marketplaceData}
+                customStyles={customStyles}
+                getActivityLogInfo={getActivityLogInfo}
+              />
             </div>
           </div>
-          <div
-            className=" edit-details"
-            onClick={() => {
-              setShowModal(true);
-            }}
-            role="presentation">
-            <img src={EditOrangeIcon} alt="" />
-            Edit
-          </div>
-        </WhiteCard>
-        <div className="row ">
-          <div className="col-lg-6 col-md-6 col-12 mt-3">
-            <WhiteCard>
-              <p className="black-heading-title card-title mt-0">Brands</p>
-              <p className="no-result-found">
-                {(customer && customer.brand) || 'No brands added'}
-              </p>
-              <div
-                className="edit-details"
-                onClick={() => setShowModal(true)}
-                role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-            </WhiteCard>
-            <>{getContactCard()}</>
-            <>{getSocialIcons()}</>
-          </div>
-
-          <div className="col-lg-6 col-md-6 col-12 mt-3">
-            <AmazonAccount
-              marketplaceData={marketplaceData}
-              customStyles={customStyles}
-              getActivityLogInfo={getActivityLogInfo}
+          <Modal
+            isOpen={showModal}
+            style={customStyles}
+            ariaHideApp={false}
+            contentLabel="Add team modal">
+            <img
+              src={CloseIcon}
+              alt="close"
+              className="float-right cursor cross-icon"
+              onClick={() => setShowModal(false)}
+              role="presentation"
             />
-          </div>
+            <EditCompanyDetails
+              setShowModal={setShowModal}
+              id={id}
+              detail={detail}
+              showModal={showModal}
+              getActivityLogInfo={getActivityLogInfo}
+              scrollDown={scrollDown}
+              setScrollDown={setScrollDown}
+              setDetail={setDetail}
+              getContactData={getContactData}
+              contactInfo={contactInfo}
+            />
+          </Modal>
         </div>
-        <Modal
-          isOpen={showModal}
-          style={customStyles}
-          ariaHideApp={false}
-          contentLabel="Add team modal">
-          <img
-            src={CloseIcon}
-            alt="close"
-            className="float-right cursor cross-icon"
-            onClick={() => setShowModal(false)}
-            role="presentation"
-          />
-          <EditCompanyDetails
-            setShowModal={setShowModal}
-            id={id}
-            customer={customer}
-            showModal={showModal}
-            getAmazon={getAmazon}
-            getActivityLogInfo={getActivityLogInfo}
-            scrollDown={scrollDown}
-            setScrollDown={setScrollDown}
-          />
-        </Modal>
-      </div>
+      )}
     </>
   );
 }
@@ -221,15 +258,14 @@ CompanyDetail.defaultProps = {
 };
 
 CompanyDetail.propTypes = {
-  id: PropTypes.string,
-  customer: PropTypes.shape({
-    id: PropTypes.string,
-    description: PropTypes.string,
-    brand: PropTypes.string,
-    phone_number: PropTypes.string,
-    merchant_id: PropTypes.string,
+  id: string,
+  customer: shape({
+    id: string,
+    description: string,
+    brand: string,
+    phone_number: string,
+    merchant_id: string,
   }).isRequired,
-  getAmazon: PropTypes.func.isRequired,
-  getActivityLogInfo: PropTypes.func.isRequired,
-  marketplaceData: PropTypes.arrayOf(PropTypes.array).isRequired,
+  getActivityLogInfo: func.isRequired,
+  marketplaceData: arrayOf(shape({})).isRequired,
 };

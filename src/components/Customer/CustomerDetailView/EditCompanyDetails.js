@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import PropTypes from 'prop-types';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { func, bool, string, shape, number, arrayOf } from 'prop-types';
 
+import CheckPhoneNumber from '../../../common/CheckPhoneNumber';
+import { editCompanyFields } from '../../../constants';
 import {
   FormField,
   Button,
@@ -28,30 +30,22 @@ import {
   updateContactInfo,
   createContactInfo,
   deleteContactInfo,
-  updateAccountDetails,
 } from '../../../api';
-import { editCompanyFields } from '../../../constants';
-import {
-  getContactDetails,
-  getCustomerDetails,
-} from '../../../store/actions/customerState';
-import { getAccountDetails } from '../../../store/actions/accountState';
-import CheckPhoneNumber from '../../../common/CheckPhoneNumber';
 
 export default function EditCompanyDetails({
   setShowModal,
   id,
-  getAmazon,
-  customer,
   getActivityLogInfo,
   scrollDown,
   setScrollDown,
+  setDetail,
+  detail,
+  getContactData,
+  contactInfo,
 }) {
-  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({});
-  const detail = useSelector((state) => state.customerState.data);
   const [contactFormData, setContactFormData] = useState({});
   const [contactApiError, setContactApiError] = useState({});
   const [checkChange, setCheckChange] = useState({});
@@ -65,9 +59,7 @@ export default function EditCompanyDetails({
     twitter: '',
   });
 
-  const contactInfo = useSelector((state) => state.customerState.contactData);
   const loader = useSelector((state) => state.customerState.isLoading);
-  const agreement = useSelector((state) => state.accountState.data);
 
   const modalScrollDown = () => {
     const div = document.getElementById('scroll-contact');
@@ -81,6 +73,7 @@ export default function EditCompanyDetails({
       setScrollDown(false);
     }
   };
+
   useEffect(() => {
     if (scrollDown === true) {
       modalScrollDown();
@@ -92,7 +85,8 @@ export default function EditCompanyDetails({
     setClearSocialInput({ ...clearSocialInput, [key]: null });
     updateCustomerDetails(detail.id, { [key]: null }).then((response) => {
       if (response && response.status === 200) {
-        dispatch(getCustomerDetails(detail.id));
+        setDetail(response && response.data);
+        toast.success('Social Media URL removed.');
         getActivityLogInfo();
         setIsLoading({ loader: false, type: 'page' });
       }
@@ -193,8 +187,6 @@ export default function EditCompanyDetails({
         defaultValue={
           item.key === 'phone_number'
             ? detail && detail[item.key]
-            : item.key === 'zip_code'
-            ? agreement.zip_code
             : Math.round(detail && detail[item.key]) || ''
         }
         placeholder={item.label}
@@ -206,10 +198,7 @@ export default function EditCompanyDetails({
   };
 
   const mapInputValues = (item) => {
-    if (item.key === 'merchant_id' || item.key === 'marketplace_id') {
-      return customer[item.key];
-    }
-    return (detail && detail[item.key]) || (agreement && agreement[item.key]);
+    return detail && detail[item.key];
   };
 
   const generateInput = (item) => {
@@ -256,46 +245,6 @@ export default function EditCompanyDetails({
 
   const saveData = () => {
     setIsLoading({ loader: true, type: 'button' });
-
-    if (formData && formData.merchant_id) {
-      updateCustomerDetails(customer.id, {
-        merchant_id: formData && formData.merchant_id,
-      }).then((res) => {
-        if (res && res.status === 200) {
-          getAmazon();
-          getActivityLogInfo();
-          setIsLoading({ loader: false, type: 'button' });
-        }
-        if (res && res.status === 400) {
-          setApiError(res && res.data);
-          setIsLoading({ loader: false, type: 'button' });
-        }
-      });
-    }
-
-    if (
-      formData &&
-      (formData.city ||
-        formData.address ||
-        formData.state ||
-        formData.zip_code ||
-        formData.contract_company_name)
-    ) {
-      updateAccountDetails(agreement.id, formData).then((res) => {
-        if (res && res.status === 400) {
-          setIsLoading({ loader: false, type: 'button' });
-          setApiError(res && res.data);
-          setShowModal(true);
-        } else if (res && res.status === 200) {
-          setIsLoading({ loader: false, type: 'button' });
-          dispatch(getAccountDetails(detail.id));
-          dispatch(getCustomerDetails(detail.id));
-          getActivityLogInfo();
-          setShowModal(false);
-        }
-      });
-    }
-
     updateCustomerDetails(detail.id, formData).then((response) => {
       if (response && response.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -304,7 +253,7 @@ export default function EditCompanyDetails({
       } else if (response && response.status === 200) {
         toast.success('Changes Saved!');
         setIsLoading({ loader: false, type: 'button' });
-        dispatch(getCustomerDetails(detail.id));
+        setDetail(response && response.data);
         getActivityLogInfo();
         setShowModal(false);
       }
@@ -337,7 +286,7 @@ export default function EditCompanyDetails({
     if (index && index.includes('CT')) {
       deleteContactInfo(index).then(() => {
         toast.success('Contact Removed!');
-        dispatch(getContactDetails(id));
+        getContactData(id);
       });
     } else {
       toast.success('Contact Removed!');
@@ -384,7 +333,7 @@ export default function EditCompanyDetails({
         }
         if (responseContact && responseContact.status === 201) {
           toast.success('Contact Saved!');
-          dispatch(getContactDetails(id));
+          getContactData(id);
           setCheckChange({ ...checkChange, [contactId]: false });
           setContactApiError({});
           setContactDetails([]);
@@ -398,7 +347,7 @@ export default function EditCompanyDetails({
         }
         if (res && res.status === 200) {
           toast.success('Contact Saved!');
-          dispatch(getContactDetails(id));
+          getContactData(id);
           setCheckChange({ ...checkChange, [contactId]: false });
           setContactApiError({});
           setContactDetails([]);
@@ -808,13 +757,15 @@ EditCompanyDetails.defaultProps = {
 };
 
 EditCompanyDetails.propTypes = {
-  setShowModal: PropTypes.func.isRequired,
-  id: PropTypes.string,
-  getAmazon: PropTypes.func.isRequired,
-  customer: PropTypes.shape({
-    id: PropTypes.string,
+  setShowModal: func.isRequired,
+  id: string,
+  detail: shape({
+    id: string,
   }).isRequired,
-  getActivityLogInfo: PropTypes.func.isRequired,
-  setScrollDown: PropTypes.func.isRequired,
-  scrollDown: PropTypes.bool,
+  getActivityLogInfo: func.isRequired,
+  setScrollDown: func.isRequired,
+  scrollDown: bool,
+  setDetail: func.isRequired,
+  getContactData: func.isRequired,
+  contactInfo: arrayOf(shape({ length: number })).isRequired,
 };

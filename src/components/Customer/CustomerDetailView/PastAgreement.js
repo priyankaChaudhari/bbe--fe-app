@@ -2,17 +2,17 @@ import React from 'react';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
+import { func, string, shape, bool, number, arrayOf } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
+import { PATH_AGREEMENT } from '../../../constants';
+import { HeaderDownloadFuntionality, Table } from '../../../common';
 import {
   CloseIcon,
   ExternalLink,
   OrangeDownloadPdf,
 } from '../../../theme/images';
-import { HeaderDownloadFuntionality, Table } from '../../../common';
-import { PATH_AGREEMENT } from '../../../constants';
 
 export default function PastAgreement({
   showPastAgreements,
@@ -152,19 +152,21 @@ export default function PastAgreement({
 }
 
 PastAgreement.propTypes = {
-  showPastAgreements: PropTypes.bool.isRequired,
-  setShowPastAgreements: PropTypes.func.isRequired,
-  agreements: PropTypes.shape({
-    map: PropTypes.func,
-    length: PropTypes.arrayOf(PropTypes.object),
-  }).isRequired,
-  history: PropTypes.shape({
-    push: PropTypes.func,
-    location: PropTypes.shape({
-      pathname: PropTypes.string,
+  showPastAgreements: bool.isRequired,
+  setShowPastAgreements: func.isRequired,
+  agreements: arrayOf(
+    shape({
+      map: func,
+      length: number,
+    }),
+  ).isRequired,
+  history: shape({
+    push: func,
+    location: shape({
+      pathname: string,
     }),
   }).isRequired,
-  id: PropTypes.string.isRequired,
+  id: string.isRequired,
 };
 
 const NotesSideBar = styled.div`

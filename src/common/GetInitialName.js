@@ -22,6 +22,8 @@ export default function GetInitialName({ userInfo, property, type }) {
           ? ` avatarName dropdown-avartName ${property}`
           : type === 'team'
           ? 'avatarName team-avatarName'
+          : type === 'activity'
+          ? ''
           : `avatarName ${property}`
       }>
       {getInitials(userInfo, type)}

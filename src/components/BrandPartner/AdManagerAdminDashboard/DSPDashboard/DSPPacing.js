@@ -166,8 +166,10 @@ const DSPPacing = ({
             }
             alt="logo"
           />
-          <div className="company-name">{itemData.customer_name}</div>
-          <div className="status">{itemData.ad_manager}</div>
+          <div className="company-info-details">
+            <div className="company-name">{itemData.customer_name}</div>
+            <div className="status">{itemData.ad_manager}</div>
+          </div>
         </td>
         <td className="product-body">
           {' '}

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
 import $ from 'jquery';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { bool, func, shape, string } from 'prop-types';
 
 import { saveAmazonSellerAccount, saveAmazonVendorAccount } from '../../../api';
 import {
@@ -208,26 +208,27 @@ EditAmazonAccountDetails.defaultProps = {
   setShowModal: () => {},
   showBtn: false,
   setApiError: () => {},
+  selectedMarketplace: null,
 };
 
 EditAmazonAccountDetails.propTypes = {
-  setShowModal: PropTypes.func,
-  selectedMarketplace: PropTypes.shape({
-    account_type: PropTypes.string,
-    value: PropTypes.string,
+  setShowModal: func,
+  selectedMarketplace: shape({
+    account_type: string,
+    value: string,
+  }),
+  formData: shape({
+    Seller: shape({}),
+    Vendor: shape({}),
   }).isRequired,
-  formData: PropTypes.shape({
-    Seller: PropTypes.objectOf(PropTypes.object),
-    Vendor: PropTypes.objectOf(PropTypes.object),
+  showBtn: bool,
+  generateDropdown: func.isRequired,
+  generateAccountHTML: func.isRequired,
+  amazonDetails: shape({
+    Seller: shape({}),
+    Vendor: shape({}),
   }).isRequired,
-  showBtn: PropTypes.bool,
-  generateDropdown: PropTypes.func.isRequired,
-  generateAccountHTML: PropTypes.func.isRequired,
-  amazonDetails: PropTypes.shape({
-    Seller: PropTypes.objectOf(PropTypes.object),
-    Vendor: PropTypes.objectOf(PropTypes.object),
-  }).isRequired,
-  sellerVendorCall: PropTypes.func.isRequired,
-  getActivityLogInfo: PropTypes.func.isRequired,
-  setApiError: PropTypes.func,
+  sellerVendorCall: func.isRequired,
+  getActivityLogInfo: func.isRequired,
+  setApiError: func,
 };
