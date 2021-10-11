@@ -20,6 +20,7 @@ import {
   DropDownIndicator,
   PageLoader,
   WhiteCard,
+  ToggleButton,
 } from '../../../../common';
 import {
   getAdManagerAdminGraphData,
@@ -822,59 +823,61 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
               </ul>
             </div>
             <div className="col-md-6 col-sm-12 order-md-2 order-1">
-              <div className="days-container ">
-                <ul className="days-tab">
-                  <li
-                    className={
-                      dspFilters.daily === false ? 'disabled-tab' : ''
-                    }>
-                    {' '}
-                    <input
-                      className="d-none"
-                      type="radio"
-                      id="daysCheck"
-                      name="flexRadioDefault1"
-                      value={dspGroupBy}
-                      checked={dspFilters.daily}
-                      onClick={() => handleDSPGroupBy('daily')}
-                      onChange={() => {}}
-                    />
-                    <label htmlFor="daysCheck">Daily</label>
-                  </li>
+              <ToggleButton>
+                <div className="days-container ">
+                  <ul className="days-tab">
+                    <li
+                      className={
+                        dspFilters.daily === false ? 'disabled-tab' : ''
+                      }>
+                      {' '}
+                      <input
+                        className="d-none"
+                        type="radio"
+                        id="daysCheck"
+                        name="flexRadioDefault1"
+                        value={dspGroupBy}
+                        checked={dspFilters.daily}
+                        onClick={() => handleDSPGroupBy('daily')}
+                        onChange={() => {}}
+                      />
+                      <label htmlFor="daysCheck">Daily</label>
+                    </li>
 
-                  <li
-                    className={
-                      dspFilters.weekly === false ? 'disabled-tab' : ''
-                    }>
-                    <input
-                      className="d-none"
-                      type="radio"
-                      id="weeklyCheck"
-                      name="flexRadioDefault1"
-                      value={dspGroupBy}
-                      checked={dspFilters.weekly && dspGroupBy === 'weekly'}
-                      onChange={() => handleDSPGroupBy('weekly')}
-                    />
-                    <label htmlFor="weeklyCheck">Weekly</label>
-                  </li>
+                    <li
+                      className={
+                        dspFilters.weekly === false ? 'disabled-tab' : ''
+                      }>
+                      <input
+                        className="d-none"
+                        type="radio"
+                        id="weeklyCheck"
+                        name="flexRadioDefault1"
+                        value={dspGroupBy}
+                        checked={dspFilters.weekly && dspGroupBy === 'weekly'}
+                        onChange={() => handleDSPGroupBy('weekly')}
+                      />
+                      <label htmlFor="weeklyCheck">Weekly</label>
+                    </li>
 
-                  <li
-                    className={
-                      dspFilters.month === false ? 'disabled-tab' : ''
-                    }>
-                    <input
-                      className=" d-none"
-                      type="radio"
-                      id="monthlyCheck"
-                      name="flexRadioDefault1"
-                      value={dspGroupBy}
-                      checked={dspFilters.month && dspGroupBy === 'monthly'}
-                      onChange={() => handleDSPGroupBy('monthly')}
-                    />
-                    <label htmlFor="monthlyCheck">Monthly</label>
-                  </li>
-                </ul>
-              </div>
+                    <li
+                      className={
+                        dspFilters.month === false ? 'disabled-tab' : ''
+                      }>
+                      <input
+                        className=" d-none"
+                        type="radio"
+                        id="monthlyCheck"
+                        name="flexRadioDefault1"
+                        value={dspGroupBy}
+                        checked={dspFilters.month && dspGroupBy === 'monthly'}
+                        onChange={() => handleDSPGroupBy('monthly')}
+                      />
+                      <label htmlFor="monthlyCheck">Monthly</label>
+                    </li>
+                  </ul>
+                </div>
+              </ToggleButton>
             </div>
           </div>
           {dspGraphLoader ? (

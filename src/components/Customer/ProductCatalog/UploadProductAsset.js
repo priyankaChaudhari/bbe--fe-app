@@ -9,7 +9,7 @@
 //   OnBoardingBody,
 //   CheckBox,
 //   Button,
-//   ContractFormField,
+//   InputFormField,
 //   ErrorMsg,
 //   PageLoader,
 // } from '../../../common';
@@ -133,7 +133,7 @@
 //           </CheckBox>
 //           {isAssignElse ? (
 //             <fieldset className="shape-without-border w-430 mt-2">
-//               <ContractFormField>
+//               <InputFormField>
 //                 <label htmlFor="email">
 //                   Assign to (email)
 //                   <input
@@ -195,7 +195,7 @@
 //                     'Send Email'
 //                   )}
 //                 </Button>
-//               </ContractFormField>
+//               </InputFormField>
 //             </fieldset>
 //           ) : (
 //             ''

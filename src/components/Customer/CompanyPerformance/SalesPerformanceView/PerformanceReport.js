@@ -29,6 +29,7 @@ import {
   PageLoader,
   CustomDateModal,
   Tabs,
+  ToggleButton,
 } from '../../../../common';
 import { getPerformance, getBuyBoxChartData } from '../../../../api';
 
@@ -48,6 +49,7 @@ import {
 } from '../../../../constants/CompanyPerformanceConstants';
 import SalesPerformanceChart from './SalePerformanceChart';
 import Theme from '../../../../theme/Theme';
+import CardMetrics from '../../../../common/CardMetrics';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -933,51 +935,52 @@ export default function PerformanceReport({
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
         )}
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
-          {' '}
-          <div className="days-container ">
-            <ul className="days-tab">
-              <li className={filters.daily === false ? 'disabled-tab' : ''}>
-                {' '}
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault"
-                  value={groupBy}
-                  checked={filters.daily}
-                  onClick={() => handleGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
+          <ToggleButton>
+            <div className="days-container ">
+              <ul className="days-tab">
+                <li className={filters.daily === false ? 'disabled-tab' : ''}>
+                  {' '}
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="daysCheck"
+                    name="flexRadioDefault"
+                    value={groupBy}
+                    checked={filters.daily}
+                    onClick={() => handleGroupBy('daily')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="daysCheck">Daily</label>
+                </li>
 
-              <li className={filters.weekly === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  value={groupBy}
-                  checked={filters.weekly && groupBy === 'weekly'}
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                  onChange={() => handleGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
+                <li className={filters.weekly === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    value={groupBy}
+                    checked={filters.weekly && groupBy === 'weekly'}
+                    id="weeklyCheck"
+                    name="flexRadioDefault"
+                    onChange={() => handleGroupBy('weekly')}
+                  />
+                  <label htmlFor="weeklyCheck">Weekly</label>
+                </li>
 
-              <li className={filters.month === false ? 'disabled-tab' : ''}>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  value={groupBy}
-                  checked={filters.month}
-                  id="monthlyCheck"
-                  name="flexRadioDefault"
-                  onChange={() => handleGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
-            </ul>
-          </div>
+                <li className={filters.month === false ? 'disabled-tab' : ''}>
+                  <input
+                    className=" d-none"
+                    type="radio"
+                    value={groupBy}
+                    checked={filters.month}
+                    id="monthlyCheck"
+                    name="flexRadioDefault"
+                    onChange={() => handleGroupBy('monthly')}
+                  />
+                  <label htmlFor="monthlyCheck">Monthly</label>
+                </li>
+              </ul>
+            </div>
+          </ToggleButton>
         </div>
       </div>
     );
@@ -1060,50 +1063,58 @@ export default function PerformanceReport({
 
     return (
       <div className={className}>
-        <div
-          className={setSalesBoxClass(name, boxActiveClass)}
-          onClick={() => setBoxToggle(name)}
-          role="presentation">
-          {' '}
-          <div className="chart-name">
-            {displayMatricsName.toUpperCase()} {theCurrency}
-          </div>
-          <div className="number-rate">
-            {name === 'conversion'
-              ? `${currentTotal.toFixed(2)}%`
-              : bindValues(currentTotal, name)}
-          </div>
-          <div className="vs">
-            {' '}
-            vs{' '}
-            {name === 'conversion'
-              ? `${previousTotal.toFixed(2)}%`
-              : name === 'revenue'
-              ? `${
-                  currencySymbol !== null ? currencySymbol : ''
-                }${previousTotal
-                  .toFixed(2)
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-              : previousTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </div>
+        <CardMetrics className="fix-height">
           <div
-            className={
-              difference > 0
-                ? 'perentage-value mt-3 pt-1'
-                : 'perentage-value down mt-3 pt-1'
-            }>
-            {!Number.isNaN(difference) && difference > 0 ? (
-              <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
-            ) : !Number.isNaN(difference) && difference < 0 ? (
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-down" />
-            ) : (
-              ''
-            )}
-            {difference !== 'N/A'
-              ? `${difference.toString().replace('-', '')}%`
-              : 'N/A'}
+            className={setSalesBoxClass(name, boxActiveClass)}
+            onClick={() => setBoxToggle(name)}
+            role="presentation">
+            {' '}
+            <div className="chart-name">
+              {displayMatricsName.toUpperCase()} {theCurrency}
+            </div>
+            <div className="number-rate">
+              {name === 'conversion'
+                ? `${currentTotal.toFixed(2)}%`
+                : bindValues(currentTotal, name)}
+            </div>
+            <div className="vs">
+              {' '}
+              vs{' '}
+              {name === 'conversion'
+                ? `${previousTotal.toFixed(2)}%`
+                : name === 'revenue'
+                ? `${
+                    currencySymbol !== null ? currencySymbol : ''
+                  }${previousTotal
+                    .toFixed(2)
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                : previousTotal
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </div>
+            <div
+              className={
+                difference > 0
+                  ? 'perentage-value mt-3 pt-1'
+                  : 'perentage-value down mt-3 pt-1'
+              }>
+              {!Number.isNaN(difference) && difference > 0 ? (
+                <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
+              ) : !Number.isNaN(difference) && difference < 0 ? (
+                <img
+                  className="red-arrow"
+                  src={ArrowDownIcon}
+                  alt="arrow-down"
+                />
+              ) : (
+                ''
+              )}
+              {difference !== 'N/A'
+                ? `${difference.toString().replace('-', '')}%`
+                : 'N/A'}
+            </div>
           </div>
-        </div>
+        </CardMetrics>
       </div>
     );
   };

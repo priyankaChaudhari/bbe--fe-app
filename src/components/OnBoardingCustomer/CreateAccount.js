@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 
 import {
   Button,
-  ContractFormField,
+  InputFormField,
   ErrorMsg,
   OnBoardingBody,
   PageLoader,
@@ -180,7 +180,7 @@ export default function CreateAccount() {
                 ''
               )}
             </p>
-            <ContractFormField className="mt-3">
+            <InputFormField className="mt-3">
               <label htmlFor="email">
                 Email Address
                 <input
@@ -193,8 +193,8 @@ export default function CreateAccount() {
                   readOnly
                 />
               </label>
-            </ContractFormField>
-            <ContractFormField className="mt-3">
+            </InputFormField>
+            <InputFormField className="mt-3">
               <label htmlFor="password">
                 Password
                 <input
@@ -216,7 +216,7 @@ export default function CreateAccount() {
                   }}
                 />
               </label>
-            </ContractFormField>
+            </InputFormField>
             <ErrorMsg>
               {apiError && apiError.password && apiError.password[0]}
               <div
@@ -274,7 +274,7 @@ export default function CreateAccount() {
                 </p>
                 <form onSubmit={handleSubmit(onSubmit)}>
                   {newDetails.map((item) => (
-                    <ContractFormField key={item.key} className="mt-3">
+                    <InputFormField key={item.key} className="mt-3">
                       <label htmlFor={item.key}>
                         {item.label}
                         <br />
@@ -306,7 +306,7 @@ export default function CreateAccount() {
                           apiError[item.key] &&
                           apiError[item.key][0]}
                       </ErrorMsg>
-                    </ContractFormField>
+                    </InputFormField>
                   ))}
                   <ErrorMsg>{apiError && apiError.detail}</ErrorMsg>
                   <ErrorMsg>

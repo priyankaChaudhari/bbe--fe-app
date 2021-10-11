@@ -486,122 +486,122 @@ export const WhiteCard = styled.div`
     min-height:530px;
   }
 
-    .order-chart-box {
-      display: inline-block;
-      background-color: ${Theme.white};
-      border: 1px solid ${Theme.gray45};
-      border-radius: 8px;
-      max-width: 197px;
-      width: 100%;
-      padding: 18px 15px;
-      cursor: pointer;
+    // .order-chart-box {
+    //   display: inline-block;
+    //   background-color: ${Theme.white};
+    //   border: 1px solid ${Theme.gray45};
+    //   border-radius: 8px;
+    //   max-width: 197px;
+    //   width: 100%;
+    //   padding: 18px 15px;
+    //   cursor: pointer;
 
-      .chart-name {
-        color:${Theme.gray40};
-        font-size:11px;
-        text-transform: uppercase;
-        font-family: ${Theme.titleFontFamily};
-      }
+    //   .chart-name {
+    //     color:${Theme.gray40};
+    //     font-size:11px;
+    //     text-transform: uppercase;
+    //     font-family: ${Theme.titleFontFamily};
+    //   }
      
-      .perentage-value {
-        color: ${Theme.lighterGreen};
-        font-size: ${Theme.extraNormal};
-        font-weight: 300;
-        margin-left: -2px;
+    //   .perentage-value {
+    //     color: ${Theme.lighterGreen};
+    //     font-size: ${Theme.extraNormal};
+    //     font-weight: 300;
+    //     margin-left: -2px;
 
-        &.down {
-          color: ${Theme.red};
-        }
-        .red-arrow{
-           width: 14px;
-          transform: rotate(180deg);
-          vertical-align: middle;
-          margin-left: -2px;
-          margin-right: 3px;
-        }
-        .green-arrow {
-           width: 14px;
-          vertical-align: bottom;
-          // transform: rotate(180deg);
-          vertical-align: middle;
-          margin-left: -2px;
-          margin-right: 3px;
-        }
+    //     &.down {
+    //       color: ${Theme.red};
+    //     }
+    //     .red-arrow{
+    //        width: 14px;
+    //       transform: rotate(180deg);
+    //       vertical-align: middle;
+    //       margin-left: -2px;
+    //       margin-right: 3px;
+    //     }
+    //     .green-arrow {
+    //        width: 14px;
+    //       vertical-align: bottom;
+    //       // transform: rotate(180deg);
+    //       vertical-align: middle;
+    //       margin-left: -2px;
+    //       margin-right: 3px;
+    //     }
 
-        img {
-          width:14px;
-        }
-      }
+    //     img {
+    //       width:14px;
+    //     }
+    //   }
 
-      &:last-child{
-        margin-right:0;
-      }
+    //   &:last-child{
+    //     margin-right:0;
+    //   }
 
-      &:hover {
-        border: 1px solid ${Theme.orange};
-      }
+    //   &:hover {
+    //     border: 1px solid ${Theme.orange};
+    //   }
 
-      &.active {
-        border: 1px solid ${Theme.orange};
-      }
-      &.ad-sales-active {
-        border: 1px solid #0045B4;
-        .chart-name {
-          color: #0045B4;
-        }
-      }
+    //   &.active {
+    //     border: 1px solid ${Theme.orange};
+    //   }
+    //   &.ad-sales-active {
+    //     border: 1px solid #0045B4;
+    //     .chart-name {
+    //       color: #0045B4;
+    //     }
+    //   }
 
-      &.ad-spend-active {
-         border: 1px solid #8C54FF;
-        .chart-name {
-          color: #8C54FF;
-        }
-      }
-      &.ad-conversion-active {
-         border: 1px solid #30A8BD;
-        .chart-name {
-          color: #30A8BD;
-        }
-      }
-       &.impression-active {
-         border: 1px solid #D6A307;
-        .chart-name {
-          color: #D6A307;
-        }
-      }
-      &.ad-cos-active {
-          border: 1px solid #E05D37;
-        .chart-name {
-          color: #E05D37;
-        }
-      }
-      &.ad-roas-active {
-          border: 1px solid #89A43C;
-        .chart-name {
-          color: #89A43C;
-        }
-      }
-       &.ad-roas-active {
-          border: 1px solid #89A43C;
-        .chart-name {
-          color: #89A43C;
-        }
-      }
+    //   &.ad-spend-active {
+    //      border: 1px solid #8C54FF;
+    //     .chart-name {
+    //       color: #8C54FF;
+    //     }
+    //   }
+    //   &.ad-conversion-active {
+    //      border: 1px solid #30A8BD;
+    //     .chart-name {
+    //       color: #30A8BD;
+    //     }
+    //   }
+    //    &.impression-active {
+    //      border: 1px solid #D6A307;
+    //     .chart-name {
+    //       color: #D6A307;
+    //     }
+    //   }
+    //   &.ad-cos-active {
+    //       border: 1px solid #E05D37;
+    //     .chart-name {
+    //       color: #E05D37;
+    //     }
+    //   }
+    //   &.ad-roas-active {
+    //       border: 1px solid #89A43C;
+    //     .chart-name {
+    //       color: #89A43C;
+    //     }
+    //   }
+    //    &.ad-roas-active {
+    //       border: 1px solid #89A43C;
+    //     .chart-name {
+    //       color: #89A43C;
+    //     }
+    //   }
 
-      &.ad-click-active {
-          border: 1px solid #C84EC6;
-        .chart-name {
-          color: #C84EC6;
-        }
-      }
-      &.ad-clickrate-active {
-          border: 1px solid #A04848;
-        .chart-name {
-          color: #A04848;
-        }
-      }
+    //   &.ad-click-active {
+    //       border: 1px solid #C84EC6;
+    //     .chart-name {
+    //       color: #C84EC6;
+    //     }
+    //   }
+    //   &.ad-clickrate-active {
+    //       border: 1px solid #A04848;
+    //     .chart-name {
+    //       color: #A04848;
+    //     }
+    //   }
       
-    }
+    // }
      .number-rate {
         color: ${Theme.gray80};
         font-size: 26px;
@@ -649,97 +649,7 @@ export const WhiteCard = styled.div`
       }
 
   
-  .days-container {
-    background-color: ${Theme.white};
-    border: 1px solid ${Theme.gray45};
-    border-radius: 18px;
-    max-width: 243px;
-    float: right;
-    width: fit-content;
-    &.spending {
-      max-width: fit-content;
-      .days-tab { 
-         li{
-          label {
-            padding: 7px 10px;
-          }
-        }
-      }
-    }
 
-    .days-tab {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-       #daysCheck:checked + label{
-         background-color: ${Theme.white};
-          border: 1px solid ${Theme.orange};
-          border-radius: 18px;
-          color: ${Theme.orange};
-        }
-        #weeklyCheck:checked + label{
-          background-color:  ${Theme.white};
-          border: 1px solid ${Theme.orange};
-          border-radius: 18px;
-          color:${Theme.orange};
-        }
-        #monthlyCheck:checked + label{
-          background-color: ${Theme.white};
-          border: 1px solid ${Theme.orange};
-          border-radius: 18px;
-          color: ${Theme.orange};
-        }
-
-        #positive:checked + label{
-          background-color: ${Theme.white};
-           border: 1px solid ${Theme.orange};
-           border-radius: 18px;
-           color: ${Theme.orange};
-         }
-         #negative:checked + label{
-           background-color:  ${Theme.white};
-           border: 1px solid ${Theme.orange};
-           border-radius: 18px;
-           color:${Theme.orange};
-         }
-         #contribution:checked + label{
-           background-color: ${Theme.white};
-           border: 1px solid ${Theme.orange};
-           border-radius: 18px;
-           color: ${Theme.orange};
-         }
-         #keyMetrics:checked + label{
-          background-color: ${Theme.white};
-          border: 1px solid ${Theme.orange};
-          border-radius: 18px;
-          color: ${Theme.orange};
-        }
-        #overspending:checked + label{
-          background-color: ${Theme.white};
-           border: 1px solid ${Theme.orange};
-           border-radius: 18px;
-           color: ${Theme.orange};
-         }
-         #underspending:checked + label{
-           background-color:  ${Theme.white};
-           border: 1px solid ${Theme.orange};
-           border-radius: 18px;
-           color:${Theme.orange};
-         }
-
-      li{
-        display: inline-block;
-      
-         label {
-            color: ${Theme.black};
-            padding: 7px 19px;
-            font-size: 14px;
-            display: inline-block;
-            cursor: pointer;
-         }
-      }
-    }
-  }
   .dsp-spent-date {
     list-style-type: none;
     padding: 0;
@@ -754,127 +664,125 @@ export const WhiteCard = styled.div`
    padding: 0;
    margin: 0;
 
-      li{
-          display: inline-block;
-          margin-right: 25px;
-          vertical-align: middle;
+    li{
+        display: inline-block;
+        margin-right: 25px;
+        vertical-align: middle;
 
-          &:last-child {
-            margin-right: none;
+        &:last-child {
+          margin-right: none;
+        }
+
+        .weeks{
+          display: flex;
+          align-items: center;
+          flex-direction: row;
+        }
+
+        .dashed-line {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+
+          li{
+            display: inline-block;
+              margin-right: 3px;
+              width: 6px;
+              height: 2px;
+              margin-bottom: 3px;
+
+            &:last-child {
+              margin-right: 6px;
+            }
           }
+        }
 
-          .weeks{
-              display: flex;
-              align-items: center;
-              flex-direction: row;
-          }
+        .circle {
+          width: 14px;
+          height: 2px;
+          margin-right: 6px;
+        }
+        .orange {
+          background: ${Theme.baseColor};
+        }
+        .adSales { 
+          background:#0045B4
+        };
+        .adSpend { 
+          background: #8C54FF
+        };
+        .adConversion { 
+          background: #30A8BD
+        };
+        .impressions { 
+          background: #D6A307
+        };
+        .adCos { 
+          background: #E05D37
+        };
+        .adRoas { 
+          background: #89A43C
+        };
+        .adClicks { 
+          background: #C84EC6
+        };
+        .adClickRate { 
+          background: #A04848
+        };
 
-         
-           .dashed-line {
-              list-style-type: none;
-              padding: 0;
-              margin: 0;
+        .revenue { 
+          background:#0045B4
+        };
+        .unitsSold { 
+          background: #8C54FF
+        };
+        .traffic { 
+          background: #30A8BD
+        };
+        .conversion { 
+          background: #D6A307
+        };
 
-              li{
-                display: inline-block;
-                  margin-right: 3px;
-                  width: 6px;
-                  height: 2px;
-                  margin-bottom: 3px;
+        .dspImpressions { 
+          background:#0045B4
+        };
+        .dspSpend { 
+          background: #8C54FF
+        };
+        .dspTotalProductSales { 
+          background: #30A8BD
+        };
+        .dspTotalRoas { 
+          background: #D6A307
+        };
+        .dspTotalDpvr { 
+          background: #E05D37
+        };
+        .dspTtlNewBrandPurchases { 
+          background: #89A43C
+        };
+        .dspProductSales { 
+          background: #C84EC6
+        };
+        .dspRoas { 
+          background: #A04848
+        };
 
-                &:last-child {
-                  margin-right: 6px;
-                }
-              }
+        .darkGray{
+          background: ${Theme.gray35};
+          
+        }
+        .gray {
+          background: ${Theme.gray25};
+        }
 
-           }
-
-          .circle {
-            width: 14px;
-            height: 2px;
-            margin-right: 6px;
-          }
-          .orange {
-            background: ${Theme.baseColor};
-          }
-          .adSales { 
-            background:#0045B4
-          };
-          .adSpend { 
-            background: #8C54FF
-          };
-          .adConversion { 
-            background: #30A8BD
-          };
-          .impressions { 
-            background: #D6A307
-          };
-          .adCos { 
-            background: #E05D37
-          };
-          .adRoas { 
-            background: #89A43C
-          };
-          .adClicks { 
-            background: #C84EC6
-          };
-          .adClickRate { 
-            background: #A04848
-          };
-
-          .revenue { 
-            background:#0045B4
-          };
-          .unitsSold { 
-            background: #8C54FF
-          };
-          .traffic { 
-            background: #30A8BD
-          };
-          .conversion { 
-            background: #D6A307
-          };
-
-          .dspImpressions { 
-            background:#0045B4
-          };
-          .dspSpend { 
-            background: #8C54FF
-          };
-          .dspTotalProductSales { 
-            background: #30A8BD
-          };
-          .dspTotalRoas { 
-            background: #D6A307
-          };
-          .dspTotalDpvr { 
-            background: #E05D37
-          };
-          .dspTtlNewBrandPurchases { 
-            background: #89A43C
-          };
-          .dspProductSales { 
-            background: #C84EC6
-          };
-          .dspRoas { 
-            background: #A04848
-          };
-
-          .darkGray{
-            background: ${Theme.gray35};
-            
-          }
-          .gray {
-            background: ${Theme.gray25};
-          }
-
-          .black {
-            background: ${Theme.black};
-          }
-          span {
-             color:${Theme.black};
-             font-size: ${Theme.normal};
-          }
+        .black {
+          background: ${Theme.black};
+        }
+        span {
+            color:${Theme.black};
+            font-size: ${Theme.normal};
+        }
     }
   }
   .speed-rate {

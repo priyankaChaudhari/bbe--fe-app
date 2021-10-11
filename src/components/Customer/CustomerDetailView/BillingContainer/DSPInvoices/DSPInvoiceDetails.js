@@ -137,7 +137,7 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
           </p>
           <div className="straight-line horizontal-line spacing " />
           <Table className="mt-0">
-            {renderTableHeader()}
+            <thead>{renderTableHeader()}</thead>
             {data && data.length >= 1 ? (
               <tbody>{data.map((item) => renderTableData(item))}</tbody>
             ) : null}

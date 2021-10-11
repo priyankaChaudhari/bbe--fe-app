@@ -9,7 +9,14 @@ import { useHistory } from 'react-router-dom';
 
 import Theme from '../../../../theme/Theme';
 import { TabletViewManager } from '../../../../theme/Global';
-import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
+import {
+  PageLoader,
+  Status,
+  Table,
+  Tabs,
+  WhiteCard,
+  ToggleButton,
+} from '../../../../common';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -398,7 +405,7 @@ const DSPKeyContributors = ({
     return (
       <>
         <Table className="mt-0">
-          {renderTableHeader()}
+          <thead>{renderTableHeader()}</thead>
           {data && data.length >= 1 ? (
             <tbody>{data.map((item) => renderTableData(item))}</tbody>
           ) : null}
@@ -527,44 +534,46 @@ const DSPKeyContributors = ({
             </p>
           </div>
           <div className="col-md-6 col-sm1-12  mb-3">
-            <div className="days-container ">
-              <ul className="days-tab">
-                <li>
-                  {' '}
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id={keyContribution.id}
-                    name="flexRadioDefault"
-                    value={selectedKeyContribution}
-                    checked={selectedKeyContribution}
-                    onClick={() => {
-                      handleContribution(true);
-                    }}
-                  />
-                  <label htmlFor={keyContribution.id}>
-                    {keyContribution.label}{' '}
-                  </label>
-                </li>
+            <ToggleButton>
+              <div className="days-container ">
+                <ul className="days-tab">
+                  <li>
+                    {' '}
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id={keyContribution.id}
+                      name="flexRadioDefault"
+                      value={selectedKeyContribution}
+                      checked={selectedKeyContribution}
+                      onClick={() => {
+                        handleContribution(true);
+                      }}
+                    />
+                    <label htmlFor={keyContribution.id}>
+                      {keyContribution.label}{' '}
+                    </label>
+                  </li>
 
-                <li>
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id={keyContribution.id2}
-                    name="flexRadioDefault"
-                    value={!selectedKeyContribution}
-                    checked={!selectedKeyContribution}
-                    onClick={() => {
-                      handleContribution(false);
-                    }}
-                  />
-                  <label htmlFor={keyContribution.id2}>
-                    {keyContribution.label2}{' '}
-                  </label>
-                </li>
-              </ul>
-            </div>
+                  <li>
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id={keyContribution.id2}
+                      name="flexRadioDefault"
+                      value={!selectedKeyContribution}
+                      checked={!selectedKeyContribution}
+                      onClick={() => {
+                        handleContribution(false);
+                      }}
+                    />
+                    <label htmlFor={keyContribution.id2}>
+                      {keyContribution.label2}{' '}
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </ToggleButton>
           </div>
         </div>
         {selectedAdDF.value === 'custom' && selectedKeyContribution ? (

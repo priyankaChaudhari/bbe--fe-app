@@ -34,7 +34,6 @@ const InputSearchWithRadius = styled.div`
     &:focus {
       outline: none;
       background-color: ${Theme.white};
-      //  padding-bottom:25px;
     }
   }
 

@@ -5,7 +5,7 @@ import NumberFormat from 'react-number-format';
 import {
   Button,
   ModalRadioCheck,
-  ContractFormField,
+  InputFormField,
   ErrorMsg,
   PageLoader,
 } from '../../common';
@@ -326,7 +326,7 @@ function Discount({
         formData.monthly_discount_amount) || (discountFlag === 'one-time' &&
         formData && formData.one_time_discount_amount) */}
         {selectedDiscountType === 'fixed amount' ? (
-          <ContractFormField>
+          <InputFormField>
             {showAmountInput ? (
               <>
                 <label className="modal-field" htmlFor="emailAddress">
@@ -371,9 +371,9 @@ function Discount({
             ) : (
               ''
             )}
-          </ContractFormField>
+          </InputFormField>
         ) : (
-          <ContractFormField>
+          <InputFormField>
             {showAmountInput ? (
               <>
                 <label className="modal-field" htmlFor="emailAddress">
@@ -424,7 +424,7 @@ function Discount({
             ) : (
               ''
             )}
-          </ContractFormField>
+          </InputFormField>
         )}
         <Button
           className="btn btn-primary w-100 mt-4 "

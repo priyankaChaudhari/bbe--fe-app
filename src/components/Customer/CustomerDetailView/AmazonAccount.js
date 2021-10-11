@@ -7,7 +7,7 @@ import Select, { components } from 'react-select';
 import { func, shape, arrayOf } from 'prop-types';
 
 import {
-  ContractFormField,
+  InputFormField,
   DropDownSelect,
   ErrorMsg,
   WhiteCard,
@@ -244,7 +244,7 @@ export default function AmazonAccount({
         {mapData &&
           mapData.map((item) => (
             <div className={item.property} id={item.key} key={item.key}>
-              <ContractFormField className="mt-3">
+              <InputFormField className="mt-3">
                 <label htmlFor={item.id}>
                   {item.label}
                   <br />
@@ -262,7 +262,7 @@ export default function AmazonAccount({
                 ) : (
                   ''
                 )}
-              </ContractFormField>
+              </InputFormField>
             </div>
           ))}
       </>

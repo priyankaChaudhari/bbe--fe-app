@@ -1701,6 +1701,7 @@ text.cust-label-avg {
    text-transform: uppercase;
    font-weight: bold;
 }
+
  .label-info {
     color: ${Theme.black};
     font-size: ${Theme.normal};

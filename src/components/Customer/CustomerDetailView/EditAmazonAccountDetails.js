@@ -6,12 +6,7 @@ import { toast } from 'react-toastify';
 import { bool, func, shape, string } from 'prop-types';
 
 import { saveAmazonSellerAccount, saveAmazonVendorAccount } from '../../../api';
-import {
-  ModalBox,
-  PageLoader,
-  Button,
-  ContractFormField,
-} from '../../../common';
+import { ModalBox, PageLoader, Button, InputFormField } from '../../../common';
 
 export default function EditAmazonAccountDetails({
   setShowModal,
@@ -159,10 +154,10 @@ export default function EditAmazonAccountDetails({
             <h4>Edit Amazon Account Names & IDs</h4>
             <div className="straight-line horizontal-line mt-3 " />
             <div className="body-content pb-0">
-              <ContractFormField>
+              <InputFormField>
                 {generateDropdown()}
                 <div className="straight-line horizontal-line mt-4 mb-3" />
-              </ContractFormField>
+              </InputFormField>
               {generateAccountHTML('edit')}
             </div>
           </div>

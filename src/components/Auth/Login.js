@@ -13,7 +13,7 @@ import { LeftArrowIcon, NextLogo } from '../../theme/images';
 import {
   Button,
   ErrorMsg,
-  ContractFormField,
+  InputFormField,
   PageLoader,
   SuccessMsg,
   ContractInputSelect,
@@ -260,7 +260,7 @@ export default function Login() {
               <form onSubmit={handleSubmit(onSubmit)}>
                 {showPassword.email ? (
                   <>
-                    <ContractFormField className="mt-2">
+                    <InputFormField className="mt-2">
                       <label htmlFor="emailAddress">
                         Email Address
                         <br />
@@ -287,7 +287,7 @@ export default function Login() {
                           })}
                         />
                       </label>
-                    </ContractFormField>
+                    </InputFormField>
                     <ErrorMsg>
                       {(errors && errors.email && errors.email.message) ||
                         (customerApiError && customerApiError[0])}
@@ -316,7 +316,7 @@ export default function Login() {
                       <>
                         {showPassword.password ? (
                           <>
-                            <ContractFormField>
+                            <InputFormField>
                               <label htmlFor="password">
                                 Enter password
                                 <br />
@@ -340,7 +340,7 @@ export default function Login() {
                                   })}
                                 />
                               </label>
-                            </ContractFormField>
+                            </InputFormField>
                             <ErrorMsg>
                               {errors &&
                                 errors.password &&

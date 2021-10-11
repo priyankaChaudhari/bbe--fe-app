@@ -432,18 +432,20 @@ export default function ProductCatalog({
                   ) : (
                     <>
                       <Table className="mt-0 product-catalog-laptop ">
-                        <tr>
-                          <th width="55%" className="product-catalog-header">
-                            Product Name / ASIN / SKU
-                          </th>
-                          <th width="25%" className="product-catalog-header">
-                            Status
-                          </th>
-                          <th width="20%" className="product-catalog-header">
-                            {' '}
-                            &nbsp;
-                          </th>
-                        </tr>
+                        <thead>
+                          <tr>
+                            <th width="55%" className="product-catalog-header">
+                              Product Name / ASIN / SKU
+                            </th>
+                            <th width="25%" className="product-catalog-header">
+                              Status
+                            </th>
+                            <th width="20%" className="product-catalog-header">
+                              {' '}
+                              &nbsp;
+                            </th>
+                          </tr>
+                        </thead>
                         <tbody>
                           {data &&
                             data.map((item) => (

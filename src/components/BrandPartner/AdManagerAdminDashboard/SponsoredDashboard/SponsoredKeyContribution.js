@@ -4,7 +4,14 @@ import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
 import { arrayOf, bool, func, string, objectOf } from 'prop-types';
 
-import { Tabs, WhiteCard, Table, PageLoader, Status } from '../../../../common';
+import {
+  Tabs,
+  WhiteCard,
+  Table,
+  PageLoader,
+  Status,
+  ToggleButton,
+} from '../../../../common';
 import { TabletViewManager } from '../../../../theme/Global';
 import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import {
@@ -150,25 +157,27 @@ const SponsoredKeyContribution = ({
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
-        <div className="days-container ">
-          <ul className="days-tab">
-            {keyTabOptions.map((item) => (
-              <li key={item.id}>
-                {' '}
-                <input
-                  className="d-none"
-                  type="radio"
-                  id={item.id}
-                  name="flexRadioDefault2"
-                  value={selectedContributionOption}
-                  checked={item.id === selectedContributionOption}
-                  onClick={() => handleContributionOptions(item.id)}
-                />
-                <label htmlFor={item.id}>{item.label}</label>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ToggleButton>
+          <div className="days-container ">
+            <ul className="days-tab">
+              {keyTabOptions.map((item) => (
+                <li key={item.id}>
+                  {' '}
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id={item.id}
+                    name="flexRadioDefault2"
+                    value={selectedContributionOption}
+                    checked={item.id === selectedContributionOption}
+                    onClick={() => handleContributionOptions(item.id)}
+                  />
+                  <label htmlFor={item.id}>{item.label}</label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </ToggleButton>
       </div>
     );
   };
@@ -448,7 +457,7 @@ const SponsoredKeyContribution = ({
     return (
       <>
         <Table className="mt-0 ">
-          {renderTableHeader()}
+          <thead>{renderTableHeader()}</thead>
           {contributionData.length >= 1 ? (
             <tbody>
               {contributionData &&
