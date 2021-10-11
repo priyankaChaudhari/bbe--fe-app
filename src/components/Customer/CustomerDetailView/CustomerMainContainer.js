@@ -215,7 +215,7 @@ export default function CustomerMainContainer() {
     ];
   }
 
-  if (customer && customer.status !== null) {
+  if (customer && (customer.status !== null || customer.status !== 'pending')) {
     viewOptions = [
       { value: 'performance', label: 'Performance' },
       { value: 'agreement', label: 'Agreements' },
