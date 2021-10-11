@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { CaretUp } from '../../../../theme/images/index';
+import { CaretUp } from '../../../../theme/images';
 
 const SponsoredFilter = ({
   handleResetFilter,

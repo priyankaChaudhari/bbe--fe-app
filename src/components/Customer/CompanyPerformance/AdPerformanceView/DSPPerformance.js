@@ -1,13 +1,15 @@
 import React from 'react';
+
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import { ArrowRightBlackIcon } from '../../../../theme/images/index';
-import { PageLoader, WhiteCard, ToggleButton } from '../../../../common';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import DSPMetrics from '../../../BrandPartner/AdManagerAdminDashboard/DSPDashboard/DSPMetrics';
+import { ArrowRightBlackIcon } from '../../../../theme/images';
+import { PageLoader, WhiteCard,ToggleButton } from '../../../../common';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const _ = require('lodash');
 

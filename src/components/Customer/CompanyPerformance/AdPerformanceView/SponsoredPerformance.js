@@ -1,18 +1,16 @@
 import React from 'react';
+
 import styled from 'styled-components';
 import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 
+import AdPerformanceChart from './AdPerformanceChart';
 import SponsoredAdMetric from '../../../BrandPartner/AdManagerAdminDashboard/SponsoredDashboard/SponsoredAdMetrics';
-
 import { DropDown } from '../DropDown';
 import { WhiteCard, PageLoader, ToggleButton } from '../../../../common';
-import {
-  AdTypesOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
-import AdPerformanceChart from './AdPerformanceChart';
+import { AdTypesOptions, noGraphDataMessage } from '../../../../constants';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const _ = require('lodash');
 

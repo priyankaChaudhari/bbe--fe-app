@@ -10,7 +10,7 @@ import {
   DropDownIndicator,
 } from '../../../../common';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { CaretUp } from '../../../../theme/images/index';
+import { CaretUp } from '../../../../theme/images';
 
 const DSPFilter = ({
   options,

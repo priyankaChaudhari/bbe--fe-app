@@ -1,11 +1,12 @@
 import React from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, instanceOf, oneOfType, string } from 'prop-types';
 import styled from 'styled-components';
-import { DropDownSelect, WhiteCard, Tabs } from '../../../../common';
-import { DropDown } from '../DropDown';
+import { arrayOf, bool, func, instanceOf, oneOfType, string } from 'prop-types';
+
 import Theme from '../../../../theme/Theme';
+import { DropDown } from '../DropDown';
+import { DropDownSelect, WhiteCard, Tabs } from '../../../../common';
 
 const AdPerformanceFilters = ({
   viewComponent,

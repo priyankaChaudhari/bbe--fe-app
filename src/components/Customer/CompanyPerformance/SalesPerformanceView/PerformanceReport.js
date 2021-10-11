@@ -32,7 +32,7 @@ import {
   dateOptions,
   bbDateOptions,
   noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+} from '../../../../constants';
 import {
   DropDownSelect,
   WhiteCard,

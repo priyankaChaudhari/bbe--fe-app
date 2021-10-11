@@ -18,7 +18,7 @@ import {
   CaretUp,
   CloseIcon,
   CompanyDefaultUser,
-} from '../../../../theme/images/index';
+} from '../../../../theme/images';
 import {
   FinanceDateTypeOptions,
   DSPBillingMetrics,
@@ -26,7 +26,7 @@ import {
   BillingSortByOptions,
   monthNames,
   StatusColorSet,
-} from '../../../../constants/DashboardConstants';
+} from '../../../../constants';
 import {
   Card,
   ModalRadioCheck,

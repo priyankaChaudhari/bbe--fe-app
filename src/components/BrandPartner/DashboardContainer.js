@@ -30,10 +30,6 @@ function DashboardContainer() {
     BGS: '',
   };
 
-  // useEffect(() => {
-  //   bgsCustomerList(1, userInfo.id, selectedValue, hybridView);
-  // }, []);
-
   const displayHeader = () => {
     return (
       <>

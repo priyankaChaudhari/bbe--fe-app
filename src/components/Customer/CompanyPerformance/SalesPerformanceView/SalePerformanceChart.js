@@ -11,6 +11,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 
 am4core.useTheme(am4themes_dataviz);
 am4core.color('red');
+
 const _ = require('lodash');
 
 export default function SalePerformanceGraph({

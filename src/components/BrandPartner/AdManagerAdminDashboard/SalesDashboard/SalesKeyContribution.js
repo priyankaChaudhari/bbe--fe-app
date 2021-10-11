@@ -5,19 +5,19 @@ import { useHistory } from 'react-router-dom';
 import { arrayOf, bool, func, string, objectOf } from 'prop-types';
 
 import { TabletViewManager } from '../../../../theme/Global';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
   UpDowGrayArrow,
-} from '../../../../theme/images/index';
+} from '../../../../theme/images';
 import {
   keyContributionConstant,
   noGraphDataMessage,
   keyContributionHeaders,
   metricsCurrency,
-} from '../../../../constants/CompanyPerformanceConstants';
+  PATH_CUSTOMER_DETAILS,
+} from '../../../../constants';
 import {
   Tabs,
   WhiteCard,

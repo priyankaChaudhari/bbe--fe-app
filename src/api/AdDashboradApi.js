@@ -1,5 +1,4 @@
 import axiosInstance from '../axios';
-import { metricsNameForAPI } from '../constants/CompanyPerformanceConstants';
 import {
   API_CUSTOMER,
   API_AD_MANAGER_ADMIN_DASHBOARD,
@@ -8,7 +7,8 @@ import {
   API_DSP_BILLING,
   API_CUSTOMER_CONTRACT,
   API_SALES_DASHBOARD,
-} from '../constants/ApiConstants';
+  metricsNameForAPI,
+} from '../constants';
 
 export async function getAdManagerAdminGraphData(
   dashboardType,

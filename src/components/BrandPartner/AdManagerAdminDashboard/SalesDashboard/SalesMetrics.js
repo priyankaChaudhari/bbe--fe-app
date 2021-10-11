@@ -7,7 +7,7 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
   UpDowGrayArrow,
-} from '../../../../theme/images/index';
+} from '../../../../theme/images';
 
 const _ = require('lodash');
 

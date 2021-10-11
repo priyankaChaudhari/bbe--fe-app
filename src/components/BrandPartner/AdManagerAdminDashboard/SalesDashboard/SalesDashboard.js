@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import $ from 'jquery';
-import PropTypes, { arrayOf, shape, string } from 'prop-types';
 import dayjs from 'dayjs';
+import PropTypes, { arrayOf, shape, string } from 'prop-types';
 import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
 
@@ -11,10 +11,7 @@ import SalesMetrics from './SalesMetrics';
 import SalesKeyContribution from './SalesKeyContribution';
 import SalePerformanceChart from '../../../Customer/CompanyPerformance/SalesPerformanceView/SalePerformanceChart';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import {
-  dateOptionsWithYear,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
 import {
   getManagersList,
   getSalesGraphData,

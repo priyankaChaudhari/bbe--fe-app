@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { arrayOf, bool, func, shape } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
-import { CaretUp } from '../../../../theme/images/index';
+import { CaretUp } from '../../../../theme/images';
 import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
 
 const SalesFilter = ({

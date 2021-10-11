@@ -5,7 +5,7 @@ import { arrayOf, func, string } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 import { useMediaQuery } from 'react-responsive';
 
-import { SearchIcon, CaretUp } from '../../../../theme/images/index';
+import { SearchIcon, CaretUp } from '../../../../theme/images';
 import {
   InputSearchWithRadius,
   WhiteCard,

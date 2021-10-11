@@ -1,5 +1,5 @@
 import axiosInstance from '../axios';
-import { API_CUSTOMER } from '../constants/ApiConstants';
+import { API_CUSTOMER } from '../constants';
 
 export default async function getAdManagerCustomerList(pageNumber, id, value) {
   const params = {
