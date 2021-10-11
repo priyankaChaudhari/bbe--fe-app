@@ -14,7 +14,7 @@ import {
   // GetInitialName,
   ModalRadioCheck,
   PageLoader,
-  ContractFormField,
+  InputFormField,
 } from '../../common';
 import {
   AddNewIcons,
@@ -310,7 +310,7 @@ function RequestSignature({
     return contactFields.map((field) => {
       return (
         <div className={field.classname}>
-          <ContractFormField className=" mb-3">
+          <InputFormField className=" mb-3">
             <label htmlFor={field.key}>
               {field.placeholder}
               <input
@@ -332,7 +332,7 @@ function RequestSignature({
                 field.key === 'email' &&
                 contactApiError.non_field_errors[0]}
             </ErrorMsg>
-          </ContractFormField>
+          </InputFormField>
         </div>
       );
     });

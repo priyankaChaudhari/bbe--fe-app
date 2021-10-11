@@ -13,7 +13,7 @@ import {
   OnBoardingBody,
   UnauthorizedHeader,
   CheckBox,
-  ContractFormField,
+  InputFormField,
   PageLoader,
   ErrorMsg,
 } from '../../common';
@@ -271,7 +271,7 @@ export default function UploadDelegation() {
                   </CheckBox>
                   {isChecked ? (
                     <fieldset className="shape-without-border w-430 mt-2">
-                      <ContractFormField>
+                      <InputFormField>
                         <label htmlFor="email">
                           Assign to (email)
                           <input
@@ -330,7 +330,7 @@ export default function UploadDelegation() {
                             'Send Email'
                           )}
                         </Button>
-                      </ContractFormField>
+                      </InputFormField>
                     </fieldset>
                   ) : (
                     ''

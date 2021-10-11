@@ -41,9 +41,6 @@ const NoRecord = styled.div`
   .NoRecordFound {
     margin: auto;
     text-align: center;
-    //padding-top: 10%;
-    // padding-left: 65px;
-    // left: 65px;
   }
   .no-record-found {
     img {

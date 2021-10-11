@@ -29,7 +29,7 @@ import {
 } from '../../constants';
 import {
   OnBoardingBody,
-  ContractFormField,
+  InputFormField,
   Button,
   PageLoader,
   ModalBox,
@@ -446,7 +446,7 @@ export default function AmazonMerchant({
         {mapData
           .filter((op) => op.section === 1)
           .map((item) => (
-            <ContractFormField className="mt-4" key={item.key}>
+            <InputFormField className="mt-4" key={item.key}>
               <label htmlFor={item.label}>
                 {item.label}
                 <input
@@ -471,7 +471,7 @@ export default function AmazonMerchant({
               <ErrorMsg>
                 {apiError && apiError.Vendor && apiError.Vendor[item.key]}
               </ErrorMsg>
-            </ContractFormField>
+            </InputFormField>
           ))}
       </fieldset>
     );
@@ -589,7 +589,7 @@ export default function AmazonMerchant({
           mapData
             .filter((op) => op.section === 2)
             .map((item) => (
-              <ContractFormField className="mt-4" key={item.key}>
+              <InputFormField className="mt-4" key={item.key}>
                 <label htmlFor={item.label}>
                   {item.label}
                   <input
@@ -619,7 +619,7 @@ export default function AmazonMerchant({
                 ) : (
                   ''
                 )}
-              </ContractFormField>
+              </InputFormField>
             ))}
         {isChecked ? '' : <>{generateSaveBtn()}</>}
       </fieldset>

@@ -9,7 +9,7 @@ import { getEmail } from '../../api';
 import { FormContainer } from '../../theme/Global';
 import { showOnboardingMsg } from '../../store/actions/userState';
 import { NextLogo, LeftArrowIcon } from '../../theme/images';
-import { Button, ContractFormField, ErrorMsg, PageLoader } from '../../common';
+import { Button, InputFormField, ErrorMsg, PageLoader } from '../../common';
 
 export default function ForgotPassword() {
   const dispatch = useDispatch();
@@ -68,7 +68,7 @@ export default function ForgotPassword() {
                   reset your password.
                 </p>
                 <form className="inner-form" onSubmit={handleSubmit(onSubmit)}>
-                  <ContractFormField>
+                  <InputFormField>
                     <label htmlFor="emailAddress">
                       Email address
                       <input
@@ -89,7 +89,7 @@ export default function ForgotPassword() {
                         onChange={() => setApiError([])}
                       />
                     </label>
-                  </ContractFormField>
+                  </InputFormField>
                   <ErrorMsg>
                     {errors && errors.email && errors.email.message}
                   </ErrorMsg>{' '}

@@ -75,14 +75,16 @@ export default function PastAgreement({
             <div className="text-center mt-3">No Past Agreement found.</div>
           ) : (
             <Table className="mt-0 product-catalog-laptop ">
-              <tr>
-                <th width="75%" className="product-header ">
-                  Agreement Type
-                </th>
-                <th width="25%" className="product-header ">
-                  Date Expired
-                </th>
-              </tr>
+              <thead>
+                <tr>
+                  <th width="75%" className="product-header ">
+                    Agreement Type
+                  </th>
+                  <th width="25%" className="product-header ">
+                    Date Expired
+                  </th>
+                </tr>
+              </thead>
               <tbody>
                 {agreements.map((item) => (
                   <tr width="100%" key={item.id}>

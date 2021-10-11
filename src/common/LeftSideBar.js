@@ -221,10 +221,6 @@ export default function LeftSideBar({ userInfo }) {
             <img className="read-book-active" src={ReadBookIconActive} alt="" />
             <img className="read-book" src={ReadBookIcon} alt="" />
           </li>
-          {/* <li>
-            <img className="user-group" src={UserGroupIconActive} alt="" />
-            <img className="user-group-active " src={UserGroupIcon} alt="" />
-          </li> */}
         </ul>
       </LeftSideBars>
     </div>

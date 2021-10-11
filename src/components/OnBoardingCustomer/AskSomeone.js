@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import {
   Button,
   CheckBox,
-  ContractFormField,
+  InputFormField,
   ErrorMsg,
   PageLoader,
 } from '../../common';
@@ -213,7 +213,7 @@ export default function AskSomeone({
         stepData.step === step &&
         stepData.email !== userInfo.email) ? (
         <fieldset className="shape-without-border w-430 mt-2">
-          <ContractFormField>
+          <InputFormField>
             <label htmlFor="email">
               Assign to (email)
               <input
@@ -262,7 +262,7 @@ export default function AskSomeone({
             ) : (
               ''
             )}
-          </ContractFormField>
+          </InputFormField>
           {!editEmail &&
           stepData &&
           stepData.email !== '' &&

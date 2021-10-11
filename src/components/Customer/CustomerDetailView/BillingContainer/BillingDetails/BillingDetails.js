@@ -13,7 +13,7 @@ import { billingAddress, creditCardDetails } from '../../../../../constants';
 import { getBillingDetails, saveBillingInfo } from '../../../../../api';
 import {
   Button,
-  ContractFormField,
+  InputFormField,
   ErrorMsg,
   GetInitialName,
   ModalBox,
@@ -200,7 +200,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                 style={{
                   opacity: data && data.id && item.key === 'email' ? 0.5 : '',
                 }}>
-                <ContractFormField className="mt-3">
+                <InputFormField className="mt-3">
                   <label htmlFor={item.label}>
                     {item.label}
                     <br />
@@ -210,7 +210,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                       <>{generateInput(item, 'billing_contact')}</>
                     )}
                   </label>
-                </ContractFormField>
+                </InputFormField>
                 <ErrorMsg>
                   {apiError &&
                     apiError.billing_contact &&
@@ -235,7 +235,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                 className="col-md-6"
                 key={item.key}
                 style={{ opacity: item.key === 'email' ? 0.5 : '' }}>
-                <ContractFormField className="mt-3">
+                <InputFormField className="mt-3">
                   <label htmlFor={item.label}>
                     {item.label}
                     <br />
@@ -245,7 +245,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                       <>{generateInput(item, 'billing_address')}</>
                     )}
                   </label>
-                </ContractFormField>
+                </InputFormField>
                 <ErrorMsg>
                   {apiError &&
                     apiError.billing_address &&
@@ -267,7 +267,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             {field.details.map((item) => {
               return (
                 <div className="col-md-6" key={item.key}>
-                  <ContractFormField className="mt-3">
+                  <InputFormField className="mt-3">
                     <label htmlFor={item.label}>
                       {item.label}
                       <br />
@@ -277,7 +277,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                         <>{generateInput(item, 'card_details')}</>
                       )}
                     </label>
-                  </ContractFormField>
+                  </InputFormField>
                   <ErrorMsg>
                     {apiError &&
                       apiError.card_details &&

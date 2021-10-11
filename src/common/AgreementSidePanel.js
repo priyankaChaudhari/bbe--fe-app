@@ -25,7 +25,7 @@ import ServicesAmendment from '../components/Contract/ServicesAmendment';
 import ErrorMsg from './ErrorMsg';
 import CheckBox from './CheckBox';
 import Tabs from './Tabs';
-import { Button, ContractFormField } from './index';
+import { Button, InputFormField } from './index';
 import { getLength, getRevenueShare, createAddendum } from '../api';
 import {
   ServiceAgreement,
@@ -2599,7 +2599,7 @@ export default function AgreementSidePanel({
   const displayOneTimeServices = () => {
     return (
       <li>
-        <ContractFormField className="mb-3">
+        <InputFormField className="mb-3">
           <label htmlFor="additional_one_time_services">
             One Time Services
           </label>
@@ -2618,7 +2618,7 @@ export default function AgreementSidePanel({
           ) : (
             ''
           )}
-        </ContractFormField>
+        </InputFormField>
         <div className="row">
           {oneTimeService &&
             oneTimeService.map((oneTimeServiceData) =>
@@ -2940,7 +2940,7 @@ export default function AgreementSidePanel({
                   />
                 </ContractInputSelect>
                 {amazonStoreCustom ? (
-                  <ContractFormField className="w-100 mt-1">
+                  <InputFormField className="w-100 mt-1">
                     <NumberFormat
                       className={
                         additionalOnetimeSerError &&
@@ -2995,7 +2995,7 @@ export default function AgreementSidePanel({
                       decimalScale={2}
                     />
                     {displayError('custom_amazon_store_price')}
-                  </ContractFormField>
+                  </InputFormField>
                 ) : (
                   ''
                 )}
@@ -3130,11 +3130,11 @@ export default function AgreementSidePanel({
   const displayListingOptimizations = () => {
     return (
       <>
-        <ContractFormField className="mb-3">
+        <InputFormField className="mb-3">
           <label htmlFor="additional_one_time_services ">
             LISTING OPTIMIZATIONS (ASIN&rsquo;s PER MONTH)
           </label>
-        </ContractFormField>
+        </InputFormField>
         {ListingOptimization.map((field) => {
           return (
             <>
@@ -3335,18 +3335,18 @@ export default function AgreementSidePanel({
                           formData &&
                           formData.contract_type === 'one time' ? null : (
                             <li key={item.key}>
-                              <ContractFormField>
+                              <InputFormField>
                                 <label htmlFor={item.key}>{item.label}</label>
                                 {generateHTML(item)}
                                 {displayError(item)}
-                              </ContractFormField>
+                              </InputFormField>
                             </li>
                           )}
                         </>
                       ) : (
                         <>
                           <li key={item.key}>
-                            <ContractFormField>
+                            <InputFormField>
                               <label>{item.label}</label>
                               {item.sections.map((subFields) => (
                                 <React.Fragment key={subFields.key}>
@@ -3356,7 +3356,7 @@ export default function AgreementSidePanel({
                                   {displayError(subFields)}
                                 </React.Fragment>
                               ))}
-                            </ContractFormField>
+                            </InputFormField>
                           </li>
                           {formData &&
                           formData.contract_type &&
@@ -3501,7 +3501,7 @@ export default function AgreementSidePanel({
                             <React.Fragment key={item.key}>
                               <>
                                 <li>
-                                  <ContractFormField>
+                                  <InputFormField>
                                     <label htmlFor={item.key}>
                                       {item.label}
                                     </label>
@@ -3513,7 +3513,7 @@ export default function AgreementSidePanel({
                                     apiError.non_field_errors[0]
                                       ? displayError('non_field_errors')
                                       : ''}
-                                  </ContractFormField>
+                                  </InputFormField>
                                 </li>
                               </>
                             </React.Fragment>
@@ -3571,7 +3571,7 @@ export default function AgreementSidePanel({
                             </div>
                             {formData && formData.threshold_type === 'Fixed' ? (
                               <div>
-                                <ContractFormField>
+                                <InputFormField>
                                   <div className="input-container  ">
                                     <span
                                       className={
@@ -3602,7 +3602,7 @@ export default function AgreementSidePanel({
                                     />
                                   </div>
                                   {displayError({ key: 'sales_threshold' })}
-                                </ContractFormField>
+                                </InputFormField>
                               </div>
                             ) : (
                               ''
@@ -3688,7 +3688,7 @@ export default function AgreementSidePanel({
 
                           <li>{displayListingOptimizations()}</li>
                           <li>
-                            <ContractFormField className="mb-3">
+                            <InputFormField className="mb-3">
                               <label htmlFor="additional_one_time_services ">
                                 Monthly Services
                               </label>
@@ -3702,7 +3702,7 @@ export default function AgreementSidePanel({
                                   ? 'Edit Discount'
                                   : 'Add Discount'}
                               </div>
-                            </ContractFormField>
+                            </InputFormField>
                             {monthlyService &&
                               monthlyService.map((serviceData) => (
                                 <CheckBox
@@ -3789,13 +3789,13 @@ export default function AgreementSidePanel({
 
                             {showAdditionalMarketplace ? (
                               <>
-                                <ContractFormField>
+                                <InputFormField>
                                   {generateHTML({
                                     key: 'additional_marketplaces',
                                     label: 'Additional Market Places',
                                     type: 'multichoice',
                                   })}
-                                </ContractFormField>
+                                </InputFormField>
                               </>
                             ) : (
                               ''
@@ -3934,11 +3934,11 @@ export default function AgreementSidePanel({
                           formData &&
                           formData.contract_type === 'dsp only' ? null : (
                             <li key={item.key}>
-                              <ContractFormField>
+                              <InputFormField>
                                 <label htmlFor={item.key}>{item.label}</label>
                                 {generateHTML(item)}
                                 {displayError(item)}
-                              </ContractFormField>
+                              </InputFormField>
                               <p className="m-0  pt-1 small-para">
                                 {item.info ? item.info : ''}
                               </p>

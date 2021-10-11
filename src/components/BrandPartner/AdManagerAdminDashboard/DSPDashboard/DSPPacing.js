@@ -6,7 +6,13 @@ import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 
 import Theme from '../../../../theme/Theme';
-import { PageLoader, Status, Table, WhiteCard } from '../../../../common';
+import {
+  PageLoader,
+  Status,
+  Table,
+  WhiteCard,
+  ToggleButton,
+} from '../../../../common';
 import { CompanyDefaultUser } from '../../../../theme/images';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
@@ -223,25 +229,27 @@ const DSPPacing = ({
     ];
 
     return (
-      <div className="days-container spending">
-        <ul className="days-tab">
-          {keyTabOptions.map((item) => (
-            <li key={item.id}>
-              {' '}
-              <input
-                className="d-none"
-                type="radio"
-                id={item.id}
-                name="flexRadioDefault2"
-                value={selectedOption}
-                checked={item.id === selectedOption}
-                onClick={() => handleSpendingOptions(item.id)}
-              />
-              <label htmlFor={item.id}>{item.label}</label>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <ToggleButton>
+        <div className="days-container spending">
+          <ul className="days-tab">
+            {keyTabOptions.map((item) => (
+              <li key={item.id}>
+                {' '}
+                <input
+                  className="d-none"
+                  type="radio"
+                  id={item.id}
+                  name="flexRadioDefault2"
+                  value={selectedOption}
+                  checked={item.id === selectedOption}
+                  onClick={() => handleSpendingOptions(item.id)}
+                />
+                <label htmlFor={item.id}>{item.label}</label>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </ToggleButton>
     );
   };
 

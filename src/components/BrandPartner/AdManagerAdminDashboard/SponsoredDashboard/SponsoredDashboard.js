@@ -26,6 +26,7 @@ import {
   PageLoader,
   DropDownIndicator,
   CustomDateModal,
+  ToggleButton,
 } from '../../../../common';
 import {
   dateOptions,
@@ -887,55 +888,57 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           </ul>
         </div>
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
-          <div className="days-container ">
-            <ul className="days-tab">
-              <li
-                // id=" BT-adperformance-days"
-                className={adFilters.daily === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.daily}
-                  onClick={() => handleAdGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
+          <ToggleButton>
+            <div className="days-container ">
+              <ul className="days-tab">
+                <li
+                  // id=" BT-adperformance-days"
+                  className={adFilters.daily === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="daysCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.daily}
+                    onClick={() => handleAdGroupBy('daily')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="daysCheck">Daily</label>
+                </li>
 
-              <li
-                // id=" BT-adperformance-weekly"
-                className={adFilters.weekly === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.weekly && adGroupBy === 'weekly'}
-                  onChange={() => handleAdGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
+                <li
+                  // id=" BT-adperformance-weekly"
+                  className={adFilters.weekly === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="weeklyCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.weekly && adGroupBy === 'weekly'}
+                    onChange={() => handleAdGroupBy('weekly')}
+                  />
+                  <label htmlFor="weeklyCheck">Weekly</label>
+                </li>
 
-              <li
-                // id=" BT-adperformance-monthly"
-                className={adFilters.month === false ? 'disabled-tab' : ''}>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  id="monthlyCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.month && adGroupBy === 'monthly'}
-                  onChange={() => handleAdGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
-            </ul>
-          </div>
+                <li
+                  // id=" BT-adperformance-monthly"
+                  className={adFilters.month === false ? 'disabled-tab' : ''}>
+                  <input
+                    className=" d-none"
+                    type="radio"
+                    id="monthlyCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.month && adGroupBy === 'monthly'}
+                    onChange={() => handleAdGroupBy('monthly')}
+                  />
+                  <label htmlFor="monthlyCheck">Monthly</label>
+                </li>
+              </ul>
+            </div>
+          </ToggleButton>
         </div>
       </div>
     );
