@@ -1,11 +1,7 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import React, { useState, useEffect, useCallback } from 'react';
 
 import $ from 'jquery';
-import PropTypes from 'prop-types';
+import PropTypes, { arrayOf, shape, string } from 'prop-types';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
@@ -22,7 +18,7 @@ import {
 import {
   getManagersList,
   getSalesGraphData,
-  getKeyContributionData,
+  getSalesKeyContributionData,
 } from '../../../../api';
 import {
   WhiteCard,
@@ -285,7 +281,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       endDate = null,
     ) => {
       setKeyContributionLoader(true);
-      getKeyContributionData(
+      getSalesKeyContributionData(
         selectedDailyFact,
         marketplace,
         selectedBgs,
@@ -474,6 +470,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           ed,
         );
       }
+    } else {
+      getSalesData(dailyFactFlag, temp, marketplace, bgsUser);
+      getContributionData(
+        dailyFactFlag,
+        marketplace,
+        selectedBgsUser.value,
+        selectedContributionOption,
+        selectedTabMetrics,
+      );
     }
   };
 
@@ -950,9 +955,19 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 SalesDashboard.defaultProps = {
   marketplaceChoices: [],
   selectedMarketplace: '',
+  userInfo: {
+    role: '',
+    id: '',
+  },
+  data: {},
 };
 
 SalesDashboard.propTypes = {
-  marketplaceChoices: PropTypes.arrayOf(PropTypes.object),
-  selectedMarketplace: PropTypes.string,
+  marketplaceChoices: arrayOf(PropTypes.object),
+  selectedMarketplace: string,
+  userInfo: shape({
+    role: string,
+    id: string,
+  }),
+  data: shape({ sub: string, label: string }),
 };

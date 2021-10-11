@@ -216,6 +216,77 @@ export async function getSalesGraphData(
   return result;
 }
 
+export async function getSalesKeyContributionData(
+  dailyFacts,
+  marketplace,
+  user,
+  contributionType,
+  selectedMetric,
+  startDate,
+  endDate,
+  userInfo,
+) {
+  const metricName = metricsNameForAPI[selectedMetric];
+
+  let selectedUser = '';
+  if (userInfo && userInfo.role === 'BGS Manager') {
+    selectedUser = user;
+  } else {
+    selectedUser = userInfo && userInfo.id;
+  }
+
+  let params = {
+    daily_facts: dailyFacts,
+    marketplace,
+    user: selectedUser,
+  };
+
+  if (startDate && endDate) {
+    params = {
+      ...params,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
+
+  if (contributionType === 'keyMetrics') {
+    params = {
+      ...params,
+      no_page: '',
+      sequence: 'desc',
+      'order-by': 'company_name',
+    };
+  } else {
+    params = {
+      ...params,
+      order_by: contributionType,
+      metric: metricName,
+    };
+  }
+
+  let result = {};
+  if (contributionType === 'keyMetrics') {
+    result = await axiosInstance
+      .get(`${API_CUSTOMER}`, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  } else {
+    result = await axiosInstance
+      .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}key-contributors/`, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
+  return result;
+}
+
 export async function getFinanceInvoices(
   type,
   searchKey,

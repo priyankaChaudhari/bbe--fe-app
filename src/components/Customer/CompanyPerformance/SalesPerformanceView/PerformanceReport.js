@@ -1,5 +1,4 @@
 /* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState, useCallback } from 'react';
 
 import dayjs from 'dayjs';
@@ -8,7 +7,7 @@ import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import Select, { components } from 'react-select';
-import { func, instanceOf, string } from 'prop-types';
+import { func, instanceOf, shape, string } from 'prop-types';
 import {
   LineChart,
   ResponsiveContainer,
@@ -1411,13 +1410,25 @@ PerformanceReport.defaultProps = {
   id: '',
   viewComponent: '',
   setViewComponent: () => {},
+  selectProps: {
+    menuIsOpen: '',
+  },
+  data: {},
+  active: {},
+  payload: {},
 };
 
 PerformanceReport.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
   viewComponent: string,
+  selectProps: shape({
+    menuIsOpen: string,
+  }),
   setViewComponent: func,
+  data: shape({ label: string }),
+  active: shape({}),
+  payload: shape({}),
 };
 const ViewData = styled.div`
   .view-data-for {

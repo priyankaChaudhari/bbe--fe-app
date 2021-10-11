@@ -131,6 +131,7 @@ const SalesKeyContribution = ({
                   value={selectedContributionOption}
                   checked={item.id === selectedContributionOption}
                   onClick={() => handleContributionOptions(item.id)}
+                  onChange={() => {}}
                 />
                 <label htmlFor={item.id}>{item.label}</label>
               </li>
@@ -149,6 +150,7 @@ const SalesKeyContribution = ({
         <ul className="tabs">
           {tabOptions.map((item) => (
             <li
+              key={item.value}
               className={selectedTab === item.value ? 'active' : ''}
               onClick={() => handleOnMetricsTabChange(item.value)}
               role="presentation">
@@ -201,45 +203,49 @@ const SalesKeyContribution = ({
 
   const renderTableHeader = () => {
     return selectedContributionOption === 'keyMetrics' ? (
-      <tr>
-        <th width="38%" className="product-header">
-          CUSTOMER
-        </th>
-        <th width="18%" className="product-header">
-          TOTAL SALES
-        </th>
-        <th width="18%" className="product-header">
-          TRAFFIC
-        </th>
-        <th width="18%" className="product-header">
-          {' '}
-          CONVERSION
-        </th>
-        <th width="28%" className="product-header">
-          {' '}
-          UNITS SOLD
-        </th>
-      </tr>
+      <thead>
+        <tr>
+          <th width="38%" className="product-header">
+            CUSTOMER
+          </th>
+          <th width="18%" className="product-header">
+            TOTAL SALES
+          </th>
+          <th width="18%" className="product-header">
+            TRAFFIC
+          </th>
+          <th width="18%" className="product-header">
+            {' '}
+            CONVERSION
+          </th>
+          <th width="28%" className="product-header">
+            {' '}
+            UNITS SOLD
+          </th>
+        </tr>
+      </thead>
     ) : (
-      <tr>
-        <th width="40%" className="product-header">
-          Customer
-        </th>
-        <th width="20%" className="product-header">
-          This Period
-        </th>
-        <th width="20%" className="product-header">
-          {' '}
-          Prev. Period
-        </th>
-        <th width="20%" className="product-header">
-          {' '}
-          Change
-        </th>
-        <th width="60%" className="product-header">
-          Contribution
-        </th>
-      </tr>
+      <thead>
+        <tr>
+          <th width="40%" className="product-header">
+            Customer
+          </th>
+          <th width="20%" className="product-header">
+            This Period
+          </th>
+          <th width="20%" className="product-header">
+            {' '}
+            Prev. Period
+          </th>
+          <th width="20%" className="product-header">
+            {' '}
+            Change
+          </th>
+          <th width="60%" className="product-header">
+            Contribution
+          </th>
+        </tr>
+      </thead>
     );
   };
 

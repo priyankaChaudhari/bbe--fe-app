@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, string } from 'prop-types';
+import { arrayOf, bool, func, shape } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import { CaretUp } from '../../../../theme/images/index';
@@ -177,7 +177,7 @@ SalesFilter.defaultProps = {
   bgsList: [],
   selectedBgs: {},
   selectedMarketplace: {},
-  isBGSManager: {},
+  isBGSManager: false,
   DropdownIndicator: () => {},
   handleBgsList: () => {},
   handleMarketplace: () => {},
@@ -186,9 +186,9 @@ SalesFilter.defaultProps = {
 
 SalesFilter.propTypes = {
   isApiCall: bool,
-  selectedBgs: string,
-  selectedMarketplace: string,
-  isBGSManager: string,
+  isBGSManager: bool,
+  selectedBgs: shape({}),
+  selectedMarketplace: shape({}),
   marketplaceOptions: arrayOf(Array),
   bgsList: arrayOf(Array),
   handleMarketplace: func,
