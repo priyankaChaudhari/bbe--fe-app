@@ -1702,6 +1702,14 @@ text.cust-label-avg {
    font-weight: bold;
 }
 
+<<<<<<< HEAD
+=======
+.label-card-text {
+  color: ${Theme.gray40};
+   font-size:${Theme.verySmall};
+}
+
+>>>>>>> pdv-2273- bgs dashboard- tooltip structure added
  .label-info {
     color: ${Theme.black};
     font-size: ${Theme.normal};

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import ReactTooltip from 'react-tooltip';
 import { func, instanceOf, string } from 'prop-types';
 
 import {
@@ -19,6 +20,13 @@ const SalesMetrics = ({
   salesPreviousTotal,
   salesDifference,
 }) => {
+  const rendeTootipData = () => {
+    return `<ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;"> 
+    <li style="display: inline-block;"> 
+    <div style="color:#f4f6fc; font-size: 11px;padding-left: 5px;">Sales Breakdown</div>
+    </li>
+    </ul>`;
+  };
   const setBoxClasses = (name, classValue) => {
     let selectedClass = '';
     if (Object.prototype.hasOwnProperty.call(selectedSalesMetrics, name)) {
@@ -54,7 +62,16 @@ const SalesMetrics = ({
             onClick={() => setBoxToggle('revenue')}
             role="presentation"
             className={setBoxClasses('revenue', 'ad-sales-active')}>
-            <div className="chart-name">Total Sales</div>
+            <div className="row">
+              <div className="chart-name col-lg-7">Total Sales</div>
+              <div
+                className="col-lg-5 label-card-text"
+                data-tip={rendeTootipData()}
+                data-html
+                data-for="idea">
+                Breakdown
+              </div>
+            </div>
             <div className="number-rate">
               {salesCurrentTotal && salesCurrentTotal.revenue
                 ? `${currencySign}${addThousandComma(
@@ -220,6 +237,14 @@ const SalesMetrics = ({
             )}
           </div>
         </div>
+
+        <ReactTooltip
+          id="idea"
+          aria-haspopup="true"
+          place="bottom"
+          effect="solid"
+          backgroundColor="#162c50"
+        />
       </div>
     );
   };
