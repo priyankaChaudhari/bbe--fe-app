@@ -1,11 +1,10 @@
 import React from 'react';
+
+import queryString from 'query-string';
 import { useHistory } from 'react-router-dom';
 
-import styled from 'styled-components';
-import queryString from 'query-string';
-
-import Theme from '../../theme/Theme';
 import UnauthorizedHeader from '../../common/UnauthorizedHeader';
+import { ThanksPage } from './OnBoardingStyles';
 import { AccountSetupIcon } from '../../theme/images';
 
 export default function Thanks() {
@@ -43,20 +42,3 @@ export default function Thanks() {
     </>
   );
 }
-
-const ThanksPage = styled.div`
-  text-align: center;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
-
-  .info {
-    color: ${Theme.gray90};
-    font-size: ${Theme.title};
-    font-family: ${Theme.baseFontFamily};
-  }
-`;

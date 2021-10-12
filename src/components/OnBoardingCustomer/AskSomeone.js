@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
-import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
+import { string, shape, bool, func } from 'prop-types';
 
+import { EditOrangeIcon } from '../../theme/images';
+import {
+  askSomeoneData,
+  updateAskSomeoneData,
+  editCustomerEmail,
+} from '../../api';
 import {
   Button,
   CheckBox,
@@ -10,12 +16,6 @@ import {
   ErrorMsg,
   PageLoader,
 } from '../../common';
-import {
-  askSomeoneData,
-  updateAskSomeoneData,
-  editCustomerEmail,
-} from '../../api';
-import { EditOrangeIcon } from '../../theme/images';
 
 export default function AskSomeone({
   setIsChecked,
@@ -313,30 +313,30 @@ AskSomeone.defaultProps = {
 };
 
 AskSomeone.propTypes = {
-  userInfo: PropTypes.shape({
-    email: PropTypes.string,
-    customer_onboarding: PropTypes.string,
+  userInfo: shape({
+    email: string,
+    customer_onboarding: string,
   }).isRequired,
-  isChecked: PropTypes.bool.isRequired,
-  setIsChecked: PropTypes.func,
-  step: PropTypes.string,
-  setIsLoading: PropTypes.func,
-  isLoading: PropTypes.shape({
-    loader: PropTypes.bool,
-    type: PropTypes.string,
+  isChecked: bool.isRequired,
+  setIsChecked: func,
+  step: string,
+  setIsLoading: func,
+  isLoading: shape({
+    loader: bool,
+    type: string,
   }).isRequired,
-  setStepData: PropTypes.func,
-  stepData: PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
-    step: PropTypes.string,
-    is_completed: PropTypes.bool,
+  setStepData: func,
+  stepData: shape({
+    id: string,
+    email: string,
+    step: string,
+    is_completed: bool,
   }),
-  setDisableBtn: PropTypes.func,
-  setOpenCollapse: PropTypes.func,
-  noAmazonAccount: PropTypes.shape({
-    Seller: PropTypes.bool,
-    Vendor: PropTypes.bool,
+  setDisableBtn: func,
+  setOpenCollapse: func,
+  noAmazonAccount: shape({
+    Seller: bool,
+    Vendor: bool,
   }),
-  accountType: PropTypes.string,
+  accountType: string,
 };

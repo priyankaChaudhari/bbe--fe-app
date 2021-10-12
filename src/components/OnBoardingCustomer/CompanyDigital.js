@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
 import queryString from 'query-string';
-import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import { string, shape, bool, func, number, arrayOf } from 'prop-types';
 
 import { TrashIcons } from '../../theme/images';
 import { getCustomerDetails, userMe } from '../../store/actions';
@@ -306,35 +306,35 @@ CompanyDigital.defaultProps = {
 };
 
 CompanyDigital.propTypes = {
-  userInfo: PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
-    customer: PropTypes.string,
-    customer_onboarding: PropTypes.string,
-    step: PropTypes.shape({
-      step: PropTypes.number,
+  userInfo: shape({
+    id: string,
+    email: string,
+    customer: string,
+    customer_onboarding: string,
+    step: shape({
+      step: number,
     }),
   }).isRequired,
-  setIsLoading: PropTypes.func.isRequired,
-  assignedToSomeone: PropTypes.bool.isRequired,
-  stepData: PropTypes.shape({
-    id: PropTypes.string,
+  setIsLoading: func.isRequired,
+  assignedToSomeone: bool.isRequired,
+  stepData: shape({
+    id: string,
   }),
-  verifiedStepData: PropTypes.shape({
-    user_name: PropTypes.string,
-    step_id: PropTypes.string,
-    customer_id: PropTypes.string,
-    user_id: PropTypes.string,
-    user_step: PropTypes.objectOf(PropTypes.object),
+  verifiedStepData: shape({
+    user_name: string,
+    step_id: string,
+    customer_id: string,
+    user_id: string,
+    user_step: shape({}),
   }).isRequired,
-  data: PropTypes.shape({
-    id: PropTypes.string,
-    website: PropTypes.string,
+  data: shape({
+    id: string,
+    website: string,
   }).isRequired,
-  isLoading: PropTypes.shape({
-    loader: PropTypes.bool,
-    type: PropTypes.string,
+  isLoading: shape({
+    loader: bool,
+    type: string,
   }).isRequired,
-  isChecked: PropTypes.bool.isRequired,
-  summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
+  isChecked: bool.isRequired,
+  summaryData: arrayOf(shape({})).isRequired,
 };
