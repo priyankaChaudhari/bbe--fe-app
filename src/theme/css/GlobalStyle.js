@@ -133,9 +133,7 @@ body {
   .customer-pdf {
     margin-left: 0px !important;
   }
- 
   
-  }
   @media only screen and (max-width: 991px) {
     .sticky {
       padding-left: 28px;
@@ -289,7 +287,7 @@ h6 {
 .black-heading-title {
   font-size: ${Theme.extraMedium}; 
   color: ${Theme.black};
-  // font-family: ${Theme.baseMediumFontFamily};
+   /* font-family: ${Theme.baseMediumFontFamily}; */
    font-family: ${Theme.baseFontFamily};
   font-weight: 600;
 }
@@ -313,7 +311,7 @@ p {
   &.black-heading-title {
     font-size: ${Theme.extraMedium}; 
     color: ${Theme.black};
-    // font-family: ${Theme.baseMediumFontFamily};
+     /* font-family: ${Theme.baseMediumFontFamily}; */
     font-family: ${Theme.baseFontFamily};
     font-weight: 600;
   }
@@ -1034,7 +1032,7 @@ fieldset {
       padding-top: 4px;
       margin-top: -2px;
     }
-  }
+}
 
 .annotationNone {
   width: 40px;
@@ -1120,10 +1118,10 @@ fieldset {
   font-size: 12px;
   font-weight: 400;
 }
- .customer-list-tooltip{
-    max-width: 16%;
-    left: 14% !important;
- }
+.customer-list-tooltip{
+  max-width: 16%;
+  left: 14% !important;
+}
 
 .contract_td {
   border: 1px solid ${Theme.black};
@@ -1192,7 +1190,7 @@ fieldset {
 }
 
 .disabled-slider-btn {
-   opacity: 0.4;
+  opacity: 0.4;
   cursor: not-allowed !important;
 }
 
@@ -1249,7 +1247,7 @@ fieldset {
   @media only screen and (max-width: 991px) {
     padding-left: 0px !important;
     padding-right: 0;
-    // margin-top: 50px;
+     /* margin-top: 50px; */
      .react-pdf__Page {
         &:first-child {
           top: 110px !important;
@@ -1288,7 +1286,6 @@ fieldset {
 .rdrDayPassive {
   visibility:hidden
 }
-
 
 .PDFPageOne {
   margin-bottom: 25px;
@@ -1618,55 +1615,52 @@ text.cust-label-avg {
     top: 6px;
   }
    @media only screen and (max-width: 767px)  {
-      progress[value] { 
-        right: 0;
-        width: 75%;
-      }
+    progress[value] { 
+      right: 0;
+      width: 75%;
+    }
    }
    @media only screen and (max-width: 550px)  {
-      progress[value] { 
-        right: 0;
-        width: 60%;
-      }
+    progress[value] { 
+      right: 0;
+      width: 60%;
+    }
    }
 }
- .uploading-progress-bar {
-    text-align: center;
-    margin-top: 5px;
+.uploading-progress-bar {
+  text-align: center;
+  margin-top: 5px;
 
-    progress[value] {
-      height: 4px;
-      position: relative;
-      border-radius: 10px;
-      width: 120px;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-    progress[value]::-webkit-progress-bar {
-      background: #d8d8d8;
-      border-radius: 10px;
-    }
-    progress[value]::-webkit-progress-value {
-      background-color: #ff4817;
-      border-radius: 10px;
-    }
+  progress[value] {
+    height: 4px;
+    position: relative;
+    border-radius: 10px;
+    width: 120px;
+    -webkit-appearance: none;
+    appearance: none;
   }
+  progress[value]::-webkit-progress-bar {
+    background: #d8d8d8;
+    border-radius: 10px;
+  }
+  progress[value]::-webkit-progress-value {
+    background-color: #ff4817;
+    border-radius: 10px;
+  }
+}
 
 .label-heading {
-   color: ${Theme.gray40};
-   font-size:${Theme.verySmall};
-   text-transform: uppercase;
-   font-weight: bold;
+  color: ${Theme.gray40};
+  font-size:${Theme.verySmall};
+  text-transform: uppercase;
+  font-weight: bold;
 }
 
-<<<<<<< HEAD
-=======
 .label-card-text {
   color: ${Theme.gray40};
-   font-size:${Theme.verySmall};
+  font-size:${Theme.verySmall};
 }
 
->>>>>>> pdv-2273- bgs dashboard- tooltip structure added
  .label-info {
     color: ${Theme.black};
     font-size: ${Theme.normal};
@@ -1679,31 +1673,31 @@ text.cust-label-avg {
     font-size: 20px;
     font-weight: 600;
 
-    &.red-range {
-      color: ${Theme.red};
-    }
+  &.red-range {
+    color: ${Theme.red};
   }
+}
 
-  .label {
-    color: ${Theme.gray40};
-    text-transform: uppercase;
-    line-height: 22px;
-    font-family: ${Theme.titleFontFamily};
-    font-size: 11px;
-    margin-bottom: 3px;
-  }
+.label {
+  color: ${Theme.gray40};
+  text-transform: uppercase;
+  line-height: 22px;
+  font-family: ${Theme.titleFontFamily};
+  font-size: 11px;
+  margin-bottom: 3px;
+}
 
 .react-sweet-progress {
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px 15px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 15px;
 }
 .react-sweet-progress-line-inner {
-    position: relative;
-    min-height: 4px;
-    border-radius: 100px;
-    transition: width 0.3s ease;
+  position: relative;
+  min-height: 4px;
+  border-radius: 100px;
+  transition: width 0.3s ease;
 }
 .liner-titles {
   color: black;
@@ -1727,14 +1721,13 @@ text.cust-label-avg {
 
 }
 
-  .dot {
-    background-color: ${Theme.gray35};
-    border-radius: 50%;
-    width: 3px;
-    height: 3px;
-    position: absolute;
-  }
-
+.dot {
+  background-color: ${Theme.gray35};
+  border-radius: 50%;
+  width: 3px;
+  height: 3px;
+  position: absolute;
+}
 .react-calendar__tile--hasActive {
   background: ${Theme.white}; 
 }
