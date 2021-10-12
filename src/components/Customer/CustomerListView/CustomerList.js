@@ -55,7 +55,7 @@ import {
   getSellerType,
   getcontract,
 } from '../../../api';
-import { CustomerListPage } from '../../../theme/CustomerListStyle';
+import { CustomerListPage } from './CustomerListStyle';
 
 const salesSortOptions = sortOptions.concat(performanceSortOptions);
 const sponsorAdSortOptions = sortOptions.concat(sadSortOptions);

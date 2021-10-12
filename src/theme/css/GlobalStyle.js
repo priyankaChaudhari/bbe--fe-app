@@ -154,7 +154,7 @@ h1 {
   span {
     background-color: ${Theme.darkGreen};
     padding: 0px 4px;
-    font-size: ${Theme.extraSmall}; !important;
+    font-size: ${Theme.extraSmall} !important;
     vertical-align: middle;
     font-family: ${Theme.titleFontFamily};
     font-weight: 500;
@@ -774,7 +774,7 @@ button:disabled {
   }
 
   .edit-profiles {
-    font-size: ${Theme.smallRes}
+    font-size: ${Theme.smallRes};
     color: ${Theme.black};
     font-family: ${Theme.titleFontFamily};
     text-transform: uppercase;
@@ -973,49 +973,6 @@ fieldset {
   }
 }
 
-// .checkbox input:checked ~ label:before {
-//   background-image: url(../images/icons/checkmark.svg);
-//   background-repeat: no-repeat;
-//   z-index: 2;
-//   background-position-y: 10px;
-//   background-position-x: 10px;
-//   content: '';
-// }
-// .checkbox input {
-//   display: none;
-// }
-
-// .checkbox label:before {
-//   display: inline-block;
-//   background-color: ${Theme.orange};
-//   opacity: 0.800000011920929;
-//   border-radius: 100%;
-//   width: 48px;
-//   position: absolute;
-//   top: 21px;
-//   left: 15px;
-//   height: 48px;
-// }
-
-// .checkbox {
-//   width: 100%;
-// }
-// .checkbox label {
-//   cursor: pointer;
-// }
-// .checkbox label:hover::before {
-//   background-color: $orange-color;
-//   opacity: 0.800000011920929;
-// }
-
-// .disableCheck {
-//   opacity: 0.4;
-//   cursor: not-allowed;
-// }
-
-// .react-select__option--is-focused:not(.react-select__option--is-selected) {
-//   background-color: #f9faff;
-// }
 .avatarName {
   border-radius: 50%;
   text-align: center;
@@ -1078,7 +1035,7 @@ fieldset {
       margin-top: -2px;
     }
   }
-}
+
 .annotationNone {
   width: 40px;
   height: 40px;
@@ -1782,7 +1739,7 @@ text.cust-label-avg {
   background: ${Theme.white}; 
 }
 .react-calendar__tile--active {
-  background: ${Theme.orange}!important;
+  background: ${Theme.orange} !important;
   padding: 10px;
   color: ${Theme.white}; 
 }
@@ -1804,7 +1761,7 @@ text.cust-label-avg {
   padding: 15px;
 }
 .react-calendar__tile--now:enabled:hover, .react-calendar__tile--now:enabled:focus {
-    background: ${Theme.lighterOrange}
+    background: ${Theme.lighterOrange};
 }
 
 .react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus { 
@@ -1815,6 +1772,7 @@ text.cust-label-avg {
     border-radius: 20px;
   }
 }
+
 `;
 
 export default bodyStyles;

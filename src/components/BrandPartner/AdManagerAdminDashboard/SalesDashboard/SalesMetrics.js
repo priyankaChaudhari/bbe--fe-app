@@ -21,10 +21,50 @@ const SalesMetrics = ({
   salesDifference,
 }) => {
   const rendeTootipData = () => {
-    return `<ul style="padding:0; margin: 0 0 4px 0; max-width: 240px;"> 
-    <li style="display: inline-block;"> 
-    <div style="color:#f4f6fc; font-size: 11px;padding-left: 5px;">Sales Breakdown</div>
-    </li>
+    return `
+    <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
+      <li style="display: "> 
+        <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
+      </li>
+      <div class="row">
+          <div class="col-6">
+           <div style="color: #f4f6fc;
+          text-transform: uppercase;
+          font-size: 11px;
+          margin-top: 8px;
+         ">Organic Sales
+        </div>
+          </div>
+           <div class="col-6">
+             <div style="color: #f4f6fc;
+              font-size: 16px;
+              margin-left: 25px;
+              float: right;
+              text-align: right;
+              margin-top: 4px;
+             ">$16,147.52
+           </div>
+           </div>
+             <div class="col-6">
+           <div style="color: #f4f6fc;
+          text-transform: uppercase;
+          font-size: 11px;
+          margin-top:7px;
+         ">In-Organic Sales
+        </div>
+          </div>
+           <div class="col-6">
+             <div style="color: #f4f6fc;
+              font-size: 16px;
+              margin-left: 25px;
+              float: right;
+              text-align: right;
+              margin-top: 4px;
+             ">$16,147.52
+           </div>
+           </div>
+      </div>
+     
     </ul>`;
   };
   const setBoxClasses = (name, classValue) => {
@@ -63,12 +103,12 @@ const SalesMetrics = ({
             role="presentation"
             className={setBoxClasses('revenue', 'ad-sales-active')}>
             <div className="row">
-              <div className="chart-name col-lg-7">Total Sales</div>
+              <div className="chart-name col-7">Total Sales</div>
               <div
-                className="col-lg-5 label-card-text"
+                className="col-5 label-card-text text-right"
                 data-tip={rendeTootipData()}
                 data-html
-                data-for="idea">
+                data-for="break-down">
                 Breakdown
               </div>
             </div>
@@ -239,7 +279,7 @@ const SalesMetrics = ({
         </div>
 
         <ReactTooltip
-          id="idea"
+          id="break-down"
           aria-haspopup="true"
           place="bottom"
           effect="solid"

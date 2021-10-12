@@ -10,7 +10,7 @@ import {
 } from '../../../theme/images';
 import { PATH_CUSTOMER_DETAILS } from '../../../constants';
 import { CommonPagination, PageLoader, WhiteCard } from '../../../common';
-import { CustomerListTabletView } from '../../../theme/CustomerListStyle';
+import { CustomerListTabletView } from './CustomerListStyle';
 
 export default function CustomerListTablet({
   data,

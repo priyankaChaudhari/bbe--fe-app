@@ -16,7 +16,7 @@ import {
   contractChoices,
   contractStatus,
 } from '../../../constants/FieldConstants';
-import { SideContent } from '../../../theme/CustomerListStyle';
+import { SideContent } from './CustomerListStyle';
 import { CaretUp, InfoIcon, SearchIcon } from '../../../theme/images';
 
 function CustomerListFilters({
