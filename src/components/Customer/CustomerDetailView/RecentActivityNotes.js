@@ -55,23 +55,29 @@ export default function RecentActivityNotes({
       <div className="col-lg-3 col-12">
         {role !== 'Customer' ? (
           <WhiteCard className="mb-3 note-height-card">
-            <p className="black-heading-title mt-0 mb-4"> Recent Notes</p>
-            {noteData && noteData.length > 0 ? (
-              <div
-                className="view-all-list "
-                role="presentation"
-                onClick={() =>
-                  setShowNotesModal({
-                    modal: true,
-                    apiCall: false,
-                  })
-                }>
-                View All
-                <img src={ForwardOrangeIcon} alt="forward-arrow" />
+            <div className="row">
+              <div className="col-6">
+                <p className="black-heading-title mt-0 mb-4"> Recent Notes</p>
               </div>
-            ) : (
-              ''
-            )}
+              {noteData && noteData.length > 0 ? (
+                <div className="col-6 text-right">
+                  <div
+                    className="view-all-list "
+                    role="presentation"
+                    onClick={() =>
+                      setShowNotesModal({
+                        modal: true,
+                        apiCall: false,
+                      })
+                    }>
+                    View All
+                    <img src={ForwardOrangeIcon} alt="forward-arrow" />
+                  </div>
+                </div>
+              ) : (
+                ''
+              )}
+            </div>
             {isLoading.loader && isLoading.type === 'note' ? (
               <PageLoader
                 component="activity"
@@ -157,16 +163,23 @@ export default function RecentActivityNotes({
           ''
         )}
         <WhiteCard className="mb-3 ">
-          <p className="black-heading-title mt-0 mb-4"> Recent Activity</p>
-          <div
-            className="view-all-list"
-            onClick={() => {
-              setViewComponent('activity');
-            }}
-            role="presentation">
-            View All
-            <img src={ForwardOrangeIcon} alt="forward-arrow" />
+          <div className="row">
+            <div className="col-6">
+              <p className="black-heading-title mt-0 mb-4"> Recent Activity</p>
+            </div>
+            <div className="col-6 text-right">
+              <div
+                className="view-all-list"
+                onClick={() => {
+                  setViewComponent('activity');
+                }}
+                role="presentation">
+                View All
+                <img src={ForwardOrangeIcon} alt="forward-arrow" />
+              </div>
+            </div>
           </div>
+
           {activityData &&
             activityData.slice(0, 3).map((item) => (
               <GroupUser key={Math.random()}>

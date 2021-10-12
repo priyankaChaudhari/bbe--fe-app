@@ -87,7 +87,7 @@ export default function SalesPerformancePanel({
 
   const rendeTootipData = () => {
     return `
-    <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
+    <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; opacity: 100%;"> 
       <li style="display: "> 
         <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
       </li>
@@ -198,7 +198,7 @@ export default function SalesPerformancePanel({
     return (
       <div className="row mt-4 mb-3">
         {_.size(activeSales) <= 2 ? (
-          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2">
+          <div className="col-md-5 col-sm-12 order-md-1 order-2 mt-2">
             <ul className="rechart-item">
               <li>
                 <div className="weeks">
@@ -242,7 +242,7 @@ export default function SalesPerformancePanel({
         ) : (
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
         )}
-        <div className="col-md-6 col-sm-12 order-md-2 order-1">
+        <div className="col-md-7 col-sm-12 order-md-2 order-1">
           {' '}
           <div className="days-container ">
             <ul className="days-tab">
@@ -377,11 +377,14 @@ export default function SalesPerformancePanel({
           {' '}
           {name === 'revenue' ? (
             <div className="row">
-              <div className="chart-name col-6">
+              <div
+                style={{ wordBreak: 'break-all' }}
+                className="chart-name col-6 pr-1">
                 {displayMatricsName.toUpperCase()} {theCurrency}
               </div>
               <div
-                className="col-6 label-card-text text-right"
+                style={{ wordBreak: 'break-all' }}
+                className="col-6 pl-0 label-card-text text-right"
                 data-tip={rendeTootipData()}
                 data-html
                 data-for="break-down">

@@ -103,9 +103,9 @@ const SalesMetrics = ({
             role="presentation"
             className={setBoxClasses('revenue', 'ad-sales-active')}>
             <div className="row">
-              <div className="chart-name col-7">Total Sales</div>
+              <div className="chart-name col-6 ">Total Sales</div>
               <div
-                className="col-5 label-card-text text-right"
+                className="col-6 pl-0 label-card-text text-right"
                 data-tip={rendeTootipData()}
                 data-html
                 data-for="break-down">
