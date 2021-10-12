@@ -33,7 +33,7 @@ export default function DSPPerformance({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === 1
+      dspData.dsp_pacing.dsp_pacing_flag === '1'
     ) {
       return (
         <span>
@@ -50,7 +50,7 @@ export default function DSPPerformance({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === 0
+      dspData.dsp_pacing.dsp_pacing_flag === '0'
     ) {
       return (
         <span className="green">
@@ -67,7 +67,7 @@ export default function DSPPerformance({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === -1
+      dspData.dsp_pacing.dsp_pacing_flag === '-1'
     ) {
       return (
         <span>
