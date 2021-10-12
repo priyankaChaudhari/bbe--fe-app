@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
 
-import PropTypes from 'prop-types';
+import { arrayOf, shape, string } from 'prop-types';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
@@ -14,7 +14,7 @@ am4core.color('red');
 
 const _ = require('lodash');
 
-export default function SalePerformanceGraph({
+export default function SalePerformanceChart({
   chartId,
   chartData,
   currencySymbol,
@@ -405,17 +405,17 @@ export default function SalePerformanceGraph({
   return <div id={chartId} style={{ width: '100%', height: '510px' }} />;
 }
 
-SalePerformanceGraph.defaultProps = {
+SalePerformanceChart.defaultProps = {
   chartData: [],
   currencySymbol: '',
   selectedBox: {},
   selectedDF: '',
 };
 
-SalePerformanceGraph.propTypes = {
-  chartId: PropTypes.string.isRequired,
-  chartData: PropTypes.arrayOf(PropTypes.object),
-  currencySymbol: PropTypes.string,
-  selectedBox: PropTypes.shape(PropTypes.object),
-  selectedDF: PropTypes.string,
+SalePerformanceChart.propTypes = {
+  chartId: string.isRequired,
+  chartData: arrayOf(shape({})),
+  currencySymbol: string,
+  selectedBox: shape({}),
+  selectedDF: string,
 };
