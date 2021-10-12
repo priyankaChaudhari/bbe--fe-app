@@ -92,7 +92,7 @@ const SalesMetrics = ({
     }
   };
 
-  const renderAdMetrics = () => {
+  const renderSalesMetrics = () => {
     const currencySign = currencySymbol !== null ? currencySymbol : '';
     return (
       <div className="row mr-1 ml-1">
@@ -289,7 +289,7 @@ const SalesMetrics = ({
     );
   };
 
-  return <>{renderAdMetrics()}</>;
+  return <>{renderSalesMetrics()}</>;
 };
 
 export default SalesMetrics;
@@ -300,19 +300,16 @@ SalesMetrics.defaultProps = {
   salesCurrentTotal: {},
   salesPreviousTotal: {},
   salesDifference: {},
-
   addThousandComma: () => {},
   setSelectedSalesMetrics: () => {},
 };
 
 SalesMetrics.propTypes = {
   currencySymbol: string,
-
   selectedSalesMetrics: instanceOf(Object),
   salesCurrentTotal: instanceOf(Object),
   salesPreviousTotal: instanceOf(Object),
   salesDifference: instanceOf(Object),
-
   addThousandComma: func,
   setSelectedSalesMetrics: func,
 };

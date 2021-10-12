@@ -51,7 +51,6 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     isBGSManager
       ? {
           value: 'all',
-          label: 'All',
         }
       : { value: userInfo.id, label: '' },
   );
@@ -549,7 +548,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
   const handleBgsList = (event) => {
     const { value } = event.target;
-    setSelectedBgsUser(value);
+    setSelectedBgsUser({
+      value,
+    });
     if (selectedSalesDF.value === 'custom') {
       salesYearAndCustomDateFilter(
         customDateState[0].startDate,
@@ -564,12 +565,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedSalesDF.value,
         salesGroupBy,
         selectedMarketplace.value,
-        selectedBgsUser.value,
+        value,
       );
       getContributionData(
         selectedSalesDF.value,
         selectedMarketplace.value,
-        selectedBgsUser.value,
+        value,
         selectedContributionOption,
         selectedTabMetrics,
       );
@@ -623,12 +624,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     if (isBGSManager) {
       setSelectedBgsUser({
         value: 'all',
-        label: 'All',
       });
     } else {
       setSelectedBgsUser({
         value: userInfo.id,
-        label: '',
       });
     }
 

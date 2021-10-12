@@ -1,11 +1,6 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable camelcase */
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import { shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import PerformanceReport from './SalesPerformanceView/PerformanceReport';
@@ -43,6 +38,12 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
   );
 }
 
+CompanyPerformance.defaultProps = {
+  marketplaceChoices: {},
+  id: '',
+};
+
 CompanyPerformance.propTypes = {
-  id: PropTypes.string.isRequired,
+  marketplaceChoices: shape({}),
+  id: string,
 };

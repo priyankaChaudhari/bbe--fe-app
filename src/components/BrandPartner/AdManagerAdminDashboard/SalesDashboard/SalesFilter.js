@@ -73,7 +73,7 @@ const SalesFilter = ({
             id={item.value}
             value={item.value}
             onChange={(event) => handleBgsList(event)}
-            defaultChecked={item.value === selectedBgs}
+            defaultChecked={item.value === selectedBgs.value}
           />
           <span className="checkmark checkmark-customer-list" />
         </label>

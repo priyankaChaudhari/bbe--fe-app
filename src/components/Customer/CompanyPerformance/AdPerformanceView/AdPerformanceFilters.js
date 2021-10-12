@@ -130,7 +130,6 @@ AdPerformanceFilters.propTypes = {
 };
 
 const ViewData = styled.div`
-  
   .view-data-for {
     margin-right: 60px;
     font-weight: normal;
@@ -150,5 +149,6 @@ const ViewData = styled.div`
     .view-data-for {
       text-align: center;
       padding-bottom: 10px;
+    }
   }
 `;
