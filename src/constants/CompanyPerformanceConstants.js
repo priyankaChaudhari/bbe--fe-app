@@ -112,3 +112,16 @@ export const metricsCurrency = {
   dspProductSales: { type: 'currency' },
   dspRoas: { type: 'currency' },
 };
+
+export const toogleMetricsData = [
+  {
+    id: 1,
+    name: 'acos',
+    label: 'ACOS',
+  },
+  {
+    id: 2,
+    name: 'roas',
+    label: 'ROAS',
+  },
+];

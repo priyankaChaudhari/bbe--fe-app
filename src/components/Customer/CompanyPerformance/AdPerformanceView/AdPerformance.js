@@ -1053,7 +1053,6 @@ const AddPerformance = styled.div`
   @media only screen and (max-width: 1255px) {
     .ad-performance-nav {
       li {
-        
         &.ad-performance {
           max-width: 192px;
           width: 100%;
@@ -1079,11 +1078,10 @@ const AddPerformance = styled.div`
       }
     }
   }
-   @media only screen and (max-width: 767px) { 
-
-     .ad-performance-nav {
+  @media only screen and (max-width: 767px) {
+    .ad-performance-nav {
       li {
-         &.ad-performance {
+        &.ad-performance {
           max-width: 100%;
           width: 100%;
           margin-bottom: 15px;
@@ -1093,5 +1091,6 @@ const AddPerformance = styled.div`
           width: 100%;
         }
       }
-   }
+    }
+  }
 `;

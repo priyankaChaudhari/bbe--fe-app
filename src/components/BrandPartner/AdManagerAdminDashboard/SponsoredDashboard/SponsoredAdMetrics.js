@@ -1,13 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 import { func, instanceOf, string } from 'prop-types';
 
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  UpDowGrayArrow,
-} from '../../../../theme/images/index';
+import ToogleMetrics from '../../../../common/ToogleMetrics';
 import CardMetrics from '../../../../common/CardMetrics';
+import DifferenceAdMetric from '../DifferenceAdMetric';
+import { toogleMetricsData } from '../../../../constants';
 
 const _ = require('lodash');
 
@@ -20,6 +18,8 @@ const SponsoredAdMetrics = ({
   adPreviousTotal,
   adDifference,
 }) => {
+  const toogleMetrics = useRef('acos');
+
   const setBoxClasses = (name, classValue) => {
     let selectedClass = '';
     if (Object.prototype.hasOwnProperty.call(selectedAdMetrics, name)) {
@@ -39,9 +39,24 @@ const SponsoredAdMetrics = ({
     ) {
       setSelectedAdMetrics(_.omit(selectedAdMetrics, [name]));
     } else if (_.size(selectedAdMetrics) < 4) {
+      if ('adCos' in selectedAdMetrics && name === 'adRoas') {
+        const values = selectedAdMetrics;
+        delete values.adCos;
+      } else if ('adRoas' in selectedAdMetrics && name === 'adCos') {
+        const values = selectedAdMetrics;
+        delete values.adRoas;
+      }
       setSelectedAdMetrics(
         _.omit(_.assign(selectedAdMetrics, { [name]: true })),
       );
+    }
+  };
+
+  const onToggleMetrics = () => {
+    if (toogleMetrics.current === 'acos') {
+      setBoxToggle('adCos');
+    } else if (toogleMetrics.current === 'roas') {
+      setBoxToggle('adRoas', 'ad');
     }
   };
 
@@ -72,25 +87,7 @@ const SponsoredAdMetrics = ({
                   : `vs ${currencySign}0.00`}
               </div>
               {adDifference && adDifference.ad_sales ? (
-                adDifference.ad_sales >= 0 ? (
-                  <div className="perentage-value mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ad_sales}%
-                  </div>
-                ) : (
-                  <div className="perentage-value down mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ad_sales.toString().replace('-', '')}%
-                  </div>
-                )
+                <DifferenceAdMetric value={adDifference.ad_sales} />
               ) : (
                 <div className="perentage-value down mt-3 pt-1">N/A</div>
               )}
@@ -120,25 +117,10 @@ const SponsoredAdMetrics = ({
                   : `vs ${currencySign}0.00`}
               </div>
               {adDifference && adDifference.ad_spend ? (
-                adDifference.ad_spend >= 0 ? (
-                  <div className="perentage-value grey mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={UpDowGrayArrow}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ad_spend}%
-                  </div>
-                ) : (
-                  <div className="perentage-value grey mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={UpDowGrayArrow}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ad_spend.toString().replace('-', '')}%
-                  </div>
-                )
+                <DifferenceAdMetric
+                  value={adDifference.ad_spend}
+                  type="spend"
+                />
               ) : (
                 <div className="perentage-value grey mt-3 pt-1">N/A</div>
               )}
@@ -166,28 +148,7 @@ const SponsoredAdMetrics = ({
                   : `vs 0.00%`}
               </div>
               {adDifference && adDifference.ad_conversion_rate ? (
-                adDifference.ad_conversion_rate >= 0 ? (
-                  <div className="perentage-value mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ad_conversion_rate}%
-                  </div>
-                ) : (
-                  <div className="perentage-value down mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ad_conversion_rate
-                      .toString()
-                      .replace('-', '')}
-                    %
-                  </div>
-                )
+                <DifferenceAdMetric value={adDifference.ad_conversion_rate} />
               ) : (
                 <div className="perentage-value down mt-3 pt-1">N/A</div>
               )}
@@ -213,68 +174,58 @@ const SponsoredAdMetrics = ({
                   : `vs 0`}
               </div>
               {adDifference && adDifference.impressions ? (
-                adDifference.impressions >= 0 ? (
-                  <div className="perentage-value mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-down"
-                    />
-                    {addThousandComma(adDifference.impressions)}%
-                  </div>
-                ) : (
-                  <div className="perentage-value down mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.impressions.toString().replace('-', '')}%
-                  </div>
-                )
+                <DifferenceAdMetric value={adDifference.impressions} />
               ) : (
                 <div className="perentage-value down mt-3 pt-1">N/A</div>
               )}
             </div>
           </CardMetrics>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
+        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <CardMetrics className="fix-height">
             <div
-              id="BT-sponsored-Acoscard"
-              onClick={() => setBoxToggle('adCos')}
+              id="BT-sponsored-AcosRoascard"
+              onClick={onToggleMetrics}
               role="presentation"
-              className={setBoxClasses('adCos', 'ad-cos-active')}>
-              <div className="chart-name">ACos</div>
+              className={
+                toogleMetrics.current === 'acos'
+                  ? setBoxClasses('adCos', 'ad-cos-active')
+                  : setBoxClasses('adRoas', 'ad-cos-active')
+              }>
+              <ToogleMetrics
+                data={toogleMetricsData}
+                onToogle={(val) => {
+                  toogleMetrics.current = val;
+                }}
+                value={toogleMetrics.current}
+              />
+
               <div className="number-rate">
-                {adCurrentTotal && adCurrentTotal.acos
-                  ? `${addThousandComma(adCurrentTotal.acos)}%`
-                  : `0.00%`}
+                {toogleMetrics.current === 'acos'
+                  ? adCurrentTotal && adCurrentTotal.acos
+                    ? `${addThousandComma(adCurrentTotal.acos)}%`
+                    : `0.00%`
+                  : adCurrentTotal && adCurrentTotal.roas
+                  ? `${currencySign}${addThousandComma(adCurrentTotal.roas)}`
+                  : `${currencySign}0.00`}
               </div>
               <div className="vs">
-                {adPreviousTotal && adPreviousTotal.acos
-                  ? `vs ${addThousandComma(adPreviousTotal.acos)}%`
-                  : `vs 0.00%`}
+                {toogleMetrics.current === 'acos'
+                  ? adPreviousTotal && adPreviousTotal.acos
+                    ? `vs ${addThousandComma(adPreviousTotal.acos)}%`
+                    : `vs 0.00%`
+                  : adPreviousTotal && adPreviousTotal.roas
+                  ? `vs ${currencySign}${addThousandComma(
+                      adPreviousTotal.roas,
+                    )}`
+                  : `vs ${currencySign}0.00`}
               </div>
-              {adDifference && adDifference.acos ? (
-                adDifference.acos >= 0 ? (
-                  <div className="perentage-value down mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.acos}%
-                  </div>
+              {(adDifference && adDifference.acos) ||
+              (adDifference && adDifference.roas) ? (
+                toogleMetrics.current === 'acos' ? (
+                  <DifferenceAdMetric value={adDifference.acos} type="acos" />
                 ) : (
-                  <div className="perentage-value mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.acos.toString().replace('-', '')}%
-                  </div>
+                  <DifferenceAdMetric value={adDifference.roas} />
                 )
               ) : (
                 <div className="perentage-value down mt-3 pt-1">N/A</div>
@@ -285,44 +236,27 @@ const SponsoredAdMetrics = ({
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
           <CardMetrics className="fix-height">
             <div
-              id="BT-sponsored-Roascard"
-              onClick={() => setBoxToggle('adRoas', 'ad')}
+              id="BT-sponsored-costPerClick"
+              onClick={() => setBoxToggle('costPerClick')}
               role="presentation"
-              className={setBoxClasses('adRoas', 'ad-roas-active', 'ad')}>
-              <div className="chart-name">RoAS</div>
+              className={setBoxClasses('costPerClick', 'costPerClick-active')}>
+              <div className="chart-name">Cost Per Click</div>
               <div className="number-rate">
-                {adCurrentTotal && adCurrentTotal.roas
-                  ? `${currencySign}${addThousandComma(adCurrentTotal.roas)}`
+                {adCurrentTotal && adCurrentTotal.cost_per_click
+                  ? `${currencySign}${addThousandComma(
+                      adCurrentTotal.cost_per_click,
+                    )}`
                   : `${currencySign}0.00`}
               </div>
               <div className="vs">
-                {' '}
-                {adPreviousTotal && adPreviousTotal.roas
+                {adPreviousTotal && adPreviousTotal.cost_per_click
                   ? `vs ${currencySign}${addThousandComma(
-                      adPreviousTotal.roas,
+                      adPreviousTotal.cost_per_click,
                     )}`
                   : `vs ${currencySign}0.00`}
               </div>
-              {adDifference && adDifference.roas ? (
-                adDifference.roas >= 0 ? (
-                  <div className="perentage-value mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.roas}%
-                  </div>
-                ) : (
-                  <div className="perentage-value down mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.roas.toString().replace('-', '')}%
-                  </div>
-                )
+              {adDifference && adDifference.cost_per_click ? (
+                <DifferenceAdMetric value={adDifference.cost_per_click} />
               ) : (
                 <div className="perentage-value down mt-3 pt-1">N/A</div>
               )}
@@ -348,25 +282,7 @@ const SponsoredAdMetrics = ({
                   : `vs 0`}
               </div>
               {adDifference && adDifference.clicks ? (
-                adDifference.clicks >= 0 ? (
-                  <div className="perentage-value mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.clicks}%
-                  </div>
-                ) : (
-                  <div className="perentage-value down mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.clicks.toString().replace('-', '')}%
-                  </div>
-                )
+                <DifferenceAdMetric value={adDifference.clicks} />
               ) : (
                 <div className="perentage-value down mt-3 pt-1">N/A</div>
               )}
@@ -396,25 +312,7 @@ const SponsoredAdMetrics = ({
                   : `vs 0.00%`}
               </div>
               {adDifference && adDifference.ctr ? (
-                adDifference.ctr >= 0 ? (
-                  <div className="perentage-value mt-3 pt-1">
-                    <img
-                      className="green-arrow"
-                      src={ArrowUpIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ctr}%
-                  </div>
-                ) : (
-                  <div className="perentage-value down mt-3 pt-1">
-                    <img
-                      className="red-arrow"
-                      src={ArrowDownIcon}
-                      alt="arrow-down"
-                    />
-                    {adDifference.ctr.toString().replace('-', '')}%
-                  </div>
-                )
+                <DifferenceAdMetric value={adDifference.ctr} />
               ) : (
                 <div className="perentage-value down mt-3 pt-1">N/A</div>
               )}
