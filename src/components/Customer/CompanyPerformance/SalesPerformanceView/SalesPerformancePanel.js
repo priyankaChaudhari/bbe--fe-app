@@ -1,5 +1,6 @@
 import React from 'react';
 
+import ReactTooltip from 'react-tooltip';
 import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
@@ -82,6 +83,54 @@ export default function SalesPerformancePanel({
       SingleValue: singleFilterOption,
       DropDownIndicator,
     };
+  };
+
+  const rendeTootipData = () => {
+    return `
+    <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
+      <li style="display: "> 
+        <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
+      </li>
+      <div class="row">
+          <div class="col-6">
+           <div style="color: #f4f6fc;
+          text-transform: uppercase;
+          font-size: 11px;
+          margin-top: 8px;
+         ">Organic Sales
+        </div>
+          </div>
+           <div class="col-6">
+             <div style="color: #f4f6fc;
+              font-size: 16px;
+              margin-left: 25px;
+              float: right;
+              text-align: right;
+              margin-top: 4px;
+             ">$16,147.52
+           </div>
+           </div>
+             <div class="col-6">
+           <div style="color: #f4f6fc;
+          text-transform: uppercase;
+          font-size: 11px;
+          margin-top:7px;
+         ">In-Organic Sales
+        </div>
+          </div>
+           <div class="col-6">
+             <div style="color: #f4f6fc;
+              font-size: 16px;
+              margin-left: 25px;
+              float: right;
+              text-align: right;
+              margin-top: 4px;
+             ">$16,147.52
+           </div>
+           </div>
+      </div>
+     
+    </ul>`;
   };
 
   const setSalesBoxClass = (name, classValue) => {
@@ -326,9 +375,24 @@ export default function SalesPerformancePanel({
           onClick={() => setBoxToggle(name)}
           role="presentation">
           {' '}
-          <div className="chart-name">
-            {displayMatricsName.toUpperCase()} {theCurrency}
-          </div>
+          {name === 'revenue' ? (
+            <div className="row">
+              <div className="chart-name col-6">
+                {displayMatricsName.toUpperCase()} {theCurrency}
+              </div>
+              <div
+                className="col-6 label-card-text text-right"
+                data-tip={rendeTootipData()}
+                data-html
+                data-for="break-down">
+                Breakdown
+              </div>
+            </div>
+          ) : (
+            <div className="chart-name">
+              {displayMatricsName.toUpperCase()} {theCurrency}
+            </div>
+          )}
           <div className="number-rate">
             {name === 'conversion'
               ? `${currentTotal.toFixed(2)}%`
@@ -365,6 +429,14 @@ export default function SalesPerformancePanel({
               : 'N/A'}
           </div>
         </div>
+
+        <ReactTooltip
+          id="break-down"
+          aria-haspopup="true"
+          place="bottom"
+          effect="solid"
+          backgroundColor="#162c50"
+        />
       </div>
     );
   };
