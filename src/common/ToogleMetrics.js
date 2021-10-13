@@ -37,11 +37,13 @@ const ToogleMetrics = ({ data, onToogle, value }) => {
 export default ToogleMetrics;
 
 const Wrapper = styled.div`
+  margin-bottom: 13px;
+  margin-top: -8px;
   .toggle-container {
     background-color: ${Theme.white};
     border: 1px solid ${Theme.gray45};
     border-radius: 5px;
-    width: fit-content;
+    width: 100%;
 
     ul.toggle-tab {
       list-style-type: none;
@@ -53,15 +55,21 @@ const Wrapper = styled.div`
         border: 1px solid ${Theme.orange};
         border-radius: 5px;
         color: ${Theme.orange};
+        width: 100%;
+        text-align: center;
       }
       li {
         display: inline-block;
+        width: 50%;
+
         label {
           color: ${Theme.black};
-          padding: 7px 19px;
-          font-size: 14px;
+          padding: 3px 2px;
+          font-size: ${Theme.verySmall};
           display: inline-block;
           cursor: pointer;
+          text-align: center;
+          width: 100%;
         }
       }
     }
