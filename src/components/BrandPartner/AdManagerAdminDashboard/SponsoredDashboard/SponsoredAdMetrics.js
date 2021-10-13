@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 
 import { func, instanceOf, string } from 'prop-types';
 
@@ -31,10 +31,6 @@ const SponsoredAdMetrics = ({
     }
     return selectedClass;
   };
-
-  useEffect(() => {
-    console.log('--selectedAdMetrics--', selectedAdMetrics);
-  }, [selectedAdMetrics]);
 
   const setBoxToggle = (name) => {
     if (
