@@ -27,9 +27,10 @@ export default function AdPerformanceChart({
       adConversion: '#30A8BD',
       impressions: '#D6A307',
       adCos: '#E05D37',
-      adRoas: '#89A43C',
+      adRoas: '#E05D37',
       adClicks: '#C84EC6',
       adClickRate: '#A04848',
+      costPerClick: '#89A43C',
     };
 
     const tooltipNames = {
@@ -41,6 +42,7 @@ export default function AdPerformanceChart({
       adRoas: 'ROAS',
       adClicks: 'CLICKS',
       adClickRate: 'CLICK THROUGH RATE',
+      costPerClick: 'COST PER CLICK',
     };
 
     // const tooltipDate =
@@ -115,7 +117,7 @@ export default function AdPerformanceChart({
 
     function bindValueAxisFormatter(item) {
       let format = '';
-      if (item === 'adSales' || item === 'adSpend') {
+      if (item === 'adSales' || item === 'adSpend' || item === 'costPerClick') {
         format = `${currencySymbol}#.#a`;
       } else if (
         item === 'adConversion' ||
@@ -147,7 +149,12 @@ export default function AdPerformanceChart({
         const previousLabel = `${item}PreviousLabel`;
         const colorCode = colorSet[item];
         tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
-        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
+        if (
+          item === 'adSales' ||
+          item === 'adSpend' ||
+          item === 'adRoas' ||
+          item === 'costPerClick'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
             colorCode,
@@ -243,14 +250,20 @@ export default function AdPerformanceChart({
           series.yAxis = valueAxis;
           series2.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
-          if (item === 'adSales' || item === 'adSpend') {
+          if (
+            item === 'adSales' ||
+            item === 'adSpend' ||
+            item === 'costPerClick'
+          ) {
             firstAxis = 'currency';
           }
         }
         if (index === 1) {
           if (
             firstAxis === 'currency' &&
-            (item === 'adSales' || item === 'adSpend')
+            (item === 'adSales' ||
+              item === 'adSpend' ||
+              item === 'costPerClick')
           ) {
             series.yAxis = valueAxis;
             series2.yAxis = valueAxis;
@@ -372,7 +385,12 @@ export default function AdPerformanceChart({
         const value = `${item}CurrentLabel`;
         // const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
 
-        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
+        if (
+          item === 'adSales' ||
+          item === 'adSpend' ||
+          item === 'adRoas' ||
+          item === 'costPerClick'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
             colorSet[item],
@@ -419,7 +437,11 @@ export default function AdPerformanceChart({
       _.keys(selectedBox).map((item, index) => {
         const series = chart.current.series.push(new am4charts.LineSeries());
 
-        if (item === 'adSales' || item === 'adSpend') {
+        if (
+          item === 'adSales' ||
+          item === 'adSpend' ||
+          item === 'costPerClick'
+        ) {
           if (firstAxis === null || firstAxis === 'currency') {
             // console.log('if currency');
             series.yAxis = valueAxis;
