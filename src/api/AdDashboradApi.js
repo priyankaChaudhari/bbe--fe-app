@@ -49,13 +49,8 @@ export async function getAdManagerAdminGraphData(
     };
   }
 
-  const url =
-    dashboardType === 'sponsored-dashboard'
-      ? API_AD_DASHBOARD
-      : API_AD_MANAGER_ADMIN_DASHBOARD;
-
   const result = await axiosInstance
-    .get(`${url}${dashboardType}/`, { params })
+    .get(`${API_AD_DASHBOARD}${dashboardType}/`, { params })
     .then((response) => {
       return response;
     })
