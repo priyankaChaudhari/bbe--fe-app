@@ -250,20 +250,15 @@ export default function AdPerformanceChart({
           series.yAxis = valueAxis;
           series2.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
-          if (
-            item === 'adSales' ||
-            item === 'adSpend' ||
-            item === 'costPerClick'
-          ) {
+
+          if (item === 'adSales' || item === 'adSpend') {
             firstAxis = 'currency';
           }
         }
         if (index === 1) {
           if (
             firstAxis === 'currency' &&
-            (item === 'adSales' ||
-              item === 'adSpend' ||
-              item === 'costPerClick')
+            (item === 'adSales' || item === 'adSpend')
           ) {
             series.yAxis = valueAxis;
             series2.yAxis = valueAxis;
@@ -363,6 +358,7 @@ export default function AdPerformanceChart({
       ];
       valueAxis3.numberFormatter.smallNumberPrefixes = [];
       valueAxis3.min = 0;
+
       // create object of 4th value axis
       const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis4.renderer.grid.template.disabled = true;
@@ -437,11 +433,7 @@ export default function AdPerformanceChart({
       _.keys(selectedBox).map((item, index) => {
         const series = chart.current.series.push(new am4charts.LineSeries());
 
-        if (
-          item === 'adSales' ||
-          item === 'adSpend' ||
-          item === 'costPerClick'
-        ) {
+        if (item === 'adSales' || item === 'adSpend') {
           if (firstAxis === null || firstAxis === 'currency') {
             // console.log('if currency');
             series.yAxis = valueAxis;

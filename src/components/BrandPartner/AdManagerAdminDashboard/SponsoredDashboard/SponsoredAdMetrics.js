@@ -323,34 +323,6 @@ const SponsoredAdMetrics = ({
             </div>
           </CardMetrics>
         </div>
-        <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div
-            id="BT-sponsored-costPerClick"
-            onClick={() => setBoxToggle('costPerClick')}
-            role="presentation"
-            className={setBoxClasses('costPerClick', 'costPerClick-active')}>
-            <div className="chart-name">Cost Per Click</div>
-            <div className="number-rate">
-              {adCurrentTotal && adCurrentTotal.cost_per_click
-                ? `${currencySign}${addThousandComma(
-                    adCurrentTotal.cost_per_click,
-                  )}`
-                : `${currencySign}0.00`}
-            </div>
-            <div className="vs">
-              {adPreviousTotal && adPreviousTotal.cost_per_click
-                ? `vs ${currencySign}${addThousandComma(
-                    adPreviousTotal.cost_per_click,
-                  )}`
-                : `vs ${currencySign}0.00`}
-            </div>
-            {adDifference && adDifference.cost_per_click ? (
-              <DifferenceAdMetric value={adDifference.cost_per_click} />
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
-        </div>
       </div>
     );
   };
