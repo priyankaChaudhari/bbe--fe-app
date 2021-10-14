@@ -39,15 +39,14 @@ const BillingContainer = ({
             role="presentation">
             DSP Invoices
           </li>
-          {customerStatus !== null ||
-            (customerStatus !== 'pending' && (
-              <li
-                className={viewComponent === 'Billing' ? 'active' : ''}
-                onClick={() => setViewComponent('Billing')}
-                role="presentation">
-                Billing Details
-              </li>
-            ))}
+          {customerStatus && customerStatus.value !== 'pending' ? (
+            <li
+              className={viewComponent === 'Billing' ? 'active' : ''}
+              onClick={() => setViewComponent('Billing')}
+              role="presentation">
+              Billing Details
+            </li>
+          ) : null}
         </ul>
       </Tabs>
       {viewComponent === 'dsp service' || viewComponent === 'rev share' ? (
