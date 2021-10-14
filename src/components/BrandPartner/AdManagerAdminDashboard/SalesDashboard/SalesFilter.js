@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 
-import Select from 'react-select';
 import { arrayOf, bool, func, shape } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import { CaretUp } from '../../../../theme/images';
-import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
+import { WhiteCard, ModalRadioCheck } from '../../../../common';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 
 const SalesFilter = ({
   handleResetFilter,
-  DropdownIndicator,
+  getSelectComponents,
   marketplaceOptions,
   handleMarketplace,
   bgsList,
@@ -22,35 +22,23 @@ const SalesFilter = ({
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
 
-  const renderMarketplaceDropdown = () => {
+  const renderMarketplaceDropdown = (className) => {
     return (
       <div className="col-12 ">
         <div className="label mt-3">Marketplace</div>
-        <DropDownSelect
-          id="BT-sponsoredadver-countryfilter"
-          className={isApiCall ? `cursor  disabled` : 'cursor '}>
-          <Select
-            classNamePrefix="react-select"
-            className="active"
-            components={DropdownIndicator}
-            options={marketplaceOptions}
-            defaultValue={marketplaceOptions && marketplaceOptions[0]}
-            value={selectedMarketplace}
-            onChange={(event) => handleMarketplace(event)}
-            placeholder={
-              marketplaceOptions &&
-              marketplaceOptions[0] &&
-              marketplaceOptions[0].label
-            }
-            theme={(theme) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                neutral50: '#1A1A1A',
-              },
-            })}
-          />
-        </DropDownSelect>
+        {DropDown(
+          className,
+          marketplaceOptions,
+          marketplaceOptions &&
+            marketplaceOptions[0] &&
+            marketplaceOptions[0].label,
+          getSelectComponents,
+          marketplaceOptions && marketplaceOptions[0],
+          handleMarketplace,
+          isApiCall,
+          null,
+          selectedMarketplace,
+        )}
       </div>
     );
   };
@@ -97,7 +85,7 @@ const SalesFilter = ({
             </p>
           </div>
 
-          {renderMarketplaceDropdown()}
+          {renderMarketplaceDropdown('cursor')}
           {isBGSManager ? (
             <>
               <div className="col-12">
@@ -178,7 +166,7 @@ SalesFilter.defaultProps = {
   selectedBgs: {},
   selectedMarketplace: {},
   isBGSManager: false,
-  DropdownIndicator: () => {},
+  getSelectComponents: () => {},
   handleBgsList: () => {},
   handleMarketplace: () => {},
   handleResetFilter: () => {},
@@ -193,6 +181,6 @@ SalesFilter.propTypes = {
   bgsList: arrayOf(Array),
   handleMarketplace: func,
   handleResetFilter: func,
-  DropdownIndicator: func,
+  getSelectComponents: func,
   handleBgsList: func,
 };

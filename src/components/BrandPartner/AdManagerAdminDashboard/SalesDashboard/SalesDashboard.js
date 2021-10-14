@@ -741,6 +741,24 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     };
   };
 
+  const singleMarketplaceFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {props.data.label}
+      </span>
+
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
+  );
+
+  const getMarketplaceSelectComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: singleMarketplaceFilterOption,
+      DropDownIndicator,
+    };
+  };
+
   const addThousandComma = (number, decimalDigits = 2) => {
     if (number !== undefined && number !== null) {
       return number
@@ -866,7 +884,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       <div className="col-lg-3 col-md-12">
         <SalesFilter
           handleResetFilter={handleResetFilter}
-          DropdownIndicator={DropDownIndicator}
+          getSelectComponents={getMarketplaceSelectComponents}
           marketplaceOptions={marketplaceOptions}
           handleMarketplace={handleMarketplace}
           bgsList={bgsList}
