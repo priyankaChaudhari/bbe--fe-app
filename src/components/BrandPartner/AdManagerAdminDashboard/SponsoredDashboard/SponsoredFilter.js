@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, string } from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
@@ -209,7 +209,7 @@ SponsoredFilter.defaultProps = {
   selectedAdManager: {},
   selectedMarketplace: {},
   selectInputRef: {},
-  isAdManagerAdmin: {},
+  isAdManagerAdmin: false,
 };
 
 SponsoredFilter.propTypes = {
@@ -224,8 +224,8 @@ SponsoredFilter.propTypes = {
   handleAdType: func,
   selectedAdType: string,
   isApiCall: bool,
-  selectedAdManager: arrayOf(Array),
-  selectedMarketplace: string,
-  selectInputRef: arrayOf(Array),
-  isAdManagerAdmin: string,
+  selectedAdManager: shape({}),
+  selectedMarketplace: shape({}),
+  selectInputRef: shape({}),
+  isAdManagerAdmin: bool,
 };

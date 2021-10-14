@@ -3,15 +3,7 @@ import React from 'react';
 import Modal from 'react-modal';
 import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
-import {
-  bool,
-  func,
-  object,
-  oneOfType,
-  shape,
-  string,
-  instanceOf,
-} from 'prop-types';
+import { bool, func, shape, string, instanceOf, arrayOf } from 'prop-types';
 
 import { CloseIcon } from '../theme/images';
 import ModalBox from './ModalBox';
@@ -99,10 +91,13 @@ CustomDateModal.defaultProps = {
   onApply: () => {},
   style: {},
   title: 'Select Date Range',
-  range: {
-    startDate: todaysDate,
-    endDate: todaysDate,
-  },
+  range: [
+    {
+      startDate: todaysDate,
+      endDate: todaysDate,
+      key: 'adSelection',
+    },
+  ],
   currentDate: todaysDate,
 };
 
@@ -112,10 +107,7 @@ CustomDateModal.propTypes = {
   onApply: func,
   isOpen: bool,
   style: shape({}),
-  range: shape({
-    startDate: oneOfType([Date, string, object]).isRequired,
-    endDate: oneOfType([Date, string, object]).isRequired,
-  }),
+  range: arrayOf(Array),
   title: string,
   currentDate: instanceOf(Date),
 };

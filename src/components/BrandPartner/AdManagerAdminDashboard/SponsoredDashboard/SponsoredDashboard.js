@@ -354,6 +354,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         if (res && res.status === 400) {
           setKeyContributionLoader(false);
         }
+        if (res && res.status === 500) {
+          setKeyContributionLoader(false);
+          setContributionData([]);
+        }
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
@@ -764,6 +768,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   };
 
   const handleContributionOptions = (type) => {
+    console.log('--type-', type);
     if (type !== selectedContributionOption) {
       setSelectedContributionOption(type);
       if (selectedAdDF.value === 'custom' && type === 'contribution') {

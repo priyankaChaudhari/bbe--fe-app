@@ -12,7 +12,7 @@ const ToogleMetrics = ({ data, onToogle, value }) => {
         <ul className="toggle-tab">
           {data.map((item) => {
             return (
-              <li>
+              <li key={item.id}>
                 <input
                   id={item.name}
                   className="d-none"
@@ -23,6 +23,7 @@ const ToogleMetrics = ({ data, onToogle, value }) => {
                   onClick={() => {
                     onToogle(item.name);
                   }}
+                  onChange={() => {}}
                 />
                 <label htmlFor={item.name}>{item.label}</label>
               </li>

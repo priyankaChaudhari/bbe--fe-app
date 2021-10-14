@@ -113,7 +113,7 @@ export default function AdPerformance({
 
   const bindAdResponseData = (response) => {
     const tempData = [];
-
+    console.log('reponse---', response);
     // filterout previous data in one temporary object.
     if (response.daily_facts.previous && response.daily_facts.previous.length) {
       response.daily_facts.previous.forEach((item) => {
@@ -127,6 +127,7 @@ export default function AdPerformance({
           adRoasPrevious: item.roas,
           adClicksPrevious: item.clicks,
           adClickRatePrevious: item.ctr,
+          costPerClickPrevious: item.cost_per_click,
           previousDate,
 
           adSalesPreviousLabel:
@@ -146,6 +147,10 @@ export default function AdPerformance({
           adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0',
           adClickRatePreviousLabel:
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+          costPerClickPreviousLabel:
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00',
         });
       });
     }
@@ -169,6 +174,7 @@ export default function AdPerformance({
           tempData[index].adRoasCurrent = item.roas;
           tempData[index].adClicksCurrent = item.clicks;
           tempData[index].adClickRateCurrent = item.ctr;
+          tempData[index].costPerClickCurrent = item.cost_per_click;
 
           tempData[index].adSalesCurrentLabel =
             item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00';
@@ -188,6 +194,10 @@ export default function AdPerformance({
             item.clicks !== null ? item.clicks : '0';
           tempData[index].adClickRateCurrentLabel =
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00';
+          tempData[index].costPerClickCurrentLabel =
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00';
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -200,6 +210,7 @@ export default function AdPerformance({
             adRoasCurrent: item.roas,
             adClicksCurrent: item.clicks,
             adClickRateCurrent: item.ctr,
+            costPerClickCurrent: item.cost_per_click,
             date: currentReportDate,
 
             adSalesPrevious: null,
@@ -210,6 +221,7 @@ export default function AdPerformance({
             adRoasPrevious: null,
             adClicksPrevious: null,
             adClickRatePrevious: null,
+            costPerClickPrevious: null,
 
             adSalesCurrentLabel:
               item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00',
@@ -228,6 +240,10 @@ export default function AdPerformance({
             adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0',
             adClickRateCurrentLabel:
               item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+            costPerClickCurrentLabel:
+              item.cost_per_click !== null
+                ? item.cost_per_click.toFixed(2)
+                : '0.00',
 
             adSalesPreviousLabel: '0.00',
             adSpendPreviousLabel: '0.00',
@@ -237,6 +253,7 @@ export default function AdPerformance({
             adRoasPreviousLabel: '0.00',
             adClicksPreviousLabel: '0',
             adClickRatePreviousLabel: '0.00',
+            costPerClickPreviousLabel: '0.00',
           });
         }
       });

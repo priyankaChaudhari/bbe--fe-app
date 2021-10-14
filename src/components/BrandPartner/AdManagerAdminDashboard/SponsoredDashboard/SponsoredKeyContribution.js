@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { arrayOf, bool, func, string, objectOf } from 'prop-types';
+import { arrayOf, bool, func, string, objectOf, shape } from 'prop-types';
 
 import {
   Tabs,
@@ -59,6 +59,7 @@ const SponsoredKeyContribution = ({
     adRoas: 'ROAS',
     adClicks: 'Clicks',
     adClickRate: 'Click Through Rate',
+    costPerClick: 'Cost Per Click',
   };
 
   const returnMetricsValue = (value) => {
@@ -171,6 +172,7 @@ const SponsoredKeyContribution = ({
                     value={selectedContributionOption}
                     checked={item.id === selectedContributionOption}
                     onClick={() => handleContributionOptions(item.id)}
+                    onChange={() => {}}
                   />
                   <label htmlFor={item.id}>{item.label}</label>
                 </li>
@@ -195,6 +197,7 @@ const SponsoredKeyContribution = ({
         <ul className="tabs">
           {_.keys(selectedAdMetrics).map((item) => (
             <li
+              key={Math.random()}
               className={selectedTab === item ? 'active' : ''}
               onClick={() => handleOnMetricsTabChange(item)}
               role="presentation">
@@ -613,7 +616,7 @@ SponsoredKeyContribution.propTypes = {
   selectedContributionOption: string,
   selectedAdManager: string,
   handleContributionOptions: func,
-  selectedAdMetrics: string,
+  selectedAdMetrics: shape({}),
   selectedTabMetrics: string,
   handleOnMetricsTabChange: func,
   selectedAdDF: objectOf(Object),
