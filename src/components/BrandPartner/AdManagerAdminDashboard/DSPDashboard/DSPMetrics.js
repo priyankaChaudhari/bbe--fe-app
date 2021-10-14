@@ -2,11 +2,7 @@ import React, { useCallback } from 'react';
 
 import { array, func, object, oneOfType, string } from 'prop-types';
 
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  UpDowGrayArrow,
-} from '../../../../theme/images';
+import DifferenceAdMetric from '../DifferenceAdMetric';
 import CardMetrics from '../../../../common/CardMetrics';
 
 const DSPMetrics = ({
@@ -53,25 +49,7 @@ const DSPMetrics = ({
                 : `vs 0`}
             </div>
             {dspDifference && dspDifference.impressions ? (
-              dspDifference.impressions >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.impressions}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.impressions.toString().replace('-', '')}%
-                </div>
-              )
+              <DifferenceAdMetric value={dspDifference.impressions} />
             ) : (
               <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}
@@ -102,25 +80,10 @@ const DSPMetrics = ({
             </div>
 
             {dspDifference && dspDifference.dsp_spend ? (
-              dspDifference.dsp_spend >= 0 ? (
-                <div className="perentage-value grey mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={UpDowGrayArrow}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.dsp_spend}%
-                </div>
-              ) : (
-                <div className="perentage-value grey mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={UpDowGrayArrow}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.dsp_spend.toString().replace('-', '')}%
-                </div>
-              )
+              <DifferenceAdMetric
+                value={dspDifference.dsp_spend}
+                type="spend"
+              />
             ) : (
               <div className="perentage-value grey mt-3 pt-1">N/A</div>
             )}
@@ -155,28 +118,7 @@ const DSPMetrics = ({
             </div>
 
             {dspDifference && dspDifference.total_product_sales ? (
-              dspDifference.total_product_sales >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.total_product_sales}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.total_product_sales
-                    .toString()
-                    .replace('-', '')}
-                  %
-                </div>
-              )
+              <DifferenceAdMetric value={dspDifference.total_product_sales} />
             ) : (
               <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}
@@ -210,25 +152,10 @@ const DSPMetrics = ({
                 : `vs ${currencySign}0.00`}
             </div>
             {dspDifference && dspDifference.total_roas ? (
-              dspDifference.total_roas >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {addThousandComma(dspDifference.total_roas)}
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.total_roas.toString().replace('-', '')}
-                </div>
-              )
+              <DifferenceAdMetric
+                value={dspDifference.total_roas}
+                type="totalRoas"
+              />
             ) : (
               <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}
@@ -254,25 +181,10 @@ const DSPMetrics = ({
                 : `vs 0.00%`}
             </div>
             {dspDifference && dspDifference.total_dpvr ? (
-              dspDifference.total_dpvr < 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.total_dpvr.toString().replace('-', '')}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.total_dpvr}%
-                </div>
-              )
+              <DifferenceAdMetric
+                value={dspDifference.total_dpvr}
+                type="dpvr"
+              />
             ) : (
               <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}
@@ -307,28 +219,9 @@ const DSPMetrics = ({
                 : `vs 0.00%`}
             </div>
             {dspDifference && dspDifference.ttl_new_brand_purchases ? (
-              dspDifference.ttl_new_brand_purchases >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.ttl_new_brand_purchases}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.ttl_new_brand_purchases
-                    .toString()
-                    .replace('-', '')}
-                  %
-                </div>
-              )
+              <DifferenceAdMetric
+                value={dspDifference.ttl_new_brand_purchases}
+              />
             ) : (
               <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}
@@ -364,25 +257,7 @@ const DSPMetrics = ({
                 : `vs ${currencySign}0`}
             </div>
             {dspDifference && dspDifference.product_sales ? (
-              dspDifference.product_sales >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.product_sales}%
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.product_sales.toString().replace('-', '')}%
-                </div>
-              )
+              <DifferenceAdMetric value={dspDifference.product_sales} />
             ) : (
               <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}
@@ -408,25 +283,7 @@ const DSPMetrics = ({
                 : `vs ${currencySign}0.00`}
             </div>
             {dspDifference && dspDifference.roas ? (
-              dspDifference.roas >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.roas}
-                </div>
-              ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {dspDifference.roas.toString().replace('-', '')}
-                </div>
-              )
+              <DifferenceAdMetric value={dspDifference.roas} type="roas" />
             ) : (
               <div className="perentage-value down mt-3 pt-1">N/A</div>
             )}

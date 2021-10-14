@@ -8,12 +8,12 @@ import {
   UpDowGrayArrow,
 } from '../../../theme/images';
 
-const DifferenceAdMetric = ({ value, type = '' }) => {
-  if (value >= 0) {
+const DifferenceAdMetric = ({ value, type }) => {
+  if (value >= 0 || (type === 'dpvr' && value < 0)) {
     return (
       <div
         className={`perentage-value ${
-          type === 'spend' ? 'grey' : type === 'acos' ? 'down' : ''
+          type === 'spend' ? '' : type === 'acos' ? 'down' : ''
         } mt-3 pt-1`}>
         <img
           className="green-arrow"
@@ -26,14 +26,15 @@ const DifferenceAdMetric = ({ value, type = '' }) => {
           }
           alt="arrow-down"
         />
-        {value}%
+        {value.toString().replace('-', '')}
+        {type === 'roas' || type === 'totalRoas' ? '' : '%'}
       </div>
     );
   }
   return (
     <div
       className={`perentage-value ${
-        type === 'spend' ? 'grey' : type === 'acos' ? '' : 'down'
+        type === 'spend' ? '' : type === 'acos' ? '' : 'down'
       }  mt-3 pt-1`}>
       <img
         className="red-arrow"
@@ -46,7 +47,8 @@ const DifferenceAdMetric = ({ value, type = '' }) => {
         }
         alt="arrow-down"
       />
-      {value.toString().replace('-', '')}%
+      {value.toString().replace('-', '')}
+      {type === 'roas' || type === 'totalRoas' ? '' : '%'}
     </div>
   );
 };
