@@ -17,6 +17,7 @@ const CardMetrics = styled.div`
       font-size: 11px;
       text-transform: uppercase;
       font-family: ${Theme.titleFontFamily};
+      padding-bottom: 15px;
     }
 
     .perentage-value {
