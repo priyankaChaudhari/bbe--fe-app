@@ -113,7 +113,6 @@ export default function AdPerformance({
 
   const bindAdResponseData = (response) => {
     const tempData = [];
-    console.log('reponse---', response);
     // filterout previous data in one temporary object.
     if (response.daily_facts.previous && response.daily_facts.previous.length) {
       response.daily_facts.previous.forEach((item) => {

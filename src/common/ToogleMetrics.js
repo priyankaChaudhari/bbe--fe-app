@@ -1,7 +1,7 @@
-import { arrayOf, func, string } from 'prop-types';
 import React from 'react';
 
 import styled from 'styled-components';
+import { arrayOf, func, string } from 'prop-types';
 
 import Theme from '../theme/Theme';
 
