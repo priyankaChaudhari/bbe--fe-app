@@ -17,7 +17,12 @@ export default function useActivityLog({ viewComponent }) {
 
       let oldValue = item && item.split('from')[1].split(' to ')[0];
       let newValue =
-        item && item.split('from')[1].split(' to ')[1].split(', ,')[0];
+        item &&
+        item.split('from') &&
+        item.split('from')[1] &&
+        item.split('from')[1].split(' to ') &&
+        item.split('from')[1].split(' to ')[1] &&
+        item.split('from')[1].split(' to ')[1].split(', ,')[0];
 
       if (
         item.includes('annual revenue') ||
@@ -147,6 +152,10 @@ export default function useActivityLog({ viewComponent }) {
           activityMessage[1].split('from')[1].split(' to ')[0];
         newValue =
           activityMessage[1] &&
+          activityMessage[1].split('from') &&
+          activityMessage[1].split('from')[1] &&
+          activityMessage[1].split('from')[1].split(' to ') &&
+          activityMessage[1].split('from')[1].split(' to ')[1] &&
           activityMessage[1].split('from')[1].split(' to ')[1].split(', ,')[0];
       }
 
