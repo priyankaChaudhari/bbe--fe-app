@@ -40,7 +40,9 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
-  const isAdManagerAdmin = userInfo && userInfo.role === 'Ad Manager Admin';
+  const isAdManagerAdmin =
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;

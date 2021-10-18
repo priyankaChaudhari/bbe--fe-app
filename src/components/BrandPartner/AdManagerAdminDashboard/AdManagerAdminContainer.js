@@ -60,10 +60,12 @@ export default function AdManagerAdminContainer({ userInfo }) {
     switch (viewComponent) {
       case 'sales':
         return (
-          <SalesDashboard
-            marketplaceChoices={marketplaceChoices}
-            userInfo={userInfo}
-          />
+          <>
+            <SalesDashboard
+              marketplaceChoices={marketplaceChoices}
+              userInfo={userInfo}
+            />
+          </>
         );
 
       case 'sponsored':
@@ -93,12 +95,26 @@ export default function AdManagerAdminContainer({ userInfo }) {
         <Tabs>
           <ul className="tabs">
             {userInfo.role === 'BGS' || userInfo.role === 'BGS Manager' ? (
-              <li
-                className={viewComponent === 'sales' ? 'active' : ''}
-                onClick={() => setViewComponent('sales')}
-                role="presentation">
-                Sales
-              </li>
+              <>
+                <li
+                  className={viewComponent === 'sales' ? 'active' : ''}
+                  onClick={() => setViewComponent('sales')}
+                  role="presentation">
+                  Sales
+                </li>
+                <li
+                  className={viewComponent === 'sponsored' ? 'active' : ''}
+                  onClick={() => setViewComponent('sponsored')}
+                  role="presentation">
+                  Sponsored Advertising
+                </li>
+                <li
+                  className={viewComponent === 'dsp' ? 'active' : ''}
+                  onClick={() => setViewComponent('dsp')}
+                  role="presentation">
+                  DSP Advertising
+                </li>
+              </>
             ) : null}
 
             {userInfo.role === 'Sponsored Advertising Ad Manager' ||

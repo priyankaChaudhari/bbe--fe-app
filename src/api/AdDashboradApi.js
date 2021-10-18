@@ -22,7 +22,10 @@ export async function getAdManagerAdminGraphData(
   userInfo,
 ) {
   let selectedUser = '';
-  if (userInfo && userInfo.role === 'Ad Manager Admin') {
+  if (
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager'
+  ) {
     selectedUser = user;
   } else {
     selectedUser = userInfo && userInfo.id;
@@ -75,7 +78,10 @@ export async function getKeyContributionData(
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
   let selectedUser = '';
-  if (userInfo && userInfo.role === 'Ad Manager Admin') {
+  if (
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager'
+  ) {
     selectedUser = user;
   } else {
     selectedUser = userInfo && userInfo.id;
