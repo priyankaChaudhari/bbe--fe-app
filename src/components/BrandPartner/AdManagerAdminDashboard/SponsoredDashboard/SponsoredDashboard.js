@@ -444,7 +444,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         break;
 
       case 'month':
-        setAdFilters({ daily: true, weekly: false, month: false });
+        setAdFilters({ daily: true, weekly: true, month: false });
         setAdGroupBy('daily');
         getAdData(
           selectedAdType,
@@ -513,7 +513,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       setAdGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: false });
+      setAdFilters({ daily: true, weekly: true, month: true });
       setAdGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';
@@ -922,7 +922,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
                     id="daysCheck"
                     name="flexRadioDefault"
                     value={adGroupBy}
-                    checked={adFilters.daily}
+                    checked={adFilters.daily && adGroupBy === 'daily'}
                     onClick={() => handleAdGroupBy('daily')}
                     onChange={() => {}}
                   />

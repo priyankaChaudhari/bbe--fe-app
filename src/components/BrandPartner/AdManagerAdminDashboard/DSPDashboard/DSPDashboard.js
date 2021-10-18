@@ -325,7 +325,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       setDSPGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setDSPFilters({ daily: true, weekly: true, month: false });
+      setDSPFilters({ daily: true, weekly: true, month: true });
       setDSPGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';
@@ -451,7 +451,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         break;
 
       case 'month':
-        setDSPFilters({ daily: true, weekly: false, month: false });
+        setDSPFilters({ daily: true, weekly: true, month: false });
         setDSPGroupBy('daily');
         getDSPData(
           value,
@@ -837,7 +837,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
                         id="daysCheck"
                         name="flexRadioDefault1"
                         value={dspGroupBy}
-                        checked={dspFilters.daily}
+                        checked={dspFilters.daily && dspGroupBy === 'daily'}
                         onClick={() => handleDSPGroupBy('daily')}
                         onChange={() => {}}
                       />
