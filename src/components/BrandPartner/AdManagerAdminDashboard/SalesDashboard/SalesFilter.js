@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import { arrayOf, bool, func, shape } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import { arrayOf, bool, func, shape } from 'prop-types';
 
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { CaretUp } from '../../../../theme/images';
 import { WhiteCard, ModalRadioCheck } from '../../../../common';
-import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 
 const SalesFilter = ({
   handleResetFilter,
