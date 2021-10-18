@@ -81,6 +81,7 @@ export const metricsNameForAPI = {
   dspTtlNewBrandPurchases: 'ttl_new_brand_purchases',
   dspProductSales: 'product_sales',
   dspRoas: 'roas',
+  costPerClick: 'cost_per_click',
 };
 
 export const DSPFinanceMetrics = [
