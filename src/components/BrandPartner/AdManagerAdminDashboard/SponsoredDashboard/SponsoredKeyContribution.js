@@ -469,8 +469,7 @@ const SponsoredKeyContribution = ({
           ) : null}
         </Table>
         {!contributionData ||
-        (contributionData && contributionData.length === 0) ||
-        (contributionData && !contributionData.result) ? (
+        (contributionData && contributionData.length === 0) ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
       </>
