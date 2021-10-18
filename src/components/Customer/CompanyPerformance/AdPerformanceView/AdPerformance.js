@@ -596,18 +596,19 @@ export default function AdPerformance({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 60) {
+
+    if (diffDays <= 30) {
       temp = 'daily';
       setAdFilters({ daily: true, weekly: false, month: false });
       setAdGroupBy('daily');
-    } else if (diffDays > 60 && diffDays <= 180) {
+    } else if (diffDays > 30 && diffDays <= 60) {
+      temp = 'daily';
+      setAdFilters({ daily: true, weekly: true, month: true });
+      setAdGroupBy('daily');
+    } else if (diffDays > 60) {
       temp = 'weekly';
-      setAdFilters({ daily: false, weekly: true, month: false });
+      setAdFilters({ daily: false, weekly: true, month: true });
       setAdGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setAdFilters({ daily: false, weekly: false, month: true });
-      setAdGroupBy('monthly');
     }
 
     if (dailyFactFlag === 'custom') {
@@ -636,18 +637,18 @@ export default function AdPerformance({
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 60) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setDSPFilters({ daily: true, weekly: false, month: false });
       setDSPGroupBy('daily');
-    } else if (diffDays > 60 && diffDays <= 180) {
+    } else if (diffDays > 30 && diffDays <= 60) {
+      temp = 'daily';
+      setDSPFilters({ daily: true, weekly: true, month: true });
+      setDSPGroupBy('daily');
+    } else if (diffDays > 60) {
       temp = 'weekly';
-      setDSPFilters({ daily: false, weekly: true, month: false });
+      setDSPFilters({ daily: false, weekly: true, month: true });
       setDSPGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setDSPFilters({ daily: false, weekly: false, month: true });
-      setDSPGroupBy('monthly');
     }
 
     if (value === 'custom') {
@@ -762,12 +763,12 @@ export default function AdPerformance({
 
       case 'month':
         if (type === 'ad') {
-          setAdFilters({ daily: true, weekly: false, month: false });
+          setAdFilters({ daily: true, weekly: true, month: false });
           setAdGroupBy('daily');
           getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         } else {
-          setDSPFilters({ daily: true, weekly: false, month: false });
+          setDSPFilters({ daily: true, weekly: true, month: false });
           setDSPGroupBy('daily');
 
           getDSPData(value, 'daily', selectedMarketplace);
@@ -827,19 +828,58 @@ export default function AdPerformance({
   const handleAdGroupBy = (value) => {
     if (value !== adGroupBy) {
       setAdGroupBy(value);
-      getAdData(
-        selectedAdType.value,
-        selectedAdDF.value,
-        value,
-        selectedMarketplace,
-      );
+
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getAdData(
+          selectedAdType.value,
+          selectedAdDF.value,
+          value,
+          selectedMarketplace,
+          sd,
+          ed,
+        );
+      } else {
+        getAdData(
+          selectedAdType.value,
+          selectedAdDF.value,
+          value,
+          selectedMarketplace,
+        );
+      }
     }
   };
 
   const handleDSPGroupBy = (value) => {
     if (value !== dspGroupBy) {
       setDSPGroupBy(value);
-      getDSPData(selectedAdDF.value, value, selectedMarketplace);
+
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getDSPData(selectedAdDF.value, value, selectedMarketplace, sd, ed);
+      } else {
+        getDSPData(selectedAdDF.value, value, selectedMarketplace);
+      }
     }
   };
 

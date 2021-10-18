@@ -768,7 +768,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   };
 
   const handleContributionOptions = (type) => {
-    console.log('--type-', type);
     if (type !== selectedContributionOption) {
       setSelectedContributionOption(type);
       if (selectedAdDF.value === 'custom' && type === 'contribution') {

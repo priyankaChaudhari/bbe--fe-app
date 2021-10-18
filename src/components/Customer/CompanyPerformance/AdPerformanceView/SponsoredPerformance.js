@@ -130,7 +130,7 @@ export default function SponsoredPerformance({
             <div className="days-container ">
               <ul className="days-tab">
                 <li
-                  id=" BT-adperformance-days"
+                  id="BT-adperformance-days"
                   className={adFilters.daily === false ? 'disabled-tab' : ''}>
                   <input
                     className="d-none"
@@ -138,7 +138,7 @@ export default function SponsoredPerformance({
                     id="daysCheck"
                     name="flexRadioDefault"
                     value={adGroupBy}
-                    checked={adFilters.daily}
+                    checked={adFilters.daily && adGroupBy === 'daily'}
                     onClick={() => handleAdGroupBy('daily')}
                     onChange={() => {}}
                   />
@@ -146,7 +146,7 @@ export default function SponsoredPerformance({
                 </li>
 
                 <li
-                  id=" BT-adperformance-weekly"
+                  id="BT-adperformance-weekly"
                   className={adFilters.weekly === false ? 'disabled-tab' : ''}>
                   <input
                     className="d-none"
@@ -161,7 +161,7 @@ export default function SponsoredPerformance({
                 </li>
 
                 <li
-                  id=" BT-adperformance-monthly"
+                  id="BT-adperformance-monthly"
                   className={adFilters.month === false ? 'disabled-tab' : ''}>
                   <input
                     className=" d-none"
@@ -169,7 +169,7 @@ export default function SponsoredPerformance({
                     id="monthlyCheck"
                     name="flexRadioDefault"
                     value={adGroupBy}
-                    checked={adFilters.month}
+                    checked={adFilters.month && adGroupBy === 'monthly'}
                     onChange={() => handleAdGroupBy('monthly')}
                   />
                   <label htmlFor="monthlyCheck">Monthly</label>

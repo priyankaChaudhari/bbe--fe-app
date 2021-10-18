@@ -148,6 +148,7 @@ export default function DSPPerformance({
               <div className="days-container ">
                 <ul className="days-tab">
                   <li
+                    id="BT-dspperformance-days"
                     className={
                       dspFilters.daily === false ? 'disabled-tab' : ''
                     }>
@@ -155,46 +156,48 @@ export default function DSPPerformance({
                     <input
                       className="d-none"
                       type="radio"
-                      id="daysCheck"
+                      id="dspDaysCheck"
                       name="flexRadioDefault1"
                       value={dspGroupBy}
-                      checked={dspFilters.daily}
+                      checked={dspFilters.daily && dspGroupBy === 'daily'}
                       onClick={() => handleDSPGroupBy('daily')}
                       onChange={() => {}}
                     />
-                    <label htmlFor="daysCheck">Daily</label>
+                    <label htmlFor="dspDaysCheck">Daily</label>
                   </li>
 
                   <li
+                    id="BT-dspperformance-weekly"
                     className={
                       dspFilters.weekly === false ? 'disabled-tab' : ''
                     }>
                     <input
                       className="d-none"
                       type="radio"
-                      id="weeklyCheck"
+                      id="dspWeeklyCheck"
                       name="flexRadioDefault1"
                       value={dspGroupBy}
                       checked={dspFilters.weekly && dspGroupBy === 'weekly'}
                       onChange={() => handleDSPGroupBy('weekly')}
                     />
-                    <label htmlFor="weeklyCheck">Weekly</label>
+                    <label htmlFor="dspWeeklyCheck">Weekly</label>
                   </li>
 
                   <li
+                    id="BT-dspperformance-monthly"
                     className={
                       dspFilters.month === false ? 'disabled-tab' : ''
                     }>
                     <input
                       className=" d-none"
                       type="radio"
-                      id="monthlyCheck"
+                      id="dspMonthlyCheck"
                       name="flexRadioDefault1"
                       value={dspGroupBy}
-                      checked={dspFilters.month}
+                      checked={dspFilters.month && dspGroupBy === 'monthly'}
                       onChange={() => handleDSPGroupBy('monthly')}
                     />
-                    <label htmlFor="monthlyCheck">Monthly</label>
+                    <label htmlFor="dspMonthlyCheck">Monthly</label>
                   </li>
                 </ul>
               </div>
