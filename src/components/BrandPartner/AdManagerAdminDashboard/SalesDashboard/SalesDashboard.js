@@ -23,6 +23,7 @@ import {
   DropDownIndicator,
   CustomDateModal,
   NoData,
+  ToggleButton,
 } from '../../../../common';
 
 import 'react-date-range/dist/styles.css'; // main style file
@@ -802,61 +803,63 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           </ul>
         </div>
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
-          <div className="days-container ">
-            <ul className="days-tab">
-              <li
-                // id=" BT-adperformance-days"
-                className={
-                  groupByFilters.daily === false ? 'disabled-tab' : ''
-                }>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault"
-                  value={salesGroupBy}
-                  checked={groupByFilters.daily}
-                  onClick={() => handleSalesGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
+          <ToggleButton>
+            <div className="days-container ">
+              <ul className="days-tab">
+                <li
+                  // id=" BT-adperformance-days"
+                  className={
+                    groupByFilters.daily === false ? 'disabled-tab' : ''
+                  }>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="daysCheck"
+                    name="flexRadioDefault"
+                    value={salesGroupBy}
+                    checked={groupByFilters.daily}
+                    onClick={() => handleSalesGroupBy('daily')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="daysCheck">Daily</label>
+                </li>
 
-              <li
-                // id=" BT-adperformance-weekly"
-                className={
-                  groupByFilters.weekly === false ? 'disabled-tab' : ''
-                }>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                  value={salesGroupBy}
-                  checked={groupByFilters.weekly && salesGroupBy === 'weekly'}
-                  onChange={() => handleSalesGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
+                <li
+                  // id=" BT-adperformance-weekly"
+                  className={
+                    groupByFilters.weekly === false ? 'disabled-tab' : ''
+                  }>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="weeklyCheck"
+                    name="flexRadioDefault"
+                    value={salesGroupBy}
+                    checked={groupByFilters.weekly && salesGroupBy === 'weekly'}
+                    onChange={() => handleSalesGroupBy('weekly')}
+                  />
+                  <label htmlFor="weeklyCheck">Weekly</label>
+                </li>
 
-              <li
-                // id=" BT-adperformance-monthly"
-                className={
-                  groupByFilters.month === false ? 'disabled-tab' : ''
-                }>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  id="monthlyCheck"
-                  name="flexRadioDefault"
-                  value={salesGroupBy}
-                  checked={groupByFilters.month && salesGroupBy === 'monthly'}
-                  onChange={() => handleSalesGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
-            </ul>
-          </div>
+                <li
+                  // id=" BT-adperformance-monthly"
+                  className={
+                    groupByFilters.month === false ? 'disabled-tab' : ''
+                  }>
+                  <input
+                    className=" d-none"
+                    type="radio"
+                    id="monthlyCheck"
+                    name="flexRadioDefault"
+                    value={salesGroupBy}
+                    checked={groupByFilters.month && salesGroupBy === 'monthly'}
+                    onChange={() => handleSalesGroupBy('monthly')}
+                  />
+                  <label htmlFor="monthlyCheck">Monthly</label>
+                </li>
+              </ul>
+            </div>
+          </ToggleButton>
         </div>
       </div>
     );

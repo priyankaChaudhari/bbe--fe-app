@@ -40,6 +40,7 @@ import CustomDateRange from './MonthPicket';
 import NoData from './NoData';
 import PdfAnnotator from './PdfAnnotator';
 import ToggleButton from './ToggleButton';
+import CardMetrics from './CardMetrics';
 
 export {
   Button,
@@ -84,4 +85,5 @@ export {
   NoData,
   PdfAnnotator,
   ToggleButton,
+  CardMetrics,
 };

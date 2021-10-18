@@ -3,6 +3,7 @@ import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import { func, instanceOf, number, string } from 'prop-types';
 
+import { CardMetrics } from '../../../../common';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -99,185 +100,193 @@ const SalesMetrics = ({
     return (
       <div className="row mr-1 ml-1">
         <div className="col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3">
-          <div
-            id="BT-sale-revenuecard"
-            onClick={() => setBoxToggle('revenue')}
-            role="presentation"
-            className={setBoxClasses('revenue', 'ad-sales-active')}>
-            <div className="row">
-              <div className="chart-name col-6 ">Total Sales</div>
-              <div
-                className="col-6 pl-0 label-card-text text-right"
-                data-tip={rendeTootipData()}
-                data-html
-                data-for="break-down">
-                Breakdown
+          <CardMetrics className="fix-height">
+            <div
+              id="BT-sale-revenuecard"
+              onClick={() => setBoxToggle('revenue')}
+              role="presentation"
+              className={setBoxClasses('revenue', 'ad-sales-active')}>
+              <div className="row">
+                <div className="chart-name col-6 ">Total Sales</div>
+                <div
+                  className="col-6 pl-0 label-card-text text-right"
+                  data-tip={rendeTootipData()}
+                  data-html
+                  data-for="break-down">
+                  Breakdown
+                </div>
               </div>
-            </div>
-            <div className="number-rate">
-              {salesCurrentTotal && salesCurrentTotal.revenue
-                ? `${currencySign}${addThousandComma(
-                    salesCurrentTotal.revenue,
-                  )}`
-                : `${currencySign}0.00`}
-            </div>
-            <div className="vs">
-              {salesPreviousTotal && salesPreviousTotal.revenue
-                ? `vs ${currencySign}${addThousandComma(
-                    salesPreviousTotal.revenue,
-                  )}`
-                : `vs ${currencySign}0.00`}
-            </div>
-            {salesDifference && salesDifference.revenue ? (
-              salesDifference.revenue >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {salesDifference.revenue}%
-                </div>
+              <div className="number-rate">
+                {salesCurrentTotal && salesCurrentTotal.revenue
+                  ? `${currencySign}${addThousandComma(
+                      salesCurrentTotal.revenue,
+                    )}`
+                  : `${currencySign}0.00`}
+              </div>
+              <div className="vs">
+                {salesPreviousTotal && salesPreviousTotal.revenue
+                  ? `vs ${currencySign}${addThousandComma(
+                      salesPreviousTotal.revenue,
+                    )}`
+                  : `vs ${currencySign}0.00`}
+              </div>
+              {salesDifference && salesDifference.revenue ? (
+                salesDifference.revenue >= 0 ? (
+                  <div className="perentage-value mt-3 pt-1">
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-down"
+                    />
+                    {salesDifference.revenue}%
+                  </div>
+                ) : (
+                  <div className="perentage-value down mt-3 pt-1">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-down"
+                    />
+                    {salesDifference.revenue.toString().replace('-', '')}%
+                  </div>
+                )
               ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {salesDifference.revenue.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
+                <div className="perentage-value down mt-3 pt-1">N/A</div>
+              )}
+            </div>
+          </CardMetrics>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div
-            id="BT-sale-trafficcard"
-            role="presentation"
-            onClick={() => setBoxToggle('traffic')}
-            className={setBoxClasses('traffic', 'ad-spend-active')}>
-            <div className="chart-name">Traffic</div>
-            <div className="number-rate">
-              {salesCurrentTotal && salesCurrentTotal.traffic
-                ? `${addThousandComma(salesCurrentTotal.traffic)}`
-                : `0.00`}
-            </div>
-            <div className="vs">
-              {salesPreviousTotal && salesPreviousTotal.traffic
-                ? `vs ${addThousandComma(salesPreviousTotal.traffic)}`
-                : `vs 0.00`}
-            </div>
-            {salesDifference && salesDifference.traffic ? (
-              salesDifference.traffic >= 0 ? (
-                <div className="perentage-value grey mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={UpDowGrayArrow}
-                    alt="arrow-down"
-                  />
-                  {salesDifference.traffic}%
-                </div>
+          <CardMetrics className="fix-height">
+            <div
+              id="BT-sale-trafficcard"
+              role="presentation"
+              onClick={() => setBoxToggle('traffic')}
+              className={setBoxClasses('traffic', 'ad-spend-active')}>
+              <div className="chart-name">Traffic</div>
+              <div className="number-rate">
+                {salesCurrentTotal && salesCurrentTotal.traffic
+                  ? `${addThousandComma(salesCurrentTotal.traffic)}`
+                  : `0.00`}
+              </div>
+              <div className="vs">
+                {salesPreviousTotal && salesPreviousTotal.traffic
+                  ? `vs ${addThousandComma(salesPreviousTotal.traffic)}`
+                  : `vs 0.00`}
+              </div>
+              {salesDifference && salesDifference.traffic ? (
+                salesDifference.traffic >= 0 ? (
+                  <div className="perentage-value grey mt-3 pt-1">
+                    <img
+                      className="green-arrow"
+                      src={UpDowGrayArrow}
+                      alt="arrow-down"
+                    />
+                    {salesDifference.traffic}%
+                  </div>
+                ) : (
+                  <div className="perentage-value grey mt-3 pt-1">
+                    <img
+                      className="red-arrow"
+                      src={UpDowGrayArrow}
+                      alt="arrow-down"
+                    />
+                    {salesDifference.traffic.toString().replace('-', '')}%
+                  </div>
+                )
               ) : (
-                <div className="perentage-value grey mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={UpDowGrayArrow}
-                    alt="arrow-down"
-                  />
-                  {salesDifference.traffic.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value grey mt-3 pt-1">N/A</div>
-            )}
-          </div>
+                <div className="perentage-value grey mt-3 pt-1">N/A</div>
+              )}
+            </div>
+          </CardMetrics>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3">
-          <div
-            id="BT-sale-conversioncard"
-            onClick={() => setBoxToggle('conversion')}
-            role="presentation"
-            className={setBoxClasses('conversion', 'ad-conversion-active')}>
-            <div className="chart-name">Conversion</div>
-            <div className="number-rate">
-              {salesCurrentTotal && salesCurrentTotal.conversion
-                ? `${addThousandComma(salesCurrentTotal.conversion)}%`
-                : `0.00%`}
-            </div>
-            <div className="vs">
-              {salesPreviousTotal && salesPreviousTotal.conversion
-                ? `vs ${addThousandComma(salesPreviousTotal.conversion)}%`
-                : `vs 0.00%`}
-            </div>
-            {salesDifference && salesDifference.conversion ? (
-              salesDifference.conversion >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {salesDifference.conversion}%
-                </div>
+          <CardMetrics className="fix-height">
+            <div
+              id="BT-sale-conversioncard"
+              onClick={() => setBoxToggle('conversion')}
+              role="presentation"
+              className={setBoxClasses('conversion', 'ad-conversion-active')}>
+              <div className="chart-name">Conversion</div>
+              <div className="number-rate">
+                {salesCurrentTotal && salesCurrentTotal.conversion
+                  ? `${addThousandComma(salesCurrentTotal.conversion)}%`
+                  : `0.00%`}
+              </div>
+              <div className="vs">
+                {salesPreviousTotal && salesPreviousTotal.conversion
+                  ? `vs ${addThousandComma(salesPreviousTotal.conversion)}%`
+                  : `vs 0.00%`}
+              </div>
+              {salesDifference && salesDifference.conversion ? (
+                salesDifference.conversion >= 0 ? (
+                  <div className="perentage-value mt-3 pt-1">
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-down"
+                    />
+                    {salesDifference.conversion}%
+                  </div>
+                ) : (
+                  <div className="perentage-value down mt-3 pt-1">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-down"
+                    />
+                    {salesDifference.conversion.toString().replace('-', '')}%
+                  </div>
+                )
               ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {salesDifference.conversion.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
+                <div className="perentage-value down mt-3 pt-1">N/A</div>
+              )}
+            </div>
+          </CardMetrics>
         </div>
         <div className="col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3">
-          <div
-            id="BT-sale-unitsoldcard"
-            onClick={() => setBoxToggle('unitsSold')}
-            role="presentation"
-            className={setBoxClasses('unitsSold', 'impression-active')}>
-            <div className="chart-name">units Sold</div>
-            <div className="number-rate">
-              {salesCurrentTotal && salesCurrentTotal.units_sold
-                ? addThousandComma(salesCurrentTotal.units_sold, 0)
-                : `0`}
-            </div>
-            <div className="vs">
-              {salesPreviousTotal && salesPreviousTotal.units_sold
-                ? `vs ${addThousandComma(salesPreviousTotal.units_sold, 0)}`
-                : `vs 0`}
-            </div>
-            {salesDifference && salesDifference.units_sold ? (
-              salesDifference.units_sold >= 0 ? (
-                <div className="perentage-value mt-3 pt-1">
-                  <img
-                    className="green-arrow"
-                    src={ArrowUpIcon}
-                    alt="arrow-down"
-                  />
-                  {addThousandComma(salesDifference.units_sold)}%
-                </div>
+          <CardMetrics className="fix-height">
+            <div
+              id="BT-sale-unitsoldcard"
+              onClick={() => setBoxToggle('unitsSold')}
+              role="presentation"
+              className={setBoxClasses('unitsSold', 'impression-active')}>
+              <div className="chart-name">units Sold</div>
+              <div className="number-rate">
+                {salesCurrentTotal && salesCurrentTotal.units_sold
+                  ? addThousandComma(salesCurrentTotal.units_sold, 0)
+                  : `0`}
+              </div>
+              <div className="vs">
+                {salesPreviousTotal && salesPreviousTotal.units_sold
+                  ? `vs ${addThousandComma(salesPreviousTotal.units_sold, 0)}`
+                  : `vs 0`}
+              </div>
+              {salesDifference && salesDifference.units_sold ? (
+                salesDifference.units_sold >= 0 ? (
+                  <div className="perentage-value mt-3 pt-1">
+                    <img
+                      className="green-arrow"
+                      src={ArrowUpIcon}
+                      alt="arrow-down"
+                    />
+                    {addThousandComma(salesDifference.units_sold)}%
+                  </div>
+                ) : (
+                  <div className="perentage-value down mt-3 pt-1">
+                    <img
+                      className="red-arrow"
+                      src={ArrowDownIcon}
+                      alt="arrow-down"
+                    />
+                    {salesDifference.units_sold.toString().replace('-', '')}%
+                  </div>
+                )
               ) : (
-                <div className="perentage-value down mt-3 pt-1">
-                  <img
-                    className="red-arrow"
-                    src={ArrowDownIcon}
-                    alt="arrow-down"
-                  />
-                  {salesDifference.units_sold.toString().replace('-', '')}%
-                </div>
-              )
-            ) : (
-              <div className="perentage-value down mt-3 pt-1">N/A</div>
-            )}
-          </div>
+                <div className="perentage-value down mt-3 pt-1">N/A</div>
+              )}
+            </div>
+          </CardMetrics>
         </div>
 
         <ReactTooltip

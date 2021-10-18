@@ -25,6 +25,7 @@ import {
   PageLoader,
   Status,
   NoData,
+  ToggleButton,
 } from '../../../../common';
 
 const SalesKeyContribution = ({
@@ -118,26 +119,28 @@ const SalesKeyContribution = ({
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
-        <div className="days-container ">
-          <ul className="days-tab">
-            {keyTabOptions.map((item) => (
-              <li key={item.id}>
-                {' '}
-                <input
-                  className="d-none"
-                  type="radio"
-                  id={item.id}
-                  name="flexRadioDefault2"
-                  value={selectedContributionOption}
-                  checked={item.id === selectedContributionOption}
-                  onClick={() => handleContributionOptions(item.id)}
-                  onChange={() => {}}
-                />
-                <label htmlFor={item.id}>{item.label}</label>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ToggleButton>
+          <div className="days-container ">
+            <ul className="days-tab">
+              {keyTabOptions.map((item) => (
+                <li key={item.id}>
+                  {' '}
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id={item.id}
+                    name="flexRadioDefault2"
+                    value={selectedContributionOption}
+                    checked={item.id === selectedContributionOption}
+                    onClick={() => handleContributionOptions(item.id)}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor={item.id}>{item.label}</label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </ToggleButton>
       </div>
     );
   };
