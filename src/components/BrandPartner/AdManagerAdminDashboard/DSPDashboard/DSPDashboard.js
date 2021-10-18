@@ -326,7 +326,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       setDSPGroupBy('daily');
     } else if (diffDays <= 30) {
       temp = 'daily';
-      setDSPFilters({ daily: true, weekly: true, month: false });
+      setDSPFilters({ daily: true, weekly: true, month: true });
       setDSPGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';

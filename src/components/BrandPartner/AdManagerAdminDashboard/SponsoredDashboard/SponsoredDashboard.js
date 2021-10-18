@@ -515,7 +515,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       setAdGroupBy('daily');
     } else if (diffDays <= 30) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: false });
+      setAdFilters({ daily: true, weekly: true, month: true });
       setAdGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';

@@ -381,7 +381,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         break;
 
       case 'month':
-        setGroupByFilters({ daily: true, weekly: false, month: false });
+        setGroupByFilters({ daily: true, weekly: true, month: false });
         setSalesGroupBy('daily');
         getSalesData(
           value,
@@ -817,7 +817,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
                     id="daysCheck"
                     name="flexRadioDefault"
                     value={salesGroupBy}
-                    checked={groupByFilters.daily}
+                    checked={groupByFilters.daily && salesGroupBy === 'daily'}
                     onClick={() => handleSalesGroupBy('daily')}
                     onChange={() => {}}
                   />
