@@ -85,6 +85,7 @@ export const metricsNameForAPI = {
   dspTtlNewBrandPurchases: 'ttl_new_brand_purchases',
   dspProductSales: 'product_sales',
   dspRoas: 'roas',
+  costPerClick: 'cost_per_click',
 };
 
 export const keyContributionHeaders = {
@@ -111,4 +112,18 @@ export const metricsCurrency = {
   dspTtlNewBrandPurchases: { type: 'percentage' },
   dspProductSales: { type: 'currency' },
   dspRoas: { type: 'currency' },
+  costPerClick: { type: 'currency' },
 };
+
+export const toogleMetricsData = [
+  {
+    id: 1,
+    name: 'acos',
+    label: 'ACOS',
+  },
+  {
+    id: 2,
+    name: 'roas',
+    label: 'ROAS',
+  },
+];

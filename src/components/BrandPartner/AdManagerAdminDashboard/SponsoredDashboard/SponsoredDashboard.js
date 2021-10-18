@@ -138,6 +138,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           adRoasPrevious: item.roas,
           adClicksPrevious: item.clicks,
           adClickRatePrevious: item.ctr,
+          costPerClickPrevious: item.cost_per_click,
           previousDate,
 
           adSalesPreviousLabel:
@@ -157,6 +158,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0',
           adClickRatePreviousLabel:
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+          costPerClickPreviousLabel:
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00',
         });
       });
     }
@@ -176,6 +181,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           tempData[index].adRoasCurrent = item.roas;
           tempData[index].adClicksCurrent = item.clicks;
           tempData[index].adClickRateCurrent = item.ctr;
+          tempData[index].costPerClickCurrent = item.cost_per_click;
 
           tempData[index].adSalesCurrentLabel =
             item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00';
@@ -195,6 +201,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             item.clicks !== null ? item.clicks : '0';
           tempData[index].adClickRateCurrentLabel =
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00';
+          tempData[index].costPerClickCurrentLabel =
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00';
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -207,6 +217,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adRoasCurrent: item.roas,
             adClicksCurrent: item.clicks,
             adClickRateCurrent: item.ctr,
+            costPerClickCurrent: item.cost_per_click,
             date: currentReportDate,
 
             adSalesPrevious: null,
@@ -217,6 +228,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adRoasPrevious: null,
             adClicksPrevious: null,
             adClickRatePrevious: null,
+            costPerClickPrevious: null,
 
             adSalesCurrentLabel:
               item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00',
@@ -235,6 +247,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0',
             adClickRateCurrentLabel:
               item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+            costPerClickCurrentLabel:
+              item.cost_per_click !== null
+                ? item.cost_per_click.toFixed(2)
+                : '0.00',
 
             adSalesPreviousLabel: '0.00',
             adSpendPreviousLabel: '0.00',
@@ -244,6 +260,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adRoasPreviousLabel: '0.00',
             adClicksPreviousLabel: '0',
             adClickRatePreviousLabel: '0.00',
+            costPerClickPreviousLabel: '0.00',
           });
         }
       });
@@ -336,6 +353,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       ).then((res) => {
         if (res && res.status === 400) {
           setKeyContributionLoader(false);
+        }
+        if (res && res.status === 500) {
+          setKeyContributionLoader(false);
+          setContributionData([]);
         }
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
@@ -747,6 +768,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   };
 
   const handleContributionOptions = (type) => {
+    console.log('--type-', type);
     if (type !== selectedContributionOption) {
       setSelectedContributionOption(type);
       if (selectedAdDF.value === 'custom' && type === 'contribution') {

@@ -17,6 +17,7 @@ const CardMetrics = styled.div`
       font-size: 11px;
       text-transform: uppercase;
       font-family: ${Theme.titleFontFamily};
+      padding-bottom: 15px;
     }
 
     .perentage-value {
@@ -114,6 +115,12 @@ const CardMetrics = styled.div`
       border: 1px solid #a04848;
       .chart-name {
         color: #a04848;
+      }
+    }
+    &.costPerClick-active {
+      border: 1px solid #89a43c;
+      .chart-name {
+        color: #89a43c;
       }
     }
   }

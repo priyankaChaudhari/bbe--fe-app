@@ -73,7 +73,6 @@ export async function getKeyContributionData(
   userInfo,
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
-
   let selectedUser = '';
   if (userInfo && userInfo.role === 'Ad Manager Admin') {
     selectedUser = user;
