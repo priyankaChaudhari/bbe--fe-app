@@ -117,6 +117,12 @@ const CardMetrics = styled.div`
         color: #a04848;
       }
     }
+    &.costPerClick-active {
+      border: 1px solid #89a43c;
+      .chart-name {
+        color: #89a43c;
+      }
+    }
   }
   //   @media only screen and (min-width: 1920px) {
   //     .order-chart-box {

@@ -112,6 +112,7 @@ export const metricsCurrency = {
   dspTtlNewBrandPurchases: { type: 'percentage' },
   dspProductSales: { type: 'currency' },
   dspRoas: { type: 'currency' },
+  costPerClick: { type: 'currency' },
 };
 
 export const toogleMetricsData = [
