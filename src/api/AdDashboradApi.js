@@ -206,7 +206,7 @@ export async function getSalesGraphData(
   }
 
   const result = await axiosInstance
-    .get(`${API_SALES_DASHBOARD}`, { params })
+    .get(`${API_AD_DASHBOARD}${API_SALES_DASHBOARD}`, { params })
     .then((response) => {
       return response;
     })

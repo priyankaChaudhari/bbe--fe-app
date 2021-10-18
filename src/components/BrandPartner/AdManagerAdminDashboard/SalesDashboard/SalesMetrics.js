@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ReactTooltip from 'react-tooltip';
-import { func, instanceOf, string } from 'prop-types';
+import { func, instanceOf, number, string } from 'prop-types';
 
 import {
   ArrowDownIcon,
@@ -19,6 +19,8 @@ const SalesMetrics = ({
   addThousandComma,
   salesPreviousTotal,
   salesDifference,
+  organicSale,
+  inorganicSale,
 }) => {
   const rendeTootipData = () => {
     return `
@@ -42,7 +44,7 @@ const SalesMetrics = ({
               float: right;
               text-align: right;
               margin-top: 4px;
-             ">$16,147.52
+             ">${currencySymbol}${addThousandComma(organicSale)}
            </div>
            </div>
              <div class="col-6">
@@ -60,7 +62,7 @@ const SalesMetrics = ({
               float: right;
               text-align: right;
               margin-top: 4px;
-             ">$16,147.52
+             ">${currencySymbol}${addThousandComma(inorganicSale)}
            </div>
            </div>
       </div>
@@ -302,6 +304,8 @@ SalesMetrics.defaultProps = {
   salesDifference: {},
   addThousandComma: () => {},
   setSelectedSalesMetrics: () => {},
+  inorganicSale: {},
+  organicSale: {},
 };
 
 SalesMetrics.propTypes = {
@@ -310,6 +314,8 @@ SalesMetrics.propTypes = {
   salesCurrentTotal: instanceOf(Object),
   salesPreviousTotal: instanceOf(Object),
   salesDifference: instanceOf(Object),
+  inorganicSale: number,
+  organicSale: number,
   addThousandComma: func,
   setSelectedSalesMetrics: func,
 };

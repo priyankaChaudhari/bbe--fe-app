@@ -78,7 +78,8 @@ export default function PerformanceReport({
     label: 'Recent 7 days',
   });
   const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
-
+  const [organicSale, setOrganicSale] = useState(0);
+  const [inorganicSale, setInorganicSale] = useState(0);
   const [salesCurrentTotal, setSalesCurrentTotal] = useState({});
   const [salesPreviousTotal, setSalesPreviousTotal] = useState({});
   const [salesDifference, setSalesDifference] = useState({});
@@ -280,6 +281,14 @@ export default function PerformanceReport({
             const salesGraphData = bindSalesResponseData(res.data);
             setSalesChartData(salesGraphData);
 
+            // brekdown tooltip values
+            if (res.data.daily_facts && res.data.daily_facts.inorganic_sale) {
+              setInorganicSale(res.data.daily_facts.inorganic_sale);
+            }
+
+            if (res.data.daily_facts && res.data.daily_facts.organic_sale) {
+              setOrganicSale(res.data.daily_facts.organic_sale);
+            }
             if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
               const lastUpdated = res.data.pf_oi_is[0].latest_date;
               res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
@@ -763,6 +772,8 @@ export default function PerformanceReport({
         currency={currency}
         salesGraphLoader={salesGraphLoader}
         salesChartData={salesChartData}
+        organicSale={organicSale}
+        inorganicSale={inorganicSale}
       />
       <div className="row mt-3">
         {renderInventoryScorePanel()}

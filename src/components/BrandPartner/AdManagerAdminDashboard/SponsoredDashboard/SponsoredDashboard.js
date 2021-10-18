@@ -117,8 +117,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
           });
-          setAdManagerList(list);
         }
+        setAdManagerList(list);
       }
     });
   }, []);

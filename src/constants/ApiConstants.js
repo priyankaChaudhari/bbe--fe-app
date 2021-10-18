@@ -33,7 +33,7 @@ export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
 export const API_AD_DASHBOARD = '/ad-dashboard/';
-export const API_SALES_DASHBOARD = '/sales-dashboard/';
+export const API_SALES_DASHBOARD = 'sales-dashboard/';
 
 export const API_DSP_INVOICES = '/invoice/';
 export const API_DSP_BILLING = '/bill/';

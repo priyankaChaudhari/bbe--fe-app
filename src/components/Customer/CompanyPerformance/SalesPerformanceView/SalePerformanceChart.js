@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
 
-import { arrayOf, shape, string } from 'prop-types';
+import { arrayOf, bool, shape, string } from 'prop-types';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
@@ -20,6 +20,7 @@ export default function SalePerformanceChart({
   currencySymbol,
   selectedBox,
   selectedDF,
+  isDashboard = false,
 }) {
   const chart = useRef(null);
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function SalePerformanceChart({
       unitsSold: 'Units Sold',
       traffic: 'Traffic',
       conversion: 'Conversion',
+      totalSales: 'Total Sales',
     };
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
@@ -122,14 +124,16 @@ export default function SalePerformanceChart({
       let valueAxis2;
       const snapToSeries = [];
       let tooltipValue = '';
+      let lableName = '';
 
-      // loop for genearate tooltip
+      // loop for generate tooltip
       _.keys(selectedBox).map((item) => {
+        lableName = item === 'revenue' && isDashboard ? 'totalSales' : item;
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
         const colorCode = colorSet[item];
 
-        tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
+        tooltipValue = `${tooltipValue} ${_.startCase(lableName)}`;
         if (item === 'revenue') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
@@ -317,7 +321,7 @@ export default function SalePerformanceChart({
 
         if (item === 'revenue') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
-            tooltipNames[item],
+            isDashboard ? tooltipNames.totalSales : tooltipNames[item],
             colorSet[item],
             currentLabel,
             currencySymbol,
@@ -400,12 +404,20 @@ export default function SalePerformanceChart({
       chart.current.cursor.snapToSeries = snapToSeries;
     }
     return () => chart.current && chart.current.dispose();
-  }, [chartId, chartData, currencySymbol, selectedBox, selectedDF]);
+  }, [
+    chartId,
+    chartData,
+    currencySymbol,
+    selectedBox,
+    selectedDF,
+    isDashboard,
+  ]);
 
   return <div id={chartId} style={{ width: '100%', height: '510px' }} />;
 }
 
 SalePerformanceChart.defaultProps = {
+  isDashboard: false,
   chartData: [],
   currencySymbol: '',
   selectedBox: {},
@@ -413,6 +425,7 @@ SalePerformanceChart.defaultProps = {
 };
 
 SalePerformanceChart.propTypes = {
+  isDashboard: bool,
   chartId: string.isRequired,
   chartData: arrayOf(shape({})),
   currencySymbol: string,

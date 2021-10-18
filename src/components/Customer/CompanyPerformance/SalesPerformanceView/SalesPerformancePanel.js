@@ -5,7 +5,7 @@ import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import { components } from 'react-select';
-import { arrayOf, bool, func, shape, string } from 'prop-types';
+import { arrayOf, bool, func, shape, string, number } from 'prop-types';
 
 import SalesPerformanceChart from './SalePerformanceChart';
 import { DropDown } from '../DropDown';
@@ -48,6 +48,8 @@ export default function SalesPerformancePanel({
   currency,
   salesGraphLoader,
   salesChartData,
+  organicSale,
+  inorganicSale,
 }) {
   const { Option, SingleValue } = components;
 
@@ -85,6 +87,33 @@ export default function SalesPerformancePanel({
     };
   };
 
+  const addThousandComma = (value, decimalDigits = 2) => {
+    if (value !== undefined && value !== null) {
+      return value.toFixed(decimalDigits).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    return value;
+  };
+
+  const bindValues = (value, name = null) => {
+    const decimal = _.split(value, '.', 2);
+    if (decimal[1] !== undefined) {
+      return (
+        <span style={{ fontSize: '26px' }}>
+          {name === 'revenue' ? currencySymbol : null}
+          {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+          <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span>
+        </span>
+      );
+    }
+    return (
+      <span style={{ fontSize: '26px' }}>
+        {name === 'revenue' ? currencySymbol : null}
+        {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+      </span>
+    );
+  };
+
   const rendeTootipData = () => {
     return `
     <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; opacity: 100%;"> 
@@ -107,7 +136,7 @@ export default function SalesPerformancePanel({
               float: right;
               text-align: right;
               margin-top: 4px;
-             ">$16,147.52
+             ">${currencySymbol}${addThousandComma(organicSale)}
            </div>
            </div>
              <div class="col-6">
@@ -125,7 +154,7 @@ export default function SalesPerformancePanel({
               float: right;
               text-align: right;
               margin-top: 4px;
-             ">$16,147.52
+             ">${currencySymbol}${addThousandComma(inorganicSale)}
            </div>
            </div>
       </div>
@@ -143,25 +172,6 @@ export default function SalesPerformancePanel({
       selectedClass = 'order-chart-box fix-height';
     }
     return selectedClass;
-  };
-
-  const bindValues = (value, name = null) => {
-    const decimal = _.split(value, '.', 2);
-    if (decimal[1] !== undefined) {
-      return (
-        <span style={{ fontSize: '26px' }}>
-          {name === 'revenue' ? currencySymbol : null}
-          {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span>
-        </span>
-      );
-    }
-    return (
-      <span style={{ fontSize: '26px' }}>
-        {name === 'revenue' ? currencySymbol : null}
-        {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-      </span>
-    );
   };
 
   const setBoxToggle = (name) => {
@@ -538,6 +548,8 @@ SalesPerformancePanel.defaultProps = {
   data: {},
   salesChartData: {},
   state: [],
+  inorganicSale: {},
+  organicSale: {},
   applyCustomDate: () => {},
   setActiveSales: () => {},
   handleDailyFact: () => {},
@@ -564,6 +576,8 @@ SalesPerformancePanel.propTypes = {
   salesDifference: shape({}),
   salesCurrentTotal: shape({}),
   salesPreviousTotal: shape({}),
+  inorganicSale: number,
+  organicSale: number,
   renderCustomDateSubLabel: func,
   setShowCustomDateModal: func,
   setState: func,

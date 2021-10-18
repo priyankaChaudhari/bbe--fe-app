@@ -70,6 +70,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [selectedContributionOption, setSelectedContributionOption] = useState(
     'contribution',
   );
+  const [organicSale, setOrganicSale] = useState(0);
+  const [inorganicSale, setInorganicSale] = useState(0);
   const [keyContributionLoader, setKeyContributionLoader] = useState(false);
   const [contributionData, setContributionData] = useState([]);
   const currentDate = new Date();
@@ -103,8 +105,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
           });
-          setBgsList(list);
         }
+        setBgsList(list);
       }
     });
   }, []);
@@ -113,8 +115,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     const tempData = [];
 
     // filterout previous data in one temporary object.
-    if (response.daily_facts.previous && response.daily_facts.previous.length) {
-      response.daily_facts.previous.forEach((item) => {
+    if (response.previous && response.previous.length) {
+      response.previous.forEach((item) => {
         const previousDate = dayjs(item.report_date).format('MMM D YYYY');
         tempData.push({
           revenuePrevious: item.revenue,
@@ -136,15 +138,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     }
 
     // filterout current data in one temporary object.
-    if (response.daily_facts.current && response.daily_facts.current.length) {
-      response.daily_facts.current.forEach((item, index) => {
+    if (response.current && response.current.length) {
+      response.current.forEach((item, index) => {
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
         let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
-        if (
-          response.daily_facts.previous &&
-          index < response.daily_facts.previous.length
-        ) {
+        if (response.previous && index < response.previous.length) {
           tempData[index].date = currentReportDate;
           tempData[index].revenueCurrent = item.revenue;
           tempData[index].unitsSoldCurrent = item.units_sold;
@@ -208,18 +207,18 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     }
 
     // filterout the dsp current total, previous total, and diffrence
-    if (response.daily_facts && response.daily_facts.current_sum) {
-      setSalesCurrentTotal(response.daily_facts.current_sum);
+    if (response && response.current_sum) {
+      setSalesCurrentTotal(response.current_sum);
     } else {
       setSalesCurrentTotal([]);
     }
-    if (response.daily_facts && response.daily_facts.previous_sum) {
-      setSalesPreviousTotal(response.daily_facts.previous_sum);
+    if (response && response.previous_sum) {
+      setSalesPreviousTotal(response.previous_sum);
     } else {
       setSalesPreviousTotal([]);
     }
-    if (response.daily_facts && response.daily_facts.difference_data) {
-      setSalesDifference(response.daily_facts.difference_data);
+    if (response && response.difference_data) {
+      setSalesDifference(response.difference_data);
     } else {
       setSalesDifference([]);
     }
@@ -250,8 +249,17 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         }
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
-            const salesGraphData = bindSalesResponseData(res.data.result);
+            const response = res.data.result;
+            const salesGraphData = bindSalesResponseData(response);
             setSalesChartData(salesGraphData);
+            // brekdown tooltip values
+            if (response && response.inorganic_sale) {
+              setInorganicSale(response.inorganic_sale);
+            }
+
+            if (response && response.organic_sale) {
+              setOrganicSale(response.organic_sale);
+            }
           } else {
             setSalesChartData([]);
             setSalesPreviousTotal([]);
@@ -906,6 +914,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
             addThousandComma={addThousandComma}
             salesPreviousTotal={salesPreviousTotal}
             salesDifference={salesDifference}
+            organicSale={organicSale}
+            inorganicSale={inorganicSale}
           />
           {renderSalesGroupBy()}
           {salesGraphLoader ? (
@@ -923,6 +933,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
               currencySymbol={currencySymbol}
               selectedBox={selectedSalesMetrics}
               selectedDF={selectedSalesDF.value}
+              isDashboard
             />
           ) : (
             <NoData>{noGraphDataMessage}</NoData>

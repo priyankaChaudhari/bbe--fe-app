@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { shape, string } from 'prop-types';
+import { arrayOf, shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import PerformanceReport from './SalesPerformanceView/PerformanceReport';
@@ -15,6 +15,7 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       : 'salePerformance';
   currentDate.setDate(currentDate.getDate() - 3);
   const [viewComponent, setViewComponent] = useState(setTab);
+
   return (
     <>
       <div className="col-lg-6 col-12">
@@ -39,11 +40,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 }
 
 CompanyPerformance.defaultProps = {
-  marketplaceChoices: {},
+  marketplaceChoices: [],
   id: '',
 };
 
 CompanyPerformance.propTypes = {
-  marketplaceChoices: shape({}),
+  marketplaceChoices: arrayOf(shape({})),
   id: string,
 };

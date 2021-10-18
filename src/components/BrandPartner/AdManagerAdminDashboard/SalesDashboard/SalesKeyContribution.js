@@ -47,7 +47,7 @@ const SalesKeyContribution = ({
   };
 
   const tabOptions = [
-    { value: 'revenue', label: 'Revenue' },
+    { value: 'revenue', label: 'Total Sales' },
     { value: 'traffic', label: 'Traffic' },
     { value: 'conversion', label: 'Conversion' },
     { value: 'unitsSold', label: 'Units Sold' },
