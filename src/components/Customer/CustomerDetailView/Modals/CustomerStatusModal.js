@@ -11,6 +11,7 @@ export default function CustomerStatusModal({
   customStyles,
   setStatusModal,
   customer,
+  getActivityLogInfo,
 }) {
   return (
     <Modal
@@ -29,6 +30,7 @@ export default function CustomerStatusModal({
         type={statusModal.type}
         setStatusModal={setStatusModal}
         customer={customer}
+        getActivityLogInfo={getActivityLogInfo}
       />
     </Modal>
   );
@@ -46,4 +48,5 @@ CustomerStatusModal.propTypes = {
   customStyles: shape({}),
   setStatusModal: func,
   customer: shape({ id: string }).isRequired,
+  getActivityLogInfo: func.isRequired,
 };

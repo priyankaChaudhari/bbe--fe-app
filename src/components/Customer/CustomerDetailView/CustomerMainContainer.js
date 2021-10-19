@@ -433,6 +433,7 @@ export default function CustomerMainContainer() {
                 customStyles={customStyles}
                 setStatusModal={setStatusModal}
                 customer={customer}
+                getActivityLogInfo={getActivityLogInfo}
               />
 
               <NotesModal
