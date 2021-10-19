@@ -1,17 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-import PropTypes from 'prop-types';
 import dayjs from 'dayjs';
 import DatePicker from 'react-date-picker';
-import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { func, string, shape } from 'prop-types';
 
-import { RightArrowIcon } from '../../../theme/images';
 import { updateCustomerDetails } from '../../../api';
+import { RightArrowIcon } from '../../../theme/images';
 import { getCustomerDetails } from '../../../store/actions/customerState';
 import { Button, ModalBox, FormField, PageLoader } from '../../../common';
 
-export default function CustomerStatus({ type, setStatusModal, customer }) {
+export default function CustomerStatus({
+  type,
+  setStatusModal,
+  customer,
+  getActivityLogInfo,
+}) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [startDate, setStartDate] = useState(new Date());
@@ -74,6 +79,7 @@ export default function CustomerStatus({ type, setStatusModal, customer }) {
       if (response && response.status === 200) {
         toast.success('Status Updated!');
         dispatch(getCustomerDetails(customer.id));
+        getActivityLogInfo();
         setStatusModal({ show: false, type });
         setIsLoading({ loader: false, type: 'button' });
       }
@@ -160,14 +166,15 @@ CustomerStatus.defaultProps = {
 };
 
 CustomerStatus.propTypes = {
-  type: PropTypes.string,
-  setStatusModal: PropTypes.func.isRequired,
-  customer: PropTypes.shape({
-    id: PropTypes.string,
-    note: PropTypes.string,
-    end_date: PropTypes.string,
-    status: PropTypes.shape({
-      value: PropTypes.string,
+  type: string,
+  setStatusModal: func.isRequired,
+  customer: shape({
+    id: string,
+    note: string,
+    end_date: string,
+    status: shape({
+      value: string,
     }),
   }).isRequired,
+  getActivityLogInfo: func.isRequired,
 };
