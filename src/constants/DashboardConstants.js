@@ -82,6 +82,10 @@ export const metricsNameForAPI = {
   dspProductSales: 'product_sales',
   dspRoas: 'roas',
   costPerClick: 'cost_per_click',
+  revenue: 'revenue',
+  traffic: 'traffic',
+  unitsSold: 'units_sold',
+  conversion: 'conversion',
 };
 
 export const DSPFinanceMetrics = [
