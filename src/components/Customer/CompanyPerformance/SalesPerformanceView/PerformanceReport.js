@@ -411,7 +411,11 @@ export default function PerformanceReport({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 30) {
+    if (diffDays <= 7) {
+      temp = 'daily';
+      setFilters({ daily: true, weekly: false, month: false });
+      setGroupBy('daily');
+    } else if (diffDays <= 30) {
       temp = 'daily';
       setFilters({ daily: true, weekly: true, month: false });
       setGroupBy('daily');
