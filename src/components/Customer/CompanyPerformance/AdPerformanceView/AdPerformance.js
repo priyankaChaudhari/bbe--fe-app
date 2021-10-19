@@ -924,6 +924,12 @@ export default function AdPerformance({
         selectedMarketplace,
         selectedAdType.value,
       );
+      DSPYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+        selectedMarketplace,
+      );
     }
     if (value === 'custom') {
       setShowAdCustomDateModal(true);
