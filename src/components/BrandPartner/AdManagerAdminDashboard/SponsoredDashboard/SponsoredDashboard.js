@@ -466,7 +466,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         break;
 
       case '30days':
-        setAdFilters({ daily: true, weekly: false, month: false });
+        setAdFilters({ daily: true, weekly: true, month: false });
         setAdGroupBy('daily');
 
         getAdData(

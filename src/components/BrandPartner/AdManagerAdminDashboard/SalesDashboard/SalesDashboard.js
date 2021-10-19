@@ -415,7 +415,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         break;
 
       case '30days':
-        setGroupByFilters({ daily: true, weekly: false, month: false });
+        setGroupByFilters({ daily: true, weekly: true, month: false });
         setSalesGroupBy('daily');
 
         getSalesData(

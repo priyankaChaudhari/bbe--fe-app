@@ -459,7 +459,7 @@ export default function PerformanceReport({
         break;
 
       case '30days':
-        setFilters({ daily: true, weekly: false, month: false });
+        setFilters({ daily: true, weekly: true, month: false });
         setGroupBy('daily');
         getData(value, 'daily', selectedAmazonValue);
         break;

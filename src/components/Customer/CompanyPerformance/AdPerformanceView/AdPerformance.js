@@ -780,7 +780,7 @@ export default function AdPerformance({
 
       case '30days':
         if (type === 'ad') {
-          setAdFilters({ daily: true, weekly: false, month: false });
+          setAdFilters({ daily: true, weekly: true, month: false });
           setAdGroupBy('daily');
           getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;

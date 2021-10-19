@@ -477,7 +477,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         break;
 
       case '30days':
-        setDSPFilters({ daily: true, weekly: false, month: false });
+        setDSPFilters({ daily: true, weekly: true, month: false });
         setDSPGroupBy('daily');
         getDSPData(
           value,
