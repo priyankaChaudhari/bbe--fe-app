@@ -62,7 +62,9 @@ const SalesKeyContribution = ({
     let decimalDigits = 2;
     if (
       selectedTabMetrics === 'adClicks' ||
-      selectedTabMetrics === 'impressions'
+      selectedTabMetrics === 'impressions' ||
+      selectedTabMetrics === 'unitsSold' ||
+      selectedTabMetrics === 'traffic'
     ) {
       decimalDigits = 0;
     }
