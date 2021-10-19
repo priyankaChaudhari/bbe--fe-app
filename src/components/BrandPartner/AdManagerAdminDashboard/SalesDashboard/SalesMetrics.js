@@ -166,12 +166,12 @@ const SalesMetrics = ({
               <div className="chart-name">Traffic</div>
               <div className="number-rate">
                 {salesCurrentTotal && salesCurrentTotal.traffic
-                  ? `${addThousandComma(salesCurrentTotal.traffic)}`
+                  ? addThousandComma(salesCurrentTotal.traffic, 0)
                   : `0.00`}
               </div>
               <div className="vs">
                 {salesPreviousTotal && salesPreviousTotal.traffic
-                  ? `vs ${addThousandComma(salesPreviousTotal.traffic)}`
+                  ? `vs ${addThousandComma(salesPreviousTotal.traffic, 0)}`
                   : `vs 0.00`}
               </div>
               {salesDifference && salesDifference.traffic ? (

@@ -76,7 +76,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [keyContributionLoader, setKeyContributionLoader] = useState(false);
   const [contributionData, setContributionData] = useState([]);
   const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 2);
+  currentDate.setDate(currentDate.getDate() - 3);
   const [customDateState, setCustomDateState] = useState([
     {
       startDate: currentDate,

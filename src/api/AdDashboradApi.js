@@ -234,6 +234,7 @@ export async function getSalesKeyContributionData(
   pageNumber,
 ) {
   let selectedUser = '';
+  const metricName = metricsNameForAPI[selectedMetric];
   if (userInfo && userInfo.role === 'BGS Manager') {
     selectedUser = user;
   } else {
@@ -273,16 +274,9 @@ export async function getSalesKeyContributionData(
     params = {
       ...params,
       order_by: contributionType,
-      metric: selectedMetric,
+      metric: metricName,
     };
   }
-
-  // if (user === 'all') {
-  //   delete params.user;
-  // }
-  // if (marketplace === 'all') {
-  //   delete params.marketplace;
-  // }
 
   let result = {};
   if (contributionType === 'keyMetrics') {
