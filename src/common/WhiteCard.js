@@ -281,6 +281,13 @@ export const WhiteCard = styled.div`
       margin-right: 4px;
       vertical-align: text-top;
     }
+    @media only screen and (max-width: 1170px) {
+      right: 8px;
+      img {
+        width: 14px;
+        margin-right: 2px;
+      }
+    }
   }
   .increase-rate {
     color: ${Theme.lighterGreen};
@@ -370,9 +377,6 @@ export const WhiteCard = styled.div`
   .view-all-list {
     font-size: ${Theme.extraNormal};
     color: ${Theme.gray85};
-    position: absolute;
-    right: 20px;
-    top: 22px;
     cursor: pointer;
 
     img {

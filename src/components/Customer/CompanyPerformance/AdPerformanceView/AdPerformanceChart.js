@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
+
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import * as am4core from '@amcharts/amcharts4/core';
@@ -8,7 +9,6 @@ import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import PropTypes, { instanceOf } from 'prop-types';
 
 am4core.useTheme(am4themes_dataviz);
-// am4core.useTheme(am4themes_animated);
 am4core.color('red');
 const _ = require('lodash');
 

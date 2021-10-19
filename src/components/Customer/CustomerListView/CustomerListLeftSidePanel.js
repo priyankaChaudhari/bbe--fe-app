@@ -3,7 +3,7 @@ import { DebounceInput } from 'react-debounce-input';
 import ReactTooltip from 'react-tooltip';
 import PropTypes from 'prop-types';
 
-import { CustomerLeftPannel } from '../../../theme/CustomerListStyle';
+import { CustomerLeftPannel } from './CustomerListStyle';
 import {
   CheckBox,
   DropDownSelect,

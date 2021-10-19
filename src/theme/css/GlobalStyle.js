@@ -133,9 +133,7 @@ body {
   .customer-pdf {
     margin-left: 0px !important;
   }
- 
   
-  }
   @media only screen and (max-width: 991px) {
     .sticky {
       padding-left: 28px;
@@ -154,7 +152,7 @@ h1 {
   span {
     background-color: ${Theme.darkGreen};
     padding: 0px 4px;
-    font-size: ${Theme.extraSmall}; !important;
+    font-size: ${Theme.extraSmall} !important;
     vertical-align: middle;
     font-family: ${Theme.titleFontFamily};
     font-weight: 500;
@@ -289,7 +287,7 @@ h6 {
 .black-heading-title {
   font-size: ${Theme.extraMedium}; 
   color: ${Theme.black};
-  // font-family: ${Theme.baseMediumFontFamily};
+   /* font-family: ${Theme.baseMediumFontFamily}; */
    font-family: ${Theme.baseFontFamily};
   font-weight: 600;
 }
@@ -313,7 +311,7 @@ p {
   &.black-heading-title {
     font-size: ${Theme.extraMedium}; 
     color: ${Theme.black};
-    // font-family: ${Theme.baseMediumFontFamily};
+     /* font-family: ${Theme.baseMediumFontFamily}; */
     font-family: ${Theme.baseFontFamily};
     font-weight: 600;
   }
@@ -774,7 +772,7 @@ button:disabled {
   }
 
   .edit-profiles {
-    font-size: ${Theme.smallRes}
+    font-size: ${Theme.smallRes};
     color: ${Theme.black};
     font-family: ${Theme.titleFontFamily};
     text-transform: uppercase;
@@ -973,49 +971,6 @@ fieldset {
   }
 }
 
-// .checkbox input:checked ~ label:before {
-//   background-image: url(../images/icons/checkmark.svg);
-//   background-repeat: no-repeat;
-//   z-index: 2;
-//   background-position-y: 10px;
-//   background-position-x: 10px;
-//   content: '';
-// }
-// .checkbox input {
-//   display: none;
-// }
-
-// .checkbox label:before {
-//   display: inline-block;
-//   background-color: ${Theme.orange};
-//   opacity: 0.800000011920929;
-//   border-radius: 100%;
-//   width: 48px;
-//   position: absolute;
-//   top: 21px;
-//   left: 15px;
-//   height: 48px;
-// }
-
-// .checkbox {
-//   width: 100%;
-// }
-// .checkbox label {
-//   cursor: pointer;
-// }
-// .checkbox label:hover::before {
-//   background-color: $orange-color;
-//   opacity: 0.800000011920929;
-// }
-
-// .disableCheck {
-//   opacity: 0.4;
-//   cursor: not-allowed;
-// }
-
-// .react-select__option--is-focused:not(.react-select__option--is-selected) {
-//   background-color: #f9faff;
-// }
 .avatarName {
   border-radius: 50%;
   text-align: center;
@@ -1077,8 +1032,8 @@ fieldset {
       padding-top: 4px;
       margin-top: -2px;
     }
-  }
 }
+
 .annotationNone {
   width: 40px;
   height: 40px;
@@ -1163,10 +1118,10 @@ fieldset {
   font-size: 12px;
   font-weight: 400;
 }
- .customer-list-tooltip{
-    max-width: 16%;
-    left: 14% !important;
- }
+.customer-list-tooltip{
+  max-width: 16%;
+  left: 14% !important;
+}
 
 .contract_td {
   border: 1px solid ${Theme.black};
@@ -1235,7 +1190,7 @@ fieldset {
 }
 
 .disabled-slider-btn {
-   opacity: 0.4;
+  opacity: 0.4;
   cursor: not-allowed !important;
 }
 
@@ -1292,7 +1247,7 @@ fieldset {
   @media only screen and (max-width: 991px) {
     padding-left: 0px !important;
     padding-right: 0;
-    // margin-top: 50px;
+     /* margin-top: 50px; */
      .react-pdf__Page {
         &:first-child {
           top: 110px !important;
@@ -1331,7 +1286,6 @@ fieldset {
 .rdrDayPassive {
   visibility:hidden
 }
-
 
 .PDFPageOne {
   margin-bottom: 25px;
@@ -1661,45 +1615,50 @@ text.cust-label-avg {
     top: 6px;
   }
    @media only screen and (max-width: 767px)  {
-      progress[value] { 
-        right: 0;
-        width: 75%;
-      }
+    progress[value] { 
+      right: 0;
+      width: 75%;
+    }
    }
    @media only screen and (max-width: 550px)  {
-      progress[value] { 
-        right: 0;
-        width: 60%;
-      }
+    progress[value] { 
+      right: 0;
+      width: 60%;
+    }
    }
 }
- .uploading-progress-bar {
-    text-align: center;
-    margin-top: 5px;
+.uploading-progress-bar {
+  text-align: center;
+  margin-top: 5px;
 
-    progress[value] {
-      height: 4px;
-      position: relative;
-      border-radius: 10px;
-      width: 120px;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-    progress[value]::-webkit-progress-bar {
-      background: #d8d8d8;
-      border-radius: 10px;
-    }
-    progress[value]::-webkit-progress-value {
-      background-color: #ff4817;
-      border-radius: 10px;
-    }
+  progress[value] {
+    height: 4px;
+    position: relative;
+    border-radius: 10px;
+    width: 120px;
+    -webkit-appearance: none;
+    appearance: none;
   }
+  progress[value]::-webkit-progress-bar {
+    background: #d8d8d8;
+    border-radius: 10px;
+  }
+  progress[value]::-webkit-progress-value {
+    background-color: #ff4817;
+    border-radius: 10px;
+  }
+}
 
 .label-heading {
-   color: ${Theme.gray40};
-   font-size:${Theme.verySmall};
-   text-transform: uppercase;
-   font-weight: bold;
+  color: ${Theme.gray40};
+  font-size:${Theme.verySmall};
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.label-card-text {
+  color: ${Theme.gray40};
+  font-size:${Theme.verySmall};
 }
 
  .label-info {
@@ -1714,31 +1673,31 @@ text.cust-label-avg {
     font-size: 20px;
     font-weight: 600;
 
-    &.red-range {
-      color: ${Theme.red};
-    }
+  &.red-range {
+    color: ${Theme.red};
   }
+}
 
-  .label {
-    color: ${Theme.gray40};
-    text-transform: uppercase;
-    line-height: 22px;
-    font-family: ${Theme.titleFontFamily};
-    font-size: 11px;
-    margin-bottom: 3px;
-  }
+.label {
+  color: ${Theme.gray40};
+  text-transform: uppercase;
+  line-height: 22px;
+  font-family: ${Theme.titleFontFamily};
+  font-size: 11px;
+  margin-bottom: 3px;
+}
 
 .react-sweet-progress {
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    padding: 10px 15px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 15px;
 }
 .react-sweet-progress-line-inner {
-    position: relative;
-    min-height: 4px;
-    border-radius: 100px;
-    transition: width 0.3s ease;
+  position: relative;
+  min-height: 4px;
+  border-radius: 100px;
+  transition: width 0.3s ease;
 }
 .liner-titles {
   color: black;
@@ -1762,19 +1721,18 @@ text.cust-label-avg {
 
 }
 
-  .dot {
-    background-color: ${Theme.gray35};
-    border-radius: 50%;
-    width: 3px;
-    height: 3px;
-    position: absolute;
-  }
-
+.dot {
+  background-color: ${Theme.gray35};
+  border-radius: 50%;
+  width: 3px;
+  height: 3px;
+  position: absolute;
+}
 .react-calendar__tile--hasActive {
   background: ${Theme.white}; 
 }
 .react-calendar__tile--active {
-  background: ${Theme.orange}!important;
+  background: ${Theme.orange} !important;
   padding: 10px;
   color: ${Theme.white}; 
 }
@@ -1796,7 +1754,7 @@ text.cust-label-avg {
   padding: 15px;
 }
 .react-calendar__tile--now:enabled:hover, .react-calendar__tile--now:enabled:focus {
-    background: ${Theme.lighterOrange}
+    background: ${Theme.lighterOrange};
 }
 
 .react-calendar__tile--active:enabled:hover, .react-calendar__tile--active:enabled:focus { 
@@ -1807,6 +1765,7 @@ text.cust-label-avg {
     border-radius: 20px;
   }
 }
+
 `;
 
 export default bodyStyles;

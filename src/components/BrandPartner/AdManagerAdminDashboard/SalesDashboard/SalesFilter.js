@@ -1,87 +1,50 @@
 import React, { useState } from 'react';
 
-import Select from 'react-select';
-import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import { arrayOf, bool, func, shape } from 'prop-types';
 
-import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { CaretUp } from '../../../../theme/images';
+import { WhiteCard, ModalRadioCheck } from '../../../../common';
 
-const SponsoredFilter = ({
+const SalesFilter = ({
   handleResetFilter,
-  DropdownIndicator,
+  getSelectComponents,
   marketplaceOptions,
   handleMarketplace,
-  adManagerList,
-  getAdManagerComponents,
-  handleAdManagerFilter,
-  SponsoredAdTypeOptions,
-  handleAdType,
-  selectedAdType,
+  bgsList,
+  handleBgsList,
+  selectedBgs,
   isApiCall,
-  selectedAdManager,
   selectedMarketplace,
-  selectInputRef,
-  isAdManagerAdmin,
+  isBGSManager,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
 
-  const renderAdManagerDropdown = (className) => {
+  const renderMarketplaceDropdown = (className) => {
     return (
       <div className="col-12 ">
-        <div className="label mt-3">Ad Manager</div>
+        <div className="label mt-3">Marketplace</div>
         {DropDown(
           className,
-          adManagerList,
-          adManagerList && adManagerList[0] && adManagerList[0].label,
-          getAdManagerComponents,
-          adManagerList && adManagerList[0],
-          handleAdManagerFilter,
+          marketplaceOptions,
+          marketplaceOptions &&
+            marketplaceOptions[0] &&
+            marketplaceOptions[0].label,
+          getSelectComponents,
+          marketplaceOptions && marketplaceOptions[0],
+          handleMarketplace,
           isApiCall,
-          selectInputRef,
-          selectedAdManager,
+          null,
+          selectedMarketplace,
         )}
       </div>
     );
   };
 
-  const renderMarketplaceDropdown = () => {
-    return (
-      <div className="col-12 ">
-        <div className="label mt-3">Marketplace</div>
-        <DropDownSelect
-          id="BT-sponsoredadver-countryfilter"
-          className={isApiCall ? `cursor  disabled` : 'cursor '}>
-          <Select
-            classNamePrefix="react-select"
-            className="active"
-            components={DropdownIndicator}
-            options={marketplaceOptions}
-            defaultValue={marketplaceOptions && marketplaceOptions[0]}
-            value={selectedMarketplace}
-            onChange={(event) => handleMarketplace(event)}
-            placeholder={
-              marketplaceOptions &&
-              marketplaceOptions[0] &&
-              marketplaceOptions[0].label
-            }
-            theme={(theme) => ({
-              ...theme,
-              colors: {
-                ...theme.colors,
-                neutral50: '#1A1A1A',
-              },
-            })}
-          />
-        </DropDownSelect>
-      </div>
-    );
-  };
-
-  const renderSponsoredAdTypes = () => {
-    return SponsoredAdTypeOptions.map((item, index) => (
+  const renderBgsUsersList = () => {
+    return bgsList.map((item, index) => (
       <ModalRadioCheck className="pb-1" key={item.value}>
         {' '}
         <label
@@ -97,8 +60,8 @@ const SponsoredFilter = ({
             name="radio"
             id={item.value}
             value={item.value}
-            onChange={(event) => handleAdType(event)}
-            defaultChecked={item.value === selectedAdType}
+            onChange={(event) => handleBgsList(event)}
+            defaultChecked={item.value === selectedBgs.value}
           />
           <span className="checkmark checkmark-customer-list" />
         </label>
@@ -122,12 +85,15 @@ const SponsoredFilter = ({
             </p>
           </div>
 
-          {isAdManagerAdmin ? renderAdManagerDropdown('cursor') : null}
-          {renderMarketplaceDropdown()}
-          <div className="col-12">
-            <div className="label mt-4 mb-2">Sponsored Ad Type</div>
-          </div>
-          <div className="col-12">{renderSponsoredAdTypes()}</div>
+          {renderMarketplaceDropdown('cursor')}
+          {isBGSManager ? (
+            <>
+              <div className="col-12">
+                <div className="label mt-4 mb-2">BGS</div>
+              </div>
+              <div className="col-12">{renderBgsUsersList()}</div>
+            </>
+          ) : null}
         </div>
       </WhiteCard>
     );
@@ -171,16 +137,15 @@ const SponsoredFilter = ({
           <div className="row ">
             <div className="col-lg-6 col-md-6 col-sm-12">
               <div className="row">
-                {renderAdManagerDropdown('customer-list-header')}
                 {renderMarketplaceDropdown('customer-list-header')}
               </div>
             </div>
             <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
               <div className="row ">
                 <div className="col-12">
-                  <div className="label mt-4 mb-2">Sponsored Ad Type</div>
+                  <div className="label mt-4 mb-2">BGS</div>
                 </div>
-                <div className="col-12">{renderSponsoredAdTypes()}</div>
+                <div className="col-12">{renderBgsUsersList()}</div>
               </div>
             </div>
           </div>
@@ -192,40 +157,30 @@ const SponsoredFilter = ({
   return <>{isDesktop ? renderDekstopView() : renderTabletView()}</>;
 };
 
-export default SponsoredFilter;
+export default SalesFilter;
 
-SponsoredFilter.defaultProps = {
+SalesFilter.defaultProps = {
+  isApiCall: false,
+  marketplaceOptions: [],
+  bgsList: [],
+  selectedBgs: {},
+  selectedMarketplace: {},
+  isBGSManager: false,
+  getSelectComponents: () => {},
+  handleBgsList: () => {},
   handleMarketplace: () => {},
   handleResetFilter: () => {},
-  marketplaceOptions: [],
-  SponsoredAdTypeOptions: [],
-  adManagerList: [],
-  getAdManagerComponents: null,
-  DropdownIndicator: () => {},
-  handleAdManagerFilter: () => {},
-  handleAdType: () => {},
-  selectedAdType: {},
-  isApiCall: false,
-  selectedAdManager: {},
-  selectedMarketplace: {},
-  selectInputRef: {},
-  isAdManagerAdmin: false,
 };
 
-SponsoredFilter.propTypes = {
+SalesFilter.propTypes = {
+  isApiCall: bool,
+  isBGSManager: bool,
+  selectedBgs: shape({}),
+  selectedMarketplace: shape({}),
+  marketplaceOptions: arrayOf(Array),
+  bgsList: arrayOf(Array),
   handleMarketplace: func,
   handleResetFilter: func,
-  marketplaceOptions: arrayOf(Array),
-  SponsoredAdTypeOptions: arrayOf(Array),
-  adManagerList: arrayOf(Array),
-  DropdownIndicator: func,
-  getAdManagerComponents: func,
-  handleAdManagerFilter: func,
-  handleAdType: func,
-  selectedAdType: string,
-  isApiCall: bool,
-  selectedAdManager: shape({}),
-  selectedMarketplace: shape({}),
-  selectInputRef: shape({}),
-  isAdManagerAdmin: bool,
+  getSelectComponents: func,
+  handleBgsList: func,
 };

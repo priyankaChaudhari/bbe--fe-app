@@ -7,7 +7,8 @@ import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import PropTypes, { instanceOf } from 'prop-types';
-import { dspColorSet } from '../../../../constants/DashboardConstants';
+
+import { dspColorSet } from '../../../../constants';
 
 am4core.useTheme(am4themes_dataviz);
 am4core.color('red');

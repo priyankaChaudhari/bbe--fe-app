@@ -812,7 +812,7 @@ export default function AgreementDetails({
 
   return (
     <>
-      <div className="col-lg-6 col-12">
+      <div className="col-lg-6 col-12 cutomer-middle-panel">
         <Tabs>
           <ul className="tabs">
             <li

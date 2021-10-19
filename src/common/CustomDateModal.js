@@ -5,10 +5,10 @@ import { DateRange } from 'react-date-range';
 import { enGB } from 'react-date-range/src/locale';
 import { bool, func, shape, string, instanceOf, arrayOf } from 'prop-types';
 
-import { CloseIcon } from '../theme/images';
 import ModalBox from './ModalBox';
 import Button from './Button';
 import Theme from '../theme/Theme';
+import { CloseIcon } from '../theme/images';
 
 const todaysDate = new Date();
 todaysDate.setDate(todaysDate.getDate() - 2);

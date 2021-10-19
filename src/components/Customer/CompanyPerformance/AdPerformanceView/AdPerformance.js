@@ -1,31 +1,27 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState, useCallback } from 'react';
+
 import styled from 'styled-components';
-import { components } from 'react-select';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import { components } from 'react-select';
 import { func, instanceOf, string } from 'prop-types';
 
-import { CloseIcon } from '../../../../theme/images/index';
+import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
-
 import AdPerformanceFilters from './AdPerformanceFilters';
-
+import { DspAdPacing } from '../../../BrandPartner';
+import { CloseIcon } from '../../../../theme/images';
 import { CustomDateModal, DropDownIndicator } from '../../../../common';
-import {
-  dateOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
 import {
   getAdPerformance,
   getDSPPerformance,
   getDspPacingData,
 } from '../../../../api';
 
-import { DspAdPacing } from '../../../BrandPartner';
-import DSPPerformance from './DSPPerformance';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -920,6 +916,21 @@ export default function AdPerformance({
         },
       ]);
     }
+    if (value === 'year') {
+      ADYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+        selectedMarketplace,
+        selectedAdType.value,
+      );
+      DSPYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+        selectedMarketplace,
+      );
+    }
     if (value === 'custom') {
       setShowAdCustomDateModal(true);
     } else {
@@ -1000,7 +1011,7 @@ export default function AdPerformance({
         marketplaceDefaultValue={marketplaceDefaultValue}
         marketplaceOptions={marketplaceOptions}
         handleMarketplaceOptions={handleMarketplaceOptions}
-        dateOptions={dateOptions}
+        dateOptions={dateOptionsWithYear}
         getSelectComponents={getSelectComponents}
         DropDownIndicator={DropDownIndicator}
         selectedAdDF={selectedAdDF}

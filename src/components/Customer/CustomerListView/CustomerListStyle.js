@@ -1,6 +1,5 @@
 import styled from 'styled-components';
-
-import Theme from './Theme';
+import Theme from '../../../theme/Theme';
 
 export const CustomerListPage = styled.div`
   padding-left: 62px;
@@ -15,7 +14,7 @@ export const CustomerListPage = styled.div`
     height: 100%;
     .table-container {
       height: calc(100% - 160px);
-      // min-height: 578px;
+      /* min-height: 578px; */
       padding-bottom: 100px;
       overflow-y: auto;
       overflow-x: hidden;
@@ -265,15 +264,6 @@ export const CustomerListPage = styled.div`
         width: 97%;
       }
     }
-    // .main-body-container {
-    //   .table-container {
-    //     height: auto;
-    //   }
-    // }
-    // .footer-sticky {
-    //   position: fixed;
-    //   bottom: 245px;
-    // }
     .dropdown-notes-filter {
       .notes-option {
         li {
@@ -458,34 +448,6 @@ export const MobileLeftSidebar = styled.div`
         margin-left: -20px;
       }
     }
-    // #ifp-sidebar-responsive {
-    //   display: none;
-    //   height: 100%;
-    //   position: absolute;
-    //   z-index: 999;
-    //   top: 0px;
-    //   left: 0;
-    //   right: 0;
-    //   .close-icon {
-    //     color: ${Theme.white};
-    //     font-size: ${Theme.normalRes};
-    //     font-family: ${Theme.titleFontFamily};
-    //     position: absolute;
-    //     right: 20px;
-    //     top: 10px;
-    //     z-index: 999;
-    //     img {
-    //       width: 18px;
-    //       margin-top: 8px;
-    //     }
-    //   }
-    // }
-    // #tabletmenu-check:checked ~ #ifp-sidebar-responsive {
-    //   display: block;
-    // }
-    // #mobilemenu-close:checked ~ #ifp-sidebar-responsive {
-    //   display: none;
-    // }
     .content-header {
       padding: 30px 30px 10px !important;
     }

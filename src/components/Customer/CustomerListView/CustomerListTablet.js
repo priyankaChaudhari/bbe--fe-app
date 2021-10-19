@@ -3,14 +3,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import NoRecordFound from '../../../common/NoRecordFound';
+import { CustomerListTabletView } from './CustomerListStyle';
+import { PATH_CUSTOMER_DETAILS } from '../../../constants';
+import { CommonPagination, PageLoader, WhiteCard } from '../../../common';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   UpDowGrayArrow,
 } from '../../../theme/images';
-import { PATH_CUSTOMER_DETAILS } from '../../../constants';
-import { CommonPagination, PageLoader, WhiteCard } from '../../../common';
-import { CustomerListTabletView } from '../../../theme/CustomerListStyle';
 
 export default function CustomerListTablet({
   data,

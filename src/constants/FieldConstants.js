@@ -1,9 +1,3 @@
-export const options = [
-  { value: 'contract_details', label: 'Accounts' },
-  { value: 'performance', label: 'Sales Performance' },
-  { value: 'sponsored_ad_performance', label: 'Sponsored Ad Performance' },
-  { value: 'dsp_ad_performance', label: 'DSP Ad Performance' },
-];
 export const contractChoices = [
   { value: 'any', label: 'Any' },
   { value: 'recurring', label: 'Recurring' },

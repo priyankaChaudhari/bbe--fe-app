@@ -32,7 +32,7 @@ import {
   dateOptions,
   SponsoredAdTypeOptions,
   noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+} from '../../../../constants';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -40,7 +40,9 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
-  const isAdManagerAdmin = userInfo && userInfo.role === 'Ad Manager Admin';
+  const isAdManagerAdmin =
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -117,8 +119,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
           });
-          setAdManagerList(list);
         }
+        setAdManagerList(list);
       }
     });
   }, []);
@@ -513,7 +515,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       setAdGroupBy('daily');
     } else if (diffDays <= 30) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: false });
+      setAdFilters({ daily: true, weekly: true, month: true });
       setAdGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';

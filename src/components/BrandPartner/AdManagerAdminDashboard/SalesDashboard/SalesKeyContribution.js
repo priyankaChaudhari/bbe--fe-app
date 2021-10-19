@@ -2,16 +2,8 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { arrayOf, bool, func, string, objectOf, shape } from 'prop-types';
+import { arrayOf, bool, func, string, objectOf } from 'prop-types';
 
-import {
-  Tabs,
-  WhiteCard,
-  Table,
-  PageLoader,
-  Status,
-  ToggleButton,
-} from '../../../../common';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
   ArrowDownIcon,
@@ -26,21 +18,26 @@ import {
   metricsCurrency,
   PATH_CUSTOMER_DETAILS,
 } from '../../../../constants';
+import {
+  Tabs,
+  WhiteCard,
+  Table,
+  PageLoader,
+  Status,
+  NoData,
+  ToggleButton,
+} from '../../../../common';
 
-const _ = require('lodash');
-
-const SponsoredKeyContribution = ({
+const SalesKeyContribution = ({
   keyContributionLoader,
   isDesktop,
   contributionData,
   selectedContributionOption,
-  selectedAdManager,
   handleContributionOptions,
-  selectedAdMetrics,
   selectedTabMetrics,
   handleOnMetricsTabChange,
   currencySymbol,
-  selectedAdDF,
+  selectedSalesDF,
 }) => {
   const history = useHistory();
 
@@ -50,17 +47,12 @@ const SponsoredKeyContribution = ({
     Low: '#F4F6FC',
   };
 
-  const tabOptions = {
-    adSales: 'Ad Sales',
-    adSpend: 'Ad Spend',
-    adConversion: 'Ad Conversion Rate',
-    impressions: 'Impressions',
-    adCos: 'ACOS',
-    adRoas: 'ROAS',
-    adClicks: 'Clicks',
-    adClickRate: 'Click Through Rate',
-    costPerClick: 'Cost Per Click',
-  };
+  const tabOptions = [
+    { value: 'revenue', label: 'Total Sales' },
+    { value: 'traffic', label: 'Traffic' },
+    { value: 'conversion', label: 'Conversion' },
+    { value: 'unitsSold', label: 'Units Sold' },
+  ];
 
   const returnMetricsValue = (value) => {
     let decimalDigits = 2;
@@ -91,42 +83,14 @@ const SponsoredKeyContribution = ({
     return '0';
   };
 
-  const renderAdPerformanceDifference = (actualValue, grayArrow, metrics) => {
-    const value = actualValue;
-    let selectedClass = '';
-    let selectedArrow = '';
-
+  const renderAdPerformanceDifference = (value) => {
     if (value) {
-      if (metrics === 'ACOS') {
-        if (value.toString().includes('-')) {
-          selectedClass = 'increase-rate';
-          selectedArrow = ArrowUpIcon;
-        } else {
-          selectedClass = 'decrease-rate';
-          selectedArrow = ArrowDownIcon;
-        }
-      } else if (grayArrow) {
-        if (value.toString().includes('-')) {
-          selectedClass = 'decrease-rate grey';
-          selectedArrow = UpDowGrayArrow;
-        } else {
-          selectedClass = 'increase-rate grey';
-          selectedArrow = UpDowGrayArrow;
-        }
-      } else if (value.toString().includes('-')) {
-        selectedClass = 'decrease-rate';
-        selectedArrow = ArrowDownIcon;
-      } else {
-        selectedClass = 'increase-rate';
-        selectedArrow = ArrowUpIcon;
-      }
-
       if (value.toString().includes('-')) {
         return (
           <>
-            <div className={selectedClass}>
+            <div className="decrease-rate">
               {' '}
-              <img className="red-arrow" src={selectedArrow} alt="arrow-up" />
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
               {`${Number(value.toString().split('-')[1]).toFixed(2)} %`}
             </div>
           </>
@@ -135,14 +99,14 @@ const SponsoredKeyContribution = ({
 
       return (
         <>
-          <div className={selectedClass}>
+          <div className="increase-rate">
             <img
               className="green-arrow"
-              src={selectedArrow}
+              src={ArrowUpIcon}
               width="14px"
               alt="arrow-up"
             />
-            {value} %
+            {Number(value)} %
           </div>
         </>
       );
@@ -151,10 +115,7 @@ const SponsoredKeyContribution = ({
   };
 
   const renderKeyContributionOptions = () => {
-    const keyTabOptions =
-      selectedAdManager === 'all'
-        ? keyContributionConstant.noAdManagerSelected
-        : keyContributionConstant.adManagerSelected;
+    const keyTabOptions = keyContributionConstant.adManagerSelected;
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
@@ -185,23 +146,18 @@ const SponsoredKeyContribution = ({
   };
 
   const renderKeyContributionTabs = () => {
-    let selectedTab = selectedTabMetrics;
-    if (selectedAdMetrics[selectedTabMetrics] === undefined) {
-      const selctedArray = _.keys(selectedAdMetrics);
-      // eslint-disable-next-line prefer-destructuring
-      selectedTab = selctedArray[0];
-      handleOnMetricsTabChange(selectedTab);
-    }
+    const selectedTab = selectedTabMetrics;
+
     return (
       <Tabs>
         <ul className="tabs">
-          {_.keys(selectedAdMetrics).map((item) => (
+          {tabOptions.map((item) => (
             <li
-              key={Math.random()}
-              className={selectedTab === item ? 'active' : ''}
-              onClick={() => handleOnMetricsTabChange(item)}
+              key={item.value}
+              className={selectedTab === item.value ? 'active' : ''}
+              onClick={() => handleOnMetricsTabChange(item.value)}
               role="presentation">
-              {tabOptions[item]}
+              {item.label}
             </li>
           ))}
         </ul>
@@ -250,45 +206,49 @@ const SponsoredKeyContribution = ({
 
   const renderTableHeader = () => {
     return selectedContributionOption === 'keyMetrics' ? (
-      <tr>
-        <th width="38%" className="product-header">
-          CUSTOMER
-        </th>
-        <th width="18%" className="product-header">
-          AD SALES
-        </th>
-        <th width="18%" className="product-header">
-          AD SPEND
-        </th>
-        <th width="18%" className="product-header">
-          {' '}
-          AD IMPRESSIONS
-        </th>
-        <th width="28%" className="product-header">
-          {' '}
-          ACOS
-        </th>
-      </tr>
+      <thead>
+        <tr>
+          <th width="38%" className="product-header">
+            CUSTOMER
+          </th>
+          <th width="18%" className="product-header">
+            TOTAL SALES
+          </th>
+          <th width="18%" className="product-header">
+            TRAFFIC
+          </th>
+          <th width="18%" className="product-header">
+            {' '}
+            CONVERSION
+          </th>
+          <th width="28%" className="product-header">
+            {' '}
+            UNITS SOLD
+          </th>
+        </tr>
+      </thead>
     ) : (
-      <tr>
-        <th width="40%" className="product-header">
-          Customer
-        </th>
-        <th width="20%" className="product-header">
-          This Period
-        </th>
-        <th width="20%" className="product-header">
-          {' '}
-          Prev. Period
-        </th>
-        <th width="20%" className="product-header">
-          {' '}
-          Change
-        </th>
-        <th width="60%" className="product-header">
-          Contribution
-        </th>
-      </tr>
+      <thead>
+        <tr>
+          <th width="40%" className="product-header">
+            Customer
+          </th>
+          <th width="20%" className="product-header">
+            This Period
+          </th>
+          <th width="20%" className="product-header">
+            {' '}
+            Prev. Period
+          </th>
+          <th width="20%" className="product-header">
+            {' '}
+            Change
+          </th>
+          <th width="60%" className="product-header">
+            Contribution
+          </th>
+        </tr>
+      </thead>
     );
   };
 
@@ -297,12 +257,10 @@ const SponsoredKeyContribution = ({
       <tr
         className="cursor"
         onClick={() =>
-          history.push(
-            PATH_CUSTOMER_DETAILS.replace(':id', itemData.id),
-            'adManager',
-          )
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
         }>
         <td className="product-body">
+          {' '}
           <img
             className="company-logo"
             src={
@@ -315,95 +273,88 @@ const SponsoredKeyContribution = ({
             }
             alt="logo"
           />
-          <div className="company-info-details">
-            <div className="company-name">
-              {itemData && itemData.company_name}
-            </div>
-            <div className="status">
-              {`${
-                itemData &&
-                itemData.ad_manager &&
-                itemData.ad_manager.first_name
-              }
+          <div className="company-name">
+            {itemData && itemData.company_name}
+          </div>
+          <div className="status">
+            {`${
+              itemData &&
+              itemData.brand_growth_strategist &&
+              itemData.brand_growth_strategist.first_name
+            }
             ${
-              itemData && itemData.ad_manager && itemData.ad_manager.last_name
+              itemData &&
+              itemData.brand_growth_strategist &&
+              itemData.brand_growth_strategist.last_name
             }`}
-            </div>
           </div>
         </td>
         <td className="product-body">
           {' '}
           {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.ad_sales
-            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_sales
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.revenue
+            ? `${currencySymbol}${itemData.sales_performance.current_sum.revenue
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
             : `${currencySymbol}0`}
           {renderAdPerformanceDifference(
             itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.ad_sales,
-            false,
-            'AdSales',
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.revenue,
           )}
         </td>
         <td className="product-body">
           {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.ad_spend
-            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_spend
-                .toFixed(2)
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.traffic
+            ? `${itemData.sales_performance.current_sum.traffic
+                .toFixed(0)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : `${currencySymbol}0`}
+            : `0`}
           {renderAdPerformanceDifference(
             itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.ad_spend,
-            true,
-            'AdSpend',
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.traffic,
           )}
         </td>
         <td>
           {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.impressions
-            ? itemData.sponsored_ad_performance.current_sum.impressions
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            : 0}
-          {renderAdPerformanceDifference(
-            itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.impressions,
-            false,
-            'AdImpressions',
-          )}
-        </td>
-        <td>
-          {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.acos
-            ? `${itemData.sponsored_ad_performance.current_sum.acos.toFixed(
-                2,
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.conversion
+            ? `${Number(
+                itemData.sales_performance.current_sum.conversion
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
               )}%`
             : '0%'}
           {renderAdPerformanceDifference(
             itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.acos,
-            false,
-            'ACOS',
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.conversion,
+          )}
+        </td>
+        <td>
+          {itemData &&
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.units_sold
+            ? `${itemData.sales_performance.current_sum.units_sold.toFixed(0)}`
+            : '0'}
+          {renderAdPerformanceDifference(
+            itemData &&
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.units_sold,
           )}
         </td>
       </tr>
@@ -414,7 +365,6 @@ const SponsoredKeyContribution = ({
         onClick={() =>
           history.push(
             PATH_CUSTOMER_DETAILS.replace(':id', itemData.customer_id),
-            'adManager',
           )
         }>
         <td className="product-body">
@@ -428,10 +378,8 @@ const SponsoredKeyContribution = ({
             }
             alt="logo"
           />
-          <div className="company-info-details">
-            <div className="company-name">{itemData.customer_name}</div>
-            <div className="status">{itemData.ad_manager}</div>
-          </div>
+          <div className="company-name">{itemData.customer_name}</div>
+          <div className="status">{itemData.ad_manager}</div>
         </td>
         <td className="product-body">
           {itemData && itemData.current
@@ -460,7 +408,7 @@ const SponsoredKeyContribution = ({
     return (
       <>
         <Table className="mt-0 ">
-          <thead>{renderTableHeader()}</thead>
+          {renderTableHeader()}
           {contributionData.length >= 1 ? (
             <tbody>
               {contributionData &&
@@ -560,7 +508,7 @@ const SponsoredKeyContribution = ({
           </div>
           {renderKeyContributionOptions()}
         </div>
-        {selectedAdDF.value === 'custom' &&
+        {selectedSalesDF.value === 'custom' &&
         selectedContributionOption !== 'keyMetrics' ? (
           <NoData>
             Top contributors cannot be calculated when using custom dates.
@@ -569,7 +517,7 @@ const SponsoredKeyContribution = ({
           <>
             {selectedContributionOption !== 'keyMetrics'
               ? renderKeyContributionTabs()
-              : ''}
+              : null}
 
             {keyContributionLoader ? (
               <PageLoader
@@ -591,37 +539,36 @@ const SponsoredKeyContribution = ({
       </WhiteCard>
     );
   };
+
   return <Wrapper>{renderKeyContributors()}</Wrapper>;
 };
 
-export default SponsoredKeyContribution;
+export default SalesKeyContribution;
 
-SponsoredKeyContribution.defaultProps = {
+SalesKeyContribution.defaultProps = {
   keyContributionLoader: false,
   isDesktop: false,
+  currencySymbol: '',
   contributionData: {},
   selectedContributionOption: {},
-  selectedAdManager: {},
-  handleContributionOptions: () => {},
-  selectedAdMetrics: {},
   selectedTabMetrics: {},
-  selectedAdDF: {},
+  selectedSalesDF: {},
+
   handleOnMetricsTabChange: () => {},
-  currencySymbol: '',
+  handleContributionOptions: () => {},
 };
 
-SponsoredKeyContribution.propTypes = {
+SalesKeyContribution.propTypes = {
   keyContributionLoader: bool,
   isDesktop: bool,
   contributionData: arrayOf(Array),
   selectedContributionOption: string,
-  selectedAdManager: string,
-  handleContributionOptions: func,
-  selectedAdMetrics: shape({}),
   selectedTabMetrics: string,
-  handleOnMetricsTabChange: func,
-  selectedAdDF: objectOf(Object),
+  selectedSalesDF: objectOf(Object),
   currencySymbol: string,
+
+  handleContributionOptions: func,
+  handleOnMetricsTabChange: func,
 };
 
 const Wrapper = styled.div`
@@ -631,9 +578,4 @@ const Wrapper = styled.div`
   .statusContainer {
     margin-top: 0px !important;
   }
-`;
-
-const NoData = styled.div`
-  margin: 3em;
-  text-align: center;
 `;

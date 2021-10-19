@@ -1,94 +1,17 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React from 'react';
+
 import { useSelector } from 'react-redux';
-import Select, { components } from 'react-select';
-import Modal from 'react-modal';
-import { DateRange } from 'react-date-range';
-import { enGB } from 'react-date-range/src/locale';
-import dayjs from 'dayjs';
-import Dashboard from './Dashboard';
 
-import { BrandPartnerDashboard } from '../../theme/Global';
-import getBGSCustomerList from '../../api/BgsApi';
-import { getManagersList } from '../../api';
-
-import {
-  DropDownSelect,
-  GetInitialName,
-  CommonPagination,
-  ModalBox,
-  Button,
-} from '../../common';
-
-import { CaretUp, CloseIcon } from '../../theme/images';
 import AdManagerAdminContainer from './AdManagerAdminDashboard/AdManagerAdminContainer';
 import FinanceDashboardContainer from './FinanceDashboard/FinanceDashboardContainer';
+import { BrandPartnerDashboard } from '../../theme/Global';
 
 const _ = require('lodash');
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '420px ',
-    width: '100% ',
-    minHeight: '390px',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
 function DashboardContainer() {
   const userInfo = useSelector((state) => state.userState.userInfo);
-  const { Option, SingleValue, MultiValue } = components;
 
-  const [brandGrowthStrategist, setBrandGrowthStrategist] = useState([]);
-  const [selectedBgsUser, setSelectedBgsUser] = useState(userInfo.id);
-
-  const [selectedValue, setSelectedValue] = useState({
-    type: 'week',
-    group: 'weekly',
-    bgs: '',
-  });
-  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
-  const [isCustomDateApply, setIsCustomDateApply] = useState(false);
-
-  const timeOptions = [
-    { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
-    { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
-    { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-    // { value: 'year', label: 'Year to Date', sub: 'vs previous year' },
-    {
-      value: 'custom',
-      label: 'Custom Range',
-      sub: 'Select start and end dates',
-    },
-  ];
-
-  const [data, setData] = useState([]);
-  const [pageNumber, setPageNumber] = useState();
-  const [count, setCount] = useState(null);
-  const [showBgsCustomDateModal, setShowBgsCustomDateModal] = useState(false);
-  const [hybridView, setHybridView] = useState('sponsored_ad_dashboard');
-
-  const selectInputRef = useRef();
-
-  const currentDate = new Date();
-
-  const [bgsData, setBgsData] = useState([
-    {
-      startDate: currentDate,
-      endDate: currentDate,
-      key: 'bgsSelection',
-    },
-  ]);
-
-  const adManagerRoleHeaders = {
+  const dashboardHeaders = {
     'Ad Manager Admin': 'Ad Manager Dashboard',
     'Sponsored Advertising Ad Manager': 'Ad Manager Dashboard',
     'DSP Ad Manager': 'Ad Manager Dashboard',
@@ -98,401 +21,27 @@ function DashboardContainer() {
     Finance: 'Finance Dashboard',
   };
 
-  const adManagerRole = {
+  const dashboardRole = {
     'Ad Manager Admin': '',
     'Sponsored Advertising Ad Manager': '',
     'DSP Ad Manager': '',
     'Hybrid Ad Manager': '',
-  };
-
-  const bgsCustomerList = useCallback(
-    (
-      currentPage,
-      selectedUser,
-      dateFilter,
-      hybridSelectedDashboard = null,
-      startDate = null,
-      endDate = null,
-    ) => {
-      setIsLoading({ loader: true, type: 'page' });
-      getBGSCustomerList(
-        currentPage,
-        selectedUser || userInfo.id,
-        dateFilter,
-        userInfo && userInfo.role,
-        hybridSelectedDashboard,
-        startDate,
-        endDate,
-      ).then((response) => {
-        setData(response && response.data && response.data.results);
-        setPageNumber(currentPage);
-        setCount(response && response.data && response.data.count);
-        getManagersList(
-          userInfo && userInfo.role,
-          hybridSelectedDashboard,
-        ).then((gs) => {
-          if (gs && gs.data && gs.data.length) {
-            const list = [{ value: userInfo.id, label: 'My Partners' }];
-            for (const brand of gs.data) {
-              list.push({
-                value: brand.id,
-                label: `${brand.first_name} ${brand.last_name}`,
-                icon:
-                  brand.documents &&
-                  brand.documents[0] &&
-                  Object.values(brand.documents[0]) &&
-                  Object.values(brand.documents[0])[0],
-              });
-              setBrandGrowthStrategist(list);
-            }
-          }
-          setIsLoading({ loader: false, type: 'page' });
-        });
-      });
-    },
-    [userInfo.id],
-  );
-
-  useEffect(() => {
-    bgsCustomerList(1, userInfo.id, selectedValue, hybridView);
-  }, []);
-
-  const handleOnchange = (event, type) => {
-    if (type === 'bgs') {
-      setSelectedValue({ ...selectedValue, bgs: event && event.value });
-      setSelectedBgsUser({ ...event });
-      bgsCustomerList(1, event && event.value, selectedValue, hybridView);
-    } else if (type === 'dashboard') {
-      setHybridView(event.value);
-      setSelectedValue({ ...selectedValue, bgs: '' });
-      setSelectedBgsUser(null);
-      bgsCustomerList(1, userInfo.id, selectedValue, event.value);
-    } else if (type === 'date') {
-      setIsCustomDateApply(false);
-      setSelectedValue({
-        ...selectedValue,
-        type: event.value,
-        group: event.group,
-      });
-      if (event && event.value === 'custom') {
-        setShowBgsCustomDateModal(true);
-      } else {
-        bgsCustomerList(
-          pageNumber,
-          selectedValue.bgs,
-          {
-            type: event.value,
-          },
-          hybridView,
-        );
-      }
-    }
-  };
-
-  const renderCustomDateSubLabel = (props) => {
-    if (selectedValue.type === 'custom' && isCustomDateApply) {
-      return `From- ${dayjs(bgsData[0].startDate).format(
-        'MMM D, YYYY',
-      )}  To- ${dayjs(bgsData[0].endDate).format('MMM D, YYYY')}`;
-    }
-
-    return props.data.sub;
-  };
-
-  const filterOption = (props) => (
-    <Option {...props}>
-      <div className="pb-2">
-        <span style={{ fontSize: '15px', color: '#000000' }}>
-          {props.data.label}
-        </span>
-
-        <div style={{ fontSize: '12px', color: '#556178' }}>
-          {props.data.sub}
-        </div>
-      </div>
-    </Option>
-  );
-
-  const singleFilterOption = (props) => (
-    <SingleValue {...props}>
-      <span style={{ fontSize: '15px', color: '#000000' }}>
-        {props.data.label}
-      </span>
-
-      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
-    </SingleValue>
-  );
-
-  const dateSingleFilterOption = (props) => (
-    <SingleValue {...props}>
-      <span style={{ fontSize: '15px', color: '#000000' }}>
-        {props.data.label}
-      </span>
-
-      <div style={{ fontSize: '12px', color: '#556178' }}>
-        {renderCustomDateSubLabel(props)}
-      </div>
-    </SingleValue>
-  );
-
-  const DropdownIndicator = (props) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: props.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
-  const IconOption = (props) => {
-    return (
-      <>
-        <Option {...props}>
-          {props.data.label !== 'My Partners' ? (
-            props.data.icon ? (
-              <img
-                className="drop-down-user"
-                src={props.data.icon}
-                alt="user"
-                style={{
-                  borderRadius: 50,
-                  marginRight: '6px',
-                  height: '30px',
-                  verticalAlign: 'middle',
-                  float: 'left',
-                }}
-              />
-            ) : (
-              <GetInitialName
-                userInfo={props.data.label}
-                type="list"
-                property="mr-2 float-left "
-                style={{
-                  verticalAlign: 'middle',
-                }}
-              />
-            )
-          ) : null}
-          {props.data.label}
-        </Option>
-      </>
-    );
-  };
-  const IconSingleOption = (props) => (
-    <MultiValue {...props}>
-      {props.data.icon ? (
-        <img
-          className="drop-down-user"
-          src={props.data.icon}
-          alt="user"
-          style={{
-            borderRadius: 50,
-            width: '30px',
-            marginBottom: '',
-            verticalAlign: 'middle',
-          }}
-        />
-      ) : (
-        <GetInitialName userInfo={props.data.label} type="list" property="" />
-      )}{' '}
-      &nbsp;
-      <span style={{ lineHeight: 0, fontSize: '15px' }}>
-        {props.data.label}
-      </span>
-    </MultiValue>
-  );
-
-  const getSelectComponents = (type) => {
-    if (type === 'user') {
-      return {
-        Option: IconOption,
-        MultiValue: IconSingleOption,
-        DropdownIndicator,
-      };
-    }
-    if (type === 'dashboard') {
-      return {
-        Option: filterOption,
-        MultiValue: singleFilterOption,
-        DropdownIndicator,
-      };
-    }
-    return {
-      Option: filterOption,
-      SingleValue: dateSingleFilterOption,
-      DropdownIndicator,
-    };
-  };
-
-  const BgsYearAndCustomDateFilter = (startDate, endDate, type) => {
-    let sd = startDate;
-    let ed = endDate;
-
-    if (type === 'custom') {
-      sd = `${startDate.getDate()}-${
-        startDate.getMonth() + 1
-      }-${startDate.getFullYear()}`;
-      ed = `${endDate.getDate()}-${
-        endDate.getMonth() + 1
-      }-${endDate.getFullYear()}`;
-
-      bgsCustomerList(
-        pageNumber,
-        selectedValue.bgs,
-        {
-          type,
-        },
-        hybridView,
-        sd,
-        ed,
-      );
-    }
-  };
-
-  const applyCustomDate = () => {
-    BgsYearAndCustomDateFilter(
-      bgsData[0].startDate,
-      bgsData[0].endDate,
-      'custom',
-    );
-    setIsCustomDateApply(true);
-    setShowBgsCustomDateModal(false);
-  };
-
-  const setMaxDate = () => {
-    const d = currentDate;
-    if (
-      (userInfo && userInfo.role === 'Growth Strategist') ||
-      (userInfo && userInfo.role === 'BGS') ||
-      (userInfo && userInfo.role === 'BGS Manager')
-    ) {
-      d.setDate(d.getDate() - 4);
-    } else {
-      d.setDate(d.getDate() - 3);
-    }
-    return d;
-  };
-
-  const renderBgsCustomDateModal = () => {
-    return (
-      <Modal
-        isOpen={showBgsCustomDateModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => {
-            setShowBgsCustomDateModal(false);
-            setBgsData([
-              {
-                startDate: currentDate,
-                endDate: currentDate,
-                key: 'bgsSelection',
-              },
-            ]);
-          }}
-          role="presentation"
-        />
-        <ModalBox>
-          <div className="modal-body">
-            <h4>Select Date Range</h4>
-            <DateRange
-              editableDateInputs
-              onChange={(item) => {
-                setBgsData([item.bgsSelection]);
-              }}
-              showMonthAndYearPickers={false}
-              ranges={bgsData}
-              moveRangeOnFirstSelection={false}
-              showDateDisplay={false}
-              maxDate={setMaxDate()}
-              rangeColors={['#FF5933']}
-              weekdayDisplayFormat="EEEEE"
-              locale={enGB}
-            />
-            <div className="text-center mt-3">
-              <Button
-                onClick={() => applyCustomDate()}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Apply
-              </Button>
-            </div>
-          </div>
-        </ModalBox>
-      </Modal>
-    );
-  };
-
-  const handlePageChange = (currentPage) => {
-    setPageNumber(currentPage);
-    bgsCustomerList(currentPage, selectedValue.bgs, selectedValue, hybridView);
+    'BGS Manager': '',
+    BGS: '',
   };
 
   const displayHeader = () => {
     return (
       <>
-        {renderBgsCustomDateModal()}
         <div className="dashboard-header-sticky">
           <div className="container-fluid">
             <div className="row">
               <div className="col-lg-3 col-md-12">
                 <p className="black-heading-title ml-1 pt-1">
-                  {adManagerRoleHeaders[userInfo && userInfo.role]}
+                  {dashboardHeaders[userInfo && userInfo.role]}
                 </p>
               </div>
               <div className="straight-line horizontal-line  d-lg-none d-md-block" />
-              {(userInfo && userInfo.role === 'Growth Strategist') ||
-              (userInfo && userInfo.role === 'BGS') ||
-              (userInfo && userInfo.role === 'BGS Manager') ? (
-                <div className="col-lg-9 col-md-12 text-md-center text-lg-right mb-2 ">
-                  <ul className="partner-select">
-                    <li
-                      className={
-                        isLoading.loader ? 'my-partner disabled' : 'my-partner '
-                      }>
-                      <DropDownSelect>
-                        <Select
-                          ref={selectInputRef}
-                          className="text-left active"
-                          classNamePrefix="react-select"
-                          placeholder="My Partners"
-                          options={brandGrowthStrategist}
-                          components={getSelectComponents('user')}
-                          componentsValue={{ Option: IconOption }}
-                          value={selectedBgsUser}
-                          onChange={(event) => {
-                            handleOnchange(event, 'bgs');
-                          }}
-                        />
-                      </DropDownSelect>
-                    </li>
-                    <li className={isLoading.loader ? 'disabled' : ''}>
-                      <DropDownSelect className="days-performance">
-                        <Select
-                          classNamePrefix="react-select"
-                          className="active"
-                          components={getSelectComponents()}
-                          options={timeOptions}
-                          defaultValue={timeOptions[0]}
-                          onChange={(event) => handleOnchange(event, 'date')}
-                        />
-                      </DropDownSelect>
-                    </li>
-                  </ul>
-                </div>
-              ) : null}
             </div>
           </div>
         </div>
@@ -503,27 +52,8 @@ function DashboardContainer() {
   return (
     <BrandPartnerDashboard>
       {displayHeader()}
-      {(userInfo && userInfo.role === 'Growth Strategist') ||
-      (userInfo && userInfo.role === 'BGS') ||
-      (userInfo && userInfo.role === 'BGS Manager') ? (
-        <>
-          <Dashboard isLoading={isLoading} data={data} />
-          {isLoading.loader ? null : (
-            <div className="footer-sticky">
-              <div className="straight-line horizontal-line" />
-              <div className="container-fluid">
-                <CommonPagination
-                  count={count}
-                  pageNumber={pageNumber}
-                  handlePageChange={handlePageChange}
-                />
-              </div>
-            </div>
-          )}
-        </>
-      ) : null}
 
-      {_.has(adManagerRole, userInfo && userInfo.role) ? (
+      {_.has(dashboardRole, userInfo && userInfo.role) ? (
         <AdManagerAdminContainer userInfo={userInfo} />
       ) : null}
 

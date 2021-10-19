@@ -37,7 +37,9 @@ currentDate.setDate(currentDate.getDate() - 2);
 const month = dayjs(currentDate).format('MMMM');
 
 const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
-  const isAdManagerAdmin = userInfo && userInfo.role === 'Ad Manager Admin';
+  const isAdManagerAdmin =
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -324,7 +326,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       setDSPGroupBy('daily');
     } else if (diffDays <= 30) {
       temp = 'daily';
-      setDSPFilters({ daily: true, weekly: true, month: false });
+      setDSPFilters({ daily: true, weekly: true, month: true });
       setDSPGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';

@@ -1,23 +1,26 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+
+import { arrayOf, bool, shape, string } from 'prop-types';
+import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
-import PropTypes from 'prop-types';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 am4core.useTheme(am4themes_dataviz);
-// am4core.useTheme(am4themes_animated);
 am4core.color('red');
+
 const _ = require('lodash');
 
-export default function SalePerformanceGraph({
+export default function SalePerformanceChart({
   chartId,
   chartData,
   currencySymbol,
   selectedBox,
   selectedDF,
+  isDashboard = false,
 }) {
   const chart = useRef(null);
   useEffect(() => {
@@ -33,6 +36,7 @@ export default function SalePerformanceGraph({
       unitsSold: 'Units Sold',
       traffic: 'Traffic',
       conversion: 'Conversion',
+      totalSales: 'Total Sales',
     };
 
     chart.current = am4core.create(chartId, am4charts.XYChart);
@@ -120,14 +124,16 @@ export default function SalePerformanceGraph({
       let valueAxis2;
       const snapToSeries = [];
       let tooltipValue = '';
+      let lableName = '';
 
-      // loop for genearate tooltip
+      // loop for generate tooltip
       _.keys(selectedBox).map((item) => {
+        lableName = item === 'revenue' && isDashboard ? 'totalSales' : item;
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
         const colorCode = colorSet[item];
 
-        tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
+        tooltipValue = `${tooltipValue} ${_.startCase(lableName)}`;
         if (item === 'revenue') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
@@ -315,7 +321,7 @@ export default function SalePerformanceGraph({
 
         if (item === 'revenue') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
-            tooltipNames[item],
+            isDashboard ? tooltipNames.totalSales : tooltipNames[item],
             colorSet[item],
             currentLabel,
             currencySymbol,
@@ -398,22 +404,31 @@ export default function SalePerformanceGraph({
       chart.current.cursor.snapToSeries = snapToSeries;
     }
     return () => chart.current && chart.current.dispose();
-  }, [chartId, chartData, currencySymbol, selectedBox, selectedDF]);
+  }, [
+    chartId,
+    chartData,
+    currencySymbol,
+    selectedBox,
+    selectedDF,
+    isDashboard,
+  ]);
 
   return <div id={chartId} style={{ width: '100%', height: '510px' }} />;
 }
 
-SalePerformanceGraph.defaultProps = {
+SalePerformanceChart.defaultProps = {
+  isDashboard: false,
   chartData: [],
   currencySymbol: '',
   selectedBox: {},
   selectedDF: '',
 };
 
-SalePerformanceGraph.propTypes = {
-  chartId: PropTypes.string.isRequired,
-  chartData: PropTypes.arrayOf(PropTypes.object),
-  currencySymbol: PropTypes.string,
-  selectedBox: PropTypes.shape(PropTypes.object),
-  selectedDF: PropTypes.string,
+SalePerformanceChart.propTypes = {
+  isDashboard: bool,
+  chartId: string.isRequired,
+  chartData: arrayOf(shape({})),
+  currencySymbol: string,
+  selectedBox: shape({}),
+  selectedDF: string,
 };

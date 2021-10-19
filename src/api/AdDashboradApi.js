@@ -1,4 +1,3 @@
-import { metricsNameForAPI } from '../constants/CompanyPerformanceConstants';
 import axiosInstance from '../axios';
 import {
   API_CUSTOMER,
@@ -7,7 +6,9 @@ import {
   API_DSP_INVOICES,
   API_DSP_BILLING,
   API_CUSTOMER_CONTRACT,
-} from '../constants/ApiConstants';
+  API_SALES_DASHBOARD,
+  metricsNameForAPI,
+} from '../constants';
 
 export async function getAdManagerAdminGraphData(
   dashboardType,
@@ -21,7 +22,10 @@ export async function getAdManagerAdminGraphData(
   userInfo,
 ) {
   let selectedUser = '';
-  if (userInfo && userInfo.role === 'Ad Manager Admin') {
+  if (
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager'
+  ) {
     selectedUser = user;
   } else {
     selectedUser = userInfo && userInfo.id;
@@ -74,7 +78,10 @@ export async function getKeyContributionData(
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
   let selectedUser = '';
-  if (userInfo && userInfo.role === 'Ad Manager Admin') {
+  if (
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager'
+  ) {
     selectedUser = user;
   } else {
     selectedUser = userInfo && userInfo.id;
@@ -170,6 +177,126 @@ export async function getDspPacingDahboardData(
     .catch((error) => {
       return error.response;
     });
+  return result;
+}
+
+export async function getSalesGraphData(
+  dailyFacts,
+  groupBy,
+  marketplace,
+  user,
+  startDate,
+  endDate,
+  userInfo,
+) {
+  let selectedUser = '';
+  if (userInfo && userInfo.role === 'BGS Manager') {
+    selectedUser = user;
+  } else {
+    selectedUser = userInfo && userInfo.id;
+  }
+
+  let params = {
+    daily_facts: dailyFacts,
+    group_by: groupBy,
+    marketplace,
+    user: selectedUser,
+  };
+
+  if (startDate && endDate) {
+    params = {
+      ...params,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
+
+  const result = await axiosInstance
+    .get(`${API_AD_DASHBOARD}${API_SALES_DASHBOARD}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getSalesKeyContributionData(
+  dailyFacts,
+  marketplace,
+  user,
+  contributionType,
+  selectedMetric,
+  startDate,
+  endDate,
+  userInfo,
+) {
+  let selectedUser = '';
+  if (userInfo && userInfo.role === 'BGS Manager') {
+    selectedUser = user;
+  } else {
+    selectedUser = userInfo && userInfo.id;
+  }
+
+  let params = {
+    daily_facts: dailyFacts,
+    marketplace,
+    user: selectedUser,
+    dashboard: 'sales_performance',
+  };
+
+  if (startDate && endDate) {
+    params = {
+      ...params,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
+
+  if (contributionType === 'keyMetrics') {
+    params = {
+      ...params,
+      no_page: '',
+      sequence: 'desc',
+      'order-by': 'company_name',
+      dashboard: 'sale_performance',
+    };
+  } else {
+    params = {
+      ...params,
+      order_by: contributionType,
+      metric: selectedMetric,
+    };
+  }
+
+  // if (user === 'all') {
+  //   delete params.user;
+  // }
+  // if (marketplace === 'all') {
+  //   delete params.marketplace;
+  // }
+
+  let result = {};
+  if (contributionType === 'keyMetrics') {
+    result = await axiosInstance
+      .get(`${API_CUSTOMER}`, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  } else {
+    result = await axiosInstance
+      .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}key-contributors/`, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+  }
   return result;
 }
 

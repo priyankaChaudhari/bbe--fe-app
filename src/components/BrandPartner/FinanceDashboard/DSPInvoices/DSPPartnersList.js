@@ -14,12 +14,13 @@ import DSPInvoiceFilters from './DSPInvoiceFilters';
 import TableMobileView from '../../../../common/TableMobileView';
 import { getFinanceInvoices } from '../../../../api';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
-import { CompanyDefaultUser } from '../../../../theme/images/index';
+
+import { CompanyDefaultUser } from '../../../../theme/images';
 import {
   PartnersStatusOptions,
   PartnersSortByOptions,
-} from '../../../../constants/DashboardConstants';
+  PATH_CUSTOMER_DETAILS,
+} from '../../../../constants';
 import {
   WhiteCard,
   Table,
