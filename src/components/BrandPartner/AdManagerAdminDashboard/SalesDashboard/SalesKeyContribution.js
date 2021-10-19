@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { arrayOf, bool, func, string, objectOf } from 'prop-types';
+import { arrayOf, bool, func, string, objectOf, number } from 'prop-types';
 
 import { TabletViewManager } from '../../../../theme/Global';
 import {
@@ -26,6 +26,7 @@ import {
   Status,
   NoData,
   ToggleButton,
+  CommonPagination,
 } from '../../../../common';
 
 const SalesKeyContribution = ({
@@ -38,6 +39,9 @@ const SalesKeyContribution = ({
   handleOnMetricsTabChange,
   currencySymbol,
   selectedSalesDF,
+  handlePageChange,
+  pageNumber,
+  count,
 }) => {
   const history = useHistory();
 
@@ -277,11 +281,15 @@ const SalesKeyContribution = ({
             {itemData && itemData.company_name}
           </div>
           <div className="status">
-            {`${
-              itemData &&
-              itemData.brand_growth_strategist &&
-              itemData.brand_growth_strategist.first_name
-            }
+            {itemData &&
+            itemData.brand_growth_strategist &&
+            itemData.brand_growth_strategist.length === 0
+              ? ''
+              : `${
+                  itemData &&
+                  itemData.brand_growth_strategist &&
+                  itemData.brand_growth_strategist.first_name
+                }
             ${
               itemData &&
               itemData.brand_growth_strategist &&
@@ -410,16 +418,25 @@ const SalesKeyContribution = ({
         <Table className="mt-0 ">
           {renderTableHeader()}
           {contributionData.length >= 1 ? (
-            <tbody>
-              {contributionData &&
-                contributionData.map((item) => renderTableData(item))}
-            </tbody>
+            <>
+              <tbody>
+                {contributionData &&
+                  contributionData.map((item) => renderTableData(item))}
+              </tbody>
+            </>
           ) : null}
         </Table>
         {!contributionData ||
-        (contributionData && contributionData.length === 0) ||
-        (contributionData && typeof contributionData.result === 'object') ? (
+        (contributionData && contributionData.length === 0) ? (
           <NoData>{noGraphDataMessage}</NoData>
+        ) : null}
+        {selectedContributionOption === 'keyMetrics' &&
+        contributionData.length >= 1 ? (
+          <CommonPagination
+            count={count}
+            pageNumber={pageNumber}
+            handlePageChange={handlePageChange}
+          />
         ) : null}
       </>
     );
@@ -553,9 +570,11 @@ SalesKeyContribution.defaultProps = {
   selectedContributionOption: {},
   selectedTabMetrics: {},
   selectedSalesDF: {},
-
   handleOnMetricsTabChange: () => {},
   handleContributionOptions: () => {},
+  handlePageChange: () => {},
+  count: null,
+  pageNumber: 1,
 };
 
 SalesKeyContribution.propTypes = {
@@ -566,9 +585,11 @@ SalesKeyContribution.propTypes = {
   selectedTabMetrics: string,
   selectedSalesDF: objectOf(Object),
   currencySymbol: string,
-
   handleContributionOptions: func,
   handleOnMetricsTabChange: func,
+  handlePageChange: func,
+  count: number,
+  pageNumber: number,
 };
 
 const Wrapper = styled.div`

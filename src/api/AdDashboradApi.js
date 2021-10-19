@@ -231,6 +231,7 @@ export async function getSalesKeyContributionData(
   startDate,
   endDate,
   userInfo,
+  pageNumber,
 ) {
   let selectedUser = '';
   if (userInfo && userInfo.role === 'BGS Manager') {
@@ -257,11 +258,17 @@ export async function getSalesKeyContributionData(
   if (contributionType === 'keyMetrics') {
     params = {
       ...params,
-      no_page: '',
       sequence: 'desc',
       'order-by': 'company_name',
       dashboard: 'sale_performance',
+      page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     };
+    if (user === 'all') {
+      delete params.user;
+    }
+    if (marketplace === 'all') {
+      delete params.marketplace;
+    }
   } else {
     params = {
       ...params,

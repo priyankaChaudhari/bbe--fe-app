@@ -91,6 +91,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     month: false,
   });
   const [salesGroupBy, setSalesGroupBy] = useState('daily');
+  const [pageNumber, setPageNumber] = useState();
+  const [contributionCount, setContributionCount] = useState(null);
 
   const getBGSList = useCallback(() => {
     getManagersList('BGS').then((bgsData) => {
@@ -284,6 +286,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       selectedMetrics,
       startDate = null,
       endDate = null,
+      page,
     ) => {
       setKeyContributionLoader(true);
       getSalesKeyContributionData(
@@ -295,6 +298,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         startDate,
         endDate,
         userInfo,
+        page,
       ).then((res) => {
         if (res && res.status === 400) {
           setKeyContributionLoader(false);
@@ -302,12 +306,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data) {
-            setContributionData(res.data);
+          } else if (res.data && res.data.results) {
+            setContributionData(res.data.results);
+            setContributionCount(res.data.count);
           } else {
             setContributionData([]);
           }
           setKeyContributionLoader(false);
+          setPageNumber(page);
         }
         setKeyContributionLoader(false);
       });
@@ -334,6 +340,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedBgsUser.value,
         selectedContributionOption,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
       getSalesData(
         selectedSalesDF.value,
@@ -358,6 +367,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     selectedContributionOption,
     selectedTabMetrics,
     getContributionData,
+    pageNumber,
   ]);
 
   const setGropuByFilter = (value) => {
@@ -377,6 +387,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedBgsUser.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -395,6 +408,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedBgsUser.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -414,6 +430,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedBgsUser.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -477,6 +496,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           sd,
           ed,
+          pageNumber,
         );
       }
     } else {
@@ -487,6 +507,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedBgsUser.value,
         selectedContributionOption,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -501,9 +524,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         salesYearAndCustomDateFilter(
           customDateState[0].startDate,
           customDateState[0].endDate,
-          selectedSalesDF.value,
+          'custom',
           event.value,
-          selectedContributionOption,
+          selectedBgsUser.value,
         );
       } else {
         getSalesData(
@@ -518,6 +541,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedBgsUser.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
       }
     }
@@ -583,6 +609,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         value,
         selectedContributionOption,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -660,6 +689,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         'all',
         'contribution',
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -677,6 +709,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedBgsUser.value,
         type,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -690,6 +725,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedBgsUser.value,
         selectedContributionOption,
         value,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -715,6 +753,20 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     );
 
     setShowAdCustomDateModal(false);
+  };
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getContributionData(
+      selectedSalesDF.value,
+      selectedMarketplace.value,
+      selectedBgsUser.value,
+      selectedContributionOption,
+      selectedTabMetrics,
+      null,
+      null,
+      currentPage,
+    );
   };
 
   const filterOption = (props) => (
@@ -955,6 +1007,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           handleOnMetricsTabChange={handleOnMetricsTabChange}
           currencySymbol={currencySymbol}
           selectedSalesDF={selectedSalesDF}
+          handlePageChange={handlePageChange}
+          contributionCount={contributionCount}
+          pageNumber={pageNumber}
+          count={contributionCount}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"
