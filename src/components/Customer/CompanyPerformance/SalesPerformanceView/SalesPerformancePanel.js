@@ -10,7 +10,7 @@ import { arrayOf, bool, func, shape, string, number } from 'prop-types';
 import SalesPerformanceChart from './SalePerformanceChart';
 import { DropDown } from '../DropDown';
 import { ArrowUpIcon, ArrowDownIcon } from '../../../../theme/images';
-import { dateOptions, noGraphDataMessage } from '../../../../constants';
+import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
 import {
   WhiteCard,
   PageLoader,
@@ -192,10 +192,10 @@ export default function SalesPerformancePanel({
       <div className="col-md-6 col-sm1-12  mb-3">
         {DropDown(
           'days-performance',
-          dateOptions,
-          dateOptions[0].label,
+          dateOptionsWithYear,
+          dateOptionsWithYear[0].label,
           getSelectComponents,
-          dateOptions[0],
+          dateOptionsWithYear[0],
           handleDailyFact,
           isApiCall,
           null,
@@ -266,7 +266,7 @@ export default function SalesPerformancePanel({
                     id="daysCheck"
                     name="flexRadioDefault"
                     value={groupBy}
-                    checked={filters.daily}
+                    checked={filters.daily && groupBy === 'daily'}
                     onClick={() => handleGroupBy('daily')}
                     onChange={() => {}}
                   />
@@ -291,7 +291,7 @@ export default function SalesPerformancePanel({
                     className=" d-none"
                     type="radio"
                     value={groupBy}
-                    checked={filters.month}
+                    checked={filters.month && groupBy === 'monthly'}
                     id="monthlyCheck"
                     name="flexRadioDefault"
                     onChange={() => handleGroupBy('monthly')}

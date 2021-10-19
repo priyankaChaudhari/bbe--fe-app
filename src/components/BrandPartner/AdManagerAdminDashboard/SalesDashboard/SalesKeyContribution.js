@@ -257,10 +257,7 @@ const SalesKeyContribution = ({
       <tr
         className="cursor"
         onClick={() =>
-          history.push(
-            PATH_CUSTOMER_DETAILS.replace(':id', itemData.id),
-            'adManager',
-          )
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
         }>
         <td className="product-body">
           {' '}
@@ -368,7 +365,6 @@ const SalesKeyContribution = ({
         onClick={() =>
           history.push(
             PATH_CUSTOMER_DETAILS.replace(':id', itemData.customer_id),
-            'adManager',
           )
         }>
         <td className="product-body">

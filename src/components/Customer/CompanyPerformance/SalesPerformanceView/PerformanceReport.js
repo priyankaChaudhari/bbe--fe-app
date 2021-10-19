@@ -411,18 +411,18 @@ export default function PerformanceReport({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 60) {
+    if (diffDays <= 30) {
       temp = 'daily';
-      setFilters({ daily: true, weekly: false, month: false });
+      setFilters({ daily: true, weekly: true, month: false });
       setGroupBy('daily');
-    } else if (diffDays > 60 && diffDays <= 180) {
+    } else if (diffDays > 30 && diffDays <= 60) {
+      temp = 'daily';
+      setFilters({ daily: true, weekly: true, month: true });
+      setGroupBy('daily');
+    } else if (diffDays > 60) {
       temp = 'weekly';
-      setFilters({ daily: false, weekly: true, month: false });
+      setFilters({ daily: false, weekly: true, month: true });
       setGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setFilters({ daily: false, weekly: false, month: true });
-      setGroupBy('monthly');
     }
 
     if (flag === 'custom') {
@@ -449,7 +449,7 @@ export default function PerformanceReport({
         break;
 
       case 'month':
-        setFilters({ daily: true, weekly: false, month: false });
+        setFilters({ daily: true, weekly: true, month: false });
         setGroupBy('daily');
         getData(value, 'daily', selectedAmazonValue);
         break;
@@ -515,7 +515,9 @@ export default function PerformanceReport({
         new Date(),
         'year',
       );
-    } else if (value === 'custom') {
+    }
+
+    if (value === 'custom') {
       setShowCustomDateModal(true);
     } else {
       setGropuByFilter(value);
