@@ -410,7 +410,9 @@ const DSPKeyContributors = ({
             <tbody>{data.map((item) => renderTableData(item))}</tbody>
           ) : null}
         </Table>
-        {!data || (data && data.length === 0) ? (
+        {!data ||
+        (data && data.length === 0) ||
+        (data && typeof data.result === 'object') ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
       </>
