@@ -306,8 +306,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          }
-          if (res.data && res.data.results) {
+          } else if (res.data && res.data.results) {
             setContributionData(res.data.results);
             setContributionCount(res.data.count);
           } else {

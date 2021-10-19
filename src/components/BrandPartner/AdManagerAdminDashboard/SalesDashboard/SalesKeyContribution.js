@@ -281,7 +281,9 @@ const SalesKeyContribution = ({
             {itemData && itemData.company_name}
           </div>
           <div className="status">
-            {itemData && itemData.brand_growth_strategist.length === 0
+            {itemData &&
+            itemData.brand_growth_strategist &&
+            itemData.brand_growth_strategist.length === 0
               ? ''
               : `${
                   itemData &&
@@ -428,7 +430,8 @@ const SalesKeyContribution = ({
         (contributionData && contributionData.length === 0) ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
-        {contributionData.length >= 1 ? (
+        {selectedContributionOption === 'keyMetrics' &&
+        contributionData.length >= 1 ? (
           <CommonPagination
             count={count}
             pageNumber={pageNumber}
