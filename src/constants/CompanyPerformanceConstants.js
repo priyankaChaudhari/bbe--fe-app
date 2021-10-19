@@ -103,6 +103,10 @@ export const metricsCurrency = {
   dspProductSales: { type: 'currency' },
   dspRoas: { type: 'currency' },
   costPerClick: { type: 'currency' },
+  revenue: { type: 'currency' },
+  traffic: { type: 'nocurrency' },
+  conversion: { type: 'percentage' },
+  units_sold: { type: 'nocurrency' },
 };
 
 export const toogleMetricsData = [

@@ -106,7 +106,7 @@ const SalesKeyContribution = ({
               width="14px"
               alt="arrow-up"
             />
-            {value} %
+            {Number(value)} %
           </div>
         </>
       );
@@ -281,78 +281,83 @@ const SalesKeyContribution = ({
           </div>
           <div className="status">
             {`${
-              itemData && itemData.ad_manager && itemData.ad_manager.first_name
+              itemData &&
+              itemData.brand_growth_strategist &&
+              itemData.brand_growth_strategist.first_name
             }
             ${
-              itemData && itemData.ad_manager && itemData.ad_manager.last_name
+              itemData &&
+              itemData.brand_growth_strategist &&
+              itemData.brand_growth_strategist.last_name
             }`}
           </div>
         </td>
         <td className="product-body">
           {' '}
           {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.ad_sales
-            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_sales
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.revenue
+            ? `${currencySymbol}${itemData.sales_performance.current_sum.revenue
                 .toFixed(2)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
             : `${currencySymbol}0`}
           {renderAdPerformanceDifference(
             itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.ad_sales,
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.revenue,
           )}
         </td>
         <td className="product-body">
           {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.ad_spend
-            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_spend
-                .toFixed(2)
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.traffic
+            ? `${itemData.sales_performance.current_sum.traffic
+                .toFixed(0)
                 .toString()
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-            : `${currencySymbol}0`}
+            : `0`}
           {renderAdPerformanceDifference(
             itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.ad_spend,
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.traffic,
           )}
         </td>
         <td>
           {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.impressions
-            ? itemData.sponsored_ad_performance.current_sum.impressions
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            : 0}
-          {renderAdPerformanceDifference(
-            itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.impressions,
-          )}
-        </td>
-        <td>
-          {itemData &&
-          itemData.sponsored_ad_performance &&
-          itemData.sponsored_ad_performance.current_sum &&
-          itemData.sponsored_ad_performance.current_sum.acos
-            ? `${itemData.sponsored_ad_performance.current_sum.acos.toFixed(
-                2,
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.conversion
+            ? `${Number(
+                itemData.sales_performance.current_sum.conversion
+                  .toFixed(2)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
               )}%`
             : '0%'}
           {renderAdPerformanceDifference(
             itemData &&
-              itemData.sponsored_ad_performance &&
-              itemData.sponsored_ad_performance.difference_data &&
-              itemData.sponsored_ad_performance.difference_data.acos,
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.conversion,
+          )}
+        </td>
+        <td>
+          {itemData &&
+          itemData.sales_performance &&
+          itemData.sales_performance.current_sum &&
+          itemData.sales_performance.current_sum.units_sold
+            ? `${itemData.sales_performance.current_sum.units_sold.toFixed(0)}`
+            : '0'}
+          {renderAdPerformanceDifference(
+            itemData &&
+              itemData.sales_performance &&
+              itemData.sales_performance.difference_data &&
+              itemData.sales_performance.difference_data.units_sold,
           )}
         </td>
       </tr>

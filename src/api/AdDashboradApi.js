@@ -232,8 +232,6 @@ export async function getSalesKeyContributionData(
   endDate,
   userInfo,
 ) {
-  const metricName = metricsNameForAPI[selectedMetric];
-
   let selectedUser = '';
   if (userInfo && userInfo.role === 'BGS Manager') {
     selectedUser = user;
@@ -245,6 +243,7 @@ export async function getSalesKeyContributionData(
     daily_facts: dailyFacts,
     marketplace,
     user: selectedUser,
+    dashboard: 'sales_performance',
   };
 
   if (startDate && endDate) {
@@ -261,12 +260,13 @@ export async function getSalesKeyContributionData(
       no_page: '',
       sequence: 'desc',
       'order-by': 'company_name',
+      dashboard: 'sale_performance',
     };
   } else {
     params = {
       ...params,
       order_by: contributionType,
-      metric: metricName,
+      metric: selectedMetric,
     };
   }
 
