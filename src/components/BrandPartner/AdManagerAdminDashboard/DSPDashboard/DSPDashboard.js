@@ -318,10 +318,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-
-    if (diffDays <= 30) {
+    if (diffDays <= 7) {
       temp = 'daily';
       setDSPFilters({ daily: true, weekly: false, month: false });
+      setDSPGroupBy('daily');
+    } else if (diffDays <= 30) {
+      temp = 'daily';
+      setDSPFilters({ daily: true, weekly: true, month: false });
       setDSPGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
