@@ -106,7 +106,7 @@ export const metricsCurrency = {
   revenue: { type: 'currency' },
   traffic: { type: 'nocurrency' },
   conversion: { type: 'percentage' },
-  units_sold: { type: 'nocurrency' },
+  unitsSold: { type: 'nocurrency' },
 };
 
 export const toogleMetricsData = [
