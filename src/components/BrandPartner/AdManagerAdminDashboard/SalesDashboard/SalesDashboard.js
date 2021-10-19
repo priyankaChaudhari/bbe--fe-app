@@ -497,10 +497,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       setCurrency(event.currency);
       setCurrencySymbol(getSymbolFromCurrency(event.currency));
 
-      if (
-        selectedSalesDF.value === 'custom' ||
-        selectedSalesDF.value === 'year'
-      ) {
+      if (selectedSalesDF.value === 'custom') {
         salesYearAndCustomDateFilter(
           customDateState[0].startDate,
           customDateState[0].endDate,
@@ -508,6 +505,16 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           event.value,
           selectedContributionOption,
         );
+        if (selectedSalesDF.value === 'year') {
+          salesYearAndCustomDateFilter(
+            new Date(new Date().getFullYear(), 0, 1),
+            new Date(),
+            selectedSalesDF.value,
+            selectedMarketplace.value,
+            event.value,
+            selectedContributionOption,
+          );
+        }
       } else {
         getSalesData(
           selectedSalesDF.value,

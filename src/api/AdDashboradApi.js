@@ -270,6 +270,13 @@ export async function getSalesKeyContributionData(
     };
   }
 
+  // if (user === 'all') {
+  //   delete params.user;
+  // }
+  // if (marketplace === 'all') {
+  //   delete params.marketplace;
+  // }
+
   let result = {};
   if (contributionType === 'keyMetrics') {
     result = await axiosInstance
