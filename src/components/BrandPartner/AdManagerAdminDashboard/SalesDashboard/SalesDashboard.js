@@ -505,16 +505,6 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           event.value,
           selectedContributionOption,
         );
-        if (selectedSalesDF.value === 'year') {
-          salesYearAndCustomDateFilter(
-            new Date(new Date().getFullYear(), 0, 1),
-            new Date(),
-            selectedSalesDF.value,
-            selectedMarketplace.value,
-            event.value,
-            selectedContributionOption,
-          );
-        }
       } else {
         getSalesData(
           selectedSalesDF.value,

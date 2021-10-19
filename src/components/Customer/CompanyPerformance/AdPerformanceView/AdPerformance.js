@@ -13,7 +13,7 @@ import AdPerformanceFilters from './AdPerformanceFilters';
 import { DspAdPacing } from '../../../BrandPartner';
 import { CloseIcon } from '../../../../theme/images';
 import { CustomDateModal, DropDownIndicator } from '../../../../common';
-import { dateOptions, noGraphDataMessage } from '../../../../constants';
+import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
 import {
   getAdPerformance,
   getDSPPerformance,
@@ -916,6 +916,15 @@ export default function AdPerformance({
         },
       ]);
     }
+    if (value === 'year') {
+      ADYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+        selectedMarketplace,
+        selectedAdType.value,
+      );
+    }
     if (value === 'custom') {
       setShowAdCustomDateModal(true);
     } else {
@@ -996,7 +1005,7 @@ export default function AdPerformance({
         marketplaceDefaultValue={marketplaceDefaultValue}
         marketplaceOptions={marketplaceOptions}
         handleMarketplaceOptions={handleMarketplaceOptions}
-        dateOptions={dateOptions}
+        dateOptions={dateOptionsWithYear}
         getSelectComponents={getSelectComponents}
         DropDownIndicator={DropDownIndicator}
         selectedAdDF={selectedAdDF}
