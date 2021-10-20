@@ -24,6 +24,7 @@ const DSPFilter = ({
   selectedAdManager,
   selectedMarketplace,
   isAdManagerAdmin,
+  isBGSManager,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
@@ -33,7 +34,9 @@ const DSPFilter = ({
       <>
         {isAdManagerAdmin ? (
           <div className="col-lg-12 col-md-6">
-            <div className="label mt-3">Ad Manager</div>
+            <div className="label mt-3">
+              {isBGSManager ? 'BGS' : 'Ad Manager'}
+            </div>
             {DropDown(
               'cursor',
               adManagerList,
@@ -140,6 +143,7 @@ DSPFilter.defaultProps = {
   selectedAdManager: {},
   selectedMarketplace: {},
   isAdManagerAdmin: {},
+  isBGSManager: false,
 };
 
 DSPFilter.propTypes = {
@@ -158,4 +162,5 @@ DSPFilter.propTypes = {
   selectedAdManager: arrayOf(Array),
   selectedMarketplace: arrayOf(Array),
   isAdManagerAdmin: string,
+  isBGSManager: bool,
 };

@@ -40,6 +40,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const isAdManagerAdmin =
     (userInfo && userInfo.role === 'Ad Manager Admin') ||
     userInfo.role === 'BGS Manager';
+
+  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -57,7 +59,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     isAdManagerAdmin
       ? {
           value: 'all',
-          label: 'All Ad Manager',
+          label: isBGSManager ? 'All BGS' : 'All Ad Manager',
         }
       : { value: userInfo.id, label: '' },
   );
@@ -112,24 +114,29 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     dspDifference,
   } = useBindDSPResponseData(tempDspChartData);
 
-  const keyContributionValue = useCallback((adManager, keyContribution) => {
-    if (adManager === 'all') {
-      if (keyContribution) {
-        return 'positive';
-      }
+  const keyContributionValue = useCallback(
+    (adManager, keyContribution) => {
+      if (adManager === 'all' && !isBGSManager) {
+        if (keyContribution) {
+          return 'positive';
+        }
 
-      return 'negative';
-    }
-    if (keyContribution) {
-      return 'contribution';
-    }
-    return 'keyMetrics';
-  }, []);
+        return 'negative';
+      }
+      if (keyContribution) {
+        return 'contribution';
+      }
+      return 'keyMetrics';
+    },
+    [isBGSManager],
+  );
 
   const getAdManagersList = useCallback(() => {
-    getManagersList('DSP Ad Manager').then((adm) => {
+    getManagersList(isBGSManager ? 'BGS' : 'DSP Ad Manager').then((adm) => {
       if (adm && adm.data && adm.data.length) {
-        const list = [{ value: 'all', label: 'All Ad Managers' }];
+        const list = [
+          { value: 'all', label: isBGSManager ? 'All BGS' : 'All Ad Managers' },
+        ];
         for (const brand of adm.data) {
           list.push({
             value: brand.id,
@@ -144,7 +151,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         }
       }
     });
-  }, []);
+  }, [isBGSManager]);
 
   const getDays = (startDate, endDate) => {
     const diffTime = Math.abs(startDate - endDate);
@@ -530,10 +537,17 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     });
 
     if (isAdManagerAdmin) {
-      setSelectedAdManager({
-        value: 'all',
-        label: 'All Ad Manager',
-      });
+      if (isBGSManager) {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All BGS',
+        });
+      } else {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All Ad Manager',
+        });
+      }
     } else {
       setSelectedAdManager({
         value: userInfo.id,
@@ -772,6 +786,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedAdManager={selectedAdManager}
           selectedMarketplace={selectedMarketplace}
           isAdManagerAdmin={isAdManagerAdmin}
+          isBGSManager={isBGSManager}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -919,6 +934,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           currencySymbol={currencySymbol}
           isDesktop={isDesktop}
           selectedAdDF={selectedAdDF}
+          isBGSManager={isBGSManager}
         />
         <DSPPacing
           currencySymbol={currencySymbol}

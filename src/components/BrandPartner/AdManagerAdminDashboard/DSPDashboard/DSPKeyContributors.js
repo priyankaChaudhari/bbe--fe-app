@@ -43,6 +43,7 @@ const DSPKeyContributors = ({
   loader,
   currencySymbol,
   selectedAdDF,
+  isBGSManager,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
@@ -54,7 +55,7 @@ const DSPKeyContributors = ({
   });
 
   useEffect(() => {
-    if (selectedAdManager !== 'all') {
+    if (selectedAdManager !== 'all' || isBGSManager) {
       setKeyContribution({
         id: 'contribution',
         label: 'Contribution',
@@ -69,7 +70,7 @@ const DSPKeyContributors = ({
         label2: 'Negative',
       });
     }
-  }, [loader, selectedAdManager, selectedKeyContribution]);
+  }, [isBGSManager, loader, selectedAdManager, selectedKeyContribution]);
 
   const returnMetricsValue = (value) => {
     let decimalDigits = 2;
@@ -622,6 +623,7 @@ DSPKeyContributors.defaultProps = {
   data: null,
   currencySymbol: '',
   selectedAdDF: {},
+  isBGSManager: false,
 };
 
 DSPKeyContributors.propTypes = {
@@ -635,6 +637,7 @@ DSPKeyContributors.propTypes = {
   loader: bool.isRequired,
   currencySymbol: string,
   selectedAdDF: objectOf(Object),
+  isBGSManager: bool,
 };
 
 const Wrapper = styled.div`
