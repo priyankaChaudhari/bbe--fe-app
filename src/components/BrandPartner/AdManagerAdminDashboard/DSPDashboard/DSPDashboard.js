@@ -20,6 +20,7 @@ import {
   DropDownIndicator,
   PageLoader,
   WhiteCard,
+  ToggleButton,
 } from '../../../../common';
 import {
   getAdManagerAdminGraphData,
@@ -36,7 +37,11 @@ currentDate.setDate(currentDate.getDate() - 2);
 const month = dayjs(currentDate).format('MMMM');
 
 const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
-  const isAdManagerAdmin = userInfo && userInfo.role === 'Ad Manager Admin';
+  const isAdManagerAdmin =
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager';
+
+  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -54,7 +59,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     isAdManagerAdmin
       ? {
           value: 'all',
-          label: 'All Ad Manager',
+          label: isBGSManager ? 'All BGS' : 'All Ad Manager',
         }
       : { value: userInfo.id, label: '' },
   );
@@ -102,6 +107,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     'dspImpressions',
   );
 
+  const [pageNumber, setPageNumber] = useState();
+  const [contributionCount, setContributionCount] = useState(null);
+
   const {
     dspChartData,
     dspCurrentTotal,
@@ -109,24 +117,29 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     dspDifference,
   } = useBindDSPResponseData(tempDspChartData);
 
-  const keyContributionValue = useCallback((adManager, keyContribution) => {
-    if (adManager === 'all') {
-      if (keyContribution) {
-        return 'positive';
-      }
+  const keyContributionValue = useCallback(
+    (adManager, keyContribution) => {
+      if (adManager === 'all' && !isBGSManager) {
+        if (keyContribution) {
+          return 'positive';
+        }
 
-      return 'negative';
-    }
-    if (keyContribution) {
-      return 'contribution';
-    }
-    return 'keyMetrics';
-  }, []);
+        return 'negative';
+      }
+      if (keyContribution) {
+        return 'contribution';
+      }
+      return 'keyMetrics';
+    },
+    [isBGSManager],
+  );
 
   const getAdManagersList = useCallback(() => {
-    getManagersList('DSP Ad Manager').then((adm) => {
+    getManagersList(isBGSManager ? 'BGS' : 'DSP Ad Manager').then((adm) => {
       if (adm && adm.data && adm.data.length) {
-        const list = [{ value: 'all', label: 'All Ad Managers' }];
+        const list = [
+          { value: 'all', label: isBGSManager ? 'All BGS' : 'All Ad Managers' },
+        ];
         for (const brand of adm.data) {
           list.push({
             value: brand.id,
@@ -141,7 +154,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         }
       }
     });
-  }, []);
+  }, [isBGSManager]);
 
   const getDays = (startDate, endDate) => {
     const diffTime = Math.abs(startDate - endDate);
@@ -195,6 +208,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       selectedMatrics,
       startDate = null,
       endDate = null,
+      page,
     ) => {
       setKeyContributionLoader(true);
       getKeyContributionData(
@@ -208,6 +222,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         startDate,
         endDate,
         userInfo,
+        page,
       ).then((res) => {
         if (res && res.status === 500) {
           setKeyContributionLoader(false);
@@ -220,10 +235,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data) {
-            setContributionData(res.data);
+          } else if (res.data && res.data.results) {
+            console.log('sdfjshdf', res.data.count);
+            setContributionData(res.data.results);
+            setContributionCount(res.data.count);
           } else {
-            setContributionData(null);
+            setContributionData([]);
+            setPageNumber(page);
           }
           setKeyContributionLoader(false);
         }
@@ -278,6 +296,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
       getDSPPacingData(
         selectedMarketplace.value,
@@ -304,6 +325,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     selectedKeyContribution,
     getDSPPacingData,
     selectedSpendingOption,
+    pageNumber,
   ]);
 
   const DSPYearAndCustomDateFilter = (
@@ -317,14 +339,17 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-
-    if (diffDays <= 30) {
+    if (diffDays <= 7) {
       temp = 'daily';
       setDSPFilters({ daily: true, weekly: false, month: false });
       setDSPGroupBy('daily');
+    } else if (diffDays <= 30) {
+      temp = 'daily';
+      setDSPFilters({ daily: true, weekly: true, month: true });
+      setDSPGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setDSPFilters({ daily: true, weekly: true, month: false });
+      setDSPFilters({ daily: true, weekly: true, month: true });
       setDSPGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';
@@ -353,6 +378,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedTabMatrics,
           sd,
           ed,
+          pageNumber,
         );
       }
     }
@@ -383,6 +409,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
       getDSPPacingData(
         event.value,
@@ -417,6 +446,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         value,
         keyContributionValue(value, true),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
       getDSPPacingData(
         selectedMarketplace.value,
@@ -446,11 +478,14 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             selectedKeyContribution,
           ),
           selectedTabMatrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
       case 'month':
-        setDSPFilters({ daily: true, weekly: false, month: false });
+        setDSPFilters({ daily: true, weekly: true, month: false });
         setDSPGroupBy('daily');
         getDSPData(
           value,
@@ -467,11 +502,14 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             selectedKeyContribution,
           ),
           selectedTabMatrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
       case '30days':
-        setDSPFilters({ daily: true, weekly: false, month: false });
+        setDSPFilters({ daily: true, weekly: true, month: false });
         setDSPGroupBy('daily');
         getDSPData(
           value,
@@ -488,6 +526,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             selectedKeyContribution,
           ),
           selectedTabMatrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -523,11 +564,21 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       currency: 'USD',
     });
 
+    setCurrency('USD');
+    setCurrencySymbol(getSymbolFromCurrency('USD'));
+
     if (isAdManagerAdmin) {
-      setSelectedAdManager({
-        value: 'all',
-        label: 'All Ad Manager',
-      });
+      if (isBGSManager) {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All BGS',
+        });
+      } else {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All Ad Manager',
+        });
+      }
     } else {
       setSelectedAdManager({
         value: userInfo.id,
@@ -535,7 +586,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       });
     }
 
-    setSelectedKeyContribution(!isAdManagerAdmin);
+    setSelectedKeyContribution(isAdManagerAdmin);
 
     if (selectedAdDF.value === 'custom') {
       DSPYearAndCustomDateFilter(
@@ -553,6 +604,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         'all',
         keyContributionValue(isAdManagerAdmin ? 'all' : '', true),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -698,6 +752,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, value),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -711,8 +768,25 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         value,
+        null,
+        null,
+        pageNumber,
       );
     }
+  };
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getContributionData(
+      selectedAdDF.value,
+      selectedMarketplace.value,
+      selectedAdManager.value,
+      keyContributionValue(selectedAdManager.value, selectedKeyContribution),
+      selectedTabMatrics,
+      null,
+      null,
+      currentPage,
+    );
   };
 
   const handleSpendingOptions = (type) => {
@@ -766,6 +840,11 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedAdManager={selectedAdManager}
           selectedMarketplace={selectedMarketplace}
           isAdManagerAdmin={isAdManagerAdmin}
+          isBGSManager={isBGSManager}
+          handlePageChange={handlePageChange}
+          contributionCount={contributionCount}
+          pageNumber={pageNumber}
+          count={contributionCount}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -822,59 +901,61 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
               </ul>
             </div>
             <div className="col-md-6 col-sm-12 order-md-2 order-1">
-              <div className="days-container ">
-                <ul className="days-tab">
-                  <li
-                    className={
-                      dspFilters.daily === false ? 'disabled-tab' : ''
-                    }>
-                    {' '}
-                    <input
-                      className="d-none"
-                      type="radio"
-                      id="daysCheck"
-                      name="flexRadioDefault1"
-                      value={dspGroupBy}
-                      checked={dspFilters.daily}
-                      onClick={() => handleDSPGroupBy('daily')}
-                      onChange={() => {}}
-                    />
-                    <label htmlFor="daysCheck">Daily</label>
-                  </li>
+              <ToggleButton>
+                <div className="days-container ">
+                  <ul className="days-tab">
+                    <li
+                      className={
+                        dspFilters.daily === false ? 'disabled-tab' : ''
+                      }>
+                      {' '}
+                      <input
+                        className="d-none"
+                        type="radio"
+                        id="daysCheck"
+                        name="flexRadioDefault1"
+                        value={dspGroupBy}
+                        checked={dspFilters.daily && dspGroupBy === 'daily'}
+                        onClick={() => handleDSPGroupBy('daily')}
+                        onChange={() => {}}
+                      />
+                      <label htmlFor="daysCheck">Daily</label>
+                    </li>
 
-                  <li
-                    className={
-                      dspFilters.weekly === false ? 'disabled-tab' : ''
-                    }>
-                    <input
-                      className="d-none"
-                      type="radio"
-                      id="weeklyCheck"
-                      name="flexRadioDefault1"
-                      value={dspGroupBy}
-                      checked={dspFilters.weekly && dspGroupBy === 'weekly'}
-                      onChange={() => handleDSPGroupBy('weekly')}
-                    />
-                    <label htmlFor="weeklyCheck">Weekly</label>
-                  </li>
+                    <li
+                      className={
+                        dspFilters.weekly === false ? 'disabled-tab' : ''
+                      }>
+                      <input
+                        className="d-none"
+                        type="radio"
+                        id="weeklyCheck"
+                        name="flexRadioDefault1"
+                        value={dspGroupBy}
+                        checked={dspFilters.weekly && dspGroupBy === 'weekly'}
+                        onChange={() => handleDSPGroupBy('weekly')}
+                      />
+                      <label htmlFor="weeklyCheck">Weekly</label>
+                    </li>
 
-                  <li
-                    className={
-                      dspFilters.month === false ? 'disabled-tab' : ''
-                    }>
-                    <input
-                      className=" d-none"
-                      type="radio"
-                      id="monthlyCheck"
-                      name="flexRadioDefault1"
-                      value={dspGroupBy}
-                      checked={dspFilters.month && dspGroupBy === 'monthly'}
-                      onChange={() => handleDSPGroupBy('monthly')}
-                    />
-                    <label htmlFor="monthlyCheck">Monthly</label>
-                  </li>
-                </ul>
-              </div>
+                    <li
+                      className={
+                        dspFilters.month === false ? 'disabled-tab' : ''
+                      }>
+                      <input
+                        className=" d-none"
+                        type="radio"
+                        id="monthlyCheck"
+                        name="flexRadioDefault1"
+                        value={dspGroupBy}
+                        checked={dspFilters.month && dspGroupBy === 'monthly'}
+                        onChange={() => handleDSPGroupBy('monthly')}
+                      />
+                      <label htmlFor="monthlyCheck">Monthly</label>
+                    </li>
+                  </ul>
+                </div>
+              </ToggleButton>
             </div>
           </div>
           {dspGraphLoader ? (
@@ -911,6 +992,11 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           currencySymbol={currencySymbol}
           isDesktop={isDesktop}
           selectedAdDF={selectedAdDF}
+          isBGSManager={isBGSManager}
+          handlePageChange={handlePageChange}
+          contributionCount={contributionCount}
+          pageNumber={pageNumber}
+          count={contributionCount}
         />
         <DSPPacing
           currencySymbol={currencySymbol}

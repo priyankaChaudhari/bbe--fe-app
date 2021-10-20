@@ -5,18 +5,32 @@ import PropTypes, { string } from 'prop-types';
 
 import DSPDashboard from './DSPDashboard/DSPDashboard';
 import SponsoredDashboard from './SponsoredDashboard/SponsoredDashboard';
+import SalesDashboard from './SalesDashboard/SalesDashboard';
 import { Tabs } from '../../../common';
 import { DashboardCard } from '../../../theme/Global';
 import { getMarketPlaceList } from '../../../api';
 
 export default function AdManagerAdminContainer({ userInfo }) {
-  const setTab =
-    userInfo &&
-    (userInfo.role === 'Ad Manager Admin' ||
-      userInfo.role === 'Sponsored Advertising Ad Manager' ||
-      userInfo.role === 'Hybrid Ad Manager')
-      ? 'sponsored'
-      : 'dsp';
+  const setTab = () => {
+    let flag = '';
+    if (
+      userInfo &&
+      (userInfo.role === 'Ad Manager Admin' ||
+        userInfo.role === 'Sponsored Advertising Ad Manager' ||
+        userInfo.role === 'Hybrid Ad Manager')
+    ) {
+      flag = 'sponsored';
+    } else if (userInfo && userInfo.role === 'DSP Ad Manager') {
+      flag = 'dsp';
+    } else if (
+      userInfo &&
+      (userInfo.role === 'BGS' || userInfo.role === 'BGS Manager')
+    ) {
+      flag = 'sales';
+    }
+    return flag;
+  };
+
   const [viewComponent, setViewComponent] = useState(setTab);
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const getMarketPlace = useCallback(() => {
@@ -41,13 +55,71 @@ export default function AdManagerAdminContainer({ userInfo }) {
   useEffect(() => {
     getMarketPlace();
   }, [getMarketPlace]);
+
+  const renderComponent = () => {
+    switch (viewComponent) {
+      case 'sales':
+        return (
+          <>
+            <SalesDashboard
+              marketplaceChoices={marketplaceChoices}
+              userInfo={userInfo}
+            />
+          </>
+        );
+
+      case 'sponsored':
+        return (
+          <SponsoredDashboard
+            marketplaceChoices={marketplaceChoices}
+            userInfo={userInfo}
+          />
+        );
+
+      case 'dsp':
+        return (
+          <DSPDashboard
+            marketplaceChoices={marketplaceChoices}
+            userInfo={userInfo}
+          />
+        );
+
+      default:
+        return '';
+    }
+  };
   return (
     <DashboardCard className="ad-manager-dashboard">
       <div className="dashboard-container-body">
         {' '}
         <Tabs>
           <ul className="tabs">
-            {userInfo.role !== 'DSP Ad Manager' ? (
+            {userInfo.role === 'BGS' || userInfo.role === 'BGS Manager' ? (
+              <>
+                <li
+                  className={viewComponent === 'sales' ? 'active' : ''}
+                  onClick={() => setViewComponent('sales')}
+                  role="presentation">
+                  Sales
+                </li>
+                <li
+                  className={viewComponent === 'sponsored' ? 'active' : ''}
+                  onClick={() => setViewComponent('sponsored')}
+                  role="presentation">
+                  Sponsored Advertising
+                </li>
+                <li
+                  className={viewComponent === 'dsp' ? 'active' : ''}
+                  onClick={() => setViewComponent('dsp')}
+                  role="presentation">
+                  DSP Advertising
+                </li>
+              </>
+            ) : null}
+
+            {userInfo.role === 'Sponsored Advertising Ad Manager' ||
+            userInfo.role === 'Ad Manager Admin' ||
+            userInfo.role === 'Hybrid Ad Manager' ? (
               <li
                 className={viewComponent === 'sponsored' ? 'active' : ''}
                 onClick={() => setViewComponent('sponsored')}
@@ -55,7 +127,9 @@ export default function AdManagerAdminContainer({ userInfo }) {
                 Sponsored Advertising
               </li>
             ) : null}
-            {userInfo.role !== 'Sponsored Advertising Ad Manager' ? (
+            {userInfo.role === 'DSP Ad Manager' ||
+            userInfo.role === 'Ad Manager Admin' ||
+            userInfo.role === 'Hybrid Ad Manager' ? (
               <li
                 className={viewComponent === 'dsp' ? 'active' : ''}
                 onClick={() => setViewComponent('dsp')}
@@ -65,17 +139,7 @@ export default function AdManagerAdminContainer({ userInfo }) {
             ) : null}
           </ul>
         </Tabs>
-        {viewComponent === 'sponsored' ? (
-          <SponsoredDashboard
-            marketplaceChoices={marketplaceChoices}
-            userInfo={userInfo}
-          />
-        ) : (
-          <DSPDashboard
-            marketplaceChoices={marketplaceChoices}
-            userInfo={userInfo}
-          />
-        )}
+        {renderComponent(viewComponent)}
       </div>
     </DashboardCard>
   );

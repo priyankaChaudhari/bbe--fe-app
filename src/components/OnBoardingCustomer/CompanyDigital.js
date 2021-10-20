@@ -21,7 +21,7 @@ import {
 } from '../../constants';
 import {
   OnBoardingBody,
-  ContractFormField,
+  InputFormField,
   Button,
   PageLoader,
   ErrorMsg,
@@ -210,7 +210,7 @@ export default function CompanyDigital({
   const generateHTML = () => {
     return (
       <OnBoardingBody className="body-white">
-        <ContractFormField className="mt-3">
+        <InputFormField className="mt-3">
           <label htmlFor="website">
             Website
             <input
@@ -226,7 +226,7 @@ export default function CompanyDigital({
           <ErrorMsg>
             {apiError && apiError.website && apiError.website[0]}
           </ErrorMsg>
-        </ContractFormField>
+        </InputFormField>
         <div className="label-title mb-1 mt-4">Social</div>
 
         <div className="row">
@@ -245,7 +245,7 @@ export default function CompanyDigital({
 
               <div className="col-8 ">
                 {' '}
-                <ContractFormField>
+                <InputFormField>
                   <input
                     className="form-control extra-space"
                     type="text"
@@ -269,7 +269,7 @@ export default function CompanyDigital({
                   <ErrorMsg>
                     {apiError && apiError[item.key] && apiError[item.key][0]}
                   </ErrorMsg>
-                </ContractFormField>
+                </InputFormField>
               </div>
             </React.Fragment>
           ))}

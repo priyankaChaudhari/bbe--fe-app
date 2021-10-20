@@ -1,13 +1,15 @@
 import React from 'react';
+
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import { ArrowRightBlackIcon } from '../../../../theme/images/index';
-import { PageLoader, WhiteCard } from '../../../../common';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import DSPMetrics from '../../../BrandPartner/AdManagerAdminDashboard/DSPDashboard/DSPMetrics';
+import { ArrowRightBlackIcon } from '../../../../theme/images';
+import { PageLoader, WhiteCard,ToggleButton } from '../../../../common';
+
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const _ = require('lodash');
 
@@ -33,7 +35,7 @@ export default function DSPPerformance({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === 1
+      dspData.dsp_pacing.dsp_pacing_flag === '1'
     ) {
       return (
         <span>
@@ -50,7 +52,7 @@ export default function DSPPerformance({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === 0
+      dspData.dsp_pacing.dsp_pacing_flag === '0'
     ) {
       return (
         <span className="green">
@@ -67,7 +69,7 @@ export default function DSPPerformance({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === -1
+      dspData.dsp_pacing.dsp_pacing_flag === '-1'
     ) {
       return (
         <span>
@@ -144,54 +146,64 @@ export default function DSPPerformance({
           )}
 
           <div className="col-md-6 col-sm-12 order-md-2 order-1">
-            {' '}
-            <div className="days-container ">
-              <ul className="days-tab">
-                <li
-                  className={dspFilters.daily === false ? 'disabled-tab' : ''}>
-                  {' '}
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id="daysCheck"
-                    name="flexRadioDefault1"
-                    value={dspGroupBy}
-                    checked={dspFilters.daily}
-                    onClick={() => handleDSPGroupBy('daily')}
-                    onChange={() => {}}
-                  />
-                  <label htmlFor="daysCheck">Daily</label>
-                </li>
+            <ToggleButton>
+              <div className="days-container ">
+                <ul className="days-tab">
+                  <li
+                    id="BT-dspperformance-days"
+                    className={
+                      dspFilters.daily === false ? 'disabled-tab' : ''
+                    }>
+                    {' '}
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="dspDaysCheck"
+                      name="flexRadioDefault1"
+                      value={dspGroupBy}
+                      checked={dspFilters.daily && dspGroupBy === 'daily'}
+                      onClick={() => handleDSPGroupBy('daily')}
+                      onChange={() => {}}
+                    />
+                    <label htmlFor="dspDaysCheck">Daily</label>
+                  </li>
 
-                <li
-                  className={dspFilters.weekly === false ? 'disabled-tab' : ''}>
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id="weeklyCheck"
-                    name="flexRadioDefault1"
-                    value={dspGroupBy}
-                    checked={dspFilters.weekly && dspGroupBy === 'weekly'}
-                    onChange={() => handleDSPGroupBy('weekly')}
-                  />
-                  <label htmlFor="weeklyCheck">Weekly</label>
-                </li>
+                  <li
+                    id="BT-dspperformance-weekly"
+                    className={
+                      dspFilters.weekly === false ? 'disabled-tab' : ''
+                    }>
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="dspWeeklyCheck"
+                      name="flexRadioDefault1"
+                      value={dspGroupBy}
+                      checked={dspFilters.weekly && dspGroupBy === 'weekly'}
+                      onChange={() => handleDSPGroupBy('weekly')}
+                    />
+                    <label htmlFor="dspWeeklyCheck">Weekly</label>
+                  </li>
 
-                <li
-                  className={dspFilters.month === false ? 'disabled-tab' : ''}>
-                  <input
-                    className=" d-none"
-                    type="radio"
-                    id="monthlyCheck"
-                    name="flexRadioDefault1"
-                    value={dspGroupBy}
-                    checked={dspFilters.month}
-                    onChange={() => handleDSPGroupBy('monthly')}
-                  />
-                  <label htmlFor="monthlyCheck">Monthly</label>
-                </li>
-              </ul>
-            </div>
+                  <li
+                    id="BT-dspperformance-monthly"
+                    className={
+                      dspFilters.month === false ? 'disabled-tab' : ''
+                    }>
+                    <input
+                      className=" d-none"
+                      type="radio"
+                      id="dspMonthlyCheck"
+                      name="flexRadioDefault1"
+                      value={dspGroupBy}
+                      checked={dspFilters.month && dspGroupBy === 'monthly'}
+                      onChange={() => handleDSPGroupBy('monthly')}
+                    />
+                    <label htmlFor="dspMonthlyCheck">Monthly</label>
+                  </li>
+                </ul>
+              </div>
+            </ToggleButton>
           </div>
         </div>
       </>

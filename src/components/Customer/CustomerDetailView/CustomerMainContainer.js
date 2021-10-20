@@ -215,7 +215,7 @@ export default function CustomerMainContainer() {
     ];
   }
 
-  if (customer && customer.status !== null) {
+  if (customer && (customer.status !== null || customer.status !== 'pending')) {
     viewOptions = [
       { value: 'performance', label: 'Performance' },
       { value: 'agreement', label: 'Agreements' },
@@ -262,7 +262,7 @@ export default function CustomerMainContainer() {
             <>
               <CustomerDetailsBody role={userInfo && userInfo.role}>
                 <div className="row">
-                  <div className="col-6 mt-4 pt-1">
+                  <div className="col-6  mt-4 pt-1">
                     {' '}
                     {userInfo && userInfo.role !== 'Customer' ? (
                       <Link to={PATH_CUSTOMER_LIST}>
@@ -433,6 +433,7 @@ export default function CustomerMainContainer() {
                 customStyles={customStyles}
                 setStatusModal={setStatusModal}
                 customer={customer}
+                getActivityLogInfo={getActivityLogInfo}
               />
 
               <NotesModal

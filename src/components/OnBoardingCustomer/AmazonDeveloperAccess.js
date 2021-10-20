@@ -8,7 +8,7 @@ import copy from 'copy-to-clipboard';
 
 import {
   OnBoardingBody,
-  ContractFormField,
+  InputFormField,
   Button,
   PageLoader,
 } from '../../common';
@@ -183,7 +183,7 @@ export default function AmazonDeveloperAccess({
           Copy and paste the ‘MWS Auth Token’ value shown on the resultant
           screen below.
         </p>
-        <ContractFormField>
+        <InputFormField>
           <label htmlFor="token">
             MWS Auth Token
             <input
@@ -195,7 +195,7 @@ export default function AmazonDeveloperAccess({
               defaultValue={data && data.mws_auth_token}
             />
           </label>
-        </ContractFormField>
+        </InputFormField>
         <Button
           className="btn-primary w-100 mt-4"
           onClick={() => saveDetails()}

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
-const ContractFormField = styled.div`
+const InputFormField = styled.div`
   position:relative;
    .edit-field {
       position: absolute;
@@ -121,4 +121,4 @@ const ContractFormField = styled.div`
   }
   
 `;
-export default ContractFormField;
+export default InputFormField;

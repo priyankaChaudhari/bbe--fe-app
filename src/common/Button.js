@@ -219,12 +219,6 @@ const Button = styled.button`
     width: 110px;
   }
 
-  // @media only screen and (min-width: 1700px) and (max-width: 1920px) {
-  //   font-size: ${Theme.normalRes};
-  //   &.btn-add-contact {
-  //     font-size: ${Theme.smallRes};
-  //   }
-  // }
   @media only screen and (max-width: 1200px) {
     &.upload-asset {
       width: 152px;

@@ -1,5 +1,5 @@
 import axiosInstance from '../axios';
-import { API_DSP_INVOICES } from '../constants/ApiConstants';
+import { API_DSP_INVOICES } from '../constants';
 
 export async function getDSPInvoiceData(invoiceType, id) {
   const params = {

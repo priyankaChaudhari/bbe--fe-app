@@ -3,13 +3,21 @@ import React, { useEffect, useState } from 'react';
 
 import _ from 'lodash';
 import styled from 'styled-components';
-import { arrayOf, bool, func, objectOf, string } from 'prop-types';
+import { arrayOf, bool, func, number, objectOf, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 
 import Theme from '../../../../theme/Theme';
 import { TabletViewManager } from '../../../../theme/Global';
-import { PageLoader, Status, Table, Tabs, WhiteCard } from '../../../../common';
+import {
+  PageLoader,
+  Status,
+  Table,
+  Tabs,
+  WhiteCard,
+  ToggleButton,
+  CommonPagination,
+} from '../../../../common';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
@@ -36,6 +44,10 @@ const DSPKeyContributors = ({
   loader,
   currencySymbol,
   selectedAdDF,
+  isBGSManager,
+  handlePageChange,
+  pageNumber,
+  count,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
@@ -47,7 +59,17 @@ const DSPKeyContributors = ({
   });
 
   useEffect(() => {
-    if (selectedAdManager !== 'all') {
+    console.log('sdfsgdfs', isBGSManager, selectedAdManager !== 'all', data);
+    console.log(
+      selectedKeyContribution === false &&
+        (selectedAdManager !== 'all' || isBGSManager) &&
+        data &&
+        data.length >= 1,
+    );
+  }, [data, isBGSManager, selectedAdManager, selectedKeyContribution]);
+
+  useEffect(() => {
+    if (selectedAdManager !== 'all' || isBGSManager) {
       setKeyContribution({
         id: 'contribution',
         label: 'Contribution',
@@ -62,7 +84,7 @@ const DSPKeyContributors = ({
         label2: 'Negative',
       });
     }
-  }, [loader, selectedAdManager, selectedKeyContribution]);
+  }, [isBGSManager, loader, selectedAdManager, selectedKeyContribution]);
 
   const returnMetricsValue = (value) => {
     let decimalDigits = 2;
@@ -154,14 +176,14 @@ const DSPKeyContributors = ({
     let selectedClass = '';
     const value = itemData.change;
     if (selectedTabMatrics === 'dspSpend') {
-      if (value.toString().includes('-')) {
+      if (value && value.toString().includes('-')) {
         selectedClass = 'decrease-rate large grey';
         selectedArrow = UpDowGrayArrow;
       } else {
         selectedClass = 'increase-rate large grey';
         selectedArrow = UpDowGrayArrow;
       }
-    } else if (value.toString().includes('-')) {
+    } else if (value && value.toString().includes('-')) {
       selectedClass = 'decrease-rate large';
       selectedArrow = ArrowDownIcon;
     } else {
@@ -169,7 +191,9 @@ const DSPKeyContributors = ({
       selectedArrow = ArrowUpIcon;
     }
 
-    return itemData && itemData.change.toString().includes('-') ? (
+    return itemData &&
+      itemData.change &&
+      itemData.change.toString().includes('-') ? (
       <div className={selectedClass}>
         {' '}
         <img className="red-arrow" src={selectedArrow} alt="arrow" />
@@ -189,7 +213,8 @@ const DSPKeyContributors = ({
   };
 
   const renderTableHeader = () => {
-    return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
+    return selectedKeyContribution === false &&
+      (selectedAdManager !== 'all' || isBGSManager) ? (
       <tr>
         <th width="38%" className="product-header">
           CUSTOMER
@@ -233,7 +258,8 @@ const DSPKeyContributors = ({
   };
 
   const renderTableData = (itemData) => {
-    return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
+    return selectedKeyContribution === false &&
+      (selectedAdManager !== 'all' || isBGSManager) ? (
       <tr
         key={itemData.id}
         className="cursor"
@@ -261,9 +287,13 @@ const DSPKeyContributors = ({
             {itemData && itemData.company_name}
           </div>
           <div className="status">
-            {`${
-              itemData && itemData.ad_manager && itemData.ad_manager.first_name
-            }
+            {itemData && itemData.ad_manager && itemData.ad_manager.length === 0
+              ? ''
+              : `${
+                  itemData &&
+                  itemData.ad_manager &&
+                  itemData.ad_manager.first_name
+                }
             ${
               itemData && itemData.ad_manager && itemData.ad_manager.last_name
             }`}
@@ -398,13 +428,28 @@ const DSPKeyContributors = ({
     return (
       <>
         <Table className="mt-0">
-          {renderTableHeader()}
+          <thead>{renderTableHeader()}</thead>
           {data && data.length >= 1 ? (
             <tbody>{data.map((item) => renderTableData(item))}</tbody>
           ) : null}
         </Table>
-        {!data || (data && data.length === 0) ? (
+        {!data ||
+        (data && data.length === 0) ||
+        (data && typeof data.result === 'object') ? (
           <NoData>{noGraphDataMessage}</NoData>
+        ) : null}
+
+        {selectedKeyContribution === false &&
+        (selectedAdManager !== 'all' || isBGSManager) &&
+        data &&
+        data.length >= 1 ? (
+          <div className="mt-0">
+            <CommonPagination
+              count={count}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
+            />
+          </div>
         ) : null}
       </>
     );
@@ -527,44 +572,46 @@ const DSPKeyContributors = ({
             </p>
           </div>
           <div className="col-md-6 col-sm1-12  mb-3">
-            <div className="days-container ">
-              <ul className="days-tab">
-                <li>
-                  {' '}
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id={keyContribution.id}
-                    name="flexRadioDefault"
-                    value={selectedKeyContribution}
-                    checked={selectedKeyContribution}
-                    onClick={() => {
-                      handleContribution(true);
-                    }}
-                  />
-                  <label htmlFor={keyContribution.id}>
-                    {keyContribution.label}{' '}
-                  </label>
-                </li>
+            <ToggleButton>
+              <div className="days-container ">
+                <ul className="days-tab">
+                  <li>
+                    {' '}
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id={keyContribution.id}
+                      name="flexRadioDefault"
+                      value={selectedKeyContribution}
+                      checked={selectedKeyContribution}
+                      onClick={() => {
+                        handleContribution(true);
+                      }}
+                    />
+                    <label htmlFor={keyContribution.id}>
+                      {keyContribution.label}{' '}
+                    </label>
+                  </li>
 
-                <li>
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id={keyContribution.id2}
-                    name="flexRadioDefault"
-                    value={!selectedKeyContribution}
-                    checked={!selectedKeyContribution}
-                    onClick={() => {
-                      handleContribution(false);
-                    }}
-                  />
-                  <label htmlFor={keyContribution.id2}>
-                    {keyContribution.label2}{' '}
-                  </label>
-                </li>
-              </ul>
-            </div>
+                  <li>
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id={keyContribution.id2}
+                      name="flexRadioDefault"
+                      value={!selectedKeyContribution}
+                      checked={!selectedKeyContribution}
+                      onClick={() => {
+                        handleContribution(false);
+                      }}
+                    />
+                    <label htmlFor={keyContribution.id2}>
+                      {keyContribution.label2}{' '}
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </ToggleButton>
           </div>
         </div>
         {selectedAdDF.value === 'custom' && selectedKeyContribution ? (
@@ -611,6 +658,10 @@ DSPKeyContributors.defaultProps = {
   data: null,
   currencySymbol: '',
   selectedAdDF: {},
+  isBGSManager: false,
+  handlePageChange: () => {},
+  count: null,
+  pageNumber: 1,
 };
 
 DSPKeyContributors.propTypes = {
@@ -624,6 +675,10 @@ DSPKeyContributors.propTypes = {
   loader: bool.isRequired,
   currencySymbol: string,
   selectedAdDF: objectOf(Object),
+  isBGSManager: bool,
+  handlePageChange: func,
+  count: number,
+  pageNumber: number,
 };
 
 const Wrapper = styled.div`

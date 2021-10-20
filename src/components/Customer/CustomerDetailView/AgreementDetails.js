@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
@@ -23,7 +25,7 @@ import {
   ActionDropDown,
   ModalBox,
   Button,
-  ContractFormField,
+  InputFormField,
 } from '../../../common';
 import {
   ClockIcon,
@@ -134,6 +136,7 @@ export default function AgreementDetails({
     getBGSManagers(id).then((res) => {
       setBgsManagerEmail(res && res.data && res.data.email);
     });
+    getActivityLogInfo();
   }, [dispatch, id]);
 
   const countDays = (value) => {
@@ -707,7 +710,7 @@ export default function AgreementDetails({
           </p>
           <div className="row">
             <div className="col-6">
-              <ContractFormField>
+              <InputFormField>
                 <DatePicker
                   minDate={new Date()}
                   className="form-control"
@@ -718,10 +721,10 @@ export default function AgreementDetails({
                   format="MM-dd-yyyy"
                   clearIcon={null}
                 />
-              </ContractFormField>
+              </InputFormField>
             </div>
             <div className="col-6">
-              <ContractFormField>
+              <InputFormField>
                 <DatePicker
                   minDate={
                     pauseDateDetails.start_date &&
@@ -737,7 +740,7 @@ export default function AgreementDetails({
                   clearIcon={null}
                   disabled={!pauseDateDetails.start_date}
                 />
-              </ContractFormField>
+              </InputFormField>
             </div>
           </div>
         </>
@@ -809,7 +812,7 @@ export default function AgreementDetails({
 
   return (
     <>
-      <div className="col-lg-6 col-12">
+      <div className="col-lg-6 col-12 cutomer-middle-panel">
         <Tabs>
           <ul className="tabs">
             <li

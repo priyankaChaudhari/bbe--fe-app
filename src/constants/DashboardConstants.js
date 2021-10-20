@@ -64,6 +64,30 @@ export const FinanceDateTypeOptions = [
   { value: 'custom', label: 'Custom Range' },
 ];
 
+export const metricsNameForAPI = {
+  adSales: 'ad_sales',
+  adSpend: 'ad_spend',
+  adConversion: 'ad_conversion_rate',
+  impressions: 'impressions',
+  adCos: 'acos',
+  adRoas: 'roas',
+  adClicks: 'clicks',
+  adClickRate: 'ctr',
+  dspImpressions: 'impressions',
+  dspSpend: 'dsp_spend',
+  dspTotalProductSales: 'total_product_sales',
+  dspTotalRoas: 'total_roas',
+  dspTotalDpvr: 'total_dpvr',
+  dspTtlNewBrandPurchases: 'ttl_new_brand_purchases',
+  dspProductSales: 'product_sales',
+  dspRoas: 'roas',
+  costPerClick: 'cost_per_click',
+  revenue: 'revenue',
+  traffic: 'traffic',
+  unitsSold: 'units_sold',
+  conversion: 'conversion',
+};
+
 export const DSPFinanceMetrics = [
   {
     value: 'openInvoices',

@@ -26,12 +26,13 @@ import {
   PageLoader,
   DropDownIndicator,
   CustomDateModal,
+  ToggleButton,
 } from '../../../../common';
 import {
   dateOptions,
   SponsoredAdTypeOptions,
   noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+} from '../../../../constants';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -39,7 +40,11 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
-  const isAdManagerAdmin = userInfo && userInfo.role === 'Ad Manager Admin';
+  const isAdManagerAdmin =
+    (userInfo && userInfo.role === 'Ad Manager Admin') ||
+    userInfo.role === 'BGS Manager';
+
+  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -57,7 +62,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     isAdManagerAdmin
       ? {
           value: 'all',
-          label: 'All Ad Manager',
+          label: isBGSManager ? 'All BGS' : 'All Ad Manager',
         }
       : { value: userInfo.id, label: '' },
   );
@@ -77,7 +82,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
 
   const [selectedTabMetrics, setSelectedTabMetrics] = useState('adSales');
 
-  const tab = isAdManagerAdmin ? 'positive' : 'contribution';
+  const tab = isBGSManager
+    ? 'contribution'
+    : isAdManagerAdmin
+    ? 'positive'
+    : 'contribution';
+
   const [selectedContributionOption, setSelectedContributionOption] = useState(
     tab,
   );
@@ -101,11 +111,17 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     month: false,
   });
   const [adGroupBy, setAdGroupBy] = useState('daily');
+  const [pageNumber, setPageNumber] = useState();
+  const [contributionCount, setContributionCount] = useState(null);
 
   const getAdManagersList = useCallback(() => {
-    getManagersList('Sponsored Advertising Ad Manager').then((adm) => {
+    getManagersList(
+      isBGSManager ? 'BGS' : 'Sponsored Advertising Ad Manager',
+    ).then((adm) => {
       if (adm && adm.data && adm.data.length) {
-        const list = [{ value: 'all', label: 'All Ad Managers' }];
+        const list = [
+          { value: 'all', label: isBGSManager ? 'All BGS' : 'All Ad Managers' },
+        ];
         for (const brand of adm.data) {
           list.push({
             value: brand.id,
@@ -116,11 +132,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
           });
-          setAdManagerList(list);
         }
+        setAdManagerList(list);
       }
     });
-  }, []);
+  }, [isBGSManager]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
@@ -137,6 +153,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           adRoasPrevious: item.roas,
           adClicksPrevious: item.clicks,
           adClickRatePrevious: item.ctr,
+          costPerClickPrevious: item.cost_per_click,
           previousDate,
 
           adSalesPreviousLabel:
@@ -156,6 +173,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0',
           adClickRatePreviousLabel:
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+          costPerClickPreviousLabel:
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00',
         });
       });
     }
@@ -175,6 +196,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           tempData[index].adRoasCurrent = item.roas;
           tempData[index].adClicksCurrent = item.clicks;
           tempData[index].adClickRateCurrent = item.ctr;
+          tempData[index].costPerClickCurrent = item.cost_per_click;
 
           tempData[index].adSalesCurrentLabel =
             item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00';
@@ -194,6 +216,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             item.clicks !== null ? item.clicks : '0';
           tempData[index].adClickRateCurrentLabel =
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00';
+          tempData[index].costPerClickCurrentLabel =
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00';
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -206,6 +232,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adRoasCurrent: item.roas,
             adClicksCurrent: item.clicks,
             adClickRateCurrent: item.ctr,
+            costPerClickCurrent: item.cost_per_click,
             date: currentReportDate,
 
             adSalesPrevious: null,
@@ -216,6 +243,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adRoasPrevious: null,
             adClicksPrevious: null,
             adClickRatePrevious: null,
+            costPerClickPrevious: null,
 
             adSalesCurrentLabel:
               item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00',
@@ -234,6 +262,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0',
             adClickRateCurrentLabel:
               item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+            costPerClickCurrentLabel:
+              item.cost_per_click !== null
+                ? item.cost_per_click.toFixed(2)
+                : '0.00',
 
             adSalesPreviousLabel: '0.00',
             adSpendPreviousLabel: '0.00',
@@ -243,6 +275,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             adRoasPreviousLabel: '0.00',
             adClicksPreviousLabel: '0',
             adClickRatePreviousLabel: '0.00',
+            costPerClickPreviousLabel: '0.00',
           });
         }
       });
@@ -319,6 +352,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       selectedMetrics,
       startDate = null,
       endDate = null,
+      page,
     ) => {
       setKeyContributionLoader(true);
       getKeyContributionData(
@@ -332,17 +366,24 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         startDate,
         endDate,
         userInfo,
+        page,
       ).then((res) => {
         if (res && res.status === 400) {
           setKeyContributionLoader(false);
         }
+        if (res && res.status === 500) {
+          setKeyContributionLoader(false);
+          setContributionData([]);
+        }
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data) {
-            setContributionData(res.data);
+          } else if (res.data && res.data.results) {
+            setContributionData(res.data.results);
+            setContributionCount(res.data.count);
           } else {
             setContributionData([]);
+            setPageNumber(page);
           }
           setKeyContributionLoader(false);
         }
@@ -371,6 +412,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         selectedContributionOption,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
       getAdData(
         selectedAdType,
@@ -397,6 +441,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     selectedContributionOption,
     selectedTabMetrics,
     getContributionData,
+    pageNumber,
   ]);
 
   const setGropuByFilter = (value) => {
@@ -418,11 +463,14 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
       case 'month':
-        setAdFilters({ daily: true, weekly: false, month: false });
+        setAdFilters({ daily: true, weekly: true, month: false });
         setAdGroupBy('daily');
         getAdData(
           selectedAdType,
@@ -438,11 +486,14 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
       case '30days':
-        setAdFilters({ daily: true, weekly: false, month: false });
+        setAdFilters({ daily: true, weekly: true, month: false });
         setAdGroupBy('daily');
 
         getAdData(
@@ -459,6 +510,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -485,13 +539,17 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 30) {
+    if (diffDays <= 7) {
       temp = 'daily';
       setAdFilters({ daily: true, weekly: false, month: false });
       setAdGroupBy('daily');
+    } else if (diffDays <= 30) {
+      temp = 'daily';
+      setAdFilters({ daily: true, weekly: true, month: true });
+      setAdGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: false });
+      setAdFilters({ daily: true, weekly: true, month: true });
       setAdGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';
@@ -525,6 +583,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           sd,
           ed,
+          pageNumber,
         );
       }
     }
@@ -536,7 +595,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     if (event.value !== selectedAdManager.value) {
       setSelectedAdManager(event);
 
-      if (value === 'all') {
+      if (!isBGSManager && value === 'all') {
         setSelectedContributionOption('positive');
         tabOption = 'positive';
       } else {
@@ -568,6 +627,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value,
           tabOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
       }
     }
@@ -603,6 +665,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
       }
     }
@@ -657,6 +722,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         selectedContributionOption,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -702,18 +770,26 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     let contributionTab = '';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
     setSelectedAdType('all');
-
+    setCurrency('USD');
+    setCurrencySymbol(getSymbolFromCurrency('USD'));
     setSelectedMarketplace({
       value: 'all',
       label: 'All Marketplaces',
       currency: 'USD',
     });
     if (isAdManagerAdmin) {
-      contributionTab = 'positive';
-      setSelectedAdManager({
-        value: 'all',
-        label: 'All Ad Manager',
-      });
+      contributionTab = isBGSManager ? 'contribution' : 'positive';
+      if (isBGSManager) {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All BGS',
+        });
+      } else {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All Ad Manager',
+        });
+      }
     } else {
       contributionTab = 'contribution';
       setSelectedAdManager({
@@ -741,6 +817,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         'all',
         contributionTab,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -759,6 +838,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         type,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -773,8 +855,26 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         selectedContributionOption,
         value,
+        null,
+        null,
+        pageNumber,
       );
     }
+  };
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getContributionData(
+      selectedAdType,
+      selectedAdDF.value,
+      selectedMarketplace.value,
+      selectedAdManager.value,
+      selectedContributionOption,
+      selectedTabMetrics,
+      null,
+      null,
+      currentPage,
+    );
   };
   const renderCustomDateSubLabel = (props) => {
     if (selectedAdDF.value === 'custom' && isCustomDateApply) {
@@ -887,55 +987,57 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           </ul>
         </div>
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
-          <div className="days-container ">
-            <ul className="days-tab">
-              <li
-                // id=" BT-adperformance-days"
-                className={adFilters.daily === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.daily}
-                  onClick={() => handleAdGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
+          <ToggleButton>
+            <div className="days-container ">
+              <ul className="days-tab">
+                <li
+                  // id=" BT-adperformance-days"
+                  className={adFilters.daily === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="daysCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.daily && adGroupBy === 'daily'}
+                    onClick={() => handleAdGroupBy('daily')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="daysCheck">Daily</label>
+                </li>
 
-              <li
-                // id=" BT-adperformance-weekly"
-                className={adFilters.weekly === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.weekly && adGroupBy === 'weekly'}
-                  onChange={() => handleAdGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
+                <li
+                  // id=" BT-adperformance-weekly"
+                  className={adFilters.weekly === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="weeklyCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.weekly && adGroupBy === 'weekly'}
+                    onChange={() => handleAdGroupBy('weekly')}
+                  />
+                  <label htmlFor="weeklyCheck">Weekly</label>
+                </li>
 
-              <li
-                // id=" BT-adperformance-monthly"
-                className={adFilters.month === false ? 'disabled-tab' : ''}>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  id="monthlyCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.month && adGroupBy === 'monthly'}
-                  onChange={() => handleAdGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
-            </ul>
-          </div>
+                <li
+                  // id=" BT-adperformance-monthly"
+                  className={adFilters.month === false ? 'disabled-tab' : ''}>
+                  <input
+                    className=" d-none"
+                    type="radio"
+                    id="monthlyCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.month && adGroupBy === 'monthly'}
+                    onChange={() => handleAdGroupBy('monthly')}
+                  />
+                  <label htmlFor="monthlyCheck">Monthly</label>
+                </li>
+              </ul>
+            </div>
+          </ToggleButton>
         </div>
       </div>
     );
@@ -987,6 +1089,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedMarketplace={selectedMarketplace}
           selectInputRef={selectInputRef}
           isAdManagerAdmin={isAdManagerAdmin}
+          isBGSManager={isBGSManager}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -1035,6 +1138,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           handleOnMetricsTabChange={handleOnMetricsTabChange}
           currencySymbol={currencySymbol}
           selectedAdDF={selectedAdDF}
+          isBGSManager={isBGSManager}
+          handlePageChange={handlePageChange}
+          contributionCount={contributionCount}
+          pageNumber={pageNumber}
+          count={contributionCount}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"

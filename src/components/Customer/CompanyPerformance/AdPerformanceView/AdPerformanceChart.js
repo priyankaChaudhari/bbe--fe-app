@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
+
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import * as am4core from '@amcharts/amcharts4/core';
@@ -8,7 +9,6 @@ import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import PropTypes, { instanceOf } from 'prop-types';
 
 am4core.useTheme(am4themes_dataviz);
-// am4core.useTheme(am4themes_animated);
 am4core.color('red');
 const _ = require('lodash');
 
@@ -27,9 +27,10 @@ export default function AdPerformanceChart({
       adConversion: '#30A8BD',
       impressions: '#D6A307',
       adCos: '#E05D37',
-      adRoas: '#89A43C',
+      adRoas: '#E05D37',
       adClicks: '#C84EC6',
       adClickRate: '#A04848',
+      costPerClick: '#89A43C',
     };
 
     const tooltipNames = {
@@ -41,6 +42,7 @@ export default function AdPerformanceChart({
       adRoas: 'ROAS',
       adClicks: 'CLICKS',
       adClickRate: 'CLICK THROUGH RATE',
+      costPerClick: 'COST PER CLICK',
     };
 
     // const tooltipDate =
@@ -115,7 +117,7 @@ export default function AdPerformanceChart({
 
     function bindValueAxisFormatter(item) {
       let format = '';
-      if (item === 'adSales' || item === 'adSpend') {
+      if (item === 'adSales' || item === 'adSpend' || item === 'costPerClick') {
         format = `${currencySymbol}#.#a`;
       } else if (
         item === 'adConversion' ||
@@ -147,7 +149,12 @@ export default function AdPerformanceChart({
         const previousLabel = `${item}PreviousLabel`;
         const colorCode = colorSet[item];
         tooltipValue = `${tooltipValue} ${_.startCase(item)}`;
-        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
+        if (
+          item === 'adSales' ||
+          item === 'adSpend' ||
+          item === 'adRoas' ||
+          item === 'costPerClick'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
             colorCode,
@@ -243,6 +250,7 @@ export default function AdPerformanceChart({
           series.yAxis = valueAxis;
           series2.yAxis = valueAxis;
           valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(item);
+
           if (item === 'adSales' || item === 'adSpend') {
             firstAxis = 'currency';
           }
@@ -350,6 +358,7 @@ export default function AdPerformanceChart({
       ];
       valueAxis3.numberFormatter.smallNumberPrefixes = [];
       valueAxis3.min = 0;
+
       // create object of 4th value axis
       const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis4.renderer.grid.template.disabled = true;
@@ -372,7 +381,12 @@ export default function AdPerformanceChart({
         const value = `${item}CurrentLabel`;
         // const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
 
-        if (item === 'adSales' || item === 'adSpend' || item === 'adRoas') {
+        if (
+          item === 'adSales' ||
+          item === 'adSpend' ||
+          item === 'adRoas' ||
+          item === 'costPerClick'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             tooltipNames[item],
             colorSet[item],

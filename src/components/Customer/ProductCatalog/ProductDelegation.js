@@ -10,7 +10,7 @@ import {
   OnBoardingBody,
   CheckBox,
   Button,
-  ContractFormField,
+  InputFormField,
   ErrorMsg,
   PageLoader,
 } from '../../../common';
@@ -148,7 +148,7 @@ export default function ProductDelegation() {
 
                   {isAssignElse ? (
                     <fieldset className="shape-without-border w-430 mt-2">
-                      <ContractFormField>
+                      <InputFormField>
                         <label htmlFor="email">
                           Assign to (email)
                           <input
@@ -209,7 +209,7 @@ export default function ProductDelegation() {
                             'Send Email'
                           )}
                         </Button>
-                      </ContractFormField>
+                      </InputFormField>
                     </fieldset>
                   ) : (
                     ''

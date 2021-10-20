@@ -12,15 +12,15 @@ import DSPInvoiceFilters from './DSPInvoiceFilters';
 import Theme from '../../../../theme/Theme';
 import DSPInvoiceTabs from './DSPInvoiceTabs';
 import TableMobileView from '../../../../common/TableMobileView';
-import { CompanyDefaultUser } from '../../../../theme/images/index';
+import { CompanyDefaultUser } from '../../../../theme/images';
 import { getFinanceInvoices } from '../../../../api';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import {
   InvoicesStatusOptions,
   InvoicesSortByOptions,
   StatusColorSet,
-} from '../../../../constants/DashboardConstants';
+  PATH_CUSTOMER_DETAILS,
+} from '../../../../constants';
 import {
   WhiteCard,
   Table,

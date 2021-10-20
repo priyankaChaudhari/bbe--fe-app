@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, string } from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { CaretUp } from '../../../../theme/images/index';
+import { CaretUp } from '../../../../theme/images';
 
 const SponsoredFilter = ({
   handleResetFilter,
@@ -24,6 +24,7 @@ const SponsoredFilter = ({
   selectedMarketplace,
   selectInputRef,
   isAdManagerAdmin,
+  isBGSManager,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
@@ -31,7 +32,7 @@ const SponsoredFilter = ({
   const renderAdManagerDropdown = (className) => {
     return (
       <div className="col-12 ">
-        <div className="label mt-3">Ad Manager</div>
+        <div className="label mt-3">{isBGSManager ? 'BGS' : 'Ad Manager'}</div>
         {DropDown(
           className,
           adManagerList,
@@ -209,7 +210,8 @@ SponsoredFilter.defaultProps = {
   selectedAdManager: {},
   selectedMarketplace: {},
   selectInputRef: {},
-  isAdManagerAdmin: {},
+  isAdManagerAdmin: false,
+  isBGSManager: false,
 };
 
 SponsoredFilter.propTypes = {
@@ -224,8 +226,9 @@ SponsoredFilter.propTypes = {
   handleAdType: func,
   selectedAdType: string,
   isApiCall: bool,
-  selectedAdManager: arrayOf(Array),
-  selectedMarketplace: string,
-  selectInputRef: arrayOf(Array),
-  isAdManagerAdmin: string,
+  selectedAdManager: shape({}),
+  selectedMarketplace: shape({}),
+  selectInputRef: shape({}),
+  isAdManagerAdmin: bool,
+  isBGSManager: bool,
 };

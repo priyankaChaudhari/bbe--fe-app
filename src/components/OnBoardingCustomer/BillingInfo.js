@@ -14,7 +14,7 @@ import Theme from '../../theme/Theme';
 import {
   CheckBox,
   OnBoardingBody,
-  ContractFormField,
+  InputFormField,
   Button,
   ModalRadioCheck,
   PageLoader,
@@ -413,7 +413,7 @@ export default function BillingInfo({
         <>
           {achDetails.map((item) => (
             <React.Fragment key={item.key}>
-              <ContractFormField
+              <InputFormField
                 className={item.key !== 'account_name' ? 'mt-3' : ''}>
                 <label htmlFor={item.label}>
                   {item.label}
@@ -425,7 +425,7 @@ export default function BillingInfo({
                     <>{generateInput(item)}</>
                   )}
                 </label>
-              </ContractFormField>
+              </InputFormField>
               <ErrorMsg>
                 {apiError && apiError[item.key] && apiError[item.key][0]}
               </ErrorMsg>
@@ -441,7 +441,7 @@ export default function BillingInfo({
             {item &&
               item.details.map((field) => (
                 <div className={field.property} key={field.key}>
-                  <ContractFormField className="mt-3">
+                  <InputFormField className="mt-3">
                     <label htmlFor={field.label}>
                       {field.label}
                       <br />
@@ -451,7 +451,7 @@ export default function BillingInfo({
                         <>{generateInput(field, 'card_details')}</>
                       )}
                     </label>
-                  </ContractFormField>
+                  </InputFormField>
                   <ErrorMsg>
                     {apiError &&
                       apiError.card_details &&
@@ -479,7 +479,7 @@ export default function BillingInfo({
               .filter((op) => op.section === 'address')
               .map((item) => (
                 <div className={item.property} key={item.key}>
-                  <ContractFormField className="mt-3">
+                  <InputFormField className="mt-3">
                     <label htmlFor={item.label}>
                       {item.label}
                       <br />
@@ -489,7 +489,7 @@ export default function BillingInfo({
                         <>{generateInput(item, 'billing_address')}</>
                       )}
                     </label>
-                  </ContractFormField>
+                  </InputFormField>
                   <ErrorMsg>
                     {apiError &&
                       apiError.billing_address &&
@@ -514,7 +514,7 @@ export default function BillingInfo({
                   style={{
                     opacity: data && data.id && item.key === 'email' ? 0.5 : '',
                   }}>
-                  <ContractFormField className="mt-3">
+                  <InputFormField className="mt-3">
                     <label htmlFor={item.label}>
                       {item.label}
                       <br />
@@ -524,7 +524,7 @@ export default function BillingInfo({
                         <>{generateInput(item, 'billing_contact')}</>
                       )}
                     </label>
-                  </ContractFormField>
+                  </InputFormField>
                   <ErrorMsg>
                     {apiError &&
                       apiError.billing_contact &&

@@ -1,18 +1,16 @@
 import React from 'react';
+
 import styled from 'styled-components';
 import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
+
+import AdPerformanceChart from './AdPerformanceChart';
+import SponsoredAdMetric from '../../../BrandPartner/AdManagerAdminDashboard/SponsoredDashboard/SponsoredAdMetrics';
+import { DropDown } from '../DropDown';
+import { WhiteCard, PageLoader, ToggleButton } from '../../../../common';
+import { AdTypesOptions, noGraphDataMessage } from '../../../../constants';
+
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
-
-import SponsoredAdMetric from '../../../BrandPartner/AdManagerAdminDashboard/SponsoredDashboard/SponsoredAdMetrics';
-
-import { DropDown } from '../DropDown';
-import { WhiteCard, PageLoader } from '../../../../common';
-import {
-  AdTypesOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
-import AdPerformanceChart from './AdPerformanceChart';
 
 const _ = require('lodash');
 
@@ -126,56 +124,57 @@ export default function SponsoredPerformance({
           <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
         )}
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
-          {' '}
-          <div className="days-container ">
-            <ul className="days-tab">
-              <li
-                id=" BT-adperformance-days"
-                className={adFilters.daily === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="daysCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.daily}
-                  onClick={() => handleAdGroupBy('daily')}
-                  onChange={() => {}}
-                />
-                <label htmlFor="daysCheck">Daily</label>
-              </li>
+          <ToggleButton>
+            <div className="days-container ">
+              <ul className="days-tab">
+                <li
+                  id="BT-adperformance-days"
+                  className={adFilters.daily === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="daysCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.daily && adGroupBy === 'daily'}
+                    onClick={() => handleAdGroupBy('daily')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="daysCheck">Daily</label>
+                </li>
 
-              <li
-                id=" BT-adperformance-weekly"
-                className={adFilters.weekly === false ? 'disabled-tab' : ''}>
-                <input
-                  className="d-none"
-                  type="radio"
-                  id="weeklyCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.weekly && adGroupBy === 'weekly'}
-                  onChange={() => handleAdGroupBy('weekly')}
-                />
-                <label htmlFor="weeklyCheck">Weekly</label>
-              </li>
+                <li
+                  id="BT-adperformance-weekly"
+                  className={adFilters.weekly === false ? 'disabled-tab' : ''}>
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="weeklyCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.weekly && adGroupBy === 'weekly'}
+                    onChange={() => handleAdGroupBy('weekly')}
+                  />
+                  <label htmlFor="weeklyCheck">Weekly</label>
+                </li>
 
-              <li
-                id=" BT-adperformance-monthly"
-                className={adFilters.month === false ? 'disabled-tab' : ''}>
-                <input
-                  className=" d-none"
-                  type="radio"
-                  id="monthlyCheck"
-                  name="flexRadioDefault"
-                  value={adGroupBy}
-                  checked={adFilters.month}
-                  onChange={() => handleAdGroupBy('monthly')}
-                />
-                <label htmlFor="monthlyCheck">Monthly</label>
-              </li>
-            </ul>
-          </div>
+                <li
+                  id="BT-adperformance-monthly"
+                  className={adFilters.month === false ? 'disabled-tab' : ''}>
+                  <input
+                    className=" d-none"
+                    type="radio"
+                    id="monthlyCheck"
+                    name="flexRadioDefault"
+                    value={adGroupBy}
+                    checked={adFilters.month && adGroupBy === 'monthly'}
+                    onChange={() => handleAdGroupBy('monthly')}
+                  />
+                  <label htmlFor="monthlyCheck">Monthly</label>
+                </li>
+              </ul>
+            </div>
+          </ToggleButton>
         </div>
       </>
     );

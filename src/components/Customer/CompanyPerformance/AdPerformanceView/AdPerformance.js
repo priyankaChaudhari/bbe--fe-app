@@ -1,31 +1,27 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState, useCallback } from 'react';
+
 import styled from 'styled-components';
-import { components } from 'react-select';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
+import { components } from 'react-select';
 import { func, instanceOf, string } from 'prop-types';
 
-import { CloseIcon } from '../../../../theme/images/index';
+import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
-
 import AdPerformanceFilters from './AdPerformanceFilters';
-
+import { DspAdPacing } from '../../../BrandPartner';
+import { CloseIcon } from '../../../../theme/images';
 import { CustomDateModal, DropDownIndicator } from '../../../../common';
-import {
-  dateOptions,
-  noGraphDataMessage,
-} from '../../../../constants/CompanyPerformanceConstants';
+import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
 import {
   getAdPerformance,
   getDSPPerformance,
   getDspPacingData,
 } from '../../../../api';
 
-import { DspAdPacing } from '../../../BrandPartner';
-import DSPPerformance from './DSPPerformance';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
@@ -113,7 +109,6 @@ export default function AdPerformance({
 
   const bindAdResponseData = (response) => {
     const tempData = [];
-
     // filterout previous data in one temporary object.
     if (response.daily_facts.previous && response.daily_facts.previous.length) {
       response.daily_facts.previous.forEach((item) => {
@@ -127,6 +122,7 @@ export default function AdPerformance({
           adRoasPrevious: item.roas,
           adClicksPrevious: item.clicks,
           adClickRatePrevious: item.ctr,
+          costPerClickPrevious: item.cost_per_click,
           previousDate,
 
           adSalesPreviousLabel:
@@ -146,6 +142,10 @@ export default function AdPerformance({
           adClicksPreviousLabel: item.clicks !== null ? item.clicks : '0',
           adClickRatePreviousLabel:
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+          costPerClickPreviousLabel:
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00',
         });
       });
     }
@@ -169,6 +169,7 @@ export default function AdPerformance({
           tempData[index].adRoasCurrent = item.roas;
           tempData[index].adClicksCurrent = item.clicks;
           tempData[index].adClickRateCurrent = item.ctr;
+          tempData[index].costPerClickCurrent = item.cost_per_click;
 
           tempData[index].adSalesCurrentLabel =
             item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00';
@@ -188,6 +189,10 @@ export default function AdPerformance({
             item.clicks !== null ? item.clicks : '0';
           tempData[index].adClickRateCurrentLabel =
             item.ctr !== null ? item.ctr.toFixed(2) : '0.00';
+          tempData[index].costPerClickCurrentLabel =
+            item.cost_per_click !== null
+              ? item.cost_per_click.toFixed(2)
+              : '0.00';
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previou value null and previous label 0
@@ -200,6 +205,7 @@ export default function AdPerformance({
             adRoasCurrent: item.roas,
             adClicksCurrent: item.clicks,
             adClickRateCurrent: item.ctr,
+            costPerClickCurrent: item.cost_per_click,
             date: currentReportDate,
 
             adSalesPrevious: null,
@@ -210,6 +216,7 @@ export default function AdPerformance({
             adRoasPrevious: null,
             adClicksPrevious: null,
             adClickRatePrevious: null,
+            costPerClickPrevious: null,
 
             adSalesCurrentLabel:
               item.ad_sales !== null ? item.ad_sales.toFixed(2) : '0.00',
@@ -228,6 +235,10 @@ export default function AdPerformance({
             adClicksCurrentLabel: item.clicks !== null ? item.clicks : '0',
             adClickRateCurrentLabel:
               item.ctr !== null ? item.ctr.toFixed(2) : '0.00',
+            costPerClickCurrentLabel:
+              item.cost_per_click !== null
+                ? item.cost_per_click.toFixed(2)
+                : '0.00',
 
             adSalesPreviousLabel: '0.00',
             adSpendPreviousLabel: '0.00',
@@ -237,6 +248,7 @@ export default function AdPerformance({
             adRoasPreviousLabel: '0.00',
             adClicksPreviousLabel: '0',
             adClickRatePreviousLabel: '0.00',
+            costPerClickPreviousLabel: '0.00',
           });
         }
       });
@@ -580,18 +592,22 @@ export default function AdPerformance({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 60) {
+    if (diffDays <= 7) {
       temp = 'daily';
       setAdFilters({ daily: true, weekly: false, month: false });
       setAdGroupBy('daily');
-    } else if (diffDays > 60 && diffDays <= 180) {
+    } else if (diffDays <= 30) {
+      temp = 'daily';
+      setAdFilters({ daily: true, weekly: true, month: false });
+      setAdGroupBy('daily');
+    } else if (diffDays > 30 && diffDays <= 60) {
+      temp = 'daily';
+      setAdFilters({ daily: true, weekly: true, month: true });
+      setAdGroupBy('daily');
+    } else if (diffDays > 60) {
       temp = 'weekly';
-      setAdFilters({ daily: false, weekly: true, month: false });
+      setAdFilters({ daily: false, weekly: true, month: true });
       setAdGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setAdFilters({ daily: false, weekly: false, month: true });
-      setAdGroupBy('monthly');
     }
 
     if (dailyFactFlag === 'custom') {
@@ -620,18 +636,22 @@ export default function AdPerformance({
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 60) {
+    if (diffDays <= 7) {
       temp = 'daily';
       setDSPFilters({ daily: true, weekly: false, month: false });
       setDSPGroupBy('daily');
-    } else if (diffDays > 60 && diffDays <= 180) {
+    } else if (diffDays <= 30) {
+      temp = 'daily';
+      setDSPFilters({ daily: true, weekly: true, month: false });
+      setDSPGroupBy('daily');
+    } else if (diffDays > 30 && diffDays <= 60) {
+      temp = 'daily';
+      setDSPFilters({ daily: true, weekly: true, month: true });
+      setDSPGroupBy('daily');
+    } else if (diffDays > 60) {
       temp = 'weekly';
-      setDSPFilters({ daily: false, weekly: true, month: false });
+      setDSPFilters({ daily: false, weekly: true, month: true });
       setDSPGroupBy('weekly');
-    } else if (diffDays > 180) {
-      temp = 'monthly';
-      setDSPFilters({ daily: false, weekly: false, month: true });
-      setDSPGroupBy('monthly');
     }
 
     if (value === 'custom') {
@@ -746,12 +766,12 @@ export default function AdPerformance({
 
       case 'month':
         if (type === 'ad') {
-          setAdFilters({ daily: true, weekly: false, month: false });
+          setAdFilters({ daily: true, weekly: true, month: false });
           setAdGroupBy('daily');
           getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         } else {
-          setDSPFilters({ daily: true, weekly: false, month: false });
+          setDSPFilters({ daily: true, weekly: true, month: false });
           setDSPGroupBy('daily');
 
           getDSPData(value, 'daily', selectedMarketplace);
@@ -760,7 +780,7 @@ export default function AdPerformance({
 
       case '30days':
         if (type === 'ad') {
-          setAdFilters({ daily: true, weekly: false, month: false });
+          setAdFilters({ daily: true, weekly: true, month: false });
           setAdGroupBy('daily');
           getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
@@ -811,19 +831,58 @@ export default function AdPerformance({
   const handleAdGroupBy = (value) => {
     if (value !== adGroupBy) {
       setAdGroupBy(value);
-      getAdData(
-        selectedAdType.value,
-        selectedAdDF.value,
-        value,
-        selectedMarketplace,
-      );
+
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getAdData(
+          selectedAdType.value,
+          selectedAdDF.value,
+          value,
+          selectedMarketplace,
+          sd,
+          ed,
+        );
+      } else {
+        getAdData(
+          selectedAdType.value,
+          selectedAdDF.value,
+          value,
+          selectedMarketplace,
+        );
+      }
     }
   };
 
   const handleDSPGroupBy = (value) => {
     if (value !== dspGroupBy) {
       setDSPGroupBy(value);
-      getDSPData(selectedAdDF.value, value, selectedMarketplace);
+
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getDSPData(selectedAdDF.value, value, selectedMarketplace, sd, ed);
+      } else {
+        getDSPData(selectedAdDF.value, value, selectedMarketplace);
+      }
     }
   };
 
@@ -856,6 +915,21 @@ export default function AdPerformance({
           key: 'adSelection',
         },
       ]);
+    }
+    if (value === 'year') {
+      ADYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+        selectedMarketplace,
+        selectedAdType.value,
+      );
+      DSPYearAndCustomDateFilter(
+        new Date(new Date().getFullYear(), 0, 1),
+        new Date(),
+        'year',
+        selectedMarketplace,
+      );
     }
     if (value === 'custom') {
       setShowAdCustomDateModal(true);
@@ -937,7 +1011,7 @@ export default function AdPerformance({
         marketplaceDefaultValue={marketplaceDefaultValue}
         marketplaceOptions={marketplaceOptions}
         handleMarketplaceOptions={handleMarketplaceOptions}
-        dateOptions={dateOptions}
+        dateOptions={dateOptionsWithYear}
         getSelectComponents={getSelectComponents}
         DropDownIndicator={DropDownIndicator}
         selectedAdDF={selectedAdDF}
@@ -1053,7 +1127,6 @@ const AddPerformance = styled.div`
   @media only screen and (max-width: 1255px) {
     .ad-performance-nav {
       li {
-        
         &.ad-performance {
           max-width: 192px;
           width: 100%;
@@ -1079,11 +1152,10 @@ const AddPerformance = styled.div`
       }
     }
   }
-   @media only screen and (max-width: 767px) { 
-
-     .ad-performance-nav {
+  @media only screen and (max-width: 767px) {
+    .ad-performance-nav {
       li {
-         &.ad-performance {
+        &.ad-performance {
           max-width: 100%;
           width: 100%;
           margin-bottom: 15px;
@@ -1093,5 +1165,6 @@ const AddPerformance = styled.div`
           width: 100%;
         }
       }
-   }
+    }
+  }
 `;

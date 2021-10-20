@@ -7,12 +7,12 @@ import { func, string } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { getDSPFinances } from '../../../../api';
-import { CaretUp, CloseIcon } from '../../../../theme/images/index';
+import { CaretUp, CloseIcon } from '../../../../theme/images';
 import {
   FinanceDateTypeOptions,
   DSPFinanceMetrics,
   monthNames,
-} from '../../../../constants/DashboardConstants';
+} from '../../../../constants';
 import {
   Card,
   ModalRadioCheck,

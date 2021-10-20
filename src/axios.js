@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// import { PATH_LOGIN } from './constants';
 import { NON_AUTHORIZATION_APIS } from './constants/ApiConstants';
 
 const requestHandler = (request) => {

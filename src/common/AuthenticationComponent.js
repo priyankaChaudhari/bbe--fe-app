@@ -105,11 +105,14 @@ export default function AuthenticationComponent() {
     return '';
   };
 
-  const adManagerRolePaths = {
+  const dashboardRolePaths = {
     'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
     'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
     'DSP Ad Manager': PATH_DSP_DASHBOARD,
     'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
+    'BGS Manager': PATH_BGS_DASHBOARD,
+    BGS: PATH_BGS_DASHBOARD,
+    Finance: PATH_FINANCE_DASHBOARD,
   };
 
   if (isAuthenticated && Object.keys(userInfo).length > 0) {
@@ -152,29 +155,15 @@ export default function AuthenticationComponent() {
           ) : (
             ''
           )}
-          {/* Brand Partner */}
-          {(userInfo && userInfo.role === 'Growth Strategist') ||
-          (userInfo && userInfo.role === 'BGS') ||
-          (userInfo && userInfo.role === 'BGS Manager') ? (
-            <Route path={PATH_BGS_DASHBOARD} component={DashboardContainer} />
-          ) : (
-            ''
-          )}
-          {/* AD MANAGER DASHBOARD PATH */}
-          {_.has(adManagerRolePaths, userInfo && userInfo.role) ? (
+
+          {/* AD MANAGER DASHBOARD, BGS DASHBOARD, FINANCE DASHBOARD PATH */}
+          {_.has(dashboardRolePaths, userInfo && userInfo.role) ? (
             <Route
-              path={adManagerRolePaths[userInfo.role]}
-              component={DashboardContainer}
-            />
-          ) : (
-            ''
-          )}
-          {userInfo && userInfo.role === 'Finance' ? (
-            <Route
-              path={PATH_FINANCE_DASHBOARD}
+              path={dashboardRolePaths[userInfo.role]}
               component={DashboardContainer}
             />
           ) : null}
+
           {/* 
           <Route path={PATH_TEAM_MEMBER} component={TeamMember} />
           <Route path={PATH_TABLET_TEAM_MEMBER} component={TabletTeamMember} /> */}

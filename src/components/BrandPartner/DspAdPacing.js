@@ -13,11 +13,12 @@ export default function DspAdPacing({
   currencySymbol,
 }) {
   const { dsp_pacing } = dspData;
+
   const displayDspPacingLabel = () => {
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === 1
+      dspData.dsp_pacing.dsp_pacing_flag === '1'
     ) {
       return (
         <>
@@ -40,7 +41,7 @@ export default function DspAdPacing({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === 0
+      dspData.dsp_pacing.dsp_pacing_flag === '0'
     ) {
       return (
         <>
@@ -55,7 +56,7 @@ export default function DspAdPacing({
     if (
       dspData &&
       dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === -1
+      dspData.dsp_pacing.dsp_pacing_flag === '-1'
     ) {
       return (
         <>
@@ -222,7 +223,7 @@ export default function DspAdPacing({
               className={
                 dspData &&
                 dspData.dsp_pacing &&
-                dspData.dsp_pacing.dsp_pacing_flag === 0
+                dspData.dsp_pacing.dsp_pacing_flag === '0'
                   ? 'label-info mt-2'
                   : 'label-info text-red mt-2'
               }>
@@ -236,7 +237,7 @@ export default function DspAdPacing({
               className={
                 dspData &&
                 dspData.dsp_pacing &&
-                dspData.dsp_pacing.dsp_pacing_flag === 0
+                dspData.dsp_pacing.dsp_pacing_flag === '0'
                   ? 'label-info text-right mt-2'
                   : 'label-info text-right text-red mt-2'
               }>

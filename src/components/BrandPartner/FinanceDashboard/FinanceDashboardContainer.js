@@ -4,7 +4,7 @@ import DSPInvoiceContainer from './DSPInvoices/DSPInvoiceContainer';
 import DSPBillingContainer from './DSPBilling/DSPBillingContainer';
 import { Tabs } from '../../../common';
 import { DashboardCard } from '../../../theme/Global';
-import { financeNavigationOptions } from '../../../constants/DashboardConstants';
+import { financeNavigationOptions } from '../../../constants';
 
 export default function FinanceDashboardContainer() {
   const [viewComponent, setViewComponent] = useState('revShare');

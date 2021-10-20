@@ -4,9 +4,10 @@
 /* eslint no-shadow: "off" */
 
 import queryString from 'query-string';
-import { updateUserMe } from '../../api';
 
+import * as actionTypes from './actionTypes';
 import axiosInstance from '../../axios';
+import { updateUserMe } from '../../api';
 import {
   API_LOGIN,
   API_USER_ME,
@@ -28,7 +29,6 @@ import {
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
 } from '../../constants/index';
-import * as actionTypes from './actionTypes';
 
 const _ = require('lodash');
 

@@ -2,23 +2,39 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { arrayOf, bool, func, string, objectOf } from 'prop-types';
+import {
+  arrayOf,
+  bool,
+  func,
+  string,
+  objectOf,
+  shape,
+  number,
+} from 'prop-types';
 
-import { Tabs, WhiteCard, Table, PageLoader, Status } from '../../../../common';
+import {
+  Tabs,
+  WhiteCard,
+  Table,
+  PageLoader,
+  Status,
+  ToggleButton,
+  CommonPagination,
+} from '../../../../common';
 import { TabletViewManager } from '../../../../theme/Global';
-import { PATH_CUSTOMER_DETAILS } from '../../../../constants';
 import {
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
   UpDowGrayArrow,
-} from '../../../../theme/images/index';
+} from '../../../../theme/images';
 import {
   keyContributionConstant,
   noGraphDataMessage,
   keyContributionHeaders,
   metricsCurrency,
-} from '../../../../constants/CompanyPerformanceConstants';
+  PATH_CUSTOMER_DETAILS,
+} from '../../../../constants';
 
 const _ = require('lodash');
 
@@ -34,6 +50,10 @@ const SponsoredKeyContribution = ({
   handleOnMetricsTabChange,
   currencySymbol,
   selectedAdDF,
+  isBGSManager,
+  handlePageChange,
+  pageNumber,
+  count,
 }) => {
   const history = useHistory();
 
@@ -52,6 +72,7 @@ const SponsoredKeyContribution = ({
     adRoas: 'ROAS',
     adClicks: 'Clicks',
     adClickRate: 'Click Through Rate',
+    costPerClick: 'Cost Per Click',
   };
 
   const returnMetricsValue = (value) => {
@@ -144,31 +165,34 @@ const SponsoredKeyContribution = ({
 
   const renderKeyContributionOptions = () => {
     const keyTabOptions =
-      selectedAdManager === 'all'
+      selectedAdManager === 'all' && !isBGSManager
         ? keyContributionConstant.noAdManagerSelected
         : keyContributionConstant.adManagerSelected;
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
-        <div className="days-container ">
-          <ul className="days-tab">
-            {keyTabOptions.map((item) => (
-              <li key={item.id}>
-                {' '}
-                <input
-                  className="d-none"
-                  type="radio"
-                  id={item.id}
-                  name="flexRadioDefault2"
-                  value={selectedContributionOption}
-                  checked={item.id === selectedContributionOption}
-                  onClick={() => handleContributionOptions(item.id)}
-                />
-                <label htmlFor={item.id}>{item.label}</label>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ToggleButton>
+          <div className="days-container ">
+            <ul className="days-tab">
+              {keyTabOptions.map((item) => (
+                <li key={item.id}>
+                  {' '}
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id={item.id}
+                    name="flexRadioDefault2"
+                    value={selectedContributionOption}
+                    checked={item.id === selectedContributionOption}
+                    onClick={() => handleContributionOptions(item.id)}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor={item.id}>{item.label}</label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </ToggleButton>
       </div>
     );
   };
@@ -186,6 +210,7 @@ const SponsoredKeyContribution = ({
         <ul className="tabs">
           {_.keys(selectedAdMetrics).map((item) => (
             <li
+              key={Math.random()}
               className={selectedTab === item ? 'active' : ''}
               onClick={() => handleOnMetricsTabChange(item)}
               role="presentation">
@@ -308,11 +333,15 @@ const SponsoredKeyContribution = ({
               {itemData && itemData.company_name}
             </div>
             <div className="status">
-              {`${
-                itemData &&
-                itemData.ad_manager &&
-                itemData.ad_manager.first_name
-              }
+              {itemData &&
+              itemData.ad_manager &&
+              itemData.ad_manager.length === 0
+                ? ''
+                : `${
+                    itemData &&
+                    itemData.ad_manager &&
+                    itemData.ad_manager.first_name
+                  }
             ${
               itemData && itemData.ad_manager && itemData.ad_manager.last_name
             }`}
@@ -448,7 +477,7 @@ const SponsoredKeyContribution = ({
     return (
       <>
         <Table className="mt-0 ">
-          {renderTableHeader()}
+          <thead>{renderTableHeader()}</thead>
           {contributionData.length >= 1 ? (
             <tbody>
               {contributionData &&
@@ -457,8 +486,17 @@ const SponsoredKeyContribution = ({
           ) : null}
         </Table>
         {!contributionData ||
-        (contributionData && contributionData.length === 0) ? (
+        (contributionData && contributionData.length === 0) ||
+        (contributionData && typeof contributionData.result === 'object') ? (
           <NoData>{noGraphDataMessage}</NoData>
+        ) : null}
+        {selectedContributionOption === 'keyMetrics' &&
+        contributionData.length >= 1 ? (
+          <CommonPagination
+            count={count}
+            pageNumber={pageNumber}
+            handlePageChange={handlePageChange}
+          />
         ) : null}
       </>
     );
@@ -595,6 +633,10 @@ SponsoredKeyContribution.defaultProps = {
   selectedAdDF: {},
   handleOnMetricsTabChange: () => {},
   currencySymbol: '',
+  isBGSManager: false,
+  handlePageChange: () => {},
+  count: null,
+  pageNumber: 1,
 };
 
 SponsoredKeyContribution.propTypes = {
@@ -604,11 +646,15 @@ SponsoredKeyContribution.propTypes = {
   selectedContributionOption: string,
   selectedAdManager: string,
   handleContributionOptions: func,
-  selectedAdMetrics: string,
+  selectedAdMetrics: shape({}),
   selectedTabMetrics: string,
   handleOnMetricsTabChange: func,
   selectedAdDF: objectOf(Object),
   currencySymbol: string,
+  isBGSManager: bool,
+  handlePageChange: func,
+  count: number,
+  pageNumber: number,
 };
 
 const Wrapper = styled.div`

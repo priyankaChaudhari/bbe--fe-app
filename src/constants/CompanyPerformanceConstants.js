@@ -2,7 +2,18 @@ export const dateOptions = [
   { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
   { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
   { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
-  // { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
+  {
+    value: 'custom',
+    label: 'Custom Range',
+    sub: 'Select start and end dates',
+  },
+];
+
+export const dateOptionsWithYear = [
+  { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
+  { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
+  { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
+  { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
   {
     value: 'custom',
     label: 'Custom Range',
@@ -14,7 +25,6 @@ export const bbDateOptions = [
   { value: 'week', label: 'Recent 7 days' },
   { value: 'month', label: 'Recent Month' },
   { value: '30days', label: 'Recent 30 Days' },
-  // { value: 'year', label: 'Year to Date' },
   {
     value: 'custom',
     label: 'Custom Range',
@@ -63,28 +73,9 @@ export const keyContributionConstant = {
     },
     {
       id: 'keyMetrics',
-      label: 'key Metrics',
+      label: 'Key Metrics',
     },
   ],
-};
-
-export const metricsNameForAPI = {
-  adSales: 'ad_sales',
-  adSpend: 'ad_spend',
-  adConversion: 'ad_conversion_rate',
-  impressions: 'impressions',
-  adCos: 'acos',
-  adRoas: 'roas',
-  adClicks: 'clicks',
-  adClickRate: 'ctr',
-  dspImpressions: 'impressions',
-  dspSpend: 'dsp_spend',
-  dspTotalProductSales: 'total_product_sales',
-  dspTotalRoas: 'total_roas',
-  dspTotalDpvr: 'total_dpvr',
-  dspTtlNewBrandPurchases: 'ttl_new_brand_purchases',
-  dspProductSales: 'product_sales',
-  dspRoas: 'roas',
 };
 
 export const keyContributionHeaders = {
@@ -111,4 +102,22 @@ export const metricsCurrency = {
   dspTtlNewBrandPurchases: { type: 'percentage' },
   dspProductSales: { type: 'currency' },
   dspRoas: { type: 'currency' },
+  costPerClick: { type: 'currency' },
+  revenue: { type: 'currency' },
+  traffic: { type: 'nocurrency' },
+  conversion: { type: 'percentage' },
+  unitsSold: { type: 'nocurrency' },
 };
+
+export const toogleMetricsData = [
+  {
+    id: 1,
+    name: 'acos',
+    label: 'ACOS',
+  },
+  {
+    id: 2,
+    name: 'roas',
+    label: 'ROAS',
+  },
+];
