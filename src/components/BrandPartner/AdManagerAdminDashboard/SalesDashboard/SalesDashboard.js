@@ -687,6 +687,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const handleResetFilter = () => {
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
 
+    setCurrency('USD');
+    setCurrencySymbol(getSymbolFromCurrency('USD'));
     setSelectedMarketplace({
       value: 'all',
       label: 'All Marketplaces',
