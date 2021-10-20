@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 
 import _ from 'lodash';
 import styled from 'styled-components';
-import { arrayOf, bool, func, objectOf, string } from 'prop-types';
+import { arrayOf, bool, func, number, objectOf, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import {
   Tabs,
   WhiteCard,
   ToggleButton,
+  CommonPagination,
 } from '../../../../common';
 import {
   ArrowDownIcon,
@@ -44,6 +45,9 @@ const DSPKeyContributors = ({
   currencySymbol,
   selectedAdDF,
   isBGSManager,
+  handlePageChange,
+  pageNumber,
+  count,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
@@ -53,6 +57,16 @@ const DSPKeyContributors = ({
     id2: 'negative',
     label2: 'Negative',
   });
+
+  useEffect(() => {
+    console.log('sdfsgdfs', isBGSManager, selectedAdManager !== 'all', data);
+    console.log(
+      selectedKeyContribution === false &&
+        (selectedAdManager !== 'all' || isBGSManager) &&
+        data &&
+        data.length >= 1,
+    );
+  }, [data, isBGSManager, selectedAdManager, selectedKeyContribution]);
 
   useEffect(() => {
     if (selectedAdManager !== 'all' || isBGSManager) {
@@ -162,14 +176,14 @@ const DSPKeyContributors = ({
     let selectedClass = '';
     const value = itemData.change;
     if (selectedTabMatrics === 'dspSpend') {
-      if (value.toString().includes('-')) {
+      if (value && value.toString().includes('-')) {
         selectedClass = 'decrease-rate large grey';
         selectedArrow = UpDowGrayArrow;
       } else {
         selectedClass = 'increase-rate large grey';
         selectedArrow = UpDowGrayArrow;
       }
-    } else if (value.toString().includes('-')) {
+    } else if (value && value.toString().includes('-')) {
       selectedClass = 'decrease-rate large';
       selectedArrow = ArrowDownIcon;
     } else {
@@ -177,7 +191,9 @@ const DSPKeyContributors = ({
       selectedArrow = ArrowUpIcon;
     }
 
-    return itemData && itemData.change.toString().includes('-') ? (
+    return itemData &&
+      itemData.change &&
+      itemData.change.toString().includes('-') ? (
       <div className={selectedClass}>
         {' '}
         <img className="red-arrow" src={selectedArrow} alt="arrow" />
@@ -241,7 +257,8 @@ const DSPKeyContributors = ({
   };
 
   const renderTableData = (itemData) => {
-    return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
+    return selectedKeyContribution === false &&
+      (selectedAdManager !== 'all' || isBGSManager) ? (
       <tr
         key={itemData.id}
         className="cursor"
@@ -269,9 +286,13 @@ const DSPKeyContributors = ({
             {itemData && itemData.company_name}
           </div>
           <div className="status">
-            {`${
-              itemData && itemData.ad_manager && itemData.ad_manager.first_name
-            }
+            {itemData && itemData.ad_manager && itemData.ad_manager.length === 0
+              ? ''
+              : `${
+                  itemData &&
+                  itemData.ad_manager &&
+                  itemData.ad_manager.first_name
+                }
             ${
               itemData && itemData.ad_manager && itemData.ad_manager.last_name
             }`}
@@ -415,6 +436,19 @@ const DSPKeyContributors = ({
         (data && data.length === 0) ||
         (data && typeof data.result === 'object') ? (
           <NoData>{noGraphDataMessage}</NoData>
+        ) : null}
+
+        {selectedKeyContribution === false &&
+        (selectedAdManager !== 'all' || isBGSManager) &&
+        data &&
+        data.length >= 1 ? (
+          <div className="mt-0">
+            <CommonPagination
+              count={count}
+              pageNumber={pageNumber}
+              handlePageChange={handlePageChange}
+            />
+          </div>
         ) : null}
       </>
     );
@@ -624,6 +658,9 @@ DSPKeyContributors.defaultProps = {
   currencySymbol: '',
   selectedAdDF: {},
   isBGSManager: false,
+  handlePageChange: () => {},
+  count: null,
+  pageNumber: 1,
 };
 
 DSPKeyContributors.propTypes = {
@@ -638,6 +675,9 @@ DSPKeyContributors.propTypes = {
   currencySymbol: string,
   selectedAdDF: objectOf(Object),
   isBGSManager: bool,
+  handlePageChange: func,
+  count: number,
+  pageNumber: number,
 };
 
 const Wrapper = styled.div`

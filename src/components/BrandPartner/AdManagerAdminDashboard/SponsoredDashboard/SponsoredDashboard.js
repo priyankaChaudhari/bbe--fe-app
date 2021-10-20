@@ -111,6 +111,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     month: false,
   });
   const [adGroupBy, setAdGroupBy] = useState('daily');
+  const [pageNumber, setPageNumber] = useState();
+  const [contributionCount, setContributionCount] = useState(null);
 
   const getAdManagersList = useCallback(() => {
     getManagersList(
@@ -350,6 +352,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       selectedMetrics,
       startDate = null,
       endDate = null,
+      page,
     ) => {
       setKeyContributionLoader(true);
       getKeyContributionData(
@@ -363,6 +366,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         startDate,
         endDate,
         userInfo,
+        page,
       ).then((res) => {
         if (res && res.status === 400) {
           setKeyContributionLoader(false);
@@ -374,10 +378,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data) {
-            setContributionData(res.data);
+          } else if (res.data && res.data.results) {
+            setContributionData(res.data.results);
+            setContributionCount(res.data.count);
           } else {
             setContributionData([]);
+            setPageNumber(page);
           }
           setKeyContributionLoader(false);
         }
@@ -406,6 +412,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         selectedContributionOption,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
       getAdData(
         selectedAdType,
@@ -432,6 +441,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     selectedContributionOption,
     selectedTabMetrics,
     getContributionData,
+    pageNumber,
   ]);
 
   const setGropuByFilter = (value) => {
@@ -453,6 +463,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -473,6 +486,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -494,6 +510,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -564,6 +583,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           sd,
           ed,
+          pageNumber,
         );
       }
     }
@@ -607,6 +627,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value,
           tabOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
       }
     }
@@ -642,6 +665,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdManager.value,
           selectedContributionOption,
           selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
         );
       }
     }
@@ -696,6 +722,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         selectedContributionOption,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -787,6 +816,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         'all',
         contributionTab,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -805,6 +837,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         type,
         selectedTabMetrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -819,8 +854,26 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdManager.value,
         selectedContributionOption,
         value,
+        null,
+        null,
+        pageNumber,
       );
     }
+  };
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getContributionData(
+      selectedAdType,
+      selectedAdDF.value,
+      selectedMarketplace.value,
+      selectedAdManager.value,
+      selectedContributionOption,
+      selectedTabMetrics,
+      null,
+      null,
+      currentPage,
+    );
   };
   const renderCustomDateSubLabel = (props) => {
     if (selectedAdDF.value === 'custom' && isCustomDateApply) {
@@ -1085,6 +1138,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           currencySymbol={currencySymbol}
           selectedAdDF={selectedAdDF}
           isBGSManager={isBGSManager}
+          handlePageChange={handlePageChange}
+          contributionCount={contributionCount}
+          pageNumber={pageNumber}
+          count={contributionCount}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"

@@ -75,6 +75,7 @@ export async function getKeyContributionData(
   startDate,
   endDate,
   userInfo,
+  pageNumber,
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
   let selectedUser = '';
@@ -103,19 +104,26 @@ export async function getKeyContributionData(
   }
 
   if (contributionType === 'keyMetrics') {
+    if (user === 'all') {
+      delete params.user;
+    }
+    if (marketplace === 'all') {
+      delete params.marketplace;
+    }
     if (dashboardType === 'sponsored_ad_dashboard') {
       params = {
         ...params,
-        no_page: '',
+
         sequence: 'desc',
         'order-by': 'company_name',
+        page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
       };
     } else {
       params = {
         ...params,
-        no_page: '',
         sequence: 'desc',
         'order-by': 'company_name',
+        page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
       };
     }
   } else {
