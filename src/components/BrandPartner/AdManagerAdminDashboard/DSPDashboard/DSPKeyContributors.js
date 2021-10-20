@@ -213,7 +213,8 @@ const DSPKeyContributors = ({
   };
 
   const renderTableHeader = () => {
-    return selectedKeyContribution === false && selectedAdManager !== 'all' ? (
+    return selectedKeyContribution === false &&
+      (selectedAdManager !== 'all' || isBGSManager) ? (
       <tr>
         <th width="38%" className="product-header">
           CUSTOMER
