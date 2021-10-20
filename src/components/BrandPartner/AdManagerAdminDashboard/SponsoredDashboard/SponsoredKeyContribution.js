@@ -2,7 +2,15 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { arrayOf, bool, func, string, objectOf, shape } from 'prop-types';
+import {
+  arrayOf,
+  bool,
+  func,
+  string,
+  objectOf,
+  shape,
+  number,
+} from 'prop-types';
 
 import {
   Tabs,
@@ -11,6 +19,7 @@ import {
   PageLoader,
   Status,
   ToggleButton,
+  CommonPagination,
 } from '../../../../common';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
@@ -42,6 +51,9 @@ const SponsoredKeyContribution = ({
   currencySymbol,
   selectedAdDF,
   isBGSManager,
+  handlePageChange,
+  pageNumber,
+  count,
 }) => {
   const history = useHistory();
 
@@ -321,11 +333,15 @@ const SponsoredKeyContribution = ({
               {itemData && itemData.company_name}
             </div>
             <div className="status">
-              {`${
-                itemData &&
-                itemData.ad_manager &&
-                itemData.ad_manager.first_name
-              }
+              {itemData &&
+              itemData.ad_manager &&
+              itemData.ad_manager.length === 0
+                ? ''
+                : `${
+                    itemData &&
+                    itemData.ad_manager &&
+                    itemData.ad_manager.first_name
+                  }
             ${
               itemData && itemData.ad_manager && itemData.ad_manager.last_name
             }`}
@@ -474,6 +490,14 @@ const SponsoredKeyContribution = ({
         (contributionData && typeof contributionData.result === 'object') ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
+        {selectedContributionOption === 'keyMetrics' &&
+        contributionData.length >= 1 ? (
+          <CommonPagination
+            count={count}
+            pageNumber={pageNumber}
+            handlePageChange={handlePageChange}
+          />
+        ) : null}
       </>
     );
   };
@@ -610,6 +634,9 @@ SponsoredKeyContribution.defaultProps = {
   handleOnMetricsTabChange: () => {},
   currencySymbol: '',
   isBGSManager: false,
+  handlePageChange: () => {},
+  count: null,
+  pageNumber: 1,
 };
 
 SponsoredKeyContribution.propTypes = {
@@ -625,6 +652,9 @@ SponsoredKeyContribution.propTypes = {
   selectedAdDF: objectOf(Object),
   currencySymbol: string,
   isBGSManager: bool,
+  handlePageChange: func,
+  count: number,
+  pageNumber: number,
 };
 
 const Wrapper = styled.div`

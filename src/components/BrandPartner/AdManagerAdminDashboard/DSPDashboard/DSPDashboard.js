@@ -107,6 +107,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     'dspImpressions',
   );
 
+  const [pageNumber, setPageNumber] = useState();
+  const [contributionCount, setContributionCount] = useState(null);
+
   const {
     dspChartData,
     dspCurrentTotal,
@@ -205,6 +208,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       selectedMatrics,
       startDate = null,
       endDate = null,
+      page,
     ) => {
       setKeyContributionLoader(true);
       getKeyContributionData(
@@ -218,6 +222,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         startDate,
         endDate,
         userInfo,
+        page,
       ).then((res) => {
         if (res && res.status === 500) {
           setKeyContributionLoader(false);
@@ -230,10 +235,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
-          } else if (res.data) {
-            setContributionData(res.data);
+          } else if (res.data && res.data.results) {
+            console.log('sdfjshdf', res.data.count);
+            setContributionData(res.data.results);
+            setContributionCount(res.data.count);
           } else {
-            setContributionData(null);
+            setContributionData([]);
+            setPageNumber(page);
           }
           setKeyContributionLoader(false);
         }
@@ -288,6 +296,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
       getDSPPacingData(
         selectedMarketplace.value,
@@ -314,6 +325,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     selectedKeyContribution,
     getDSPPacingData,
     selectedSpendingOption,
+    pageNumber,
   ]);
 
   const DSPYearAndCustomDateFilter = (
@@ -366,6 +378,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedTabMatrics,
           sd,
           ed,
+          pageNumber,
         );
       }
     }
@@ -396,6 +409,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
       getDSPPacingData(
         event.value,
@@ -430,6 +446,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         value,
         keyContributionValue(value, true),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
       getDSPPacingData(
         selectedMarketplace.value,
@@ -459,6 +478,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             selectedKeyContribution,
           ),
           selectedTabMatrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -480,6 +502,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             selectedKeyContribution,
           ),
           selectedTabMatrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -501,6 +526,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             selectedKeyContribution,
           ),
           selectedTabMatrics,
+          null,
+          null,
+          pageNumber,
         );
         break;
 
@@ -555,7 +583,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       });
     }
 
-    setSelectedKeyContribution(!isAdManagerAdmin);
+    setSelectedKeyContribution(isAdManagerAdmin);
 
     if (selectedAdDF.value === 'custom') {
       DSPYearAndCustomDateFilter(
@@ -573,6 +601,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         'all',
         keyContributionValue(isAdManagerAdmin ? 'all' : '', true),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -718,6 +749,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, value),
         selectedTabMatrics,
+        null,
+        null,
+        pageNumber,
       );
     }
   };
@@ -731,8 +765,25 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdManager.value,
         keyContributionValue(selectedAdManager.value, selectedKeyContribution),
         value,
+        null,
+        null,
+        pageNumber,
       );
     }
+  };
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getContributionData(
+      selectedAdDF.value,
+      selectedMarketplace.value,
+      selectedAdManager.value,
+      keyContributionValue(selectedAdManager.value, selectedKeyContribution),
+      selectedTabMatrics,
+      null,
+      null,
+      currentPage,
+    );
   };
 
   const handleSpendingOptions = (type) => {
@@ -787,6 +838,10 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedMarketplace={selectedMarketplace}
           isAdManagerAdmin={isAdManagerAdmin}
           isBGSManager={isBGSManager}
+          handlePageChange={handlePageChange}
+          contributionCount={contributionCount}
+          pageNumber={pageNumber}
+          count={contributionCount}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -935,6 +990,10 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           isDesktop={isDesktop}
           selectedAdDF={selectedAdDF}
           isBGSManager={isBGSManager}
+          handlePageChange={handlePageChange}
+          contributionCount={contributionCount}
+          pageNumber={pageNumber}
+          count={contributionCount}
         />
         <DSPPacing
           currencySymbol={currencySymbol}
