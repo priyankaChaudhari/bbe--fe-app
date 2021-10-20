@@ -73,8 +73,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   );
   const [organicSale, setOrganicSale] = useState(0);
   const [inorganicSale, setInorganicSale] = useState(0);
-  const [keyContributionLoader, setKeyContributionLoader] = useState(false);
-  const [contributionData, setContributionData] = useState([]);
+  const [contributionData, setContributionData] = useState({
+    contributionData: [],
+    contributionLoader: false,
+    keyMetricsData: [],
+    keyMetricLoader: false,
+  });
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [customDateState, setCustomDateState] = useState([
@@ -288,7 +292,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       endDate = null,
       page,
     ) => {
-      setKeyContributionLoader(true);
+      if (contributionType === 'keyMetrics') {
+        setContributionData({ ...contributionData, keyMetricLoader: true });
+      } else {
+        setContributionData({ ...contributionData, contributionLoader: true });
+      }
       getSalesKeyContributionData(
         selectedDailyFact,
         marketplace,
@@ -301,24 +309,49 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         page,
       ).then((res) => {
         if (res && res.status === 400) {
-          setKeyContributionLoader(false);
+          setContributionData({
+            ...contributionData,
+            keyMetricLoader: false,
+            contributionLoader: false,
+          });
         }
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
-            setContributionData(res.data.result);
+            setContributionData((prevState) => ({
+              ...prevState,
+              contributionData: res.data.result,
+              contributionLoader: false,
+            }));
           } else if (res.data && res.data.results) {
-            setContributionData(res.data.results);
+            setContributionData((prevState) => ({
+              ...prevState,
+              keyMetricsData: res.data.results,
+              keyMetricLoader: false,
+            }));
             setContributionCount(res.data.count);
           } else {
-            setContributionData([]);
+            setContributionData((prevState) => ({
+              ...prevState,
+              contributionData: [],
+              keyMetricsData: [],
+              contributionLoader: false,
+              keyMetricLoader: false,
+            }));
           }
-          setKeyContributionLoader(false);
+
           setPageNumber(page);
+        } else {
+          setContributionData((prevState) => ({
+            ...prevState,
+            contributionData: [],
+            keyMetricsData: [],
+            contributionLoader: false,
+            keyMetricLoader: false,
+          }));
         }
-        setKeyContributionLoader(false);
       });
     },
-    [userInfo],
+    [contributionData, userInfo],
   );
 
   useEffect(() => {
@@ -997,9 +1030,17 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         </WhiteCard>
 
         <SalesKeyContribution
-          keyContributionLoader={keyContributionLoader}
+          keyContributionLoader={
+            selectedContributionOption === 'contribution'
+              ? contributionData.contributionLoader
+              : contributionData.keyMetricLoader
+          }
           isDesktop={isDesktop}
-          contributionData={contributionData}
+          contributionData={
+            selectedContributionOption === 'contribution'
+              ? contributionData.contributionData
+              : contributionData.keyMetricsData
+          }
           selectedContributionOption={selectedContributionOption}
           handleContributionOptions={handleContributionOptions}
           selectedSalesMetrics={selectedSalesMetrics}
