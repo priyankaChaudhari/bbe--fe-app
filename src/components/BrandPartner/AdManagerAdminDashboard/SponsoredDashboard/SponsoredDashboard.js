@@ -770,7 +770,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     let contributionTab = '';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
     setSelectedAdType('all');
-
+    setCurrency('USD');
+    setCurrencySymbol(getSymbolFromCurrency('USD'));
     setSelectedMarketplace({
       value: 'all',
       label: 'All Marketplaces',

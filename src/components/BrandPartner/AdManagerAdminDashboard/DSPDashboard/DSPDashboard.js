@@ -564,6 +564,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       currency: 'USD',
     });
 
+    setCurrency('USD');
+    setCurrencySymbol(getSymbolFromCurrency('USD'));
+
     if (isAdManagerAdmin) {
       if (isBGSManager) {
         setSelectedAdManager({
