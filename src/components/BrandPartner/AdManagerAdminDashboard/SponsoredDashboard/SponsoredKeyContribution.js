@@ -41,6 +41,7 @@ const SponsoredKeyContribution = ({
   handleOnMetricsTabChange,
   currencySymbol,
   selectedAdDF,
+  isBGSManager,
 }) => {
   const history = useHistory();
 
@@ -152,7 +153,7 @@ const SponsoredKeyContribution = ({
 
   const renderKeyContributionOptions = () => {
     const keyTabOptions =
-      selectedAdManager === 'all'
+      selectedAdManager === 'all' && !isBGSManager
         ? keyContributionConstant.noAdManagerSelected
         : keyContributionConstant.adManagerSelected;
 
@@ -608,6 +609,7 @@ SponsoredKeyContribution.defaultProps = {
   selectedAdDF: {},
   handleOnMetricsTabChange: () => {},
   currencySymbol: '',
+  isBGSManager: false,
 };
 
 SponsoredKeyContribution.propTypes = {
@@ -622,6 +624,7 @@ SponsoredKeyContribution.propTypes = {
   handleOnMetricsTabChange: func,
   selectedAdDF: objectOf(Object),
   currencySymbol: string,
+  isBGSManager: bool,
 };
 
 const Wrapper = styled.div`

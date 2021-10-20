@@ -43,6 +43,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const isAdManagerAdmin =
     (userInfo && userInfo.role === 'Ad Manager Admin') ||
     userInfo.role === 'BGS Manager';
+
+  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -60,7 +62,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     isAdManagerAdmin
       ? {
           value: 'all',
-          label: 'All Ad Manager',
+          label: isBGSManager ? 'All BGS' : 'All Ad Manager',
         }
       : { value: userInfo.id, label: '' },
   );
@@ -80,7 +82,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
 
   const [selectedTabMetrics, setSelectedTabMetrics] = useState('adSales');
 
-  const tab = isAdManagerAdmin ? 'positive' : 'contribution';
+  const tab = isBGSManager
+    ? 'contribution'
+    : isAdManagerAdmin
+    ? 'positive'
+    : 'contribution';
+
   const [selectedContributionOption, setSelectedContributionOption] = useState(
     tab,
   );
@@ -106,9 +113,13 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const [adGroupBy, setAdGroupBy] = useState('daily');
 
   const getAdManagersList = useCallback(() => {
-    getManagersList('Sponsored Advertising Ad Manager').then((adm) => {
+    getManagersList(
+      isBGSManager ? 'BGS' : 'Sponsored Advertising Ad Manager',
+    ).then((adm) => {
       if (adm && adm.data && adm.data.length) {
-        const list = [{ value: 'all', label: 'All Ad Managers' }];
+        const list = [
+          { value: 'all', label: isBGSManager ? 'All BGS' : 'All Ad Managers' },
+        ];
         for (const brand of adm.data) {
           list.push({
             value: brand.id,
@@ -123,7 +134,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         setAdManagerList(list);
       }
     });
-  }, []);
+  }, [isBGSManager]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
@@ -564,7 +575,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     if (event.value !== selectedAdManager.value) {
       setSelectedAdManager(event);
 
-      if (value === 'all') {
+      if (!isBGSManager && value === 'all') {
         setSelectedContributionOption('positive');
         tabOption = 'positive';
       } else {
@@ -737,11 +748,18 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       currency: 'USD',
     });
     if (isAdManagerAdmin) {
-      contributionTab = 'positive';
-      setSelectedAdManager({
-        value: 'all',
-        label: 'All Ad Manager',
-      });
+      contributionTab = isBGSManager ? 'contribution' : 'positive';
+      if (isBGSManager) {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All BGS',
+        });
+      } else {
+        setSelectedAdManager({
+          value: 'all',
+          label: 'All Ad Manager',
+        });
+      }
     } else {
       contributionTab = 'contribution';
       setSelectedAdManager({
@@ -1017,6 +1035,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedMarketplace={selectedMarketplace}
           selectInputRef={selectInputRef}
           isAdManagerAdmin={isAdManagerAdmin}
+          isBGSManager={isBGSManager}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -1065,6 +1084,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           handleOnMetricsTabChange={handleOnMetricsTabChange}
           currencySymbol={currencySymbol}
           selectedAdDF={selectedAdDF}
+          isBGSManager={isBGSManager}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"
