@@ -73,7 +73,7 @@ export const keyContributionConstant = {
     },
     {
       id: 'keyMetrics',
-      label: 'key Metrics',
+      label: 'Key Metrics',
     },
   ],
 };
