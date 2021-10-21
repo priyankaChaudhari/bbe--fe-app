@@ -739,7 +739,7 @@ const GrayBody = styled.div`
     max-height: 225px;
     font-size: ${Theme.normal};
     color: ${Theme.gray35};
-    // border-bottom: 1px solid ${Theme.gray9};
+    /* border-bottom: 1px solid ${Theme.gray9}; */
     border-left: 1px solid ${Theme.gray9};
     border-right: 1px solid ${Theme.gray9};
     border-bottom-right-radius: 20px;
@@ -759,9 +759,9 @@ const GrayBody = styled.div`
         padding: 8px;
         float: left;
         width: 100%;
-        // &:first-child {
-        //   border-top: 1px solid ${Theme.gray7};
-        // }
+        /* &:first-child {
+           border-top: 1px solid ${Theme.gray7};
+        } */
 
         .book-list-icon {
           vertical-align: top;
