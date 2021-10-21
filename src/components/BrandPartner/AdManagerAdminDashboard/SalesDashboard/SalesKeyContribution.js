@@ -42,6 +42,7 @@ const SalesKeyContribution = ({
   handlePageChange,
   pageNumber,
   count,
+  isApiCall,
 }) => {
   const history = useHistory();
 
@@ -127,7 +128,7 @@ const SalesKeyContribution = ({
       <div className="col-md-6 col-sm1-12  mb-3">
         <ToggleButton>
           <div className="days-container ">
-            <ul className="days-tab">
+            <ul className={isApiCall ? 'days-tab disabled' : 'days-tab'}>
               {keyTabOptions.map((item) => (
                 <li key={item.id}>
                   {' '}
@@ -156,7 +157,7 @@ const SalesKeyContribution = ({
 
     return (
       <Tabs>
-        <ul className="tabs">
+        <ul className={isApiCall ? 'tabs disabled' : 'tabs'}>
           {tabOptions.map((item) => (
             <li
               key={item.value}
@@ -261,6 +262,7 @@ const SalesKeyContribution = ({
   const renderTableData = (itemData) => {
     return selectedContributionOption === 'keyMetrics' ? (
       <tr
+        key={itemData.id}
         className="cursor"
         onClick={() =>
           history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
@@ -567,31 +569,33 @@ export default SalesKeyContribution;
 SalesKeyContribution.defaultProps = {
   keyContributionLoader: false,
   isDesktop: false,
+  isApiCall: false,
   currencySymbol: '',
   contributionData: {},
   selectedContributionOption: {},
   selectedTabMetrics: {},
   selectedSalesDF: {},
+  count: null,
+  pageNumber: 1,
   handleOnMetricsTabChange: () => {},
   handleContributionOptions: () => {},
   handlePageChange: () => {},
-  count: null,
-  pageNumber: 1,
 };
 
 SalesKeyContribution.propTypes = {
   keyContributionLoader: bool,
   isDesktop: bool,
-  contributionData: arrayOf(Array),
+  isApiCall: bool,
   selectedContributionOption: string,
   selectedTabMetrics: string,
-  selectedSalesDF: objectOf(Object),
   currencySymbol: string,
+  count: number,
+  pageNumber: number,
+  selectedSalesDF: objectOf(Object),
+  contributionData: arrayOf(Array),
   handleContributionOptions: func,
   handleOnMetricsTabChange: func,
   handlePageChange: func,
-  count: number,
-  pageNumber: number,
 };
 
 const Wrapper = styled.div`
