@@ -2,17 +2,10 @@ import React from 'react';
 
 import { components } from 'react-select';
 import { arrayOf, bool, func, shape } from 'prop-types';
-import {
-  LineChart,
-  ResponsiveContainer,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  Legend,
-  LabelList,
-} from 'recharts';
 
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
+import BbPercentChart from './BbPercentChart';
 import { DropDown } from '../DropDown';
 import {
   dateOptions,
@@ -26,9 +19,6 @@ import {
   NoData,
   DropDownIndicator,
 } from '../../../../common';
-
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 
 export default function BuyBoxPercentPanel({
   bBChartData,
@@ -82,109 +72,12 @@ export default function BuyBoxPercentPanel({
     };
   };
 
-  const BBCustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      if (payload.length === 2) {
-        return (
-          <div className="custom-tooltip">
-            <p className="label-1">{payload[0].payload.date}</p>
-
-            <p className="label-2">{payload[1].payload.value}%</p>
-          </div>
-        );
-      }
-    }
-    return null;
-  };
-
-  const CustomizedLabel = (data) => {
-    const dataLength = bBChartData.length - 1;
-    if (
-      data &&
-      data.index === dataLength &&
-      bBChartData &&
-      data.y !== null &&
-      !Number.isNaN(data.y)
-    ) {
-      return (
-        <g className="mb-3">
-          {bBChartData && bBChartData[0].avg ? (
-            <rect
-              x={data.x - 25}
-              y={data.y - 27}
-              fill="#BFC5D2"
-              width={50}
-              height={28}
-            />
-          ) : null}
-
-          <text
-            className="cust-label-avg"
-            x={data.x}
-            y={data.y}
-            dy={-10}
-            fontSize={14}
-            textAnchor="middle"
-            dominantBaseline="middle"
-            fill="black">
-            {bBChartData[0].avg}%
-          </text>
-        </g>
-      );
-    }
-    return null;
-  };
-
-  const customTicks = () => {
-    if (bBChartData && bBChartData.length) {
-      const { avg } = bBChartData[0];
-      if (avg === '0.00') {
-        return [-1, parseFloat(avg), 1];
-      }
-      return [0, parseFloat(avg), parseFloat(avg) * 2];
-    }
-    return [];
-  };
-
-  const renderBBgraph = () => {
-    return (
-      <ResponsiveContainer width="99%" height={200}>
-        <LineChart
-          // width={300}
-          // height={200}
-          data={bBChartData}
-          margin={{
-            top: 30,
-            right: 30,
-            left: 20,
-            bottom: 20,
-          }}>
-          <XAxis dataKey="date" hide />
-          <YAxis tickCount={3} ticks={customTicks()} hide />
-          <Tooltip content={<BBCustomTooltip />} />
-          <Legend />
-          <Line dataKey="avg" dot={false} stroke="#BFC5D2" activeDot={false}>
-            <LabelList content={<CustomizedLabel />} />
-          </Line>
-          <Line
-            dataKey="value"
-            dot={false}
-            stroke="BLACK"
-            strokeWidth={2}
-            activeDot={false}
-          />
-        </LineChart>
-      </ResponsiveContainer>
-    );
-  };
-
   const renderBBPercentGraphPanel = () => {
     return (
       <div className="col-sm-12 mb-3 ">
         <WhiteCard className="fix-height">
           <div className="row">
             <div className="col-6 ">
-              {' '}
               <p className="black-heading-title mt-2 mb-4"> Buy Box %</p>
             </div>
             <div className="col-6 text-right mb-1">
@@ -228,7 +121,7 @@ export default function BuyBoxPercentPanel({
               height={40}
             />
           ) : bBChartData && bBChartData.length > 1 ? (
-            renderBBgraph()
+            <BbPercentChart chartId="BbPercentchart" chartData={bBChartData} />
           ) : (
             <NoData>{noGraphDataMessage}</NoData>
           )}
@@ -245,7 +138,6 @@ export default function BuyBoxPercentPanel({
   return (
     <>
       <div className="row ">{renderBBPercentGraphPanel()}</div>
-
       {/* custom date modal for BB% graph */}
       <CustomDateModal
         id="BT-performancereport-daterange-BBdate"
