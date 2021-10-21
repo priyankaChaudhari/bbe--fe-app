@@ -239,7 +239,7 @@ const Table = styled.table`
         word-break: keep-all;
       }
       .customer-details {
-        max-width: 60%;
+        max-width: 58%;
       }
 
       .company-logo {
@@ -458,31 +458,30 @@ const Table = styled.table`
       }
     }
   }
-   @media only screen and (min-width: 1920px) { 
-        tr {
-          td {
-           .company-info-details {
-              float: left;
-              word-break: keep-all;
-              max-width: 75%;
-            }
-          }
+  @media only screen and (min-width: 1920px) {
+    tr {
+      td {
+        .company-info-details {
+          float: left;
+          word-break: keep-all;
+          max-width: 75%;
         }
+      }
+    }
   }
-   @media only screen and (max-width: 1050px) { 
-        tr {
-          td {
-           .company-info-details {
-              float: left;
-              max-width: 65%;
-              word-break: keep-all;
-            }
-            .customer-details {
-              max-width: 55%;
-            }
-            
-          }
+  @media only screen and (max-width: 1050px) {
+    tr {
+      td {
+        .company-info-details {
+          float: left;
+          max-width: 65%;
+          word-break: keep-all;
         }
+        .customer-details {
+          max-width: 55%;
+        }
+      }
+    }
   }
   &.product-catalog-laptop {
     @media only screen and (max-width: 767px) {
@@ -494,29 +493,29 @@ const Table = styled.table`
     @media only screen and (min-width: 767px) {
       display: none;
     }
+  }
 
-    @media only screen and (min-width: 1700px) and (max-width: 1920px) {
-      tbody {
-        tr {
-          &.table-header {
-            th {
-              font-size: 17px;
-            }
+  @media only screen and (min-width: 1700px) and (max-width: 1920px) {
+    tbody {
+      tr {
+        &.table-header {
+          th {
+            font-size: 17px;
           }
+        }
 
-          td {
-            font-size: ${Theme.normalRes};
+        td {
+          font-size: ${Theme.normalRes};
 
-            .sub-address {
-              font-size: ${Theme.smallRes};
-            }
-            .company-name {
-              font-size: ${Theme.medium};
-            }
-            
+          .sub-address {
+            font-size: ${Theme.smallRes};
+          }
+          .company-name {
+            font-size: ${Theme.medium};
           }
         }
       }
+    }
   }
 
   @media only screen and (min-width: 991px) and (max-width: 1362px) {
@@ -532,6 +531,5 @@ const Table = styled.table`
       }
     }
   }
- 
 `;
 export default Table;

@@ -152,7 +152,7 @@ export default function CustomerList() {
   );
   const [showOrderOption, setShowOrderOption] = useState(false);
 
-  const isDesktop = useMediaQuery({ minWidth: 991 });
+  const isDesktop = useMediaQuery({ minWidth: 992 });
   const currentDate = new Date();
   const [isCustomDateApply, setIsCustomDateApply] = useState(false);
   const [customDateData, setCustomDateData] = useState([
