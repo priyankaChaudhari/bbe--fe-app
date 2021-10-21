@@ -18,6 +18,8 @@ export default function CustomerTabDetails({
   setViewComponent,
   viewComponent,
   customer,
+  subViewComponent,
+  setSubViewComponent,
 }) {
   const dispatch = useDispatch();
   return (
@@ -61,6 +63,32 @@ export default function CustomerTabDetails({
             />
             Performance
           </div>
+          <ul>
+            <li
+              onClick={() => {
+                setSubViewComponent('seller');
+              }}
+              role="presentation">
+              <div
+                className={`left-details ${
+                  subViewComponent === 'seller' ? 'active' : ''
+                }`}>
+                Seller Reporting
+              </div>
+            </li>
+            <li
+              onClick={() => {
+                setSubViewComponent('vendor');
+              }}
+              role="presentation">
+              <div
+                className={`left-details ${
+                  subViewComponent === 'vendor' ? 'active' : ''
+                }`}>
+                Vendor Reporting
+              </div>
+            </li>
+          </ul>
         </li>
       ) : (
         ''
@@ -177,4 +205,6 @@ CustomerTabDetails.propTypes = {
   customer: shape({
     id: string,
   }).isRequired,
+  subViewComponent: string.isRequired,
+  setSubViewComponent: func.isRequired,
 };

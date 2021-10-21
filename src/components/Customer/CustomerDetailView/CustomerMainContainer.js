@@ -40,6 +40,7 @@ import {
   BackToTop,
   WhiteCard,
   GetInitialName,
+  ModalRadioCheck,
 } from '../../../common';
 import {
   getCustomerActivityLog,
@@ -66,6 +67,8 @@ export default function CustomerMainContainer() {
   const [viewComponent, setViewComponent] = useState(
     customerSelectedTab || 'performance',
   );
+
+  const [subViewComponent, setSubViewComponent] = useState('seller');
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
@@ -307,6 +310,8 @@ export default function CustomerMainContainer() {
                         setViewComponent={setViewComponent}
                         viewComponent={viewComponent}
                         customer={customer}
+                        subViewComponent={subViewComponent}
+                        setSubViewComponent={setSubViewComponent}
                       />
                     </WhiteCard>
 
@@ -319,6 +324,42 @@ export default function CustomerMainContainer() {
                       }}
                       defaultValue={viewOptions[0]}
                     />
+
+                    <ModalRadioCheck className="pb-1" key="seller">
+                      {' '}
+                      <label
+                        className="d-lg-none d-block mb-3"
+                        htmlFor="seller">
+                        Seller Reporting
+                        <input
+                          type="radio"
+                          name="radio"
+                          id="seller"
+                          value="seller"
+                          onChange={() => setSubViewComponent('seller')}
+                          defaultChecked={subViewComponent === 'seller'}
+                        />
+                        <span className="checkmark checkmark-customer-list" />
+                      </label>
+                    </ModalRadioCheck>
+
+                    <ModalRadioCheck className="pb-1" key="vendor">
+                      {' '}
+                      <label
+                        className="d-lg-none d-block mb-3"
+                        htmlFor="vendor">
+                        Vendor Reporting
+                        <input
+                          type="radio"
+                          name="radio"
+                          id="vendor"
+                          value="vendor"
+                          onChange={() => setSubViewComponent('vendor')}
+                          defaultChecked={subViewComponent === 'vendor'}
+                        />
+                        <span className="checkmark checkmark-customer-list" />
+                      </label>
+                    </ModalRadioCheck>
                   </div>
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails
