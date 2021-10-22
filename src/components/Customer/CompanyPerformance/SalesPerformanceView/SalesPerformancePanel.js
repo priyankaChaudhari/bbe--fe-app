@@ -259,7 +259,6 @@ export default function SalesPerformancePanel({
             <div className="days-container ">
               <ul className="days-tab">
                 <li className={filters.daily === false ? 'disabled-tab' : ''}>
-                  {' '}
                   <input
                     className="d-none"
                     type="radio"
