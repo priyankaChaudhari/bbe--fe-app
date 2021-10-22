@@ -705,7 +705,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         'custom',
         selectedMarketplace.value,
         value,
-        selectedContributionOption,
+        selectedAdManager.value,
       );
     } else {
       getAdData(

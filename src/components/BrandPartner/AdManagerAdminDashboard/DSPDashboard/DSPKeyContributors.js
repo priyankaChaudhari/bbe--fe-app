@@ -10,15 +10,6 @@ import { useHistory } from 'react-router-dom';
 import Theme from '../../../../theme/Theme';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
-  PageLoader,
-  Status,
-  Table,
-  Tabs,
-  WhiteCard,
-  ToggleButton,
-  CommonPagination,
-} from '../../../../common';
-import {
   ArrowDownIcon,
   ArrowUpIcon,
   CompanyDefaultUser,
@@ -32,6 +23,16 @@ import {
   keyContributionHeaders,
   metricsCurrency,
 } from '../../../../constants';
+
+import {
+  PageLoader,
+  Status,
+  Table,
+  Tabs,
+  WhiteCard,
+  ToggleButton,
+  CommonPagination,
+} from '../../../../common';
 
 const DSPKeyContributors = ({
   selectedKeyContribution,
@@ -57,16 +58,6 @@ const DSPKeyContributors = ({
     id2: 'negative',
     label2: 'Negative',
   });
-
-  useEffect(() => {
-    console.log('sdfsgdfs', isBGSManager, selectedAdManager !== 'all', data);
-    console.log(
-      selectedKeyContribution === false &&
-        (selectedAdManager !== 'all' || isBGSManager) &&
-        data &&
-        data.length >= 1,
-    );
-  }, [data, isBGSManager, selectedAdManager, selectedKeyContribution]);
 
   useEffect(() => {
     if (selectedAdManager !== 'all' || isBGSManager) {
@@ -438,24 +429,168 @@ const DSPKeyContributors = ({
         (data && typeof data.result === 'object') ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
-
-        {selectedKeyContribution === false &&
-        (selectedAdManager !== 'all' || isBGSManager) &&
-        data &&
-        data.length >= 1 ? (
-          <div className="mt-0">
-            <CommonPagination
-              count={count}
-              pageNumber={pageNumber}
-              handlePageChange={handlePageChange}
-            />
-          </div>
-        ) : null}
       </>
     );
   };
 
   const renderTabletKeyContributions = () => {
+    if (
+      selectedKeyContribution === false &&
+      (selectedAdManager !== 'all' || isBGSManager)
+    ) {
+      return (
+        <TabletViewManager className="d-lg-none d-md-block d-sm-block">
+          <div className="container-fluid">
+            <div className="row cursor">
+              {data &&
+                data.map((itemData) => (
+                  <div
+                    className="col-md-6 col-12 mt-4"
+                    role="presentation"
+                    key={itemData.id}
+                    onClick={() =>
+                      history.push(
+                        PATH_CUSTOMER_DETAILS.replace(':id', itemData.id),
+                        'adManager',
+                      )
+                    }>
+                    {' '}
+                    <img
+                      className="company-logo"
+                      src={
+                        itemData &&
+                        itemData.documents &&
+                        itemData.documents[0] &&
+                        Object.values(itemData.documents[0])
+                          ? Object.values(itemData.documents[0])[0]
+                          : CompanyDefaultUser
+                      }
+                      alt="logo"
+                    />
+                    <div className="company-name">
+                      {itemData && itemData.company_name}
+                    </div>
+                    <div className="status">
+                      {itemData &&
+                      itemData.ad_manager &&
+                      itemData.ad_manager.length === 0
+                        ? ''
+                        : `${
+                            itemData &&
+                            itemData.ad_manager &&
+                            itemData.ad_manager.first_name
+                          }${
+                            itemData &&
+                            itemData.ad_manager &&
+                            itemData.ad_manager.last_name
+                          }`}
+                    </div>
+                    <div className="clear-fix" />
+                    <div className=" straight-line horizontal-line pt-3 mb-3 " />
+                    <div className="row">
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Impressions</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.dsp_ad_performance &&
+                          itemData.dsp_ad_performance.current_sum &&
+                          itemData.dsp_ad_performance.current_sum.impressions
+                            ? `${itemData.dsp_ad_performance.current_sum.impressions
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `0`}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.dsp_ad_performance &&
+                              itemData.dsp_ad_performance.difference_data &&
+                              itemData.dsp_ad_performance.difference_data
+                                .impressions,
+                            false,
+                            'impressions',
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">dsp Spend</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.dsp_ad_performance &&
+                          itemData.dsp_ad_performance.current_sum &&
+                          itemData.dsp_ad_performance.current_sum.dsp_spend
+                            ? `${currencySymbol}${itemData.dsp_ad_performance.current_sum.dsp_spend
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.dsp_ad_performance &&
+                              itemData.dsp_ad_performance.difference_data &&
+                              itemData.dsp_ad_performance.difference_data
+                                .dsp_spend,
+                            true,
+                            'DspSpend',
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">total Product Sales</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.dsp_ad_performance &&
+                          itemData.dsp_ad_performance.current_sum &&
+                          itemData.dsp_ad_performance.current_sum
+                            .total_product_sales
+                            ? `${currencySymbol}${itemData.dsp_ad_performance.current_sum.total_product_sales
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.dsp_ad_performance &&
+                              itemData.dsp_ad_performance.difference_data &&
+                              itemData.dsp_ad_performance.difference_data
+                                .total_product_sales,
+                            false,
+                            'totalProductSales',
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">total Roas</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.dsp_ad_performance &&
+                          itemData.dsp_ad_performance.current_sum &&
+                          itemData.dsp_ad_performance.current_sum.total_roas
+                            ? `${itemData.dsp_ad_performance.current_sum.total_roas.toFixed(
+                                2,
+                              )}%`
+                            : '0%'}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.dsp_ad_performance &&
+                              itemData.dsp_ad_performance.difference_data &&
+                              itemData.dsp_ad_performance.difference_data
+                                .total_roas,
+                            false,
+                            'totalRoas',
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </TabletViewManager>
+      );
+    }
     return (
       <>
         {data && data.length >= 1 ? (
@@ -464,7 +599,19 @@ const DSPKeyContributors = ({
               <div className="row cursor">
                 {data &&
                   data.map((itemData) => (
-                    <div className="col-md-6 col-12 mt-4" role="presentation">
+                    <div
+                      className="col-md-6 col-12 mt-4"
+                      role="presentation"
+                      key={itemData.customer_id}
+                      onClick={() =>
+                        history.push(
+                          PATH_CUSTOMER_DETAILS.replace(
+                            ':id',
+                            itemData.customer_id,
+                          ),
+                          'adManager',
+                        )
+                      }>
                       {' '}
                       <img
                         className="company-logo"
@@ -546,9 +693,10 @@ const DSPKeyContributors = ({
     }
     return (
       <Tabs>
-        <ul className="tabs">
+        <ul className={loader ? 'tabs disabled' : 'tabs'}>
           {_.keys(selectedDSPMatrics).map((item) => (
             <li
+              key={item}
               className={selectedTabMatrics === item ? 'active' : ''}
               onClick={() => handleOnMatricsTabChange(item)}
               role="presentation">
@@ -574,7 +722,7 @@ const DSPKeyContributors = ({
           <div className="col-md-6 col-sm1-12  mb-3">
             <ToggleButton>
               <div className="days-container ">
-                <ul className="days-tab">
+                <ul className={loader ? 'days-tab disabled' : 'days-tab'}>
                   <li>
                     {' '}
                     <input
@@ -587,6 +735,7 @@ const DSPKeyContributors = ({
                       onClick={() => {
                         handleContribution(true);
                       }}
+                      onChange={() => {}}
                     />
                     <label htmlFor={keyContribution.id}>
                       {keyContribution.label}{' '}
@@ -604,6 +753,7 @@ const DSPKeyContributors = ({
                       onClick={() => {
                         handleContribution(false);
                       }}
+                      onChange={() => {}}
                     />
                     <label htmlFor={keyContribution.id2}>
                       {keyContribution.label2}{' '}
@@ -637,6 +787,18 @@ const DSPKeyContributors = ({
             ) : (
               renderTabletKeyContributions()
             )}
+            {selectedKeyContribution === false &&
+            (selectedAdManager !== 'all' || isBGSManager) &&
+            data &&
+            data.length >= 1 ? (
+              <div className="mt-0">
+                <CommonPagination
+                  count={count}
+                  pageNumber={pageNumber}
+                  handlePageChange={handlePageChange}
+                />
+              </div>
+            ) : null}
           </>
         )}
       </WhiteCard>
