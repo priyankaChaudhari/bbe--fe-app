@@ -146,8 +146,8 @@ body {
 h1 {
   font-size: ${Theme.largeTitleFontSize};
   font-family: ${Theme.titleFontFamily};
-  color: ${Theme.darkGreen};
   margin: 0;
+  color: initial !important;
 
   span {
     background-color: ${Theme.darkGreen};
@@ -175,6 +175,7 @@ h1 {
       background-color: #d63649;
     }
   }
+  
   @media only screen and (min-width: 1700px) {
     font-size: ${Theme.largeTitleFontSizeRes};
   }
