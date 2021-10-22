@@ -40,6 +40,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [salesCurrentTotal, setSalesCurrentTotal] = useState([]);
   const [salesPreviousTotal, setSalesPreviousTotal] = useState([]);
   const [salesDifference, setSalesDifference] = useState([]);
+  const [isApiCall, setIsApiCall] = useState(false);
   const [selectedSalesMetrics, setSelectedSalesMetrics] = useState({
     revenue: true,
   });
@@ -297,6 +298,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       } else {
         setContributionData({ ...contributionData, contributionLoader: true });
       }
+      setIsApiCall(true);
       getSalesKeyContributionData(
         selectedDailyFact,
         marketplace,
@@ -309,6 +311,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         page,
       ).then((res) => {
         if (res && res.status === 400) {
+          setIsApiCall(false);
           setContributionData({
             ...contributionData,
             keyMetricLoader: false,
@@ -338,7 +341,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
               keyMetricLoader: false,
             }));
           }
-
+          setIsApiCall(false);
           setPageNumber(page);
         } else {
           setContributionData((prevState) => ({
@@ -348,6 +351,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
             contributionLoader: false,
             keyMetricLoader: false,
           }));
+          setIsApiCall(false);
         }
       });
     },
@@ -1054,6 +1058,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           contributionCount={contributionCount}
           pageNumber={pageNumber}
           count={contributionCount}
+          isApiCall={isApiCall}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"
