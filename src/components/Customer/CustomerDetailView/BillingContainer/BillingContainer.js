@@ -34,6 +34,12 @@ const BillingContainer = ({
             Rev Share Invoices
           </li>
           <li
+            className={viewComponent === 'upsell invoices' ? 'active' : ''}
+            onClick={() => setViewComponent('upsell invoices')}
+            role="presentation">
+            Upsell Invoices
+          </li>
+          <li
             className={viewComponent === 'dsp service' ? 'active' : ''}
             onClick={() => setViewComponent('dsp service')}
             role="presentation">
@@ -49,7 +55,9 @@ const BillingContainer = ({
           ) : null}
         </ul>
       </Tabs>
-      {viewComponent === 'dsp service' || viewComponent === 'rev share' ? (
+      {viewComponent === 'dsp service' ||
+      viewComponent === 'rev share' ||
+      viewComponent === 'upsell invoices' ? (
         <Invoice invoiceType={viewComponent} id={id} userInfo={userInfo} />
       ) : (
         <BillingDetails
