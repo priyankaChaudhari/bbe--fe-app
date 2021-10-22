@@ -172,8 +172,11 @@ const SponsoredKeyContribution = ({
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
         <ToggleButton>
-          <div className="days-container ">
-            <ul className="days-tab">
+          <div className="days-container">
+            <ul
+              className={
+                keyContributionLoader ? 'days-tab disabled' : 'days-tab'
+              }>
               {keyTabOptions.map((item) => (
                 <li key={item.id}>
                   {' '}
@@ -207,7 +210,7 @@ const SponsoredKeyContribution = ({
     }
     return (
       <Tabs>
-        <ul className="tabs">
+        <ul className={keyContributionLoader ? 'tabs disabled' : 'tabs'}>
           {_.keys(selectedAdMetrics).map((item) => (
             <li
               key={Math.random()}
@@ -227,14 +230,14 @@ const SponsoredKeyContribution = ({
     let selectedClass = '';
     const value = itemData.change;
     if (selectedTabMetrics === 'adSpend') {
-      if (value.toString().includes('-')) {
+      if (value && value.toString().includes('-')) {
         selectedClass = 'decrease-rate large grey';
         selectedArrow = UpDowGrayArrow;
       } else {
         selectedClass = 'increase-rate large grey';
         selectedArrow = UpDowGrayArrow;
       }
-    } else if (value.toString().includes('-')) {
+    } else if (value && value.toString().includes('-')) {
       selectedClass = 'decrease-rate large';
       selectedArrow = ArrowDownIcon;
     } else {
@@ -503,6 +506,7 @@ const SponsoredKeyContribution = ({
   };
 
   const renderTabletKeyContributions = () => {
+    console.log('contributionData', contributionData);
     return (
       <TabletViewManager className="d-lg-none d-md-block d-sm-block">
         <div className="container-fluid">
