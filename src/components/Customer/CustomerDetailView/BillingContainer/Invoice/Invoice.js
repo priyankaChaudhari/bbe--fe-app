@@ -4,11 +4,11 @@ import { string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import MetricsInvoices from './MetricsInvoices';
-import DSPInvoiceDetails from './DSPInvoiceDetails';
+import InvoiceList from './InvoiceList';
 import { PageLoader } from '../../../../../common';
-import { getDSPInvoiceData, getMetricsInvoiceData } from '../../../../../api';
+import { getInvoiceData, getMetricsInvoiceData } from '../../../../../api';
 
-const DSPInvoices = ({ id, invoiceType }) => {
+const Invoice = ({ id, invoiceType }) => {
   const [loader, setLoader] = useState(false);
   const [invoicesData, setInvoicesData] = useState(null);
   const [invoiceMetricsData, setMetricsData] = useState(null);
@@ -16,7 +16,7 @@ const DSPInvoices = ({ id, invoiceType }) => {
   const getDSPInvoicesData = useCallback(
     (type) => {
       setLoader(true);
-      getDSPInvoiceData(type, id).then((res) => {
+      getInvoiceData(type, id).then((res) => {
         if (res && res.status === 500) {
           setLoader(false);
           setInvoicesData(null);
@@ -81,7 +81,7 @@ const DSPInvoices = ({ id, invoiceType }) => {
       ) : (
         <>
           <MetricsInvoices data={invoiceMetricsData} />
-          <DSPInvoiceDetails
+          <InvoiceList
             invoiceType={invoiceType}
             data={invoicesData}
             loader={loader}
@@ -92,13 +92,13 @@ const DSPInvoices = ({ id, invoiceType }) => {
   );
 };
 
-export default DSPInvoices;
+export default Invoice;
 
-DSPInvoices.defaultProps = {
+Invoice.defaultProps = {
   invoiceType: 'rev share',
 };
 
-DSPInvoices.propTypes = {
+Invoice.propTypes = {
   id: string.isRequired,
   invoiceType: string,
 };

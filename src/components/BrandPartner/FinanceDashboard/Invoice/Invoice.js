@@ -20,7 +20,7 @@ import {
   CustomDateRange,
 } from '../../../../common';
 
-export default function DSPInvoices({
+export default function Invoice({
   setTimeFrame,
   setTimeFrameType,
   setIsTimeFrameChange,
@@ -312,14 +312,14 @@ export default function DSPInvoices({
   );
 }
 
-DSPInvoices.defaultProps = {
+Invoice.defaultProps = {
   setTimeFrame: () => {},
   setTimeFrameType: () => {},
   setIsTimeFrameChange: () => {},
   selectedNavigation: '',
 };
 
-DSPInvoices.propTypes = {
+Invoice.propTypes = {
   setTimeFrame: func,
   setTimeFrameType: func,
   setIsTimeFrameChange: func,
