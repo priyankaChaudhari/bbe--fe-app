@@ -236,7 +236,6 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           if (res.data && res.data.result) {
             setContributionData(res.data.result);
           } else if (res.data && res.data.results) {
-            console.log('sdfjshdf', res.data.count);
             setContributionData(res.data.results);
             setContributionCount(res.data.count);
           } else {

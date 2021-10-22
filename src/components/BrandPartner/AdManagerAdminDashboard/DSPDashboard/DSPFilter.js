@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, shape, string } from 'prop-types';
+import { arrayOf, bool, func, shape } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import {
@@ -129,38 +129,31 @@ const DSPFilter = ({
 export default DSPFilter;
 
 DSPFilter.defaultProps = {
-  selectProps: {
-    menuIsOpen: false,
-  },
-  handleMarketplaceOptions: () => {},
+  isAdManagerAdmin: false,
+  isBGSManager: false,
+  isApiCall: false,
   options: [],
   adManagerList: [],
   getAdManagerComponents: null,
-  handleAdManagerFilter: () => {},
-  isApiCall: false,
-  handleResetFilter: () => {},
   selectInputRef: {},
   selectedAdManager: {},
   selectedMarketplace: {},
-  isAdManagerAdmin: {},
-  isBGSManager: false,
+  handleResetFilter: () => {},
+  handleAdManagerFilter: () => {},
+  handleMarketplaceOptions: () => {},
 };
 
 DSPFilter.propTypes = {
-  handleMarketplaceOptions: func,
+  isApiCall: bool,
+  isAdManagerAdmin: bool,
+  isBGSManager: bool,
+  selectInputRef: shape({}),
+  selectedAdManager: shape({}),
+  selectedMarketplace: shape({}),
   options: arrayOf(Array),
-  // eslint-disable-next-line react/no-unused-prop-types
-  selectProps: shape({
-    menuIsOpen: bool,
-  }),
   adManagerList: arrayOf(Array),
+  handleMarketplaceOptions: func,
   getAdManagerComponents: func,
   handleAdManagerFilter: func,
-  isApiCall: bool,
   handleResetFilter: func,
-  selectInputRef: arrayOf(Array),
-  selectedAdManager: arrayOf(Array),
-  selectedMarketplace: arrayOf(Array),
-  isAdManagerAdmin: string,
-  isBGSManager: bool,
 };
