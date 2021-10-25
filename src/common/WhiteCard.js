@@ -371,6 +371,32 @@ export const WhiteCard = styled.div`
       &:last-child {
         margin-bottom: 0;
       }
+      .sub-category {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+
+        li.sub-category-details {
+          font-size: ${Theme.normal};
+          padding: 25px 0 0 80px;
+          color: ${Theme.black};
+          margin: 0;
+
+          &.active {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+  .sub-category-mobile-view {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+
+    li {
+      display: inline-block;
+      margin-right: 20px;
     }
   }
 

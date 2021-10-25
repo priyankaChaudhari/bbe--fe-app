@@ -63,30 +63,27 @@ export default function CustomerTabDetails({
             />
             Performance
           </div>
-          <ul>
+          <ul className="sub-category">
             <li
               onClick={() => {
                 setSubViewComponent('seller');
               }}
-              role="presentation">
-              <div
-                className={`left-details ${
-                  subViewComponent === 'seller' ? 'active' : ''
-                }`}>
-                Seller Reporting
-              </div>
+              role="presentation"
+              className={`sub-category-details ${
+                subViewComponent === 'seller' ? 'active' : ''
+              }`}>
+              {' '}
+              Seller Reporting
             </li>
             <li
               onClick={() => {
                 setSubViewComponent('vendor');
               }}
-              role="presentation">
-              <div
-                className={`left-details ${
-                  subViewComponent === 'vendor' ? 'active' : ''
-                }`}>
-                Vendor Reporting
-              </div>
+              role="presentation"
+              className={`sub-category-details ${
+                subViewComponent === 'vendor' ? 'active' : ''
+              }`}>
+              Vendor Reporting
             </li>
           </ul>
         </li>
