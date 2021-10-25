@@ -20,12 +20,14 @@ import Addendum from './Addendum';
 import Statement from './Statement';
 import ContractFooter from './ContractFooter';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
-import RequestSignatureModal from './ContractModals/RequestSignatureModal';
-import DiscardChangesConfirmation from './ContractModals/DiscardChangesConfirmation';
-import DiscountModal from './ContractModals/DiscountModal';
-import ContractEditConfirmation from './ContractModals/ContractEditConfirmation';
 import { ContractTab, SidePanel } from '../../theme/AgreementStyle';
 import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
+import {
+  RequestSignatureModal,
+  DiscardChangesConfirmation,
+  DiscountModal,
+  ContractEditConfirmation,
+} from './ContractModals';
 import {
   PageLoader,
   PageNotFound,
@@ -167,7 +169,7 @@ export default function ContractContainer() {
     amendment: false,
   });
   const [openCollapse, setOpenCollapse] = useState({
-    agreement: false,
+    agreement: true,
     statement: false,
     addendum: false,
     dspAddendum: false,
@@ -2308,7 +2310,6 @@ export default function ContractContainer() {
       saveChanges(apis);
     }
   };
-
   const checkApprovalCondition = () => {
     const rev = Number(details?.rev_share?.value);
     const dspFee = Number(details?.dsp_fee);
@@ -2565,6 +2566,7 @@ export default function ContractContainer() {
         createAgreementDoc={createAgreementDoc}
         setIsLoading={setIsLoading}
         getContractDetails={getContractDetails}
+        amendmentData={amendmentData}
       />
     );
   };
