@@ -1,17 +1,19 @@
+/* eslint-disable camelcase */
 import React, { useEffect, useState, useCallback } from 'react';
 
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import * as am4core from '@amcharts/amcharts4/core';
-// eslint-disable-next-line camelcase
-import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import Select from 'react-select';
+import * as am4core from '@amcharts/amcharts4/core';
+import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import { func, instanceOf, shape, string } from 'prop-types';
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 import SalesPerformancePanel from './SalesPerformancePanel';
 import BuyBoxPercentPanel from './BuyBoxPercentPanel';
 import Theme from '../../../../theme/Theme';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getPerformance, getBuyBoxChartData } from '../../../../api';
 import {
   DropDownSelect,
@@ -20,9 +22,6 @@ import {
   Tabs,
   DropDownIndicator,
 } from '../../../../common';
-
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -236,7 +235,7 @@ export default function PerformanceReport({
 
           const tempBBData = res.data.bbep.map((data) => {
             return {
-              date: dayjs(data.report_date).format('MMM D'),
+              date: dayjs(data.report_date).format('MMM D YYYY'),
               value: data.bbep,
               avg: avg.toFixed(2),
             };
