@@ -855,7 +855,7 @@ export const WhiteCard = styled.div`
     }
     .days-container {
       margin: 0 auto;
-      float: none;
+      float: none !important;
     }
     .rechart-item {
       margin: 0 auto;
