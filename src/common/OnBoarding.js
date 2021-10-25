@@ -136,7 +136,7 @@ const OnBoardingBody = styled.div`
     .account-steps-check {
       list-style-type: none;
       padding: 0;
-      marging: 0;
+      margin: 0;
 
       li {
         padding-bottom: 10px;
