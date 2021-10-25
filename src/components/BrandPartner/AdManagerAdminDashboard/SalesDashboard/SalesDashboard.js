@@ -40,6 +40,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [salesCurrentTotal, setSalesCurrentTotal] = useState([]);
   const [salesPreviousTotal, setSalesPreviousTotal] = useState([]);
   const [salesDifference, setSalesDifference] = useState([]);
+
   const [selectedSalesMetrics, setSelectedSalesMetrics] = useState({
     revenue: true,
   });
@@ -73,12 +74,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   );
   const [organicSale, setOrganicSale] = useState(0);
   const [inorganicSale, setInorganicSale] = useState(0);
-  const [contributionData, setContributionData] = useState({
-    contributionData: [],
-    contributionLoader: false,
-    keyMetricsData: [],
-    keyMetricLoader: false,
-  });
+  const [contributionData, setContributionData] = useState([]);
+  const [contributionLoader, setContributionLoader] = useState(false);
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [customDateState, setCustomDateState] = useState([
@@ -292,11 +289,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       endDate = null,
       page,
     ) => {
-      if (contributionType === 'keyMetrics') {
-        setContributionData({ ...contributionData, keyMetricLoader: true });
-      } else {
-        setContributionData({ ...contributionData, contributionLoader: true });
-      }
+      setContributionLoader(true);
       getSalesKeyContributionData(
         selectedDailyFact,
         marketplace,
@@ -308,50 +301,25 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         userInfo,
         page,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setContributionData({
-            ...contributionData,
-            keyMetricLoader: false,
-            contributionLoader: false,
-          });
+        if (res && (res.status === 400 || res.status === 400)) {
+          setContributionLoader(false);
+          setContributionData([]);
         }
         if (res && res.status === 200) {
           if (res.data && res.data.result) {
-            setContributionData((prevState) => ({
-              ...prevState,
-              contributionData: res.data.result,
-              contributionLoader: false,
-            }));
+            setContributionData(res.data.result);
           } else if (res.data && res.data.results) {
-            setContributionData((prevState) => ({
-              ...prevState,
-              keyMetricsData: res.data.results,
-              keyMetricLoader: false,
-            }));
+            setContributionData(res.data.results);
             setContributionCount(res.data.count);
           } else {
-            setContributionData((prevState) => ({
-              ...prevState,
-              contributionData: [],
-              keyMetricsData: [],
-              contributionLoader: false,
-              keyMetricLoader: false,
-            }));
+            setContributionData([]);
+            setPageNumber(page);
           }
-
-          setPageNumber(page);
-        } else {
-          setContributionData((prevState) => ({
-            ...prevState,
-            contributionData: [],
-            keyMetricsData: [],
-            contributionLoader: false,
-            keyMetricLoader: false,
-          }));
+          setContributionLoader(false);
         }
       });
     },
-    [contributionData, userInfo],
+    [userInfo],
   );
 
   useEffect(() => {
@@ -1032,17 +1000,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         </WhiteCard>
 
         <SalesKeyContribution
-          keyContributionLoader={
-            selectedContributionOption === 'contribution'
-              ? contributionData.contributionLoader
-              : contributionData.keyMetricLoader
-          }
+          keyContributionLoader={contributionLoader}
           isDesktop={isDesktop}
-          contributionData={
-            selectedContributionOption === 'contribution'
-              ? contributionData.contributionData
-              : contributionData.keyMetricsData
-          }
+          contributionData={contributionData}
           selectedContributionOption={selectedContributionOption}
           handleContributionOptions={handleContributionOptions}
           selectedSalesMetrics={selectedSalesMetrics}
@@ -1054,6 +1014,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           contributionCount={contributionCount}
           pageNumber={pageNumber}
           count={contributionCount}
+          isApiCall={contributionLoader}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"

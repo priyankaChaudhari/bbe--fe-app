@@ -42,6 +42,7 @@ const SalesKeyContribution = ({
   handlePageChange,
   pageNumber,
   count,
+  isApiCall,
 }) => {
   const history = useHistory();
 
@@ -127,7 +128,7 @@ const SalesKeyContribution = ({
       <div className="col-md-6 col-sm1-12  mb-3">
         <ToggleButton>
           <div className="days-container ">
-            <ul className="days-tab">
+            <ul className={isApiCall ? 'days-tab disabled' : 'days-tab'}>
               {keyTabOptions.map((item) => (
                 <li key={item.id}>
                   {' '}
@@ -156,7 +157,7 @@ const SalesKeyContribution = ({
 
     return (
       <Tabs>
-        <ul className="tabs">
+        <ul className={isApiCall ? 'tabs disabled' : 'tabs'}>
           {tabOptions.map((item) => (
             <li
               key={item.value}
@@ -261,6 +262,7 @@ const SalesKeyContribution = ({
   const renderTableData = (itemData) => {
     return selectedContributionOption === 'keyMetrics' ? (
       <tr
+        key={itemData.id}
         className="cursor"
         onClick={() =>
           history.push(PATH_CUSTOMER_DETAILS.replace(':id', itemData.id))
@@ -432,26 +434,178 @@ const SalesKeyContribution = ({
         (contributionData && contributionData.length === 0) ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
-        {selectedContributionOption === 'keyMetrics' &&
-        contributionData.length >= 1 ? (
-          <CommonPagination
-            count={count}
-            pageNumber={pageNumber}
-            handlePageChange={handlePageChange}
-          />
-        ) : null}
       </>
     );
   };
 
   const renderTabletKeyContributions = () => {
+    if (selectedContributionOption === 'keyMetrics') {
+      return (
+        <TabletViewManager className="d-lg-none d-md-block d-sm-block">
+          <div className="container-fluid">
+            <div className="row cursor">
+              {contributionData &&
+                contributionData.map((itemData) => (
+                  <div
+                    className="col-md-6 col-12 mt-4"
+                    role="presentation"
+                    key={itemData.id}
+                    onClick={() =>
+                      history.push(
+                        PATH_CUSTOMER_DETAILS.replace(':id', itemData.id),
+                      )
+                    }>
+                    {' '}
+                    <img
+                      className="company-logo"
+                      src={
+                        itemData &&
+                        itemData.documents &&
+                        itemData.documents[0] &&
+                        Object.values(itemData.documents[0])
+                          ? Object.values(itemData.documents[0])[0]
+                          : CompanyDefaultUser
+                      }
+                      alt="logo"
+                    />
+                    <div className="company-name">
+                      {itemData && itemData.company_name}
+                    </div>
+                    <div className="status">
+                      {itemData &&
+                      itemData.brand_growth_strategist &&
+                      itemData.brand_growth_strategist.length === 0
+                        ? ''
+                        : `${
+                            itemData &&
+                            itemData.brand_growth_strategist &&
+                            itemData.brand_growth_strategist.first_name
+                          }
+            ${
+              itemData &&
+              itemData.brand_growth_strategist &&
+              itemData.brand_growth_strategist.last_name
+            }`}
+                    </div>
+                    <div className="clear-fix" />
+                    <div className=" straight-line horizontal-line pt-3 mb-3 " />
+                    <div className="row">
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Total Sales</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sales_performance &&
+                          itemData.sales_performance.current_sum &&
+                          itemData.sales_performance.current_sum.revenue
+                            ? `${currencySymbol}${itemData.sales_performance.current_sum.revenue
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sales_performance &&
+                              itemData.sales_performance.difference_data &&
+                              itemData.sales_performance.difference_data
+                                .revenue,
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Traffic</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sales_performance &&
+                          itemData.sales_performance.current_sum &&
+                          itemData.sales_performance.current_sum.traffic
+                            ? `${itemData.sales_performance.current_sum.traffic
+                                .toFixed(0)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `0`}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sales_performance &&
+                              itemData.sales_performance.difference_data &&
+                              itemData.sales_performance.difference_data
+                                .traffic,
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Conversion</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sales_performance &&
+                          itemData.sales_performance.current_sum &&
+                          itemData.sales_performance.current_sum.conversion
+                            ? `${Number(
+                                itemData.sales_performance.current_sum.conversion
+                                  .toFixed(2)
+                                  .toString()
+                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+                              )}%`
+                            : '0%'}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sales_performance &&
+                              itemData.sales_performance.difference_data &&
+                              itemData.sales_performance.difference_data
+                                .conversion,
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Units Sold</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sales_performance &&
+                          itemData.sales_performance.current_sum &&
+                          itemData.sales_performance.current_sum.units_sold
+                            ? `${itemData.sales_performance.current_sum.units_sold.toFixed(
+                                0,
+                              )}`
+                            : '0'}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sales_performance &&
+                              itemData.sales_performance.difference_data &&
+                              itemData.sales_performance.difference_data
+                                .units_sold,
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </TabletViewManager>
+      );
+    }
+
     return (
       <TabletViewManager className="d-lg-none d-md-block d-sm-block">
         <div className="container-fluid">
           <div className="row cursor">
             {contributionData &&
               contributionData.map((itemData) => (
-                <div className="col-md-6 col-12 mt-4" role="presentation">
+                <div
+                  className="col-md-6 col-12 mt-4"
+                  role="presentation"
+                  key={itemData.customer_id}
+                  onClick={() =>
+                    history.push(
+                      PATH_CUSTOMER_DETAILS.replace(
+                        ':id',
+                        itemData.customer_id,
+                      ),
+                    )
+                  }>
                   {' '}
                   <img
                     className="company-logo"
@@ -553,6 +707,15 @@ const SalesKeyContribution = ({
             ) : (
               <NoData>{noGraphDataMessage}</NoData>
             )}
+
+            {selectedContributionOption === 'keyMetrics' &&
+            contributionData.length >= 1 ? (
+              <CommonPagination
+                count={count}
+                pageNumber={pageNumber}
+                handlePageChange={handlePageChange}
+              />
+            ) : null}
           </>
         )}
       </WhiteCard>
@@ -567,31 +730,33 @@ export default SalesKeyContribution;
 SalesKeyContribution.defaultProps = {
   keyContributionLoader: false,
   isDesktop: false,
+  isApiCall: false,
   currencySymbol: '',
   contributionData: {},
   selectedContributionOption: {},
   selectedTabMetrics: {},
   selectedSalesDF: {},
+  count: null,
+  pageNumber: 1,
   handleOnMetricsTabChange: () => {},
   handleContributionOptions: () => {},
   handlePageChange: () => {},
-  count: null,
-  pageNumber: 1,
 };
 
 SalesKeyContribution.propTypes = {
   keyContributionLoader: bool,
   isDesktop: bool,
-  contributionData: arrayOf(Array),
+  isApiCall: bool,
   selectedContributionOption: string,
   selectedTabMetrics: string,
-  selectedSalesDF: objectOf(Object),
   currencySymbol: string,
+  count: number,
+  pageNumber: number,
+  selectedSalesDF: objectOf(Object),
+  contributionData: arrayOf(Array),
   handleContributionOptions: func,
   handleOnMetricsTabChange: func,
   handlePageChange: func,
-  count: number,
-  pageNumber: number,
 };
 
 const Wrapper = styled.div`

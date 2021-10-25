@@ -88,7 +88,7 @@ export default function Summary() {
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader color="#FF5933" type="page" />
       ) : (
-        <OnBoardingBody className="body-white">
+        <OnBoardingBody className="body-white pt-5">
           <div className="white-card-base panel pb-4">
             <h3 className="page-heading ">Account Summary</h3>
 

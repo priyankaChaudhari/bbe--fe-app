@@ -1,18 +1,11 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { arrayOf, bool, func, objectOf, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { useHistory } from 'react-router-dom';
+import { bool, func, objectOf, shape, string } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
-import {
-  PageLoader,
-  Status,
-  Table,
-  WhiteCard,
-  ToggleButton,
-} from '../../../../common';
 import { CompanyDefaultUser } from '../../../../theme/images';
 import { TabletViewManager } from '../../../../theme/Global';
 import {
@@ -20,6 +13,13 @@ import {
   noGraphDataMessage,
   contributionColorSet,
 } from '../../../../constants';
+import {
+  PageLoader,
+  Status,
+  Table,
+  WhiteCard,
+  ToggleButton,
+} from '../../../../common';
 
 const DSPPacing = ({
   data,
@@ -54,7 +54,10 @@ const DSPPacing = ({
             {data &&
               data.dsp_pacing &&
               data.dsp_pacing.map((itemData) => (
-                <div className="col-md-6 col-12 mt-4" role="presentation">
+                <div
+                  className="col-md-6 col-12 mt-4"
+                  role="presentation"
+                  key={itemData.customer_id}>
                   {' '}
                   <img
                     className="company-logo"
@@ -129,31 +132,34 @@ const DSPPacing = ({
 
   const renderTableHeader = () => {
     return (
-      <tr>
-        <th width="40%" className="product-header">
-          Customer
-        </th>
-        <th width="20%" className="product-header">
-          PLANNED
-        </th>
-        <th width="20%" className="product-header">
-          {' '}
-          ACTUAL
-        </th>
-        <th width="20%" className="product-header">
-          {' '}
-          {selectedOption === 'overspending' ? 'OVERSPEND' : 'UNDERSPEND'}
-        </th>
-        <th width="20%" className="product-header">
-          Contribution
-        </th>
-      </tr>
+      <thead>
+        <tr>
+          <th width="40%" className="product-header">
+            Customer
+          </th>
+          <th width="20%" className="product-header">
+            PLANNED
+          </th>
+          <th width="20%" className="product-header">
+            {' '}
+            ACTUAL
+          </th>
+          <th width="20%" className="product-header">
+            {' '}
+            {selectedOption === 'overspending' ? 'OVERSPEND' : 'UNDERSPEND'}
+          </th>
+          <th width="20%" className="product-header">
+            Contribution
+          </th>
+        </tr>
+      </thead>
     );
   };
 
   const renderTableData = (itemData) => {
     return (
       <tr
+        key={itemData.customer_id}
         className="cursor"
         onClick={() =>
           history.push(
@@ -231,7 +237,7 @@ const DSPPacing = ({
     return (
       <ToggleButton>
         <div className="days-container spending">
-          <ul className="days-tab">
+          <ul className={loader ? 'days-tab disabled' : 'days-tab'}>
             {keyTabOptions.map((item) => (
               <li key={item.id}>
                 {' '}
@@ -243,6 +249,7 @@ const DSPPacing = ({
                   value={selectedOption}
                   checked={item.id === selectedOption}
                   onClick={() => handleSpendingOptions(item.id)}
+                  onChange={() => {}}
                 />
                 <label htmlFor={item.id}>{item.label}</label>
               </li>
@@ -384,7 +391,7 @@ DSPPacing.defaultProps = {
 };
 
 DSPPacing.propTypes = {
-  data: arrayOf(Array),
+  data: shape({}),
   loader: bool.isRequired,
   currencySymbol: string,
   handleSpendingOptions: func,

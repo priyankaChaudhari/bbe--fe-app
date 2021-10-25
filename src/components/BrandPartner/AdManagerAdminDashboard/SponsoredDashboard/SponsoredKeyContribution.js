@@ -172,8 +172,11 @@ const SponsoredKeyContribution = ({
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
         <ToggleButton>
-          <div className="days-container ">
-            <ul className="days-tab">
+          <div className="days-container">
+            <ul
+              className={
+                keyContributionLoader ? 'days-tab disabled' : 'days-tab'
+              }>
               {keyTabOptions.map((item) => (
                 <li key={item.id}>
                   {' '}
@@ -207,7 +210,7 @@ const SponsoredKeyContribution = ({
     }
     return (
       <Tabs>
-        <ul className="tabs">
+        <ul className={keyContributionLoader ? 'tabs disabled' : 'tabs'}>
           {_.keys(selectedAdMetrics).map((item) => (
             <li
               key={Math.random()}
@@ -227,14 +230,14 @@ const SponsoredKeyContribution = ({
     let selectedClass = '';
     const value = itemData.change;
     if (selectedTabMetrics === 'adSpend') {
-      if (value.toString().includes('-')) {
+      if (value && value.toString().includes('-')) {
         selectedClass = 'decrease-rate large grey';
         selectedArrow = UpDowGrayArrow;
       } else {
         selectedClass = 'increase-rate large grey';
         selectedArrow = UpDowGrayArrow;
       }
-    } else if (value.toString().includes('-')) {
+    } else if (value && value.toString().includes('-')) {
       selectedClass = 'decrease-rate large';
       selectedArrow = ArrowDownIcon;
     } else {
@@ -308,6 +311,7 @@ const SponsoredKeyContribution = ({
   const renderTableData = (itemData) => {
     return selectedContributionOption === 'keyMetrics' ? (
       <tr
+        key={itemData.id}
         className="cursor"
         onClick={() =>
           history.push(
@@ -490,26 +494,187 @@ const SponsoredKeyContribution = ({
         (contributionData && typeof contributionData.result === 'object') ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
-        {selectedContributionOption === 'keyMetrics' &&
-        contributionData.length >= 1 ? (
-          <CommonPagination
-            count={count}
-            pageNumber={pageNumber}
-            handlePageChange={handlePageChange}
-          />
-        ) : null}
       </>
     );
   };
 
   const renderTabletKeyContributions = () => {
+    if (selectedContributionOption === 'keyMetrics') {
+      return (
+        <TabletViewManager className="d-lg-none d-md-block d-sm-block">
+          <div className="container-fluid">
+            <div className="row cursor">
+              {contributionData &&
+                contributionData.map((itemData) => (
+                  <div
+                    className="col-md-6 col-12 mt-4"
+                    role="presentation"
+                    key={itemData.id}
+                    onClick={() =>
+                      history.push(
+                        PATH_CUSTOMER_DETAILS.replace(':id', itemData.id),
+                        'adManager',
+                      )
+                    }>
+                    {' '}
+                    <img
+                      className="company-logo"
+                      src={
+                        itemData &&
+                        itemData.documents &&
+                        itemData.documents[0] &&
+                        Object.values(itemData.documents[0])
+                          ? Object.values(itemData.documents[0])[0]
+                          : CompanyDefaultUser
+                      }
+                      alt="logo"
+                    />
+                    <div className="company-name">
+                      {itemData && itemData.company_name}
+                    </div>
+                    <div className="status">
+                      {itemData &&
+                      itemData.ad_manager &&
+                      itemData.ad_manager.length === 0
+                        ? ''
+                        : `${
+                            itemData &&
+                            itemData.ad_manager &&
+                            itemData.ad_manager.first_name
+                          }
+            ${
+              itemData && itemData.ad_manager && itemData.ad_manager.last_name
+            }`}
+                    </div>
+                    <div className="clear-fix" />
+                    <div className=" straight-line horizontal-line pt-3 mb-3 " />
+                    <div className="row">
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Ad sales</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sponsored_ad_performance &&
+                          itemData.sponsored_ad_performance.current_sum &&
+                          itemData.sponsored_ad_performance.current_sum.ad_sales
+                            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_sales
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sponsored_ad_performance &&
+                              itemData.sponsored_ad_performance
+                                .difference_data &&
+                              itemData.sponsored_ad_performance.difference_data
+                                .ad_sales,
+                            false,
+                            'AdSales',
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Ad Spend</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sponsored_ad_performance &&
+                          itemData.sponsored_ad_performance.current_sum &&
+                          itemData.sponsored_ad_performance.current_sum.ad_spend
+                            ? `${currencySymbol}${itemData.sponsored_ad_performance.current_sum.ad_spend
+                                .toFixed(2)
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                            : `${currencySymbol}0`}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sponsored_ad_performance &&
+                              itemData.sponsored_ad_performance
+                                .difference_data &&
+                              itemData.sponsored_ad_performance.difference_data
+                                .ad_spend,
+                            true,
+                            'AdSpend',
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">Ad Impressions</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sponsored_ad_performance &&
+                          itemData.sponsored_ad_performance.current_sum &&
+                          itemData.sponsored_ad_performance.current_sum
+                            .impressions
+                            ? itemData.sponsored_ad_performance.current_sum.impressions
+                                .toString()
+                                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                            : 0}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sponsored_ad_performance &&
+                              itemData.sponsored_ad_performance
+                                .difference_data &&
+                              itemData.sponsored_ad_performance.difference_data
+                                .impressions,
+                            false,
+                            'AdImpressions',
+                          )}
+                        </div>
+                      </div>
+                      <div className="col-6 pb-3">
+                        {' '}
+                        <div className="label">ACOS</div>
+                        <div className="label-info ">
+                          {itemData &&
+                          itemData.sponsored_ad_performance &&
+                          itemData.sponsored_ad_performance.current_sum &&
+                          itemData.sponsored_ad_performance.current_sum.acos
+                            ? `${itemData.sponsored_ad_performance.current_sum.acos.toFixed(
+                                2,
+                              )}%`
+                            : '0%'}
+                          {renderAdPerformanceDifference(
+                            itemData &&
+                              itemData.sponsored_ad_performance &&
+                              itemData.sponsored_ad_performance
+                                .difference_data &&
+                              itemData.sponsored_ad_performance.difference_data
+                                .acos,
+                            false,
+                            'ACOS',
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        </TabletViewManager>
+      );
+    }
     return (
       <TabletViewManager className="d-lg-none d-md-block d-sm-block">
         <div className="container-fluid">
           <div className="row cursor">
             {contributionData &&
               contributionData.map((itemData) => (
-                <div className="col-md-6 col-12 mt-4" role="presentation">
+                <div
+                  className="col-md-6 col-12 mt-4"
+                  role="presentation"
+                  key={itemData.customer_id}
+                  onClick={() =>
+                    history.push(
+                      PATH_CUSTOMER_DETAILS.replace(
+                        ':id',
+                        itemData.customer_id,
+                      ),
+                      'adManager',
+                    )
+                  }>
                   {' '}
                   <img
                     className="company-logo"
@@ -611,6 +776,14 @@ const SponsoredKeyContribution = ({
             ) : (
               <NoData>{noGraphDataMessage}</NoData>
             )}
+            {selectedContributionOption === 'keyMetrics' &&
+            contributionData.length >= 1 ? (
+              <CommonPagination
+                count={count}
+                pageNumber={pageNumber}
+                handlePageChange={handlePageChange}
+              />
+            ) : null}
           </>
         )}
       </WhiteCard>
