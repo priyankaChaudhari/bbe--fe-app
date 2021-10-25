@@ -61,7 +61,7 @@ export default function Header({ type, userInfo }) {
   const [showArticle, setShowArticle] = useState(false);
   const [showArticleSuccess, setShowArticleSuccess] = useState(false);
   const [formData, setFormData] = useState({});
-  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
+  const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991.98 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const profilePic =
     userInfo &&
@@ -866,7 +866,7 @@ const MainHeader = styled.div`
     }
   }
 
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 991.98px) {
     height: 70px;
     padding-top: 13px;
 
@@ -965,7 +965,7 @@ const MobileSidebar = styled.div`
     display: none;
   }
 
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 991.98px) {
     background-color: ${Theme['$base-color']};
     display: block;
     #responsive-button {
@@ -1025,7 +1025,7 @@ const MobileSidebar = styled.div`
 `;
 
 const SideContents = styled.div`
-  @media (max-width: 991px) {
+  @media (max-width: 991.98px) {
     max-width: 64px;
     position: fixed;
     top: 70px;

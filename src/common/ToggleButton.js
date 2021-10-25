@@ -55,6 +55,12 @@ const ToggleButton = styled.div`
       }
     }
   }
+  @media only screen and (max-width: 767px) {
+    .days-container {
+      margin: 0 auto;
+      float: none !important;
+    }
+  }
 `;
 
 export default ToggleButton;

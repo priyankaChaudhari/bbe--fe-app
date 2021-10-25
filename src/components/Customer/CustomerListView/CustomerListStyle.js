@@ -3,7 +3,6 @@ import Theme from '../../../theme/Theme';
 
 export const CustomerListPage = styled.div`
   padding-left: 62px;
-  padding-left: 62px;
   background-color: ${Theme.gray6};
   padding-top: 60px;
   height: 100%;
@@ -23,7 +22,6 @@ export const CustomerListPage = styled.div`
       top: 130px;
       width: 66%;
       position: fixed;
-
       padding: 15px;
       background: ${Theme.white};
       .fixed-customer-header {
@@ -290,16 +288,17 @@ export const CustomerListPage = styled.div`
       }
     }
   }
-  @media only screen and (max-width: 992px) {
+
+  @media only screen and (max-width: 991.98px) {
     padding-left: 0px;
+
     .main-body-container {
       width: 100%;
-      .table-container {
-        width: 100%;
-      }
+
       .table-container {
         background-color: transparent;
         padding: 0;
+        width: 100%;
         .fixed-customer-header {
           max-width: 100%;
           background: ${Theme.gray6};
@@ -477,7 +476,7 @@ export const MobileLeftSidebar = styled.div`
 
 export const SideContent = styled.div`
   display: none;
-  @media (max-width: 991px) {
+  @media (max-width: 991.98px) {
     display: block;
     width: 100%;
     min-height: 100%;

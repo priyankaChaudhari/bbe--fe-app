@@ -227,7 +227,7 @@ export const BrandPartnerDashboard = styled.div`
     padding-left: 64px;
   }
 
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 991.98px) {
     padding-left: 0;
 
     .dashboard-header-sticky {
@@ -397,7 +397,7 @@ export const DashboardCard = styled.div`
       }
     }
   }
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 991.98px) {
     .dashboard-container-body {
       padding: 30px 15px 0 15px;
     }
@@ -490,7 +490,7 @@ export const FormContainer = styled.div`
     }
   }
 
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 991.98px) {
     background-position: center;
     background-size: cover;
     background-image: url(${BannerBg});

@@ -36,7 +36,7 @@ function CustomerListFilters({
   selectInputRefMobile,
   accountType,
 }) {
-  const isDesktop = useMediaQuery({ minWidth: 991 });
+  const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
 
   return (
