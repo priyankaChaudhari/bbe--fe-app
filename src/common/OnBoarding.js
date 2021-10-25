@@ -136,7 +136,7 @@ const OnBoardingBody = styled.div`
     .account-steps-check {
       list-style-type: none;
       padding: 0;
-      marging: 0;
+      margin: 0;
 
       li {
         padding-bottom: 10px;
@@ -309,7 +309,7 @@ const OnBoardingBody = styled.div`
   .panel {
     padding: 0;
     max-width: 400px;
-    margin-top: 55px;
+    margin-top: 65px;
     box-shadow: none;
   }
   .panel-unauthorize-header {
