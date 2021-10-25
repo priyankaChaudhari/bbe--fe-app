@@ -527,7 +527,7 @@ export default function ContractFooter({
           <Footer className=" mt-5 ">
             <div className="container-fluid ">
               {renderContractButtonHtml(
-                () => onClickOfUpdatePauseContract(),
+                () => onClickOfUpdatePauseContract({ getPauseAgreement: true }),
                 'Approval for Pause',
               )}
             </div>
