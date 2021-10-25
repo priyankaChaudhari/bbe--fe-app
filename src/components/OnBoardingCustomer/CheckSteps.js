@@ -1,8 +1,8 @@
 /* eslint-disable no-lonely-if */
 import React from 'react';
 
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { string, shape, bool, arrayOf } from 'prop-types';
 
 import { Button } from '../../common';
 import {
@@ -63,8 +63,8 @@ export default function CheckSteps({
 }
 
 CheckSteps.propTypes = {
-  step: PropTypes.string.isRequired,
-  summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  disableBtn: PropTypes.bool.isRequired,
-  skipAmazonAccount: PropTypes.bool.isRequired,
+  step: string.isRequired,
+  summaryData: arrayOf(shape({})).isRequired,
+  disableBtn: bool.isRequired,
+  skipAmazonAccount: bool.isRequired,
 };

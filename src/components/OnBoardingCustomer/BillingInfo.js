@@ -1,16 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
-import queryString from 'query-string';
-import PropTypes from 'prop-types';
-import Modal from 'react-modal';
-import styled from 'styled-components';
-import NumberFormat from 'react-number-format';
 import $ from 'jquery';
-import { useHistory } from 'react-router-dom';
+import queryString from 'query-string';
+import NumberFormat from 'react-number-format';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { string, shape, bool, func, number, arrayOf } from 'prop-types';
 
-import Theme from '../../theme/Theme';
+import BillingTermsModal from './Modals/BillingTermsModal';
+import { userMe } from '../../store/actions';
+import { SecurityLock } from '../../theme/images';
+import { CollapseOpenContainer } from './OnBoardingStyles';
 import {
   CheckBox,
   OnBoardingBody,
@@ -18,10 +19,8 @@ import {
   Button,
   ModalRadioCheck,
   PageLoader,
-  ModalBox,
   ErrorMsg,
 } from '../../common';
-import { CloseIcon, SecurityLock } from '../../theme/images';
 import {
   askSomeoneData,
   updateAskSomeoneData,
@@ -36,8 +35,8 @@ import {
   creditCardDetails,
   stepPath,
   authorizeLink,
+  billingTerms,
 } from '../../constants';
-import { userMe } from '../../store/actions';
 
 export default function BillingInfo({
   setIsLoading,
@@ -66,21 +65,6 @@ export default function BillingInfo({
   const [showModal, setShowModal] = useState(false);
   const params = queryString.parse(history.location.search);
   const [apiError, setApiError] = useState({});
-
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      maxWidth: '600px ',
-      width: '100% ',
-      minHeight: '200px',
-      overlay: ' {zIndex: 1000}',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  };
 
   const getIncompleteStep = summaryData.find(
     (op) =>
@@ -155,7 +139,6 @@ export default function BillingInfo({
             });
           } else {
             CheckStep('billing information');
-            // history.push(PATH_BILLING_DETAILS);
           }
           updateUserMe(userInfo.id || verifiedStepData.user_id, {
             step: {
@@ -248,7 +231,6 @@ export default function BillingInfo({
 
     details = {
       ...formData,
-      // payment_type: formData.ach ? 'ach' : 'credit card',
       payment_type: 'credit card',
       billing_address: formData.billing_address,
       billing_contact: formData.billing_contact,
@@ -367,18 +349,7 @@ export default function BillingInfo({
 
           {item.label}
           <br />
-          <input
-            type="radio"
-            name="radio"
-            id={item.key}
-            // onChange={(event) => {
-            //   setFormData({
-            //     ...formData,
-            //     credit_card_type: event.target.checked ? item.key : '',
-            //   });
-            // }}
-            readOnly
-          />
+          <input type="radio" name="radio" id={item.key} readOnly />
           <span className="checkmark" />
         </label>
       </ModalRadioCheck>
@@ -545,7 +516,6 @@ export default function BillingInfo({
         <fieldset className="shape-without-border  w-430 mt-3">
           <p className="account-steps m-0">Part 1</p>
           <div className="billing-address mb-3 pb-1"> Payment Type </div>
-          {/* <p className="account-steps m-0">Payment Type</p> */}
           <p className="account-steps m-0">Payment Type</p>
           <ul className="payment-type">
             <li>
@@ -555,42 +525,7 @@ export default function BillingInfo({
                 Credit Card
               </label>
             </li>
-
-            {/* {paymentType.map((item) => (
-              <li key={item.key}>
-                <ModalRadioCheck className="mt-1">
-                  <label
-                    className="radio-container  contact-billing "
-                    htmlFor={item.key}>
-                    {item.label}
-                    <br />
-                    <input
-                      type="radio"
-                      name="radio1"
-                      id={item.key}
-                      defaultChecked={formData[item.key]}
-                      onChange={() => {
-                        setFormData({
-                          ...formData,
-                          ach: !formData.ach,
-                          credit_card: !formData.credit_card,
-                        });
-                      }}
-                      readOnly
-                    />
-                    <span className="checkmark checkmark-top" />
-                  </label>
-                </ModalRadioCheck>
-              </li>
-            ))} */}
           </ul>
-          {/* <p className="text-verify-account mb-0">
-            To verify your bank account we’ll be making a small charge
-            (typically less than $1) to your account from Buy Box Experts. It
-            can take up to 3 days to process this charge. You’ll then receive an
-            email from us, asking you to enter the amount charged to complete
-            the process. The charge will then be refunded to you.
-          </p> */}
 
           <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
 
@@ -625,13 +560,7 @@ export default function BillingInfo({
             <label
               className="checkboxes check-container customer-pannel hereby-acknowledge"
               htmlFor="contract-copy-check">
-              I hereby acknowledge that I am an authorized signer on the account
-              listed above and hereby authorize payments to be made to BBE using
-              this payment method to satisfy any and all invoices or bills on
-              our account with BBE moving forward until or unless further notice
-              is provided in writing. I further agree to the additional Terms &
-              Conditions for these payment and agree to the terms and conditions
-              found{' '}
+              {billingTerms}
               <span
                 className="link-url"
                 onClick={() => setShowModal(true)}
@@ -666,55 +595,7 @@ export default function BillingInfo({
           )}
         </div>
       </OnBoardingBody>
-      <Modal
-        isOpen={showModal}
-        style={customStyles}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => setShowModal(false)}
-          role="presentation"
-        />
-        <ModalBox>
-          <div className="modal-body" style={{ color: '#2E384D' }}>
-            By accepting the terms on the Payment Information page, I
-            acknowledge that I am an authorized signer, user or representative
-            of the account provided and have the authority to set up payments
-            against that account on a recurring basis moving forward. <br />
-            <br /> I understand that this authorization will remain in effect
-            until I cancel it in writing, and I agree to notify the merchant in
-            writing of any changes in my account information or termination of
-            this authorization at least 15 days prior to the next billing date.
-            If the monthly billing date falls on a weekend or holiday, I
-            understand that the payments may be executed automatically over
-            those days or may be processed on the next business day. <br />
-            <br /> A prorated initial billing may be charged to cover the dates
-            between the signature date and the selected monthly billing date, if
-            different. <br />
-            <br /> For ACH debits to my checking/savings account, I understand
-            that because these are electronic transactions, the funds may be
-            withdrawn from my account as soon as electronic payment is
-            processed. In the case of an ACH Transaction or Credit Card
-            transactions being rejected for Non-Sufficient Funds (NSF), I
-            understand that Buy Box Experts (“BBE”) may, at its discretion
-            attempt to process the charge again within 30 days, and agree to an
-            additional $25 charge for each attempt returned NSF which will be
-            initiated as a separate transaction from the authorized recurring
-            payment method. <br />
-            <br /> I acknowledge that the origination of ACH transactions to my
-            account must comply with the provisions of U.S. law. I certify that
-            I am an authorized user/signer of this credit card/bank account and
-            will not dispute these scheduled transactions with my bank or credit
-            card company; so long as the transactions correspond to the terms
-            indicated in this authorization form, our service agreement with
-            BBE, and any invoice provided by BBE to me in conjunction with the
-            payment.
-          </div>
-        </ModalBox>
-      </Modal>
+      <BillingTermsModal showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 }
@@ -725,82 +606,41 @@ BillingInfo.defaultProps = {
 };
 
 BillingInfo.propTypes = {
-  userInfo: PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
-    customer: PropTypes.string,
-    customer_onboarding: PropTypes.string,
-    step: PropTypes.shape({
-      step: PropTypes.number,
+  userInfo: shape({
+    id: string,
+    email: string,
+    customer: string,
+    customer_onboarding: string,
+    step: shape({
+      step: number,
     }),
   }).isRequired,
-  setIsLoading: PropTypes.func.isRequired,
-  assignedToSomeone: PropTypes.bool.isRequired,
-  stepData: PropTypes.shape({
-    id: PropTypes.string,
+  setIsLoading: func.isRequired,
+  assignedToSomeone: bool.isRequired,
+  stepData: shape({
+    id: string,
   }),
-  verifiedStepData: PropTypes.objectOf(
-    PropTypes.shape({
-      user_name: PropTypes.string,
+  verifiedStepData: shape(
+    shape({
+      user_name: string,
     }),
   ).isRequired,
-  isLoading: PropTypes.shape({
-    loader: PropTypes.bool,
-    type: PropTypes.string,
+  isLoading: shape({
+    loader: bool,
+    type: string,
   }).isRequired,
-  data: PropTypes.shape({
-    id: PropTypes.string,
-    card_details: PropTypes.objectOf(PropTypes.object),
-    billing_address: PropTypes.shape({
-      address: PropTypes.string,
+  data: shape({
+    id: string,
+    card_details: shape({}),
+    billing_address: shape({
+      address: string,
     }),
-    billing_contact: PropTypes.shape({
-      first_name: PropTypes.string,
+    billing_contact: shape({
+      first_name: string,
     }),
   }).isRequired,
-  isChecked: PropTypes.bool.isRequired,
-  summaryData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  skipAmazonAccount: PropTypes.bool.isRequired,
-  summaryDetails: PropTypes.func,
+  isChecked: bool.isRequired,
+  summaryData: arrayOf(shape({})).isRequired,
+  skipAmazonAccount: bool.isRequired,
+  summaryDetails: func,
 };
-
-const CollapseOpenContainer = styled.div`
-  max-width: 430px !important;
-  margin: 0 auto;
-  .inner-content {
-    background-color: ${Theme.white};
-    padding: 4px 0px 4px 0px;
-    .pay-card {
-      font-size: ${Theme.extraNormal};
-      color: ${Theme.black};
-      font-weight: 600;
-    }
-    .label-title {
-      color: ${Theme.gray40};
-      font-size: ${Theme.verySmall};
-      letter-spacing: 1.13px;
-      text-transform: uppercase;
-      font-weight: bold;
-      font-family: ${Theme.titleFontFamily};
-    }
-    .payment-option {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      li {
-        display: inline-block;
-        margin-right: 23px;
-        margin-bottom: 7px;
-        &:last-child {
-          margin-right: 0px;
-          margin-bottom: 0px;
-        }
-        .card {
-          width: 18px;
-          margin-right: 6px;
-          vertical-align: middle;
-        }
-      }
-    }
-  }
-`;

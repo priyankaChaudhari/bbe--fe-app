@@ -1,22 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import queryString from 'query-string';
+import { useHistory } from 'react-router-dom';
 
-import {
-  Button,
-  OnBoardingBody,
-  PageLoader,
-  UnauthorizedHeader,
-} from '../../common';
+import { verifyStepUser } from '../../api';
 import { PATH_CREATE_PASSWORD, PATH_LOGIN } from '../../constants';
 import {
   AccountSetupIcon,
   LockFinish,
   OrangeCheckMark,
 } from '../../theme/images';
-import { verifyStepUser } from '../../api';
+import {
+  Button,
+  OnBoardingBody,
+  PageLoader,
+  UnauthorizedHeader,
+} from '../../common';
 
 export default function Info() {
   const history = useHistory();
