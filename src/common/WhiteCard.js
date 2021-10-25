@@ -385,6 +385,11 @@ export const WhiteCard = styled.div`
           &.active {
             font-weight: bold;
           }
+
+          &:hover {
+            cursor: pointer;
+            font-family: ${Theme.titleFontFamily};
+          }
         }
       }
     }

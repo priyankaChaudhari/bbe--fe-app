@@ -31,6 +31,7 @@ export default function AdPerformance({
   id,
   viewComponent,
   setViewComponent,
+  selectedUserType,
 }) {
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
@@ -1042,24 +1043,26 @@ export default function AdPerformance({
 
       {/* DSP ad performance panel */}
 
-      <DSPPerformance
-        dspData={dspData}
-        setShowDspAdPacingModal={setShowDspAdPacingModal}
-        selectedDspBox={selectedDspBox}
-        dspFilters={dspFilters}
-        handleDSPGroupBy={handleDSPGroupBy}
-        dspGroupBy={dspGroupBy}
-        selectedAdDF={selectedAdDF}
-        currencySymbol={currencySymbol}
-        dspCurrentTotal={dspCurrentTotal}
-        dspDifference={dspDifference}
-        dspPreviousTotal={dspPreviousTotal}
-        setBoxToggle={setBoxToggle}
-        setBoxClasses={setBoxClasses}
-        dspChartData={dspChartData}
-        dspGraphLoader={dspGraphLoader}
-        noGraphDataMessage={noGraphDataMessage}
-      />
+      {selectedUserType === 'seller' ? (
+        <DSPPerformance
+          dspData={dspData}
+          setShowDspAdPacingModal={setShowDspAdPacingModal}
+          selectedDspBox={selectedDspBox}
+          dspFilters={dspFilters}
+          handleDSPGroupBy={handleDSPGroupBy}
+          dspGroupBy={dspGroupBy}
+          selectedAdDF={selectedAdDF}
+          currencySymbol={currencySymbol}
+          dspCurrentTotal={dspCurrentTotal}
+          dspDifference={dspDifference}
+          dspPreviousTotal={dspPreviousTotal}
+          setBoxToggle={setBoxToggle}
+          setBoxClasses={setBoxClasses}
+          dspChartData={dspChartData}
+          dspGraphLoader={dspGraphLoader}
+          noGraphDataMessage={noGraphDataMessage}
+        />
+      ) : null}
 
       <CustomDateModal
         id="BT-adperformance-daterange"
@@ -1088,6 +1091,7 @@ AdPerformance.defaultProps = {
   marketplaceChoices: {},
   id: '',
   viewComponent: '',
+  selectedUserType: 'seller',
   setViewComponent: () => {},
 };
 
@@ -1095,6 +1099,7 @@ AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
   viewComponent: string,
+  selectedUserType: string,
   setViewComponent: func,
 };
 

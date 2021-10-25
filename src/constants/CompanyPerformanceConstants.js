@@ -21,6 +21,11 @@ export const dateOptionsWithYear = [
   },
 ];
 
+export const vendorSalesMetricsTypeOptions = [
+  { value: 'OrderedRevenue', label: 'Ordered Revenue' },
+  { value: 'ShippedCOGS', label: 'Shipped COGS' },
+];
+
 export const bbDateOptions = [
   { value: 'week', label: 'Recent 7 days' },
   { value: 'month', label: 'Recent Month' },

@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { arrayOf, shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-import PerformanceReport from './SalesPerformanceView/PerformanceReport';
+import PerformanceReport from './SellerReporting/PerformanceReport';
 import AdPerformance from './AdPerformanceView/AdPerformance';
+import VendorSalesPerformanceContainer from './VendorReporting/VendorSalesPerformanceContainer';
 
 export default function CompanyPerformance({
   marketplaceChoices,
@@ -18,42 +19,51 @@ export default function CompanyPerformance({
       ? 'adPerformance'
       : 'salePerformance';
   currentDate.setDate(currentDate.getDate() - 3);
-  const [viewComponent, setViewComponent] = useState(setTab);
+  const [sellerViewComponent, setSellerViewComponent] = useState(setTab);
+  const [vendorViewComponent, setVendorViewComponent] = useState(
+    'salePerformance',
+  );
 
   return (
     <>
       {subViewComponent === 'seller' ? (
+        // seller section
         <div className="col-lg-6 col-12" key={subViewComponent}>
-          {viewComponent === 'salePerformance' ? (
+          {sellerViewComponent === 'salePerformance' ? (
             <PerformanceReport
               marketplaceChoices={marketplaceChoices}
               id={id}
-              viewComponent={viewComponent}
-              setViewComponent={setViewComponent}
+              viewComponent={sellerViewComponent}
+              setViewComponent={setSellerViewComponent}
             />
           ) : (
             <AdPerformance
               marketplaceChoices={marketplaceChoices}
               id={id}
-              viewComponent={viewComponent}
-              setViewComponent={setViewComponent}
+              viewComponent={sellerViewComponent}
+              setViewComponent={setSellerViewComponent}
             />
           )}
         </div>
       ) : (
+        // vendor section
         <div className="col-lg-6 col-12" key={subViewComponent}>
-          {/* <PerformanceReport
-            marketplaceChoices={marketplaceChoices}
-            id={id}
-            viewComponent={viewComponent}
-            setViewComponent={setViewComponent}
-          /> */}
-          <AdPerformance
-            marketplaceChoices={marketplaceChoices}
-            id={id}
-            viewComponent={viewComponent}
-            setViewComponent={setViewComponent}
-          />
+          {vendorViewComponent === 'salePerformance' ? (
+            <VendorSalesPerformanceContainer
+              marketplaceChoices={marketplaceChoices}
+              id={id}
+              viewComponent={vendorViewComponent}
+              setViewComponent={setVendorViewComponent}
+            />
+          ) : (
+            <AdPerformance
+              marketplaceChoices={marketplaceChoices}
+              id={id}
+              viewComponent={vendorViewComponent}
+              setViewComponent={setVendorViewComponent}
+              selectedUserType={subViewComponent}
+            />
+          )}
         </div>
       )}
     </>

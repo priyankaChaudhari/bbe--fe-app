@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import SalesFilter from './SalesFilter';
 import SalesMetrics from './SalesMetrics';
 import SalesKeyContribution from './SalesKeyContribution';
-import SalePerformanceChart from '../../../Customer/CompanyPerformance/SalesPerformanceView/SalePerformanceChart';
+import SalePerformanceChart from '../../../Customer/CompanyPerformance/SellerReporting/SalePerformanceChart';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
 import {
