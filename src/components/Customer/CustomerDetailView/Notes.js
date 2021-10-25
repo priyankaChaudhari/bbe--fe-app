@@ -667,7 +667,6 @@ function Notes({
             ? 'dropdown-notes-filter show'
             : 'dropdown-notes-filter hide'
         }>
-        {' '}
         <ul className="notes-option">
           {filtersOption.notes.map((item) => {
             return (
@@ -793,7 +792,6 @@ function Notes({
                     setNoteContent('');
                     $('#editor').scrollTop(0);
                   }}>
-                  {' '}
                   <img className="header-icon" src={OrangeChat} alt="check" />
                   <span className="cursor"> Add note </span>
                 </li>

@@ -26,6 +26,7 @@ export default function Activity({
   count,
   pageNumber,
 }) {
+  console.log('activityData', activityData);
   return (
     <>
       <div className="col-lg-6  col-12 mb-3">
