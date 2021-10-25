@@ -368,10 +368,9 @@ function Notes({
               {displayUserInfo(item.user)}
               <div className="activity-user">
                 <span className="font-bold">
-                  {' '}
-                  {item.user && item.user.first_name}{' '}
+                  {item.user && item.user.first_name}
                   {item.user && item.user.last_name}:
-                </span>{' '}
+                </span>
                 {data.showNotesEditor &&
                 data.selectedNote &&
                 data.selectedNote.id === item.id ? (
@@ -412,7 +411,7 @@ function Notes({
                     </span>
 
                     <div className="time-date  mt-1">
-                      {item && item.created_at}{' '}
+                      {item && item.created_at}
                       <span className="pin">
                         <ul className="more-action">
                           {(userInfo && userInfo.id) ===
@@ -421,7 +420,6 @@ function Notes({
                               <li
                                 role="presentation"
                                 onClick={() => onEditClick(item)}>
-                                {' '}
                                 <span className="dot" /> Edit
                               </li>
                               {item.is_archieved ? (
@@ -438,7 +436,6 @@ function Notes({
                                       is_archieved: false,
                                     })
                                   }>
-                                  {' '}
                                   <span className="dot" /> Unarchive
                                 </li>
                               ) : (
@@ -455,7 +452,6 @@ function Notes({
                                       is_archieved: true,
                                     })
                                   }>
-                                  {' '}
                                   <span className="dot" /> Archive
                                 </li>
                               )}
@@ -463,7 +459,6 @@ function Notes({
                                 ''
                               ) : (
                                 <li className="delete">
-                                  {' '}
                                   <span
                                     className="delete"
                                     role="presentation"
@@ -473,7 +468,7 @@ function Notes({
                                         id: item.id,
                                       });
                                     }}>
-                                    <span className="dot" /> Delete{' '}
+                                    <span className="dot" /> Delete
                                     {item.id ===
                                     (showDelete && showDelete.id) ? (
                                       <div
@@ -481,7 +476,6 @@ function Notes({
                                         className="delete-msg"
                                         role="presentation"
                                         onClick={() => onDeleteNote(item.id)}>
-                                        {' '}
                                         <img
                                           className="red-trash-icon"
                                           src={RedTrashIcon}
@@ -900,10 +894,9 @@ function Notes({
                   {displayUserInfo(userInfo)}
                   <div className="activity-user">
                     <span className="font-bold">
-                      {' '}
-                      {userInfo && userInfo.first_name}{' '}
+                      {userInfo && userInfo.first_name}
                       {userInfo && userInfo.last_name}:
-                    </span>{' '}
+                    </span>
                     {renderEditor()}
                   </div>
                 </GroupUser>
