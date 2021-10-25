@@ -6,7 +6,11 @@ import { useHistory } from 'react-router-dom';
 import PerformanceReport from './SalesPerformanceView/PerformanceReport';
 import AdPerformance from './AdPerformanceView/AdPerformance';
 
-export default function CompanyPerformance({ marketplaceChoices, id }) {
+export default function CompanyPerformance({
+  marketplaceChoices,
+  id,
+  subViewComponent,
+}) {
   const history = useHistory();
   const currentDate = new Date();
   const setTab =
@@ -18,23 +22,40 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 
   return (
     <>
-      <div className="col-lg-6 col-12">
-        {viewComponent === 'salePerformance' ? (
-          <PerformanceReport
+      {subViewComponent === 'seller' ? (
+        <div className="col-lg-6 col-12" key={subViewComponent}>
+          {viewComponent === 'salePerformance' ? (
+            <PerformanceReport
+              marketplaceChoices={marketplaceChoices}
+              id={id}
+              viewComponent={viewComponent}
+              setViewComponent={setViewComponent}
+            />
+          ) : (
+            <AdPerformance
+              marketplaceChoices={marketplaceChoices}
+              id={id}
+              viewComponent={viewComponent}
+              setViewComponent={setViewComponent}
+            />
+          )}
+        </div>
+      ) : (
+        <div className="col-lg-6 col-12" key={subViewComponent}>
+          {/* <PerformanceReport
             marketplaceChoices={marketplaceChoices}
             id={id}
             viewComponent={viewComponent}
             setViewComponent={setViewComponent}
-          />
-        ) : (
+          /> */}
           <AdPerformance
             marketplaceChoices={marketplaceChoices}
             id={id}
             viewComponent={viewComponent}
             setViewComponent={setViewComponent}
           />
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }
@@ -42,9 +63,11 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
 CompanyPerformance.defaultProps = {
   marketplaceChoices: [],
   id: '',
+  subViewComponent: 'seller',
 };
 
 CompanyPerformance.propTypes = {
   marketplaceChoices: arrayOf(shape({})),
   id: string,
+  subViewComponent: string,
 };
