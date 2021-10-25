@@ -35,7 +35,7 @@ import SortDownIcon from './icons/SortDown.png';
 import InfoIcon from './icons/info.png';
 import TelescopeIcon from './icons/telescope.svg';
 import AlarmBellIcon from './icons/alarm-bell.png';
-import ServiceAgreement from './icons/Service-Agreement.png';
+import ServiceAgreementIcon from './icons/Service-Agreement.png';
 import CreateAddendum from './icons/Create-Addendum.png';
 import StatementWork from './icons/Statement-Work.png';
 import AddNewIcons from './icons/add-contact.png';
@@ -221,7 +221,7 @@ export {
   InfoIcon,
   TelescopeIcon,
   AlarmBellIcon,
-  ServiceAgreement,
+  ServiceAgreementIcon,
   CreateAddendum,
   StatementWork,
   AddNewIcons,

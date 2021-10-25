@@ -1,38 +1,35 @@
-/* eslint no-param-reassign: "error" */
-/* eslint consistent-return: "error" */
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import axios from 'axios';
 import cloneDeep from 'lodash/cloneDeep';
-import styled from 'styled-components';
-import Modal from 'react-modal';
 import queryString from 'query-string';
 import dayjs from 'dayjs';
-import { useHistory, useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
 import { useMediaQuery } from 'react-responsive';
+import { toast, ToastContainer } from 'react-toastify';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import PdfViewer from '../../common/PdfViewer';
-import Theme from '../../theme/Theme';
-import AgreementSidePanel from '../../common/AgreementSidePanel';
+import AgreementSidePanel from './AgreementSidePanel';
 import Agreement from './Agreement';
 import ServicesAmendment from './ServicesAmendment';
 import DSPAddendum from './DSPAddendum';
 import Addendum from './Addendum';
 import Statement from './Statement';
-import Discount from './Discount';
 import ContractFooter from './ContractFooter';
-import RequestSignature from './RequestSignature';
 import THAD_SIGN_IMG from '../../constants/ThadSignImg';
+import RequestSignatureModal from './ContractModals/RequestSignatureModal';
+import DiscardChangesConfirmation from './ContractModals/DiscardChangesConfirmation';
+import DiscountModal from './ContractModals/DiscountModal';
+import ContractEditConfirmation from './ContractModals/ContractEditConfirmation';
+import { ContractTab, SidePanel } from '../../theme/AgreementStyle';
 import { CloseIcon, OrangeDownloadPdf } from '../../theme/images';
 import {
   PageLoader,
   PageNotFound,
   Button,
-  ModalBox,
   HeaderDownloadFuntionality,
 } from '../../common';
 import {
@@ -60,7 +57,6 @@ import {
   getThresholdType,
   getYoyPercentage,
 } from '../../api';
-
 import {
   AgreementDetails,
   StatementDetails,
@@ -74,47 +70,28 @@ import {
   PATH_CUSTOMER_LIST,
 } from '../../constants';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '600px ',
-    minHeight: '170px',
-    width: '100% ',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-const customStylesForAlert = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '474px ',
-    width: '100% ',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
 const customStylesForTabs = {
   width: '33%',
   margin: '0',
   paddingLeft: '0',
   paddingRight: '0',
 };
+
+const nonDraftCustomStyles = {
+  width: '50%',
+  margin: '0',
+  paddingLeft: '0',
+  paddingRight: '0',
+};
+
 export default function ContractContainer() {
   const dispatch = useDispatch();
   const location = useLocation();
   const history = useHistory();
   const params = queryString.parse(history.location.search);
 
-  const id = location.pathname.split('/')[2];
+  const { id } = useParams();
+
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [formData, setFormData] = useState({});
@@ -229,22 +206,43 @@ export default function ContractContainer() {
   const [amendmentData, setAmendmentData] = useState({});
   const [sidebarSection, setSidebarSection] = useState('edit');
 
+  const detailsId = details?.id;
+  const contractStatusValue = details?.contract_status?.value;
+  const contractTypeDsp = formData?.contract_type
+    ?.toLowerCase()
+    .includes('dsp');
+  const contractTypeRecurring = formData?.contract_type
+    ?.toLowerCase()
+    .includes('recurring');
+  const contractTypeOne = formData?.contract_type
+    ?.toLowerCase()
+    .includes('one');
+  const additionalMonthlyServicesLength =
+    details?.additional_monthly_services?.length;
+  const primaryMarketplaceName = details?.primary_marketplace?.name;
+  const customerCompanyName = formData?.customer_id?.company_name;
+  const customerAddress = formData?.customer_id?.address;
+  const customerState = formData?.customer_id?.state;
+  const customerCity = formData?.customer_id?.city;
+  const customerZipCode = formData?.customer_id?.zip_code;
+
+  const displayNumber = (num) => {
+    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
+
   const executeScroll = (eleId) => {
     const element = document.getElementById(eleId);
     const offset = isDesktop ? -150 : isMobile ? -220 : -220;
     const y =
-      element &&
-      element.getBoundingClientRect() &&
-      element.getBoundingClientRect().top + window.pageYOffset + offset;
-
+      element?.getBoundingClientRect()?.top + window.pageYOffset + offset;
     window.scrollTo({ top: y });
   };
 
   if (
     isLoading.loader === true &&
     isLoading.type === 'page' &&
-    details &&
-    details.id &&
+    detailsId &&
     loaderFlag === true
   ) {
     setIsLoading({ loader: false, type: 'page' });
@@ -253,12 +251,12 @@ export default function ContractContainer() {
 
   const fetchUncommonOptions = (options, alreadySelected, type) => {
     let result = [];
-    if (alreadySelected && alreadySelected.length) {
+    if (alreadySelected?.length) {
       for (const option of options) {
         let isFound = true;
         for (const service of alreadySelected) {
           if (
-            service && service.service && service.service.id
+            service?.service?.id
               ? service.service.id !== option.value
               : service.service_id !== option.value
           ) {
@@ -307,8 +305,6 @@ export default function ContractContainer() {
         label: 'Amazon Store Package',
       });
     }
-    // }
-    // func(result);
     if (type === 'one_time_service') {
       if (setNotIncludedOneTimeServices) {
         setNotIncludedOneTimeServices(result);
@@ -321,16 +317,15 @@ export default function ContractContainer() {
     }
   };
 
-  const splittedPath =
-    location && location.pathname && location.pathname.split('/');
+  const splittedPath = location?.pathname?.split('/');
 
   const getContractActivityLogInfo = useCallback(
     (currentPage) => {
       setActivityLoader(true);
       getContractActivityLog(currentPage, splittedPath && splittedPath[4]).then(
         (response) => {
-          setActivityData(response && response.data && response.data.results);
-          setActivityCount(response && response.data && response.data.count);
+          setActivityData(response?.data?.results);
+          setActivityCount(response?.data?.count);
           setPageNumber(currentPage);
           getDocumentList().then((picResponse) => {
             setImages(picResponse);
@@ -355,16 +350,16 @@ export default function ContractContainer() {
   }
 
   const checkContractStatus = () => {
-    if (details && details.contract_status) {
+    if (details?.contract_status) {
       if (
-        details.contract_status.value === 'pending account setup' ||
-        details.contract_status.value === 'active' ||
-        details.contract_status.value === 'renewed' ||
-        details.contract_status.value === 'cancel' ||
-        details.contract_status.value === 'pending for cancellation' ||
-        details.contract_status.value === 'active pending for pause' ||
-        details.contract_status.value === 'pause' ||
-        details.contract_status.value === 'inactive'
+        contractStatusValue === 'pending account setup' ||
+        contractStatusValue === 'active' ||
+        contractStatusValue === 'renewed' ||
+        contractStatusValue === 'cancel' ||
+        contractStatusValue === 'pending for cancellation' ||
+        contractStatusValue === 'active pending for pause' ||
+        contractStatusValue === 'pause' ||
+        contractStatusValue === 'inactive'
       ) {
         return true;
       }
@@ -373,20 +368,13 @@ export default function ContractContainer() {
     return false;
   };
 
-  if (isDocRendered && formData && formData.id) {
+  if (isDocRendered && formData?.id) {
     if (checkContractStatus()) {
       setIsDocRendered(false);
       setDownloadApiCall(true);
     }
-
     if (
-      ((formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp')) ||
-        (formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('recurring') &&
-          showSection.dspAddendum)) &&
+      (contractTypeDsp || (contractTypeRecurring && showSection.dspAddendum)) &&
       (!formData.start_date ||
         (formData.start_date &&
           firstMonthDate &&
@@ -396,27 +384,11 @@ export default function ContractContainer() {
       setIsDocRendered(false);
       setDownloadApiCall(true);
     }
-
-    if (
-      !(
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp')
-      ) &&
-      formData &&
-      formData.contract_type &&
-      formData.contract_type.toLowerCase().includes('recurring') &&
-      !showSection.dspAddendum
-    ) {
+    if (!contractTypeDsp && contractTypeRecurring && !showSection.dspAddendum) {
       setIsDocRendered(false);
       setDownloadApiCall(true);
     }
-
-    if (
-      formData &&
-      formData.contract_type &&
-      formData.contract_type.toLowerCase().includes('one')
-    ) {
+    if (contractTypeOne) {
       setIsDocRendered(false);
       setDownloadApiCall(true);
     }
@@ -434,9 +406,7 @@ export default function ContractContainer() {
     let dspErrors = 0;
 
     if (
-      contract &&
-      contract.contract_type &&
-      contract.contract_type.toLowerCase().includes('one') &&
+      contract?.contract_type?.toLowerCase().includes('one') &&
       (contract.additional_one_time_services === null ||
         !contract.additional_one_time_services.length)
     ) {
@@ -450,21 +420,11 @@ export default function ContractContainer() {
 
     AgreementDetails.forEach((item) => {
       if (item.key !== 'contract_address') {
-        if (
-          !(
-            item.key === 'length' &&
-            details &&
-            details.contract_type === 'one time'
-          )
-        ) {
+        if (!(item.key === 'length' && details?.contract_type === 'one time')) {
           if (
             item.isMandatory &&
             item.field === 'customer' &&
-            !(
-              contract &&
-              contract.customer_id &&
-              contract.customer_id[item.key]
-            )
+            !(contract?.customer_id && contract.customer_id[item.key])
           ) {
             agreementErrors += 1;
             item.error = true;
@@ -485,11 +445,7 @@ export default function ContractContainer() {
             if (
               subItem &&
               subItem.isMandatory &&
-              !(
-                contract &&
-                contract.customer_id &&
-                contract.customer_id[subItem.key]
-              )
+              !(contract?.customer_id && contract.customer_id[subItem.key])
             ) {
               subItem.error = true;
               agreementErrors += 1;
@@ -504,11 +460,7 @@ export default function ContractContainer() {
       if (
         item.isMandatory &&
         !(contract && contract[item.key]) &&
-        !(
-          contract &&
-          contract.contract_type &&
-          contract.contract_type.toLowerCase().includes('one')
-        )
+        !contract?.contract_type?.toLowerCase().includes('one')
       ) {
         statementErrors += 1;
         item.error = true;
@@ -518,9 +470,7 @@ export default function ContractContainer() {
     DSPAddendumDetails.forEach((item) => {
       if (item.isMandatory && !(contract && contract[item.key])) {
         if (
-          contract &&
-          contract.contract_type &&
-          contract.contract_type.toLowerCase().includes('dsp') &&
+          contract?.contract_type?.toLowerCase().includes('dsp') &&
           item.key !== 'dsp_length'
         ) {
           dspErrors += 1;
@@ -528,20 +478,12 @@ export default function ContractContainer() {
         }
 
         if (
-          contract &&
-          contract.contract_type &&
-          contract.contract_type.toLowerCase().includes('recurring') &&
+          contract?.contract_type?.toLowerCase().includes('recurring') &&
           item.key === 'dsp_length'
         ) {
           dspErrors += 1;
           item.error = true;
-        } else if (
-          !(
-            contract &&
-            contract.contract_type &&
-            contract.contract_type.toLowerCase().includes('dsp')
-          )
-        ) {
+        } else if (!contract?.contract_type?.toLowerCase().includes('dsp')) {
           dspErrors += 1;
           item.error = true;
         }
@@ -574,40 +516,26 @@ export default function ContractContainer() {
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
           }
-
           // get amendment data
-          if (res && res.data && res.data.draft_from) {
-            getAmendmentData(res && res.data && res.data.id);
+          if (res?.data?.draft_from) {
+            getAmendmentData(res?.data?.id);
           }
-
           getAddendum({
             customer_id: id,
-            contract_id: res && res.data && res.data.id,
+            contract_id: res?.data?.id,
           }).then((addendum) => {
             setNewAddendum(
-              addendum &&
-                addendum.data &&
-                addendum.data.results &&
-                addendum.data.results.length &&
-                addendum.data.results[0],
+              addendum?.data?.results?.length && addendum.data.results[0],
             );
             setOriginalAddendumData(
-              addendum &&
-                addendum.data &&
-                addendum.data.results &&
-                addendum.data.results.length &&
-                addendum.data.results[0],
+              addendum?.data?.results?.length && addendum.data.results[0],
             );
           });
-
-          if (history && history.location && history.location.showEditView) {
-            showEditView(res && res.data);
+          if (history?.location?.showEditView) {
+            showEditView(res?.data);
           }
-
-          // setIsDocRendered(true);
         } else {
           setIsLoading({ loader: false, type: 'page' });
-
           setLoaderFlag(false);
           setPageNotFoundFlag(true);
         }
@@ -635,13 +563,7 @@ export default function ContractContainer() {
 
   useEffect(() => {
     agreementTemplate().then((response) => {
-      setData(
-        response &&
-          response.data &&
-          response.data.results &&
-          response.data.results[0],
-      );
-
+      setData(response?.data?.results && response.data.results[0]);
       getContractDetails();
     });
 
@@ -658,24 +580,19 @@ export default function ContractContainer() {
       setAdditionalMarketplaces(market.data);
       setMarketplacesResult(market.data);
     });
-    getMonthlyService().then((res) => {
-      setMonthlyService(res.data);
 
-      // fetchUncommonOptions(
-      //   res && res.data,
-      //   formData.additional_monthly_services,
-      //   'monthly_service',
-      // );
+    getMonthlyService().then((res) => {
+      setMonthlyService(res?.data);
     });
 
     getServicesFee().then((res) => {
-      setServicesFees(res && res.data);
+      setServicesFees(res?.data);
     });
 
     getOneTimeService().then((r) => {
-      setOneTimeService(r && r.data);
+      setOneTimeService(r?.data);
 
-      if (r && r.data) {
+      if (r?.data) {
         const result = [];
         r.data.forEach((item) => {
           if (item.label.includes('Amazon Store Package')) {
@@ -693,7 +610,6 @@ export default function ContractContainer() {
         setAmazonStoreOptions(list);
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, id]);
 
   const showTabInResponsive = (section) => {
@@ -729,7 +645,6 @@ export default function ContractContainer() {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
     }
-
     if (flag === 'Yes') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
       setUpdatedFormData({});
@@ -753,11 +668,7 @@ export default function ContractContainer() {
       setThirdMonthDate(null);
       setEndDate(null);
 
-      if (
-        originalData &&
-        originalData.additional_marketplaces &&
-        originalData.additional_marketplaces.length
-      ) {
+      if (originalData?.additional_marketplaces?.length) {
         setShowAdditionalMarketplace(true);
       } else {
         setShowAdditionalMarketplace(false);
@@ -770,7 +681,6 @@ export default function ContractContainer() {
     if (flag === 'No') {
       setShowEditContractConfirmationModal(false);
     }
-
     if (flag === 'Yes') {
       const dataToUpdate = {
         contract_status: 'pending contract',
@@ -787,43 +697,33 @@ export default function ContractContainer() {
     }
   };
 
+  const handleNewDate = (monthDateOrder) => {
+    const newDate = new Date(
+      new Date(
+        new Date(monthDateOrder).getFullYear(),
+        new Date(monthDateOrder).getMonth() + 1,
+        0,
+      ),
+    );
+    return newDate;
+  };
+
   const calculateTotalDays = (flag = '') => {
     let firstMonthdays = 0;
     if (new Date(firstMonthDate).getDate() !== 1) {
-      const totalDays = new Date(
-        new Date(firstMonthDate).getFullYear(),
-        new Date(firstMonthDate).getMonth() + 1,
-        0,
-      ).getDate();
+      const totalDays = handleNewDate(firstMonthDate).getDate();
       const currentDate = new Date(firstMonthDate).getDate();
       firstMonthdays = totalDays - currentDate;
     } else {
-      firstMonthdays = new Date(
-        new Date(firstMonthDate).getFullYear(),
-        new Date(firstMonthDate).getMonth() + 1,
-        0,
-      ).getDate();
+      firstMonthdays = handleNewDate(firstMonthDate).getDate();
     }
 
     let extraDays = 0;
     if (new Date(firstMonthDate).getDate() !== 1) {
-      extraDays = new Date(
-        new Date(endMonthDate).getFullYear(),
-        new Date(endMonthDate).getMonth() + 1,
-        0,
-      ).getDate();
+      extraDays = handleNewDate(endMonthDate).getDate();
     }
-    const secondMonthdays = new Date(
-      new Date(secondMonthDate).getFullYear(),
-      new Date(secondMonthDate).getMonth() + 1,
-      0,
-    ).getDate();
-    const thirdMonthdays = new Date(
-      new Date(thirdMonthDate).getFullYear(),
-      new Date(thirdMonthDate).getMonth() + 1,
-      0,
-    ).getDate();
-
+    const secondMonthdays = handleNewDate(secondMonthDate).getDate();
+    const thirdMonthdays = handleNewDate(thirdMonthDate).getDate();
     const totaldays =
       firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
 
@@ -847,11 +747,7 @@ export default function ContractContainer() {
     }
 
     if (key === 'length' && label === 'Initial Period') {
-      if (
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp')
-      ) {
+      if (contractTypeDsp) {
         return calculateTotalDays('initial');
       }
       if (
@@ -861,27 +757,18 @@ export default function ContractContainer() {
       ) {
         return `Enter ${label}`;
       }
-      return (
-        formData &&
-        formData.length &&
-        formData.length.label &&
-        parseInt(formData.length.label, 10)
-      );
+      return formData?.length?.label && parseInt(formData.length.label, 10);
     }
     if (key === 'length') {
-      // return details && details.length && details.length.label;
-
-      return formData && formData.length && formData.length.label
+      return formData?.length?.label
         ? formData.length.label
         : formData.length
         ? formData.length
         : 'Select Length';
     }
     if (key === 'primary_marketplace') {
-      if (details && details.primary_marketplace) {
-        return details &&
-          details.primary_marketplace &&
-          details.primary_marketplace.name
+      if (details?.primary_marketplace) {
+        return primaryMarketplaceName
           ? details.primary_marketplace.name
           : details.primary_marketplace;
       }
@@ -889,11 +776,9 @@ export default function ContractContainer() {
     }
 
     if (key === 'start_date') {
-      // return
       return formData && formData[key] !== null
         ? formData && dayjs(formData[key]).format('MM / DD / YYYY')
         : 'Select Date';
-      // details && dayjs(details[key]).format('MM / DD / YYYY');
     }
     if (key === 'current_date') {
       return dayjs(Date()).format('MM / DD / YYYY');
@@ -904,80 +789,23 @@ export default function ContractContainer() {
 
     if (key === 'address') {
       if (
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.address === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.address === null)) &&
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.state === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.state === null)) &&
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.city === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.city === null)) &&
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.zip_code === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.zip_code === null))
+        (customerAddress === '' || customerAddress === null) &&
+        (customerState === '' || customerState === null) &&
+        (customerCity === '' || customerCity === null) &&
+        (customerZipCode === '' || customerZipCode === null)
       ) {
         return `Enter Location`;
       }
-      return `${
-        formData && formData.customer_id && formData.customer_id.address
-          ? formData && formData.customer_id && formData.customer_id.address
-          : ''
-      }${
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.address &&
-        ((formData && formData.customer_id && formData.customer_id.state) ||
-          (formData && formData.customer_id && formData.customer_id.city) ||
-          (formData && formData.customer_id && formData.customer_id.zip_code))
+      return `${customerAddress || ''}${
+        customerAddress && (customerState || customerCity || customerZipCode)
           ? ','
           : ''
       }
-       ${
-         formData && formData.customer_id && formData.customer_id.city
-           ? formData && formData.customer_id && formData.customer_id.city
-           : ''
-       }${
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.city &&
-        (formData.customer_id.state ||
-          (formData && formData.customer_id && formData.customer_id.zip_code))
-          ? ','
-          : ''
+       ${customerCity || ''}${
+        customerCity && (customerState || customerZipCode) ? ',' : ''
       }
-      ${
-        formData && formData.customer_id && formData.customer_id.state
-          ? formData && formData.customer_id && formData.customer_id.state
-          : ''
-      }${
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.state &&
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.zip_code
-          ? ','
-          : ''
-      }
-     
-      ${
-        formData && formData.customer_id && formData.customer_id.zip_code
-          ? formData && formData.customer_id && formData.customer_id.zip_code
-          : ''
-      }
+      ${customerState || ''}${customerState && customerZipCode ? ',' : ''}     
+      ${customerZipCode || ''}
       `;
     }
 
@@ -1002,12 +830,7 @@ export default function ContractContainer() {
       if (details && details[key] === 'Fixed') {
         return `Fixed: <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold">${
           details && details.sales_threshold
-            ? `$${
-                details &&
-                details.sales_threshold
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-              }`
+            ? `$${displayNumber(details?.sales_threshold)}`
             : `Enter ${label}.`
         }</span>`;
       }
@@ -1015,9 +838,9 @@ export default function ContractContainer() {
 
     if (type && type.includes('number')) {
       if (details && details[key]) {
-        return `${type === 'number-currency' ? '$' : '%'}${details[key]
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        return `${type === 'number-currency' ? '$' : '%'}${displayNumber(
+          details[key],
+        )}`;
       }
       return `Enter ${label}`;
     }
@@ -1034,15 +857,10 @@ export default function ContractContainer() {
         : details && details[key];
 
     return result;
-    // return details && details[key];
   };
 
   const showRevTable = () => {
-    if (
-      details &&
-      details.threshold_type &&
-      details.threshold_type !== 'None'
-    ) {
+    if (details?.threshold_type && details.threshold_type !== 'None') {
       return `<table class="contact-list " style="width: 100%;
     border-collapse: collapse;"><tr style="display: table-row;
     vertical-align: inherit;
@@ -1090,18 +908,11 @@ export default function ContractContainer() {
             (item.service && item.service.name !== undefined) ||
             item.name !== undefined
           ) {
-            if (
-              // item &&
-              // item.service &&
-              // item.service.name !== 'DSP Advertising' &&
-              item &&
-              item.service &&
-              item.service.name !== 'Inventory Reconciliation'
-            ) {
+            if (item?.service?.name !== 'Inventory Reconciliation') {
               fields.push(
                 `<tr>
                 <td style="border: 1px solid black;padding: 13px;">${
-                  item.service ? item.service.name : item && item.name
+                  item.service ? item.service.name : item?.name
                 }</td>
                 ${
                   item.name
@@ -1110,13 +921,9 @@ export default function ContractContainer() {
                     ? `<td style="border: 1px solid black;padding: 13px;">N/A</td>`
                     : `<td style="border: 1px solid black;padding: 13px;">$${
                         item.service
-                          ? item.service.fee
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          ? displayNumber(item.service.fee)
                           : item.fee
-                          ? item.fee
-                              .toString()
-                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                          ? displayNumber(item.fee)
                           : ''
                       } /month
                 </td>`
@@ -1129,11 +936,7 @@ export default function ContractContainer() {
           fields.push(
             `<tr>
                 <td style="border: 1px solid black;padding: 13px;">${
-                  item && item.quantity
-                    ? item.quantity
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : 0
+                  item?.quantity ? displayNumber(item.quantity) : 0
                 }</td>
             <td style="border: 1px solid black;padding: 13px;">${
               item.service ? item.service.name : item && item.name
@@ -1146,23 +949,18 @@ export default function ContractContainer() {
                  )
                    ? item.custom_amazon_store_price
                      ? `<td style="border: 1px solid black;padding: 13px;">
-                                $${item.custom_amazon_store_price
-                                  .toString()
-                                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                                $${displayNumber(
+                                  item.custom_amazon_store_price,
+                                )}
                                </td>`
                      : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
-                   : item && item.service && item.service.fee
+                   : item?.service?.fee
                    ? `<td style="border: 1px solid black;padding: 13px;">
-                           $${(item && item.service && item.service.fee
-                             ? item.service.fee
-                             : ''
-                           )
+                           $${(item?.service?.fee ? item.service.fee : '')
                              .toString()
                              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} </td>`
                    : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
-               }
-
-     
+               }  
             <td style="border: 1px solid black;padding: 13px;">$${(item.service
               .name !== 'Amazon Store Package Custom'
               ? item.quantity * item.service.fee
@@ -1182,7 +980,7 @@ export default function ContractContainer() {
 
   const mapAdditionalMarketPlaces = () => {
     const fields = [];
-    if (details && details.additional_marketplaces) {
+    if (details?.additional_marketplaces) {
       for (const item of details.additional_marketplaces) {
         fields.push(
           `<tr>
@@ -1191,13 +989,9 @@ export default function ContractContainer() {
       }</td>
                     <td style="border: 1px solid black;padding: 13px;">$${
                       item.service
-                        ? item.service.fee
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        ? displayNumber(item.service.fee)
                         : item.fee
-                        ? item.fee
-                            .toString()
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        ? displayNumber(item.fee)
                         : ''
                     } /month
                     </td>
@@ -1214,17 +1008,13 @@ export default function ContractContainer() {
                   Variable Monthly Services</td>
                   </tr>`,
     ];
-    if (details && details.additional_monthly_services) {
+    if (details?.additional_monthly_services) {
       for (const item of details.additional_monthly_services) {
-        if (
-          item &&
-          item.service &&
-          item.service.name === 'Inventory Reconciliation'
-        ) {
+        if (item?.service?.name === 'Inventory Reconciliation') {
           fields.push(
             `<tr>
                  <td style="border: 1px solid black;padding: 13px;">${
-                   item.service ? item.service.name : item && item.name
+                   item.service ? item.service.name : item?.name
                  }</td>
                     <td style="border: 1px solid black;padding: 13px;"> 
                   25% of recovered $s
@@ -1233,7 +1023,6 @@ export default function ContractContainer() {
           );
         }
       }
-
       return fields.length > 1 ? fields.toString().replaceAll(',', '') : '';
     }
     return '';
@@ -1242,12 +1031,8 @@ export default function ContractContainer() {
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
-        details &&
-        details.total_fee &&
-        details.total_fee.onetime_service_after_discount
-          ? details.total_fee.onetime_service_after_discount
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        details?.total_fee?.onetime_service_after_discount
+          ? displayNumber(details.total_fee.onetime_service_after_discount)
           : 0
       }`;
     }
@@ -1266,7 +1051,7 @@ export default function ContractContainer() {
   const mapMonthlyServiceTotal = () => {
     return `
     ${
-      details && details.total_fee && details.total_fee.monthly_service_discount
+      details?.total_fee?.monthly_service_discount
         ? `<tr style=" border: 1px solid black;">
             <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Sub-total</td>
             <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">${mapServiceTotal(
@@ -1277,25 +1062,17 @@ export default function ContractContainer() {
         : ''
     }
     ${
-      details && details.total_fee && details.total_fee.monthly_service_discount
+      details?.total_fee?.monthly_service_discount
         ? `<tr style=" border: 1px solid black;">
             <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Discount ${
-              details &&
-              details.monthly_discount_amount &&
-              details &&
-              details.monthly_discount_type === 'percentage'
-                ? `(${details && details.monthly_discount_amount}%)`
+              details?.monthly_discount_amount &&
+              details?.monthly_discount_type === 'percentage'
+                ? `(${details?.monthly_discount_amount}%)`
                 : ''
             }</td>
             <td class="total-service text-right"style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${
-              details &&
-              details.total_fee &&
-              details.total_fee.monthly_service_discount
-                ? details &&
-                  details.total_fee &&
-                  details.total_fee.monthly_service_discount
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              details?.total_fee?.monthly_service_discount
+                ? displayNumber(details?.total_fee?.monthly_service_discount)
                 : 0
             }
             </td>
@@ -1305,12 +1082,10 @@ export default function ContractContainer() {
          <tr>
             <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
             <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
-              details &&
-              details.total_fee &&
-              details.total_fee.monthly_service_after_discount
-                ? details.total_fee.monthly_service_after_discount
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              details?.total_fee?.monthly_service_after_discount
+                ? displayNumber(
+                    details.total_fee.monthly_service_after_discount,
+                  )
                 : 0
             }
             </td>
@@ -1321,40 +1096,28 @@ export default function ContractContainer() {
   const mapOnetimeServiceTotal = () => {
     return `
     ${
-      details && details.total_fee && details.total_fee.onetime_service_discount
+      details?.total_fee?.onetime_service_discount
         ? `<tr style=" border: 1px solid black;">
             <td class="total-service" colspan="3" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px;"> Sub-total</td>
-            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">$${
-              details &&
-              details.total_fee &&
-              details.total_fee.onetime_service
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">$${displayNumber(
+              details?.total_fee?.onetime_service,
+            )}
             </td>
          </tr>`
         : ''
     }
        ${
-         details &&
-         details.total_fee &&
-         details.total_fee.onetime_service_discount
+         details?.total_fee?.onetime_service_discount
            ? `<tr style=" border: 1px solid black;">
             <td class="total-service" colspan="3" style="border-bottom: hidden; border-left: 1px solid black;padding: 5px 13px;"> Discount ${
-              details &&
-              details.one_time_discount_amount &&
-              details &&
-              details.one_time_discount_type === 'percentage'
-                ? `(${details && details.one_time_discount_amount}%)`
+              details?.one_time_discount_amount &&
+              details?.one_time_discount_type === 'percentage'
+                ? `(${details?.one_time_discount_amount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${
-              details &&
-              details.total_fee &&
-              details.total_fee.onetime_service_discount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${displayNumber(
+              details?.total_fee?.onetime_service_discount,
+            )}
             </td>
          </tr>`
            : ''
@@ -1362,24 +1125,16 @@ export default function ContractContainer() {
          
          <tr>
             <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
-              details &&
-              details.total_fee &&
-              details.total_fee.onetime_service_after_discount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${displayNumber(
+              details?.total_fee?.onetime_service_after_discount,
+            )}
             </td>
          </tr>
          `;
   };
 
   const showMonthlyServiceTable = () => {
-    if (
-      details &&
-      details.additional_monthly_services &&
-      details.additional_monthly_services.length
-    ) {
+    if (additionalMonthlyServicesLength) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center"><span style="font-weight: 800;
     font-family: Helvetica-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br><table class="contact-list " style="width: 100%;
     border-collapse: collapse;><tr style="display: table-row;
@@ -1390,18 +1145,14 @@ export default function ContractContainer() {
       'additional_monthly_services',
       'Monthly Services',
     )} ${mapAdditionalMarketPlaces()}${mapMonthlyServiceTotal()}
-                              ${mapVariableMonthlyService()}
-                                </table>`;
+          ${mapVariableMonthlyService()}
+        </table>`;
     }
     return '';
   };
 
   const showOneTimeTable = () => {
-    if (
-      details &&
-      details.additional_one_time_services &&
-      details.additional_one_time_services.length
-    ) {
+    if (details?.additional_one_time_services?.length) {
       return `<table
     class="contact-list "
     style="width: 100%;
@@ -1411,26 +1162,10 @@ export default function ContractContainer() {
       style="display: table-row;
     vertical-align: inherit;
     border-color: inherit;">
-      <th
-        style="text-align: left;border: 1px solid black;
-    padding: 13px;">
-        Quantity
-      </th>
-      <th
-        style="text-align: left;border: 1px solid black;
-    padding: 13px;">
-        Service
-      </th>
-      <th
-        style="text-align: left;border: 1px solid black;
-    padding: 13px;">
-        Service Fee
-      </th>
-      <th
-        style="text-align: left;border: 1px solid black;
-    padding: 13px;">
-        Total Service Fee
-      </th>
+      <th style="text-align: left;border: 1px solid black;padding: 13px;">Quantity</th>
+      <th style="text-align: left;border: 1px solid black;padding: 13px;">Service</th>
+      <th style="text-align: left;border: 1px solid black;padding: 13px;">Service Fee</th>
+      <th style="text-align: left;border: 1px solid black;padding: 13px;">Total Service Fee</th>
     </tr>
     ${mapMonthlyServices('additional_one_time_services', 'One Time Services')}
     ${mapOnetimeServiceTotal()}
@@ -1440,11 +1175,7 @@ export default function ContractContainer() {
   };
 
   const showOneTimeServiceTable = () => {
-    if (
-      details &&
-      details.additional_one_time_services &&
-      details.additional_one_time_services.length
-    ) {
+    if (details?.additional_one_time_services?.length) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
     font-family: Helvetica-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br>${showOneTimeTable()}`;
     }
@@ -1452,7 +1183,7 @@ export default function ContractContainer() {
   };
 
   const showBillingCap = () => {
-    if (formData && formData.billing_cap) {
+    if (formData?.billing_cap) {
       return `<br><br><div class=" text-center " style="text-align: center;"><span style="font-weight: 800;
       font-family: Helvetica-bold;"> Billing Cap </span> </div><div style="text-align: center;">Maximum amount that will be charged between the monthly retainer and revenue share.</div>
       <div class=" text-center input-contact-value mt-3" style="margin-top: 1rem!important; text-align: center;"><span style="background:#ffe5df;padding: 4px 9px; font-weight: bold"> 
@@ -1495,76 +1226,63 @@ export default function ContractContainer() {
       notIncludedMonthlyServices.length ||
       notIncludedOneTimeServices.length
     ) {
-      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
-    font-family: Helvetica-bold;">Additional Services Not Included</span><br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><div class="table-responsive"><br> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
-                                <tr>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
-                                  </tr>
-                                  ${displayNotIncludedServices()}
-                                  </table></div>
-                                  `;
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;">
+      <span style="font-weight: 800; font-family: Helvetica-bold;">Additional Services Not Included</span>
+      <br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.
+      </div>
+      <div class="table-responsive"><br> 
+        <table class="contact-list " style="width: 100%;border-collapse: collapse;">
+          <tr>
+            <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
+            <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
+          </tr>
+          ${displayNotIncludedServices()}
+        </table>
+      </div>`;
     }
     return '';
   };
 
   const getAgreementAccorType = (index) => {
-    if (
-      data &&
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
-    ) {
+    if (data && details?.contract_type?.toLowerCase().includes('one')) {
       return (
-        data &&
-        data.one_time_service_agreement &&
+        data?.one_time_service_agreement &&
         data.one_time_service_agreement[index]
       );
     }
     return (
-      data &&
-      data.recurring_service_agreement &&
+      data?.recurring_service_agreement &&
       data.recurring_service_agreement[index]
     );
   };
 
   const mapDspDetails = () => {
     return `<tr>
-        <td style="border: 1px solid black;
-    padding: 13px;">
-     <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
-          ${
-            firstMonthDate
-              ? dayjs(firstMonthDate).format('MM-DD-YYYY')
-              : 'MM-DD-YYYY'
-          }
-
+        <td style="border: 1px solid black; padding: 13px;">
+          <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
+            ${
+              firstMonthDate
+                ? dayjs(firstMonthDate).format('MM-DD-YYYY')
+                : 'MM-DD-YYYY'
+            }
           </span>
         </td>
-        <td
-          style="border: 1px solid black;
-    padding: 13px;">
-    <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>
-     DSP_FEE
-     </span>
+        <td style="border: 1px solid black; padding: 13px;">
+          <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold";>DSP_FEE</span>
         </td>
       </tr>`;
   };
 
   const displayFirstMonthFee = () => {
     if (firstMonthDate && new Date(firstMonthDate).getDate() !== 1) {
-      if (formData && formData.dsp_fee) {
-        const fee = parseInt(formData && formData.dsp_fee, 10);
+      if (formData?.dsp_fee) {
+        const fee = parseInt(formData?.dsp_fee, 10);
         const FinalFee = fee + fee / 2;
-        return `$${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        return `$${displayNumber(FinalFee)}`;
       }
     }
-    if (formData && formData.dsp_fee) {
-      return `$${
-        formData &&
-        formData.dsp_fee &&
-        formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      }`;
+    if (formData?.dsp_fee) {
+      return `$${formData?.dsp_fee && displayNumber(formData.dsp_fee)}`;
     }
     return 'Enter DSP Fee ';
   };
@@ -1607,64 +1325,41 @@ export default function ContractContainer() {
               DSP_FEE
 </span>
         </td>
-      </tr>
-      
+      </tr>     
       </table></div>`;
   };
 
   const showRightTick = (section) => {
     if (section === 'service_agreement') {
-      if (
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('one')
-      ) {
+      if (contractTypeOne) {
         if (
-          formData &&
-          formData.customer_id &&
-          formData.customer_id.company_name &&
+          customerCompanyName &&
           formData.start_date &&
-          formData.customer_id.address &&
-          formData.customer_id.state &&
-          formData.customer_id.city &&
-          formData.customer_id.zip_code &&
+          customerAddress &&
+          customerState &&
+          customerCity &&
+          customerZipCode &&
           (formData.additional_one_time_services !== null ||
-            (formData.additional_one_time_services &&
-              formData.additional_one_time_services.length))
+            formData.additional_one_time_services?.length)
         ) {
           return true;
         }
       } else if (
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.company_name &&
+        customerCompanyName &&
         formData.start_date &&
         formData.length &&
-        formData.customer_id.address &&
-        formData.customer_id.state &&
-        formData.customer_id.city &&
-        formData.customer_id.zip_code
+        customerState &&
+        customerCity &&
+        customerZipCode
       ) {
         return true;
       }
     }
 
     if (section === 'statement') {
-      if (
-        !(
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('one')
-        ) &&
-        !(
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('dsp')
-        )
-      ) {
+      if (!contractTypeOne && !contractTypeDsp) {
         if (
-          formData &&
-          formData.monthly_retainer &&
+          formData?.monthly_retainer &&
           formData.primary_marketplace &&
           formData.rev_share
         ) {
@@ -1674,30 +1369,13 @@ export default function ContractContainer() {
     }
 
     if (section === 'dspAddendum') {
-      if (
-        showSection &&
-        showSection.dspAddendum &&
-        !(
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('one')
-        )
-      ) {
-        if (
-          formData &&
-          formData.contract_type &&
-          formData.contract_type.toLowerCase().includes('dsp')
-        ) {
-          if (formData && formData.start_date && formData.dsp_fee) {
+      if (showSection?.dspAddendum && !contractTypeOne) {
+        if (contractTypeDsp) {
+          if (formData?.start_date && formData.dsp_fee) {
             return true;
           }
         }
-        if (
-          formData &&
-          formData.start_date &&
-          formData.dsp_fee &&
-          formData.dsp_length
-        ) {
+        if (formData?.start_date && formData.dsp_fee && formData.dsp_length) {
           return true;
         }
       } else {
@@ -1722,14 +1400,10 @@ export default function ContractContainer() {
     padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
     padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Listing Optimization - Copy <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background: #ffe5df;padding: 4px 9px;"> ${
-      details && details.content_optimization
-        ? details && details.content_optimization
-        : 0
+      details?.content_optimization ? details?.content_optimization : 0
     } </span></span></td><td style="border: 1px solid black;
     padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;"> ${
-      details && details.design_optimization
-        ? details && details.design_optimization
-        : 0
+      details?.design_optimization ? details?.design_optimization : 0
     } </span></span></td><td style="border: 1px solid black;
     padding: 13px;">Listing Creation</td></tr><tr><td style="border: 1px solid black;
     padding: 13px;">Listing Compliance</td><td style="border: 1px solid black;
@@ -1742,11 +1416,11 @@ export default function ContractContainer() {
     padding: 13px;">Advertising Management</td><td style="border: 1px solid black;
     padding: 13px;"> 
     ${
-      details && details.seller_type && details.seller_type.label
+      details?.seller_type?.label
         ? [
-            details && details.seller_type && details.seller_type.label
-              ? details && details.seller_type && details.seller_type.label
-              : details && details.seller_type && details.seller_type,
+            details?.seller_type?.label
+              ? details?.seller_type?.label
+              : details?.seller_type && details.seller_type,
           ]
         : ''
     } Account Management</td></tr><tr><td style="border: 1px solid black;
@@ -1758,9 +1432,9 @@ export default function ContractContainer() {
 
   const mapLanguage = () => {
     if (
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('recurring (90 day notice)')
+      details?.contract_type
+        ?.toLowerCase()
+        .includes('recurring (90 day notice)')
     ) {
       return Recurring90DaysLanguage;
     }
@@ -1779,7 +1453,7 @@ export default function ContractContainer() {
         // caculate the total of additional monthly serviece
         if (formData.additional_monthly_services !== null) {
           formData.additional_monthly_services.forEach((item) => {
-            if (item && item.service) {
+            if (item?.service) {
               monthlySubTotal += item.service.fee;
             } else {
               const fixedFee = servicesFees.filter(
@@ -1792,7 +1466,7 @@ export default function ContractContainer() {
         if (formData.additional_marketplaces !== null) {
           // calculate the total of additional marketplaces
           formData.additional_marketplaces.forEach((item) => {
-            if (item && item.fee) {
+            if (item?.fee) {
               additionalMarketplacesTotal += item.fee;
             } else {
               additionalMarketplacesTotal += additionaMarketplaceAmount;
@@ -1890,10 +1564,6 @@ export default function ContractContainer() {
       'CUSTOMER_NAME',
       mapDefaultValues('company_name', 'Customer Name'),
     )
-      // .replaceAll(
-      //   'AGREEMENT_DATE',
-      //   mapDefaultValues('start_date', 'Start Date'),
-      // )
       .replace('CUSTOMER_ADDRESS', mapDefaultValues('address', 'Address, '))
       .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
       .replace('THAD_SIGN', mapThadSignImg());
@@ -1919,87 +1589,70 @@ export default function ContractContainer() {
         .replace('REVENUE_SHARE', mapDefaultValues('rev_share', 'Rev Share'))
         .replace(
           'REV_THRESHOLD',
-          mapDefaultValues(
-            'threshold_type',
-            'Rev Threshold',
-            // 'number-currency',
-          ),
+          mapDefaultValues('threshold_type', 'Rev Threshold'),
         )
         .replace('SELLER_TYPE', mapDefaultValues('seller_type', 'Seller Type'))
         .replace(
           'PRIMARY_MARKETPLACE',
           mapDefaultValues('primary_marketplace', 'Primary Marketplace'),
         )
-
         .replace('MAP_MONTHLY_SERVICES', showMonthlyServiceTable())
         .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
         .replace('MAP_STANDARD_SERVICE_TABLE', showStandardServicesTable())
         .replace(
           'ADDITIONAL_SERVICES_NOT_INCLUDED',
           showNotIncludedServicesTable(),
-          // notIncludedMonthlyServices,
-          // notIncludedOneTimeServices,
         )
         .replace(
           'BILLING_CAP_AMOUNT',
           mapDefaultValues('billing_cap', 'Billing Cap', 'number-currency'),
         );
-    // .replace(
-    //   'BILLING_CAP_AMOUNT',
-    //   mapDefaultValues('billing_cap', 'Billing Cap', 'number-currency'),
-    // );
 
-    const dspAddendum =
-      showSection && showSection.dspAddendum
-        ? data.dsp_addendum &&
-          data.dsp_addendum[0]
-            .replace(
-              'CUSTOMER_NAME',
-              mapDefaultValues('company_name', 'Customer Name'),
-            )
-
-            .replaceAll(
-              'START_DATE',
-              mapDefaultValues('start_date', 'Start Date'),
-            )
-            .replace(
-              'DSP_DETAIL_TABLE',
-              `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
-    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
-            )
-            .replace('BUDGET_BREAKDOWN_TABLE', `${mapBudgetBreakdownTable()}`)
-            .replaceAll(
-              'CONTRACT_LENGTH',
-              mapDefaultValues('length', 'Initial Period', 'number-currency'),
-            )
-            .replace(
-              'NO_OF_DAYS_BASED_ON_DATE',
-              mapDefaultValues(
-                'calculated_no_of_days',
-                'Calculated Days',
-                'number-currency',
-              ),
-            )
-            .replaceAll(
-              'DSP_FEE',
-              mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
-            )
-        : '';
-
-    const dspAddendumSignature =
-      showSection && showSection.dspAddendum
-        ? AddendumSign.replace(
+    const dspAddendum = showSection?.dspAddendum
+      ? data.dsp_addendum &&
+        data.dsp_addendum[0]
+          .replace(
             'CUSTOMER_NAME',
             mapDefaultValues('company_name', 'Customer Name'),
           )
-            .replace(
-              'BBE_DATE',
-              mapDefaultValues('current_date', 'Current Date'),
-            )
-            .replace('THAD_SIGN', mapThadSignImg())
-        : '';
+          .replaceAll(
+            'START_DATE',
+            mapDefaultValues('start_date', 'Start Date'),
+          )
+          .replace(
+            'DSP_DETAIL_TABLE',
+            `<table class="contact-list " style="width: 100%;
+    border-collapse: collapse;"><tr><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Start Date</th><th style="text-align: left; border: 1px solid black;
+    padding: 13px;">Monthly Ad Budget</th></tr>${mapDspDetails()}</table>`,
+          )
+          .replace('BUDGET_BREAKDOWN_TABLE', `${mapBudgetBreakdownTable()}`)
+          .replaceAll(
+            'CONTRACT_LENGTH',
+            mapDefaultValues('length', 'Initial Period', 'number-currency'),
+          )
+          .replace(
+            'NO_OF_DAYS_BASED_ON_DATE',
+            mapDefaultValues(
+              'calculated_no_of_days',
+              'Calculated Days',
+              'number-currency',
+            ),
+          )
+          .replaceAll(
+            'DSP_FEE',
+            mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
+          )
+      : '';
+
+    const dspAddendumSignature = showSection?.dspAddendum
+      ? AddendumSign.replace(
+          'CUSTOMER_NAME',
+          mapDefaultValues('company_name', 'Customer Name'),
+        )
+          .replace('BBE_DATE', mapDefaultValues('current_date', 'Current Date'))
+          .replace('THAD_SIGN', mapThadSignImg())
+      : '';
 
     const addendumData =
       data.addendum &&
@@ -2013,10 +1666,9 @@ export default function ContractContainer() {
           mapDefaultValues('start_date', 'Start Date'),
         );
 
-    const newAddendumAddedData =
-      newAddendumData && newAddendumData.addendum
-        ? newAddendumData.addendum.replaceAll('<p>', '<p style="margin:0">')
-        : '';
+    const newAddendumAddedData = newAddendumData?.addendum
+      ? newAddendumData.addendum.replaceAll('<p>', '<p style="margin:0">')
+      : '';
 
     const addendumSignatureData = AddendumSign.replace(
       'CUSTOMER_NAME',
@@ -2026,24 +1678,14 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const finalAgreement = `${agreementData} ${agreementSignatureData} ${
-      (details &&
-        details.contract_type &&
-        details.contract_type.toLowerCase().includes('one')) ||
-      (details &&
-        details.contract_type &&
-        details.contract_type.toLowerCase().includes('dsp'))
+      details?.contract_type?.toLowerCase().includes('one') ||
+      details?.contract_type?.toLowerCase().includes('dsp')
         ? ''
         : statmentData
     } ${
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
-        ? ''
-        : dspAddendum
+      details?.contract_type?.toLowerCase().includes('one') ? '' : dspAddendum
     } ${
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
+      details?.contract_type?.toLowerCase().includes('one')
         ? ''
         : dspAddendumSignature
     } ${
@@ -2057,7 +1699,7 @@ export default function ContractContainer() {
     setPDFData(finalAgreement);
 
     const contractData = {
-      contract: details && details.id,
+      contract: detailsId,
       contract_data: finalAgreement
         .replaceAll('PRINTED_NAME', '')
         .replace('CUSTOMER_ROLE', ''),
@@ -2066,7 +1708,6 @@ export default function ContractContainer() {
     createContractDesign(contractData).then(() => {
       setContractDesignLoader(false);
     });
-    // }
   };
 
   useEffect(() => {
@@ -2079,11 +1720,7 @@ export default function ContractContainer() {
   useEffect(() => {
     const sectionFlag = { ...showSection };
 
-    if (
-      details &&
-      details.additional_monthly_services &&
-      details.additional_monthly_services.length
-    ) {
+    if (additionalMonthlyServicesLength) {
       setMonthlyAdditionalServices({
         create: [...details.additional_monthly_services],
         delete: [],
@@ -2094,11 +1731,7 @@ export default function ContractContainer() {
         delete: [],
       });
     }
-    if (
-      details &&
-      details.additional_marketplaces &&
-      details.additional_marketplaces.length
-    ) {
+    if (details?.additional_marketplaces?.length) {
       setAdditionalMarketplace({
         create: [...details.additional_marketplaces],
         delete: [],
@@ -2109,11 +1742,7 @@ export default function ContractContainer() {
         delete: [],
       });
     }
-    if (
-      details &&
-      details.additional_one_time_services &&
-      details.additional_one_time_services.length
-    ) {
+    if (details?.additional_one_time_services?.length) {
       setAdditionalOnetimeServices({
         create: [...details.additional_one_time_services],
         delete: [],
@@ -2125,19 +1754,7 @@ export default function ContractContainer() {
       });
     }
 
-    // if (
-    //   details &&
-    //   details.contract_type &&
-    //   details.contract_type.toLowerCase().includes('dsp')
-    // ) {
-    //   sectionFlag.dspAddendum = true;
-    // }
-
-    if (
-      details &&
-      details.primary_marketplace &&
-      details.primary_marketplace.name
-    ) {
+    if (primaryMarketplaceName) {
       setAdditionalMarketplaces(
         marketplacesResult.filter(
           (op) => op.value !== details.primary_marketplace.name,
@@ -2147,11 +1764,11 @@ export default function ContractContainer() {
       setAdditionalMarketplaces(marketplacesResult);
     }
 
-    if (details && details.additional_marketplaces) {
+    if (details?.additional_marketplaces) {
       setMarketPlaces(
         marketplacesResult.filter(
           (choice) =>
-            !(details && details.additional_marketplaces).some(
+            !(details?.additional_marketplaces).some(
               (item) => item.name === choice.value,
             ),
         ),
@@ -2160,7 +1777,7 @@ export default function ContractContainer() {
       setMarketPlaces(marketplacesResult);
     }
 
-    if (details && details.additional_one_time_services) {
+    if (details?.additional_one_time_services) {
       fetchUncommonOptions(
         oneTimeService,
         details.additional_one_time_services,
@@ -2168,7 +1785,7 @@ export default function ContractContainer() {
       );
     }
 
-    if (details && details.additional_monthly_services) {
+    if (details?.additional_monthly_services) {
       fetchUncommonOptions(
         monthlyService,
         details.additional_monthly_services,
@@ -2176,8 +1793,8 @@ export default function ContractContainer() {
       );
     }
 
-    if (newAddendumData && newAddendumData.id) {
-      if (newAddendumData.addendum && newAddendumData.addendum.length <= 7) {
+    if (newAddendumData?.id) {
+      if (newAddendumData.addendum?.length <= 7) {
         sectionFlag.addendum = false;
       } else {
         sectionFlag.addendum = true;
@@ -2185,24 +1802,12 @@ export default function ContractContainer() {
     }
 
     if (
-      !(
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('one')
-      ) &&
-      !(
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp')
-      ) &&
-      details &&
-      details.additional_monthly_services &&
-      details.additional_monthly_services.length &&
+      !contractTypeOne &&
+      !contractTypeDsp &&
+      additionalMonthlyServicesLength &&
       details.additional_monthly_services.find(
         (item) =>
-          item &&
-          item.service &&
-          item.service.name &&
+          item?.service?.name &&
           item.service.name.toLowerCase().includes('dsp'),
       )
     ) {
@@ -2211,42 +1816,31 @@ export default function ContractContainer() {
       sectionFlag.dspAddendum = false;
     }
 
-    if (
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('dsp')
-    ) {
+    if (details?.contract_type?.toLowerCase().includes('dsp')) {
       sectionFlag.dspAddendum = true;
     }
 
     setIsDocRendered(true);
     setShowCollpase(sectionFlag);
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [details, newAddendumData]);
 
   const createPrimaryMarketplace = () => {
     const statementData = {
-      id:
-        (details &&
-          details.primary_marketplace &&
-          details.primary_marketplace.id) ||
-        '',
-      contract: details.id,
+      id: details?.primary_marketplace?.id || '',
+      contract: detailsId,
       name: updatedFormData && updatedFormData.primary_marketplace,
       is_primary: true,
     };
 
-    if (details.primary_marketplace && details.primary_marketplace.id) {
+    if (details.primary_marketplace?.id) {
       updateMarketplace(details.primary_marketplace.id, statementData).then(
         (updateMarketplaceRes) => {
-          if (updateMarketplaceRes && updateMarketplaceRes.status === 200) {
+          if (updateMarketplaceRes?.status === 200) {
             setFormData({
               ...formData,
-              primary_marketplace:
-                updateMarketplaceRes && updateMarketplaceRes.data,
+              primary_marketplace: updateMarketplaceRes?.data,
             });
-            if (updatedFormData && updatedFormData.primary_marketplace) {
+            if (updatedFormData?.primary_marketplace) {
               delete updatedFormData.primary_marketplace;
               setUpdatedFormData({ ...updatedFormData });
 
@@ -2267,10 +1861,9 @@ export default function ContractContainer() {
         if (createMarketplaceRes && createMarketplaceRes.status === 201) {
           setFormData({
             ...formData,
-            primary_marketplace:
-              createMarketplaceRes && createMarketplaceRes.data,
+            primary_marketplace: createMarketplaceRes?.data,
           });
-          if (updatedFormData && updatedFormData.primary_marketplace) {
+          if (updatedFormData?.primary_marketplace) {
             delete updatedFormData.primary_marketplace;
             setUpdatedFormData({ ...updatedFormData });
             if (!Object.keys(updatedFormData).length) {
@@ -2293,37 +1886,29 @@ export default function ContractContainer() {
       updatedFormData.additional_marketplaces,
     ).then((updateMarketplacesRes) => {
       flag = true;
-      if (updateMarketplacesRes && updateMarketplacesRes.status === 200) {
+      if (updateMarketplacesRes?.status === 200) {
         setFormData({
           ...formData,
-          additional_marketplaces:
-            updateMarketplacesRes && updateMarketplacesRes.data,
+          additional_marketplaces: updateMarketplacesRes?.data,
         });
         setOriginalData({
           ...originalData,
-          additional_marketplaces:
-            updateMarketplacesRes && updateMarketplacesRes.data,
+          additional_marketplaces: updateMarketplacesRes?.data,
         });
       }
     });
     if (flag) {
-      if (updatedFormData && updatedFormData.additional_marketplaces) {
+      if (updatedFormData?.additional_marketplaces) {
         delete updatedFormData.additional_marketplaces;
         setUpdatedFormData({ ...updatedFormData });
       }
-      if (
-        !(
-          formData &&
-          formData.additional_marketplaces &&
-          formData.additional_marketplaces.length
-        )
-      ) {
+      if (!formData?.additional_marketplaces?.length) {
         setShowAdditionalMarketplace(false);
       } else {
         setShowAdditionalMarketplace(true);
       }
 
-      if (updatedFormData && updatedFormData.primary_marketplace) {
+      if (updatedFormData?.primary_marketplace) {
         createPrimaryMarketplace();
       }
     }
@@ -2343,72 +1928,48 @@ export default function ContractContainer() {
 
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
-          getAmendmentData(details && details.id);
+          getAmendmentData(detailsId);
           if (
-            additionalMonthlySerRes &&
-            additionalMonthlySerRes.status === 200 &&
-            additionalOneTimeServRes &&
-            additionalOneTimeServRes.status === 200 &&
-            contractRes &&
-            contractRes.status === 200 &&
-            addendumRes &&
-            addendumRes.status === 200 &&
-            updateCustomerRes &&
-            updateCustomerRes.status === 200
+            additionalMonthlySerRes?.status === 200 &&
+            additionalOneTimeServRes?.status === 200 &&
+            contractRes?.status === 200 &&
+            addendumRes?.status === 200 &&
+            updateCustomerRes?.status === 200
           ) {
-            // use/access the results
             showFooter(false);
-            // setIsEditContract(false);
             setUpdatedFormData({});
             getContractDetails();
             setIsEditContract(false);
           }
 
-          if (
-            additionalMonthlySerRes &&
-            additionalMonthlySerRes.status === 200
-          ) {
+          if (additionalMonthlySerRes?.status === 200) {
             setFormData({
               ...formData,
-              additional_monthly_services:
-                additionalMonthlySerRes && additionalMonthlySerRes.data,
+              additional_monthly_services: additionalMonthlySerRes?.data,
             });
             setOriginalData({
               ...originalData,
-              additional_monthly_services:
-                additionalMonthlySerRes && additionalMonthlySerRes.data,
+              additional_monthly_services: additionalMonthlySerRes?.data,
             });
-            if (
-              updatedFormData &&
-              updatedFormData.additional_monthly_services
-            ) {
+            if (updatedFormData?.additional_monthly_services) {
               delete updatedFormData.additional_monthly_services;
             }
           }
-          if (
-            additionalOneTimeServRes &&
-            additionalOneTimeServRes.status === 200
-          ) {
+          if (additionalOneTimeServRes?.status === 200) {
             setFormData({
               ...formData,
-              additional_one_time_services:
-                additionalOneTimeServRes && additionalOneTimeServRes.data,
+              additional_one_time_services: additionalOneTimeServRes?.data,
             });
             setOriginalData({
               ...originalData,
-              additional_one_time_services:
-                additionalOneTimeServRes && additionalOneTimeServRes.data,
+              additional_one_time_services: additionalOneTimeServRes?.data,
             });
 
             const service =
-              additionalOneTimeServRes &&
-              additionalOneTimeServRes.data &&
-              additionalOneTimeServRes.data.length &&
+              additionalOneTimeServRes?.data?.length &&
               additionalOneTimeServRes.data.find(
                 (item) =>
-                  item &&
-                  item.service &&
-                  item.service.name &&
+                  item?.service?.name &&
                   item.service.name === 'Amazon Store Package Custom',
               );
             if (service) {
@@ -2416,32 +1977,24 @@ export default function ContractContainer() {
             } else {
               setAmazonStoreCustom(false);
             }
-
-            if (
-              updatedFormData &&
-              updatedFormData.additional_one_time_services
-            ) {
+            if (updatedFormData?.additional_one_time_services) {
               delete updatedFormData.additional_one_time_services;
             }
           }
 
-          if (
-            (addendumRes && addendumRes.status === 200) ||
-            (addendumRes && addendumRes.status === 201)
-          ) {
-            if (addendumRes && addendumRes.status === 201) {
-              setNewAddendum(addendumRes && addendumRes.data);
+          if (addendumRes?.status === 200 || addendumRes?.status === 201) {
+            if (addendumRes?.status === 201) {
+              setNewAddendum(addendumRes?.data);
             }
-            setNewAddendum(addendumRes && addendumRes.data);
-
-            setOriginalAddendumData(addendumRes && addendumRes.data);
+            setNewAddendum(addendumRes?.data);
+            setOriginalAddendumData(addendumRes?.data);
             setShowEditor(false);
-            if (updatedFormData && updatedFormData.addendum) {
+            if (updatedFormData?.addendum) {
               delete updatedFormData.addendum;
             }
           }
 
-          if (updateCustomerRes && updateCustomerRes.status === 200) {
+          if (updateCustomerRes?.status === 200) {
             const customerData = updateCustomerRes.data;
             setFormData({ ...formData, ...customerData });
             delete updatedFormData.company_name;
@@ -2487,22 +2040,17 @@ export default function ContractContainer() {
           let dspErrCount = 0;
 
           if (
-            (additionalMonthlySerRes &&
-              additionalMonthlySerRes.status === 400) ||
-            (additionalOneTimeServRes &&
-              additionalOneTimeServRes.status === 400) ||
-            (contractRes && contractRes.status === 400) ||
-            (updateCustomerRes && updateCustomerRes.status === 400)
+            additionalMonthlySerRes?.status === 400 ||
+            additionalOneTimeServRes?.status === 400 ||
+            contractRes?.status === 400 ||
+            updateCustomerRes?.status === 400
           ) {
             toast.error(
               'Changes have not been saved. Please fix errors and try again',
             );
           }
 
-          if (
-            additionalMonthlySerRes &&
-            additionalMonthlySerRes.status === 400
-          ) {
+          if (additionalMonthlySerRes?.status === 400) {
             setAdditionalMonthlySerError({
               ...additionalMonthlySerError,
               ...additionalMonthlySerRes.data,
@@ -2513,10 +2061,7 @@ export default function ContractContainer() {
                 .length;
             }
           }
-          if (
-            additionalOneTimeServRes &&
-            additionalOneTimeServRes.status === 400
-          ) {
+          if (additionalOneTimeServRes?.status === 400) {
             setAdditionalOnetimeSerError({
               ...additionalOnetimeSerError,
               ...additionalOneTimeServRes.data,
@@ -2536,10 +2081,8 @@ export default function ContractContainer() {
               }
             }
             if (
-              additionalOneTimeServRes &&
-              additionalOneTimeServRes.data &&
-              Object.values(additionalOneTimeServRes.data) &&
-              Object.values(additionalOneTimeServRes.data).length &&
+              additionalOneTimeServRes?.data &&
+              Object.values(additionalOneTimeServRes.data)?.length &&
               Object.values(additionalOneTimeServRes.data)[0] ===
                 'Object does not exists'
             ) {
@@ -2550,7 +2093,7 @@ export default function ContractContainer() {
             }
           }
 
-          if (updateCustomerRes && updateCustomerRes.status === 400) {
+          if (updateCustomerRes?.status === 400) {
             setCustomerErrors({
               ...customerError,
               ...updateCustomerRes.data,
@@ -2566,7 +2109,7 @@ export default function ContractContainer() {
                 agreementErrCount += 1;
             }
           }
-          if (contractRes && contractRes.status === 400) {
+          if (contractRes?.status === 400) {
             setContractError({
               ...contractError,
               ...contractRes.data,
@@ -2584,13 +2127,10 @@ export default function ContractContainer() {
                   Object.keys(contractRes.data).includes('design_optimization')
                 )
                   statementErrCount += 1;
-
                 if (Object.keys(contractRes.data).includes('yoy_percentage'))
                   statementErrCount += 1;
-
                 if (Object.keys(contractRes.data).includes('sales_threshold'))
                   statementErrCount += 1;
-
                 if (
                   Object.keys(contractRes.data).includes('dsp_fee') &&
                   !contractError.dsp_fee
@@ -2619,7 +2159,7 @@ export default function ContractContainer() {
 
     if (updatedFormData && Object.keys(updatedFormData).length) {
       // for start date
-      if (updatedFormData && updatedFormData.start_date) {
+      if (updatedFormData?.start_date) {
         updatedFormData.start_date = dayjs(updatedFormData.start_date).format(
           'YYYY-MM-DD',
         );
@@ -2632,7 +2172,6 @@ export default function ContractContainer() {
           updatedFormData.additional_monthly_services,
         );
       }
-
       // for additional one time service
       if (updatedFormData.additional_one_time_services) {
         additionalOneTimeApi = createAdditionalServiceBulk(
@@ -2656,7 +2195,6 @@ export default function ContractContainer() {
         };
         updateCustomerApi = updateCustomerDetails(id, customerData);
       }
-
       // for 'monthly_retainer', 'dsp_fee', 'sales_threshold'
       const num = [
         'monthly_retainer',
@@ -2682,20 +2220,14 @@ export default function ContractContainer() {
       delete updatedContractFields.state;
       delete updatedContractFields.zip_code;
 
-      if (
-        updatedContractFields &&
-        updatedContractFields.threshold_type === 'Fixed'
-      ) {
+      if (updatedContractFields?.threshold_type === 'Fixed') {
         updatedContractFields.yoy_percentage = null;
         if (!updatedContractFields.sales_threshold) {
           updatedContractFields.sales_threshold = formData.sales_threshold;
         }
       }
 
-      if (
-        updatedContractFields &&
-        updatedContractFields.threshold_type === 'YoY + %'
-      ) {
+      if (updatedContractFields?.threshold_type === 'YoY + %') {
         updatedContractFields.sales_threshold = null;
         if (!updatedContractFields.yoy_percentage) {
           updatedContractFields.yoy_percentage = formData.yoy_percentage;
@@ -2703,10 +2235,8 @@ export default function ContractContainer() {
       }
 
       if (
-        (updatedContractFields &&
-          updatedContractFields.threshold_type === 'YoY') ||
-        (updatedContractFields &&
-          updatedContractFields.threshold_type === 'None')
+        updatedContractFields?.threshold_type === 'YoY' ||
+        updatedContractFields?.threshold_type === 'None'
       ) {
         updatedContractFields.sales_threshold = null;
         updatedContractFields.yoy_percentage = null;
@@ -2739,7 +2269,7 @@ export default function ContractContainer() {
         AccountApi = updateAccountDetails(details.id, detail);
       }
 
-      if (newAddendumData && newAddendumData.id && updatedFormData.addendum) {
+      if (newAddendumData?.id && updatedFormData.addendum) {
         AddendumApi = updateAddendum(newAddendumData.id, {
           addendum: newAddendumData && newAddendumData.addendum,
           contract: details.id,
@@ -2762,12 +2292,11 @@ export default function ContractContainer() {
       ];
 
       if (
-        (updatedFormData && updatedFormData.primary_marketplace) ||
-        (updatedFormData && updatedFormData.additional_marketplaces)
+        updatedFormData?.primary_marketplace ||
+        updatedFormData?.additional_marketplaces
       ) {
         if (
-          updatedFormData &&
-          updatedFormData.primary_marketplace &&
+          updatedFormData?.primary_marketplace &&
           !Object.keys(updatedFormData).includes('additional_marketplaces')
         ) {
           createPrimaryMarketplace();
@@ -2781,17 +2310,10 @@ export default function ContractContainer() {
   };
 
   const checkApprovalCondition = () => {
-    const rev = Number(details && details.rev_share && details.rev_share.value);
-    const dspFee = Number(details && details.dsp_fee);
-    const contractTermLength = parseInt(
-      details && details.length && details.length.value,
-      10,
-    );
-    if (
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('recurring')
-    ) {
+    const rev = Number(details?.rev_share?.value);
+    const dspFee = Number(details?.dsp_fee);
+    const contractTermLength = parseInt(details?.length?.value, 10);
+    if (details?.contract_type?.toLowerCase().includes('recurring')) {
       if (details && details.draft_from) {
         return true;
       }
@@ -2804,38 +2326,19 @@ export default function ContractContainer() {
       }
     }
     if (
-      details &&
-      details.draft_from &&
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('dsp')
+      details?.draft_from &&
+      details?.contract_type?.toLowerCase().includes('dsp')
     ) {
       return true;
     }
 
     if (
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('dsp') &&
+      details?.contract_type?.toLowerCase().includes('dsp') &&
       dspFee < 10000
     ) {
       return true;
     }
-
-    // if (
-    //   details &&
-    //   details.contract_type &&
-    //   details.contract_type.toLowerCase().includes('one') &&
-    //   details &&
-    //   details.hs_deal_id === null
-    // ) {
-    //   return true;
-    // }
-    if (
-      newAddendumData &&
-      newAddendumData.addendum &&
-      newAddendumData.addendum.length > 7
-    ) {
+    if (newAddendumData?.addendum?.length > 7) {
       return true;
     }
     return false;
@@ -2868,12 +2371,8 @@ export default function ContractContainer() {
           />
         </div>
 
-        {(details &&
-          details.contract_type &&
-          details.contract_type.toLowerCase().includes('one')) ||
-        (details &&
-          details.contract_type &&
-          details.contract_type.toLowerCase().includes('dsp')) ? null : (
+        {details?.contract_type?.toLowerCase().includes('one') ||
+        details?.contract_type?.toLowerCase().includes('dsp') ? null : (
           <div id="statement">
             <Statement
               formData={formData}
@@ -2886,15 +2385,9 @@ export default function ContractContainer() {
           </div>
         )}
 
-        {(details &&
-          details.contract_type &&
-          details.contract_type.toLowerCase().includes('dsp')) ||
+        {details?.contract_type?.toLowerCase().includes('dsp') ||
         (showSection.dspAddendum &&
-          !(
-            details &&
-            details.contract_type &&
-            details.contract_type.toLowerCase().includes('one')
-          )) ? (
+          !details?.contract_type?.toLowerCase().includes('one')) ? (
           <div id="dspAddendum">
             <DSPAddendum
               formData={formData}
@@ -2914,7 +2407,7 @@ export default function ContractContainer() {
         ) : (
           ''
         )}
-        {showSection && showSection.addendum ? (
+        {showSection?.addendum ? (
           <div id="addendum">
             <Addendum
               formData={formData}
@@ -2967,7 +2460,6 @@ export default function ContractContainer() {
         editContractFlag={editContractFlag}
         setEditContractFlag={setEditContractFlag}
         setNotIncludedOneTimeServices={setNotIncludedOneTimeServices}
-        // setNotIncludedMonthlyServices={setNotIncludedMonthlyServices}
         notIncludedOneTimeServices={notIncludedOneTimeServices}
         showFooter={showFooter}
         newAddendumData={newAddendumData}
@@ -3103,6 +2595,134 @@ export default function ContractContainer() {
     setIsEditContract(false);
   };
 
+  const isDraftContract = (agreement = details) => {
+    if (
+      agreement?.draft_from &&
+      agreement.contract_status &&
+      (agreement.contract_status.value === 'pending contract' ||
+        agreement.contract_status.value === 'pending contract approval' ||
+        agreement.contract_status.value === 'pending contract signature')
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const renderContractTabHtml = () => {
+    return (
+      <>
+        <ContractTab className="d-lg-none d-block">
+          <ul style={{ textAlign: 'center' }} className="tabs">
+            <li
+              style={
+                isDraftContract() ? customStylesForTabs : nonDraftCustomStyles
+              }
+              className={tabInResponsive === 'view-contract' ? 'active' : ''}
+              role="presentation"
+              onClick={() => showTabInResponsive('view-contract')}>
+              View Contract
+            </li>
+
+            <li
+              style={
+                isDraftContract() ? customStylesForTabs : nonDraftCustomStyles
+              }
+              className={tabInResponsive === 'edit-fields' ? 'active' : ''}
+              role="presentation"
+              onClick={() => showTabInResponsive('edit-fields')}>
+              {isEditContract ? 'Edit Fields' : 'Activity'}
+            </li>
+            {isDraftContract() ? (
+              <li
+                style={
+                  isDraftContract() ? customStylesForTabs : nonDraftCustomStyles
+                }
+                className={tabInResponsive === 'amendment' ? 'active' : ''}
+                role="presentation"
+                onClick={() => showTabInResponsive('amendment')}>
+                Amendment
+              </li>
+            ) : (
+              ''
+            )}
+          </ul>
+        </ContractTab>
+      </>
+    );
+  };
+
+  const renderHeaderDownloadFuntionality = () => {
+    return (
+      <>
+        <HeaderDownloadFuntionality>
+          <div
+            className={
+              userInfo && userInfo.role === 'Customer' ? ' customer-pdf' : ''
+            }>
+            <div className="container-fluid">
+              <div className="row">
+                <div className="col-md-6 col-sm-12">Contract Management</div>
+                <div className="col-md-6 col-sm-12">
+                  <ul className="contract-download-nav ">
+                    {isFooter ||
+                    (newAddendumData?.id &&
+                      showEditor &&
+                      updatedFormData?.addendum) ? (
+                      ''
+                    ) : (
+                      <li
+                        className={
+                          detailsId &&
+                          contractDesignLoader !== null &&
+                          !contractDesignLoader
+                            ? 'download-pdf '
+                            : 'download-pdf disabled'
+                        }>
+                        <a
+                          className="download-pdf-link"
+                          href={
+                            details?.contract_url ? details?.contract_url : null
+                          }
+                          download>
+                          <img
+                            src={OrangeDownloadPdf}
+                            alt="download"
+                            className="download-pdf-icon "
+                            role="presentation"
+                          />
+                          Download
+                        </a>
+                      </li>
+                    )}
+                    <li>
+                      <span className="divide-arrow hide-mobile" />
+                    </li>
+                    <li>
+                      <img
+                        width="18px"
+                        src={CloseIcon}
+                        alt="close"
+                        className="float-right cursor remove-cross-icon"
+                        onClick={() => {
+                          if (history?.location?.state) {
+                            history.push(history?.location?.state);
+                          } else {
+                            history.push(PATH_CUSTOMER_LIST);
+                          }
+                        }}
+                        role="presentation"
+                      />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </HeaderDownloadFuntionality>
+      </>
+    );
+  };
+
   return (
     <>
       <ToastContainer
@@ -3114,118 +2734,9 @@ export default function ContractContainer() {
         <PageNotFound />
       ) : checkContractStatus() ? (
         <>
-          <ContractTab className="d-lg-none d-block">
-            <ul style={{ textAlign: 'center' }} className="tabs">
-              <li
-                style={customStylesForTabs}
-                className={tabInResponsive === 'view-contract' ? 'active' : ''}
-                role="presentation"
-                onClick={() => showTabInResponsive('view-contract')}>
-                View Contract
-              </li>
-
-              <li
-                style={customStylesForTabs}
-                className={tabInResponsive === 'edit-fields' ? 'active' : ''}
-                role="presentation"
-                onClick={() => showTabInResponsive('edit-fields')}>
-                {isEditContract ? 'Edit Fields' : 'Activity'}
-              </li>
-              <li
-                style={customStylesForTabs}
-                className={tabInResponsive === 'amendment' ? 'active' : ''}
-                role="presentation"
-                onClick={() => showTabInResponsive('amendment')}>
-                Amendment
-              </li>
-            </ul>
-          </ContractTab>
+          {renderContractTabHtml()}
           <div className="on-boarding-container">
-            <HeaderDownloadFuntionality>
-              <div
-                className={
-                  userInfo && userInfo.role === 'Customer'
-                    ? 'customer-pdf'
-                    : ' '
-                }>
-                <div className="container-fluid">
-                  <div className="row">
-                    <div className="col-md-6 col-sm-12">
-                      {' '}
-                      Contract Management
-                    </div>
-                    <div className="col-md-6 col-sm-12">
-                      <ul className="contract-download-nav ">
-                        {isFooter ||
-                        (newAddendumData &&
-                          newAddendumData.id &&
-                          showEditor &&
-                          updatedFormData &&
-                          updatedFormData.addendum) ? (
-                          ''
-                        ) : (
-                          <li
-                            className={
-                              details &&
-                              details.id &&
-                              contractDesignLoader !== null &&
-                              !contractDesignLoader
-                                ? 'download-pdf '
-                                : 'download-pdf disabled'
-                            }>
-                            <a
-                              className="download-pdf-link"
-                              href={
-                                details && details.contract_url
-                                  ? details && details.contract_url
-                                  : null
-                              }
-                              download>
-                              <img
-                                src={OrangeDownloadPdf}
-                                alt="download"
-                                className="download-pdf-icon "
-                                role="presentation"
-                              />
-                              Download
-                            </a>
-                          </li>
-                        )}
-                        <li>
-                          <span className="divide-arrow hide-mobile" />
-                        </li>
-
-                        <li>
-                          <img
-                            width="18px"
-                            src={CloseIcon}
-                            alt="close"
-                            className="float-right cursor remove-cross-icon"
-                            onClick={() => {
-                              if (
-                                history &&
-                                history.location &&
-                                history.location.state
-                              ) {
-                                history.push(
-                                  history &&
-                                    history.location &&
-                                    history.location.state,
-                                );
-                              } else {
-                                history.push(PATH_CUSTOMER_LIST);
-                              }
-                            }}
-                            role="presentation"
-                          />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </HeaderDownloadFuntionality>
-
+            {renderHeaderDownloadFuntionality()}
             {isLoading.loader && isLoading.type === 'page' ? (
               <PageLoader
                 className="modal-loader"
@@ -3240,7 +2751,7 @@ export default function ContractContainer() {
                 (isTablet && tabInResponsive === 'view-contract') ||
                 (isMobile && tabInResponsive === 'view-contract') ? (
                   <PdfViewer
-                    pdf={details && details.contract_url}
+                    pdf={details?.contract_url}
                     loadingMsg="Loading Contract Document..."
                   />
                 ) : (
@@ -3251,144 +2762,21 @@ export default function ContractContainer() {
                 (isMobile && tabInResponsive === 'edit-fields')
                   ? displayRightSidePanel()
                   : ''}
-                {((details &&
-                  details.contract_status &&
-                  details.contract_status.value ===
-                    'pending for cancellation') ||
-                  (details &&
-                    details.contract_status &&
-                    details.contract_status.value ===
-                      'active pending for pause')) &&
+                {(contractStatusValue === 'pending for cancellation' ||
+                  contractStatusValue === 'active pending for pause') &&
                 userInfo &&
                 userInfo.role === 'BGS Manager'
                   ? displayFooter()
                   : ''}
-
-                {(isTablet && tabInResponsive === 'amendment') ||
-                (isMobile && tabInResponsive === 'amendment') ? (
-                  <ServicesAmendment amendmentData={amendmentData} />
-                ) : (
-                  ''
-                )}
               </>
             )}
           </div>
         </>
       ) : (
         <>
-          <ContractTab className="d-lg-none d-block">
-            <ul style={{ textAlign: 'center' }} className="tabs">
-              <li
-                style={customStylesForTabs}
-                className={tabInResponsive === 'view-contract' ? 'active' : ''}
-                role="presentation"
-                onClick={() => showTabInResponsive('view-contract')}>
-                View Contract
-              </li>
-
-              <li
-                style={customStylesForTabs}
-                className={tabInResponsive === 'edit-fields' ? 'active' : ''}
-                role="presentation"
-                onClick={() => showTabInResponsive('edit-fields')}>
-                {isEditContract ? 'Edit Fields' : 'Activity'}
-              </li>
-              <li
-                style={customStylesForTabs}
-                className={tabInResponsive === 'amendment' ? 'active' : ''}
-                role="presentation"
-                onClick={() => showTabInResponsive('amendment')}>
-                Amendment
-              </li>
-            </ul>
-          </ContractTab>
-
+          {renderContractTabHtml()}
           <div className="on-boarding-container">
-            <HeaderDownloadFuntionality>
-              <div
-                className={
-                  userInfo && userInfo.role === 'Customer'
-                    ? ' customer-pdf'
-                    : ''
-                }>
-                <div className="container-fluid">
-                  <div className="row">
-                    <div className="col-md-6 col-sm-12">
-                      {' '}
-                      Contract Management
-                    </div>
-                    <div className="col-md-6 col-sm-12">
-                      <ul className="contract-download-nav ">
-                        {isFooter ||
-                        (newAddendumData &&
-                          newAddendumData.id &&
-                          showEditor &&
-                          updatedFormData &&
-                          updatedFormData.addendum) ? (
-                          ''
-                        ) : (
-                          <li
-                            className={
-                              details &&
-                              details.id &&
-                              contractDesignLoader !== null &&
-                              !contractDesignLoader
-                                ? 'download-pdf '
-                                : 'download-pdf disabled'
-                            }>
-                            <a
-                              className="download-pdf-link"
-                              href={
-                                details && details.contract_url
-                                  ? details && details.contract_url
-                                  : null
-                              }
-                              download>
-                              <img
-                                src={OrangeDownloadPdf}
-                                alt="download"
-                                className="download-pdf-icon "
-                                role="presentation"
-                              />
-                              Download
-                            </a>
-                          </li>
-                        )}
-                        <li>
-                          <span className="divide-arrow hide-mobile" />
-                        </li>
-                        <li>
-                          <img
-                            width="18px"
-                            src={CloseIcon}
-                            alt="close"
-                            className="float-right cursor remove-cross-icon"
-                            onClick={() => {
-                              // history.goBack('Agreement');
-                              if (
-                                history &&
-                                history.location &&
-                                history.location.state
-                              ) {
-                                history.push(
-                                  history &&
-                                    history.location &&
-                                    history.location.state,
-                                );
-                              } else {
-                                history.push(PATH_CUSTOMER_LIST);
-                              }
-                            }}
-                            role="presentation"
-                          />
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </HeaderDownloadFuntionality>
-
+            {renderHeaderDownloadFuntionality()}
             {(isLoading.loader && isLoading.type === 'page') ||
             activityLoader ? (
               <PageLoader
@@ -3398,7 +2786,7 @@ export default function ContractContainer() {
                 width={40}
                 component="agreement"
               />
-            ) : details && details.id ? (
+            ) : detailsId ? (
               <>
                 {isDesktop ||
                 (isTablet && tabInResponsive === 'view-contract') ||
@@ -3410,8 +2798,7 @@ export default function ContractContainer() {
                 (isMobile && tabInResponsive === 'edit-fields')
                   ? displayRightSidePanel()
                   : ''}
-                {(details &&
-                  details.id &&
+                {(detailsId &&
                   isLoading.loader &&
                   isLoading.type === 'button') ||
                 (!isLoading.loader && isLoading.type === 'page')
@@ -3420,7 +2807,9 @@ export default function ContractContainer() {
 
                 {(isTablet && tabInResponsive === 'amendment') ||
                 (isMobile && tabInResponsive === 'amendment') ? (
-                  <ServicesAmendment amendmentData={amendmentData} />
+                  <SidePanel>
+                    <ServicesAmendment amendmentData={amendmentData} />
+                  </SidePanel>
                 ) : (
                   ''
                 )}
@@ -3430,169 +2819,45 @@ export default function ContractContainer() {
             )}
           </div>
 
-          <Modal
-            isOpen={showModal}
-            style={customStyles}
-            ariaHideApp={false}
-            contentLabel="Edit modal">
-            <img
-              src={CloseIcon}
-              alt="close"
-              className="float-right cursor cross-icon"
-              onClick={() => {
-                setShowModal(false);
-                removeParams('step');
-                setShowEditor(false);
-              }}
-              role="presentation"
-            />
-            <ModalBox>
-              <RequestSignature
-                id={id}
-                agreementData={details}
-                setShowModal={setShowModal}
-                pdfData={pdfData}
-                setOpenCollapse={setOpenCollapse}
-                getContractDetails={getContractDetails}
-                setContractLoading={setIsLoading}
-                setShowEditor={setShowEditor}
-                setIsEditContract={setIsEditContract}
-              />
-            </ModalBox>
-          </Modal>
-          <Modal
-            isOpen={showDiscardModal.show}
-            style={customStylesForAlert}
-            ariaHideApp={false}
-            contentLabel="Edit modal">
-            <ModalBox>
-              <div className="modal-body">
-                <div className="alert-msg ">
-                  <span>Are you sure you want to discard all the changes?</span>
-                </div>
-                <div className="text-center ">
-                  <Button
-                    onClick={() => discardAgreementChanges('No')}
-                    type="button"
-                    className="btn-primary on-boarding  mr-2 pb-2 mb-1">
-                    Keep Editing
-                  </Button>
-                  <Button
-                    onClick={() => discardAgreementChanges('Yes')}
-                    type="button"
-                    className=" btn-transparent w-50 on-boarding ">
-                    Discard Changes
-                  </Button>
+          <RequestSignatureModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            removeParams={removeParams}
+            setShowEditor={setShowEditor}
+            id={id}
+            details={details}
+            pdfData={pdfData}
+            setOpenCollapse={setOpenCollapse}
+            getContractDetails={getContractDetails}
+            setIsLoading={setIsLoading}
+            setIsEditContract={setIsEditContract}
+          />
 
-                  {/* </Link> */}
-                </div>
-              </div>
-            </ModalBox>
-          </Modal>
-          <Modal
-            isOpen={showDiscountModal}
-            style={customStyles}
-            ariaHideApp={false}
-            contentLabel="Edit modal">
-            <img
-              src={CloseIcon}
-              alt="close"
-              className="float-right cursor cross-icon"
-              onClick={() => closeDiscountModal()}
-              role="presentation"
-            />
-            <ModalBox>
-              <Discount
-                agreementData={details}
-                setShowDiscountModal={setShowDiscountModal}
-                formData={formData}
-                setFormData={setFormData}
-                discountFlag={discountFlag}
-                // getContractDetails={getContractDetails}
-                setIsEditContract={setIsEditContract}
-                setDetails={setDetails}
-              />
-            </ModalBox>
-          </Modal>
-          <Modal
-            isOpen={showEditContractConfirmationModal}
-            style={customStylesForAlert}
-            ariaHideApp={false}
-            contentLabel="Edit modal">
-            <ModalBox>
-              <div className="modal-body">
-                <div className="alert-msg  ">
-                  Making any edits to this contract will void the version of the
-                  contract that&apos;s out for signature.
-                  <div className="sure-to-proceed">
-                    Are you sure you want to proceed?
-                  </div>
-                </div>
+          <DiscardChangesConfirmation
+            showDiscardModal={showDiscardModal}
+            discardAgreementChanges={discardAgreementChanges}
+          />
 
-                <div className="text-center ">
-                  <Button
-                    onClick={() => editAgreementChanges('Yes')}
-                    type="button"
-                    className="btn-primary on-boarding  mr-2 pb-2 mb-1">
-                    Yes, Make Edits
-                  </Button>
-                  <Button
-                    onClick={() => editAgreementChanges('No')}
-                    type="button"
-                    className=" btn-transparent w-50 on-boarding ">
-                    Cancel
-                  </Button>
-                </div>
-              </div>
-            </ModalBox>
-          </Modal>
+          <DiscountModal
+            showDiscountModal={showDiscountModal}
+            closeDiscountModal={closeDiscountModal}
+            details={details}
+            setShowDiscountModal={setShowDiscountModal}
+            formData={formData}
+            setFormData={setFormData}
+            discountFlag={discountFlag}
+            setIsEditContract={setIsEditContract}
+            setDetails={setDetails}
+          />
+
+          <ContractEditConfirmation
+            showEditContractConfirmationModal={
+              showEditContractConfirmationModal
+            }
+            editAgreementChanges={editAgreementChanges}
+          />
         </>
       )}
     </>
   );
 }
-
-const ContractTab = styled.div`
-  background: ${Theme.gray6};
-  padding-top: 70px;
-  position: fixed;
-  z-index: 1;
-  width: 100%;
-
-  .tabs {
-    padding: 0;
-    margin: 0;
-    list-style-type: none;
-    border-bottom: 1px solid ${Theme.gray5};
-
-    li {
-      display: inline-block;
-      color: ${Theme.black};
-      font-size: ${Theme.normal};
-      padding: 23px 40px;
-      cursor: pointer;
-
-      &:last-child {
-        margin-right: 0;
-      }
-
-      &:hover {
-        padding-bottom: 23px;
-        border-bottom: 2px solid ${Theme.orange};
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-
-      &.active {
-        padding-bottom: 23px;
-        border-bottom: 2px solid ${Theme.orange};
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-    }
-  }
-
-  @media only screen and (max-width: 767px) {
-    padding-top: 120px;
-  }
-`;

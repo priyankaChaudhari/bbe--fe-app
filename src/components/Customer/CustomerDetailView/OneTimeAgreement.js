@@ -41,8 +41,7 @@ export default function OneTimeAgreement({
   };
   const onDeleteContract = (contractId) => {
     setIsLoading(true);
-    deleteContract(contractId).then((res) => {
-      console.log(' in dlete contract res', res);
+    deleteContract(contractId).then(() => {
       setIsLoading(false);
 
       setViewComponent('past');
