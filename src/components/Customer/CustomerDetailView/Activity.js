@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import { shape, string, bool, func, arrayOf, number } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import {
@@ -159,15 +159,15 @@ export default function Activity({
 }
 
 Activity.propTypes = {
-  isLoading: PropTypes.shape({
-    loader: PropTypes.bool,
-    type: PropTypes.string,
+  isLoading: shape({
+    loader: bool,
+    type: string,
   }).isRequired,
-  activityData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activityDetail: PropTypes.func.isRequired,
-  getActivityInitials: PropTypes.func.isRequired,
-  images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handlePageChange: PropTypes.func.isRequired,
-  pageNumber: PropTypes.number.isRequired,
-  count: PropTypes.number.isRequired,
+  activityData: arrayOf(shape).isRequired,
+  activityDetail: func.isRequired,
+  getActivityInitials: func.isRequired,
+  images: arrayOf(shape).isRequired,
+  handlePageChange: func.isRequired,
+  pageNumber: number.isRequired,
+  count: number.isRequired,
 };

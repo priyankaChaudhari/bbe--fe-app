@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { func, shape, string, bool, arrayOf } from 'prop-types';
+import { func, shape, string, bool, arrayOf, oneOfType } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import { GroupUser } from '../../../theme/Global';
@@ -32,6 +32,7 @@ export default function RecentActivityNotes({
 }) {
   const [noteData, setNoteData] = useState([]);
   // console.log('noteData', noteData);
+  console.log('showNotesModal', showNotesModal);
   const getNotes = useCallback(() => {
     setIsLoading({ loader: true, type: 'note' });
     getRecentNotes(id).then((res) => {
@@ -258,10 +259,18 @@ RecentActivityNotes.propTypes = {
   images: arrayOf(shape({})).isRequired,
   setViewComponent: func.isRequired,
   role: string.isRequired,
-  showNotesModal: shape({
-    apiCall: bool,
-    deleteNote: bool,
-  }).isRequired,
+  showNotesModal: oneOfType([
+    bool,
+    shape({
+      modal: bool,
+      apiCall: bool,
+      deleteNote: bool,
+    }),
+  ]).isRequired,
+  // showNotesModal: shape({
+  //   apiCall: bool,
+  //   deleteNote: bool,
+  // }).isRequired,
   setShowNotesModal: func.isRequired,
   setNewNoteEditor: func.isRequired,
   getActivityLogInfo: func.isRequired,

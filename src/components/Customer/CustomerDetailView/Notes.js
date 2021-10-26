@@ -5,10 +5,10 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import debounce from 'lodash.debounce';
 import ReactTooltip from 'react-tooltip';
-import PropTypes from 'prop-types';
 import $ from 'jquery';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { shape, string, bool, func, oneOfType } from 'prop-types';
 
 import EditorComponent from '../../../common/EditorComponent';
 import { NotesSideBar } from './CustomerDetailStyles';
@@ -875,13 +875,18 @@ Notes.defaultProps = {
 };
 
 Notes.propTypes = {
-  setShowNotesModal: PropTypes.func,
-  customerId: PropTypes.string,
-  setNewNoteEditor: PropTypes.func,
-  showNewNoteEditor: PropTypes.bool,
-  showNotesModal: PropTypes.shape({
-    deleteNote: PropTypes.bool,
-  }),
+  setShowNotesModal: func,
+  customerId: string,
+  setNewNoteEditor: func,
+  showNewNoteEditor: bool,
+  showNotesModal: oneOfType([
+    bool,
+    shape({
+      modal: bool,
+      apiCall: bool,
+      deleteNote: bool,
+    }),
+  ]),
 };
 
 export default Notes;
