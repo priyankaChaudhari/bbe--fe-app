@@ -1,11 +1,15 @@
 /* eslint-disable camelcase */
 import React, { useEffect, useRef } from 'react';
 
-import { arrayOf, bool, shape, string } from 'prop-types';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
+import { arrayOf, bool, shape, string } from 'prop-types';
 
+import {
+  VendorMetricsNames,
+  VendorMetricsColorSet,
+} from '../../../../constants';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 
@@ -24,21 +28,6 @@ export default function VendorSalePerformanceChart({
 }) {
   const chart = useRef(null);
   useEffect(() => {
-    const colorSet = {
-      revenue: '#0045B4',
-      unitsSold: '#8C54FF',
-      traffic: '#30A8BD',
-      conversion: '#D6A307',
-    };
-
-    const tooltipNames = {
-      revenue: 'Revenue',
-      unitsSold: 'Units Sold',
-      traffic: 'Traffic',
-      conversion: 'Conversion',
-      totalSales: 'Total Sales',
-    };
-
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
     chart.current.paddingRight = 20;
@@ -107,11 +96,15 @@ export default function VendorSalePerformanceChart({
 
     function bindValueAxisFormatter(item) {
       let format = '';
-      if (item === 'revenue') {
+      if (item === 'orderedRevenue' || item === 'shippedCOGs') {
         format = `${currencySymbol}#.#a`;
-      } else if (item === 'unitsSold' || item === 'traffic') {
+      } else if (
+        item === 'glanceViews' ||
+        item === 'orderedUnits' ||
+        item === 'shippedUnits'
+      ) {
         format = `#.#a`;
-      } else if (item === 'conversion') {
+      } else if (item === 'conversionRate') {
         format = `#.#'%'`;
       }
       return format;
@@ -125,16 +118,15 @@ export default function VendorSalePerformanceChart({
       const snapToSeries = [];
       let tooltipValue = '';
       let lableName = '';
-
       // loop for generate tooltip
       _.keys(selectedBox).map((item) => {
-        lableName = item === 'revenue' && isDashboard ? 'totalSales' : item;
+        lableName = VendorMetricsNames[item];
         const currentLabel = `${item}CurrentLabel`;
         const previousLabel = `${item}PreviousLabel`;
-        const colorCode = colorSet[item];
+        const colorCode = VendorMetricsColorSet[item];
 
-        tooltipValue = `${tooltipValue} ${_.startCase(lableName)}`;
-        if (item === 'revenue') {
+        tooltipValue = `${tooltipValue} ${lableName}`;
+        if (item === 'orderedRevenue' || item === 'shippedCOGs') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
             colorCode,
@@ -153,7 +145,11 @@ export default function VendorSalePerformanceChart({
               null,
             )}`;
           }
-        } else if (item === 'traffic' || item === 'unitsSold') {
+        } else if (
+          item === 'glanceViews' ||
+          item === 'orderedUnits' ||
+          item === 'shippedUnits'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
             colorCode,
@@ -172,7 +168,7 @@ export default function VendorSalePerformanceChart({
               null,
             )}`;
           }
-        } else if (item === 'conversion') {
+        } else if (item === 'conversionRate') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
             'Recent',
             colorCode,
@@ -201,7 +197,7 @@ export default function VendorSalePerformanceChart({
         const currentValue = `${item}Current`;
         const previousValue = `${item}Previous`;
         const seriesName = `${item}Series`;
-        const colorCode = colorSet[item];
+        const colorCode = VendorMetricsColorSet[item];
 
         if (index === 0) {
           series.yAxis = valueAxis;
@@ -319,28 +315,32 @@ export default function VendorSalePerformanceChart({
       _.keys(selectedBox).map((item) => {
         const currentLabel = `${item}CurrentLabel`;
 
-        if (item === 'revenue') {
+        if (item === 'orderedRevenue' || item === 'shippedCOGs') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
-            isDashboard ? tooltipNames.totalSales : tooltipNames[item],
-            colorSet[item],
+            VendorMetricsNames[item],
+            VendorMetricsColorSet[item],
             currentLabel,
             currencySymbol,
             null,
             null,
           )}`;
-        } else if (item === 'traffic' || item === 'unitsSold') {
+        } else if (
+          item === 'glanceViews' ||
+          item === 'orderedUnits' ||
+          item === 'shippedUnits'
+        ) {
           tooltipValue = `${tooltipValue} ${renderTooltip(
-            tooltipNames[item],
-            colorSet[item],
+            VendorMetricsNames[item],
+            VendorMetricsColorSet[item],
             currentLabel,
             null,
             null,
             null,
           )}`;
-        } else if (item === 'conversion') {
+        } else if (item === 'conversionRate') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
-            tooltipNames[item],
-            colorSet[item],
+            VendorMetricsNames[item],
+            VendorMetricsColorSet[item],
             currentLabel,
             null,
             '%',
@@ -389,11 +389,11 @@ export default function VendorSalePerformanceChart({
         series.name = `${item}Series`;
         series.strokeWidth = 2;
         series.tooltipHTML = `${tooltipValue}`;
-        series.stroke = am4core.color(colorSet[item]);
+        series.stroke = am4core.color(VendorMetricsColorSet[item]);
         series.fill = am4core.color('#2e384d');
 
         const circleBullet = series.bullets.push(new am4charts.CircleBullet());
-        circleBullet.circle.fill = am4core.color(colorSet[item]);
+        circleBullet.circle.fill = am4core.color(VendorMetricsColorSet[item]);
         circleBullet.circle.strokeWidth = 1;
         circleBullet.circle.radius = 5;
 

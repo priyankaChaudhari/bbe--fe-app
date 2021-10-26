@@ -22,9 +22,27 @@ export const dateOptionsWithYear = [
 ];
 
 export const vendorSalesMetricsTypeOptions = [
-  { value: 'OrderedRevenue', label: 'Ordered Revenue' },
-  { value: 'ShippedCOGS', label: 'Shipped COGS' },
+  { value: 'orderedRevenue', label: 'Ordered Revenue' },
+  { value: 'shippedCOGS', label: 'Shipped COGS' },
 ];
+
+export const VendorMetricsNames = {
+  orderedRevenue: 'Ordered Revenue',
+  shippedCOGs: 'Shipped COGs',
+  glanceViews: 'Glance Views',
+  conversionRate: 'Conversion Rate',
+  orderedUnits: 'Ordered Units',
+  shippedUnits: 'Shipped Units',
+};
+
+export const VendorMetricsColorSet = {
+  orderedRevenue: '#0045B4',
+  shippedCOGs: '#0045B4',
+  glanceViews: '#8C54FF',
+  conversionRate: '#30A8BD',
+  orderedUnits: '#D6A307',
+  shippedUnits: '#D6A307',
+};
 
 export const bbDateOptions = [
   { value: 'week', label: 'Recent 7 days' },

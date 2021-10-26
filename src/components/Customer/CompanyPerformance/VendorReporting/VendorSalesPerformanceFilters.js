@@ -56,16 +56,10 @@ const VendorSalesPerformanceFilters = ({
                 options={marketplaceOptions}
                 defaultValue={
                   marketplaceDefaultValue && marketplaceDefaultValue[0]
-                  // marketplaceOptions && marketplaceOptions[0]
                 }
                 onChange={(event) => handleMarketplaceOptions(event)}
                 placeholder={
-                  marketplaceDefaultValue &&
-                  marketplaceDefaultValue[0] &&
-                  marketplaceDefaultValue[0].label
-                  // marketplaceOptions &&
-                  // marketplaceOptions[0] &&
-                  // marketplaceOptions[0].label
+                  marketplaceDefaultValue && marketplaceDefaultValue[0]?.label
                 }
                 theme={(theme) => ({
                   ...theme,

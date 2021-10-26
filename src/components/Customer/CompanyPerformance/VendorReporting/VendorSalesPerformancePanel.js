@@ -5,7 +5,7 @@ import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import { components } from 'react-select';
-import { arrayOf, bool, func, shape, string, number } from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 
 import SalesPerformanceChart from './VendorSalePerformanceChart';
 import { DropDown } from '../DropDown';
@@ -13,6 +13,7 @@ import { ArrowUpIcon, ArrowDownIcon } from '../../../../theme/images';
 import {
   vendorSalesMetricsTypeOptions,
   noGraphDataMessage,
+  VendorMetricsNames,
 } from '../../../../constants';
 import {
   WhiteCard,
@@ -50,11 +51,10 @@ export default function SalesPerformancePanel({
   salesCurrentTotal,
   salesDifference,
   salesPreviousTotal,
-  currency,
   salesGraphLoader,
   salesChartData,
-  organicSale,
-  inorganicSale,
+  // organicSale,
+  // inorganicSale,
   metricsType,
 }) {
   const { Option, SingleValue } = components;
@@ -93,20 +93,22 @@ export default function SalesPerformancePanel({
     };
   };
 
-  const addThousandComma = (value, decimalDigits = 2) => {
-    if (value !== undefined && value !== null) {
-      return value.toFixed(decimalDigits).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
+  // const addThousandComma = (value, decimalDigits = 2) => {
+  //   if (value !== undefined && value !== null) {
+  //     return value.toFixed(decimalDigits).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  //   }
 
-    return value;
-  };
+  //   return value;
+  // };
 
   const bindValues = (value, name = null) => {
     const decimal = _.split(value, '.', 2);
     if (decimal[1] !== undefined) {
       return (
         <span style={{ fontSize: '26px' }}>
-          {name === 'revenue' ? currencySymbol : null}
+          {name === 'orderedRevenue' || name === 'shippedCOGs'
+            ? currencySymbol
+            : null}
           {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span>
         </span>
@@ -114,59 +116,61 @@ export default function SalesPerformancePanel({
     }
     return (
       <span style={{ fontSize: '26px' }}>
-        {name === 'revenue' ? currencySymbol : null}
+        {name === 'orderedRevenue' || name === 'shippedCOGs'
+          ? currencySymbol
+          : null}
         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
       </span>
     );
   };
 
-  const rendeTootipData = () => {
-    return `
-    <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; opacity: 100%;"> 
-      <li style="display: "> 
-        <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
-      </li>
-      <div class="row">
-          <div class="col-6">
-           <div style="color: #f4f6fc;
-          text-transform: uppercase;
-          font-size: 11px;
-          margin-top: 8px;
-         ">Organic Sales
-        </div>
-          </div>
-           <div class="col-6">
-             <div style="color: #f4f6fc;
-              font-size: 16px;
-              margin-left: 25px;
-              float: right;
-              text-align: right;
-              margin-top: 4px;
-             ">${currencySymbol}${addThousandComma(organicSale)}
-           </div>
-           </div>
-             <div class="col-6">
-           <div style="color: #f4f6fc;
-          text-transform: uppercase;
-          font-size: 11px;
-          margin-top:7px;
-         ">In-Organic Sales
-        </div>
-          </div>
-           <div class="col-6">
-             <div style="color: #f4f6fc;
-              font-size: 16px;
-              margin-left: 25px;
-              float: right;
-              text-align: right;
-              margin-top: 4px;
-             ">${currencySymbol}${addThousandComma(inorganicSale)}
-           </div>
-           </div>
-      </div>
-     
-    </ul>`;
-  };
+  // const rendeTootipData = () => {
+  //   return `
+  //   <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; opacity: 100%;">
+  //     <li style="display: ">
+  //       <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
+  //     </li>
+  //     <div class="row">
+  //         <div class="col-6">
+  //          <div style="color: #f4f6fc;
+  //         text-transform: uppercase;
+  //         font-size: 11px;
+  //         margin-top: 8px;
+  //        ">Organic Sales
+  //       </div>
+  //         </div>
+  //          <div class="col-6">
+  //            <div style="color: #f4f6fc;
+  //             font-size: 16px;
+  //             margin-left: 25px;
+  //             float: right;
+  //             text-align: right;
+  //             margin-top: 4px;
+  //            ">${currencySymbol}${addThousandComma(organicSale)}
+  //          </div>
+  //          </div>
+  //            <div class="col-6">
+  //          <div style="color: #f4f6fc;
+  //         text-transform: uppercase;
+  //         font-size: 11px;
+  //         margin-top:7px;
+  //        ">In-Organic Sales
+  //       </div>
+  //         </div>
+  //          <div class="col-6">
+  //            <div style="color: #f4f6fc;
+  //             font-size: 16px;
+  //             margin-left: 25px;
+  //             float: right;
+  //             text-align: right;
+  //             margin-top: 4px;
+  //            ">${currencySymbol}${addThousandComma(inorganicSale)}
+  //          </div>
+  //          </div>
+  //     </div>
+
+  //   </ul>`;
+  // };
 
   const setSalesBoxClass = (name, classValue) => {
     let selectedClass = '';
@@ -314,73 +318,51 @@ export default function SalesPerformancePanel({
     let currentTotal = 0;
     let previousTotal = 0;
     let difference = 0;
-    let theCurrency = null;
     let boxActiveClass = '';
     const name = matricsName;
     let displayMatricsName;
 
-    if (name === 'revenue') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.revenue
-          ? salesCurrentTotal.revenue
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.revenue
-          ? salesPreviousTotal.revenue
-          : 0;
-      difference =
-        salesDifference && salesDifference.revenue
-          ? salesDifference.revenue
-          : 'N/A';
-      theCurrency = currency !== null ? `(${currency})` : null;
+    if (name === 'orderedRevenue' || name === 'shippedCOGs') {
+      currentTotal = salesCurrentTotal?.revenue ? salesCurrentTotal.revenue : 0;
+      previousTotal = salesPreviousTotal?.revenue
+        ? salesPreviousTotal.revenue
+        : 0;
+      difference = salesDifference?.revenue ? salesDifference.revenue : 'N/A';
       boxActiveClass = 'ad-sales-active';
       displayMatricsName = matricsName;
-    } else if (name === 'unitsSold') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.units_sold
-          ? salesCurrentTotal.units_sold
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.units_sold
-          ? salesPreviousTotal.units_sold
-          : 0;
-      difference =
-        salesDifference && salesDifference.units_sold
-          ? salesDifference.units_sold
-          : 'N/A';
-      theCurrency = ``;
+    } else if (name === 'glanceViews') {
+      currentTotal = salesCurrentTotal?.units_sold
+        ? salesCurrentTotal.units_sold
+        : 0;
+      previousTotal = salesPreviousTotal?.units_sold
+        ? salesPreviousTotal.units_sold
+        : 0;
+      difference = salesDifference?.units_sold
+        ? salesDifference.units_sold
+        : 'N/A';
+
       boxActiveClass = 'ad-spend-active';
-      displayMatricsName = 'Units sold';
-    } else if (name === 'traffic') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.traffic
-          ? salesCurrentTotal.traffic
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.traffic
-          ? salesPreviousTotal.traffic
-          : 0;
-      difference =
-        salesDifference && salesDifference.traffic
-          ? salesDifference.traffic
-          : 'N/A';
-      theCurrency = ``;
+      displayMatricsName = matricsName;
+    } else if (name === 'conversionRate') {
+      currentTotal = salesCurrentTotal?.conversion
+        ? salesCurrentTotal.conversion
+        : 0;
+      previousTotal = salesPreviousTotal?.conversion
+        ? salesPreviousTotal.conversion
+        : 0;
+      difference = salesDifference?.conversion
+        ? salesDifference.conversion
+        : 'N/A';
+
       boxActiveClass = 'ad-conversion-active';
       displayMatricsName = matricsName;
-    } else if (name === 'conversion') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.conversion
-          ? salesCurrentTotal.conversion
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.conversion
-          ? salesPreviousTotal.conversion
-          : 0;
-      difference =
-        salesDifference && salesDifference.conversion
-          ? salesDifference.conversion
-          : 'N/A';
-      theCurrency = ``;
+    } else if (name === 'orderedUnits' || name === 'shippedUnits') {
+      currentTotal = salesCurrentTotal?.traffic ? salesCurrentTotal.traffic : 0;
+      previousTotal = salesPreviousTotal?.traffic
+        ? salesPreviousTotal.traffic
+        : 0;
+      difference = salesDifference?.traffic ? salesDifference.traffic : 'N/A';
+
       boxActiveClass = 'impression-active';
       displayMatricsName = matricsName;
     }
@@ -393,38 +375,20 @@ export default function SalesPerformancePanel({
             onClick={() => setBoxToggle(name)}
             role="presentation">
             {' '}
-            {name === 'revenue' ? (
-              <div className="row">
-                <div
-                  style={{ wordBreak: 'break-all' }}
-                  className="chart-name col-6 pr-1">
-                  {displayMatricsName.toUpperCase()} {theCurrency}
-                </div>
-                <div
-                  style={{ wordBreak: 'break-all' }}
-                  className="col-6 pl-0 label-card-text text-right"
-                  data-tip={rendeTootipData()}
-                  data-html
-                  data-for="break-down">
-                  Breakdown
-                </div>
-              </div>
-            ) : (
-              <div className="chart-name">
-                {displayMatricsName.toUpperCase()} {theCurrency}
-              </div>
-            )}
+            <div className="chart-name">
+              {VendorMetricsNames[displayMatricsName].toUpperCase()}
+            </div>
             <div className="number-rate">
-              {name === 'conversion'
+              {name === 'conversionRate'
                 ? `${currentTotal.toFixed(2)}%`
                 : bindValues(currentTotal, name)}
             </div>
             <div className="vs">
               {' '}
               vs{' '}
-              {name === 'conversion'
+              {name === 'conversionRate'
                 ? `${previousTotal.toFixed(2)}%`
-                : name === 'revenue'
+                : name === 'orderedRevenue' || name === 'shippedCOGs'
                 ? `${
                     currencySymbol !== null ? currencySymbol : ''
                   }${previousTotal
@@ -480,18 +444,45 @@ export default function SalesPerformancePanel({
           {renderMetricsType()}
         </div>
 
-        <div className="row mr-1 ml-1">
-          {renderSalesBox('revenue', 'col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3')}
-          {renderSalesBox(
-            'unitsSold',
-            'col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3',
-          )}
-          {renderSalesBox('traffic', 'col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3')}
-          {renderSalesBox(
-            'conversion',
-            'col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3',
-          )}
-        </div>
+        {metricsType.value === 'orderedRevenue' ? (
+          <div className="row mr-1 ml-1">
+            {renderSalesBox(
+              'orderedRevenue',
+              'col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'glanceViews',
+              'col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'conversionRate',
+              'col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'orderedUnits',
+              'col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3',
+            )}
+          </div>
+        ) : (
+          <div className="row mr-1 ml-1">
+            {renderSalesBox(
+              'shippedCOGs',
+              'col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'glanceViews',
+              'col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'conversionRate',
+              'col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'shippedUnits',
+              'col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3',
+            )}
+          </div>
+        )}
         {rednerSaleGroupBy()}
         <div className="clear-fix" />
 
@@ -553,7 +544,6 @@ SalesPerformancePanel.defaultProps = {
   groupBy: '',
   currencySymbol: '',
   selectedValue: {},
-  currency: '',
   activeSales: {},
   currentDate: {},
   filters: {},
@@ -563,8 +553,8 @@ SalesPerformancePanel.defaultProps = {
   data: {},
   salesChartData: {},
   state: [],
-  inorganicSale: {},
-  organicSale: {},
+  // inorganicSale: {},
+  // organicSale: {},
   metricsType: {},
   applyCustomDate: () => {},
   setActiveSales: () => {},
@@ -581,7 +571,6 @@ SalesPerformancePanel.propTypes = {
   salesGraphLoader: bool,
   currencySymbol: string,
   groupBy: string,
-  currency: string,
   selectedValue: shape({}),
   activeSales: shape({}),
   currentDate: shape({}),
@@ -592,8 +581,8 @@ SalesPerformancePanel.propTypes = {
   salesDifference: shape({}),
   salesCurrentTotal: shape({}),
   salesPreviousTotal: shape({}),
-  inorganicSale: number,
-  organicSale: number,
+  // inorganicSale: number,
+  // organicSale: number,
   metricsType: shape({}),
   renderCustomDateSubLabel: func,
   setShowCustomDateModal: func,

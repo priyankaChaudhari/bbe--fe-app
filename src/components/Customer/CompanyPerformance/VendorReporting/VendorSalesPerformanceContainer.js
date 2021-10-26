@@ -34,7 +34,7 @@ export default function PerformanceReport({
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [selectedVendorMetricsType, setSelectedVendorMetricsType] = useState({
-    value: 'OrderedRevenue',
+    value: 'orderedRevenue',
     label: 'Ordered Revenue',
   });
   const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
@@ -69,118 +69,167 @@ export default function PerformanceReport({
   const [salesGraphLoader, setSalesGraphLoader] = useState(false);
 
   const [isApiCall, setIsApiCall] = useState(false);
-  const [activeSales, setActiveSales] = useState({ revenue: true });
+  const [activeSales, setActiveSales] = useState({ orderedRevenue: true });
 
-  const bindSalesResponseData = (response) => {
+  const bindSalesResponseData = (response, selectedMetrics) => {
     const tempData = [];
 
     // filterout previous data in one temporary object.
-    if (response.daily_facts.previous && response.daily_facts.previous.length) {
+    if (response?.daily_facts?.previous.length) {
       response.daily_facts.previous.forEach((item) => {
         const previousDate = dayjs(item.report_date).format('MMM D YYYY');
-        tempData.push({
-          revenuePrevious: item.revenue,
-          unitsSoldPrevious: item.units_sold,
-          trafficPrevious: item.traffic,
-          conversionPrevious: item.conversion,
-          previousDate,
+        if (selectedMetrics === 'orderedRevenue') {
+          tempData.push({
+            orderedRevenuePrevious: item.revenue,
+            glanceViewsPrevious: item.units_sold,
+            conversionRatePrevious: item.conversion,
+            orderedUnitsPrevious: item.traffic,
+            previousDate,
 
-          revenuePreviousLabel:
-            item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
-          unitsSoldPreviousLabel:
-            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
-          trafficPreviousLabel:
-            item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
-          conversionPreviousLabel:
-            item.conversion !== null ? item.conversion : '0',
-        });
+            orderedRevenuePreviousLabel:
+              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+            glanceViewsPreviousLabel:
+              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+            orderedUnitsPreviousLabel:
+              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+            conversionRatePreviousLabel:
+              item.conversion !== null ? item.conversion : '0',
+          });
+        } else {
+          tempData.push({
+            shippedCOGsPrevious: item.revenue,
+            glanceViewsPrevious: item.units_sold,
+            conversionRatePrevious: item.conversion,
+            shippedUnitsPrevious: item.traffic,
+            previousDate,
+
+            shippedCOGsPreviousLabel:
+              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+            glanceViewsPreviousLabel:
+              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+            shippedUnitsPreviousLabel:
+              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+            conversionRatePreviousLabel:
+              item.conversion !== null ? item.conversion : '0',
+          });
+        }
       });
     }
 
     // filterout current data in one temporary object.
-    if (response.daily_facts.current && response.daily_facts.current.length) {
+    if (response?.daily_facts?.current.length) {
       response.daily_facts.current.forEach((item, index) => {
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
-        let indexNumber = index;
+        // let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
         if (
           response.daily_facts.previous &&
           index < response.daily_facts.previous.length
         ) {
-          tempData[index].date = currentReportDate;
-          tempData[index].revenueCurrent = item.revenue;
-          tempData[index].unitsSoldCurrent = item.units_sold;
-          tempData[index].trafficCurrent = item.traffic;
-          tempData[index].conversionCurrent = item.conversion;
+          if (selectedMetrics === 'orderedRevenue') {
+            tempData[index].date = currentReportDate;
+            tempData[index].orderedRevenueCurrent = item.revenue;
+            tempData[index].glanceViewsCurrent = item.units_sold;
+            tempData[index].orderedUnitsCurrent = item.traffic;
+            tempData[index].conversionRateCurrent = item.conversion;
 
-          tempData[index].revenueCurrentLabel =
-            item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
-          tempData[index].unitsSoldCurrentLabel =
-            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
-          tempData[index].trafficCurrentLabel =
-            item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
-          tempData[index].conversionCurrentLabel =
-            item.conversion !== null ? item.conversion : '0';
-
-          // to add the dotted line. we have to check null matrix and add the dummy number like 8
-          if (index > 0) {
-            indexNumber = index - 1;
+            tempData[index].orderedRevenueCurrentLabel =
+              item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
+            tempData[index].glanceViewsCurrentLabel =
+              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
+            tempData[index].orderedUnitsCurrentLabel =
+              item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
+            tempData[index].conversionRateCurrentLabel =
+              item.conversion !== null ? item.conversion : '0';
           } else {
-            indexNumber = index;
+            tempData[index].date = currentReportDate;
+            tempData[index].shippedCOGsCurrent = item.revenue;
+            tempData[index].glanceViewsCurrent = item.units_sold;
+            tempData[index].shippedUnitsCurrent = item.traffic;
+            tempData[index].conversionRateCurrent = item.conversion;
+
+            tempData[index].shippedCOGsCurrentLabel =
+              item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
+            tempData[index].glanceViewsCurrentLabel =
+              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
+            tempData[index].shippedUnitsCurrentLabel =
+              item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
+            tempData[index].conversionRateCurrentLabel =
+              item.conversion !== null ? item.conversion : '0';
           }
-          tempData[indexNumber].revenueDashLength =
-            item.revenue === null ? 8 : null;
-          tempData[indexNumber].unitsSoldDashLength =
-            item.units_sold === null ? 8 : null;
-          tempData[indexNumber].trafficDashLength =
-            item.traffic === null ? 8 : null;
-          tempData[indexNumber].conversionDashLength =
-            item.conversion === null ? 8 : null;
-        } else {
+        } else if (selectedMetrics === 'orderedRevenue') {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previous value null and previous label 0
+
           tempData.push({
-            revenueCurrent: item.revenue,
-            unitsSoldCurrent: item.units_sold,
-            trafficCurrent: item.traffic,
-            conversionCurrent: item.conversion,
+            orderedRevenueCurrent: item.revenue,
+            glanceViewsCurrent: item.units_sold,
+            orderedUnitsCurrent: item.traffic,
+            conversionRateCurrent: item.conversion,
             date: currentReportDate,
 
-            revenuePrevious: null,
-            unitsSoldPrevious: null,
-            trafficPrevious: null,
-            conversionPrevious: null,
+            orderedRevenuePrevious: null,
+            glanceViewsPrevious: null,
+            orderedUnitsPrevious: null,
+            conversionRatePrevious: null,
 
-            revenueCurrentLabel:
+            orderedRevenueCurrentLabel:
               item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
-            unitsSoldCurrentLabel:
+            glanceViewsCurrentLabel:
               item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
-            trafficCurrentLabel:
+            orderedUnitsCurrentLabel:
               item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
-            conversionCurrentLabel:
+            conversionRateCurrentLabel:
               item.conversion !== null ? item.conversion : '0',
 
-            revenuePreviousLabel: '0.00',
-            unitsSoldPreviousLabel: '0.00',
-            trafficPreviousLabel: '0.00',
-            conversionPreviousLabel: '0',
+            orderedRevenuePreviousLabel: '0.00',
+            glanceViewsPreviousLabel: '0.00',
+            orderedUnitsPreviousLabel: '0.00',
+            conversionRatePreviousLabel: '0',
+          });
+        } else {
+          tempData.push({
+            shippedCOGsCurrent: item.revenue,
+            glanceViewsCurrent: item.units_sold,
+            shippedUnitsCurrent: item.traffic,
+            conversionRateCurrent: item.conversion,
+            date: currentReportDate,
+
+            shippedCOGsPrevious: null,
+            glanceViewsPrevious: null,
+            shippedUnitsPrevious: null,
+            conversionRatePrevious: null,
+
+            shippedCOGsCurrentLabel:
+              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+            glanceViewsCurrentLabel:
+              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+            shippedUnitsCurrentLabel:
+              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+            conversionRateCurrentLabel:
+              item.conversion !== null ? item.conversion : '0',
+
+            shippedCOGsPreviousLabel: '0.00',
+            glanceViewsPreviousLabel: '0.00',
+            shippedUnitsPreviousLabel: '0.00',
+            conversionRatePreviousLabel: '0',
           });
         }
       });
     }
 
     // filterout the dsp current total, previous total, and diffrence
-    if (response.daily_facts && response.daily_facts.current_sum) {
+    if (response?.daily_facts?.current_sum) {
       setSalesCurrentTotal(response.daily_facts.current_sum);
     } else {
       setSalesCurrentTotal({});
     }
-    if (response.daily_facts && response.daily_facts.previous_sum) {
+    if (response?.daily_facts?.previous_sum) {
       setSalesPreviousTotal(response.daily_facts.previous_sum);
     } else {
       setSalesPreviousTotal({});
     }
-    if (response.daily_facts && response.daily_facts.difference_data) {
+    if (response?.daily_facts?.difference_data) {
       setSalesDifference(response.daily_facts.difference_data);
     } else {
       setSalesDifference({});
@@ -206,21 +255,24 @@ export default function PerformanceReport({
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
+        if (res?.status === 400 || res.status === 500) {
           setIsApiCall(false);
           setSalesGraphLoader(false);
         }
-        if (res && res.status === 200) {
-          if (res.data && res.data.daily_facts) {
-            const salesGraphData = bindSalesResponseData(res.data);
+        if (res?.status === 200) {
+          if (res?.data?.daily_facts) {
+            const salesGraphData = bindSalesResponseData(
+              res.data,
+              selectedVendorMetricsType.value,
+            );
             setSalesChartData(salesGraphData);
 
             // brekdown tooltip values
-            if (res.data.daily_facts && res.data.daily_facts.inorganic_sale) {
+            if (res?.data?.daily_facts?.inorganic_sale) {
               setInorganicSale(res.data.daily_facts.inorganic_sale);
             }
 
-            if (res.data.daily_facts && res.data.daily_facts.organic_sale) {
+            if (res?.data?.daily_facts?.organic_sale) {
               setOrganicSale(res.data.daily_facts.organic_sale);
             }
           } else {
@@ -231,7 +283,7 @@ export default function PerformanceReport({
         }
       });
     },
-    [id],
+    [id, selectedVendorMetricsType.value],
   );
 
   useEffect(() => {
@@ -423,23 +475,28 @@ export default function PerformanceReport({
   const handleMetricsType = (event) => {
     const { value } = event;
     setSelectedVendorMetricsType(event);
-
-    if (selectedVendorMetricsType.value === 'custom') {
-      checkDifferenceBetweenDates(
-        state[0].startDate,
-        state[0].endDate,
-        'custom',
-        selectedAmazonValue.value,
-        value,
-      );
+    if (value === 'orderedRevenue') {
+      setActiveSales({ orderedRevenue: true });
     } else {
-      getData(
-        selectedSalesDF.value,
-        selectedVendorMetricsType.value,
-        groupBy,
-        selectedAmazonValue,
-      );
+      setActiveSales({ shippedCOGs: true });
     }
+
+    // if (selectedVendorMetricsType.value === 'custom') {
+    //   checkDifferenceBetweenDates(
+    //     state[0].startDate,
+    //     state[0].endDate,
+    //     'custom',
+    //     selectedAmazonValue.value,
+    //     value,
+    //   );
+    // } else {
+    //   getData(
+    //     selectedSalesDF.value,
+    //     selectedVendorMetricsType.value,
+    //     groupBy,
+    //     selectedAmazonValue,
+    //   );
+    // }
   };
 
   const handleAmazonOptions = (event) => {
@@ -457,37 +514,6 @@ export default function PerformanceReport({
       getData(selectedSalesDF.value, groupBy, event.value);
     }
   };
-
-  // const handleMarketplaceOptions = (event) => {
-  //   setSelectedMarketplace(event.value);
-  //   setCurrency(event.currency);
-  //   setCurrencySymbol(getSymbolFromCurrency(event.currency));
-  //   getDSPPacing(event.value);
-  //   if (selectedAdDF.value === 'custom') {
-  //     ADYearAndCustomDateFilter(
-  //       adState[0].startDate,
-  //       adState[0].endDate,
-  //       'custom',
-  //       event.value,
-  //       selectedAdType.value,
-  //     );
-
-  //     DSPYearAndCustomDateFilter(
-  //       adState[0].startDate,
-  //       adState[0].endDate,
-  //       'custom',
-  //       event.value,
-  //     );
-  //   } else {
-  //     getAdData(
-  //       selectedAdType.value,
-  //       selectedAdDF.value,
-  //       adGroupBy,
-  //       event.value,
-  //     );
-  //     getDSPData(selectedAdDF.value, dspGroupBy, event.value);
-  //   }
-  // };
 
   const handleGroupBy = (value) => {
     if (value !== groupBy) {
