@@ -1,5 +1,6 @@
 export const financeNavigationOptions = [
   { key: 'revShare', value: 'Rev Share Invoicing' },
+  { key: 'upSell', value: 'Upsell Invoicing' },
   { key: 'dspInvoicing', value: 'DSP Invoicing' },
   { key: 'dspBilling', value: 'DSP Billing' },
 ];
