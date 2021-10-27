@@ -231,7 +231,7 @@ export const userMe = (history, customer) => {
         localStorage.removeItem('step');
         localStorage.removeItem('page');
         localStorage.removeItem('bgs');
-        const params = queryString.parse(history.location.search);
+        const params = queryString.parse(history?.location.search);
         if (history.location.pathname !== '/') {
           const stringified = queryString.stringify({
             ...params,

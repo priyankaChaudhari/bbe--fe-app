@@ -1,23 +1,28 @@
 import React, { useState } from 'react';
 
-import styled from 'styled-components';
 import ReactTooltip from 'react-tooltip';
-import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
-import { toast } from 'react-toastify';
+import { shape, string, arrayOf } from 'prop-types';
 
-import Theme from '../../theme/Theme';
 import EditPassword from './EditPassword';
 import CropUploadImage from '../../common/CropUploadImage';
 import CheckPhoneNumber from '../../common/CheckPhoneNumber';
-import { FormField, Button, PageLoader, ErrorMsg } from '../../common';
-import { userDetails } from '../../constants';
 import { updateUserInfo } from '../../api';
-import { userMe } from '../../store/actions/userState';
 import { InfoIcon } from '../../theme/images';
+import { userDetails } from '../../constants';
+import { userMe } from '../../store/actions/userState';
+import { FormContainer } from '../../common/Styles/HeaderStyles';
+import {
+  FormField,
+  Button,
+  PageLoader,
+  ErrorMsg,
+  GetInitialName,
+} from '../../common';
 
-export default function EditProfile({ initials, userInfo }) {
+export default function EditProfile({ userInfo }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const { register, handleSubmit, errors } = useForm();
@@ -27,10 +32,10 @@ export default function EditProfile({ initials, userInfo }) {
   const onSubmit = (data) => {
     setIsLoading({ loader: true, type: 'button' });
     updateUserInfo(data, userInfo.id).then((response) => {
-      if (response && response.status === 400) {
+      if (response?.status === 400) {
         setApiError(response.data);
         setIsLoading({ loader: false, type: 'button' });
-      } else if (response.status === 200) {
+      } else if (response?.status === 200) {
         setShowBtn(false);
         setIsLoading({ loader: false, type: 'button' });
         toast.success('Changes Saved!');
@@ -46,9 +51,7 @@ export default function EditProfile({ initials, userInfo }) {
         {item.label}
         <br />
         <input
-          className={
-            errors && errors.email ? 'form-control' : 'form-control mb-2'
-          }
+          className={errors?.email ? 'form-control' : 'form-control mb-2'}
           defaultValue={userInfo[item.key]}
           type={item.type}
           placeholder={item.placeholder}
@@ -107,7 +110,9 @@ export default function EditProfile({ initials, userInfo }) {
                   <div className="m-0 profile-pic">PROFILE PICTURE</div>
                   If you don&apos;t upload a photo, your initials will be
                   used:&nbsp;
-                  <span style={{ textTransform: 'uppercase' }}>{initials}</span>
+                  <span style={{ textTransform: 'uppercase' }}>
+                    <GetInitialName userInfo={userInfo} type="profile" />
+                  </span>
                 </span>
               </span>
             </div>
@@ -120,16 +125,8 @@ export default function EditProfile({ initials, userInfo }) {
                       <FormField className="">
                         {generateHTML(item)}
                         <CheckPhoneNumber name="Phone" />
-                        <ErrorMsg>
-                          {errors &&
-                            errors[item.key] &&
-                            errors[item.key].message}
-                        </ErrorMsg>
-                        <ErrorMsg>
-                          {apiError &&
-                            apiError[item.key] &&
-                            apiError[item.key][0]}
-                        </ErrorMsg>
+                        <ErrorMsg>{errors?.[item.key]?.message}</ErrorMsg>
+                        <ErrorMsg>{apiError?.[item.key]?.[0]}</ErrorMsg>
                       </FormField>
                     </div>
                   </React.Fragment>
@@ -142,16 +139,8 @@ export default function EditProfile({ initials, userInfo }) {
                     <div className="col-md-6 mt-2">
                       <FormField className="">
                         {generateHTML(item)}
-                        <ErrorMsg>
-                          {errors &&
-                            errors[item.key] &&
-                            errors[item.key].message}
-                        </ErrorMsg>
-                        <ErrorMsg>
-                          {apiError &&
-                            apiError[item.key] &&
-                            apiError[item.key][0]}
-                        </ErrorMsg>
+                        <ErrorMsg>{errors?.[item.key]?.message}</ErrorMsg>
+                        <ErrorMsg>{apiError?.[item.key]?.[0]}</ErrorMsg>
                       </FormField>
                     </div>
                   </React.Fragment>
@@ -180,70 +169,8 @@ export default function EditProfile({ initials, userInfo }) {
 }
 
 EditProfile.propTypes = {
-  userInfo: PropTypes.shape({
-    id: PropTypes.string,
-    documents: PropTypes.arrayOf(PropTypes.object),
+  userInfo: shape({
+    id: string,
+    documents: arrayOf(shape({})),
   }).isRequired,
-  initials: PropTypes.string.isRequired,
 };
-
-const FormContainer = styled.div`
-  height: 100%;
-  .banner-bg {
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-  }
-
-  .inner-form {
-    max-width: 327px;
-    margin: 0 auto;
-    width: 100%;
-    vertical-align: middle;
-
-    .logo {
-      width: 190px;
-      padding: 35px 0 45px 0;
-
-      span {
-        position: absolute;
-        top: 46px;
-        margin-left: 6px;
-        font-size: 16px;
-        font-weight: bold;
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-    }
-    .google-icon {
-      width: 20px;
-      margin-right: 10px;
-      vertical-align: bottom;
-    }
-    .or-else {
-      text-align: center;
-      margin-top: 8px;
-    }
-  }
-
-  .profile-pic {
-    font-family: ${Theme.titleFontFamily};
-    color: ${Theme.gray35};
-  }
-
-  @media only screen and (max-width: 991px) {
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100%;
-
-    .inner-form {
-      background: rgb(91 91 91 / 0.9);
-      height: 100%;
-      top: 0;
-      max-width: 100%;
-      padding: 0 20px;
-    }
-  }
-`;
