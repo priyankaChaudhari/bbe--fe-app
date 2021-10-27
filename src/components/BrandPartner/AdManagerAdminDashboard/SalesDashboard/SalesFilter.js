@@ -48,6 +48,7 @@ const SalesFilter = ({
       <ModalRadioCheck className="pb-1" key={item.value}>
         {' '}
         <label
+          style={{ textTransform: 'capitalize' }}
           className={`${
             index === 0
               ? 'checkboxes radio-container customer-list'

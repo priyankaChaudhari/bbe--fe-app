@@ -112,16 +112,18 @@ export async function getManagersList(type, hybridSelectedDashboard) {
       ? API_BGS
       : API_ADM;
 
-  let params = {};
+  let params = {
+    'order-by': 'first_name',
+  };
   if (type === 'Sponsored Advertising Ad Manager') {
-    params = { dashboard: 'sponsored_ad_dashboard' };
+    params = { ...params, dashboard: 'sponsored_ad_dashboard' };
   }
   if (type === 'DSP Ad Manager') {
-    params = { dashboard: 'dsp_ad_performance' };
+    params = { ...params, dashboard: 'dsp_ad_performance' };
   }
 
   if (hybridSelectedDashboard && type === 'Hybrid Ad Manager') {
-    params = { dashboard: hybridSelectedDashboard };
+    params = { ...params, dashboard: hybridSelectedDashboard };
   }
 
   const result = await axiosInstance
