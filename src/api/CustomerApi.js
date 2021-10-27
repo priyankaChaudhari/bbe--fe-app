@@ -500,6 +500,7 @@ export async function getPerformance(
   marketplace,
   startDate,
   endDate,
+  metricsType = null,
 ) {
   let params = {};
   if (startDate && endDate) {
@@ -507,6 +508,7 @@ export async function getPerformance(
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
+      metricsType,
       start_date: startDate,
       end_date: endDate,
     };
@@ -515,6 +517,7 @@ export async function getPerformance(
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
+      metricsType,
     };
   }
   const result = await axiosInstance

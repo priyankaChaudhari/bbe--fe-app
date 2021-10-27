@@ -73,9 +73,12 @@ export default function PerformanceReport({
 
   const bindSalesResponseData = (response, selectedMetrics) => {
     const tempData = [];
-
     // filterout previous data in one temporary object.
-    if (response?.daily_facts?.previous.length) {
+    if (
+      response.daily_facts &&
+      response.daily_facts.previous &&
+      response.daily_facts.previous.length
+    ) {
       response.daily_facts.previous.forEach((item) => {
         const previousDate = dayjs(item.report_date).format('MMM D YYYY');
         if (selectedMetrics === 'orderedRevenue') {
@@ -117,7 +120,11 @@ export default function PerformanceReport({
     }
 
     // filterout current data in one temporary object.
-    if (response?.daily_facts?.current.length) {
+    if (
+      response.daily_facts &&
+      response.daily_facts.current &&
+      response.daily_facts.current.length
+    ) {
       response.daily_facts.current.forEach((item, index) => {
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
         // let indexNumber = index;
@@ -219,17 +226,17 @@ export default function PerformanceReport({
     }
 
     // filterout the dsp current total, previous total, and diffrence
-    if (response?.daily_facts?.current_sum) {
+    if (response.daily_facts && response.daily_facts.current_sum) {
       setSalesCurrentTotal(response.daily_facts.current_sum);
     } else {
       setSalesCurrentTotal({});
     }
-    if (response?.daily_facts?.previous_sum) {
+    if (response.daily_facts && response.daily_facts.previous_sum) {
       setSalesPreviousTotal(response.daily_facts.previous_sum);
     } else {
       setSalesPreviousTotal({});
     }
-    if (response?.daily_facts?.difference_data) {
+    if (response.daily_facts && response.daily_facts.difference_data) {
       setSalesDifference(response.daily_facts.difference_data);
     } else {
       setSalesDifference({});
@@ -242,6 +249,7 @@ export default function PerformanceReport({
       selectedDailyFact,
       selectedGroupBy,
       marketplace,
+      metricsType,
       startDate = null,
       endDate = null,
     ) => {
@@ -254,6 +262,7 @@ export default function PerformanceReport({
         marketplace,
         startDate,
         endDate,
+        metricsType,
       ).then((res) => {
         if (res?.status === 400 || res.status === 500) {
           setIsApiCall(false);
@@ -261,10 +270,7 @@ export default function PerformanceReport({
         }
         if (res?.status === 200) {
           if (res?.data?.daily_facts) {
-            const salesGraphData = bindSalesResponseData(
-              res.data,
-              selectedVendorMetricsType.value,
-            );
+            const salesGraphData = bindSalesResponseData(res.data, metricsType);
             setSalesChartData(salesGraphData);
 
             // brekdown tooltip values
@@ -283,7 +289,7 @@ export default function PerformanceReport({
         }
       });
     },
-    [id, selectedVendorMetricsType.value],
+    [id],
   );
 
   useEffect(() => {
@@ -309,7 +315,12 @@ export default function PerformanceReport({
       setSelectedAmazonValue(marketplace[0].value);
       setCurrency(marketplace[0].currency);
       setCurrencySymbol(getSymbolFromCurrency(marketplace[0].currency));
-      getData(selectedSalesDF.value, groupBy, marketplace[0].value);
+      getData(
+        selectedSalesDF.value,
+        groupBy,
+        marketplace[0].value,
+        selectedVendorMetricsType.value,
+      );
 
       setResponseId('12345');
     }
@@ -320,6 +331,7 @@ export default function PerformanceReport({
     groupBy,
     selectedSalesDF,
     selectedAmazonValue,
+    selectedVendorMetricsType,
   ]);
 
   const renderCustomDateSubLabel = (props, flag) => {
@@ -347,6 +359,7 @@ export default function PerformanceReport({
     endDate,
     flag = null,
     marketplace = selectedAmazonValue,
+    metricsType = selectedVendorMetricsType.value,
   ) => {
     let temp = '';
     let sd = startDate;
@@ -377,10 +390,10 @@ export default function PerformanceReport({
       ed = `${endDate.getDate()}-${
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
-      getData(flag, temp, marketplace, sd, ed);
+      getData(flag, temp, marketplace, metricsType, sd, ed);
     } else {
       // flag==='year
-      getData(flag, temp, marketplace);
+      getData(flag, temp, marketplace, metricsType);
     }
   };
 
@@ -390,19 +403,34 @@ export default function PerformanceReport({
       case 'week':
         setFilters({ daily: true, weekly: false, month: false });
         setGroupBy('daily');
-        getData(value, 'daily', selectedAmazonValue);
+        getData(
+          value,
+          'daily',
+          selectedAmazonValue,
+          selectedVendorMetricsType.value,
+        );
         break;
 
       case 'month':
         setFilters({ daily: true, weekly: true, month: false });
         setGroupBy('daily');
-        getData(value, 'daily', selectedAmazonValue);
+        getData(
+          value,
+          'daily',
+          selectedAmazonValue,
+          selectedVendorMetricsType.value,
+        );
         break;
 
       case '30days':
         setFilters({ daily: true, weekly: true, month: false });
         setGroupBy('daily');
-        getData(value, 'daily', selectedAmazonValue);
+        getData(
+          value,
+          'daily',
+          selectedAmazonValue,
+          selectedVendorMetricsType.value,
+        );
         break;
 
       default:
@@ -417,7 +445,7 @@ export default function PerformanceReport({
       </span>
 
       <div style={{ fontSize: '12px', color: '#556178' }}>
-        {renderCustomDateSubLabel(props)}
+        {renderCustomDateSubLabel(props, 'sp')}
       </div>
     </SingleValue>
   );
@@ -474,29 +502,32 @@ export default function PerformanceReport({
 
   const handleMetricsType = (event) => {
     const { value } = event;
-    setSelectedVendorMetricsType(event);
+
     if (value === 'orderedRevenue') {
       setActiveSales({ orderedRevenue: true });
+      setSelectedVendorMetricsType({
+        value: 'orderedRevenue',
+        label: 'Ordered Revenue',
+      });
     } else {
       setActiveSales({ shippedCOGs: true });
+      setSelectedVendorMetricsType({
+        value: 'shippedCOGS',
+        label: 'Shipped COGS',
+      });
     }
 
-    // if (selectedVendorMetricsType.value === 'custom') {
-    //   checkDifferenceBetweenDates(
-    //     state[0].startDate,
-    //     state[0].endDate,
-    //     'custom',
-    //     selectedAmazonValue.value,
-    //     value,
-    //   );
-    // } else {
-    //   getData(
-    //     selectedSalesDF.value,
-    //     selectedVendorMetricsType.value,
-    //     groupBy,
-    //     selectedAmazonValue,
-    //   );
-    // }
+    if (selectedSalesDF.value === 'custom') {
+      checkDifferenceBetweenDates(
+        state[0].startDate,
+        state[0].endDate,
+        'custom',
+        selectedAmazonValue,
+        value,
+      );
+    } else {
+      getData(selectedSalesDF.value, groupBy, selectedAmazonValue, value);
+    }
   };
 
   const handleAmazonOptions = (event) => {
@@ -511,14 +542,24 @@ export default function PerformanceReport({
         event.value,
       );
     } else {
-      getData(selectedSalesDF.value, groupBy, event.value);
+      getData(
+        selectedSalesDF.value,
+        groupBy,
+        event.value,
+        selectedVendorMetricsType.value,
+      );
     }
   };
 
   const handleGroupBy = (value) => {
     if (value !== groupBy) {
       setGroupBy(value);
-      getData(selectedSalesDF.value, value, selectedAmazonValue);
+      getData(
+        selectedSalesDF.value,
+        value,
+        selectedAmazonValue,
+        selectedVendorMetricsType.value,
+      );
     }
   };
 

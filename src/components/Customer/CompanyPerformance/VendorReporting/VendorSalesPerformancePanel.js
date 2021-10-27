@@ -32,7 +32,6 @@ const _ = require('lodash');
 
 am4core.useTheme(am4themes_dataviz);
 export default function SalesPerformancePanel({
-  renderCustomDateSubLabel,
   activeSales,
   currencySymbol,
   setActiveSales,
@@ -59,36 +58,28 @@ export default function SalesPerformancePanel({
 }) {
   const { Option, SingleValue } = components;
 
-  const filterOption = (props) => (
+  const metricsTypeFilterOption = (props) => (
     <Option {...props}>
       <div className="pb-2">
         <span style={{ fontSize: '15px', color: '#000000' }}>
           {props.data.label}
         </span>
-
-        <div style={{ fontSize: '12px', color: '#556178' }}>
-          {props.data.sub}
-        </div>
       </div>
     </Option>
   );
 
-  const singleFilterOption = (props) => (
+  const metricsTypeSingleFilterOption = (props) => (
     <SingleValue {...props}>
       <span style={{ fontSize: '15px', color: '#000000' }}>
         {props.data.label}
       </span>
-
-      <div style={{ fontSize: '12px', color: '#556178' }}>
-        {renderCustomDateSubLabel(props, 'sp')}
-      </div>
     </SingleValue>
   );
 
-  const getSelectComponents = () => {
+  const getMetricTypeSelectComponents = () => {
     return {
-      Option: filterOption,
-      SingleValue: singleFilterOption,
+      Option: metricsTypeFilterOption,
+      SingleValue: metricsTypeSingleFilterOption,
       DropDownIndicator,
     };
   };
@@ -202,7 +193,7 @@ export default function SalesPerformancePanel({
           'days-performance',
           vendorSalesMetricsTypeOptions,
           vendorSalesMetricsTypeOptions[0].label,
-          getSelectComponents,
+          getMetricTypeSelectComponents,
           vendorSalesMetricsTypeOptions[0],
           handleMetricsType,
           isApiCall,
@@ -559,7 +550,6 @@ SalesPerformancePanel.defaultProps = {
   applyCustomDate: () => {},
   setActiveSales: () => {},
   handleMetricsType: () => {},
-  renderCustomDateSubLabel: () => {},
   setShowCustomDateModal: () => {},
   setState: () => {},
   handleGroupBy: () => {},
@@ -584,7 +574,6 @@ SalesPerformancePanel.propTypes = {
   // inorganicSale: number,
   // organicSale: number,
   metricsType: shape({}),
-  renderCustomDateSubLabel: func,
   setShowCustomDateModal: func,
   setState: func,
   setActiveSales: func,
