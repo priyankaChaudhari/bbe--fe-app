@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+import { shape, string } from 'prop-types';
 
-import Theme from '../../theme/Theme';
-import { FormField, Button, ErrorMsg, PageLoader } from '../../common';
-import { userDetails } from '../../constants';
 import { updatePassword } from '../../api';
+import { userDetails } from '../../constants';
+import { PasswordFormContainer } from '../../common/Styles/HeaderStyles';
 import { CloseEyeIcon, smallEyeIcon } from '../../theme/images';
+import { FormField, Button, ErrorMsg, PageLoader } from '../../common';
 
 export default function EditPassword({ userInfo }) {
   const { register, handleSubmit, errors, watch, reset } = useForm();
@@ -53,9 +52,7 @@ export default function EditPassword({ userInfo }) {
         {item.label}
         <br />
         <input
-          className={
-            errors && errors.email ? 'form-control' : 'form-control mb-2'
-          }
+          className={errors?.email ? 'form-control' : 'form-control mb-2'}
           defaultValue={userInfo[item.key]}
           type={showPassword[item.key] ? 'text' : item.type}
           placeholder={item.placeholder}
@@ -78,7 +75,7 @@ export default function EditPassword({ userInfo }) {
             },
           })}
         />
-        {watch()[item.key] && watch()[item.key].length !== 0 ? (
+        {watch()[item.key]?.length !== 0 ? (
           <>
             {showPassword[item.key] ? (
               <img
@@ -111,7 +108,7 @@ export default function EditPassword({ userInfo }) {
   };
 
   return (
-    <FormContainer>
+    <PasswordFormContainer>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-md-6">
@@ -121,12 +118,8 @@ export default function EditPassword({ userInfo }) {
                 .map((item) => (
                   <React.Fragment key={item.key}>
                     {generateHTML(item)}
-                    <ErrorMsg>
-                      {errors && errors[item.key] && errors[item.key].message}
-                    </ErrorMsg>
-                    <ErrorMsg>
-                      {apiError && apiError[item.key] && apiError[item.key][0]}
-                    </ErrorMsg>
+                    <ErrorMsg>{errors?.[item.key]?.message}</ErrorMsg>
+                    <ErrorMsg>{apiError?.[item.key]?.[0]}</ErrorMsg>
                   </React.Fragment>
                 ))}
             </FormField>
@@ -138,12 +131,8 @@ export default function EditPassword({ userInfo }) {
                 .map((item) => (
                   <React.Fragment key={item.key}>
                     {generateHTML(item)}
-                    <ErrorMsg>
-                      {errors && errors[item.key] && errors[item.key].message}
-                    </ErrorMsg>
-                    <ErrorMsg>
-                      {apiError && apiError[item.key] && apiError[item.key][0]}
-                    </ErrorMsg>
+                    <ErrorMsg>{errors?.[item.key]?.message}</ErrorMsg>
+                    <ErrorMsg>{apiError?.[item.key]?.[0]}</ErrorMsg>
                   </React.Fragment>
                 ))}
             </FormField>
@@ -163,68 +152,12 @@ export default function EditPassword({ userInfo }) {
           </Button>
         </div>
       </form>
-    </FormContainer>
+    </PasswordFormContainer>
   );
 }
 
 EditPassword.propTypes = {
-  userInfo: PropTypes.shape({
-    id: PropTypes.string,
+  userInfo: shape({
+    id: string,
   }).isRequired,
 };
-
-const FormContainer = styled.div`
-  height: 100%;
-  .banner-bg {
-    width: 100%;
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-  }
-
-  .inner-form {
-    max-width: 327px;
-    margin: 0 auto;
-    width: 100%;
-    vertical-align: middle;
-
-    .logo {
-      width: 190px;
-      padding: 35px 0 45px 0;
-
-      span {
-        position: absolute;
-        top: 46px;
-        margin-left: 6px;
-        font-size: 16px;
-        font-weight: bold;
-        color: ${Theme.black};
-        font-family: ${Theme.titleFontFamily};
-      }
-    }
-    .google-icon {
-      width: 20px;
-      margin-right: 10px;
-      vertical-align: bottom;
-    }
-    .or-else {
-      text-align: center;
-      margin-top: 8px;
-    }
-  }
-
-  @media only screen and (max-width: 991px) {
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    height: 100%;
-
-    .inner-form {
-      background: rgb(91 91 91 / 0.9);
-      height: 100%;
-      top: 0;
-      max-width: 100%;
-      padding: 0 20px;
-    }
-  }
-`;
