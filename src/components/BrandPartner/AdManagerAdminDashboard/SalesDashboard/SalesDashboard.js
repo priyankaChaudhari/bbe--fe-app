@@ -98,8 +98,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const getBGSList = useCallback(() => {
     getManagersList('BGS').then((bgsData) => {
       if (bgsData && bgsData.data && bgsData.data.length) {
+        const results = bgsData.data;
         const list = [{ value: 'all', label: 'All' }];
-        for (const brand of bgsData.data) {
+
+        for (const brand of results) {
           list.push({
             value: brand.id,
             label: `${brand.first_name} ${brand.last_name}`,
