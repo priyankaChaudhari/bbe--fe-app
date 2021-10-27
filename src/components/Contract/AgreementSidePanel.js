@@ -16,7 +16,7 @@ import { SidePanel } from '../../theme/AgreementStyle';
 import {
   agreementDefaultProptypes,
   agreementSidePanelPropTypes,
-} from './AgreementSidePanelProptypes';
+} from './PropTypesConstants/AgreementSidePanelProptypes';
 import { getLength, getRevenueShare, createAddendum } from '../../api';
 import {
   AgreementDetails,
