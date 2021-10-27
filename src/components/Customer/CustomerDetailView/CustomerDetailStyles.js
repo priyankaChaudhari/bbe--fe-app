@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import Theme from '../../../theme/Theme';
 
-const CustomerDetailsBody = styled.div`
+export const CustomerDetailsBody = styled.div`
   background: ${Theme.gray6};
   min-height: 100%;
   width: 100%;
@@ -128,4 +128,96 @@ const CustomerDetailsBody = styled.div`
   }
 `;
 
-export default CustomerDetailsBody;
+export const NotesSideBar = styled.div`
+  top: 0;
+  background: #ffff;
+  height: 100%;
+  .footer-sticky {
+    position: fixed;
+    bottom: 0;
+    max-width: 600px;
+    width: 100%;
+    background: white;
+  }
+  .notes-pin-unpin {
+    position: relative;
+
+    .pin-icon {
+      background: #0062ff;
+      padding: 2px;
+      border-radius: 50%;
+      width: 19px;
+      position: absolute;
+      top: 27px;
+      left: 25px;
+      transform: rotate(-46deg);
+    }
+  }
+  .chat-info-icon {
+    position: absolute;
+    right: 47px;
+  }
+  .dropdown-select-all-notes {
+    background-color: rgba(224, 231, 255, 0.2);
+    border: 1px solid ${Theme.gray2};
+    border-radius: 20px;
+    width: 230px;
+    height: 40px;
+    color: ${Theme.black};
+    padding: 11px 2px 0 14px;
+  }
+  .dropdown-notes-filter {
+    background-color: ${Theme.white};
+    border-radius: 8px;
+    box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
+    max-width: 230px;
+    padding: 15px;
+    position: absolute;
+    z-index: 99999;
+    top: 45px;
+    width: 100%;
+
+    &.hide {
+      display: none;
+    }
+    &.show {
+      display: block;
+    }
+    .notes-option {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        padding-bottom: 14px;
+
+        &.checkbox-option {
+          padding-bottom: 4px;
+        }
+
+        &.teams-title {
+          color: ${Theme.gray40};
+          text-transform: uppercase;
+          font-size: 11px;
+          padding: 5px 0 15px 0;
+          font-family: ${Theme.titleFontFamily};
+        }
+      }
+    }
+  }
+  .commemt-inbox-body {
+    height: 80vh;
+    overflow: scroll;
+    padding-bottom: 50px;
+  }
+  @media only screen and (max-width: 767px) {
+    .dropdown-select-all-notes {
+      width: 100%;
+      max-width: 100%;
+    }
+    .commemt-inbox-body {
+      height: 60vh;
+      overflow: scroll;
+    }
+  }
+`;

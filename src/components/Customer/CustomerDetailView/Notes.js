@@ -5,14 +5,14 @@ import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import debounce from 'lodash.debounce';
 import ReactTooltip from 'react-tooltip';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import $ from 'jquery';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { shape, string, bool, func, oneOfType } from 'prop-types';
 
 import EditorComponent from '../../../common/EditorComponent';
-import Theme from '../../../theme/Theme';
+import { NotesSideBar } from './CustomerDetailStyles';
+import { filtersOption } from '../../../constants';
 import { GroupUser } from '../../../theme/Global';
 import { getNotes, saveNotes, deleteNote, updateNotes } from '../../../api';
 import {
@@ -53,27 +53,6 @@ function Notes({
   });
 
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'page' });
-
-  const filtersOption = {
-    notes: [
-      { label: 'All Notes' },
-      { label: 'My Notes', value: 'my_notes' },
-      { label: 'Team Notes' },
-    ],
-    teams: [
-      { team: 'Sales Team' },
-      { team: 'On-boarding Team' },
-      { team: 'BGS Team' },
-      { team: 'Creative Team' },
-      { team: 'Advertising Team' },
-      { team: 'Finance Team' },
-    ],
-    archived: [
-      { label: 'Hide archived', value: 'hide' },
-      { label: 'Show archived', value: '' },
-      { label: 'Only show archived', value: 'only_archived' },
-    ],
-  };
 
   const [filters, setFilter] = useState(
     JSON.parse(localStorage.getItem('noteFilters')) || {
@@ -141,7 +120,7 @@ function Notes({
       if (!selectedFilters.archived) {
         delete selectedFilters.archived;
       }
-      if (!(selectedFilters.team && selectedFilters.team.length)) {
+      if (!selectedFilters.team?.length) {
         delete selectedFilters.team;
       }
 
@@ -149,25 +128,23 @@ function Notes({
         (res) => {
           setData({
             ...data,
-            notes: res && res.results,
-            count: res && res.count,
+            notes: res?.results,
+            count: res?.count,
             currentPage: pageNumber,
           });
           setIsLoading({ loader: false, type: 'page' });
         },
       );
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [customerId, filters],
   );
 
   useEffect(() => {
     getData(data.currentPage);
-  }, [getData]);
+  }, [data.currentPage, getData]);
 
   const debouncedSave = useCallback(
     debounce((page, nextValue) => getData(page, nextValue), 500),
-
     [], // will be created only once initially
   );
 
@@ -191,15 +168,13 @@ function Notes({
     };
 
     setIsLoading({ loader: true, type: 'page' });
-    if (data && data.selectedNote && data.selectedNote.id) {
-      updateNotes(data.selectedNote && data.selectedNote.id, postData).then(
-        () => {
-          setIsLoading({ loader: false, type: 'page' });
+    if (data?.selectedNote?.id) {
+      updateNotes(data.selectedNote?.id, postData).then(() => {
+        setIsLoading({ loader: false, type: 'page' });
 
-          setData({ ...data, showNotesEditor: false, showEditor: false });
-          getData(data.currentPage);
-        },
-      );
+        setData({ ...data, showNotesEditor: false, showEditor: false });
+        getData(data.currentPage);
+      });
     } else {
       saveNotes(postData).then(() => {
         setData({ ...data, showNotesEditor: false, showEditor: false });
@@ -216,7 +191,7 @@ function Notes({
         <div className="alert-msg mt-3">
           <EditorComponent
             setData={setNoteContent}
-            data={data.selectedNote && data.selectedNote.note}
+            data={data.selectedNote?.note}
           />
         </div>
         <div className="text-right mt-2 mb-3 ">
@@ -283,17 +258,16 @@ function Notes({
 
   const onUpdateNote = (item, dataToPost) => {
     setIsLoading({ loader: true, type: 'button' });
-
     setData({
       ...data,
       selectedNote: item,
     });
 
-    updateNotes(item && item.id, dataToPost).then(() => {
+    updateNotes(item?.id, dataToPost).then(() => {
       if (dataToPost.is_archieved) {
         toast.success(
           <div>
-            Note Archived{' '}
+            Note Archived
             <span
               style={{
                 borderRadius: '50%',
@@ -304,7 +278,7 @@ function Notes({
                 marginLeft: '5px',
                 backgroundColor: '#8798ad',
               }}
-            />{' '}
+            />
             <div
               role="presentation"
               style={{
@@ -330,7 +304,7 @@ function Notes({
   const displayUserInfo = (item) => {
     return (
       <div className=" float-left mt-1 ">
-        {item && item.documents && item.documents.length ? (
+        {item?.documents?.length ? (
           <img
             className="default-user-activity"
             src={
@@ -359,8 +333,35 @@ function Notes({
     setData({ ...data, notes: list });
   };
 
+  const renderArchiveHtml = (item, isArchieved, label) => {
+    return (
+      <li
+        role="presentation"
+        className={
+          isLoading.loader && item.id === data.selectedNote.id ? 'disabled' : ''
+        }
+        onClick={() =>
+          onUpdateNote(item, {
+            is_archieved: isArchieved,
+          })
+        }>
+        <span className="dot" /> {label}
+      </li>
+    );
+  };
+  const renderPinnHtml = (item, isPinned, label) => {
+    return (
+      <li
+        role="presentation"
+        onClick={() => onUpdateNote(item, { is_pinned: isPinned })}>
+        <span className="dot" />
+        {label}
+      </li>
+    );
+  };
+
   const displayNotes = () => {
-    return data && data.notes && data.notes.length ? (
+    return data?.notes?.length ? (
       data.notes.map((item) => {
         return (
           <div className="notes-pin-unpin">
@@ -368,13 +369,10 @@ function Notes({
               {displayUserInfo(item.user)}
               <div className="activity-user">
                 <span className="font-bold">
-                  {' '}
-                  {item.user && item.user.first_name}{' '}
-                  {item.user && item.user.last_name}:
-                </span>{' '}
-                {data.showNotesEditor &&
-                data.selectedNote &&
-                data.selectedNote.id === item.id ? (
+                  {item.user?.first_name}
+                  {item.user?.last_name}:
+                </span>
+                {data.showNotesEditor && data.selectedNote?.id === item.id ? (
                   renderEditor()
                 ) : (
                   <>
@@ -385,19 +383,19 @@ function Notes({
                         className="note-text"
                         dangerouslySetInnerHTML={{
                           __html: item.showMore
-                            ? item && item.note
-                            : item && item.note.slice(0, 150),
+                            ? item?.note
+                            : item?.note.slice(0, 150),
                         }}
                       />
 
-                      {item && item.note.length > 150 ? (
+                      {item?.note.length > 150 ? (
                         <span style={{ color: 'black' }}>
                           {!item.showMore ? '...' : ''}
                         </span>
                       ) : (
                         ''
                       )}
-                      {item && item.note.length > 150 ? (
+                      {item?.note.length > 150 ? (
                         <span
                           style={{ color: '#FF5933' }}
                           role="presentation"
@@ -412,58 +410,23 @@ function Notes({
                     </span>
 
                     <div className="time-date  mt-1">
-                      {item && item.created_at}{' '}
+                      {item?.created_at}
                       <span className="pin">
                         <ul className="more-action">
-                          {(userInfo && userInfo.id) ===
-                          (item && item.user && item.user.id) ? (
+                          {userInfo?.id === item?.user?.id ? (
                             <>
                               <li
                                 role="presentation"
                                 onClick={() => onEditClick(item)}>
-                                {' '}
                                 <span className="dot" /> Edit
                               </li>
-                              {item.is_archieved ? (
-                                <li
-                                  role="presentation"
-                                  className={
-                                    isLoading.loader &&
-                                    item.id === data.selectedNote.id
-                                      ? 'disabled'
-                                      : ''
-                                  }
-                                  onClick={() =>
-                                    onUpdateNote(item, {
-                                      is_archieved: false,
-                                    })
-                                  }>
-                                  {' '}
-                                  <span className="dot" /> Unarchive
-                                </li>
-                              ) : (
-                                <li
-                                  role="presentation"
-                                  className={
-                                    isLoading.loader &&
-                                    item.id === data.selectedNote.id
-                                      ? 'disabled'
-                                      : ''
-                                  }
-                                  onClick={() =>
-                                    onUpdateNote(item, {
-                                      is_archieved: true,
-                                    })
-                                  }>
-                                  {' '}
-                                  <span className="dot" /> Archive
-                                </li>
-                              )}
+                              {item.is_archieved
+                                ? renderArchiveHtml(item, false, 'Unarchive')
+                                : renderArchiveHtml(item, true, 'Archive')}
                               {item.hs_note_id ? (
                                 ''
                               ) : (
                                 <li className="delete">
-                                  {' '}
                                   <span
                                     className="delete"
                                     role="presentation"
@@ -473,15 +436,13 @@ function Notes({
                                         id: item.id,
                                       });
                                     }}>
-                                    <span className="dot" /> Delete{' '}
-                                    {item.id ===
-                                    (showDelete && showDelete.id) ? (
+                                    <span className="dot" /> Delete
+                                    {item.id === showDelete?.id ? (
                                       <div
                                         ref={ref}
                                         className="delete-msg"
                                         role="presentation"
                                         onClick={() => onDeleteNote(item.id)}>
-                                        {' '}
                                         <img
                                           className="red-trash-icon"
                                           src={RedTrashIcon}
@@ -499,30 +460,15 @@ function Notes({
                           ) : (
                             ''
                           )}
-                          {item.is_pinned ? (
-                            <li
-                              role="presentation"
-                              onClick={() =>
-                                onUpdateNote(item, { is_pinned: false })
-                              }>
-                              <span className="dot" /> Unpin
-                            </li>
-                          ) : (
-                            <li
-                              role="presentation"
-                              onClick={() =>
-                                onUpdateNote(item, { is_pinned: true })
-                              }>
-                              <span className="dot" /> Pin
-                            </li>
-                          )}
+                          {item.is_pinned
+                            ? renderPinnHtml(item, false, 'Unpin')
+                            : renderPinnHtml(item, true, 'Pin')}
                         </ul>
                       </span>
                     </div>
                   </>
                 )}
               </div>
-
               <div className="clear-fix" />
             </GroupUser>
             {item.is_pinned ? (
@@ -575,7 +521,6 @@ function Notes({
             q: searchQuery.q,
           });
           // setShowDropdown({ show: false });
-
           localStorage.setItem(
             'noteFilters',
             JSON.stringify({
@@ -591,7 +536,6 @@ function Notes({
             notes: item.label,
             q: searchQuery.q,
           });
-
           localStorage.setItem(
             'noteFilters',
             JSON.stringify({
@@ -607,7 +551,6 @@ function Notes({
     if (section === 'archived') {
       setFilter({ ...filters, archived: item.value, q: searchQuery.q });
       // setShowDropdown({ show: false });
-
       localStorage.setItem(
         'noteFilters',
         JSON.stringify({
@@ -673,7 +616,6 @@ function Notes({
             ? 'dropdown-notes-filter show'
             : 'dropdown-notes-filter hide'
         }>
-        {' '}
         <ul className="notes-option">
           {filtersOption.notes.map((item) => {
             return (
@@ -698,7 +640,6 @@ function Notes({
             );
           })}
           <li className="teams-title">Teams</li>
-
           {filtersOption.teams.map((teamFilter) => {
             return (
               <li className="checkbox-option">
@@ -780,7 +721,6 @@ function Notes({
         <div className="container-fluid">
           <div className="row">
             <div className="col-md-6 col-sm-12">
-              {' '}
               <div className="header-title "> Notes</div>
             </div>
             <div className="col-md-6 col-sm-12">
@@ -799,7 +739,6 @@ function Notes({
                     setNoteContent('');
                     $('#editor').scrollTop(0);
                   }}>
-                  {' '}
                   <img className="header-icon" src={OrangeChat} alt="check" />
                   <span className="cursor"> Add note </span>
                 </li>
@@ -857,7 +796,7 @@ function Notes({
                     setShowDropdown({ show: !showDropdown.show });
                   }
                 }>
-                {filters && filters.notes}
+                {filters?.notes}
 
                 <img
                   src={InfoIcon}
@@ -881,7 +820,6 @@ function Notes({
                   }}
                 />
               </div>
-
               <div>{displayFilter()}</div>
             </DropDownSelect>
           </div>
@@ -900,10 +838,9 @@ function Notes({
                   {displayUserInfo(userInfo)}
                   <div className="activity-user">
                     <span className="font-bold">
-                      {' '}
-                      {userInfo && userInfo.first_name}{' '}
-                      {userInfo && userInfo.last_name}:
-                    </span>{' '}
+                      {userInfo?.first_name}
+                      {userInfo?.last_name}:
+                    </span>
                     {renderEditor()}
                   </div>
                 </GroupUser>
@@ -938,107 +875,18 @@ Notes.defaultProps = {
 };
 
 Notes.propTypes = {
-  setShowNotesModal: PropTypes.func,
-  customerId: PropTypes.string,
-  setNewNoteEditor: PropTypes.func,
-  showNewNoteEditor: PropTypes.bool,
-  showNotesModal: PropTypes.shape({
-    deleteNote: PropTypes.bool,
-  }),
+  setShowNotesModal: func,
+  customerId: string,
+  setNewNoteEditor: func,
+  showNewNoteEditor: bool,
+  showNotesModal: oneOfType([
+    bool,
+    shape({
+      modal: bool,
+      apiCall: bool,
+      deleteNote: bool,
+    }),
+  ]),
 };
 
 export default Notes;
-
-const NotesSideBar = styled.div`
-  top: 0;
-  background: #ffff;
-  height: 100%;
-  .footer-sticky {
-    position: fixed;
-    bottom: 0;
-    max-width: 600px;
-    width: 100%;
-    background: white;
-  }
-  .notes-pin-unpin {
-    position: relative;
-
-    .pin-icon {
-      background: #0062ff;
-      padding: 2px;
-      border-radius: 50%;
-      width: 19px;
-      position: absolute;
-      top: 27px;
-      left: 25px;
-      transform: rotate(-46deg);
-    }
-  }
-  .chat-info-icon {
-    position: absolute;
-    right: 47px;
-  }
-  .dropdown-select-all-notes {
-    background-color: rgba(224, 231, 255, 0.2);
-    border: 1px solid ${Theme.gray2};
-    border-radius: 20px;
-    width: 230px;
-    height: 40px;
-    color: ${Theme.black};
-    padding: 11px 2px 0 14px;
-  }
-  .dropdown-notes-filter {
-    background-color: ${Theme.white};
-    border-radius: 8px;
-    box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
-    max-width: 230px;
-    padding: 15px;
-    position: absolute;
-    z-index: 99999;
-    top: 45px;
-    width: 100%;
-
-    &.hide {
-      display: none;
-    }
-    &.show {
-      display: block;
-    }
-    .notes-option {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-
-      li {
-        padding-bottom: 14px;
-
-        &.checkbox-option {
-          padding-bottom: 4px;
-        }
-
-        &.teams-title {
-          color: ${Theme.gray40};
-          text-transform: uppercase;
-          font-size: 11px;
-          padding: 5px 0 15px 0;
-          font-family: ${Theme.titleFontFamily};
-        }
-      }
-    }
-  }
-  .commemt-inbox-body {
-    height: 80vh;
-    overflow: scroll;
-    padding-bottom: 50px;
-  }
-  @media only screen and (max-width: 767px) {
-    .dropdown-select-all-notes {
-      width: 100%;
-      max-width: 100%;
-    }
-    .commemt-inbox-body {
-      height: 60vh;
-      overflow: scroll;
-    }
-  }
-`;

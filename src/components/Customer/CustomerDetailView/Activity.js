@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import { shape, string, bool, func, arrayOf, number } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import {
@@ -58,12 +58,10 @@ export default function Activity({
                         .split(' ')
                         .slice(0, 2)[1]
                         .toLowerCase() === 'user') ||
-                    (item && item.status !== undefined) ? (
+                    item?.status !== undefined ? (
                       <div
                         className={
-                          item && item.status !== undefined
-                            ? 'contract-email'
-                            : ''
+                          item?.status !== undefined ? 'contract-email' : ''
                         }>
                         <img
                           src={
@@ -76,7 +74,7 @@ export default function Activity({
                                   .split(' ')
                                   .slice(0, 2)[0] === 'System'
                               ? NextActivityLogo
-                              : item && item.status !== undefined
+                              : item?.status !== undefined
                               ? ContractEmailIcon
                               : images.find(
                                   (op) => op.entity_id === item.history_user_id,
@@ -99,9 +97,9 @@ export default function Activity({
                       {activityDetail(item, true)}
 
                       <div className="time-date mt-1">
-                        {item && item.history_date ? item.history_date : ''}
+                        {item?.history_date ? item.history_date : ''}
                       </div>
-                      {item && item.status ? (
+                      {item?.status ? (
                         <>
                           <Status
                             label={item.status}
@@ -124,10 +122,9 @@ export default function Activity({
                             <div className="email-clicks">
                               <span className="email-opens">
                                 Opens: {item.opens || 0}
-                              </span>{' '}
+                              </span>
                               <span className="email-opens">
-                                {' '}
-                                Clicks: {item.clicks || 0}{' '}
+                                Clicks: {item.clicks || 0}
                               </span>
                             </div>
                           ) : (
@@ -162,15 +159,15 @@ export default function Activity({
 }
 
 Activity.propTypes = {
-  isLoading: PropTypes.shape({
-    loader: PropTypes.bool,
-    type: PropTypes.string,
+  isLoading: shape({
+    loader: bool,
+    type: string,
   }).isRequired,
-  activityData: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activityDetail: PropTypes.func.isRequired,
-  getActivityInitials: PropTypes.func.isRequired,
-  images: PropTypes.arrayOf(PropTypes.object).isRequired,
-  handlePageChange: PropTypes.func.isRequired,
-  pageNumber: PropTypes.number.isRequired,
-  count: PropTypes.number.isRequired,
+  activityData: arrayOf(shape).isRequired,
+  activityDetail: func.isRequired,
+  getActivityInitials: func.isRequired,
+  images: arrayOf(shape).isRequired,
+  handlePageChange: func.isRequired,
+  pageNumber: number.isRequired,
+  count: number.isRequired,
 };
