@@ -31,8 +31,6 @@ export default function RecentActivityNotes({
   setIsLoading,
 }) {
   const [noteData, setNoteData] = useState([]);
-  // console.log('noteData', noteData);
-  console.log('showNotesModal', showNotesModal);
   const getNotes = useCallback(() => {
     setIsLoading({ loader: true, type: 'note' });
     getRecentNotes(id).then((res) => {
