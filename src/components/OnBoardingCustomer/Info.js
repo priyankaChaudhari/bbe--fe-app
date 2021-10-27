@@ -128,10 +128,10 @@ export default function Info() {
                   account on Buy Box Experts NEXT. We hate paperwork so we ask
                   for as little as necessary to get going.
                 </p>
-                <div className="complete-steps mt-3">
+                <div className="complete-steps">
                   You’ll need the following to complete your account setup:
                 </div>
-                <ul className="account-steps-check">
+                <ul className="account-steps-check pt-3 mb-3">
                   <li>
                     <img src={OrangeCheckMark} alt="check" />
                     Your Company&apos;s Digital Presence
