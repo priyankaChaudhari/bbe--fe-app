@@ -59,7 +59,7 @@ export default function Header({ type, userInfo }) {
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991.98 });
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const profilePic =
-    userInfo?.documents[0] && Object.values(userInfo.documents[0])?.[0];
+    userInfo?.documents?.[0] && Object.values(userInfo?.documents?.[0])?.[0];
 
   const toggleDropdown = () => {
     document.getElementById('myDropdown').classList.toggle('show');
