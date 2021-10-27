@@ -31,19 +31,19 @@ const BillingContainer = ({
             className={viewComponent === 'rev share' ? 'active' : ''}
             onClick={() => setViewComponent('rev share')}
             role="presentation">
-            Rev Share Invoices
+            Rev Share
           </li>
           <li
-            className={viewComponent === 'upsell invoices' ? 'active' : ''}
-            onClick={() => setViewComponent('upsell invoices')}
+            className={viewComponent === 'upsell' ? 'active' : ''}
+            onClick={() => setViewComponent('upsell')}
             role="presentation">
-            Upsell Invoices
+            Upsells
           </li>
           <li
             className={viewComponent === 'dsp service' ? 'active' : ''}
             onClick={() => setViewComponent('dsp service')}
             role="presentation">
-            DSP Invoices
+            DSP
           </li>
           {customerStatus && customerStatus.value !== 'pending' ? (
             <li
@@ -57,7 +57,7 @@ const BillingContainer = ({
       </Tabs>
       {viewComponent === 'dsp service' ||
       viewComponent === 'rev share' ||
-      viewComponent === 'upsell invoices' ? (
+      viewComponent === 'upsell' ? (
         <Invoice invoiceType={viewComponent} id={id} userInfo={userInfo} />
       ) : (
         <BillingDetails
