@@ -128,7 +128,11 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
-    if (item && item.history_change_reason.includes('updated')) {
+    if (
+      item &&
+      item.history_change_reason.includes('updated') &&
+      !item.history_change_reason.includes('brand profile note')
+    ) {
       activityMessage = item.history_change_reason.split('updated');
       const msg = activityMessage[0];
       logUser = msg;
