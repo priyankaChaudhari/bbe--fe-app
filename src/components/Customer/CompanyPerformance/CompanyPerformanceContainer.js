@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { arrayOf, shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -24,6 +24,11 @@ export default function CompanyPerformance({
     'salePerformance',
   );
 
+  useEffect(() => {
+    setSellerViewComponent(setTab);
+    setVendorViewComponent('salePerformance');
+  }, [setTab, subViewComponent]);
+
   return (
     <>
       {subViewComponent === 'seller' ? (
@@ -42,6 +47,7 @@ export default function CompanyPerformance({
               id={id}
               viewComponent={sellerViewComponent}
               setViewComponent={setSellerViewComponent}
+              accountType={subViewComponent}
             />
           )}
         </div>
@@ -61,7 +67,7 @@ export default function CompanyPerformance({
               id={id}
               viewComponent={vendorViewComponent}
               setViewComponent={setVendorViewComponent}
-              selectedUserType={subViewComponent}
+              accountType={subViewComponent}
             />
           )}
         </div>

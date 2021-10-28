@@ -13,7 +13,7 @@ import AdPerformanceFilters from './AdPerformanceFilters';
 import { DspAdPacing } from '../../../BrandPartner';
 import { CloseIcon } from '../../../../theme/images';
 import { CustomDateModal, DropDownIndicator } from '../../../../common';
-import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
+import { dateOptions, noGraphDataMessage } from '../../../../constants';
 import {
   getAdPerformance,
   getDSPPerformance,
@@ -31,7 +31,7 @@ export default function AdPerformance({
   id,
   viewComponent,
   setViewComponent,
-  selectedUserType,
+  accountType,
 }) {
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
@@ -453,6 +453,7 @@ export default function AdPerformance({
         marketplace,
         startDate,
         endDate,
+        accountType,
       ).then((res) => {
         if (res && res.status === 400) {
           setIsApiCall(false);
@@ -473,7 +474,7 @@ export default function AdPerformance({
         }
       });
     },
-    [id],
+    [id, accountType],
   );
 
   const getDSPData = useCallback(
@@ -1012,7 +1013,7 @@ export default function AdPerformance({
         marketplaceDefaultValue={marketplaceDefaultValue}
         marketplaceOptions={marketplaceOptions}
         handleMarketplaceOptions={handleMarketplaceOptions}
-        dateOptions={dateOptionsWithYear}
+        dateOptions={dateOptions}
         getSelectComponents={getSelectComponents}
         DropDownIndicator={DropDownIndicator}
         selectedAdDF={selectedAdDF}
@@ -1043,7 +1044,7 @@ export default function AdPerformance({
 
       {/* DSP ad performance panel */}
 
-      {selectedUserType === 'seller' ? (
+      {accountType === 'seller' ? (
         <DSPPerformance
           dspData={dspData}
           setShowDspAdPacingModal={setShowDspAdPacingModal}
@@ -1091,7 +1092,7 @@ AdPerformance.defaultProps = {
   marketplaceChoices: {},
   id: '',
   viewComponent: '',
-  selectedUserType: 'seller',
+  accountType: 'seller',
   setViewComponent: () => {},
 };
 
@@ -1099,7 +1100,7 @@ AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
   viewComponent: string,
-  selectedUserType: string,
+  accountType: string,
   setViewComponent: func,
 };
 

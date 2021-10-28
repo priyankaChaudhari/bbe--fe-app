@@ -577,6 +577,7 @@ export async function getAdPerformance(
   marketplace,
   startDate,
   endDate,
+  accountType,
 ) {
   let params = {};
   if (startDate && endDate) {
@@ -587,6 +588,7 @@ export async function getAdPerformance(
       marketplace,
       start_date: startDate,
       end_date: endDate,
+      accountType,
     };
   } else {
     params = {
@@ -594,6 +596,7 @@ export async function getAdPerformance(
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
+      accountType,
     };
   }
   const result = await axiosInstance
