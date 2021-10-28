@@ -147,10 +147,11 @@ function ContractActivityLog({
   };
 
   const displayMixedLog = (logUser, msg) => {
+    console.log(msg);
     return msg.map((item, index) => {
       const field = item.split('from')[0];
-      let oldValue = item.split('from')[1].split(' to ')[0];
-      let newValue = item.split('from')[1].split(' to ')[1].split(', ,')[0];
+      let oldValue = item.split('from')[1]?.split(' to ')[0];
+      let newValue = item.split('from')[1]?.split(' to ')[1]?.split(', ,')[0];
 
       if (
         item.includes('annual revenue') ||
