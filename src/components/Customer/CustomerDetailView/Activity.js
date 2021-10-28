@@ -3,12 +3,12 @@ import React from 'react';
 import { shape, string, bool, func, arrayOf, number } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
+import { GroupUser } from '../../../theme/Global';
 import {
   ContractEmailIcon,
   DefaultUser,
   NextActivityLogo,
 } from '../../../theme/images';
-import { GroupUser } from '../../../theme/Global';
 import {
   CommonPagination,
   PageLoader,
