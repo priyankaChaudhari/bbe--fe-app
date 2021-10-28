@@ -112,14 +112,14 @@ export default function ShareIdeaModal({
 }
 
 ShareIdeaModal.defaultProps = {
-  showArticle: {},
+  showArticle: false,
   showArticleSuccess: false,
   setShowArticle: () => {},
   setShowArticleSuccess: () => {},
 };
 
 ShareIdeaModal.propTypes = {
-  showArticle: func,
+  showArticle: bool,
   setShowArticle: func,
   setShowArticleSuccess: func,
   showArticleSuccess: bool,

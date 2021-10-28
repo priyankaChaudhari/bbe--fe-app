@@ -75,13 +75,13 @@ export default function ProfileModal({
 }
 
 ProfileModal.defaultProps = {
-  showModal: {},
+  showModal: false,
   setShowModal: () => {},
   setShowSuccessMsg: () => {},
 };
 
 ProfileModal.propTypes = {
-  showModal: func,
+  showModal: bool,
   setShowModal: func,
   setShowSuccessMsg: func,
   userInfo: shape({}).isRequired,

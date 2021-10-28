@@ -302,6 +302,8 @@ export default function Invoice({
           <div className="medium-text-title ">
             {selectedNavigation === 'revShare'
               ? 'Rev Share Invoicing'
+              : selectedNavigation === 'upSell'
+              ? 'Upsell Invoices'
               : 'DSP Invoices'}
           </div>{' '}
         </div>
