@@ -389,7 +389,7 @@ function Notes({
                         }}
                       />
 
-                      {item?.note.length > 151 ? (
+                      {item?.note.length > 150 ? (
                         <span style={{ color: 'black' }}>
                           {!item.showMore ? '...' : ''}
                         </span>
