@@ -97,30 +97,30 @@ export default VendorSalesPerformanceFilters;
 
 VendorSalesPerformanceFilters.defaultProps = {
   viewComponent: '',
-  setViewComponent: () => {},
+  selectedSalesDF: {},
   marketplaceDefaultValue: {},
   marketplaceOptions: {},
-  handleMarketplaceOptions: () => {},
   dateOptions: {},
-  getSelectComponents: () => {},
   isApiCall: false,
   DropDownIndicator: () => {},
+  getSelectComponents: () => {},
+  handleMarketplaceOptions: () => {},
+  setViewComponent: () => {},
   handleDailyFact: () => {},
-  selectedSalesDF: {},
 };
 
 VendorSalesPerformanceFilters.propTypes = {
-  viewComponent: string,
-  setViewComponent: func,
-  marketplaceDefaultValue: oneOfType(Object, Array),
-  marketplaceOptions: arrayOf(Array),
-  handleMarketplaceOptions: func,
-  dateOptions: arrayOf(Array),
-  getSelectComponents: func,
   isApiCall: bool,
+  viewComponent: string,
+  marketplaceDefaultValue: oneOfType(Object, Array),
+  selectedSalesDF: instanceOf(Object),
+  marketplaceOptions: arrayOf(Array),
+  dateOptions: arrayOf(Array),
+  setViewComponent: func,
+  handleMarketplaceOptions: func,
+  getSelectComponents: func,
   DropDownIndicator: func,
   handleDailyFact: func,
-  selectedSalesDF: instanceOf(Object),
 };
 
 const ViewData = styled.div`

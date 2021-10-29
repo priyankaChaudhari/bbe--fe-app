@@ -40,7 +40,10 @@ export default function AdPerformance({
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
-  const [selectedAdType, setSelectedAdType] = useState('all');
+  const [selectedAdType, setSelectedAdType] = useState({
+    value: 'all',
+    label: 'All Ad Types',
+  });
   const [selectedAdDF, setSelectedAdDF] = useState({
     value: 'week',
     label: 'Recent 7 days',

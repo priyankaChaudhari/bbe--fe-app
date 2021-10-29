@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
 import dayjs from 'dayjs';
-
 import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
@@ -10,7 +9,6 @@ import { func, instanceOf, shape, string } from 'prop-types';
 
 import VendorSalesPerformancePanel from './VendorSalesPerformancePanel';
 import VendorSalesPerformanceFilters from './VendorSalesPerformanceFilters';
-
 import { dateOptionsWithYear } from '../../../../constants';
 import { getVendorReportingData } from '../../../../api';
 import { CustomDateModal, DropDownIndicator } from '../../../../common';
@@ -651,17 +649,17 @@ export default function PerformanceReport({
 }
 
 PerformanceReport.defaultProps = {
-  marketplaceChoices: {},
   id: '',
   viewComponent: '',
   data: {},
+  marketplaceChoices: {},
   setViewComponent: () => {},
 };
 
 PerformanceReport.propTypes = {
-  marketplaceChoices: instanceOf(Object),
   id: string,
   viewComponent: string,
   data: shape({}),
+  marketplaceChoices: instanceOf(Object),
   setViewComponent: func,
 };

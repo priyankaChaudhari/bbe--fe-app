@@ -52,8 +52,6 @@ export default function SalesPerformancePanel({
   salesPreviousTotal,
   salesGraphLoader,
   salesChartData,
-  // organicSale,
-  // inorganicSale,
   metricsType,
 }) {
   const { Option, SingleValue } = components;
@@ -84,14 +82,6 @@ export default function SalesPerformancePanel({
     };
   };
 
-  // const addThousandComma = (value, decimalDigits = 2) => {
-  //   if (value !== undefined && value !== null) {
-  //     return value.toFixed(decimalDigits).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-  //   }
-
-  //   return value;
-  // };
-
   const bindValues = (value, name = null) => {
     const decimal = _.split(value, '.', 2);
     if (decimal[1] !== undefined) {
@@ -114,54 +104,6 @@ export default function SalesPerformancePanel({
       </span>
     );
   };
-
-  // const rendeTootipData = () => {
-  //   return `
-  //   <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; opacity: 100%;">
-  //     <li style="display: ">
-  //       <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
-  //     </li>
-  //     <div class="row">
-  //         <div class="col-6">
-  //          <div style="color: #f4f6fc;
-  //         text-transform: uppercase;
-  //         font-size: 11px;
-  //         margin-top: 8px;
-  //        ">Organic Sales
-  //       </div>
-  //         </div>
-  //          <div class="col-6">
-  //            <div style="color: #f4f6fc;
-  //             font-size: 16px;
-  //             margin-left: 25px;
-  //             float: right;
-  //             text-align: right;
-  //             margin-top: 4px;
-  //            ">${currencySymbol}${addThousandComma(organicSale)}
-  //          </div>
-  //          </div>
-  //            <div class="col-6">
-  //          <div style="color: #f4f6fc;
-  //         text-transform: uppercase;
-  //         font-size: 11px;
-  //         margin-top:7px;
-  //        ">In-Organic Sales
-  //       </div>
-  //         </div>
-  //          <div class="col-6">
-  //            <div style="color: #f4f6fc;
-  //             font-size: 16px;
-  //             margin-left: 25px;
-  //             float: right;
-  //             text-align: right;
-  //             margin-top: 4px;
-  //            ">${currencySymbol}${addThousandComma(inorganicSale)}
-  //          </div>
-  //          </div>
-  //     </div>
-
-  //   </ul>`;
-  // };
 
   const setSalesBoxClass = (name, classValue) => {
     let selectedClass = '';
@@ -214,7 +156,6 @@ export default function SalesPerformancePanel({
               <li>
                 <div className="weeks">
                   <span
-                    // className="orange block"
                     className={
                       _.size(activeSales) === 1
                         ? `${_.keys(activeSales)[0]} adSales circle`
@@ -577,8 +518,6 @@ SalesPerformancePanel.defaultProps = {
   data: {},
   salesChartData: {},
   state: [],
-  // inorganicSale: {},
-  // organicSale: {},
   metricsType: {},
   applyCustomDate: () => {},
   setActiveSales: () => {},
@@ -604,8 +543,6 @@ SalesPerformancePanel.propTypes = {
   salesDifference: shape({}),
   salesCurrentTotal: shape({}),
   salesPreviousTotal: shape({}),
-  // inorganicSale: number,
-  // organicSale: number,
   metricsType: shape({}),
   setShowCustomDateModal: func,
   setState: func,

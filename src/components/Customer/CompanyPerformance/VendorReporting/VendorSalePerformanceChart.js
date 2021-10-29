@@ -418,17 +418,17 @@ export default function VendorSalePerformanceChart({
 
 VendorSalePerformanceChart.defaultProps = {
   isDashboard: false,
-  chartData: [],
   currencySymbol: '',
-  selectedBox: {},
   selectedDF: '',
+  chartData: [],
+  selectedBox: {},
 };
 
 VendorSalePerformanceChart.propTypes = {
   isDashboard: bool,
+  currencySymbol: string,
+  selectedDF: string,
   chartId: string.isRequired,
   chartData: arrayOf(shape({})),
-  currencySymbol: string,
   selectedBox: shape({}),
-  selectedDF: string,
 };
