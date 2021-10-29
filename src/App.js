@@ -62,6 +62,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <GlobalStyle />
+
       <Switch>
         {/* Auth */}
         <Route path={PATH_LOGIN} component={Login} />
