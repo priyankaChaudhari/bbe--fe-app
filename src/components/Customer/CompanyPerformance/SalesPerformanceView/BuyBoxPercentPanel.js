@@ -112,6 +112,7 @@ export default function BuyBoxPercentPanel({
               </ul>
             </div>
           </div>
+          <br />
           {bBGraphLoader ? (
             <PageLoader
               component="performance-graph"

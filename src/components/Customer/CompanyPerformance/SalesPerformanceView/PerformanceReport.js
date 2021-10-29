@@ -587,7 +587,6 @@ export default function PerformanceReport({
         'custom',
       );
       setShowBBCustomDateModal(false);
-
       setIsBBCustomDateApply(true);
     } else {
       checkDifferenceBetweenDates(
@@ -788,16 +787,17 @@ export default function PerformanceReport({
       <BuyBoxPercentPanel
         bBChartData={bBChartData}
         bBGraphLoader={bBGraphLoader}
+        bBDailyFact={bBDailyFact}
         handleBBDailyFact={handleBBDailyFact}
         isApiCall={isApiCall}
-        bBDailyFact={bBDailyFact}
+        setShowBBCustomDateModal={setShowBBCustomDateModal}
         dspData={dspData}
         showBBCustomDateModal={showBBCustomDateModal}
         BBstate={BBstate}
-        setShowBBCustomDateModal={setShowBBCustomDateModal}
         setBBState={setBBState}
         applyCustomDate={applyCustomDate}
         currentDate={currentDate}
+        renderCustomDateSubLabel={renderCustomDateSubLabel}
       />
       {/* custom date modal for sale performance graph */}
       <CustomDateModal
