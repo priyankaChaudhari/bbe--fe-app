@@ -366,10 +366,15 @@ export async function getFinanceInvoices(
       ...params,
       invoice_type: 'rev share',
     };
-  } else {
+  } else if (selectedNavigation === 'dspInvoicing') {
     params = {
       ...params,
       invoice_type: 'dsp service',
+    };
+  } else {
+    params = {
+      ...params,
+      invoice_type: 'upsell',
     };
   }
   let result = {};
@@ -406,10 +411,15 @@ export async function getDSPFinances(
       ...params,
       invoice_type: 'rev share',
     };
-  } else {
+  } else if (selectedNavigation === 'dspInvoicing') {
     params = {
       ...params,
       invoice_type: 'dsp service',
+    };
+  } else {
+    params = {
+      ...params,
+      invoice_type: 'upsell',
     };
   }
 

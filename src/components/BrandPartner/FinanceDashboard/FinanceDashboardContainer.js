@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import DSPInvoiceContainer from './DSPInvoices/DSPInvoiceContainer';
+import InvoiceContainer from './Invoice/InvoiceContainer';
 import DSPBillingContainer from './DSPBilling/DSPBillingContainer';
 import { Tabs } from '../../../common';
 import { DashboardCard } from '../../../theme/Global';
@@ -12,16 +12,10 @@ export default function FinanceDashboardContainer() {
   const renderComponent = () => {
     switch (viewComponent) {
       case 'revShare':
-        return (
-          <DSPInvoiceContainer
-            selectedNavigation={viewComponent}
-            key={viewComponent}
-          />
-        );
-
+      case 'upSell':
       case 'dspInvoicing':
         return (
-          <DSPInvoiceContainer
+          <InvoiceContainer
             selectedNavigation={viewComponent}
             key={viewComponent}
           />

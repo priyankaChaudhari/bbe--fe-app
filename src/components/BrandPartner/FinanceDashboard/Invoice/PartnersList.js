@@ -8,9 +8,9 @@ import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
 import { bool, func, objectOf, string } from 'prop-types';
 
-import DSPInvoiceTabs from './DSPInvoiceTabs';
+import InvoiceTabs from './InvoiceTabs';
 import EnableInvoiceing from './EnableInvoiceing';
-import DSPInvoiceFilters from './DSPInvoiceFilters';
+import InvoiceFilters from './InvoiceFilters';
 import TableMobileView from '../../../../common/TableMobileView';
 import { getFinanceInvoices } from '../../../../api';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
@@ -30,7 +30,7 @@ import {
   NoData,
 } from '../../../../common';
 
-export default function DSPPartnersList({
+export default function PartnersList({
   timeFrame,
   timeFrameType,
   isTimeFrameChange,
@@ -337,12 +337,9 @@ export default function DSPPartnersList({
     <>
       <div className="col-lg-3 col-md-12">
         {isDesktop ? (
-          <DSPInvoiceTabs
-            onTabClick={onTabClick}
-            viewComponent={viewComponent}
-          />
+          <InvoiceTabs onTabClick={onTabClick} viewComponent={viewComponent} />
         ) : null}
-        <DSPInvoiceFilters
+        <InvoiceFilters
           searchQuery={searchQuery}
           selectedStatus={selectedStatus}
           statusOptions={PartnersStatusOptions}
@@ -433,7 +430,7 @@ export default function DSPPartnersList({
   );
 }
 
-DSPPartnersList.defaultProps = {
+PartnersList.defaultProps = {
   onTabClick: () => {},
   selectedNavigation: '',
   timeFrame: {},
@@ -441,7 +438,7 @@ DSPPartnersList.defaultProps = {
   isTimeFrameChange: false,
   setIsTimeFrameChange: () => {},
 };
-DSPPartnersList.propTypes = {
+PartnersList.propTypes = {
   onTabClick: func,
   viewComponent: string.isRequired,
   isDesktop: bool.isRequired,

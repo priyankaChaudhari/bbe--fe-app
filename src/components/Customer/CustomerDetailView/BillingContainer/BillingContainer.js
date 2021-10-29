@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { shape, string } from 'prop-types';
 
-import DSPInvoices from './DSPInvoices/DSPInvoices';
+import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
 
@@ -18,8 +18,10 @@ const BillingContainer = ({
   useEffect(() => {
     if (redirectType === 'dspInvoicing') {
       setViewComponent('dsp service');
-    } else {
+    } else if (redirectType === 'revShare') {
       setViewComponent('rev share');
+    } else {
+      setViewComponent('upsell');
     }
   }, [redirectType]);
 
@@ -31,13 +33,19 @@ const BillingContainer = ({
             className={viewComponent === 'rev share' ? 'active' : ''}
             onClick={() => setViewComponent('rev share')}
             role="presentation">
-            Rev Share Invoices
+            Rev Share
+          </li>
+          <li
+            className={viewComponent === 'upsell' ? 'active' : ''}
+            onClick={() => setViewComponent('upsell')}
+            role="presentation">
+            Upsell
           </li>
           <li
             className={viewComponent === 'dsp service' ? 'active' : ''}
             onClick={() => setViewComponent('dsp service')}
             role="presentation">
-            DSP Invoices
+            DSP
           </li>
           {customerStatus && customerStatus.value !== 'pending' ? (
             <li
@@ -49,8 +57,10 @@ const BillingContainer = ({
           ) : null}
         </ul>
       </Tabs>
-      {viewComponent === 'dsp service' || viewComponent === 'rev share' ? (
-        <DSPInvoices invoiceType={viewComponent} id={id} userInfo={userInfo} />
+      {viewComponent === 'dsp service' ||
+      viewComponent === 'rev share' ||
+      viewComponent === 'upsell' ? (
+        <Invoice invoiceType={viewComponent} id={id} userInfo={userInfo} />
       ) : (
         <BillingDetails
           id={id}

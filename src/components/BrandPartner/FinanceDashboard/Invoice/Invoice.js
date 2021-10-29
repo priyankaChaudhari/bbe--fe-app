@@ -20,7 +20,7 @@ import {
   CustomDateRange,
 } from '../../../../common';
 
-export default function DSPInvoices({
+export default function Invoice({
   setTimeFrame,
   setTimeFrameType,
   setIsTimeFrameChange,
@@ -257,6 +257,9 @@ export default function DSPInvoices({
     if (data[key] === null) {
       return 'N/A';
     }
+    if (typeof data[key] === 'undefined') {
+      return '0';
+    }
     if (
       key === 'total_overdue' ||
       key === 'expected_by_end_of_month' ||
@@ -302,6 +305,8 @@ export default function DSPInvoices({
           <div className="medium-text-title ">
             {selectedNavigation === 'revShare'
               ? 'Rev Share Invoicing'
+              : selectedNavigation === 'upSell'
+              ? 'Upsell Invoices'
               : 'DSP Invoices'}
           </div>{' '}
         </div>
@@ -312,14 +317,14 @@ export default function DSPInvoices({
   );
 }
 
-DSPInvoices.defaultProps = {
+Invoice.defaultProps = {
   setTimeFrame: () => {},
   setTimeFrameType: () => {},
   setIsTimeFrameChange: () => {},
   selectedNavigation: '',
 };
 
-DSPInvoices.propTypes = {
+Invoice.propTypes = {
   setTimeFrame: func,
   setTimeFrameType: func,
   setIsTimeFrameChange: func,

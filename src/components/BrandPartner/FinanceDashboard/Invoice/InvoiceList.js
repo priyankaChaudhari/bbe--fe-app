@@ -8,9 +8,9 @@ import { components } from 'react-select';
 import { useHistory } from 'react-router-dom';
 import { func, string, bool, objectOf } from 'prop-types';
 
-import DSPInvoiceFilters from './DSPInvoiceFilters';
+import DSPInvoiceFilters from './InvoiceFilters';
 import Theme from '../../../../theme/Theme';
-import DSPInvoiceTabs from './DSPInvoiceTabs';
+import DSPInvoiceTabs from './InvoiceTabs';
 import TableMobileView from '../../../../common/TableMobileView';
 import { CompanyDefaultUser } from '../../../../theme/images';
 import { getFinanceInvoices } from '../../../../api';
@@ -31,7 +31,7 @@ import {
   NoData,
 } from '../../../../common';
 
-export default function DSPInvoicesList({
+export default function InvoicesList({
   timeFrame,
   timeFrameType,
   isTimeFrameChange,
@@ -414,7 +414,7 @@ export default function DSPInvoicesList({
   );
 }
 
-DSPInvoicesList.defaultProps = {
+InvoicesList.defaultProps = {
   data: () => {},
   onTabClick: () => {},
   timeFrame: new Date(),
@@ -423,7 +423,7 @@ DSPInvoicesList.defaultProps = {
   setIsTimeFrameChange: () => {},
   selectedNavigation: '',
 };
-DSPInvoicesList.propTypes = {
+InvoicesList.propTypes = {
   data: func,
   onTabClick: func,
   viewComponent: string.isRequired,

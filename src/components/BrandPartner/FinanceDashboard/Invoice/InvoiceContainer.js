@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
-import DSPInvoicesList from './DSPInvoicesList';
-import DSPPartnersList from './DSPPartnersList';
-import DSPInvoices from './DSPInvoices';
+import InvoicesList from './InvoiceList';
+import PartnersList from './PartnersList';
+import Invoice from './Invoice';
 import { BackToTop, Tabs } from '../../../../common';
 
-export default function DSPInvoiceContainer({ selectedNavigation }) {
+export default function InvoiceContainer({ selectedNavigation }) {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 991 });
   const [viewComponent, setViewComponent] = useState('invoices');
@@ -25,7 +25,7 @@ export default function DSPInvoiceContainer({ selectedNavigation }) {
 
   return (
     <>
-      <DSPInvoices
+      <Invoice
         setTimeFrame={setTimeFrame}
         setTimeFrameType={setTimeFrameType}
         setIsTimeFrameChange={setIsTimeFrameChange}
@@ -53,7 +53,7 @@ export default function DSPInvoiceContainer({ selectedNavigation }) {
 
       <div className="row mt-3">
         {viewComponent === 'invoices' ? (
-          <DSPInvoicesList
+          <InvoicesList
             viewComponent={viewComponent}
             onTabClick={onTabClick}
             timeFrame={timeFrame}
@@ -65,7 +65,7 @@ export default function DSPInvoiceContainer({ selectedNavigation }) {
             selectedNavigation={selectedNavigation}
           />
         ) : (
-          <DSPPartnersList
+          <PartnersList
             viewComponent={viewComponent}
             onTabClick={onTabClick}
             timeFrame={timeFrame}
@@ -85,7 +85,7 @@ export default function DSPInvoiceContainer({ selectedNavigation }) {
   );
 }
 
-DSPInvoiceContainer.defaultProps = {
+InvoiceContainer.defaultProps = {
   selectedNavigation: 'revShare',
 };
-DSPInvoiceContainer.propTypes = { selectedNavigation: string };
+InvoiceContainer.propTypes = { selectedNavigation: string };

@@ -133,6 +133,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
           <p style={{ marginTop: '0px' }} className="black-heading-title mb-4">
             {invoiceType === 'rev share'
               ? 'Revenue Share Invoices'
+              : invoiceType === 'upsell'
+              ? 'Upsell Invoices'
               : 'DSP Invoices'}
           </p>
           <div className="straight-line horizontal-line spacing " />
