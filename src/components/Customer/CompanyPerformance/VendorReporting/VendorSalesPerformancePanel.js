@@ -251,7 +251,7 @@ export default function SalesPerformancePanel({
             </ul>
           </div>
         ) : (
-          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
+          <div className="col-md-5 col-sm-12 order-md-1 order-2 mt-2" />
         )}
         <div className="col-md-7 col-sm-12 order-md-2 order-1">
           <ToggleButton>
