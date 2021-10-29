@@ -10,7 +10,7 @@ import { string, arrayOf, shape } from 'prop-types';
 
 am4core.useTheme(am4themes_dataviz);
 am4core.useTheme(am4themes_animated);
-am4core.color('red');
+// am4core.color('red');
 
 function BbPercentChart({ chartId, chartData }) {
   const chart = useRef(null);
@@ -28,7 +28,7 @@ function BbPercentChart({ chartId, chartData }) {
 
   const createBbPercentChart = useCallback(() => {
     chart.current = am4core.create(chartId, am4charts.XYChart);
-    chart.current.padding(20, 40, 0, 0);
+    chart.current.padding(20, 10, 20, 0);
     chart.current.data = chartData;
     chart.current.logo.disabled = true;
     // Enable chart cursor
@@ -38,6 +38,7 @@ function BbPercentChart({ chartId, chartData }) {
     chart.current.cursor.lineX.strokeWidth = 1;
     chart.current.cursor.lineX.strokeOpacity = 1;
     chart.current.cursor.lineX.strokeDasharray = '';
+    chart.current.cursor.behavior = 'none';
     // Create Y axes
     const valueAxis = chart.current.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.disabled = true;
@@ -107,5 +108,5 @@ BbPercentChart.propTypes = {
 };
 
 const ChartDiv = styled.div`
-  margin: 0 0 10px 20px;
+  margin: 20px 0px;
 `;
