@@ -1,6 +1,9 @@
 {
   "root": true,
   "extends": ["airbnb", "airbnb/hooks", "prettier", "prettier/react"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
   "rules": {
     "react/jsx-props-no-spreading": "off",
     "no-nested-ternary": "off",

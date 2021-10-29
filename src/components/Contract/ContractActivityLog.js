@@ -126,13 +126,13 @@ function ContractActivityLog({
     }
     const firstName =
       (userInfo &&
-        userInfo.split(' ').slice(0, 2) &&
-        userInfo.split(' ').slice(0, 2)[0].charAt(0)) ||
+        userInfo?.split(' ')?.slice(0, 2) &&
+        userInfo?.split(' ')?.slice(0, 2)[0]?.charAt(0)) ||
       '';
     const lastName =
       (userInfo &&
-        userInfo.split(' ').slice(0, 2) &&
-        userInfo.split(' ').slice(0, 2)[1].charAt(0)) ||
+        userInfo?.split(' ')?.slice(0, 2) &&
+        userInfo?.split(' ')?.slice(0, 2)[1]?.charAt(0)) ||
       '';
 
     return firstName + lastName;
@@ -140,9 +140,9 @@ function ContractActivityLog({
 
   const displayMixedLog = (logUser, msg) => {
     return msg.map((item, index) => {
-      const field = item.split('from')[0];
-      let oldValue = item.split('from')[1].split(' to ')[0];
-      let newValue = item.split('from')[1].split(' to ')[1].split(', ,')[0];
+      const field = item?.split('from')[0];
+      let oldValue = item?.split('from')[1]?.split(' to ')[0];
+      let newValue = item?.split('from')[1]?.split(' to ')[1]?.split(', ,')[0];
 
       if (
         item.includes('annual revenue') ||
@@ -191,7 +191,7 @@ function ContractActivityLog({
       item &&
       item.history_change_reason.includes('created new record by company name')
     ) {
-      activityMessage = item.history_change_reason.split(
+      activityMessage = item.history_change_reason?.split(
         'created new record by company name',
       );
       return (
@@ -203,7 +203,7 @@ function ContractActivityLog({
       );
     }
     if (item.history_change_reason.includes('deleted')) {
-      activityMessage = item.history_change_reason.split('deleted');
+      activityMessage = item.history_change_reason?.split('deleted');
       return (
         <>
           {activityMessage[0]}
@@ -214,7 +214,7 @@ function ContractActivityLog({
     }
 
     if (item.history_change_reason.includes('updated addendum')) {
-      activityMessage = item.history_change_reason.split('updated addendum');
+      activityMessage = item.history_change_reason?.split('updated addendum');
       return (
         <>
           {activityMessage[0]}
@@ -225,7 +225,7 @@ function ContractActivityLog({
     }
 
     if (item.history_change_reason.includes('resumed')) {
-      activityMessage = item.history_change_reason.split('resumed');
+      activityMessage = item.history_change_reason?.split('resumed');
       return (
         <>
           {activityMessage[0]}
@@ -236,7 +236,7 @@ function ContractActivityLog({
     }
 
     if (item.history_change_reason.includes('approved and sent')) {
-      activityMessage = item.history_change_reason.split('approved and sent');
+      activityMessage = item.history_change_reason?.split('approved and sent');
       return (
         <>
           {activityMessage[0]}
@@ -247,7 +247,7 @@ function ContractActivityLog({
     }
 
     if (item.history_change_reason.includes('sent')) {
-      activityMessage = item.history_change_reason.split('sent');
+      activityMessage = item.history_change_reason?.split('sent');
       return (
         <>
           {activityMessage[0]}
@@ -258,7 +258,7 @@ function ContractActivityLog({
     }
 
     if (item.history_change_reason.includes('signed')) {
-      activityMessage = item.history_change_reason.split('signed');
+      activityMessage = item.history_change_reason?.split('signed');
       return (
         <>
           {activityMessage[0]}
@@ -269,22 +269,22 @@ function ContractActivityLog({
     }
 
     if (item.history_change_reason.includes('approved')) {
-      activityMessage = item.history_change_reason.split('approved');
+      activityMessage = item.history_change_reason?.split('approved');
       logUser = activityMessage[0];
       if (activityMessage[1].includes('from')) {
-        field = activityMessage[1].split('from')[0];
-        oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
+        field = activityMessage[1]?.split('from')[0];
+        oldValue = activityMessage[1]?.split('from')[1]?.split(' to ')[0];
         newValue = activityMessage[1]
-          .split('from')[1]
-          .split(' to ')[1]
-          .split(', ,')[0];
+          ?.split('from')[1]
+          ?.split(' to ')[1]
+          ?.split(', ,')[0];
 
         return (
           <>
             {activityMessage && activityMessage[0]}
             <span>
               approved{' '}
-              {activityMessage && activityMessage[1].split(' from ')[0]} from{' '}
+              {activityMessage && activityMessage[1]?.split(' from ')[0]} from{' '}
             </span>{' '}
             {oldValue}
             <span> to </span> {newValue}
@@ -301,14 +301,14 @@ function ContractActivityLog({
     }
 
     if (item && item.history_change_reason.includes('updated')) {
-      activityMessage = item.history_change_reason.split('updated');
+      activityMessage = item.history_change_reason?.split('updated');
       logUser = activityMessage[0];
-      field = activityMessage[1].split('from')[0];
-      oldValue = activityMessage[1].split('from')[1].split(' to ')[0];
+      field = activityMessage[1]?.split('from')[0];
+      oldValue = activityMessage[1]?.split('from')[1]?.split(' to ')[0];
       newValue = activityMessage[1]
-        .split('from')[1]
-        .split(' to ')[1]
-        .split(', ,')[0];
+        ?.split('from')[1]
+        ?.split(' to ')[1]
+        ?.split(', ,')[0];
 
       if (activityMessage.length > 2) {
         mixedLog = true;
@@ -332,22 +332,22 @@ function ContractActivityLog({
         let rowAmount = [];
         if (
           activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[0] !== ''
+          activityMessage[1]?.split(' from ')[1]?.split(' to ')[0] !== ''
         ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[0];
-          if (rowAmount.split('.')[1] === '00') {
-            fromAmount = rowAmount.split('.')[0];
+          rowAmount = activityMessage[1]?.split(' from ')[1]?.split(' to ')[0];
+          if (rowAmount?.split('.')[1] === '00') {
+            fromAmount = rowAmount?.split('.')[0];
           } else {
             fromAmount = rowAmount;
           }
         }
         if (
           activityMessage &&
-          activityMessage[1].split(' from ')[1].split(' to ')[1] !== ''
+          activityMessage[1]?.split(' from ')[1]?.split(' to ')[1] !== ''
         ) {
-          rowAmount = activityMessage[1].split(' from ')[1].split(' to ')[1];
-          if (rowAmount.split('.')[1] === '00') {
-            toAmount = rowAmount.split('.')[0];
+          rowAmount = activityMessage[1]?.split(' from ')[1]?.split(' to ')[1];
+          if (rowAmount?.split('.')[1] === '00') {
+            toAmount = rowAmount?.split('.')[0];
           } else {
             toAmount = rowAmount;
           }
@@ -356,30 +356,30 @@ function ContractActivityLog({
           <>
             {activityMessage && activityMessage[0]}
             <span>
-              updated {activityMessage && activityMessage[1].split(' from ')[0]}{' '}
-              from{' '}
+              updated{' '}
+              {activityMessage && activityMessage[1]?.split(' from ')[0]} from{' '}
             </span>{' '}
             {fromAmount === ''
               ? 'None'
               : fromAmount &&
-                fromAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                fromAmount?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             <span> to </span>{' '}
             {toAmount === ''
               ? 'None'
               : toAmount &&
-                toAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                toAmount?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
 
       return activityMessage && activityMessage[1].includes('addendum')
-        ? item && item.history_change_reason
+        ? item && item?.history_change_reason
         : mixedLog
         ? displayMixedLog(logUser, activityMessage)
         : displayLog(logUser, field, oldValue, newValue);
     }
     if (item && item.history_change_reason.includes('requested for')) {
-      activityMessage = item.history_change_reason.split('requested for');
+      activityMessage = item.history_change_reason?.split('requested for');
       return (
         <>
           {activityMessage && activityMessage[0]}
@@ -389,14 +389,14 @@ function ContractActivityLog({
       );
     }
     if (item && item.history_change_reason.includes('added')) {
-      activityMessage = item.history_change_reason.split('added');
+      activityMessage = item.history_change_reason?.split('added');
       let value;
       if (
         item &&
         item.history_change_reason.includes('Amazon Store Package Custom')
       ) {
-        // activityMessage = item.history_change_reason.split('as')[1];
-        value = activityMessage[1].split('as');
+        // activityMessage = item.history_change_reason?.split('as')[1];
+        value = activityMessage[1]?.split('as');
         return (
           <>
             {activityMessage && activityMessage[0]}
@@ -405,7 +405,7 @@ function ContractActivityLog({
             as
             {value &&
               value[1] &&
-              value[1].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              value[1]?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           </>
         );
       }
@@ -418,7 +418,7 @@ function ContractActivityLog({
       );
     }
     if (item && item.history_change_reason.includes('removed')) {
-      activityMessage = item.history_change_reason.split('removed');
+      activityMessage = item.history_change_reason?.split('removed');
       return (
         <>
           {activityMessage && activityMessage[0]}
@@ -466,13 +466,13 @@ function ContractActivityLog({
                     images.find((op) => op.entity_id === item.history_user_id)
                       .presigned_url) ||
                   (item.history_change_reason &&
-                    item.history_change_reason.split(' ').slice(0, 2) &&
-                    item.history_change_reason.split(' ').slice(0, 2)[0] ===
+                    item.history_change_reason?.split(' ')?.slice(0, 2) &&
+                    item.history_change_reason?.split(' ')?.slice(0, 2)[0] ===
                       'System' &&
                     item.history_change_reason
-                      .split(' ')
-                      .slice(0, 2)[1]
-                      .toLowerCase() === 'user') ||
+                      ?.split(' ')
+                      ?.slice(0, 2)[1]
+                      ?.toLowerCase() === 'user') ||
                   (item && item.status !== undefined) ? (
                     <div
                       className={
@@ -482,10 +482,10 @@ function ContractActivityLog({
                       }>
                       <img
                         src={
-                          item.history_change_reason.split(' ').slice(0, 2) &&
+                          item.history_change_reason?.split(' ')?.slice(0, 2) &&
                           item.history_change_reason
-                            .split(' ')
-                            .slice(0, 2)[0] === 'System'
+                            ?.split(' ')
+                            ?.slice(0, 2)[0] === 'System'
                             ? NextActivityLogo
                             : item && item.status !== undefined
                             ? ContractEmailIcon
