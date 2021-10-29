@@ -39,7 +39,7 @@ const BillingContainer = ({
             className={viewComponent === 'upsell' ? 'active' : ''}
             onClick={() => setViewComponent('upsell')}
             role="presentation">
-            Upsells
+            Upsell
           </li>
           <li
             className={viewComponent === 'dsp service' ? 'active' : ''}

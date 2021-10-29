@@ -257,6 +257,9 @@ export default function Invoice({
     if (data[key] === null) {
       return 'N/A';
     }
+    if (typeof data[key] === 'undefined') {
+      return '0';
+    }
     if (
       key === 'total_overdue' ||
       key === 'expected_by_end_of_month' ||
