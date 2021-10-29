@@ -855,11 +855,7 @@ export const WhiteCard = styled.div`
     }
     .days-container {
       margin: 0 auto;
-<<<<<<< HEAD
       float: none !important;
-=======
-      float: none !important ;
->>>>>>> PDV-2555 - Integrate Buy box percent chart with amcharts
     }
     .rechart-item {
       margin: 0 auto;
