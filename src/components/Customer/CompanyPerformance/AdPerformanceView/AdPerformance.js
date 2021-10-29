@@ -557,9 +557,10 @@ export default function AdPerformance({
         adGroupBy,
         marketplace[0].value,
       );
-
-      getDSPData(selectedAdDF.value, dspGroupBy, marketplace[0].value);
-      getDSPPacing(marketplace[0].value);
+      if (accountType !== 'vendor') {
+        getDSPData(selectedAdDF.value, dspGroupBy, marketplace[0].value);
+        getDSPPacing(marketplace[0].value);
+      }
       setResponseId('12345');
     }
   }, [
@@ -575,6 +576,7 @@ export default function AdPerformance({
     dspGroupBy,
     selectedAdType,
     selectedAdDF,
+    accountType,
   ]);
 
   const getDays = (startDate, endDate) => {

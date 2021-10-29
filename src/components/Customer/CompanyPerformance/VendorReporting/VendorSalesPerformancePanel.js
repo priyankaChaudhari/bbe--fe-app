@@ -313,46 +313,79 @@ export default function SalesPerformancePanel({
     const name = matricsName;
     let displayMatricsName;
 
-    if (name === 'orderedRevenue' || name === 'shippedCOGs') {
-      currentTotal = salesCurrentTotal?.revenue ? salesCurrentTotal.revenue : 0;
-      previousTotal = salesPreviousTotal?.revenue
-        ? salesPreviousTotal.revenue
+    if (name === 'orderedRevenue') {
+      currentTotal = salesCurrentTotal?.ordered_revenue
+        ? salesCurrentTotal.ordered_revenue
         : 0;
-      difference = salesDifference?.revenue ? salesDifference.revenue : 'N/A';
+      previousTotal = salesPreviousTotal?.ordered_revenue
+        ? salesPreviousTotal.ordered_revenue
+        : 0;
+      difference = salesDifference?.ordered_revenue
+        ? salesDifference.ordered_revenue
+        : 'N/A';
+      boxActiveClass = 'ad-sales-active';
+      displayMatricsName = matricsName;
+    } else if (name === 'shippedCOGs') {
+      currentTotal = salesCurrentTotal?.shipped_cogs
+        ? salesCurrentTotal.shipped_cogs
+        : 0;
+      previousTotal = salesPreviousTotal?.shipped_cogs
+        ? salesPreviousTotal.shipped_cogs
+        : 0;
+      difference = salesDifference?.shipped_cogs
+        ? salesDifference.shipped_cogs
+        : 'N/A';
       boxActiveClass = 'ad-sales-active';
       displayMatricsName = matricsName;
     } else if (name === 'glanceViews') {
-      currentTotal = salesCurrentTotal?.units_sold
-        ? salesCurrentTotal.units_sold
+      currentTotal = salesCurrentTotal?.glance_views
+        ? salesCurrentTotal.glance_views
         : 0;
-      previousTotal = salesPreviousTotal?.units_sold
-        ? salesPreviousTotal.units_sold
+      previousTotal = salesPreviousTotal?.glance_views
+        ? salesPreviousTotal.glance_views
         : 0;
-      difference = salesDifference?.units_sold
-        ? salesDifference.units_sold
+      difference = salesDifference?.glance_views
+        ? salesDifference.glance_views
         : 'N/A';
 
       boxActiveClass = 'ad-spend-active';
       displayMatricsName = matricsName;
     } else if (name === 'conversionRate') {
-      currentTotal = salesCurrentTotal?.conversion
-        ? salesCurrentTotal.conversion
+      currentTotal = salesCurrentTotal?.conversion_rate
+        ? salesCurrentTotal.conversion_rate
         : 0;
-      previousTotal = salesPreviousTotal?.conversion
-        ? salesPreviousTotal.conversion
+      previousTotal = salesPreviousTotal?.conversion_rate
+        ? salesPreviousTotal.conversion_rate
         : 0;
-      difference = salesDifference?.conversion
-        ? salesDifference.conversion
+      difference = salesDifference?.conversion_rate
+        ? salesDifference.conversion_rate
         : 'N/A';
 
       boxActiveClass = 'ad-conversion-active';
       displayMatricsName = matricsName;
-    } else if (name === 'orderedUnits' || name === 'shippedUnits') {
-      currentTotal = salesCurrentTotal?.traffic ? salesCurrentTotal.traffic : 0;
-      previousTotal = salesPreviousTotal?.traffic
-        ? salesPreviousTotal.traffic
+    } else if (name === 'orderedUnits') {
+      currentTotal = salesCurrentTotal?.ordered_units
+        ? salesCurrentTotal.ordered_units
         : 0;
-      difference = salesDifference?.traffic ? salesDifference.traffic : 'N/A';
+      previousTotal = salesPreviousTotal?.ordered_units
+        ? salesPreviousTotal.ordered_units
+        : 0;
+      difference = salesDifference?.ordered_units
+        ? salesDifference.ordered_units
+        : 'N/A';
+
+      boxActiveClass = 'impression-active';
+      displayMatricsName = matricsName;
+    } else if (name === 'shippedUnits') {
+      currentTotal = salesCurrentTotal?.shipped_units
+        ? salesCurrentTotal.shipped_units
+        : 0;
+      previousTotal = salesPreviousTotal?.shipped_units
+        ? salesPreviousTotal.shipped_units
+        : 0;
+      difference = salesDifference?.shipped_units
+        ? salesDifference.shipped_units
+        : 'N/A';
 
       boxActiveClass = 'impression-active';
       displayMatricsName = matricsName;

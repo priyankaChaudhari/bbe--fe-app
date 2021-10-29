@@ -16,6 +16,8 @@ import {
   API_PERFORMANCE,
   API_AD_PERFORMANCE,
   API_ACCOUNT_MARKETPLACE,
+  API_VENDOR_ORDERED,
+  API_VENDOR_SHIPPED,
 } from '../constants/ApiConstants';
 
 export async function getCustomerList(
@@ -500,7 +502,6 @@ export async function getPerformance(
   marketplace,
   startDate,
   endDate,
-  metricsType = null,
 ) {
   let params = {};
   if (startDate && endDate) {
@@ -508,7 +509,6 @@ export async function getPerformance(
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
-      metricsType,
       start_date: startDate,
       end_date: endDate,
     };
@@ -517,11 +517,49 @@ export async function getPerformance(
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
-      metricsType,
     };
   }
   const result = await axiosInstance
     .get(`${API_PERFORMANCE + customer}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getVendorReportingData(
+  customer,
+  dailyFacts,
+  groupBy,
+  marketplace,
+  startDate,
+  endDate,
+  metricsType,
+) {
+  let params = {};
+  const api =
+    metricsType === 'orderedRevenue' ? API_VENDOR_ORDERED : API_VENDOR_SHIPPED;
+  if (startDate && endDate) {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  } else {
+    params = {
+      daily_facts: dailyFacts,
+      group_by: groupBy,
+      marketplace,
+    };
+  }
+
+  const result = await axiosInstance
+    .get(`${api + customer}/`, { params })
     .then((response) => {
       return response;
     })
@@ -588,7 +626,7 @@ export async function getAdPerformance(
       marketplace,
       start_date: startDate,
       end_date: endDate,
-      accountType,
+      account_type: accountType,
     };
   } else {
     params = {
@@ -596,7 +634,7 @@ export async function getAdPerformance(
       daily_facts: dailyFacts,
       group_by: groupBy,
       marketplace,
-      accountType,
+      account_type: accountType,
     };
   }
   const result = await axiosInstance

@@ -110,11 +110,11 @@ export default function PerformanceReport({
           revenuePreviousLabel:
             item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
           unitsSoldPreviousLabel:
-            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+            item.units_sold !== null ? item.units_sold.toFixed(0) : '0',
           trafficPreviousLabel:
-            item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+            item.traffic !== null ? item.traffic.toFixed(0) : '0',
           conversionPreviousLabel:
-            item.conversion !== null ? item.conversion : '0',
+            item.conversion !== null ? item.conversion.toFixed(2) : '0',
         });
       });
     }
@@ -138,11 +138,11 @@ export default function PerformanceReport({
           tempData[index].revenueCurrentLabel =
             item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
           tempData[index].unitsSoldCurrentLabel =
-            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
+            item.units_sold !== null ? item.units_sold.toFixed(0) : '0';
           tempData[index].trafficCurrentLabel =
-            item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
+            item.traffic !== null ? item.traffic.toFixed(0) : '0';
           tempData[index].conversionCurrentLabel =
-            item.conversion !== null ? item.conversion : '0';
+            item.conversion !== null ? item.conversion.toFixed(2) : '0';
 
           // to add the dotted line. we have to check null matrix and add the dummy number like 8
           if (index > 0) {
@@ -176,15 +176,15 @@ export default function PerformanceReport({
             revenueCurrentLabel:
               item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
             unitsSoldCurrentLabel:
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+              item.units_sold !== null ? item.units_sold.toFixed(0) : '0',
             trafficCurrentLabel:
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+              item.traffic !== null ? item.traffic.toFixed(0) : '0',
             conversionCurrentLabel:
-              item.conversion !== null ? item.conversion : '0',
+              item.conversion !== null ? item.conversion.toFixed(2) : '0',
 
             revenuePreviousLabel: '0.00',
-            unitsSoldPreviousLabel: '0.00',
-            trafficPreviousLabel: '0.00',
+            unitsSoldPreviousLabel: '0',
+            trafficPreviousLabel: '0',
             conversionPreviousLabel: '0',
           });
         }

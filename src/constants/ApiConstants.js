@@ -22,6 +22,9 @@ export const API_BGS = '/bgs/';
 export const API_AMAZON_DETAILS = '/merchant/';
 export const API_DELETE_MARKETPLACE = `${API_AMAZON_DETAILS}delete-marketplace/`;
 export const API_PERFORMANCE = '/performance/';
+export const API_VENDOR_ORDERED = '/performance-ordered-revenue/';
+export const API_VENDOR_SHIPPED = '/performance-shipped-cogs/';
+
 // export const API_PERFORMANCE = '/sales-performance/';
 export const API_MARKETPLACES = '/marketplaces/';
 export const API_ALL_MARKETPLACES = '/marketplaces/all-marketplace/';

@@ -12,7 +12,7 @@ import VendorSalesPerformancePanel from './VendorSalesPerformancePanel';
 import VendorSalesPerformanceFilters from './VendorSalesPerformanceFilters';
 
 import { dateOptionsWithYear } from '../../../../constants';
-import { getPerformance } from '../../../../api';
+import { getVendorReportingData } from '../../../../api';
 import { CustomDateModal, DropDownIndicator } from '../../../../common';
 
 import 'react-date-range/dist/styles.css'; // main style file
@@ -56,8 +56,6 @@ export default function PerformanceReport({
     label: 'Recent 7 days',
   });
   const [selectedAmazonValue, setSelectedAmazonValue] = useState(null);
-  const [organicSale, setOrganicSale] = useState(0);
-  const [inorganicSale, setInorganicSale] = useState(0);
   const [salesCurrentTotal, setSalesCurrentTotal] = useState({});
   const [salesPreviousTotal, setSalesPreviousTotal] = useState({});
   const [salesDifference, setSalesDifference] = useState({});
@@ -75,45 +73,53 @@ export default function PerformanceReport({
     const tempData = [];
     // filterout previous data in one temporary object.
     if (
-      response.daily_facts &&
-      response.daily_facts.previous &&
-      response.daily_facts.previous.length
+      response.result &&
+      response.result.previous &&
+      response.result.previous.length
     ) {
-      response.daily_facts.previous.forEach((item) => {
+      response.result.previous.forEach((item) => {
         const previousDate = dayjs(item.report_date).format('MMM D YYYY');
         if (selectedMetrics === 'orderedRevenue') {
           tempData.push({
-            orderedRevenuePrevious: item.revenue,
-            glanceViewsPrevious: item.units_sold,
-            conversionRatePrevious: item.conversion,
-            orderedUnitsPrevious: item.traffic,
+            orderedRevenuePrevious: item.ordered_revenue,
+            glanceViewsPrevious: item.glance_views,
+            conversionRatePrevious: item.conversion_rate,
+            orderedUnitsPrevious: item.ordered_units,
             previousDate,
 
             orderedRevenuePreviousLabel:
-              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+              item.ordered_revenue !== null
+                ? item.ordered_revenue.toFixed(2)
+                : '0.00',
             glanceViewsPreviousLabel:
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+              item.glance_views !== null ? item.glance_views.toFixed(0) : '0',
             orderedUnitsPreviousLabel:
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+              item.ordered_units !== null ? item.ordered_units.toFixed(0) : '0',
             conversionRatePreviousLabel:
-              item.conversion !== null ? item.conversion : '0',
+              item.conversion_rate !== null
+                ? item.conversion_rate.toFixed(2)
+                : '0',
           });
         } else {
           tempData.push({
-            shippedCOGsPrevious: item.revenue,
-            glanceViewsPrevious: item.units_sold,
-            conversionRatePrevious: item.conversion,
-            shippedUnitsPrevious: item.traffic,
+            shippedCOGsPrevious: item.shipped_cogs,
+            glanceViewsPrevious: item.glance_views,
+            conversionRatePrevious: item.conversion_rate,
+            shippedUnitsPrevious: item.shipped_units,
             previousDate,
 
             shippedCOGsPreviousLabel:
-              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+              item.shipped_cogs !== null
+                ? item.shipped_cogs.toFixed(2)
+                : '0.00',
             glanceViewsPreviousLabel:
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+              item.glance_views !== null ? item.glance_views.toFixed(0) : '0',
             shippedUnitsPreviousLabel:
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+              item.shipped_units !== null ? item.shipped_units.toFixed(0) : '0',
             conversionRatePreviousLabel:
-              item.conversion !== null ? item.conversion : '0',
+              item.conversion_rate !== null
+                ? item.conversion_rate.toFixed(2)
+                : '0',
           });
         }
       });
@@ -121,58 +127,66 @@ export default function PerformanceReport({
 
     // filterout current data in one temporary object.
     if (
-      response.daily_facts &&
-      response.daily_facts.current &&
-      response.daily_facts.current.length
+      response.result &&
+      response.result.current &&
+      response.result.current.length
     ) {
-      response.daily_facts.current.forEach((item, index) => {
+      response.result.current.forEach((item, index) => {
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
         // let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
         if (
-          response.daily_facts.previous &&
-          index < response.daily_facts.previous.length
+          response.result.previous &&
+          index < response.result.previous.length
         ) {
           if (selectedMetrics === 'orderedRevenue') {
             tempData[index].date = currentReportDate;
-            tempData[index].orderedRevenueCurrent = item.revenue;
-            tempData[index].glanceViewsCurrent = item.units_sold;
-            tempData[index].orderedUnitsCurrent = item.traffic;
-            tempData[index].conversionRateCurrent = item.conversion;
+            tempData[index].orderedRevenueCurrent = item.ordered_revenue;
+            tempData[index].glanceViewsCurrent = item.glance_views;
+            tempData[index].orderedUnitsCurrent = item.ordered_units;
+            tempData[index].conversionRateCurrent = item.conversion_rate;
 
             tempData[index].orderedRevenueCurrentLabel =
-              item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
+              item.ordered_revenue !== null
+                ? item.ordered_revenue.toFixed(2)
+                : '0.00';
             tempData[index].glanceViewsCurrentLabel =
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
+              item.glance_views !== null ? item.glance_views.toFixed(0) : '0';
             tempData[index].orderedUnitsCurrentLabel =
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
+              item.ordered_units !== null ? item.ordered_units.toFixed(0) : '0';
             tempData[index].conversionRateCurrentLabel =
-              item.conversion !== null ? item.conversion : '0';
+              item.conversion_rate !== null
+                ? item.conversion_rate.toFixed(2)
+                : '0';
           } else {
             tempData[index].date = currentReportDate;
-            tempData[index].shippedCOGsCurrent = item.revenue;
-            tempData[index].glanceViewsCurrent = item.units_sold;
-            tempData[index].shippedUnitsCurrent = item.traffic;
-            tempData[index].conversionRateCurrent = item.conversion;
+            tempData[index].shippedCOGsCurrent = item.shipped_cogs;
+            tempData[index].glanceViewsCurrent = item.glance_views;
+            tempData[index].shippedUnitsCurrent = item.shipped_units;
+            tempData[index].conversionRateCurrent = item.conversion_rate;
 
             tempData[index].shippedCOGsCurrentLabel =
-              item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
+              item.shipped_cogs !== null
+                ? item.shipped_cogs.toFixed(2)
+                : '0.00';
             tempData[index].glanceViewsCurrentLabel =
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
+              item.glance_views !== null ? item.glance_views.toFixed(0) : '0';
             tempData[index].shippedUnitsCurrentLabel =
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
+              item.shipped_units !== null ? item.shipped_units.toFixed(0) : '0';
             tempData[index].conversionRateCurrentLabel =
-              item.conversion !== null ? item.conversion : '0';
+              item.conversion_rate !== null
+                ? item.conversion_rate.toFixed(2)
+                : '0';
           }
         } else if (selectedMetrics === 'orderedRevenue') {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previous value null and previous label 0
 
           tempData.push({
-            orderedRevenueCurrent: item.revenue,
-            glanceViewsCurrent: item.units_sold,
-            orderedUnitsCurrent: item.traffic,
-            conversionRateCurrent: item.conversion,
+            orderedRevenueCurrent: item.ordered_revenue,
+            glanceViewsCurrent: item.glance_views,
+            orderedUnitsCurrent: item.ordered_units,
+            conversionRateCurrent: item.conversion_rate,
             date: currentReportDate,
 
             orderedRevenuePrevious: null,
@@ -181,25 +195,29 @@ export default function PerformanceReport({
             conversionRatePrevious: null,
 
             orderedRevenueCurrentLabel:
-              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+              item.ordered_revenue !== null
+                ? item.ordered_revenue.toFixed(2)
+                : '0.00',
             glanceViewsCurrentLabel:
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+              item.glance_views !== null ? item.glance_views.toFixed(0) : '0',
             orderedUnitsCurrentLabel:
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+              item.ordered_units !== null ? item.ordered_units.toFixed(0) : '0',
             conversionRateCurrentLabel:
-              item.conversion !== null ? item.conversion : '0',
+              item.conversion_rate !== null
+                ? item.conversion_rate.toFixed(2)
+                : '0',
 
             orderedRevenuePreviousLabel: '0.00',
-            glanceViewsPreviousLabel: '0.00',
-            orderedUnitsPreviousLabel: '0.00',
+            glanceViewsPreviousLabel: '0',
+            orderedUnitsPreviousLabel: '0',
             conversionRatePreviousLabel: '0',
           });
         } else {
           tempData.push({
-            shippedCOGsCurrent: item.revenue,
-            glanceViewsCurrent: item.units_sold,
-            shippedUnitsCurrent: item.traffic,
-            conversionRateCurrent: item.conversion,
+            shippedCOGsCurrent: item.shipped_cogs,
+            glanceViewsCurrent: item.glance_views,
+            shippedUnitsCurrent: item.shipped_units,
+            conversionRateCurrent: item.conversion_rate,
             date: currentReportDate,
 
             shippedCOGsPrevious: null,
@@ -208,17 +226,21 @@ export default function PerformanceReport({
             conversionRatePrevious: null,
 
             shippedCOGsCurrentLabel:
-              item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
+              item.shipped_cogs !== null
+                ? item.shipped_cogs.toFixed(2)
+                : '0.00',
             glanceViewsCurrentLabel:
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+              item.glance_views !== null ? item.glance_views.toFixed(0) : '0',
             shippedUnitsCurrentLabel:
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+              item.shipped_units !== null ? item.shipped_units.toFixed(0) : '0',
             conversionRateCurrentLabel:
-              item.conversion !== null ? item.conversion : '0',
+              item.conversion_rate !== null
+                ? item.conversion_rate.toFixed(2)
+                : '0',
 
             shippedCOGsPreviousLabel: '0.00',
-            glanceViewsPreviousLabel: '0.00',
-            shippedUnitsPreviousLabel: '0.00',
+            glanceViewsPreviousLabel: '0',
+            shippedUnitsPreviousLabel: '0',
             conversionRatePreviousLabel: '0',
           });
         }
@@ -226,18 +248,18 @@ export default function PerformanceReport({
     }
 
     // filterout the dsp current total, previous total, and diffrence
-    if (response.daily_facts && response.daily_facts.current_sum) {
-      setSalesCurrentTotal(response.daily_facts.current_sum);
+    if (response.result && response.result.current_sum) {
+      setSalesCurrentTotal(response.result.current_sum);
     } else {
       setSalesCurrentTotal({});
     }
-    if (response.daily_facts && response.daily_facts.previous_sum) {
-      setSalesPreviousTotal(response.daily_facts.previous_sum);
+    if (response.result && response.result.previous_sum) {
+      setSalesPreviousTotal(response.result.previous_sum);
     } else {
       setSalesPreviousTotal({});
     }
-    if (response.daily_facts && response.daily_facts.difference_data) {
-      setSalesDifference(response.daily_facts.difference_data);
+    if (response.result && response.result.difference_data) {
+      setSalesDifference(response.result.difference_data);
     } else {
       setSalesDifference({});
     }
@@ -255,7 +277,7 @@ export default function PerformanceReport({
     ) => {
       setIsApiCall(true);
       setSalesGraphLoader(true);
-      getPerformance(
+      getVendorReportingData(
         id,
         selectedDailyFact,
         selectedGroupBy,
@@ -269,18 +291,9 @@ export default function PerformanceReport({
           setSalesGraphLoader(false);
         }
         if (res?.status === 200) {
-          if (res?.data?.daily_facts) {
+          if (res?.data?.result) {
             const salesGraphData = bindSalesResponseData(res.data, metricsType);
             setSalesChartData(salesGraphData);
-
-            // brekdown tooltip values
-            if (res?.data?.daily_facts?.inorganic_sale) {
-              setInorganicSale(res.data.daily_facts.inorganic_sale);
-            }
-
-            if (res?.data?.daily_facts?.organic_sale) {
-              setOrganicSale(res.data.daily_facts.organic_sale);
-            }
           } else {
             setSalesChartData([]);
           }
@@ -310,7 +323,6 @@ export default function PerformanceReport({
       if (marketplace.length === 0) {
         marketplace[0] = _.nth(list, 0);
       }
-
       setMarketplaceDefaultValue(marketplace);
       setSelectedAmazonValue(marketplace[0].value);
       setCurrency(marketplace[0].currency);
@@ -608,8 +620,8 @@ export default function PerformanceReport({
         currency={currency}
         salesGraphLoader={salesGraphLoader}
         salesChartData={salesChartData}
-        organicSale={organicSale}
-        inorganicSale={inorganicSale}
+        organicSale={null}
+        inorganicSale={null}
         metricsType={selectedVendorMetricsType}
       />
 
