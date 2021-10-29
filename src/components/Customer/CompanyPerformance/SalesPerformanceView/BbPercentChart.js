@@ -10,8 +10,7 @@ import { string, arrayOf, shape } from 'prop-types';
 
 am4core.useTheme(am4themes_dataviz);
 am4core.useTheme(am4themes_animated);
-// am4core.color('red');
-
+am4core.color('red');
 function BbPercentChart({ chartId, chartData }) {
   const chart = useRef(null);
   const averageValue = chartData && chartData[0].avg;
