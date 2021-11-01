@@ -10,6 +10,8 @@ import { pickBy } from 'lodash';
 import { Link, useParams, useHistory } from 'react-router-dom';
 
 import ArticleSearch from './ArticleSearch';
+import { GrayBody } from './ArticleKBaseStyle';
+import { ArticleDetail } from './ArticleDetailsStyle';
 import { getArticleBoards, updateArticle } from '../../api';
 import { CloseIcon, LeftArrowIcon } from '../../theme/images';
 import { PATH_ARTICLE_DETAILS, PATH_ARTICLE_LIST } from '../../constants';
@@ -20,8 +22,6 @@ import {
   PageLoader,
   BackToTop,
 } from '../../common';
-import { GrayBody } from './ArticleKBaseStyle';
-import { ArticleDetail } from './ArticleDetailsStyle';
 
 const customStyles = {
   content: {
