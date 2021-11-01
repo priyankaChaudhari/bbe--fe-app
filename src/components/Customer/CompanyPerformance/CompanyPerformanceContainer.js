@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { arrayOf, shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
@@ -23,11 +23,6 @@ export default function CompanyPerformance({
   const [vendorViewComponent, setVendorViewComponent] = useState(
     'salePerformance',
   );
-
-  useEffect(() => {
-    setSellerViewComponent(setTab);
-    setVendorViewComponent('salePerformance');
-  }, [setTab, subViewComponent]);
 
   return (
     <>
