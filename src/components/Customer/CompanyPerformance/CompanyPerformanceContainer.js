@@ -22,17 +22,6 @@ export default function CompanyPerformance({
       : 'salePerformance';
   currentDate.setDate(currentDate.getDate() - 3);
   const [sellerViewComponent, setSellerViewComponent] = useState(setTab);
-  const [vendorViewComponent, setVendorViewComponent] = useState(
-    'salePerformance',
-  );
-
-  const handleOnTabChange = (selectedTab) => {
-    if (subViewComponent === 'seller') {
-      setSellerViewComponent(selectedTab);
-    } else {
-      setVendorViewComponent(selectedTab);
-    }
-  };
 
   const renderViewComponents = () => {
     if (subViewComponent === 'seller') {
@@ -54,8 +43,8 @@ export default function CompanyPerformance({
       );
     }
     return (
-      <div key={vendorViewComponent}>
-        {vendorViewComponent === 'salePerformance' ? (
+      <div key={sellerViewComponent}>
+        {sellerViewComponent === 'salePerformance' ? (
           <VendorSalesPerformanceContainer
             marketplaceChoices={marketplaceChoices}
             id={id}
@@ -71,31 +60,21 @@ export default function CompanyPerformance({
     );
   };
 
-  const renderActiveTabClass = (selectedClass) => {
-    let activeClass = '';
-    if (subViewComponent === 'seller') {
-      if (sellerViewComponent === selectedClass) {
-        activeClass = 'active';
-      }
-    } else if (vendorViewComponent === selectedClass) {
-      activeClass = 'active';
-    }
-    return activeClass;
-  };
-
   return (
     <div className="col-lg-6 col-12" key={subViewComponent}>
       <Tabs className="mb-3">
         <ul className="tabs">
           <li
-            className={renderActiveTabClass('salePerformance')}
-            onClick={() => handleOnTabChange('salePerformance')}
+            className={
+              sellerViewComponent === 'salePerformance' ? 'active' : ''
+            }
+            onClick={() => setSellerViewComponent('salePerformance')}
             role="presentation">
             Sales Performance
           </li>
           <li
-            className={renderActiveTabClass('adPerformance')}
-            onClick={() => handleOnTabChange('adPerformance')}
+            className={sellerViewComponent === 'adPerformance' ? 'active' : ''}
+            onClick={() => setSellerViewComponent('adPerformance')}
             role="presentation">
             Ad Performance
           </li>
