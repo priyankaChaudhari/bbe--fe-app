@@ -47,6 +47,7 @@ export default function RecentActivityNotes({
     if (showNotesModal.deleteNote) {
       getActivityLogInfo();
     }
+    getActivityLogInfo();
   }, [getNotes, showNotesModal, getActivityLogInfo, role]);
 
   return (
