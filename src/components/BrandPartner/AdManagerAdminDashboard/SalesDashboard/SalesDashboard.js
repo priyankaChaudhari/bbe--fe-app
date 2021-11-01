@@ -463,11 +463,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 7) {
-      temp = 'daily';
-      setGroupByFilters({ daily: true, weekly: false, month: false });
-      setSalesGroupBy('daily');
-    } else if (diffDays <= 30) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setGroupByFilters({ daily: true, weekly: true, month: false });
       setSalesGroupBy('daily');

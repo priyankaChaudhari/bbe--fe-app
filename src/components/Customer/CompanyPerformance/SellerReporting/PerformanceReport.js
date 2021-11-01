@@ -71,6 +71,7 @@ export default function PerformanceReport({
   const [selectedValue, setSelectedValue] = useState({
     value: 'week',
     label: 'Recent 7 days',
+    sub: 'vs Previous 7 days',
   });
   const [bBDailyFact, setBBDailyFact] = useState({
     value: 'week',
@@ -410,11 +411,7 @@ export default function PerformanceReport({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 7) {
-      temp = 'daily';
-      setFilters({ daily: true, weekly: false, month: false });
-      setGroupBy('daily');
-    } else if (diffDays <= 30) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setFilters({ daily: true, weekly: true, month: false });
       setGroupBy('daily');
