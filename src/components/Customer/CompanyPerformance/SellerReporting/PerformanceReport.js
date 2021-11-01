@@ -690,15 +690,15 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         <WhiteCard className="fix-height ">
           <p className="black-heading-title mt-0 mb-4">Inventory Score (IPI)</p>
 
-          <ResponsiveContainer width="99%" height={200}>
+          <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
                 data={pieData}
-                cx={70}
+                cx={72}
                 cy={100}
-                startAngle={180}
+                startAngle={170}
                 marginBottom={40}
-                endAngle={0}
+                endAngle={10}
                 innerRadius={60}
                 outerRadius={80}
                 fill="#8884D8"

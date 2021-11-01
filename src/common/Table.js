@@ -253,6 +253,7 @@ const Table = styled.table`
       .company-name {
         min-height: 20px;
         text-transform: capitalize;
+        word-break: break-all;
       }
 
       .status {
