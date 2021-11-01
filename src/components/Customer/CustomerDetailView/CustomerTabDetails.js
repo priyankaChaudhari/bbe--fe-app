@@ -76,6 +76,7 @@ export default function CustomerTabDetails({
             />
             Performance
             <div
+              style={{ position: 'relative' }}
               onClick={(e) => {
                 e.stopPropagation();
                 setIsCollapseOpen(!isCollapseOpen);
@@ -84,10 +85,9 @@ export default function CustomerTabDetails({
               <img
                 src={CaretUp}
                 alt="caret"
+                className="collapse-arrow-icon"
                 style={{
                   transform: isCollapseOpen ? 'rotate(180deg)' : '',
-                  width: '25px',
-                  height: '25px',
                 }}
               />
             </div>

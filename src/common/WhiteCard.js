@@ -357,6 +357,13 @@ export const WhiteCard = styled.div`
             width: 28px;
           }
         }
+        .collapse-arrow-icon {
+          width: 25px;
+          height: 25px;
+          position: absolute;
+          top: -27px;
+          right: -12px;
+        }
         &:hover {
           border-left: 3px solid ${Theme.orange};
           cursor: pointer;
