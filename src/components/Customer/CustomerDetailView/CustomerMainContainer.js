@@ -324,49 +324,51 @@ export default function CustomerMainContainer() {
                       }}
                       defaultValue={viewOptions[0]}
                     />
-                    <WhiteCard className="d-lg-none d-block mt-3 mb-3">
-                      <ul className="sub-category-mobile-view">
-                        <li>
-                          {' '}
-                          <ModalRadioCheck className="pb-1" key="seller">
-                            <label
-                              className="checkboxes radio-container customer-list"
-                              htmlFor="seller">
-                              Seller Reporting
-                              <input
-                                type="radio"
-                                name="radio"
-                                id="seller"
-                                value="seller"
-                                onChange={() => setSubViewComponent('seller')}
-                                defaultChecked={subViewComponent === 'seller'}
-                              />
-                              <span className="checkmark checkmark-customer-list" />
-                            </label>
-                          </ModalRadioCheck>
-                        </li>
-                        <li>
-                          {' '}
-                          <ModalRadioCheck className="pb-1" key="vendor">
+                    {viewComponent === 'performance' ? (
+                      <WhiteCard className="d-lg-none d-block mt-3 mb-3">
+                        <ul className="sub-category-mobile-view">
+                          <li>
                             {' '}
-                            <label
-                              className="checkboxes radio-container customer-list"
-                              htmlFor="vendor">
-                              Vendor Reporting
-                              <input
-                                type="radio"
-                                name="radio"
-                                id="vendor"
-                                value="vendor"
-                                onChange={() => setSubViewComponent('vendor')}
-                                defaultChecked={subViewComponent === 'vendor'}
-                              />
-                              <span className="checkmark checkmark-customer-list" />
-                            </label>
-                          </ModalRadioCheck>
-                        </li>
-                      </ul>
-                    </WhiteCard>
+                            <ModalRadioCheck className="pb-1" key="seller">
+                              <label
+                                className="checkboxes radio-container customer-list"
+                                htmlFor="seller">
+                                Seller Reporting
+                                <input
+                                  type="radio"
+                                  name="radio"
+                                  id="seller"
+                                  value="seller"
+                                  onChange={() => setSubViewComponent('seller')}
+                                  defaultChecked={subViewComponent === 'seller'}
+                                />
+                                <span className="checkmark checkmark-customer-list" />
+                              </label>
+                            </ModalRadioCheck>
+                          </li>
+                          <li>
+                            {' '}
+                            <ModalRadioCheck className="pb-1" key="vendor">
+                              {' '}
+                              <label
+                                className="checkboxes radio-container customer-list"
+                                htmlFor="vendor">
+                                Vendor Reporting
+                                <input
+                                  type="radio"
+                                  name="radio"
+                                  id="vendor"
+                                  value="vendor"
+                                  onChange={() => setSubViewComponent('vendor')}
+                                  defaultChecked={subViewComponent === 'vendor'}
+                                />
+                                <span className="checkmark checkmark-customer-list" />
+                              </label>
+                            </ModalRadioCheck>
+                          </li>
+                        </ul>
+                      </WhiteCard>
+                    ) : null}
                   </div>
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails
