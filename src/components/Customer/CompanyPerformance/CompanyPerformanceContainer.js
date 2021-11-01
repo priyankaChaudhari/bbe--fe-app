@@ -7,6 +7,8 @@ import PerformanceReport from './SellerReporting/PerformanceReport';
 import AdPerformance from './AdPerformanceView/AdPerformance';
 import VendorSalesPerformanceContainer from './VendorReporting/VendorSalesPerformanceContainer';
 
+import { Tabs } from '../../../common';
+
 export default function CompanyPerformance({
   marketplaceChoices,
   id,
@@ -24,50 +26,84 @@ export default function CompanyPerformance({
     'salePerformance',
   );
 
-  return (
-    <>
-      {subViewComponent === 'seller' ? (
-        // seller section
-        <div className="col-lg-6 col-12" key={subViewComponent}>
+  const handleOnTabChange = (selectedTab) => {
+    if (subViewComponent === 'seller') {
+      setSellerViewComponent(selectedTab);
+    } else {
+      setVendorViewComponent(selectedTab);
+    }
+  };
+
+  const renderViewComponents = () => {
+    if (subViewComponent === 'seller') {
+      return (
+        <div key={sellerViewComponent}>
           {sellerViewComponent === 'salePerformance' ? (
             <PerformanceReport
               marketplaceChoices={marketplaceChoices}
               id={id}
-              viewComponent={sellerViewComponent}
-              setViewComponent={setSellerViewComponent}
             />
           ) : (
             <AdPerformance
               marketplaceChoices={marketplaceChoices}
               id={id}
-              viewComponent={sellerViewComponent}
-              setViewComponent={setSellerViewComponent}
               accountType={subViewComponent}
             />
           )}
         </div>
-      ) : (
-        // vendor section
-        <div className="col-lg-6 col-12" key={subViewComponent}>
-          {vendorViewComponent === 'salePerformance' ? (
-            <VendorSalesPerformanceContainer
-              marketplaceChoices={marketplaceChoices}
-              id={id}
-              viewComponent={vendorViewComponent}
-              setViewComponent={setVendorViewComponent}
-            />
-          ) : (
-            <AdPerformance
-              marketplaceChoices={marketplaceChoices}
-              id={id}
-              viewComponent={vendorViewComponent}
-              setViewComponent={setVendorViewComponent}
-              accountType={subViewComponent}
-            />
-          )}
-        </div>
-      )}
-    </>
+      );
+    }
+    return (
+      <div key={vendorViewComponent}>
+        {vendorViewComponent === 'salePerformance' ? (
+          <VendorSalesPerformanceContainer
+            marketplaceChoices={marketplaceChoices}
+            id={id}
+          />
+        ) : (
+          <AdPerformance
+            marketplaceChoices={marketplaceChoices}
+            id={id}
+            accountType={subViewComponent}
+          />
+        )}
+      </div>
+    );
+  };
+
+  const renderActiveTabClass = (selectedClass) => {
+    let activeClass = '';
+    if (subViewComponent === 'seller') {
+      if (sellerViewComponent === selectedClass) {
+        activeClass = 'active';
+      }
+    } else if (vendorViewComponent === selectedClass) {
+      activeClass = 'active';
+    }
+    return activeClass;
+  };
+
+  return (
+    <div className="col-lg-6 col-12" key={subViewComponent}>
+      <Tabs className="mb-3">
+        <ul className="tabs">
+          <li
+            className={renderActiveTabClass('salePerformance')}
+            onClick={() => handleOnTabChange('salePerformance')}
+            role="presentation">
+            Sales Performance
+          </li>
+          <li
+            className={renderActiveTabClass('adPerformance')}
+            onClick={() => handleOnTabChange('adPerformance')}
+            role="presentation">
+            Ad Performance
+          </li>
+        </ul>
+      </Tabs>
+
+      {renderViewComponents()}
+    </div>
   );
 }
 

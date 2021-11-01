@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Select from 'react-select';
 import * as am4core from '@amcharts/amcharts4/core';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
-import { func, instanceOf, shape, string } from 'prop-types';
+import { instanceOf, shape, string } from 'prop-types';
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 import SalesPerformancePanel from './SalesPerformancePanel';
@@ -19,7 +19,6 @@ import {
   DropDownSelect,
   WhiteCard,
   CustomDateModal,
-  Tabs,
   DropDownIndicator,
 } from '../../../../common';
 
@@ -27,12 +26,7 @@ const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 am4core.useTheme(am4themes_dataviz);
-export default function PerformanceReport({
-  marketplaceChoices,
-  id,
-  viewComponent,
-  setViewComponent,
-}) {
+export default function PerformanceReport({ marketplaceChoices, id }) {
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
   const [isSPCustomDateApply, setIsSPCustomDateApply] = useState(false);
@@ -599,22 +593,6 @@ export default function PerformanceReport({
   const renderMarketplaceDropDown = () => {
     return (
       <WhiteCard className="mb-3">
-        <Tabs>
-          <ul className="tabs">
-            <li
-              className={viewComponent === 'salePerformance' ? 'active' : ''}
-              onClick={() => setViewComponent('salePerformance')}
-              role="presentation">
-              Sales Performance
-            </li>
-            <li
-              className={viewComponent === 'adPerformance' ? 'active' : ''}
-              onClick={() => setViewComponent('adPerformance')}
-              role="presentation">
-              Ad Performance
-            </li>
-          </ul>
-        </Tabs>
         <ViewData>
           <div className="row">
             <div className="col-md-4  col-sm-12 ">
@@ -824,17 +802,13 @@ export default function PerformanceReport({
 PerformanceReport.defaultProps = {
   marketplaceChoices: {},
   id: '',
-  viewComponent: '',
   data: {},
-  setViewComponent: () => {},
 };
 
 PerformanceReport.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
-  viewComponent: string,
   data: shape({}),
-  setViewComponent: func,
 };
 const ViewData = styled.div`
   .view-data-for {

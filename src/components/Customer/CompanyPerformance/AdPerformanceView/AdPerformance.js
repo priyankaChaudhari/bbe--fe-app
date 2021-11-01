@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
-import { func, instanceOf, string } from 'prop-types';
+import { instanceOf, string } from 'prop-types';
 
 import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
@@ -26,13 +26,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
 
-export default function AdPerformance({
-  marketplaceChoices,
-  id,
-  viewComponent,
-  setViewComponent,
-  accountType,
-}) {
+export default function AdPerformance({ marketplaceChoices, id, accountType }) {
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -1005,8 +999,6 @@ export default function AdPerformance({
   return (
     <AddPerformance>
       <AdPerformanceFilters
-        viewComponent={viewComponent}
-        setViewComponent={setViewComponent}
         marketplaceDefaultValue={marketplaceDefaultValue}
         marketplaceOptions={marketplaceOptions}
         handleMarketplaceOptions={handleMarketplaceOptions}
@@ -1088,17 +1080,13 @@ export default function AdPerformance({
 AdPerformance.defaultProps = {
   marketplaceChoices: {},
   id: '',
-  viewComponent: '',
   accountType: 'seller',
-  setViewComponent: () => {},
 };
 
 AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
-  viewComponent: string,
   accountType: string,
-  setViewComponent: func,
 };
 
 const AddPerformance = styled.div`

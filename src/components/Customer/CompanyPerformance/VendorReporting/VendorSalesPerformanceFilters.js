@@ -2,15 +2,13 @@ import React from 'react';
 
 import Select from 'react-select';
 import styled from 'styled-components';
-import { arrayOf, bool, func, instanceOf, oneOfType, string } from 'prop-types';
+import { arrayOf, bool, func, instanceOf, oneOfType } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../DropDown';
-import { DropDownSelect, WhiteCard, Tabs } from '../../../../common';
+import { DropDownSelect, WhiteCard } from '../../../../common';
 
 const VendorSalesPerformanceFilters = ({
-  viewComponent,
-  setViewComponent,
   marketplaceDefaultValue,
   marketplaceOptions,
   handleMarketplaceOptions,
@@ -23,22 +21,6 @@ const VendorSalesPerformanceFilters = ({
 }) => {
   return (
     <WhiteCard className="mb-3">
-      <Tabs>
-        <ul className="tabs">
-          <li
-            className={viewComponent === 'salePerformance' ? 'active' : ''}
-            onClick={() => setViewComponent('salePerformance')}
-            role="presentation">
-            Sales Performance
-          </li>
-          <li
-            className={viewComponent === 'adPerformance' ? 'active' : ''}
-            onClick={() => setViewComponent('adPerformance')}
-            role="presentation">
-            Ad Performance
-          </li>
-        </ul>
-      </Tabs>
       <ViewData>
         <div className="row">
           <div className="col-md-4  col-sm-12 ">
@@ -96,7 +78,6 @@ const VendorSalesPerformanceFilters = ({
 export default VendorSalesPerformanceFilters;
 
 VendorSalesPerformanceFilters.defaultProps = {
-  viewComponent: '',
   selectedSalesDF: {},
   marketplaceDefaultValue: {},
   marketplaceOptions: {},
@@ -105,18 +86,15 @@ VendorSalesPerformanceFilters.defaultProps = {
   DropDownIndicator: () => {},
   getSelectComponents: () => {},
   handleMarketplaceOptions: () => {},
-  setViewComponent: () => {},
   handleDailyFact: () => {},
 };
 
 VendorSalesPerformanceFilters.propTypes = {
   isApiCall: bool,
-  viewComponent: string,
   marketplaceDefaultValue: oneOfType(Object, Array),
   selectedSalesDF: instanceOf(Object),
   marketplaceOptions: arrayOf(Array),
   dateOptions: arrayOf(Array),
-  setViewComponent: func,
   handleMarketplaceOptions: func,
   getSelectComponents: func,
   DropDownIndicator: func,

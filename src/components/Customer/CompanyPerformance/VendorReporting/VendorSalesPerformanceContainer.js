@@ -5,7 +5,7 @@ import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import { components } from 'react-select';
-import { func, instanceOf, shape, string } from 'prop-types';
+import { instanceOf, shape, string } from 'prop-types';
 
 import VendorSalesPerformancePanel from './VendorSalesPerformancePanel';
 import VendorSalesPerformanceFilters from './VendorSalesPerformanceFilters';
@@ -20,12 +20,7 @@ const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 am4core.useTheme(am4themes_dataviz);
-export default function PerformanceReport({
-  marketplaceChoices,
-  id,
-  viewComponent,
-  setViewComponent,
-}) {
+export default function PerformanceReport({ marketplaceChoices, id }) {
   const { Option, SingleValue } = components;
   const [isSPCustomDateApply, setIsSPCustomDateApply] = useState(false);
   const [responseId, setResponseId] = useState(null);
@@ -579,8 +574,6 @@ export default function PerformanceReport({
   return (
     <>
       <VendorSalesPerformanceFilters
-        viewComponent={viewComponent}
-        setViewComponent={setViewComponent}
         marketplaceDefaultValue={marketplaceDefaultValue}
         marketplaceOptions={amazonOptions}
         handleMarketplaceOptions={handleAmazonOptions}
@@ -647,16 +640,12 @@ export default function PerformanceReport({
 
 PerformanceReport.defaultProps = {
   id: '',
-  viewComponent: '',
   data: {},
   marketplaceChoices: {},
-  setViewComponent: () => {},
 };
 
 PerformanceReport.propTypes = {
   id: string,
-  viewComponent: string,
   data: shape({}),
   marketplaceChoices: instanceOf(Object),
-  setViewComponent: func,
 };
