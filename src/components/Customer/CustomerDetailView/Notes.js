@@ -363,6 +363,7 @@ function Notes({
   const displayNotes = () => {
     return data?.notes?.length ? (
       data.notes.map((item) => {
+        const noteType = item.note_type;
         return (
           <div className="notes-pin-unpin">
             <GroupUser className="mb-3" key={item.id}>
@@ -413,7 +414,8 @@ function Notes({
                       {item?.created_at}
                       <span className="pin">
                         <ul className="more-action">
-                          {userInfo?.id === item?.user?.id ? (
+                          {userInfo?.id === item?.user?.id &&
+                          noteType !== 'bp_profile' ? (
                             <>
                               <li
                                 role="presentation"
