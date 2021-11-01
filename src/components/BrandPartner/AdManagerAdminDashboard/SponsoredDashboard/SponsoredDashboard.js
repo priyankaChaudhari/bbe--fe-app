@@ -539,11 +539,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 7) {
-      temp = 'daily';
-      setAdFilters({ daily: true, weekly: false, month: false });
-      setAdGroupBy('daily');
-    } else if (diffDays <= 30) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setAdFilters({ daily: true, weekly: true, month: true });
       setAdGroupBy('daily');

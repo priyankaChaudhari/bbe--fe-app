@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { func, shape, string } from 'prop-types';
@@ -11,6 +11,7 @@ import {
   Organization,
   BillingIcon,
   ExchangeIcon,
+  CaretUp,
 } from '../../../theme/images';
 
 export default function CustomerTabDetails({
@@ -18,8 +19,23 @@ export default function CustomerTabDetails({
   setViewComponent,
   viewComponent,
   customer,
+  subViewComponent,
+  setSubViewComponent,
 }) {
   const dispatch = useDispatch();
+  const [isCollapseOpen, setIsCollapseOpen] = useState(
+    viewComponent === 'performance',
+  );
+
+  const handleMenuOnclick = (selectedTab) => {
+    setViewComponent(selectedTab);
+    dispatch(setCustomerSelectedTab('performance'));
+    if (selectedTab !== 'performance') {
+      setIsCollapseOpen(false);
+    } else if (isCollapseOpen === false) {
+      setIsCollapseOpen(true);
+    }
+  };
   return (
     <ul className="left-details-card d-lg-block d-none">
       {role === 'Customer' ? (
@@ -46,8 +62,7 @@ export default function CustomerTabDetails({
       {role !== 'Customer' ? (
         <li
           onClick={() => {
-            setViewComponent('performance');
-            dispatch(setCustomerSelectedTab('performance'));
+            handleMenuOnclick('performance');
           }}
           role="presentation">
           <div
@@ -60,7 +75,48 @@ export default function CustomerTabDetails({
               alt="monitor"
             />
             Performance
+            <div
+              style={{ position: 'relative' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsCollapseOpen(!isCollapseOpen);
+              }}
+              role="presentation">
+              <img
+                src={CaretUp}
+                alt="caret"
+                className="collapse-arrow-icon"
+                style={{
+                  transform: isCollapseOpen ? 'rotate(180deg)' : '',
+                }}
+              />
+            </div>
           </div>
+          {isCollapseOpen ? (
+            <ul className="sub-category">
+              <li
+                onClick={() => {
+                  setSubViewComponent('seller');
+                }}
+                role="presentation"
+                className={`sub-category-details ${
+                  subViewComponent === 'seller' ? 'active' : ''
+                }`}>
+                {' '}
+                Seller Reporting
+              </li>
+              <li
+                onClick={() => {
+                  setSubViewComponent('vendor');
+                }}
+                role="presentation"
+                className={`sub-category-details ${
+                  subViewComponent === 'vendor' ? 'active' : ''
+                }`}>
+                Vendor Reporting
+              </li>
+            </ul>
+          ) : null}
         </li>
       ) : (
         ''
@@ -177,4 +233,6 @@ CustomerTabDetails.propTypes = {
   customer: shape({
     id: string,
   }).isRequired,
+  subViewComponent: string.isRequired,
+  setSubViewComponent: func.isRequired,
 };

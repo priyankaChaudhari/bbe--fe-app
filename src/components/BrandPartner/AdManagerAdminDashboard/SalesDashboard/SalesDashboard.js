@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 import SalesFilter from './SalesFilter';
 import SalesMetrics from './SalesMetrics';
 import SalesKeyContribution from './SalesKeyContribution';
-import SalePerformanceChart from '../../../Customer/CompanyPerformance/SalesPerformanceView/SalePerformanceChart';
+import SalePerformanceChart from '../../../Customer/CompanyPerformance/SellerReporting/SalePerformanceChart';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
 import {
@@ -463,11 +463,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 7) {
-      temp = 'daily';
-      setGroupByFilters({ daily: true, weekly: false, month: false });
-      setSalesGroupBy('daily');
-    } else if (diffDays <= 30) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setGroupByFilters({ daily: true, weekly: true, month: false });
       setSalesGroupBy('daily');

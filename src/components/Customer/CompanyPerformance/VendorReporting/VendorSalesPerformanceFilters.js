@@ -8,15 +8,15 @@ import Theme from '../../../../theme/Theme';
 import { DropDown } from '../DropDown';
 import { DropDownSelect, WhiteCard } from '../../../../common';
 
-const AdPerformanceFilters = ({
+const VendorSalesPerformanceFilters = ({
   marketplaceDefaultValue,
   marketplaceOptions,
   handleMarketplaceOptions,
   dateOptions,
   getSelectComponents,
   DropDownIndicator,
-  handleAdDailyFact,
-  selectedAdDF,
+  handleDailyFact,
+  selectedSalesDF,
   isApiCall,
 }) => {
   return (
@@ -41,9 +41,7 @@ const AdPerformanceFilters = ({
                 }
                 onChange={(event) => handleMarketplaceOptions(event)}
                 placeholder={
-                  marketplaceDefaultValue &&
-                  marketplaceDefaultValue[0] &&
-                  marketplaceDefaultValue[0].label
+                  marketplaceDefaultValue && marketplaceDefaultValue[0]?.label
                 }
                 theme={(theme) => ({
                   ...theme,
@@ -65,10 +63,10 @@ const AdPerformanceFilters = ({
               dateOptions[0].label,
               getSelectComponents,
               dateOptions[0],
-              handleAdDailyFact,
+              handleDailyFact,
               isApiCall,
               null,
-              selectedAdDF,
+              selectedSalesDF,
             )}
           </div>
         </div>
@@ -77,30 +75,30 @@ const AdPerformanceFilters = ({
   );
 };
 
-export default AdPerformanceFilters;
+export default VendorSalesPerformanceFilters;
 
-AdPerformanceFilters.defaultProps = {
+VendorSalesPerformanceFilters.defaultProps = {
+  selectedSalesDF: {},
   marketplaceDefaultValue: {},
   marketplaceOptions: {},
-  handleMarketplaceOptions: () => {},
   dateOptions: {},
-  getSelectComponents: () => {},
   isApiCall: false,
   DropDownIndicator: () => {},
-  handleAdDailyFact: () => {},
-  selectedAdDF: {},
+  getSelectComponents: () => {},
+  handleMarketplaceOptions: () => {},
+  handleDailyFact: () => {},
 };
 
-AdPerformanceFilters.propTypes = {
-  marketplaceDefaultValue: oneOfType(Object, Array),
-  marketplaceOptions: arrayOf(Array),
-  handleMarketplaceOptions: func,
-  dateOptions: arrayOf(Array),
-  getSelectComponents: func,
+VendorSalesPerformanceFilters.propTypes = {
   isApiCall: bool,
+  marketplaceDefaultValue: oneOfType(Object, Array),
+  selectedSalesDF: instanceOf(Object),
+  marketplaceOptions: arrayOf(Array),
+  dateOptions: arrayOf(Array),
+  handleMarketplaceOptions: func,
+  getSelectComponents: func,
   DropDownIndicator: func,
-  handleAdDailyFact: func,
-  selectedAdDF: instanceOf(Object),
+  handleDailyFact: func,
 };
 
 const ViewData = styled.div`
