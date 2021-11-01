@@ -27,7 +27,7 @@ export const API_VENDOR_SHIPPED = '/performance-shipped-cogs/';
 
 // export const API_PERFORMANCE = '/sales-performance/';
 export const API_MARKETPLACES = '/marketplaces/';
-export const API_ALL_MARKETPLACES = '/marketplaces/all-marketplace/';
+export const API_ALL_MARKETPLACES = `${API_MARKETPLACES}all-marketplace/`;
 export const API_AD_PERFORMANCE = '/performance-metrics/';
 export const API_ADM = '/manager-list/';
 export const API_SERVICES_FEE = '/type-of-services/';
