@@ -420,7 +420,7 @@ p {
     display: block;
     position: relative;
     padding-left: 35px;
-    margin-bottom: 12px;
+    /* margin-bottom: 12px; */
     cursor: pointer;
     font-size: ${Theme.extraMedium};
     -webkit-user-select: none;

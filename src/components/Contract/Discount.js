@@ -253,7 +253,7 @@ function Discount({
               defaultChecked={setDefaultValue(inputValue)}
             />
             <span className="checkmark checkmark-customer-list" />
-            {Title} ({unit})
+            {Title} {unit !== '' ? `(${unit})` : ''}
           </label>
         </ModalRadioCheck>
       </li>
@@ -289,8 +289,8 @@ function Discount({
     <div className="modal-body ">
       <h4 className="on-boarding mb-4">Apply Discount</h4>
       <div className="body-content">
-        <ul className="apply-discount mb-4">
-          {handleModalRadioCheck('none', 'none', 'none', 'None')}
+        <ul className="apply-discount mb-2">
+          {handleModalRadioCheck('none', 'none', 'None', '')}
           {handleModalRadioCheck(
             'fixedAmount',
             'fixed amount',
@@ -300,10 +300,10 @@ function Discount({
           {handleModalRadioCheck('percentage', 'percentage', 'Percentage', '%')}
         </ul>
         {selectedDiscountType === 'fixed amount' ? (
-          <InputFormField>
+          <>
             {showAmountInput ? (
-              <>
-                <label className="modal-field" htmlFor="emailAddress">
+              <InputFormField className="mt-4">
+                <label className="modal-field " htmlFor="emailAddress">
                   Amount
                   <div className="input-container">
                     {handleSelectedDiscountType('fixed amount')}
@@ -311,16 +311,16 @@ function Discount({
                   </div>
                 </label>
                 {handleErrorMsg()}
-              </>
+              </InputFormField>
             ) : (
               ''
             )}
-          </InputFormField>
+          </>
         ) : (
-          <InputFormField>
+          <>
             {showAmountInput ? (
-              <>
-                <label className="modal-field" htmlFor="emailAddress">
+              <InputFormField className="mt-4">
+                <label className="modal-field " htmlFor="emailAddress">
                   Amount
                   <div className="input-container">
                     {handleNumerFormat('Enter Percentage', 'percentage')}
@@ -328,11 +328,11 @@ function Discount({
                   </div>
                 </label>
                 {handleErrorMsg()}
-              </>
+              </InputFormField>
             ) : (
               ''
             )}
-          </InputFormField>
+          </>
         )}
         <Button
           className="btn btn-primary w-100 mt-4 "
