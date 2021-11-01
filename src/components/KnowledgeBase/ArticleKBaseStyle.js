@@ -171,6 +171,7 @@ export const GrayBody = styled.div`
       font-size: ${Theme.extraMedium};
       line-height: 24px;
       font-weight: 300;
+      white-space: break-spaces;
     }
     .ghq-card-content__image {
       /* width: -webkit-fill-available !important; */
