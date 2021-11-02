@@ -700,6 +700,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     );
   };
 
+  console.log('pieData', pieData);
   const renderInventoryScorePanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
