@@ -18,10 +18,10 @@ const BillingContainer = ({
   useEffect(() => {
     if (redirectType === 'dspInvoicing') {
       setViewComponent('dsp service');
-    } else if (redirectType === 'revShare') {
-      setViewComponent('rev share');
-    } else {
+    } else if (redirectType === 'upSell') {
       setViewComponent('upsell');
+    } else {
+      setViewComponent('rev share');
     }
   }, [redirectType]);
 
