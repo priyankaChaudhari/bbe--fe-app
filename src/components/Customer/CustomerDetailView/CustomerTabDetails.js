@@ -11,7 +11,7 @@ import {
   Organization,
   BillingIcon,
   ExchangeIcon,
-  CaretUp,
+  // CaretUp,
 } from '../../../theme/images';
 
 export default function CustomerTabDetails({
@@ -19,8 +19,8 @@ export default function CustomerTabDetails({
   setViewComponent,
   viewComponent,
   customer,
-  subViewComponent,
-  setSubViewComponent,
+  // subViewComponent,
+  // setSubViewComponent,
 }) {
   const dispatch = useDispatch();
   const [isCollapseOpen, setIsCollapseOpen] = useState(
@@ -75,7 +75,8 @@ export default function CustomerTabDetails({
               alt="monitor"
             />
             Performance
-            <div
+            {/* hide vendor feature */}
+            {/* <div
               style={{ position: 'relative' }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -90,9 +91,11 @@ export default function CustomerTabDetails({
                   transform: isCollapseOpen ? 'rotate(180deg)' : '',
                 }}
               />
-            </div>
+            </div> */}
           </div>
-          {isCollapseOpen ? (
+
+          {/* hide vendor feature */}
+          {/* {isCollapseOpen ? (
             <ul className="sub-category">
               <li
                 onClick={() => {
@@ -116,7 +119,7 @@ export default function CustomerTabDetails({
                 Vendor Reporting
               </li>
             </ul>
-          ) : null}
+          ) : null} */}
         </li>
       ) : (
         ''
@@ -233,6 +236,6 @@ CustomerTabDetails.propTypes = {
   customer: shape({
     id: string,
   }).isRequired,
-  subViewComponent: string.isRequired,
-  setSubViewComponent: func.isRequired,
+  // subViewComponent: string.isRequired,
+  // setSubViewComponent: func.isRequired,
 };
