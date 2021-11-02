@@ -33,6 +33,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               <div className="black-heading-title">
                 {invoiceType === 'rev share'
                   ? 'Revenue Share Invoices'
+                  : invoiceType === 'upsell'
+                  ? 'Upsell Invoices'
                   : 'DSP Invoices'}
               </div>
             </div>
@@ -149,6 +151,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               No{' '}
               {invoiceType === 'rev share'
                 ? 'Revenue Share Invoices'
+                : invoiceType === 'upsell'
+                ? 'Upsell Invoices'
                 : 'DSP Invoices'}{' '}
               Found
             </NoData>
