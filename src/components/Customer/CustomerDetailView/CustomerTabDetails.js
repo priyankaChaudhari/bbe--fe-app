@@ -41,7 +41,7 @@ export default function CustomerTabDetails({
       {role === 'Customer' ? (
         <li
           onClick={() => {
-            setViewComponent('dashboard');
+            handleMenuOnclick('dashboard');
           }}
           role="presentation">
           <div
@@ -123,7 +123,7 @@ export default function CustomerTabDetails({
       )}
       <li
         onClick={() => {
-          setViewComponent('agreement');
+          handleMenuOnclick('agreement');
           dispatch(setCustomerSelectedTab('agreement'));
         }}
         role="presentation">
@@ -143,7 +143,7 @@ export default function CustomerTabDetails({
                         ) : (
                           <li
                             onClick={() => {
-                              setViewComponent('product catalog');
+                              handleMenuOnclick('product catalog');
                               dispatch(
                                 setCustomerSelectedTab('product catalog'),
                               );
@@ -169,7 +169,7 @@ export default function CustomerTabDetails({
       customer.brand_assets.is_completed ? (
         <li
           onClick={() => {
-            setViewComponent('brand asset');
+            handleMenuOnclick('brand asset');
             // dispatch(setCustomerSelectedTab('brand asset'));
           }}
           role="presentation">
@@ -187,7 +187,7 @@ export default function CustomerTabDetails({
 
       <li
         onClick={() => {
-          setViewComponent('company');
+          handleMenuOnclick('company');
           dispatch(setCustomerSelectedTab('company'));
         }}
         role="presentation">
@@ -199,7 +199,7 @@ export default function CustomerTabDetails({
           Company Details
         </div>
       </li>
-      <li onClick={() => setViewComponent('billing')} role="presentation">
+      <li onClick={() => handleMenuOnclick('billing')} role="presentation">
         <div
           className={`left-details ${
             viewComponent === 'billing' ? 'active' : ''
@@ -210,7 +210,7 @@ export default function CustomerTabDetails({
       </li>
       <li
         onClick={() => {
-          setViewComponent('activity');
+          handleMenuOnclick('activity');
           dispatch(setCustomerSelectedTab('activity'));
         }}
         role="presentation">
