@@ -1,13 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
+
 import queryString from 'query-string';
 import HelloSign from 'hellosign-embedded';
-// import styled from 'styled-components';
-import { PATH_WARNING } from '../../constants/index';
-import { transactionalSignUp } from '../../api/index';
+import { useHistory } from 'react-router-dom';
+
 import { PageLoader } from '../../common';
-// import Header from '../../common/Header';
-// import Theme from '../../theme/Theme';
+import { PATH_WARNING } from '../../constants';
+import { transactionalSignUp } from '../../api';
 
 function HelloSignComponent() {
   const history = useHistory();
@@ -16,48 +16,29 @@ function HelloSignComponent() {
 
   useEffect(() => {
     setIsLoading({ loader: false, type: 'page' });
-
     const client = new HelloSign({
       clientId: process.env.REACT_APP_HELLOSIGN_CLIENT_ID,
     });
-
     transactionalSignUp({
       request_id: params.key,
     }).then((res) => {
       if (res && res.status === 400) {
         history.push({
           pathname: PATH_WARNING,
-          state: { error: res && res.data && res.data.request_id },
+          state: { error: res?.data?.request_id },
         });
       } else {
-        client.open(res && res.data && res.data.sign_url, {
+        client.open(res?.data?.sign_url, {
           skipDomainVerification: true,
         });
-
         client.on('finish', () => {
           window.location.href = 'http://www.buyboxexperts.com/';
-
-          // checksignatureStatus({ request_id: params.key }).then((statusRes) => {
-          //   if (statusRes && statusRes.status === 200) {
-          //     window.location.href = 'http://www.buyboxexperts.com/';
-          //   }
-          //   // console.log(res, ' after check signature status');
-          // });
         });
-
         client.on('close', () => {
           window.location.href = 'http://www.buyboxexperts.com/';
-
-          // checksignatureStatus({ request_id: params.key }).then((response) => {
-          //   // console.log(res, ' after check signature status');
-          //   if (response && response.status === 200) {
-          //     window.location.href = 'http://www.buyboxexperts.com/';
-          //   }
-          // });
         });
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <div>
@@ -66,9 +47,7 @@ function HelloSignComponent() {
       ) : (
         <>
           {/* <Header /> */}
-
           {/* <Footer className="sticky">
-            {' '}
             <p>Last updated by You on Dec 1, 4:18 PM</p>
           </Footer> */}
         </>
@@ -78,24 +57,3 @@ function HelloSignComponent() {
 }
 
 export default HelloSignComponent;
-
-// const Footer = styled.div`
-//   border: 1px solid ${Theme.gray15};
-//   bottom: 0;
-//   width: 100%;
-//   background: #fff;
-//   box-shadow: ${Theme.boxShadow};
-//   position: fixed;
-//   min-height: 80px;
-
-//   .w-320 {
-//     float: left;
-//     max-width: 320px;
-//     width: 100%;
-//   }
-
-//   p {
-//     float: left;
-//     margin-top: 30px;
-//   }
-// `;

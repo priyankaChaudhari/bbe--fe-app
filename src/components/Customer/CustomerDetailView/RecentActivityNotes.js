@@ -1,11 +1,12 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect, useCallback } from 'react';
 
-import { func, shape, string, bool, arrayOf } from 'prop-types';
+import { func, shape, string, bool, arrayOf, oneOfType } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import { GroupUser } from '../../../theme/Global';
 import { GetInitialName, PageLoader, WhiteCard } from '../../../common';
+import { getRecentNotes } from '../../../api';
 import {
   ContractEmailIcon,
   DefaultUser,
@@ -13,7 +14,6 @@ import {
   NextActivityLogo,
   OrangeChat,
 } from '../../../theme/images';
-import { getRecentNotes } from '../../../api';
 
 export default function RecentActivityNotes({
   id,
@@ -31,11 +31,10 @@ export default function RecentActivityNotes({
   setIsLoading,
 }) {
   const [noteData, setNoteData] = useState([]);
-
   const getNotes = useCallback(() => {
     setIsLoading({ loader: true, type: 'note' });
     getRecentNotes(id).then((res) => {
-      setNoteData(res && res.data && res.data.results);
+      setNoteData(res?.data?.results);
       setIsLoading({ loader: false, type: 'note' });
     });
   }, [id, setIsLoading]);
@@ -48,6 +47,7 @@ export default function RecentActivityNotes({
     if (showNotesModal.deleteNote) {
       getActivityLogInfo();
     }
+    getActivityLogInfo();
   }, [getNotes, showNotesModal, getActivityLogInfo, role]);
 
   return (
@@ -88,14 +88,14 @@ export default function RecentActivityNotes({
               />
             ) : (
               <>
-                {noteData && noteData.length === 0 ? (
+                {noteData?.length === 0 ? (
                   <div className="text-center">No notes found.</div>
                 ) : (
                   <>
                     {noteData &&
                       noteData.slice(0, 3).map((item) => (
                         <React.Fragment key={item.id}>
-                          {item && item.user ? (
+                          {item?.user ? (
                             <GroupUser className="mb-3" key={item.id}>
                               {images.find(
                                 (op) => op.entity_id === item.user.id,
@@ -121,17 +121,17 @@ export default function RecentActivityNotes({
                               )}
                               <div className="activity-user">
                                 <span className="font-bold">
-                                  {item && item.user && item.user.first_name}{' '}
-                                  {item && item.user && item.user.last_name}:
-                                </span>{' '}
+                                  {item?.user?.first_name}
+                                  {item?.user?.last_name}:
+                                </span>
                                 <p
                                   className="m-0 note-text"
                                   dangerouslySetInnerHTML={{
-                                    __html: item && item.note.slice(0, 80),
+                                    __html: item?.note.slice(0, 80),
                                   }}
                                 />
                                 <div className="time-date  mt-1">
-                                  {item && item.created_at}{' '}
+                                  {item?.created_at}
                                 </div>
                               </div>
                               <div className="clear-fix" />
@@ -154,7 +154,6 @@ export default function RecentActivityNotes({
                 });
                 setNewNoteEditor(true);
               }}>
-              {' '}
               <img className="red-chat-icon" src={OrangeChat} alt="chat" /> Add
               note
             </div>
@@ -194,10 +193,10 @@ export default function RecentActivityNotes({
                     .split(' ')
                     .slice(0, 2)[1]
                     .toLowerCase() === 'user') ||
-                (item && item.status !== undefined) ? (
+                item?.status !== undefined ? (
                   <div
                     className={
-                      item && item.status !== undefined ? 'contract-email' : ''
+                      item?.status !== undefined ? 'contract-email' : ''
                     }>
                     <img
                       src={
@@ -208,14 +207,14 @@ export default function RecentActivityNotes({
                               .split(' ')
                               .slice(0, 2)[0] === 'System'
                           ? NextActivityLogo
-                          : item && item.status !== undefined
+                          : item?.status !== undefined
                           ? ContractEmailIcon
                           : images.find(
                               (op) => op.entity_id === item.history_user_id,
                             ).presigned_url
                       }
                       className={
-                        item && item.status !== undefined
+                        item?.status !== undefined
                           ? 'default-user-activity contract-mail'
                           : 'default-user-activity '
                       }
@@ -231,7 +230,7 @@ export default function RecentActivityNotes({
                   {activityDetail(item)}
 
                   <div className="time-date mt-1">
-                    {item && item.history_date ? item.history_date : ''}
+                    {item?.history_date ? item.history_date : ''}
                   </div>
                 </div>
                 <div className="clear-fix" />
@@ -259,10 +258,18 @@ RecentActivityNotes.propTypes = {
   images: arrayOf(shape({})).isRequired,
   setViewComponent: func.isRequired,
   role: string.isRequired,
-  showNotesModal: shape({
-    apiCall: bool,
-    deleteNote: bool,
-  }).isRequired,
+  showNotesModal: oneOfType([
+    bool,
+    shape({
+      modal: bool,
+      apiCall: bool,
+      deleteNote: bool,
+    }),
+  ]).isRequired,
+  // showNotesModal: shape({
+  //   apiCall: bool,
+  //   deleteNote: bool,
+  // }).isRequired,
   setShowNotesModal: func.isRequired,
   setNewNoteEditor: func.isRequired,
   getActivityLogInfo: func.isRequired,

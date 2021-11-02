@@ -2,15 +2,13 @@ import React from 'react';
 
 import Select from 'react-select';
 import styled from 'styled-components';
-import { arrayOf, bool, func, instanceOf, oneOfType, string } from 'prop-types';
+import { arrayOf, bool, func, instanceOf, oneOfType } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../DropDown';
-import { DropDownSelect, WhiteCard, Tabs } from '../../../../common';
+import { DropDownSelect, WhiteCard } from '../../../../common';
 
 const AdPerformanceFilters = ({
-  viewComponent,
-  setViewComponent,
   marketplaceDefaultValue,
   marketplaceOptions,
   handleMarketplaceOptions,
@@ -23,22 +21,6 @@ const AdPerformanceFilters = ({
 }) => {
   return (
     <WhiteCard className="mb-3">
-      <Tabs>
-        <ul className="tabs">
-          <li
-            className={viewComponent === 'salePerformance' ? 'active' : ''}
-            onClick={() => setViewComponent('salePerformance')}
-            role="presentation">
-            Sales Performance
-          </li>
-          <li
-            className={viewComponent === 'adPerformance' ? 'active' : ''}
-            onClick={() => setViewComponent('adPerformance')}
-            role="presentation">
-            Ad Performance
-          </li>
-        </ul>
-      </Tabs>
       <ViewData>
         <div className="row">
           <div className="col-md-4  col-sm-12 ">
@@ -56,16 +38,12 @@ const AdPerformanceFilters = ({
                 options={marketplaceOptions}
                 defaultValue={
                   marketplaceDefaultValue && marketplaceDefaultValue[0]
-                  // marketplaceOptions && marketplaceOptions[0]
                 }
                 onChange={(event) => handleMarketplaceOptions(event)}
                 placeholder={
                   marketplaceDefaultValue &&
                   marketplaceDefaultValue[0] &&
                   marketplaceDefaultValue[0].label
-                  // marketplaceOptions &&
-                  // marketplaceOptions[0] &&
-                  // marketplaceOptions[0].label
                 }
                 theme={(theme) => ({
                   ...theme,
@@ -102,8 +80,6 @@ const AdPerformanceFilters = ({
 export default AdPerformanceFilters;
 
 AdPerformanceFilters.defaultProps = {
-  viewComponent: '',
-  setViewComponent: () => {},
   marketplaceDefaultValue: {},
   marketplaceOptions: {},
   handleMarketplaceOptions: () => {},
@@ -116,8 +92,6 @@ AdPerformanceFilters.defaultProps = {
 };
 
 AdPerformanceFilters.propTypes = {
-  viewComponent: string,
-  setViewComponent: func,
   marketplaceDefaultValue: oneOfType(Object, Array),
   marketplaceOptions: arrayOf(Array),
   handleMarketplaceOptions: func,

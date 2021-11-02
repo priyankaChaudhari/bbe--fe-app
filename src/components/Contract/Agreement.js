@@ -1,9 +1,11 @@
 /* eslint-disable react/no-danger */
 
 import React from 'react';
-import styled from 'styled-components';
+
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
+import { string, number, func, oneOfType, arrayOf, shape } from 'prop-types';
+
+import { AgreementParagraph } from '../../theme/AgreementStyle';
 import {
   RecurringLanguage,
   Recurring90DaysLanguage,
@@ -15,14 +17,26 @@ export default function Agreement({
   templateData,
   servicesFees,
 }) {
+  const customerId = formData?.customer_id;
+  const customerAddress = customerId?.address;
+  const customerState = customerId?.state;
+  const customerCity = customerId?.city;
+  const customerZipCode = customerId?.zip_code;
+  const contractType = details?.contract_type;
+
+  const displayNumber = (num) => {
+    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
+
   const mapDefaultValues = (key, label) => {
     if (key === 'company_name') {
-      return formData && formData.customer_id && formData.customer_id[key]
-        ? formData && formData.customer_id && formData.customer_id[key]
+      return customerId && formData.customer_id[key]
+        ? customerId && formData.customer_id[key]
         : `Client Name`;
     }
     if (key === 'length') {
-      return formData && formData.length && formData.length.label
+      return formData?.length?.label
         ? formData.length.label
         : formData.length
         ? formData.length
@@ -36,82 +50,26 @@ export default function Agreement({
     if (key === 'current_date') {
       return dayjs(Date()).format('MM / DD / YYYY');
     }
+
     if (key === 'address') {
       if (
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.address === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.address === null)) &&
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.state === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.state === null)) &&
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.city === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.city === null)) &&
-        ((formData &&
-          formData.customer_id &&
-          formData.customer_id.zip_code === '') ||
-          (formData &&
-            formData.customer_id &&
-            formData.customer_id.zip_code === null))
+        (customerAddress === '' || customerAddress === null) &&
+        (customerState === '' || customerState === null) &&
+        (customerCity === '' || customerCity === null) &&
+        (customerZipCode === '' || customerZipCode === null)
       ) {
         return `Enter Location`;
       }
-      return `${
-        formData && formData.customer_id && formData.customer_id.address
-          ? formData && formData.customer_id && formData.customer_id.address
-          : ''
-      }${
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.address &&
-        ((formData && formData.customer_id && formData.customer_id.state) ||
-          (formData && formData.customer_id && formData.customer_id.city) ||
-          (formData && formData.customer_id && formData.customer_id.zip_code))
+      return `${customerAddress || ''}${
+        customerAddress && (customerState || customerCity || customerZipCode)
           ? ','
           : ''
       }
-       ${
-         formData && formData.customer_id && formData.customer_id.city
-           ? formData && formData.customer_id && formData.customer_id.city
-           : ''
-       }${
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.city &&
-        (formData.customer_id.state ||
-          (formData && formData.customer_id && formData.customer_id.zip_code))
-          ? ','
-          : ''
+      ${customerCity || ''}${
+        customerCity && (customerState || customerZipCode) ? ',' : ''
       }
-      ${
-        formData && formData.customer_id && formData.customer_id.state
-          ? formData && formData.customer_id && formData.customer_id.state
-          : ''
-      }${
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.state &&
-        formData &&
-        formData.customer_id &&
-        formData.customer_id.zip_code
-          ? ','
-          : ''
-      }
-     
-      ${
-        formData && formData.customer_id && formData.customer_id.zip_code
-          ? formData && formData.customer_id && formData.customer_id.zip_code
-          : ''
-      }
+      ${customerState || ''}${customerState && customerZipCode ? ',' : ''}
+      ${customerZipCode || ''}
       `;
     }
     if (
@@ -123,172 +81,105 @@ export default function Agreement({
     }
     return formData[key];
   };
-
   const getAgreementAccorType = (index) => {
-    if (
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('one')
-    ) {
-      return (
-        templateData &&
-        templateData.one_time_service_agreement &&
-        templateData.one_time_service_agreement[index]
-      );
+    const OTSA = templateData?.one_time_service_agreement;
+    if (contractType.toLowerCase().includes('one')) {
+      return OTSA && templateData.one_time_service_agreement[index];
     }
-    return (
-      templateData &&
-      templateData.recurring_service_agreement &&
-      templateData.recurring_service_agreement[index]
-    );
+    return OTSA && templateData.recurring_service_agreement[index];
   };
 
-  const displayNumber = (num) => {
-    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return res;
+  const customAmazonStorePrice = (fee) => {
+    return `<td style="border: 1px solid black;padding: 13px;">
+        ${fee ? `$${displayNumber(fee)}` : '$0'}
+      </td>`;
   };
-
+  const tdService = (service, fee) => {
+    return `<td style="border: 1px solid black; padding: 13px;">
+          ${
+            service.quantity && fee
+              ? `$${displayNumber(service.quantity * fee)}`
+              : '$0'
+          }
+        </td>
+        `;
+  };
   const mapMonthlyServices = () => {
     const fields = [];
-    if (formData && formData.additional_one_time_services) {
+    if (formData?.additional_one_time_services) {
       formData.additional_one_time_services.forEach((service) => {
         const fixedFee = servicesFees.filter(
           (n) => n.id === service.service_id,
         );
         return fields.push(
           `<tr>
-              <td style="border: 1px solid black;padding: 13px;">${
-                service.quantity
-                  ? service.quantity
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  : 0
-              }</td>
-                  
-                   <td style="border: 1px solid black;padding: 13px;">${
-                     service.name
-                       ? service.name
-                       : service.service && service.service.name
-                       ? service.service.name
-                       : ''
-                   }
+              <td style="border: 1px solid black; padding: 13px;">
+                  ${service.quantity ? displayNumber(service.quantity) : 0}
               </td>
-             
+              <td style="border: 1px solid black;padding: 13px;">
+                  ${
+                    service.name
+                      ? service.name
+                      : service.service?.name
+                      ? service.service.name
+                      : ''
+                  }
+              </td>             
                   ${
                     (
-                      service && service.name
+                      service?.name
                         ? service.name.includes('Amazon Store Package Custom')
-                        : service &&
-                          service.service &&
-                          service.service.name.includes(
+                        : service?.service?.name.includes(
                             'Amazon Store Package Custom',
                           )
                     )
                       ? service.custom_amazon_store_price
                         ? `<td style="border: 1px solid black;padding: 13px;">
-                                $${
-                                  displayNumber(
-                                    service.custom_amazon_store_price,
-                                  )
-                                  // .toString()
-                                  // .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                                } 
+                                $${displayNumber(
+                                  service.custom_amazon_store_price,
+                                )} 
                                </td>`
-                        : // Yet to save 185
-                          `<td style="border: 1px solid black;padding: 13px;">
-                        ${
-                          fixedFee && fixedFee[0] && fixedFee[0].fee
-                            ? `$${displayNumber(fixedFee[0].fee)}`
-                            : '$0'
-                        }</td>`
-                      : service && service.service && service.service.fee
-                      ? `<td style="border: 1px solid black;padding: 13px;">
-                           $${
-                             service && service.service && service.service.fee
-                               ? displayNumber(service.service.fee)
-                               : ''
-                             //  .toString()
-                             //  .replace(
-                             //    /\B(?=(\d{3})+(?!\d))/g,
-                             //    ',',
-                             //  )
-                           } </td>`
-                      : // yet to save
-                        `<td style="border: 1px solid black;padding: 13px;">${
-                          fixedFee && fixedFee[0] && fixedFee[0].fee
-                            ? `$${displayNumber(fixedFee[0].fee)}`
-                            : '$0'
-                        }</td>`
+                        : customAmazonStorePrice(
+                            fixedFee && fixedFee[0] && fixedFee[0].fee,
+                          )
+                      : service?.service?.fee
+                      ? customAmazonStorePrice(service?.service?.fee)
+                      : customAmazonStorePrice(
+                          fixedFee && fixedFee[0] && fixedFee[0].fee,
+                        )
                   }
-
-     
-     
-
-      ${
-        (
-          service && service.name
-            ? service.name !== 'Amazon Store Package Custom'
-            : service &&
-              service.service &&
-              service.service.name !== 'Amazon Store Package Custom'
-        )
-          ? service.quantity && service.service && service.service.fee
-            ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
-              service.service &&
-              service.service.fee
-                ? service.quantity * service.service.fee
-                : ''
-              )
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </td>`
-            : // Yet to save 238
-              `<td style="border: 1px solid black;padding: 13px;">
-              ${(service.quantity && fixedFee && fixedFee[0] && fixedFee[0].fee
-                ? `$${service.quantity * fixedFee[0].fee}`
-                : '$0'
-              )
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            </td>`
-          : service.quantity && service.custom_amazon_store_price
-          ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
-            service.custom_amazon_store_price
-              ? service.quantity * service.custom_amazon_store_price
-              : ''
-            )
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </td>`
-          : // Yet to save 255
-            `<td style="border: 1px solid black;padding: 13px;">
-          ${(service.quantity && fixedFee && fixedFee[0] && fixedFee[0].fee
-            ? `$${service.quantity * fixedFee[0].fee}`
-            : '$0'
-          )
-            .toString()
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </td>`
-      }
-         
-                  
-                  </tr>`,
+                  ${
+                    (
+                      service?.name
+                        ? service.name !== 'Amazon Store Package Custom'
+                        : service?.service?.name !==
+                          'Amazon Store Package Custom'
+                    )
+                      ? service.quantity && service.service?.fee
+                        ? tdService(service, service.service?.fee)
+                        : tdService(
+                            service,
+                            fixedFee && fixedFee[0] && fixedFee[0].fee,
+                          )
+                      : service.quantity && service.custom_amazon_store_price
+                      ? tdService(service, service.custom_amazon_store_price)
+                      : tdService(
+                          service,
+                          fixedFee && fixedFee[0] && fixedFee[0].fee,
+                        )
+                  }                 
+          </tr>`,
         );
       });
     }
-    // return fields.length ? fields.toString().replaceAll(',', '') : '';
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
       return `$${
-        details &&
-        details.total_fee &&
-        details.total_fee.onetime_service_after_discount
-          ? details.total_fee.onetime_service_after_discount
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+        details?.total_fee?.onetime_service_after_discount
+          ? displayNumber(details.total_fee.onetime_service_after_discount)
           : 0
       }`;
     }
@@ -331,7 +222,7 @@ export default function Agreement({
 
           if (item.custom_amazon_store_price) {
             oneTimeSubTotal += item.custom_amazon_store_price * quantity;
-          } else if (item && item.service) {
+          } else if (item?.service) {
             oneTimeSubTotal += item.service.fee * quantity;
           } else {
             let fixedFee = servicesFees.filter((n) => n.id === item.service_id);
@@ -363,93 +254,68 @@ export default function Agreement({
     }
     return 0;
   };
-
   const mapOnetimeServiceTotal = () => {
     const totalFees = calculateTodalFee('onetime');
     return `
     ${
-      totalFees && totalFees.oneTimeAmountAfterDiscount
-        ? `<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;">
-            <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px" text-align:left"> Sub-total</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px" text-align: right;">$${
-              totalFees &&
-              totalFees.oneTimeSubTotal
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+      totalFees?.oneTimeAmountAfterDiscount
+        ? `<tr style="display: table-row; vertical-align: inherit; border-color: inherit;">
+            <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px" text-align:left">Sub-total</td>
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px" text-align: right;">
+              $${displayNumber(totalFees?.oneTimeSubTotal)}
             </td>
          </tr>`
         : ''
     }
         ${
-          totalFees && totalFees.oneTimeAmountAfterDiscount
-            ? `<tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;">
-            <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px; text-align:left;"> Discount ${
-              totalFees &&
-              totalFees.oneTimeAmountAfterDiscount &&
-              totalFees &&
-              totalFees.oneTimeDiscountType === 'percentage'
-                ? `(${totalFees && totalFees.oneTimeDiscount}%)`
-                : ''
-            }</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px;text-align: right;"> -$${
-              totalFees &&
-              totalFees.oneTimeAmountAfterDiscount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+          totalFees?.oneTimeAmountAfterDiscount
+            ? `<tr style="display: table-row; vertical-align: inherit; border-color: inherit;">
+            <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px; text-align:left;"> Discount 
+              ${
+                totalFees?.oneTimeAmountAfterDiscount &&
+                totalFees?.oneTimeDiscountType === 'percentage'
+                  ? `(${totalFees?.oneTimeDiscount}%)`
+                  : ''
+              }
+            </td>
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px; text-align: right;"> 
+              -$${displayNumber(totalFees?.oneTimeAmountAfterDiscount)}
             </td>
          </tr>`
             : ''
         }
-         <tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;">
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding-top: 5px; text-align:left"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding-top: 5px; text-align: right;"> $${
-              totalFees &&
-              totalFees.oneTimeTotal
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+         <tr style="display: table-row; vertical-align: inherit; border-color: inherit;">
+            <td class="total-service" colspan="3" style="border: 1px solid black; padding-top: 5px; text-align:left"> Total</td>
+            <td class="total-service text-right" style="border: 1px solid black; padding-top: 5px; text-align: right;"> 
+              $${displayNumber(totalFees?.oneTimeTotal)} 
             </td>
          </tr>
          `;
   };
 
   const showOneTimeServiceTable = () => {
-    if (
-      formData &&
-      formData.additional_one_time_services &&
-      formData.additional_one_time_services.length
-    ) {
-      return `<div class="table-responsive"><table class="contact-list " style="width: 100%;
-    border-collapse: collapse;
-"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Quantity</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service Fee</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}${mapOnetimeServiceTotal()}
-                                </table></div>`;
+    if (formData?.additional_one_time_services?.length) {
+      return `<div class="table-responsive">
+        <table class="contact-list " style="width: 100%; border-collapse: collapse;">
+          <tr style="display: table-row; vertical-align: inherit; border-color: inherit;">
+            <th style="text-align: left;border: 1px solid black; padding: 13px;">Quantity</th>
+            <th style="text-align: left;border: 1px solid black; padding: 13px;">Service</th>
+            <th style="text-align: left;border: 1px solid black; padding: 13px;">Service Fee</th>
+            <th style="text-align: left;border: 1px solid black; padding: 13px;">Total Service Fee</th>
+          </tr>
+          ${mapMonthlyServices(
+            'additional_one_time_services',
+            'One Time Services',
+          )}
+          ${mapOnetimeServiceTotal()}
+        </table>
+      </div>`;
     }
     return '';
   };
 
   const mapLanguage = () => {
-    if (
-      details &&
-      details.contract_type &&
-      details.contract_type.toLowerCase().includes('recurring (90 day notice)')
-    ) {
+    if (contractType.toLowerCase().includes('recurring (90 day notice)')) {
       return Recurring90DaysLanguage;
     }
     return RecurringLanguage;
@@ -457,7 +323,7 @@ export default function Agreement({
 
   return (
     <>
-      <Paragraph>
+      <AgreementParagraph>
         <p
           className="mb-4 long-text "
           dangerouslySetInnerHTML={{
@@ -523,7 +389,7 @@ export default function Agreement({
                 .replace('THAD_SIGN', mapThadSignImg()),
           }}
         />
-      </Paragraph>
+      </AgreementParagraph>
     </>
   );
 }
@@ -536,119 +402,86 @@ Agreement.defaultProps = {
 };
 
 Agreement.propTypes = {
-  details: PropTypes.shape({
-    length: PropTypes.shape({ label: PropTypes.string }),
-    contract_type: PropTypes.string,
-    one_time_discount_type: PropTypes.string,
-    one_time_discount_amount: PropTypes.number,
-    total_fee: PropTypes.shape({
-      additional_marketplaces: PropTypes.number,
-      monthly_service: PropTypes.number,
-      onetime_service: PropTypes.number,
-      onetime_service_after_discount: PropTypes.number,
-      onetime_service_discount: PropTypes.number,
+  details: shape({
+    length: oneOfType([
+      string,
+      shape({
+        value: string,
+        label: string,
+      }),
+    ]),
+    contract_type: string,
+    one_time_discount_type: string,
+    one_time_discount_amount: number,
+    total_fee: shape({
+      additional_marketplaces: number,
+      monthly_service: number,
+      onetime_service: number,
+      onetime_service_after_discount: number,
+      onetime_service_discount: number,
     }),
-    primary_marketplace: PropTypes.shape({
-      fee: PropTypes.number,
-      name: PropTypes.string,
-      id: PropTypes.string,
-    }),
-    additional_marketplaces: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.shape({
-          name: PropTypes.string,
-          fee: PropTypes.number,
+    primary_marketplace: oneOfType([
+      string,
+      shape({
+        fee: number,
+        name: string,
+        id: string,
+      }),
+    ]),
+    additional_marketplaces: arrayOf(
+      shape({
+        service: shape({
+          name: string,
+          fee: number,
         }),
       }),
     ),
-    additional_one_time_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.shape({
-          name: PropTypes.string,
-          fee: PropTypes.number,
+    additional_one_time_services: arrayOf(
+      shape({
+        service: shape({
+          name: string,
+          fee: number,
         }),
       }),
     ),
-    additional_monthly_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.shape({
-          name: PropTypes.string,
-          fee: PropTypes.number,
+    additional_monthly_services: arrayOf(
+      shape({
+        service: shape({
+          name: string,
+          fee: number,
         }),
       }),
     ),
   }),
-  formData: PropTypes.shape({
-    length: PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
+  formData: shape({
+    length: oneOfType([
+      string,
+      shape({
+        value: string,
+        label: string,
+      }),
+    ]),
+    sales_threshold: string,
+    additional_one_time_services: arrayOf(shape({})),
+    customer_id: shape({
+      address: string,
+      city: string,
+      state: string,
+      zip_code: string,
     }),
-    sales_threshold: PropTypes.string,
-
-    additional_one_time_services: PropTypes.arrayOf(PropTypes.object),
-    customer_id: PropTypes.shape({
-      address: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      zip_code: PropTypes.string,
+    one_time_discount_type: oneOfType([string, number]),
+    one_time_discount_amount: oneOfType([string, number]),
+  }),
+  templateData: shape({
+    addendum: arrayOf(string),
+    statement_of_work: arrayOf(string),
+    one_time_service_agreement: arrayOf(string),
+    recurring_service_agreement: arrayOf(string),
+  }),
+  servicesFees: arrayOf(
+    shape({
+      fee: number,
+      filter: func,
     }),
-    one_time_discount_type: PropTypes.string,
-    one_time_discount_amount: PropTypes.number,
-  }),
-  templateData: PropTypes.shape({
-    addendum: PropTypes.arrayOf(PropTypes.shape(PropTypes.string)),
-    statement_of_work: PropTypes.string,
-    one_time_service_agreement: PropTypes.arrayOf(PropTypes.string),
-    recurring_service_agreement: PropTypes.arrayOf(PropTypes.string),
-  }),
-  servicesFees: PropTypes.shape({
-    fee: PropTypes.number,
-    filter: PropTypes.func,
-  }),
+  ),
 };
-
-const Paragraph = styled.div`
-  .first-sub-category {
-    margin: 0;
-    padding-inline-start: 30px;
-    li {
-      margin-bottom: 17px;
-      padding-left: 5px;
-    }
-  }
-  &.testing {
-    color: red !important;
-  }
-
-  .contact-list table,
-  td,
-  th {
-    border: 1px solid black;
-    padding: 13px;
-
-    .total-service-bordless {
-      font-weight: 500;
-      border-bottom: hidden !important;
-    }
-  }
-
-  tr {
-    .total-service {
-      font-weight: 800;
-    }
-    .total-service-bordless {
-      font-weight: 500;
-      border-bottom: hidden !important;
-      padding: 7px 13px;
-    }
-
-    th {
-      text-align: left;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-`;

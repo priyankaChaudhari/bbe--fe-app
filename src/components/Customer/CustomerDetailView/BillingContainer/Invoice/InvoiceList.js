@@ -33,6 +33,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               <div className="black-heading-title">
                 {invoiceType === 'rev share'
                   ? 'Revenue Share Invoices'
+                  : invoiceType === 'upsell'
+                  ? 'Upsell Invoices'
                   : 'DSP Invoices'}
               </div>
             </div>
@@ -44,7 +46,7 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               <TableMobileView
                 className="mb-3"
                 invoiceType={item.invoice_type}
-                invoiceId={item.invoiced_id}
+                invoiceId={item.next_next_invoiced_id}
                 status={item.invoice_status}
                 statusColor={
                   StatusColorSet[
@@ -98,7 +100,7 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
       <tr>
         <td className="product-body">
           <div className="company-name">{item.invoice_type}</div>
-          <div className="status">#{item.invoiced_id}</div>
+          <div className="status">#{item.next_invoiced_id}</div>
         </td>
         <td className="product-body">
           ${addThousandComma(item.monthly_budget, 0)}
@@ -133,6 +135,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
           <p style={{ marginTop: '0px' }} className="black-heading-title mb-4">
             {invoiceType === 'rev share'
               ? 'Revenue Share Invoices'
+              : invoiceType === 'upsell'
+              ? 'Upsell Invoices'
               : 'DSP Invoices'}
           </p>
           <div className="straight-line horizontal-line spacing " />
@@ -147,6 +151,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               No{' '}
               {invoiceType === 'rev share'
                 ? 'Revenue Share Invoices'
+                : invoiceType === 'upsell'
+                ? 'Upsell Invoices'
                 : 'DSP Invoices'}{' '}
               Found
             </NoData>

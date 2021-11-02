@@ -1,11 +1,14 @@
 /* eslint-disable react/no-danger */
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
 
 import queryString from 'query-string';
 import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
+import NavigationHeader from './NavigationHeader';
+import { login } from '../../store/actions/userState';
+import { resetPassword, updateOnBoardCustomer } from '../../api';
 import {
   Button,
   InputFormField,
@@ -14,19 +17,16 @@ import {
   PageLoader,
   UnauthorizedHeader,
 } from '../../common';
-import { resetPassword, updateOnBoardCustomer } from '../../api';
-import { login } from '../../store/actions/userState';
-import NavigationHeader from './NavigationHeader';
 
 export default function CreateAccount() {
   const { register, handleSubmit, errors, watch } = useForm();
   const history = useHistory();
   const dispatch = useDispatch();
-  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const loader = useSelector((state) => state.userState.isLoading);
+  const params = queryString.parse(history.location.search);
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({});
-  const params = queryString.parse(history.location.search);
+  const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [assignTo, setAssignTo] = useState(false);
   const [showSuccessMsg, setShowSuccessMsg] = useState(false);
   const [getEmail, setGetEmail] = useState('');

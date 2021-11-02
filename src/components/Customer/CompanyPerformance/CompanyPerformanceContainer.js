@@ -3,10 +3,17 @@ import React, { useState } from 'react';
 import { arrayOf, shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
-import PerformanceReport from './SalesPerformanceView/PerformanceReport';
+import PerformanceReport from './SellerReporting/PerformanceReport';
 import AdPerformance from './AdPerformanceView/AdPerformance';
+import VendorSalesPerformanceContainer from './VendorReporting/VendorSalesPerformanceContainer';
 
-export default function CompanyPerformance({ marketplaceChoices, id }) {
+import { Tabs } from '../../../common';
+
+export default function CompanyPerformance({
+  marketplaceChoices,
+  id,
+  subViewComponent,
+}) {
   const history = useHistory();
   const currentDate = new Date();
   const setTab =
@@ -14,37 +21,79 @@ export default function CompanyPerformance({ marketplaceChoices, id }) {
       ? 'adPerformance'
       : 'salePerformance';
   currentDate.setDate(currentDate.getDate() - 3);
-  const [viewComponent, setViewComponent] = useState(setTab);
+  const [sellerViewComponent, setSellerViewComponent] = useState(setTab);
 
-  return (
-    <>
-      <div className="col-lg-6 col-12">
-        {viewComponent === 'salePerformance' ? (
-          <PerformanceReport
+  const renderViewComponents = () => {
+    if (subViewComponent === 'seller') {
+      return (
+        <div key={sellerViewComponent}>
+          {sellerViewComponent === 'salePerformance' ? (
+            <PerformanceReport
+              marketplaceChoices={marketplaceChoices}
+              id={id}
+            />
+          ) : (
+            <AdPerformance
+              marketplaceChoices={marketplaceChoices}
+              id={id}
+              accountType={subViewComponent}
+            />
+          )}
+        </div>
+      );
+    }
+    return (
+      <div key={sellerViewComponent}>
+        {sellerViewComponent === 'salePerformance' ? (
+          <VendorSalesPerformanceContainer
             marketplaceChoices={marketplaceChoices}
             id={id}
-            viewComponent={viewComponent}
-            setViewComponent={setViewComponent}
           />
         ) : (
           <AdPerformance
             marketplaceChoices={marketplaceChoices}
             id={id}
-            viewComponent={viewComponent}
-            setViewComponent={setViewComponent}
+            accountType={subViewComponent}
           />
         )}
       </div>
-    </>
+    );
+  };
+
+  return (
+    <div className="col-lg-6 col-12" key={subViewComponent}>
+      <Tabs className="mb-3">
+        <ul className="tabs">
+          <li
+            className={
+              sellerViewComponent === 'salePerformance' ? 'active' : ''
+            }
+            onClick={() => setSellerViewComponent('salePerformance')}
+            role="presentation">
+            Sales Performance
+          </li>
+          <li
+            className={sellerViewComponent === 'adPerformance' ? 'active' : ''}
+            onClick={() => setSellerViewComponent('adPerformance')}
+            role="presentation">
+            Ad Performance
+          </li>
+        </ul>
+      </Tabs>
+
+      {renderViewComponents()}
+    </div>
   );
 }
 
 CompanyPerformance.defaultProps = {
   marketplaceChoices: [],
   id: '',
+  subViewComponent: 'seller',
 };
 
 CompanyPerformance.propTypes = {
   marketplaceChoices: arrayOf(shape({})),
   id: string,
+  subViewComponent: string,
 };

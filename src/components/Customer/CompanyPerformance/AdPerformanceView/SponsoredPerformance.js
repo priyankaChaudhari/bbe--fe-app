@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
+import { arrayOf, bool, func, instanceOf, shape, string } from 'prop-types';
 
 import AdPerformanceChart from './AdPerformanceChart';
 import SponsoredAdMetric from '../../../BrandPartner/AdManagerAdminDashboard/SponsoredDashboard/SponsoredAdMetrics';
@@ -234,7 +234,7 @@ SponsoredPerformance.defaultProps = {
   handleAdGroupBy: () => {},
   handleAdType: () => {},
   isApiCall: false,
-  selectedAdType: '',
+  selectedAdType: {},
   getAdTypesSelectComponents: () => {},
 };
 
@@ -253,7 +253,7 @@ SponsoredPerformance.propTypes = {
   handleAdGroupBy: func,
   handleAdType: func,
   isApiCall: bool,
-  selectedAdType: string,
+  selectedAdType: shape({}),
   getAdTypesSelectComponents: func,
 };
 const NoData = styled.div`

@@ -4,10 +4,10 @@ import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import NavigationHeader from './NavigationHeader';
-import { logout, userMe } from '../../store/actions';
 import { showOnboardingMsg } from '../../store/actions/userState';
-import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
+import { logout, userMe } from '../../store/actions';
 import { accountSummary, updateUserMe } from '../../api';
+import { GrayClockIcon, OrangeCheckMark } from '../../theme/images';
 import { OnBoardingBody, GreyCard, Button, PageLoader } from '../../common';
 import {
   PATH_AMAZON_MERCHANT,

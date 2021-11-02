@@ -18,7 +18,7 @@ function DashboardContainer() {
     'Hybrid Ad Manager': 'Ad Manager Dashboard',
     BGS: 'BGS Dashboard',
     'BGS Manager': 'BGS Dashboard',
-    Finance: 'Finance Dashboard',
+    Finance: 'Dashboard',
   };
 
   const dashboardRole = {

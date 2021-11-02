@@ -70,6 +70,8 @@ export default function useActivityLog({ viewComponent }) {
     let newValue = '';
     let mixedLog = false;
     let customerSetupHeader = '';
+
+    // For created new record by company name Activity
     if (
       item &&
       item.history_change_reason.includes('created new record by company name')
@@ -85,6 +87,8 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
+
+    // For deleted Activity
     if (item.history_change_reason.includes('deleted')) {
       activityMessage = item.history_change_reason.split('deleted');
       if (item.history_change_reason.includes('deleted note')) {
@@ -118,6 +122,8 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
+
+    // For updated addendum Activity
     if (item.history_change_reason.includes('updated addendum')) {
       activityMessage = item.history_change_reason.split('updated addendum');
       return (
@@ -128,7 +134,13 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
-    if (item && item.history_change_reason.includes('updated')) {
+
+    // For updated activity without brand profile activity
+    if (
+      item &&
+      item.history_change_reason.includes('updated') &&
+      !item.history_change_reason.includes('brand profile note')
+    ) {
       activityMessage = item.history_change_reason.split('updated');
       const msg = activityMessage[0];
       logUser = msg;
@@ -232,6 +244,26 @@ export default function useActivityLog({ viewComponent }) {
         ? displayMixedLog(logUser, activityMessage, customerSetupHeader)
         : displayLog(logUser, field, oldValue, newValue);
     }
+
+    // For updated activity without brand profile activity
+    if (item && item.history_change_reason.includes('brand profile note')) {
+      activityMessage = item.history_change_reason.includes('updated')
+        ? item.history_change_reason.split('updated')
+        : item.history_change_reason.split('created');
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          {item.history_change_reason.includes('updated') ? (
+            <span>updated</span>
+          ) : (
+            <span>created</span>
+          )}
+          {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+
+    // For requested Activity
     if (item && item.history_change_reason.includes('requested for')) {
       activityMessage = item.history_change_reason.split('requested for');
       return (
@@ -242,6 +274,8 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
+
+    // For added Activity
     if (item && item.history_change_reason.includes('added')) {
       activityMessage = item.history_change_reason.split('added');
       let value;
@@ -271,6 +305,8 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
+
+    // For removed Activity
     if (item && item.history_change_reason.includes('removed')) {
       activityMessage = item.history_change_reason.split('removed');
       return (

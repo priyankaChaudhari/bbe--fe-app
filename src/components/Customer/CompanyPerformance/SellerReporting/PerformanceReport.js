@@ -1,39 +1,32 @@
+/* eslint-disable camelcase */
 import React, { useEffect, useState, useCallback } from 'react';
 
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import * as am4core from '@amcharts/amcharts4/core';
-// eslint-disable-next-line camelcase
-import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import Select from 'react-select';
-import { func, instanceOf, shape, string } from 'prop-types';
+import * as am4core from '@amcharts/amcharts4/core';
+import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
+import { instanceOf, shape, string } from 'prop-types';
 import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 import SalesPerformancePanel from './SalesPerformancePanel';
 import BuyBoxPercentPanel from './BuyBoxPercentPanel';
 import Theme from '../../../../theme/Theme';
+import 'react-date-range/dist/styles.css'; // main style file
+import 'react-date-range/dist/theme/default.css'; // theme css file
 import { getPerformance, getBuyBoxChartData } from '../../../../api';
 import {
   DropDownSelect,
   WhiteCard,
   CustomDateModal,
-  Tabs,
   DropDownIndicator,
 } from '../../../../common';
-
-import 'react-date-range/dist/styles.css'; // main style file
-import 'react-date-range/dist/theme/default.css'; // theme css file
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 am4core.useTheme(am4themes_dataviz);
-export default function PerformanceReport({
-  marketplaceChoices,
-  id,
-  viewComponent,
-  setViewComponent,
-}) {
+export default function PerformanceReport({ marketplaceChoices, id }) {
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
   const [isSPCustomDateApply, setIsSPCustomDateApply] = useState(false);
@@ -72,6 +65,7 @@ export default function PerformanceReport({
   const [selectedValue, setSelectedValue] = useState({
     value: 'week',
     label: 'Recent 7 days',
+    sub: 'vs Previous 7 days',
   });
   const [bBDailyFact, setBBDailyFact] = useState({
     value: 'week',
@@ -111,11 +105,11 @@ export default function PerformanceReport({
           revenuePreviousLabel:
             item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
           unitsSoldPreviousLabel:
-            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+            item.units_sold !== null ? item.units_sold.toFixed(0) : '0',
           trafficPreviousLabel:
-            item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+            item.traffic !== null ? item.traffic.toFixed(0) : '0',
           conversionPreviousLabel:
-            item.conversion !== null ? item.conversion : '0',
+            item.conversion !== null ? item.conversion.toFixed(2) : '0',
         });
       });
     }
@@ -139,11 +133,11 @@ export default function PerformanceReport({
           tempData[index].revenueCurrentLabel =
             item.revenue !== null ? item.revenue.toFixed(2) : '0.00';
           tempData[index].unitsSoldCurrentLabel =
-            item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00';
+            item.units_sold !== null ? item.units_sold.toFixed(0) : '0';
           tempData[index].trafficCurrentLabel =
-            item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
+            item.traffic !== null ? item.traffic.toFixed(0) : '0';
           tempData[index].conversionCurrentLabel =
-            item.conversion !== null ? item.conversion : '0';
+            item.conversion !== null ? item.conversion.toFixed(2) : '0';
 
           // to add the dotted line. we have to check null matrix and add the dummy number like 8
           if (index > 0) {
@@ -177,15 +171,15 @@ export default function PerformanceReport({
             revenueCurrentLabel:
               item.revenue !== null ? item.revenue.toFixed(2) : '0.00',
             unitsSoldCurrentLabel:
-              item.units_sold !== null ? item.units_sold.toFixed(2) : '0.00',
+              item.units_sold !== null ? item.units_sold.toFixed(0) : '0',
             trafficCurrentLabel:
-              item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
+              item.traffic !== null ? item.traffic.toFixed(0) : '0',
             conversionCurrentLabel:
-              item.conversion !== null ? item.conversion : '0',
+              item.conversion !== null ? item.conversion.toFixed(2) : '0',
 
             revenuePreviousLabel: '0.00',
-            unitsSoldPreviousLabel: '0.00',
-            trafficPreviousLabel: '0.00',
+            unitsSoldPreviousLabel: '0',
+            trafficPreviousLabel: '0',
             conversionPreviousLabel: '0',
           });
         }
@@ -236,7 +230,7 @@ export default function PerformanceReport({
 
           const tempBBData = res.data.bbep.map((data) => {
             return {
-              date: dayjs(data.report_date).format('MMM D'),
+              date: dayjs(data.report_date).format('MMM D YYYY'),
               value: data.bbep,
               avg: avg.toFixed(2),
             };
@@ -411,11 +405,7 @@ export default function PerformanceReport({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 7) {
-      temp = 'daily';
-      setFilters({ daily: true, weekly: false, month: false });
-      setGroupBy('daily');
-    } else if (diffDays <= 30) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setFilters({ daily: true, weekly: true, month: false });
       setGroupBy('daily');
@@ -588,7 +578,6 @@ export default function PerformanceReport({
         'custom',
       );
       setShowBBCustomDateModal(false);
-
       setIsBBCustomDateApply(true);
     } else {
       checkDifferenceBetweenDates(
@@ -604,22 +593,6 @@ export default function PerformanceReport({
   const renderMarketplaceDropDown = () => {
     return (
       <WhiteCard className="mb-3">
-        <Tabs>
-          <ul className="tabs">
-            <li
-              className={viewComponent === 'salePerformance' ? 'active' : ''}
-              onClick={() => setViewComponent('salePerformance')}
-              role="presentation">
-              Sales Performance
-            </li>
-            <li
-              className={viewComponent === 'adPerformance' ? 'active' : ''}
-              onClick={() => setViewComponent('adPerformance')}
-              role="presentation">
-              Ad Performance
-            </li>
-          </ul>
-        </Tabs>
         <ViewData>
           <div className="row">
             <div className="col-md-4  col-sm-12 ">
@@ -717,15 +690,15 @@ export default function PerformanceReport({
         <WhiteCard className="fix-height ">
           <p className="black-heading-title mt-0 mb-4">Inventory Score (IPI)</p>
 
-          <ResponsiveContainer width="99%" height={200}>
+          <ResponsiveContainer width="100%" height={200}>
             <PieChart>
               <Pie
                 data={pieData}
-                cx={75}
+                cx={72}
                 cy={100}
-                startAngle={180}
+                startAngle={170}
                 marginBottom={40}
-                endAngle={0}
+                endAngle={10}
                 innerRadius={60}
                 outerRadius={80}
                 fill="#8884D8"
@@ -789,16 +762,17 @@ export default function PerformanceReport({
       <BuyBoxPercentPanel
         bBChartData={bBChartData}
         bBGraphLoader={bBGraphLoader}
+        bBDailyFact={bBDailyFact}
         handleBBDailyFact={handleBBDailyFact}
         isApiCall={isApiCall}
-        bBDailyFact={bBDailyFact}
+        setShowBBCustomDateModal={setShowBBCustomDateModal}
         dspData={dspData}
         showBBCustomDateModal={showBBCustomDateModal}
         BBstate={BBstate}
-        setShowBBCustomDateModal={setShowBBCustomDateModal}
         setBBState={setBBState}
         applyCustomDate={applyCustomDate}
         currentDate={currentDate}
+        renderCustomDateSubLabel={renderCustomDateSubLabel}
       />
       {/* custom date modal for sale performance graph */}
       <CustomDateModal
@@ -828,17 +802,13 @@ export default function PerformanceReport({
 PerformanceReport.defaultProps = {
   marketplaceChoices: {},
   id: '',
-  viewComponent: '',
   data: {},
-  setViewComponent: () => {},
 };
 
 PerformanceReport.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
-  viewComponent: string,
   data: shape({}),
-  setViewComponent: func,
 };
 const ViewData = styled.div`
   .view-data-for {

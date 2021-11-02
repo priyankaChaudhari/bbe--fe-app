@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
-import { func, instanceOf, string } from 'prop-types';
+import { instanceOf, string } from 'prop-types';
 
 import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
@@ -13,7 +13,7 @@ import AdPerformanceFilters from './AdPerformanceFilters';
 import { DspAdPacing } from '../../../BrandPartner';
 import { CloseIcon } from '../../../../theme/images';
 import { CustomDateModal, DropDownIndicator } from '../../../../common';
-import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
+import { dateOptions, noGraphDataMessage } from '../../../../constants';
 import {
   getAdPerformance,
   getDSPPerformance,
@@ -26,12 +26,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
 
-export default function AdPerformance({
-  marketplaceChoices,
-  id,
-  viewComponent,
-  setViewComponent,
-}) {
+export default function AdPerformance({ marketplaceChoices, id, accountType }) {
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -39,7 +34,10 @@ export default function AdPerformance({
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
-  const [selectedAdType, setSelectedAdType] = useState('all');
+  const [selectedAdType, setSelectedAdType] = useState({
+    value: 'all',
+    label: 'All Ad Types',
+  });
   const [selectedAdDF, setSelectedAdDF] = useState({
     value: 'week',
     label: 'Recent 7 days',
@@ -452,6 +450,7 @@ export default function AdPerformance({
         marketplace,
         startDate,
         endDate,
+        accountType,
       ).then((res) => {
         if (res && res.status === 400) {
           setIsApiCall(false);
@@ -472,7 +471,7 @@ export default function AdPerformance({
         }
       });
     },
-    [id],
+    [id, accountType],
   );
 
   const getDSPData = useCallback(
@@ -555,9 +554,10 @@ export default function AdPerformance({
         adGroupBy,
         marketplace[0].value,
       );
-
-      getDSPData(selectedAdDF.value, dspGroupBy, marketplace[0].value);
-      getDSPPacing(marketplace[0].value);
+      if (accountType !== 'vendor') {
+        getDSPData(selectedAdDF.value, dspGroupBy, marketplace[0].value);
+        getDSPPacing(marketplace[0].value);
+      }
       setResponseId('12345');
     }
   }, [
@@ -573,6 +573,7 @@ export default function AdPerformance({
     dspGroupBy,
     selectedAdType,
     selectedAdDF,
+    accountType,
   ]);
 
   const getDays = (startDate, endDate) => {
@@ -592,11 +593,7 @@ export default function AdPerformance({
     let sd = startDate;
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
-    if (diffDays <= 7) {
-      temp = 'daily';
-      setAdFilters({ daily: true, weekly: false, month: false });
-      setAdGroupBy('daily');
-    } else if (diffDays <= 30) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setAdFilters({ daily: true, weekly: true, month: false });
       setAdGroupBy('daily');
@@ -636,11 +633,7 @@ export default function AdPerformance({
     let ed = endDate;
     const diffDays = getDays(startDate, endDate);
 
-    if (diffDays <= 7) {
-      temp = 'daily';
-      setDSPFilters({ daily: true, weekly: false, month: false });
-      setDSPGroupBy('daily');
-    } else if (diffDays <= 30) {
+    if (diffDays <= 30) {
       temp = 'daily';
       setDSPFilters({ daily: true, weekly: true, month: false });
       setDSPGroupBy('daily');
@@ -1006,12 +999,10 @@ export default function AdPerformance({
   return (
     <AddPerformance>
       <AdPerformanceFilters
-        viewComponent={viewComponent}
-        setViewComponent={setViewComponent}
         marketplaceDefaultValue={marketplaceDefaultValue}
         marketplaceOptions={marketplaceOptions}
         handleMarketplaceOptions={handleMarketplaceOptions}
-        dateOptions={dateOptionsWithYear}
+        dateOptions={dateOptions}
         getSelectComponents={getSelectComponents}
         DropDownIndicator={DropDownIndicator}
         selectedAdDF={selectedAdDF}
@@ -1042,24 +1033,26 @@ export default function AdPerformance({
 
       {/* DSP ad performance panel */}
 
-      <DSPPerformance
-        dspData={dspData}
-        setShowDspAdPacingModal={setShowDspAdPacingModal}
-        selectedDspBox={selectedDspBox}
-        dspFilters={dspFilters}
-        handleDSPGroupBy={handleDSPGroupBy}
-        dspGroupBy={dspGroupBy}
-        selectedAdDF={selectedAdDF}
-        currencySymbol={currencySymbol}
-        dspCurrentTotal={dspCurrentTotal}
-        dspDifference={dspDifference}
-        dspPreviousTotal={dspPreviousTotal}
-        setBoxToggle={setBoxToggle}
-        setBoxClasses={setBoxClasses}
-        dspChartData={dspChartData}
-        dspGraphLoader={dspGraphLoader}
-        noGraphDataMessage={noGraphDataMessage}
-      />
+      {accountType === 'seller' ? (
+        <DSPPerformance
+          dspData={dspData}
+          setShowDspAdPacingModal={setShowDspAdPacingModal}
+          selectedDspBox={selectedDspBox}
+          dspFilters={dspFilters}
+          handleDSPGroupBy={handleDSPGroupBy}
+          dspGroupBy={dspGroupBy}
+          selectedAdDF={selectedAdDF}
+          currencySymbol={currencySymbol}
+          dspCurrentTotal={dspCurrentTotal}
+          dspDifference={dspDifference}
+          dspPreviousTotal={dspPreviousTotal}
+          setBoxToggle={setBoxToggle}
+          setBoxClasses={setBoxClasses}
+          dspChartData={dspChartData}
+          dspGraphLoader={dspGraphLoader}
+          noGraphDataMessage={noGraphDataMessage}
+        />
+      ) : null}
 
       <CustomDateModal
         id="BT-adperformance-daterange"
@@ -1087,15 +1080,13 @@ export default function AdPerformance({
 AdPerformance.defaultProps = {
   marketplaceChoices: {},
   id: '',
-  viewComponent: '',
-  setViewComponent: () => {},
+  accountType: 'seller',
 };
 
 AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
-  viewComponent: string,
-  setViewComponent: func,
+  accountType: string,
 };
 
 const AddPerformance = styled.div`

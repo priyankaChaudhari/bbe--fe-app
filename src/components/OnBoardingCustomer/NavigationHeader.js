@@ -1,15 +1,14 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
-import styled from 'styled-components';
-import LoadingBar from 'react-top-loading-bar';
-import PropTypes from 'prop-types';
 import queryString from 'query-string';
+import LoadingBar from 'react-top-loading-bar';
+import { useHistory } from 'react-router-dom';
+import { string, shape, bool } from 'prop-types';
 
-import Theme from '../../theme/Theme';
+import { askSomeoneData } from '../../api';
+import { BackToStep } from './OnBoardingStyles';
 import { LeftArrowIcon } from '../../theme/images';
 import { PATH_ACCOUNT_SETUP_CHOOSE } from '../../constants';
-import { askSomeoneData } from '../../api';
 
 export default function NavigationHeader({
   bar,
@@ -135,37 +134,21 @@ NavigationHeader.defaultProps = {
 };
 
 NavigationHeader.propTypes = {
-  bar: PropTypes.string.isRequired,
-  backStep: PropTypes.string,
-  skipStep: PropTypes.string,
-  showSuccessMsg: PropTypes.bool,
-  userInfo: PropTypes.shape({
-    email: PropTypes.string,
-    customer_onboarding: PropTypes.string,
+  bar: string.isRequired,
+  backStep: string,
+  skipStep: string,
+  showSuccessMsg: bool,
+  userInfo: shape({
+    email: string,
+    customer_onboarding: string,
   }).isRequired,
-  stepData: PropTypes.shape({
-    id: PropTypes.string,
+  stepData: shape({
+    id: string,
   }),
-  verifiedStepData: PropTypes.objectOf(
-    PropTypes.shape({
-      user_name: PropTypes.string,
+  verifiedStepData: shape(
+    shape({
+      user_name: string,
     }),
   ).isRequired,
-  stepName: PropTypes.string.isRequired,
+  stepName: string.isRequired,
 };
-
-const BackToStep = styled.div`
-  position: fixed;
-  background-color: ${Theme.white};
-  z-index: 2;
-  top: 70px;
-  padding: 22px 0px 18px 0px;
-  width: 100%;
-  border-bottom: 1px solid ${Theme.gray5};
-
-  .skip-steps {
-    color: ${Theme.gray40};
-    font-size: ${Theme.extraNormal};
-    cursor: pointer;
-  }
-`;

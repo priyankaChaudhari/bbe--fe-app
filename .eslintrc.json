@@ -32,7 +32,17 @@
         "controlComponents": ["CustomInput"],
         "depth": 3
       }
-    ]
+    ],
+    "no-param-reassign": 0
+    // "react/forbid-prop-types": [
+    //   "error",
+    //   {
+    //     "forbid": [
+    //       "object",
+    //       "string"
+    //     ]
+    //   }
+    // ]
   },
 
   "env": {

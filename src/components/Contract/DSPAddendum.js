@@ -1,14 +1,23 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/no-danger */
 
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
+import {
+  string,
+  func,
+  oneOfType,
+  arrayOf,
+  shape,
+  instanceOf,
+} from 'prop-types';
+
+import { DspAddendumParagraph } from '../../theme/AgreementStyle';
 
 export default function DSPAddendum({
   formData,
   templateData,
-  // calculatedDate,
   setCalculatedDate,
   firstMonthDate,
   setFirstMonthDate,
@@ -64,49 +73,35 @@ export default function DSPAddendum({
       const fourth = date.setMonth(date.getMonth() + 1);
       setThirdMonthDate(new Date(fourth));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formData]);
 
+  const handleNewDate = (monthDateOrder) => {
+    const newDate = new Date(
+      new Date(
+        new Date(monthDateOrder).getFullYear(),
+        new Date(monthDateOrder).getMonth() + 1,
+        0,
+      ),
+    );
+    return newDate;
+  };
   const calculateTotalDays = (flag = '') => {
     let firstMonthdays = 0;
     if (new Date(firstMonthDate).getDate() !== 1) {
-      const totalDays = new Date(
-        new Date(firstMonthDate).getFullYear(),
-        new Date(firstMonthDate).getMonth() + 1,
-        0,
-      ).getDate();
+      const totalDays = handleNewDate(firstMonthDate).getDate();
       const currentDate = new Date(firstMonthDate).getDate();
       firstMonthdays = totalDays - currentDate;
     } else {
-      firstMonthdays = new Date(
-        new Date(firstMonthDate).getFullYear(),
-        new Date(firstMonthDate).getMonth() + 1,
-        0,
-      ).getDate();
+      firstMonthdays = handleNewDate(firstMonthDate).getDate();
     }
-
     let extraDays = 0;
     if (new Date(firstMonthDate).getDate() !== 1) {
-      extraDays = new Date(
-        new Date(endMonthDate).getFullYear(),
-        new Date(endMonthDate).getMonth() + 1,
-        0,
-      ).getDate();
+      extraDays = handleNewDate(endMonthDate).getDate();
     }
-    const secondMonthdays = new Date(
-      new Date(secondMonthDate).getFullYear(),
-      new Date(secondMonthDate).getMonth() + 1,
-      0,
-    ).getDate();
-    const thirdMonthdays = new Date(
-      new Date(thirdMonthDate).getFullYear(),
-      new Date(thirdMonthDate).getMonth() + 1,
-      0,
-    ).getDate();
-
+    const secondMonthdays = handleNewDate(secondMonthDate).getDate();
+    const thirdMonthdays = handleNewDate(thirdMonthDate).getDate();
     const totaldays =
       firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
-
     if (flag === 'initial') {
       if (totaldays < 105) {
         return '3';
@@ -117,7 +112,6 @@ export default function DSPAddendum({
       return `90 days (3 months)`;
     }
     return `105 days (3.5 months)`;
-
     // return firstMonthdays + extraDays + secondMonthdays + thirdMonthdays;
   };
 
@@ -133,7 +127,6 @@ export default function DSPAddendum({
     if (key === 'calculated_no_of_days') {
       return calculateTotalDays();
     }
-
     if (key === 'start_date') {
       return formData && formData[key] !== null
         ? formData && dayjs(formData[key]).format('MM / DD / YYYY')
@@ -141,11 +134,7 @@ export default function DSPAddendum({
     }
 
     if (key === 'dsp_length') {
-      if (
-        formData &&
-        formData.contract_type &&
-        formData.contract_type.toLowerCase().includes('dsp')
-      ) {
+      if (formData?.contract_type?.toLowerCase().includes('dsp')) {
         return calculateTotalDays('initial');
       }
       if (
@@ -155,11 +144,10 @@ export default function DSPAddendum({
       ) {
         return `Enter ${label}`;
       }
-      return formData && formData.dsp_length && formData.dsp_length.label
+      return formData?.dsp_length?.label
         ? parseInt(formData.dsp_length.label, 10)
         : parseInt(formData.dsp_length, 10);
     }
-
     if (
       formData[key] === undefined ||
       formData[key] === '' ||
@@ -180,8 +168,6 @@ export default function DSPAddendum({
           : `Enter ${label}.`
       }`;
     }
-
-    // return details && details[key];
     return formData[key];
   };
 
@@ -208,23 +194,16 @@ export default function DSPAddendum({
 
   const displayFirstMonthFee = () => {
     if (firstMonthDate && new Date(firstMonthDate).getDate() !== 1) {
-      if (formData && formData.dsp_fee) {
-        const fee = parseInt(formData && formData.dsp_fee, 10);
+      if (formData?.dsp_fee) {
+        const fee = parseInt(formData?.dsp_fee, 10);
         const FinalFee = fee + fee / 2;
         return `$${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
     }
-    // return (
-    if (formData && formData.dsp_fee) {
-      return `$${
-        formData &&
-        formData.dsp_fee &&
-        formData.dsp_fee.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      }`;
+    if (formData?.dsp_fee) {
+      return `$${formData?.dsp_fee?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
     }
     return 'Enter DSP Fee ';
-
-    // );
   };
 
   const mapBudgetBreakdownTable = () => {
@@ -274,7 +253,7 @@ export default function DSPAddendum({
 
   return (
     <div>
-      <Paragraph>
+      <DspAddendumParagraph>
         <>
           <p
             className="long-text"
@@ -315,10 +294,6 @@ export default function DSPAddendum({
                       'number-currency',
                     ),
                   )
-                  // .replaceAll(
-                  //   'DSP_FEE',
-                  //   mapDefaultValues('dsp_fee', 'Dsp Fee', 'number-currency'),
-                  // )
                   .replaceAll(
                     'CONTRACT_LENGTH',
                     mapDefaultValues(
@@ -350,7 +325,7 @@ export default function DSPAddendum({
             }}
           />
         </>
-      </Paragraph>
+      </DspAddendumParagraph>
     </div>
   );
 }
@@ -371,80 +346,38 @@ DSPAddendum.defaultProps = {
 };
 
 DSPAddendum.propTypes = {
-  // formData: PropTypes.shape({
-  //   dsp_fee: PropTypes.string,
-  //   start_date: PropTypes.string,
-  //   length: PropTypes.shape({
-  //     label: PropTypes.string,
-  //     value: PropTypes.string,
-  //   }),
-  //   dsp_length: PropTypes.shape({
-  //     label: PropTypes.string,
-  //     value: PropTypes.string,
-  //   }),
-  // }),
-  templateData: PropTypes.shape({
-    dsp_addendum: PropTypes.arrayOf(PropTypes.string),
+  templateData: shape({
+    dsp_addendum: arrayOf(string),
   }),
-  // calculatedDate: PropTypes.instanceOf(Date),
-  setCalculatedDate: PropTypes.func,
-  firstMonthDate: PropTypes.instanceOf(Date),
-  setFirstMonthDate: PropTypes.func,
-  secondMonthDate: PropTypes.instanceOf(Date),
-  setSecondMonthDate: PropTypes.func,
-  thirdMonthDate: PropTypes.instanceOf(Date),
-  setThirdMonthDate: PropTypes.func,
-  endMonthDate: PropTypes.instanceOf(Date),
-  setEndDate: PropTypes.func,
-  formData: PropTypes.shape({
-    dsp_length: PropTypes.number,
-    dsp_fee: PropTypes.number,
-    contract_status: PropTypes.string,
-    start_date: PropTypes.instanceOf(Date),
-    contract_type: PropTypes.string,
-    customer_id: PropTypes.shape({
-      address: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      zip_code: PropTypes.string,
+  setCalculatedDate: func,
+  firstMonthDate: oneOfType([string, instanceOf(Date)]),
+  setFirstMonthDate: func,
+  secondMonthDate: oneOfType([string, instanceOf(Date)]),
+  setSecondMonthDate: func,
+  thirdMonthDate: oneOfType([string, instanceOf(Date)]),
+  setThirdMonthDate: func,
+  endMonthDate: oneOfType([string, instanceOf(Date)]),
+  setEndDate: func,
+  formData: shape({
+    dsp_fee: string,
+    dsp_length: oneOfType([
+      string,
+      shape({
+        value: string,
+        label: string,
+      }),
+    ]),
+    contract_status: shape({
+      label: string,
+      value: string,
+    }),
+    start_date: oneOfType([string, instanceOf(Date)]),
+    contract_type: string,
+    customer_id: shape({
+      address: string,
+      city: string,
+      state: string,
+      zip_code: string,
     }),
   }),
 };
-
-const Paragraph = styled.div`
-  .order-list-item {
-    margin: 0;
-    li {
-      padding-left: 8px;
-    }
-  }
-  .contact-list table,
-  td,
-  th {
-    border: 1px solid black;
-    padding: 13px;
-  }
-  tr {
-    .total-service {
-      font-weight: 800;
-    }
-    th {
-      text-align: left;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .refer-agreement {
-    border-bottom: 1px solid black;
-    font-weight: 400;
-    margin-left: 35px;
-    padding: 6px 0;
-
-    .label {
-      font-weight: 800;
-    }
-  }
-`;

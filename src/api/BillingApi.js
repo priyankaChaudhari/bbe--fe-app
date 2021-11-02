@@ -1,7 +1,7 @@
 import axiosInstance from '../axios';
 import { API_DSP_INVOICES } from '../constants';
 
-export async function getDSPInvoiceData(invoiceType, id) {
+export async function getInvoiceData(invoiceType, id) {
   const params = {
     customer: id,
     invoice_type: invoiceType,

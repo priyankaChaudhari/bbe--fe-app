@@ -7,4 +7,5 @@ export * from './AgreementSign';
 export * from './AgreementFields';
 export * from './DashboardConstants';
 export * from './CompanyPerformanceConstants';
+export { default as filtersOption } from './NotesConstants';
 export { default as userDetails } from './UserConstants';

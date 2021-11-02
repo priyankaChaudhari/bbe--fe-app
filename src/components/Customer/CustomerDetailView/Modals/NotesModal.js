@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Modal from 'react-modal';
-import { func, shape, bool, string } from 'prop-types';
+import { func, shape, bool, string, oneOfType } from 'prop-types';
 
 import Notes from '../Notes';
 
@@ -50,9 +50,14 @@ NotesModal.defaultProps = {
 };
 
 NotesModal.propTypes = {
-  showNotesModal: shape({
-    modal: bool,
-  }).isRequired,
+  showNotesModal: oneOfType([
+    bool,
+    shape({
+      modal: bool,
+      apiCall: bool,
+      deleteNote: bool,
+    }),
+  ]).isRequired,
   id: string.isRequired,
   setNewNoteEditor: func,
   setShowNotesModal: func,

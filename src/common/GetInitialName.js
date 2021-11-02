@@ -1,6 +1,6 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import { shape, string } from 'prop-types';
 
 const getInitials = (userInfo, type) => {
   if (type === 'list') {
@@ -13,8 +13,8 @@ const getInitials = (userInfo, type) => {
   return firstName + lastName;
 };
 
-// eslint-disable-next-line react/prop-types
 export default function GetInitialName({ userInfo, property, type }) {
+  if (type === 'profile') return getInitials(userInfo);
   return (
     <div
       className={
@@ -34,9 +34,11 @@ export default function GetInitialName({ userInfo, property, type }) {
 GetInitialName.defaultProps = {
   property: '',
   type: '',
+  userInfo: {},
 };
 
 GetInitialName.propTypes = {
-  property: PropTypes.string,
-  type: PropTypes.string,
+  property: string,
+  type: string,
+  userInfo: shape({}),
 };

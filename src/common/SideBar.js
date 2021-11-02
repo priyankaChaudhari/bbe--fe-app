@@ -5,21 +5,20 @@ const SideBar = styled.div`
   min-width: 80px;
   max-width: 300px;
   position: absolute;
-  top:80px;
+  top: 80px;
   right: 0;
-  min-height:100%;
-  // z-index: 98;
+  min-height: 100%;
+  /* z-index: 98; */
   background: ${Theme.white};
-  border-left:1px solid  ${Theme.gray7};
- 
+  border-left: 1px solid ${Theme.gray7};
 
   .activity-icon {
-    background-color:${Theme.gray15};
+    background-color: ${Theme.gray15};
     width: 40px;
     height: 40px;
     border-radius: 50%;
 
-    img{
+    img {
       margin-top: 13px;
       width: 24px;
     }
@@ -30,7 +29,7 @@ const SideBar = styled.div`
     opacity: 0;
   }
   label[data-function*='swipe'] {
-    padding 30px 0 0 10px;
+    padding: 30px 0 0 10px;
     z-index: 1;
     display: block;
     width: 42px;
@@ -41,7 +40,7 @@ const SideBar = styled.div`
     transform: translate3d(0, 0, 0);
     transition: transform 0.3s;
   }
-  
+
   input[data-function*='swipe']:checked ~ label[data-function*='swipe'] {
     transform: translate3d(200px, 0, 0);
   }
@@ -58,7 +57,7 @@ const SideBar = styled.div`
   input[data-function*='swipe']:checked ~ label:nth-child(3) {
     display: none;
   }
-  
+
   input[data-function*='swipe']:checked ~ .sidebar {
     transform: translate3d(0px, 0px, 0px);
     display: none;
@@ -66,18 +65,18 @@ const SideBar = styled.div`
   input[data-function*='swipe']:checked ~ .sidebar .menu li {
     width: 70%;
   }
- 
+
   .sidebar {
-    background:${Theme.white};
+    background: ${Theme.white};
     padding-top: 45px;
     right: 0;
     transition: all 0.3s;
 
-   .menu{
-     padding:0;
-     margin:0;
+    .menu {
+      padding: 0;
+      margin: 0;
       li {
-        color:${Theme.white};
+        color: ${Theme.white};
         text-align: center;
         font-size: ${Theme.normal};
         font-weight: 900;
@@ -87,20 +86,19 @@ const SideBar = styled.div`
         padding: 15px 15px 15px 20px;
         border-bottom: 1px solid ${Theme.gray5};
         &:last-child {
-          border-bottom:none;
+          border-bottom: none;
         }
 
         .activity-user {
           font-size: ${Theme.normal};
-          color:${Theme.gray90};
+          color: ${Theme.gray90};
           float: left;
           max-width: 240px;
           word-wrap: break-word;
           text-align: left;
 
           span {
-            color:${Theme.gray35};
-          
+            color: ${Theme.gray35};
           }
         }
 
@@ -120,7 +118,7 @@ const SideBar = styled.div`
           text-align: center;
           border: 1px solid ${Theme.lightOrange};
           background: ${Theme.lightOrange};
-          color:${Theme.orange};
+          color: ${Theme.orange};
           text-transform: Uppercase;
           font-size: ${Theme.extraSmall};
           padding-top: 5px;
@@ -130,7 +128,7 @@ const SideBar = styled.div`
         }
 
         .time-date {
-          color:${Theme.gray35};
+          color: ${Theme.gray35};
           font-size: ${Theme.small};
           text-align: left;
         }
@@ -145,56 +143,56 @@ const SideBar = styled.div`
     font-size: ${Theme.extraSmall};
     position: absolute;
     width: 185px;
-    color:${Theme.gray30};
+    color: ${Theme.gray30};
     top: 40px;
     text-transform: uppercase;
   }
 
-  @media only screen and (min-width: 1500px)  {
-     max-width: 350px;
+  @media only screen and (min-width: 1500px) {
+    max-width: 350px;
     .sidebar {
-        .menu {
-          li{
-            .activity-user {
-              max-width: 320px;
+      .menu {
+        li {
+          .activity-user {
+            max-width: 320px;
           }
         }
+      }
     }
   }
-   @media only screen and (min-width: 1700px) and (max-width: 1920px) { 
+  @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     max-width: 380px;
     .sidebar {
-        .menu {
-          li{
-             font-size: ${Theme.normalRes};
-            .activity-user {
-              max-width: 350px;
-              font-size: ${Theme.normalRes};
-            }
-            .avatar {
-              width: 46px;
-              height: 26px;
-              border-radius: 50%;
-              float: left;
-              margin-right: 13px;
-              text-align: center;
-              border: 1px solid ${Theme.lightOrange};
-              background: ${Theme.lightOrange};
-              color:${Theme.orange};
-              text-transform: Uppercase;
-              font-size: ${Theme.extraSmallRes}; 
-            }
-            .time-date {
-              font-size: ${Theme.smallRes};
-            }
+      .menu {
+        li {
+          font-size: ${Theme.normalRes};
+          .activity-user {
+            max-width: 350px;
+            font-size: ${Theme.normalRes};
+          }
+          .avatar {
+            width: 46px;
+            height: 26px;
+            border-radius: 50%;
+            float: left;
+            margin-right: 13px;
+            text-align: center;
+            border: 1px solid ${Theme.lightOrange};
+            background: ${Theme.lightOrange};
+            color: ${Theme.orange};
+            text-transform: Uppercase;
+            font-size: ${Theme.extraSmallRes};
+          }
+          .time-date {
+            font-size: ${Theme.smallRes};
           }
         }
-        
       }
-     .activity-log {
-        font-size: ${Theme.extraSmallRes}; 
-      }
-   }
+    }
+    .activity-log {
+      font-size: ${Theme.extraSmallRes};
+    }
+  }
 `;
 
 export default SideBar;

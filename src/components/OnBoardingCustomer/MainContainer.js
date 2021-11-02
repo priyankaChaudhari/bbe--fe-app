@@ -1,28 +1,31 @@
 /* eslint-disable react/no-danger */
-/* eslint-disable jsx-a11y/media-has-caption */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
-import styled from 'styled-components';
 import queryString from 'query-string';
-import Modal from 'react-modal';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
 import { Collapse } from 'react-collapse';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
-import Header from '../../common/Header';
-import CompanyDigital from './CompanyDigital';
-import BillingInfo from './BillingInfo';
 import AskSomeone from './AskSomeone';
+import CheckSteps from './CheckSteps';
+import BillingInfo from './BillingInfo';
+import Header from '../../common/Header';
+import CreateAccount from './CreateAccount';
+import VideoModal from './Modals/VideoModal';
+import CompanyDigital from './CompanyDigital';
+import AmazonMerchant from './AmazonMerchant';
+import NavigationHeader from './NavigationHeader';
+import { getCustomerDetails } from '../../store/actions';
+import { CollapseContainer } from './OnBoardingStyles';
+import { CaretUp, VideoCall } from '../../theme/images';
 import {
   OnBoardingBody,
   UnauthorizedHeader,
   GreyCard,
   PageLoader,
-  ModalBox,
   CheckBox,
 } from '../../common';
-import { CaretUp, CloseIcon, VideoCall } from '../../theme/images';
 import {
   accountSummary,
   getStepDetails,
@@ -33,8 +36,6 @@ import {
   deleteAmazonAccount,
   getAmazonAccountDetails,
 } from '../../api';
-import { getCustomerDetails } from '../../store/actions';
-import NavigationHeader from './NavigationHeader';
 import {
   PATH_AMAZON_MERCHANT,
   PATH_BILLING_DETAILS,
@@ -48,17 +49,14 @@ import {
   PATH_CREATE_PASSWORD,
   PATH_ACCOUNT_SETUP,
   stepPath,
+  customVideoStyle,
+  delegatedInfo,
 } from '../../constants';
-import {
-  AmazonDeveloperAccess,
-  AmazonMerchant,
-  CheckSteps,
-  CreateAccount,
-} from '.';
 
 export default function MainContainer() {
   const history = useHistory();
   const dispatch = useDispatch();
+  const params = queryString.parse(history.location.search);
   const data = useSelector((state) => state.customerState.data);
   const loader = useSelector((state) => state.customerState.isLoading);
   const [openCollapse, setOpenCollapse] = useState(false);
@@ -67,43 +65,21 @@ export default function MainContainer() {
   const [assignedToSomeone, setAssignedToSomeone] = useState(false);
   const [stepData, setStepData] = useState({});
   const [verifiedStepData, setVerifiedStepData] = useState({});
-  const params = queryString.parse(history.location.search);
   const [userInfo, setUserInfo] = useState({});
   const [showVideo, setShowVideo] = useState(false);
   const [videoData, setVideoData] = useState({});
   const [summaryData, setSummaryData] = useState([]);
   const [disableBtn, setDisableBtn] = useState(false);
   const [billingData, setBillingData] = useState({});
+  const [apiError, setApiError] = useState({});
+  const [formData, setFormData] = useState({});
+  const [marketplaceDetails, setMarketplaceDetails] = useState({});
+  const [showAmazonVideo, setShowAmazonVideo] = useState({});
+  const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
   const [noAmazonAccount, setNoAmazonAccount] = useState({
     Seller: false,
     Vendor: false,
   });
-  const [marketplaceDetails, setMarketplaceDetails] = useState({});
-  const [showAmazonVideo, setShowAmazonVideo] = useState({});
-  const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
-  const [apiError, setApiError] = useState({});
-  const [formData, setFormData] = useState({});
-
-  const customStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      maxWidth: '900px ',
-      width: '100% ',
-      minHeight: '200px',
-      overlay: ' {zIndex: 1000}',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  };
-  const customVideostyle = {
-    width: '16px',
-    marginRight: '6px',
-    verticalAlign: 'text-bottom',
-    cursor: 'pointer',
-  };
 
   const whichStep = [
     {
@@ -366,7 +342,6 @@ export default function MainContainer() {
           userInfo={userInfo}
           isLoading={isLoading}
           isChecked={isChecked}
-          customStyles={customStyles}
           noAmazonAccount={noAmazonAccount}
           marketplaceDetails={marketplaceDetails}
           showVideo={showAmazonVideo}
@@ -378,18 +353,6 @@ export default function MainContainer() {
           setMarketplaceDetails={setMarketplaceDetails}
           setFormData={setFormData}
           formData={formData}
-        />
-      );
-    if (path === 'amazon-account')
-      return (
-        <AmazonDeveloperAccess
-          setIsLoading={setIsLoading}
-          assignedToSomeone={assignedToSomeone}
-          stepData={stepData}
-          verifiedStepData={verifiedStepData}
-          userInfo={userInfo}
-          data={data}
-          isLoading={isLoading}
         />
       );
     return '';
@@ -545,9 +508,7 @@ export default function MainContainer() {
                         }}
                       />
                     </div>
-                    If you’re unable to provide this information or you think
-                    this was sent to you unintentionally, please let them know
-                    via the email address highlighted above.
+                    {delegatedInfo}
                   </GreyCard>
                 ) : (
                   <p className="account-steps m-0">Step {item.stepof} of 4</p>
@@ -573,7 +534,7 @@ export default function MainContainer() {
                     {item.video ? (
                       <>
                         <img
-                          style={customVideostyle}
+                          style={customVideoStyle}
                           src={VideoCall}
                           alt="video"
                         />
@@ -650,7 +611,7 @@ export default function MainContainer() {
                     />
                     <div className="clear-fix" />
                   </div>
-                  <CollapseOpenContainer>
+                  <CollapseContainer>
                     <Collapse isOpened={openCollapse}>
                       {history.location.pathname.includes(
                         PATH_AMAZON_MERCHANT,
@@ -663,7 +624,7 @@ export default function MainContainer() {
                       )}
                       {generateHTML(item.path)}
                     </Collapse>
-                  </CollapseOpenContainer>
+                  </CollapseContainer>
                   <CheckSteps
                     summaryData={summaryData}
                     step={item.key}
@@ -676,46 +637,13 @@ export default function MainContainer() {
               )}
             </OnBoardingBody>
           )}
-          <Modal
-            isOpen={showVideo}
-            style={customStyles}
-            ariaHideApp={false}
-            contentLabel="Edit modal">
-            <img
-              src={CloseIcon}
-              alt="close"
-              className="float-right cursor cross-icon"
-              onClick={() => setShowVideo(false)}
-              role="presentation"
-            />
-            <ModalBox>
-              {isLoading.loader && isLoading.type === 'video' ? (
-                <PageLoader color="#FF5933" type="page" />
-              ) : (
-                <div className="modal-body">
-                  <iframe
-                    title="video "
-                    className="embed-responsive-item w-100 "
-                    allow="accelerometer; autoplay;"
-                    frameBorder="0"
-                    allowFullScreen
-                    src={
-                      videoData
-                        ? history.location.pathname.includes(
-                            PATH_COMPANY_DETAILS,
-                          ) ||
-                          history.location.pathname.includes(
-                            PATH_UNAUTHORIZED_COMPANY_DETAILS,
-                          )
-                          ? videoData.step_4_video
-                          : videoData.step_2_video
-                        : ''
-                    }
-                  />
-                </div>
-              )}
-            </ModalBox>
-          </Modal>
+          <VideoModal
+            showVideo={showVideo}
+            setShowVideo={setShowVideo}
+            isLoading={isLoading}
+            videoData={videoData}
+            history={history}
+          />
         </>
       );
     return '';
@@ -737,8 +665,3 @@ export default function MainContainer() {
     </>
   );
 }
-
-const CollapseOpenContainer = styled.div`
-  opacity: 0.6;
-  pointer-events: none;
-`;

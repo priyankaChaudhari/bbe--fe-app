@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-// import { Document, Page } from 'react-pdf';
-import { Document, Page, pdfjs } from 'react-pdf/dist/entry.webpack';
-import 'react-pdf/dist/Page/AnnotationLayer.css';
+
 import PropTypes from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import { Document, Page, pdfjs } from 'react-pdf/dist/esm/entry.webpack';
+import 'react-pdf/dist/esm/Page/AnnotationLayer.css';
+
 import PdfLoadingMsg from './PdfLoadingMsg';
-// import styled from 'styled-components';
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
 export default function PdfViewer({ pdf, loadingMsg }) {
   const [totalPages, setNumPages] = useState(null);
   const [isLoader, setIsLoader] = useState({ loader: false });

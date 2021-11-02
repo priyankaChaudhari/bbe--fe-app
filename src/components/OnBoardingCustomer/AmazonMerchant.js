@@ -2,15 +2,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 
-import queryString from 'query-string';
-import PropTypes from 'prop-types';
-import Modal from 'react-modal';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import queryString from 'query-string';
 import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import { string, shape, bool, func, number } from 'prop-types';
 
+import AmazonVideo from './Modals/AmazonVideo';
 import { userMe } from '../../store/actions';
-import { CloseIcon, VideoCall } from '../../theme/images';
+import { VideoCall } from '../../theme/images';
 import {
   askSomeoneData,
   updateAskSomeoneData,
@@ -32,7 +32,6 @@ import {
   InputFormField,
   Button,
   PageLoader,
-  ModalBox,
   ErrorMsg,
   CheckBox,
 } from '../../common';
@@ -45,7 +44,6 @@ export default function AmazonMerchant({
   userInfo,
   isLoading,
   isChecked,
-  customStyles,
   noAmazonAccount,
   showVideo,
   marketplaceDetails,
@@ -75,24 +73,6 @@ export default function AmazonMerchant({
       Vendor: marketplaceDetails.Vendor,
     });
   }, [marketplaceDetails]);
-
-  const mapVideoData = () => {
-    if (marketplaceDetails.type === 'Hybrid') {
-      if (showVideo[2]) return videoData.seller_central_info;
-      if (showVideo[3]) return videoData.seller_ad_info;
-      if (showVideo[5]) return videoData.vendor_central_info;
-      if (showVideo[6]) return videoData.vendor_ad_info;
-    }
-    if (marketplaceDetails.type === 'Seller') {
-      if (showVideo[2]) return videoData.seller_central_info;
-      if (showVideo[3]) return videoData.seller_ad_info;
-    }
-    if (marketplaceDetails.type === 'Vendor') {
-      if (showVideo[2]) return videoData.vendor_central_info;
-      if (showVideo[3]) return videoData.vendor_ad_info;
-    }
-    return '';
-  };
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
@@ -204,7 +184,6 @@ export default function AmazonMerchant({
     ).then((res) => {
       if ((res && res.status === 201) || (res && res.status === 200))
         saveDetails();
-      // setLatestId({ ...latestId, Seller: res && res.data && res.data.id });
 
       if (res && res.status === 400) {
         setApiError(res && res.data);
@@ -760,35 +739,13 @@ export default function AmazonMerchant({
                 )}
               </>
             )}
-            <Modal
-              isOpen={showVideo[Object.keys(showVideo)]}
-              style={customStyles}
-              ariaHideApp={false}
-              contentLabel="Edit modal">
-              <img
-                src={CloseIcon}
-                alt="close"
-                className="float-right cursor cross-icon"
-                onClick={() => setShowVideo({ showVideo: false })}
-                role="presentation"
-              />
-              <ModalBox>
-                {isLoading.loader && isLoading.type === 'video' ? (
-                  <PageLoader color="#FF5933" type="page" />
-                ) : (
-                  <div className="modal-body">
-                    <iframe
-                      title="video "
-                      className="embed-responsive-item w-100 "
-                      allow="accelerometer; autoplay;"
-                      frameBorder="0"
-                      allowFullScreen
-                      src={videoData ? mapVideoData() : ''}
-                    />
-                  </div>
-                )}
-              </ModalBox>
-            </Modal>
+            <AmazonVideo
+              showVideo={showVideo}
+              setShowVideo={setShowVideo}
+              isLoading={isLoading}
+              videoData={videoData}
+              marketplaceDetails={marketplaceDetails}
+            />
           </>
         )}
         {generateBtn()}
@@ -810,62 +767,61 @@ AmazonMerchant.defaultProps = {
 };
 
 AmazonMerchant.propTypes = {
-  userInfo: PropTypes.shape({
-    id: PropTypes.string,
-    email: PropTypes.string,
-    customer: PropTypes.string,
-    customer_onboarding: PropTypes.string,
-    step: PropTypes.shape({
-      step: PropTypes.number,
+  userInfo: shape({
+    id: string,
+    email: string,
+    customer: string,
+    customer_onboarding: string,
+    step: shape({
+      step: number,
     }),
   }).isRequired,
-  setIsLoading: PropTypes.func.isRequired,
-  assignedToSomeone: PropTypes.bool.isRequired,
-  stepData: PropTypes.shape({
-    id: PropTypes.string,
+  setIsLoading: func.isRequired,
+  assignedToSomeone: bool.isRequired,
+  stepData: shape({
+    id: string,
   }),
-  verifiedStepData: PropTypes.objectOf(
-    PropTypes.shape({
-      user_name: PropTypes.string,
-      user_step: PropTypes.objectOf(PropTypes.object),
+  verifiedStepData: shape(
+    shape({
+      user_name: string,
+      user_step: shape({}),
     }),
   ).isRequired,
-  isLoading: PropTypes.shape({
-    loader: PropTypes.bool,
-    type: PropTypes.string,
+  isLoading: shape({
+    loader: bool,
+    type: string,
   }).isRequired,
-  isChecked: PropTypes.bool.isRequired,
-  customStyles: PropTypes.objectOf(PropTypes.object).isRequired,
-  noAmazonAccount: PropTypes.shape({
-    Seller: PropTypes.bool,
-    Vendor: PropTypes.bool,
+  isChecked: bool.isRequired,
+  noAmazonAccount: shape({
+    Seller: bool,
+    Vendor: bool,
   }).isRequired,
-  setShowVideo: PropTypes.func,
-  showVideo: PropTypes.objectOf(PropTypes.object),
-  marketplaceDetails: PropTypes.shape({
-    type: PropTypes.string,
-    marketplace: PropTypes.string,
-    marketplaceId: PropTypes.string,
-    Seller: PropTypes.shape({
-      id: PropTypes.string,
+  setShowVideo: func,
+  showVideo: shape(shape({})),
+  marketplaceDetails: shape({
+    type: string,
+    marketplace: string,
+    marketplaceId: string,
+    Seller: shape({
+      id: string,
     }),
-    Vendor: PropTypes.shape({
-      id: PropTypes.string,
+    Vendor: shape({
+      id: string,
     }),
   }).isRequired,
-  videoData: PropTypes.shape({
-    seller_central_info: PropTypes.string,
-    seller_ad_info: PropTypes.string,
-    vendor_central_info: PropTypes.string,
-    vendor_ad_info: PropTypes.string,
+  videoData: shape({
+    seller_central_info: string,
+    seller_ad_info: string,
+    vendor_central_info: string,
+    vendor_ad_info: string,
   }).isRequired,
-  setNoAmazonAccount: PropTypes.func,
-  setApiError: PropTypes.func,
-  apiError: PropTypes.objectOf(PropTypes.array),
-  setMarketplaceDetails: PropTypes.func,
-  setFormData: PropTypes.func,
-  formData: PropTypes.shape({
-    Seller: PropTypes.objectOf(PropTypes.Object),
-    Vendor: PropTypes.objectOf(PropTypes.Object),
+  setNoAmazonAccount: func,
+  setApiError: func,
+  apiError: shape([]),
+  setMarketplaceDetails: func,
+  setFormData: func,
+  formData: shape({
+    Seller: shape({}),
+    Vendor: shape({}),
   }),
 };

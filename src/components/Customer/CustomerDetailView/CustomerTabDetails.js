@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { func, shape, string } from 'prop-types';
@@ -11,6 +11,7 @@ import {
   Organization,
   BillingIcon,
   ExchangeIcon,
+  // CaretUp,
 } from '../../../theme/images';
 
 export default function CustomerTabDetails({
@@ -18,14 +19,29 @@ export default function CustomerTabDetails({
   setViewComponent,
   viewComponent,
   customer,
+  // subViewComponent,
+  // setSubViewComponent,
 }) {
   const dispatch = useDispatch();
+  const [isCollapseOpen, setIsCollapseOpen] = useState(
+    viewComponent === 'performance',
+  );
+
+  const handleMenuOnclick = (selectedTab) => {
+    setViewComponent(selectedTab);
+    dispatch(setCustomerSelectedTab('performance'));
+    if (selectedTab !== 'performance') {
+      setIsCollapseOpen(false);
+    } else if (isCollapseOpen === false) {
+      setIsCollapseOpen(true);
+    }
+  };
   return (
     <ul className="left-details-card d-lg-block d-none">
       {role === 'Customer' ? (
         <li
           onClick={() => {
-            setViewComponent('dashboard');
+            handleMenuOnclick('dashboard');
           }}
           role="presentation">
           <div
@@ -46,8 +62,7 @@ export default function CustomerTabDetails({
       {role !== 'Customer' ? (
         <li
           onClick={() => {
-            setViewComponent('performance');
-            dispatch(setCustomerSelectedTab('performance'));
+            handleMenuOnclick('performance');
           }}
           role="presentation">
           <div
@@ -60,14 +75,58 @@ export default function CustomerTabDetails({
               alt="monitor"
             />
             Performance
+            {/* hide vendor feature */}
+            {/* <div
+              style={{ position: 'relative' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsCollapseOpen(!isCollapseOpen);
+              }}
+              role="presentation">
+              <img
+                src={CaretUp}
+                alt="caret"
+                className="collapse-arrow-icon"
+                style={{
+                  transform: isCollapseOpen ? 'rotate(180deg)' : '',
+                }}
+              />
+            </div> */}
           </div>
+
+          {/* hide vendor feature */}
+          {/* {isCollapseOpen ? (
+            <ul className="sub-category">
+              <li
+                onClick={() => {
+                  setSubViewComponent('seller');
+                }}
+                role="presentation"
+                className={`sub-category-details ${
+                  subViewComponent === 'seller' ? 'active' : ''
+                }`}>
+                {' '}
+                Seller Reporting
+              </li>
+              <li
+                onClick={() => {
+                  setSubViewComponent('vendor');
+                }}
+                role="presentation"
+                className={`sub-category-details ${
+                  subViewComponent === 'vendor' ? 'active' : ''
+                }`}>
+                Vendor Reporting
+              </li>
+            </ul>
+          ) : null} */}
         </li>
       ) : (
         ''
       )}
       <li
         onClick={() => {
-          setViewComponent('agreement');
+          handleMenuOnclick('agreement');
           dispatch(setCustomerSelectedTab('agreement'));
         }}
         role="presentation">
@@ -87,7 +146,7 @@ export default function CustomerTabDetails({
                         ) : (
                           <li
                             onClick={() => {
-                              setViewComponent('product catalog');
+                              handleMenuOnclick('product catalog');
                               dispatch(
                                 setCustomerSelectedTab('product catalog'),
                               );
@@ -113,7 +172,7 @@ export default function CustomerTabDetails({
       customer.brand_assets.is_completed ? (
         <li
           onClick={() => {
-            setViewComponent('brand asset');
+            handleMenuOnclick('brand asset');
             // dispatch(setCustomerSelectedTab('brand asset'));
           }}
           role="presentation">
@@ -131,7 +190,7 @@ export default function CustomerTabDetails({
 
       <li
         onClick={() => {
-          setViewComponent('company');
+          handleMenuOnclick('company');
           dispatch(setCustomerSelectedTab('company'));
         }}
         role="presentation">
@@ -143,7 +202,7 @@ export default function CustomerTabDetails({
           Company Details
         </div>
       </li>
-      <li onClick={() => setViewComponent('billing')} role="presentation">
+      <li onClick={() => handleMenuOnclick('billing')} role="presentation">
         <div
           className={`left-details ${
             viewComponent === 'billing' ? 'active' : ''
@@ -154,7 +213,7 @@ export default function CustomerTabDetails({
       </li>
       <li
         onClick={() => {
-          setViewComponent('activity');
+          handleMenuOnclick('activity');
           dispatch(setCustomerSelectedTab('activity'));
         }}
         role="presentation">
@@ -177,4 +236,6 @@ CustomerTabDetails.propTypes = {
   customer: shape({
     id: string,
   }).isRequired,
+  // subViewComponent: string.isRequired,
+  // setSubViewComponent: func.isRequired,
 };

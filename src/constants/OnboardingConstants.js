@@ -188,3 +188,16 @@ export const amazonVendorAccountDetails = [
 
 export const authorizeLink =
   'https://www.authorize.net/en-us/about-us/dpa.html';
+
+export const customVideoStyle = {
+  width: '16px',
+  marginRight: '6px',
+  verticalAlign: 'text-bottom',
+  cursor: 'pointer',
+};
+
+export const billingTerms =
+  'I hereby acknowledge that I am an authorized signer on the account listed above and hereby authorize payments to be made to BBE using this payment method to satisfy any and all invoices or bills on our account with BBE moving forward until or unless further notice is provided in writing. I further agree to the additional Terms & Conditions for these payment and agree to the terms and conditions found ';
+
+export const delegatedInfo =
+  ' If you’re unable to provide this information or you think this was sent to you unintentionally, please let them know via the email address highlighted above.';

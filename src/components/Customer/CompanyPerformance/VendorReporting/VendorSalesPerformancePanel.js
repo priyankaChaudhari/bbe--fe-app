@@ -5,12 +5,16 @@ import * as am4core from '@amcharts/amcharts4/core';
 // eslint-disable-next-line camelcase
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import { components } from 'react-select';
-import { arrayOf, bool, func, shape, string, number } from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 
-import SalesPerformanceChart from './SalePerformanceChart';
+import SalesPerformanceChart from './VendorSalePerformanceChart';
 import { DropDown } from '../DropDown';
 import { ArrowUpIcon, ArrowDownIcon } from '../../../../theme/images';
-import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
+import {
+  vendorSalesMetricsTypeOptions,
+  noGraphDataMessage,
+  VendorMetricsNames,
+} from '../../../../constants';
 import {
   WhiteCard,
   PageLoader,
@@ -28,11 +32,10 @@ const _ = require('lodash');
 
 am4core.useTheme(am4themes_dataviz);
 export default function SalesPerformancePanel({
-  renderCustomDateSubLabel,
   activeSales,
   currencySymbol,
   setActiveSales,
-  handleDailyFact,
+  handleMetricsType,
   isApiCall,
   selectedValue,
   showCustomDateModal,
@@ -47,54 +50,36 @@ export default function SalesPerformancePanel({
   salesCurrentTotal,
   salesDifference,
   salesPreviousTotal,
-  currency,
   salesGraphLoader,
   salesChartData,
-  organicSale,
-  inorganicSale,
+  metricsType,
 }) {
   const { Option, SingleValue } = components;
 
-  const filterOption = (props) => (
+  const metricsTypeFilterOption = (props) => (
     <Option {...props}>
       <div className="pb-2">
         <span style={{ fontSize: '15px', color: '#000000' }}>
           {props.data.label}
         </span>
-
-        <div style={{ fontSize: '12px', color: '#556178' }}>
-          {props.data.sub}
-        </div>
       </div>
     </Option>
   );
 
-  const singleFilterOption = (props) => (
+  const metricsTypeSingleFilterOption = (props) => (
     <SingleValue {...props}>
       <span style={{ fontSize: '15px', color: '#000000' }}>
         {props.data.label}
       </span>
-
-      <div style={{ fontSize: '12px', color: '#556178' }}>
-        {renderCustomDateSubLabel(props, 'sp')}
-      </div>
     </SingleValue>
   );
 
-  const getSelectComponents = () => {
+  const getMetricTypeSelectComponents = () => {
     return {
-      Option: filterOption,
-      SingleValue: singleFilterOption,
+      Option: metricsTypeFilterOption,
+      SingleValue: metricsTypeSingleFilterOption,
       DropDownIndicator,
     };
-  };
-
-  const addThousandComma = (value, decimalDigits = 2) => {
-    if (value !== undefined && value !== null) {
-      return value.toFixed(decimalDigits).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    }
-
-    return value;
   };
 
   const bindValues = (value, name = null) => {
@@ -102,7 +87,9 @@ export default function SalesPerformancePanel({
     if (decimal[1] !== undefined) {
       return (
         <span style={{ fontSize: '26px' }}>
-          {name === 'revenue' ? currencySymbol : null}
+          {name === 'orderedRevenue' || name === 'shippedCOGs'
+            ? currencySymbol
+            : null}
           {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
           <span style={{ fontSize: '16px' }}>.{decimal[1].slice(0, 2)}</span>
         </span>
@@ -110,58 +97,12 @@ export default function SalesPerformancePanel({
     }
     return (
       <span style={{ fontSize: '26px' }}>
-        {name === 'revenue' ? currencySymbol : null}
+        {name === 'orderedRevenue' || name === 'shippedCOGs'
+          ? currencySymbol
+          : null}
         {decimal[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
       </span>
     );
-  };
-
-  const rendeTootipData = () => {
-    return `
-    <ul style="padding:0; margin: 0 0 4px 0; max-width: 240px; opacity: 100%;"> 
-      <li style="display: "> 
-        <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
-      </li>
-      <div class="row">
-          <div class="col-6">
-           <div style="color: #f4f6fc;
-          text-transform: uppercase;
-          font-size: 11px;
-          margin-top: 8px;
-         ">Organic Sales
-        </div>
-          </div>
-           <div class="col-6">
-             <div style="color: #f4f6fc;
-              font-size: 16px;
-              margin-left: 25px;
-              float: right;
-              text-align: right;
-              margin-top: 4px;
-             ">${currencySymbol}${addThousandComma(organicSale)}
-           </div>
-           </div>
-             <div class="col-6">
-           <div style="color: #f4f6fc;
-          text-transform: uppercase;
-          font-size: 11px;
-          margin-top:7px;
-         ">In-Organic Sales
-        </div>
-          </div>
-           <div class="col-6">
-             <div style="color: #f4f6fc;
-              font-size: 16px;
-              margin-left: 25px;
-              float: right;
-              text-align: right;
-              margin-top: 4px;
-             ">${currencySymbol}${addThousandComma(inorganicSale)}
-           </div>
-           </div>
-      </div>
-     
-    </ul>`;
   };
 
   const setSalesBoxClass = (name, classValue) => {
@@ -187,19 +128,19 @@ export default function SalesPerformancePanel({
     }
   };
 
-  const renderFilterDropDown = () => {
+  const renderMetricsType = () => {
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
         {DropDown(
           'days-performance',
-          dateOptionsWithYear,
-          dateOptionsWithYear[0].label,
-          getSelectComponents,
-          dateOptionsWithYear[0],
-          handleDailyFact,
+          vendorSalesMetricsTypeOptions,
+          vendorSalesMetricsTypeOptions[0].label,
+          getMetricTypeSelectComponents,
+          vendorSalesMetricsTypeOptions[0],
+          handleMetricsType,
           isApiCall,
           null,
-          selectedValue,
+          metricsType,
         )}
         <div className="clear-fix" />
       </div>
@@ -215,7 +156,6 @@ export default function SalesPerformancePanel({
               <li>
                 <div className="weeks">
                   <span
-                    // className="orange block"
                     className={
                       _.size(activeSales) === 1
                         ? `${_.keys(activeSales)[0]} adSales circle`
@@ -252,7 +192,7 @@ export default function SalesPerformancePanel({
             </ul>
           </div>
         ) : (
-          <div className="col-md-6 col-sm-12 order-md-1 order-2 mt-2" />
+          <div className="col-md-5 col-sm-12 order-md-1 order-2 mt-2" />
         )}
         <div className="col-md-7 col-sm-12 order-md-2 order-1">
           <ToggleButton>
@@ -310,73 +250,84 @@ export default function SalesPerformancePanel({
     let currentTotal = 0;
     let previousTotal = 0;
     let difference = 0;
-    let theCurrency = null;
     let boxActiveClass = '';
     const name = matricsName;
     let displayMatricsName;
 
-    if (name === 'revenue') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.revenue
-          ? salesCurrentTotal.revenue
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.revenue
-          ? salesPreviousTotal.revenue
-          : 0;
-      difference =
-        salesDifference && salesDifference.revenue
-          ? salesDifference.revenue
-          : 'N/A';
-      theCurrency = currency !== null ? `(${currency})` : null;
+    if (name === 'orderedRevenue') {
+      currentTotal = salesCurrentTotal?.ordered_revenue
+        ? salesCurrentTotal.ordered_revenue
+        : 0;
+      previousTotal = salesPreviousTotal?.ordered_revenue
+        ? salesPreviousTotal.ordered_revenue
+        : 0;
+      difference = salesDifference?.ordered_revenue
+        ? salesDifference.ordered_revenue
+        : 'N/A';
       boxActiveClass = 'ad-sales-active';
       displayMatricsName = matricsName;
-    } else if (name === 'unitsSold') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.units_sold
-          ? salesCurrentTotal.units_sold
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.units_sold
-          ? salesPreviousTotal.units_sold
-          : 0;
-      difference =
-        salesDifference && salesDifference.units_sold
-          ? salesDifference.units_sold
-          : 'N/A';
-      theCurrency = ``;
+    } else if (name === 'shippedCOGs') {
+      currentTotal = salesCurrentTotal?.shipped_cogs
+        ? salesCurrentTotal.shipped_cogs
+        : 0;
+      previousTotal = salesPreviousTotal?.shipped_cogs
+        ? salesPreviousTotal.shipped_cogs
+        : 0;
+      difference = salesDifference?.shipped_cogs
+        ? salesDifference.shipped_cogs
+        : 'N/A';
+      boxActiveClass = 'ad-sales-active';
+      displayMatricsName = matricsName;
+    } else if (name === 'glanceViews') {
+      currentTotal = salesCurrentTotal?.glance_views
+        ? salesCurrentTotal.glance_views
+        : 0;
+      previousTotal = salesPreviousTotal?.glance_views
+        ? salesPreviousTotal.glance_views
+        : 0;
+      difference = salesDifference?.glance_views
+        ? salesDifference.glance_views
+        : 'N/A';
+
       boxActiveClass = 'ad-spend-active';
-      displayMatricsName = 'Units sold';
-    } else if (name === 'traffic') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.traffic
-          ? salesCurrentTotal.traffic
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.traffic
-          ? salesPreviousTotal.traffic
-          : 0;
-      difference =
-        salesDifference && salesDifference.traffic
-          ? salesDifference.traffic
-          : 'N/A';
-      theCurrency = ``;
+      displayMatricsName = matricsName;
+    } else if (name === 'conversionRate') {
+      currentTotal = salesCurrentTotal?.conversion_rate
+        ? salesCurrentTotal.conversion_rate
+        : 0;
+      previousTotal = salesPreviousTotal?.conversion_rate
+        ? salesPreviousTotal.conversion_rate
+        : 0;
+      difference = salesDifference?.conversion_rate
+        ? salesDifference.conversion_rate
+        : 'N/A';
+
       boxActiveClass = 'ad-conversion-active';
       displayMatricsName = matricsName;
-    } else if (name === 'conversion') {
-      currentTotal =
-        salesCurrentTotal && salesCurrentTotal.conversion
-          ? salesCurrentTotal.conversion
-          : 0;
-      previousTotal =
-        salesPreviousTotal && salesPreviousTotal.conversion
-          ? salesPreviousTotal.conversion
-          : 0;
-      difference =
-        salesDifference && salesDifference.conversion
-          ? salesDifference.conversion
-          : 'N/A';
-      theCurrency = ``;
+    } else if (name === 'orderedUnits') {
+      currentTotal = salesCurrentTotal?.ordered_units
+        ? salesCurrentTotal.ordered_units
+        : 0;
+      previousTotal = salesPreviousTotal?.ordered_units
+        ? salesPreviousTotal.ordered_units
+        : 0;
+      difference = salesDifference?.ordered_units
+        ? salesDifference.ordered_units
+        : 'N/A';
+
+      boxActiveClass = 'impression-active';
+      displayMatricsName = matricsName;
+    } else if (name === 'shippedUnits') {
+      currentTotal = salesCurrentTotal?.shipped_units
+        ? salesCurrentTotal.shipped_units
+        : 0;
+      previousTotal = salesPreviousTotal?.shipped_units
+        ? salesPreviousTotal.shipped_units
+        : 0;
+      difference = salesDifference?.shipped_units
+        ? salesDifference.shipped_units
+        : 'N/A';
+
       boxActiveClass = 'impression-active';
       displayMatricsName = matricsName;
     }
@@ -389,38 +340,20 @@ export default function SalesPerformancePanel({
             onClick={() => setBoxToggle(name)}
             role="presentation">
             {' '}
-            {name === 'revenue' ? (
-              <div className="row">
-                <div
-                  style={{ wordBreak: 'break-all' }}
-                  className="chart-name col-6 pr-1">
-                  {displayMatricsName.toUpperCase()} {theCurrency}
-                </div>
-                <div
-                  style={{ wordBreak: 'break-all' }}
-                  className="col-6 pl-0 label-card-text text-right"
-                  data-tip={rendeTootipData()}
-                  data-html
-                  data-for="break-down">
-                  Breakdown
-                </div>
-              </div>
-            ) : (
-              <div className="chart-name">
-                {displayMatricsName.toUpperCase()} {theCurrency}
-              </div>
-            )}
+            <div className="chart-name">
+              {VendorMetricsNames[displayMatricsName].toUpperCase()}
+            </div>
             <div className="number-rate">
-              {name === 'conversion'
+              {name === 'conversionRate'
                 ? `${currentTotal.toFixed(2)}%`
                 : bindValues(currentTotal, name)}
             </div>
             <div className="vs">
               {' '}
               vs{' '}
-              {name === 'conversion'
+              {name === 'conversionRate'
                 ? `${previousTotal.toFixed(2)}%`
-                : name === 'revenue'
+                : name === 'orderedRevenue' || name === 'shippedCOGs'
                 ? `${
                     currencySymbol !== null ? currencySymbol : ''
                   }${previousTotal
@@ -473,21 +406,48 @@ export default function SalesPerformancePanel({
             {' '}
             <p className="black-heading-title mt-2 mb-4"> Sales Performance</p>
           </div>
-          {renderFilterDropDown()}
+          {renderMetricsType()}
         </div>
 
-        <div className="row mr-1 ml-1">
-          {renderSalesBox('revenue', 'col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3')}
-          {renderSalesBox(
-            'unitsSold',
-            'col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3',
-          )}
-          {renderSalesBox('traffic', 'col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3')}
-          {renderSalesBox(
-            'conversion',
-            'col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3',
-          )}
-        </div>
+        {metricsType.value === 'orderedRevenue' ? (
+          <div className="row mr-1 ml-1">
+            {renderSalesBox(
+              'orderedRevenue',
+              'col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'glanceViews',
+              'col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'conversionRate',
+              'col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'orderedUnits',
+              'col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3',
+            )}
+          </div>
+        ) : (
+          <div className="row mr-1 ml-1">
+            {renderSalesBox(
+              'shippedCOGs',
+              'col-lg-3 col-md-3 pr-1 pl-0 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'glanceViews',
+              'col-lg-3 col-md-3 pr-1 pl-1 col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'conversionRate',
+              'col-lg-3 col-md-3 pr-1 pl-1  col-6 mb-3',
+            )}
+            {renderSalesBox(
+              'shippedUnits',
+              'col-lg-3 col-md-3 pl-1 pr-0 col-6 mb-3',
+            )}
+          </div>
+        )}
         {rednerSaleGroupBy()}
         <div className="clear-fix" />
 
@@ -549,7 +509,6 @@ SalesPerformancePanel.defaultProps = {
   groupBy: '',
   currencySymbol: '',
   selectedValue: {},
-  currency: '',
   activeSales: {},
   currentDate: {},
   filters: {},
@@ -559,12 +518,10 @@ SalesPerformancePanel.defaultProps = {
   data: {},
   salesChartData: {},
   state: [],
-  inorganicSale: {},
-  organicSale: {},
+  metricsType: {},
   applyCustomDate: () => {},
   setActiveSales: () => {},
-  handleDailyFact: () => {},
-  renderCustomDateSubLabel: () => {},
+  handleMetricsType: () => {},
   setShowCustomDateModal: () => {},
   setState: () => {},
   handleGroupBy: () => {},
@@ -576,7 +533,6 @@ SalesPerformancePanel.propTypes = {
   salesGraphLoader: bool,
   currencySymbol: string,
   groupBy: string,
-  currency: string,
   selectedValue: shape({}),
   activeSales: shape({}),
   currentDate: shape({}),
@@ -587,13 +543,11 @@ SalesPerformancePanel.propTypes = {
   salesDifference: shape({}),
   salesCurrentTotal: shape({}),
   salesPreviousTotal: shape({}),
-  inorganicSale: number,
-  organicSale: number,
-  renderCustomDateSubLabel: func,
+  metricsType: shape({}),
   setShowCustomDateModal: func,
   setState: func,
   setActiveSales: func,
   applyCustomDate: func,
-  handleDailyFact: func,
+  handleMetricsType: func,
   handleGroupBy: func,
 };

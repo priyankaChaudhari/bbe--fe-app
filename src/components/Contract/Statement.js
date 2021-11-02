@@ -1,36 +1,34 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable react/no-danger */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/label-has-for */
-/* eslint no-useless-escape: "error" */
-
 import React from 'react';
 
-import styled from 'styled-components';
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
+import { string, number, func, oneOfType, arrayOf, shape } from 'prop-types';
 
 import { additionaMarketplaceAmount } from '../../constants';
+import { StatementParagraph } from '../../theme/AgreementStyle';
 
 export default function Statement({
   formData,
-  // details,
   templateData,
   notIncludedOneTimeServices,
   notIncludedMonthlyServices,
   servicesFees,
 }) {
+  const sellerTypeLabel = formData?.seller_type?.label;
+  const displayNumber = (num) => {
+    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
+
   const mapDefaultValues = (key, label, type) => {
     if (key === 'company_name') {
       return formData && formData.customer_id && formData.customer_id[key]
         ? formData && formData.customer_id && formData.customer_id[key]
         : `Client Name`;
     }
-
     if (formData[key] === undefined || formData[key] === '') {
       return `Enter ${label}`;
     }
-
     if (key === 'start_date') {
       return formData && formData[key] !== null
         ? formData && dayjs(formData[key]).format('MM / DD / YYYY')
@@ -38,9 +36,7 @@ export default function Statement({
     }
     if (key === 'primary_marketplace') {
       if (formData && formData.primary_marketplace) {
-        return formData &&
-          formData.primary_marketplace &&
-          formData.primary_marketplace.name
+        return formData?.primary_marketplace?.name
           ? formData.primary_marketplace.name
           : formData.primary_marketplace;
       }
@@ -60,23 +56,17 @@ export default function Statement({
       if (formData && formData[key] === 'Fixed') {
         return `Fixed: <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold">${
           formData && formData.sales_threshold
-            ? `$${
-                formData &&
-                formData.sales_threshold
-                  .toString()
-                  .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-              }`
+            ? `$${displayNumber(formData && formData.sales_threshold)}`
             : `Enter ${label}.`
         }</span>`;
       }
     }
-
     if (type && type.includes('number')) {
       // ${type === 'number-currency' ? '$' : '%'}
       if (formData && formData[key]) {
-        return `${type === 'number-currency' ? '$' : '%'}${`${formData[key]
-          .toString()
-          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}`;
+        return `${type === 'number-currency' ? '$' : '%'}${`${displayNumber(
+          formData[key],
+        )}`}`;
       }
       return `Enter ${label}.`;
     }
@@ -89,22 +79,32 @@ export default function Statement({
         : `Enter ${label}`
       : formData && formData[key];
   };
-  // style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"
-
   const showRevTable = () => {
-    if (
-      formData &&
-      formData.threshold_type &&
-      formData.threshold_type !== 'None'
-    ) {
-      return `<div class="table-responsive"> <table class="contact-list "><tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold Type</th>
-      </tr><tr><td>% Of Incremental Sales</td>
-      <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE</span>  </td><td> <span>REV_THRESHOLD </span></td></tr></table> </div>`;
+    if (formData?.threshold_type && formData.threshold_type !== 'None') {
+      return `<div class="table-responsive"> 
+          <table class="contact-list ">
+            <tr><th>Type</th><th>Description</th><th> Rev Share %</th><th> Sales Threshold Type</th></tr>
+            <tr>
+              <td>% Of Incremental Sales</td>
+              <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
+              threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td>
+              <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> REVENUE_SHARE</span>  </td>
+              <td> <span>REV_THRESHOLD </span></td>
+            </tr>
+          </table> 
+        </div>`;
     }
-    return `<div class="table-responsive"> <table class="contact-list"><tr><th>Type</th><th>Description</th>
-    <th> Rev Share %</th></tr><tr><td>% Of Sales</td><td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
-    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> REVENUE_SHARE </span> </td></tr></table></div>`;
+    return `<div class="table-responsive"> 
+        <table class="contact-list">
+          <tr><th>Type</th><th>Description</th><th>Rev Share %</th></tr>
+          <tr>
+            <td>% Of Sales</td>
+            <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
+            through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td>
+            <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> REVENUE_SHARE </span> </td>
+          </tr>
+        </table>
+      </div>`;
   };
 
   const displayNotIncludedServices = () => {
@@ -122,10 +122,10 @@ export default function Statement({
     for (const item of notIncludedOneTimeServices) {
       fields.push(
         `<tr>
-          <td style="border: 1px solid black;padding: 13px;"> ${
+          <td style="border: 1px solid black; padding: 13px;"> ${
             item.label ? item.label : 'N/A'
           }</td>
-          <td style="border: 1px solid black;padding: 13px;"> ${'One Time'}</td>
+          <td style="border: 1px solid black; padding: 13px;"> ${'One Time'}</td>
          </tr>`,
       );
     }
@@ -134,33 +134,10 @@ export default function Statement({
 
   const mapVariableMonthlyService = () => {
     const fields = [
-      `<tr ><td class="total-service" colspan="2" style ="text-align: center">
-                  Variable Monthly Services</td>
-                  </tr>`,
+      `<tr ><td class="total-service" colspan="2" style ="text-align: center">Variable Monthly Services</td></tr>`,
     ];
-    if (formData && formData.additional_monthly_services) {
+    if (formData?.additional_monthly_services) {
       for (const item of formData.additional_monthly_services) {
-        // if (
-        //   item.name
-        //     ? item.name === 'DSP Advertising'
-        //     : item.service.name === 'DSP Advertising'
-        // ) {
-        //   fields.push(
-        //     `<tr>
-        //          <td style="border: 1px solid black;padding: 13px;">${
-        //            item.service ? item.service.name : item && item.name
-        //          }
-        //           </td>
-        //           <td style="border: 1px solid black;padding: 13px;">
-        //           ${
-        //             item.service && item.service.dsp_text
-        //               ? item.service.dsp_text
-        //               : 'Included'
-        //           }
-        //           </td>
-        //         </tr>`,
-        //   );
-        // }
         if (
           item.name
             ? item.name === 'Inventory Reconciliation'
@@ -168,61 +145,47 @@ export default function Statement({
         ) {
           fields.push(
             `<tr>
-                 <td style="border: 1px solid black;padding: 13px;">${
-                   item.service ? item.service.name : item && item.name
-                 }</td>
-                    <td style="border: 1px solid black;padding: 13px;"> 
-                    25% of recovered $<span>&#39;</span>s
-                    
-                  </td>
-                    </tr>`,
+              <td style="border: 1px solid black;padding: 13px;">${
+                item.service ? item.service.name : item?.name
+              }</td>
+              <td style="border: 1px solid black;padding: 13px;">25% of recovered $<span>&#39;</span>s </td>
+            </tr>`,
           );
         }
       }
-
       return fields.length > 1 ? fields.toString().replaceAll(',', '') : '';
     }
     return '';
   };
-  const displayNumber = (num) => {
-    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return res;
-  };
-
   const mapAdditionalMarketPlaces = () => {
     const fields = [];
-    if (formData && formData.additional_marketplaces) {
+    if (formData?.additional_marketplaces) {
       for (const item of formData.additional_marketplaces) {
         fields.push(
-          `<tr>
-      <td style="border: 1px solid black;padding: 13px;">${
-        item.service ? item.service.name : item && item.name
-      }</td>
-
-      ${
-        item && item.fee
-          ? `<td style="border: 1px solid black;padding: 13px;">
-            $${
-              item.service
-                ? item.service.fee
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : item.fee
-                ? item.fee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : ''
+          `<tr> 
+            <td style="border: 1px solid black;padding: 13px;">${
+              item.service ? item.service.name : item?.name
+            }</td>
+            ${
+              item?.fee
+                ? `<td style="border: 1px solid black;padding: 13px;">
+                $${
+                  item.service
+                    ? displayNumber(item.service.fee)
+                    : item.fee
+                    ? displayNumber(item.fee)
+                    : ''
+                }
+                /month
+              </td>`
+                : `<td>$${displayNumber(
+                    additionaMarketplaceAmount,
+                  )} /month</td>`
             }
-            /month
-          </td>`
-          : //  `<td>Yet ot save </td>`
-            `<td>$${additionaMarketplaceAmount
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} /month</td>`
-      }
-      </tr>`,
+          </tr>`,
         );
       }
     }
-    // return fields.length ? fields.toString().replaceAll(',', '') : '';
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
@@ -288,7 +251,7 @@ export default function Statement({
 
           if (item.custom_amazon_store_price) {
             oneTimeSubTotal += item.custom_amazon_store_price * quantity;
-          } else if (item && item.service) {
+          } else if (item?.service) {
             oneTimeSubTotal += item.service.fee * quantity;
           } else {
             let fixedFee = servicesFees.filter((n) => n.id === item.service_id);
@@ -329,9 +292,7 @@ export default function Statement({
         ? `<tr>
             <td class="total-service-bordless"> Sub-total</td>
             <td class="total-service-bordless text-right">
-            $${totalFees.monthlySubTotal
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            $${displayNumber(totalFees.monthlySubTotal)}
             </td>
          </tr>`
         : ''
@@ -340,134 +301,151 @@ export default function Statement({
       totalFees.monthlyAmountAfterDiscount
         ? `<tr>
             <td class="total-service-bordless"> Discount ${
-              totalFees &&
-              totalFees.monthlyAmountAfterDiscount &&
-              totalFees &&
-              totalFees.monthlyDiscountType === 'percentage'
-                ? `(${totalFees && totalFees.monthlyDiscount}%)`
+              totalFees?.monthlyAmountAfterDiscount &&
+              totalFees?.monthlyDiscountType === 'percentage'
+                ? `(${totalFees?.monthlyDiscount}%)`
                 : ''
             }</td>
             <td class="total-service-bordless text-right"> -$${
-              totalFees && totalFees.monthlyAmountAfterDiscount
-                ? totalFees &&
-                  totalFees.monthlyAmountAfterDiscount
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              totalFees?.monthlyAmountAfterDiscount
+                ? displayNumber(totalFees?.monthlyAmountAfterDiscount)
                 : 0
             }
             </td>
          </tr>`
         : ''
     }
-
-         <tr>
-            <td class="total-service" style="padding-top: 5px"> Total</td>
-            <td class="total-service text-right" style="padding-top: 5px;"> $${
-              totalFees && totalFees.monthlyTotal
-                ? totalFees.monthlyTotal
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : 0
-            }
-            </td>
-         </tr>
-         `;
+      <tr>
+        <td class="total-service" style="padding-top: 5px"> Total</td>
+        <td class="total-service text-right" style="padding-top: 5px;"> 
+          $${
+            totalFees?.monthlyTotal ? displayNumber(totalFees.monthlyTotal) : 0
+          }
+        </td>
+      </tr>`;
   };
 
   const showStandardServicesTable = () => {
-    return `
-   <div class="table-responsive"><table class=" contact-list " style="width: 100%; overflow:auto;
-    border-collapse: collapse;"><tr><th colspan="3" style="text-align: left; border: 1px solid black;
-    padding: 13px;  ">Service Components</th></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Expert Strategy and Consultation (AGS)</td><td style="border: 1px solid black;
-    padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td><td style="border: 1px solid black;
-    padding: 13px;">Weekly Call</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Copy <br><span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold"> ${
-      formData && formData.content_optimization
-        ? formData && formData.content_optimization
-        : 0
-    }</span></span></td><td style="border: 1px solid black;
-    padding: 13px;">Listing Optimization - Design <br> <span style="font-weight: 800;"> ASIN&rsquo;s per month: <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"> ${
-      formData && formData.design_optimization
-        ? formData && formData.design_optimization
-        : 0
-    }</span></span></td><td style="border: 1px solid black;
-    padding: 13px;">Listing Creation</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Listing Compliance</td><td style="border: 1px solid black;
-    padding: 13px;">Brand Registry Consultation</td><td style="border: 1px solid black;
-    padding: 13px;">Catalog Management and Organization</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Seller Performance Consultation</td><td style="border: 1px solid black;
-    padding: 13px;">Reporting</td><td style="border: 1px solid black;
-    padding: 13px;">Holiday and Seasonal Preparation</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Promotion Planning and Support</td><td style="border: 1px solid black;
-    padding: 13px;">Advertising Management</td><td style="border: 1px solid black;
-    padding: 13px;"> ${
-      formData && formData.seller_type && formData.seller_type.label
-        ? [
-            formData && formData.seller_type && formData.seller_type.label
-              ? formData && formData.seller_type && formData.seller_type.label
-              : formData && formData.seller_type && formData.seller_type,
-          ]
-        : ''
-    } Account Management</td></tr><tr><td style="border: 1px solid black;
-    padding: 13px;">Review Strategy</td><td style="border: 1px solid black;
-    padding: 13px;">Total Managed Ad Spend</td><td style="border: 1px solid black;
-    padding: 13px;">Channel Governance Consultation</td></tr></table> </div>
+    return `<div class="table-responsive">
+        <table class=" contact-list " style="width: 100%; overflow:auto; border-collapse: collapse;">
+          <tr><th colspan="3" style="text-align: left; border: 1px solid black;padding: 13px;">Service Components</th></tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 13px;">Expert Strategy and Consultation (AGS)</td>
+            <td style="border: 1px solid black; padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td>
+            <td style="border: 1px solid black; padding: 13px;">Weekly Call</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 13px;">Listing Optimization - Copy <br>
+              <span style="font-weight: 800;"> ASIN&rsquo;s per month: 
+              <span style=" background:#ffe5df; padding: 4px 9px; font-weight: bold"> 
+                ${
+                  formData?.content_optimization
+                    ? formData?.content_optimization
+                    : 0
+                }
+              </span>
+              </span>
+            </td>
+            <td style="border: 1px solid black;padding: 13px;">Listing Optimization - Design <br> 
+              <span style="font-weight: 800;"> ASIN&rsquo;s per month: 
+              <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold"> 
+                ${
+                  formData?.design_optimization
+                    ? formData?.design_optimization
+                    : 0
+                }
+              </span>
+              </span>
+            </td>
+            <td style="border: 1px solid black; padding: 13px;">Listing Creation</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 13px;">Listing Compliance</td>
+            <td style="border: 1px solid black; padding: 13px;">Brand Registry Consultation</td>
+            <td style="border: 1px solid black; padding: 13px;">Catalog Management and Organization</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 13px;">Seller Performance Consultation</td>
+            <td style="border: 1px solid black; padding: 13px;">Reporting</td>
+            <td style="border: 1px solid black; padding: 13px;">Holiday and Seasonal Preparation</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 13px;">Promotion Planning and Support</td>
+            <td style="border: 1px solid black; padding: 13px;">Advertising Management</td>
+            <td style="border: 1px solid black; padding: 13px;"> 
+              ${
+                sellerTypeLabel
+                  ? [
+                      sellerTypeLabel ||
+                        (formData?.seller_type && formData.seller_type),
+                    ]
+                  : ''
+              } Account Management
+            </td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid black; padding: 13px;">Review Strategy</td>
+            <td style="border: 1px solid black; padding: 13px;">Total Managed Ad Spend</td>
+            <td style="border: 1px solid black; padding: 13px;">Channel Governance Consultation</td>
+          </tr>
+        </table> 
+      </div>
   `;
   };
   const mapOnetimeServiceTotal = () => {
     const totalFees = calculateTodalFee('onetime');
-
     return `
     ${
-      totalFees && totalFees.oneTimeAmountAfterDiscount
+      totalFees?.oneTimeAmountAfterDiscount
         ? `<tr>
             <td class="total-service-borderless" style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Sub-total</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${
-              totalFees &&
-              totalFees.oneTimeSubTotal
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${displayNumber(
+              totalFees?.oneTimeSubTotal,
+            )}
             </td>
          </tr>`
         : ''
     }
-         ${
-           totalFees && totalFees.oneTimeAmountAfterDiscount
-             ? `<tr>
+    ${
+      totalFees?.oneTimeAmountAfterDiscount
+        ? `<tr>
             <td class="total-service-borderless"style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Discount ${
-              totalFees &&
-              totalFees.oneTimeAmountAfterDiscount &&
-              totalFees &&
-              totalFees.oneTimeDiscountType === 'percentage'
-                ? `(${totalFees && totalFees.oneTimeDiscount}%)`
+              totalFees?.oneTimeAmountAfterDiscount &&
+              totalFees?.oneTimeDiscountType === 'percentage'
+                ? `(${totalFees?.oneTimeDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px"> -$${
-              totalFees &&
-              totalFees.oneTimeAmountAfterDiscount
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px"> -$${displayNumber(
+              totalFees?.oneTimeAmountAfterDiscount,
+            )}
             </td>
          </tr>`
-             : ''
-         }
-         
+        : ''
+    }        
          <tr>
             <td class="total-service" colspan="3" style=" padding-top: 5px "> Total</td>
-            <td class="total-service text-right"style="padding-top: 5px "> $${
-              totalFees &&
-              totalFees.oneTimeTotal
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            }
+            <td class="total-service text-right"style="padding-top: 5px "> $${displayNumber(
+              totalFees?.oneTimeTotal,
+            )}
             </td>
          </tr>
          `;
   };
-
+  const customAmazonStorePrice = (fee) => {
+    return `<td style="border: 1px solid black;padding: 13px;">
+        ${fee ? `$${displayNumber(fee)}` : '$0'}
+      </td>`;
+  };
+  const tdService = (service, fee) => {
+    return `<td style="border: 1px solid black; padding: 13px;">
+          ${
+            service.quantity && fee
+              ? `$${displayNumber(service.quantity * fee)}`
+              : '$0'
+          }
+        </td>
+        `;
+  };
   const mapMonthlyServices = (key) => {
     const fields = [];
     if (key !== 'additional_one_time_services') {
@@ -486,10 +464,10 @@ export default function Statement({
               fields.push(
                 `<tr>
                 <td style="border: 1px solid black;padding: 13px;">${
-                  item.service ? item.service.name : item && item.name
+                  item.service ? item.service.name : item?.name
                 }</td>
                 ${
-                  item.service && item.service.fee
+                  item.service?.fee
                     ? `<td style="border: 1px solid black;padding: 13px;">$${
                         item.service
                           ? `${displayNumber(item.service.fee)}`
@@ -525,170 +503,124 @@ export default function Statement({
         );
         return fields.push(
           `<tr>
-              <td style="border: 1px solid black;padding: 13px;">${
-                service.quantity
-                  ? service.quantity
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                  : 0
-              }</td>
-                  
-                   <td style="border: 1px solid black;padding: 13px;">${
-                     service.name
-                       ? service.name
-                       : service.service && service.service.name
-                       ? service.service.name
-                       : ''
-                   }
-              </td>
-             
-                  ${
-                    (
-                      service && service.name
-                        ? service.name.includes('Amazon Store Package Custom')
-                        : service &&
-                          service.service &&
-                          service.service.name.includes(
-                            'Amazon Store Package Custom',
-                          )
+            <td style="border: 1px solid black;padding: 13px;">
+              ${service.quantity ? displayNumber(service.quantity) : 0}
+            </td>                 
+            <td style="border: 1px solid black;padding: 13px;">
+              ${
+                service.name
+                  ? service.name
+                  : service.service?.name
+                  ? service.service.name
+                  : ''
+              }
+            </td>            
+            ${
+              (
+                service && service.name
+                  ? service.name.includes('Amazon Store Package Custom')
+                  : service?.service?.name.includes(
+                      'Amazon Store Package Custom',
                     )
-                      ? service.custom_amazon_store_price
-                        ? `<td>
-                                $${displayNumber(
-                                  service.custom_amazon_store_price,
-                                )}
-                               </td>`
-                        : `<td>${
-                            fixedFee && fixedFee[0] && fixedFee[0].fee
-                              ? `$${displayNumber(fixedFee[0].fee)}`
-                              : '$0' // for amazon store option
-                          }</td>`
-                      : service && service.service && service.service.fee
-                      ? `<td>
-                           $${
-                             service && service.service && service.service.fee
-                               ? displayNumber(service.service.fee)
-                               : ''
-                           } </td>`
-                      : `<td>
-                      ${
-                        fixedFee && fixedFee[0] && fixedFee[0].fee
-                          ? `$${displayNumber(fixedFee[0].fee)}`
-                          : '$0' // for amazon store option
-                      }
-                       </td>`
-                  }
-
-     
-     
-
-      ${
-        (
-          service && service.name
-            ? service.name !== 'Amazon Store Package Custom'
-            : service &&
-              service.service &&
-              service.service.name !== 'Amazon Store Package Custom'
-        )
-          ? service.quantity && service.service && service.service.fee
-            ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
-              service.service &&
-              service.service.fee
-                ? service.quantity * service.service.fee
-                : ''
               )
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </td>`
-            : // <td>Yet to save</td>
-              `<td>${(service.quantity &&
-              fixedFee &&
-              fixedFee[0] &&
-              fixedFee[0].fee
-                ? `$${service.quantity * fixedFee[0].fee}`
-                : '$0'
+                ? service.custom_amazon_store_price
+                  ? `<td>$${displayNumber(
+                      service.custom_amazon_store_price,
+                    )}</td>`
+                  : customAmazonStorePrice(
+                      fixedFee && fixedFee[0] && fixedFee[0].fee,
+                    )
+                : service?.service?.fee
+                ? customAmazonStorePrice(service?.service?.fee)
+                : customAmazonStorePrice(
+                    fixedFee && fixedFee[0] && fixedFee[0].fee,
+                  )
+            }
+            ${
+              (
+                service && service.name
+                  ? service.name !== 'Amazon Store Package Custom'
+                  : service &&
+                    service.service?.name !== 'Amazon Store Package Custom'
               )
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>`
-          : service.quantity && service.custom_amazon_store_price
-          ? `<td style="border: 1px solid black;padding: 13px;">$${(service.quantity &&
-            service.custom_amazon_store_price
-              ? service.quantity * service.custom_amazon_store_price
-              : ''
-            )
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          </td>`
-          : // <td>Yet to save</td>
-            `<td>${(service.quantity &&
-            fixedFee &&
-            fixedFee[0] &&
-            fixedFee[0].fee
-              ? `$${service.quantity * fixedFee[0].fee}`
-              : '$0'
-            )
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</td>`
-      }
-         
-                  
-                  </tr>`,
+                ? service.quantity && service.service?.fee
+                  ? tdService(service, service.service?.fee)
+                  : tdService(
+                      service,
+                      fixedFee && fixedFee[0] && fixedFee[0].fee,
+                    )
+                : service.quantity && service.custom_amazon_store_price
+                ? tdService(service, service.custom_amazon_store_price)
+                : tdService(service, fixedFee && fixedFee[0] && fixedFee[0].fee)
+            }                
+          </tr>`,
         );
       });
     }
-    // return fields.length ? fields.toString().replaceAll(',', '') : '';
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
   const showMonthlyServiceTable = () => {
     if (
-      (formData &&
-        formData.additional_monthly_services &&
-        formData.additional_monthly_services.length) ||
-      (formData &&
-        formData.additional_marketplaces &&
-        formData.additional_marketplaces.length)
+      formData?.additional_monthly_services?.length ||
+      formData?.additional_marketplaces?.length
     ) {
-      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center"><span style="font-weight: 800;
-    font-family: Helvetica-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br> <div class="table-responsive"><table class="contact-list "><tr><th>Service</th><th>Service Fee</th></tr>${mapMonthlyServices(
-      'additional_monthly_services',
-      'Monthly Services',
-    )} ${mapAdditionalMarketPlaces()}
-    
-   ${mapMonthlyServiceTotal()}
-                              ${mapVariableMonthlyService()}
-                                </table></div>`;
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center">
+      <span style="font-weight: 800; font-family: Helvetica-bold;">Additional Monthly Services </span>
+      <br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br>
+      <div class="table-responsive">
+        <table class="contact-list ">
+          <tr>
+            <th>Service</th>
+            <th>Service Fee</th>
+          </tr>
+          ${mapMonthlyServices(
+            'additional_monthly_services',
+            'Monthly Services',
+          )} 
+          ${mapAdditionalMarketPlaces()}   
+          ${mapMonthlyServiceTotal()}
+          ${mapVariableMonthlyService()}
+        </table>
+      </div>`;
     }
     return '';
   };
 
   const showOneTimeServiceTable = () => {
-    if (
-      formData &&
-      formData.additional_one_time_services &&
-      formData.additional_one_time_services.length
-    ) {
-      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
-    font-family: Helvetica-bold;">Additional One Time Services </span><br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br> <div class="table-responsive"><table class="contact-list "><tr><th>Quantity</th><th>Service</th><th>Service Fee</th><th>Total Service Fee</th></tr>${mapMonthlyServices(
-      'additional_one_time_services',
-      'One Time Services',
-    )}
-    ${mapOnetimeServiceTotal()}
-                                </table></div>`;
+    if (formData?.additional_one_time_services?.length) {
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;">
+        <span style="font-weight: 800; font-family: Helvetica-bold;">Additional One Time Services </span>
+        <br>The following additional monthly services will be provided to Client as a one time service in addition to the Monthly Retainer and any Additional Monthly services.</div><br>
+        <div class="table-responsive">
+        <table class="contact-list ">
+          <tr>
+            <th>Quantity</th>
+            <th>Service</th>
+            <th>Service Fee</th>
+            <th>Total Service Fee</th>
+          </tr>
+          ${mapMonthlyServices(
+            'additional_one_time_services',
+            'One Time Services',
+          )}
+        ${mapOnetimeServiceTotal()}
+        </table>
+      </div>`;
     }
     return '';
   };
 
   const showBillingCap = () => {
     if (formData && formData.billing_cap) {
-      return `<br><br><div class=" text-center " style="text-align: center;"><span style="font-weight: 800;
-      font-family: Helvetica-bold;"> Billing Cap </span> </div><div style="text-align: center;">Maximum amount that will be charged between the monthly retainer and revenue share.</div>
-      <div class=" text-center input-contact-value mt-3" style="margin-top: 1rem!important; text-align: center;"><span style="background:#ffe5df;padding: 4px 9px; font-weight: bold"> 
-      ${mapDefaultValues(
-        'billing_cap',
-        'Billing Cap',
-        'number-currency',
-      )}</span></div>`;
+      return `<br><br><div class=" text-center " style="text-align: center;">
+      <span style="font-weight: 800; font-family: Helvetica-bold;"> Billing Cap </span> </div>
+      <div style="text-align: center;">Maximum amount that will be charged between the monthly retainer and revenue share.</div>
+      <div class=" text-center input-contact-value mt-3" style="margin-top: 1rem!important; text-align: center;">
+        <span style="background:#ffe5df;padding: 4px 9px; font-weight: bold"> 
+          ${mapDefaultValues('billing_cap', 'Billing Cap', 'number-currency')}
+        </span>
+      </div>`;
     }
     return '';
   };
@@ -698,23 +630,25 @@ export default function Statement({
       notIncludedMonthlyServices.length ||
       notIncludedOneTimeServices.length
     ) {
-      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;"><span style="font-weight: 800;
-    font-family: Helvetica-bold;">Additional Services Not Included</span><br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><div class="table-responsive"><br> <table class="contact-list " style="width: 100%;border-collapse: collapse;">
-                                <tr>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service</th>
-                                  <th style="text-align: left; border: 1px solid black;padding: 13px;">Service Type</th>
-                                  </tr>
-                                  ${displayNotIncludedServices()}
-                                  </table></div>
-                                  `;
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;">
+        <span style="font-weight: 800; font-family: Helvetica-bold;">Additional Services Not Included</span>
+          <br>The following services are not part of this agreement, but can be purchased after signing by working with your Buy Box Experts Brand Growth Strategist or Sales Representative.</div><div class="table-responsive"><br> 
+          <table class="contact-list " style="width: 100%;border-collapse: collapse;">
+            <tr>
+              <th style="text-align: left; border: 1px solid black; padding: 13px;">Service</th>
+              <th style="text-align: left; border: 1px solid black; padding: 13px;">Service Type</th>
+            </tr>
+            ${displayNotIncludedServices()}
+          </table>
+        </div>
+      `;
     }
     return '';
   };
 
   return (
     <>
-      <Paragraph>
-        {' '}
+      <StatementParagraph>
         <p
           className="long-text"
           dangerouslySetInnerHTML={{
@@ -780,13 +714,12 @@ export default function Statement({
                 ),
           }}
         />
-      </Paragraph>
+      </StatementParagraph>
     </>
   );
 }
 
 Statement.defaultProps = {
-  details: {},
   formData: {},
   templateData: {},
   notIncludedOneTimeServices: [],
@@ -794,146 +727,80 @@ Statement.defaultProps = {
   servicesFees: {},
 };
 Statement.propTypes = {
-  details: PropTypes.shape({
-    length: PropTypes.string,
-    monthly_discount_amount: PropTypes.number,
-    monthly_discount_type: PropTypes.string,
-    one_time_discount_amount: PropTypes.number,
-    one_time_discount_type: PropTypes.string,
-
-    primary_marketplace: PropTypes.shape({
-      fee: PropTypes.number,
-      name: PropTypes.string,
-      id: PropTypes.string,
+  formData: shape({
+    length: oneOfType([
+      string,
+      shape({
+        value: string,
+        label: string,
+      }),
+    ]),
+    sales_threshold: string,
+    billing_cap: oneOfType([string, number]),
+    additional_marketplaces: arrayOf(
+      shape({
+        service: string,
+      }),
+    ),
+    additional_one_time_services: arrayOf(
+      shape({
+        service: shape({
+          id: string,
+        }),
+      }),
+    ),
+    seller_type: shape({
+      value: string,
+      label: string,
     }),
-    total_fee: PropTypes.shape({
-      onetime_service: PropTypes.number,
-      additional_marketplaces: PropTypes.number,
-      monthly_service: PropTypes.number,
-      monthly_service_discount: PropTypes.number,
-      monthly_service_after_discount: PropTypes.number,
-      onetime_service_discount: PropTypes.number,
-      onetime_service_after_discount: PropTypes.number,
+    primary_marketplace: oneOfType([
+      string,
+      shape({
+        fee: number,
+        name: string,
+        id: string,
+      }),
+    ]),
+    additional_monthly_services: arrayOf(
+      shape({
+        service: shape({
+          id: string,
+        }),
+      }),
+    ),
+    content_optimization: number,
+    design_optimization: number,
+    customer_id: shape({
+      address: string,
+      city: string,
+      state: string,
+      zip_code: string,
     }),
-    additional_marketplaces: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
-    additional_one_time_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
-    additional_monthly_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
+    monthly_discount_amount: oneOfType([string, number]),
+    monthly_discount_type: oneOfType([string, number]),
+    one_time_discount_type: oneOfType([string, number]),
+    one_time_discount_amount: oneOfType([string, number]),
+    threshold_type: string,
+    yoy_percentage: string,
   }),
-  formData: PropTypes.shape({
-    length: PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    }),
-    sales_threshold: PropTypes.string,
-    billing_cap: PropTypes.string,
-    additional_marketplaces: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
-    additional_one_time_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
-    seller_type: PropTypes.shape({
-      value: PropTypes.string,
-      label: PropTypes.string,
-    }),
-    primary_marketplace: PropTypes.shape({
-      fee: PropTypes.number,
-      name: PropTypes.string,
-      id: PropTypes.string,
-    }),
-    additional_monthly_services: PropTypes.arrayOf(
-      PropTypes.shape({
-        service: PropTypes.string,
-      }),
-    ),
-    content_optimization: PropTypes.number,
-    design_optimization: PropTypes.number,
-    customer_id: PropTypes.shape({
-      address: PropTypes.string,
-      city: PropTypes.string,
-      state: PropTypes.string,
-      zip_code: PropTypes.string,
-    }),
-    monthly_discount_type: PropTypes.string,
-    monthly_discount_amount: PropTypes.number,
-    one_time_discount_type: PropTypes.string,
-    one_time_discount_amount: PropTypes.number,
-    threshold_type: PropTypes.string,
-    yoy_percentage: PropTypes.string,
+  templateData: shape({
+    addendum: arrayOf(string),
+    statement_of_work: arrayOf(string),
   }),
-  templateData: PropTypes.shape({
-    addendum: PropTypes.string,
-    statement_of_work: PropTypes.string,
-  }),
-  notIncludedOneTimeServices: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
+  notIncludedOneTimeServices: arrayOf(
+    shape({
+      label: string.isRequired,
     }),
   ),
-  notIncludedMonthlyServices: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
+  notIncludedMonthlyServices: arrayOf(
+    shape({
+      label: string.isRequired,
     }),
   ),
-  servicesFees: PropTypes.shape({
-    fee: PropTypes.number,
-    filter: PropTypes.func,
-  }),
+  servicesFees: arrayOf(
+    shape({
+      fee: number,
+      filter: func,
+    }),
+  ),
 };
-
-const Paragraph = styled.div`
-  .summary {
-    margin: 0;
-    li {
-      margin-top: 10px;
-    }
-  }
-
-  .contact-list table,
-  td,
-  th {
-    border: 1px solid black;
-    padding: 13px;
-
-    .total-service-bordless {
-      font-weight: 500;
-      border-bottom: hidden !important;
-    }
-  }
-
-  tr {
-    .total-service {
-      font-weight: 800;
-    }
-    .total-service-bordless {
-      font-weight: 500;
-      border-bottom: hidden !important;
-      padding: 7px 13px;
-    }
-
-    th {
-      text-align: left;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-`;

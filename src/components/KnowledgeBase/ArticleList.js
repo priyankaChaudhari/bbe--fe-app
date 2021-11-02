@@ -245,7 +245,7 @@ const GrayBody = styled.div`
       padding-left: 100px;
     }
   }
-  @media only screen and (max-width: 991px) {
+  @media only screen and (max-width: 991.98px) {
     .graycontainer {
       padding: 0 45px;
     }
