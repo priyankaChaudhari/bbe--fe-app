@@ -46,7 +46,7 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               <TableMobileView
                 className="mb-3"
                 invoiceType={item.invoice_type}
-                invoiceId={item.invoiced_id}
+                invoiceId={item.next_next_invoiced_id}
                 status={item.invoice_status}
                 statusColor={
                   StatusColorSet[
@@ -100,7 +100,7 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
       <tr>
         <td className="product-body">
           <div className="company-name">{item.invoice_type}</div>
-          <div className="status">#{item.invoiced_id}</div>
+          <div className="status">#{item.next_invoiced_id}</div>
         </td>
         <td className="product-body">
           ${addThousandComma(item.monthly_budget, 0)}

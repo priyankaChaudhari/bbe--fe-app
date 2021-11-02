@@ -205,7 +205,7 @@ export default function InvoicesList({
     return (
       <tr
         className="cursor"
-        key={item.invoiced_id}
+        key={item.next_invoiced_id}
         onClick={() =>
           history.push(
             PATH_CUSTOMER_DETAILS.replace(
@@ -231,7 +231,7 @@ export default function InvoicesList({
               {item.customer && item.customer.name}
             </div>
             <div className="status">
-              {item.invoice_type} | #{item.invoiced_id}
+              {item.invoice_type} | #{item.next_invoiced_id}
             </div>
           </div>
         </td>
@@ -299,11 +299,11 @@ export default function InvoicesList({
                   selectedNavigation,
                 )
               }
-              key={item.invoiced_id}
+              key={item.next_invoiced_id}
               className="mb-3 cursor"
               CompanyName={item.customer && item.customer.name}
               invoiceType={item.invoice_type}
-              invoiceId={item.invoiced_id}
+              invoiceId={item.next_invoiced_id}
               label="AMOUNT"
               labelInfo={`$${bindAmount(item.monthly_budget, 0, true)}`}
               label1="CREATED ON"
