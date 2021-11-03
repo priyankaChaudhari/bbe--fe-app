@@ -324,6 +324,7 @@ export default function CustomerMainContainer() {
                       }}
                       defaultValue={viewOptions[0]}
                     />
+
                     {viewComponent === 'performance' ? (
                       <WhiteCard className="d-lg-none d-block mt-3 mb-3">
                         <ul className="sub-category-mobile-view">
