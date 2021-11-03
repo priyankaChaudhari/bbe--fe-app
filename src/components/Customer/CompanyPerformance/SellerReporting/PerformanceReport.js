@@ -21,6 +21,7 @@ import {
   CustomDateModal,
   DropDownIndicator,
 } from '../../../../common';
+import InventoryScoreGraph from './InventoryScoreGraph';
 
 const _ = require('lodash');
 const getSymbolFromCurrency = require('currency-symbol-map');
@@ -700,7 +701,6 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     );
   };
 
-  console.log('pieData', pieData);
   const renderInventoryScorePanel = () => {
     return (
       <div className="col-md-4 col-sm-12 mb-3">
@@ -742,6 +742,16 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     );
   };
 
+  const renderInventoryScorePanelAmcharts = () => {
+    return (
+      <InventoryScoreGraph
+        chartId="inventory-score-graph"
+        pieData={pieData}
+        dspData={dspData}
+      />
+    );
+  };
+
   return (
     <>
       {renderMarketplaceDropDown()}
@@ -773,6 +783,12 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       />
       <div className="row mt-3">
         {renderInventoryScorePanel()}
+        {renderPositiveFeedbackPanel()}
+        {renderOrderIssuesPanel()}
+      </div>
+      <h6>inventory score graph using amcharts</h6>
+      <div className="row mt-3">
+        {renderInventoryScorePanelAmcharts()}
         {renderPositiveFeedbackPanel()}
         {renderOrderIssuesPanel()}
       </div>
