@@ -7,17 +7,15 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 import styled from 'styled-components';
 import { string, arrayOf, shape } from 'prop-types';
 
-import { WhiteCard } from '../../../../common';
 // Themes begin
-
 function am4themes_colorTheme(target) {
   if (target instanceof am4core.ColorSet) {
-    target.list = [am4core.color('#97ca61'), am4core.color('#eaeff2')];
+    target.list = [am4core.color('#97ca61'), am4core.color('#EAEFF2')];
   }
 }
 am4core.useTheme(am4themes_colorTheme);
 am4core.useTheme(am4themes_animated);
-function InventoryScoreGraph({ chartId, pieData, dspData }) {
+function InventoryScoreGraph({ chartId, pieData }) {
   const chart = useRef(null);
   const createInventoryScoreGraph = useCallback(() => {
     chart.current = am4core.create(chartId, am4charts.PieChart);
@@ -71,41 +69,22 @@ function InventoryScoreGraph({ chartId, pieData, dspData }) {
     return () => chart.current && chart.current.dispose();
   }, [createInventoryScoreGraph]);
 
-  return (
-    <div className="col-md-4 col-sm-12 mb-3">
-      <WhiteCard className="fix-height ">
-        <p className="black-heading-title mt-0 mb-4">Inventory Score (IPI)</p>
-        <PieChartDiv id={chartId} />
-        {/* <div className="average">
-          {pieData && pieData.length && !Number.isNaN(pieData[0].value)
-            ? pieData[0].value
-            : 'N/A'}
-          <div className="out-off">Out of 1000</div>
-        </div> */}
-        <br />
-        <div className="last-update mt-3 ">
-          Last updated: {dspData && dspData.latest_date}
-        </div>
-      </WhiteCard>
-    </div>
-  );
+  return <PieChartDiv id={chartId} />;
 }
 
 export default InventoryScoreGraph;
 
 InventoryScoreGraph.defaultProps = {
   pieData: [],
-  dspData: [],
 };
 InventoryScoreGraph.propTypes = {
   chartId: string.isRequired,
   pieData: arrayOf(shape({})),
-  dspData: arrayOf(shape({})),
 };
 
 const PieChartDiv = styled.div`
   max-width: 170px;
   width: 100%;
   height: 140px;
-  margin: 0 auto 50px 0;
+  margin: 0 auto 70px 0;
 `;
