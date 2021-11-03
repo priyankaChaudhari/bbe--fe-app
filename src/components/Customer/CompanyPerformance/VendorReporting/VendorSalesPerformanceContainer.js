@@ -40,6 +40,12 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       key: 'selection',
     },
   ]);
+
+  const [customDate, setCustomDate] = useState({
+    startDate: currentDate,
+    endDate: currentDate,
+  });
+
   const [salesChartData, setSalesChartData] = useState([]);
   const [showCustomDateModal, setShowCustomDateModal] = useState(false);
   const [groupBy, setGroupBy] = useState('daily');
@@ -392,6 +398,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       ed = `${endDate.getDate()}-${
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
+
+      setCustomDate({ startDate: sd, endDate: ed });
       getData(flag, temp, marketplace, metricsType, sd, ed);
     } else {
       // flag==='year
@@ -556,12 +564,23 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   const handleGroupBy = (value) => {
     if (value !== groupBy) {
       setGroupBy(value);
-      getData(
-        selectedSalesDF.value,
-        value,
-        selectedAmazonValue,
-        selectedVendorMetricsType.value,
-      );
+      if (selectedSalesDF.value === 'custom') {
+        getData(
+          selectedSalesDF.value,
+          value,
+          selectedAmazonValue,
+          selectedVendorMetricsType.value,
+          customDate.startDate,
+          customDate.endDate,
+        );
+      } else {
+        getData(
+          selectedSalesDF.value,
+          value,
+          selectedAmazonValue,
+          selectedVendorMetricsType.value,
+        );
+      }
     }
   };
 
