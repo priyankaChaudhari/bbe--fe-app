@@ -40,7 +40,7 @@ import {
   BackToTop,
   WhiteCard,
   GetInitialName,
-  // ModalRadioCheck,
+  ModalRadioCheck,
 } from '../../../common';
 import {
   getCustomerActivityLog,
@@ -325,8 +325,7 @@ export default function CustomerMainContainer() {
                       defaultValue={viewOptions[0]}
                     />
 
-                    {/* hide vendor feature */}
-                    {/* {viewComponent === 'performance' ? (
+                    {viewComponent === 'performance' ? (
                       <WhiteCard className="d-lg-none d-block mt-3 mb-3">
                         <ul className="sub-category-mobile-view">
                           <li>
@@ -370,7 +369,7 @@ export default function CustomerMainContainer() {
                           </li>
                         </ul>
                       </WhiteCard>
-                    ) : null} */}
+                    ) : null}
                   </div>
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails
