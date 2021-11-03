@@ -49,6 +49,10 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       key: 'selection',
     },
   ]);
+  const [customDate, setCustomDate] = useState({
+    startDate: currentDate,
+    endDate: currentDate,
+  });
   const [BBstate, setBBState] = useState([
     {
       startDate: currentDate,
@@ -426,6 +430,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       ed = `${endDate.getDate()}-${
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
+
+      setCustomDate({ startDate: sd, endDate: ed });
       getData(flag, temp, marketplace, sd, ed);
     } else {
       // flag==='year
@@ -566,7 +572,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   const handleGroupBy = (value) => {
     if (value !== groupBy) {
       setGroupBy(value);
-      getData(selectedValue.value, value, selectedAmazonValue);
+      if (selectedValue.value === 'custom') {
+        getData(
+          selectedValue.value,
+          value,
+          selectedAmazonValue,
+          customDate.startDate,
+          customDate.endDate,
+        );
+      } else {
+        getData(selectedValue.value, value, selectedAmazonValue);
+      }
     }
   };
 
