@@ -36,6 +36,7 @@ import {
   CloseIcon,
   CaretUp,
   DisabledRecurring,
+  AddIcons,
 } from '../../../theme/images';
 import {
   PATH_AGREEMENT,
@@ -842,6 +843,20 @@ export default function AgreementDetails({
             <>
               {viewComponent === 'current' ? (
                 <>
+                  <div
+                    className=" mt-4  mb-3 cursor "
+                    style={{ color: '#171725', fontSize: '14px' }}
+                    // onClick={() => addNewOneTime()}
+                    role="presentation">
+                    <img
+                      width="16px"
+                      style={{ verticalAlign: 'middle' }}
+                      src={AddIcons}
+                      className="mr-2"
+                      alt="add"
+                    />
+                    Add New Agreement
+                  </div>{' '}
                   {generateHTML()}
                   <div
                     className="looking-past-agre"
