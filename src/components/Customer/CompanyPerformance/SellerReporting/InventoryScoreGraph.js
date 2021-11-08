@@ -74,4 +74,7 @@ const PieChartDiv = styled.div`
   width: 100%;
   height: 140px;
   margin: 0 auto;
+  @media only screen and (max-width: 991px) {
+    margin: 0 auto 40px auto;
+  }
 `;

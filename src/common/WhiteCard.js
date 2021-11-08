@@ -702,7 +702,7 @@ export const WhiteCard = styled.div`
     position: absolute;
     left: 0;
     right: 0;
-    top: 136px;
+    top: 150px;
     text-align: center;
 
     .out-off {
@@ -812,7 +812,7 @@ export const WhiteCard = styled.div`
   @media only screen and (max-width: 1350px) and (min-width: 991px) {
     .average {
       font-size: 18px;
-      top: 160px;
+      top: 165px;
     }
   }
   @media only screen and (max-width: 1150px) {
