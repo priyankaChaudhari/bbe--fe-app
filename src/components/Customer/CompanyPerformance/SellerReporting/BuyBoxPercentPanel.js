@@ -1,5 +1,7 @@
-import React from 'react';
+// import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
+import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { arrayOf, bool, func, shape } from 'prop-types';
 
@@ -36,6 +38,8 @@ export default function BuyBoxPercentPanel({
   renderCustomDateSubLabel,
 }) {
   const { Option, SingleValue } = components;
+  const averageDateValue = bBDailyFact.value;
+  const [showBBAverageDateLabel, setShowBBAverageDateLabel] = useState('');
 
   const bbFilterOption = (props) => (
     <Option {...props}>
@@ -72,6 +76,22 @@ export default function BuyBoxPercentPanel({
     };
   };
 
+  const getAverageDateLabel = useCallback(() => {
+    if (averageDateValue === 'week') {
+      setShowBBAverageDateLabel('7 days');
+    } else if (averageDateValue === 'month') {
+      setShowBBAverageDateLabel('Recent month');
+    } else if (averageDateValue === '30days') {
+      setShowBBAverageDateLabel('30 days');
+    } else if (averageDateValue === 'custom') {
+      setShowBBAverageDateLabel(
+        `From- ${dayjs(BBstate[0].startDate).format(
+          'MMM D, YYYY',
+        )}  To - ${dayjs(BBstate[0].endDate).format('MMM D, YYYY')}`,
+      );
+    }
+  }, [BBstate, averageDateValue]);
+
   const renderBBPercentGraphPanel = () => {
     return (
       <div className="col-sm-12 mb-3 ">
@@ -95,8 +115,8 @@ export default function BuyBoxPercentPanel({
             </div>
           </div>
           <div className="row">
-            <div className="col-md-6 col-sm-12 order-md-1 order-2">
-              <ul className="rechart-item">
+            <div className="col-lg-12 col-md-6 col-sm-12 order-md-1 order-2">
+              <ul className="rechart-item bbpercent-graph-label">
                 <li>
                   <div className="weeks">
                     <span className="black label-block" />
@@ -106,7 +126,7 @@ export default function BuyBoxPercentPanel({
                 <li>
                   <div className="weeks">
                     <span className="gray label-block" />
-                    <span>Average</span>
+                    <span>{showBBAverageDateLabel} average</span>
                   </div>
                 </li>
               </ul>
@@ -136,6 +156,10 @@ export default function BuyBoxPercentPanel({
     );
   };
 
+  useEffect(() => {
+    getAverageDateLabel();
+  }, [getAverageDateLabel]);
+
   return (
     <>
       <div className="row ">{renderBBPercentGraphPanel()}</div>
@@ -156,6 +180,7 @@ export default function BuyBoxPercentPanel({
         }}
         onChange={(item) => {
           setBBState([item.BBselection]);
+          // getBBCustomDate();
         }}
         onApply={() => applyCustomDate('BBDate')}
         currentDate={currentDate}

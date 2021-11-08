@@ -913,6 +913,9 @@ export const WhiteCard = styled.div`
       text-align: center;
       padding-top: 10px;
     }
+    .bbpercent-graph-label {
+      text-align: left !important;
+    }
   }
   @media only screen and (max-width: 460px) {
     .brand-name {
