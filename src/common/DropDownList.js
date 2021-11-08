@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const DropDownList = styled.div`
+  display: none;
   background-color: ${Theme.white};
   border-radius: 8px;
   box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.4);
@@ -20,6 +21,7 @@ const DropDownList = styled.div`
       color: ${Theme.black};
       font-weight: 600;
       margin-bottom: 24px;
+      cursor: pointer;
 
       &:last-child {
         margin-bottom: 0;

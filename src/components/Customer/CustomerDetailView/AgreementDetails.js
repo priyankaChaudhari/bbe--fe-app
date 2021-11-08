@@ -27,6 +27,7 @@ import {
   Button,
   InputFormField,
   DropDownList,
+  ModalRadioCheck,
 } from '../../../common';
 import {
   ClockIcon,
@@ -867,7 +868,9 @@ export default function AgreementDetails({
                   </div>{' '}
                   <DropDownList>
                     <ul className="new-agreement-list">
-                      <li>
+                      <li
+                        onClick={() => setShowModal(true)}
+                        role="presentation">
                         Recurring Service Agreement
                         <div className="sub-title"> Standard Cancellation</div>
                       </li>
@@ -1032,6 +1035,88 @@ export default function AgreementDetails({
             </div>
           </ModalBox>
         </Modal>
+        <Modal
+          isOpen={showModal}
+          style={customStyles}
+          ariaHideApp={false}
+          contentLabel="Edit modal">
+          <img
+            src={CloseIcon}
+            alt="close"
+            className="float-right cursor cross-icon"
+            onClick={() => setShowModal(false)}
+            role="presentation"
+          />
+          <ModalBox>
+            <div className="modal-body">
+              <h4 className="on-boarding ">ADD &#60;CONTRACT TYPE&#62; </h4>{' '}
+              <p className="long-text">
+                This partner already has an active &#60;Contract Type&#62; .
+                Please confirm whether this
+                <br /> is a new agreement to run in parallel with the existing
+                agreement(s).
+              </p>
+              <ModalRadioCheck className="pb-3" key="seller">
+                <label
+                  className="checkboxes radio-container medium-text-label"
+                  htmlFor="seller">
+                  Yes, this agreement will run alongside the existing one(s)
+                  <input type="radio" name="radio" id="seller" value="seller" />
+                  <span className="checkmark checkmark-customer-list" />
+                </label>
+              </ModalRadioCheck>
+              <ModalRadioCheck key="seller">
+                <label
+                  className="checkboxes radio-container medium-text-label"
+                  htmlFor="seller">
+                  No, this agreement will replace an existing agreement
+                  <input type="radio" name="radio" id="seller" value="seller" />
+                  <span className="checkmark checkmark-customer-list" />
+                </label>
+              </ModalRadioCheck>
+              <OrangeFieldSet className="mt-4 ">
+                <CheckBoxContract>
+                  <div className="checkbox" role="presentation">
+                    <input
+                      type="checkbox"
+                      id="check1"
+                      name="check1"
+                      value="check12"
+                    />
+                    <label htmlFor="check1">
+                      <div className="solid-icon mt-2">
+                        <img
+                          width="48px"
+                          className="solid-icon"
+                          src={RecurringIcon}
+                          alt="sync"
+                        />
+                      </div>
+                      <div className="contract-status" role="presentation">
+                        <p className="black-heading-title mt-2 pt-1 mb-0">
+                          Recurring Service Agreement
+                        </p>
+                        <ul className="recurring-contact">
+                          <li>
+                            <p className="basic-text ">Expires Mar 20,2021</p>
+                          </li>
+                          <li>
+                            <span className="dot" />
+                            <p className="basic-text ">
+                              Amazon US (Primary),Amazon.ca,Amazon.co.uk
+                            </p>
+                          </li>
+                        </ul>
+                      </div>
+                    </label>
+                  </div>
+                </CheckBoxContract>
+                <div className="clear-fix" />
+              </OrangeFieldSet>
+              <Button className="btn-primary w-100 mt-4">Confirm</Button>
+            </div>
+          </ModalBox>
+        </Modal>
       </div>
     </>
   );
@@ -1051,5 +1136,44 @@ AgreementDetails.propTypes = {
 const CustomerDetailCoppase = styled.div`
   .ReactCollapse--content {
     width: 100%;
+  }
+`;
+
+const OrangeFieldSet = styled.div`
+  border-radius: 4px;
+  border: 1px solid ${Theme.gray11};
+  padding: 0 11px 8px 11px;
+  cursor: pointer;
+  &.active {
+    border: 1px solid ${Theme.orange};
+  }
+`;
+
+const CheckBoxContract = styled.div`
+  label {
+    cursor: pointer;
+  }
+
+  .checkbox input:checked ~ label:before {
+    background-repeat: no-repeat;
+    z-index: 2;
+    background-position-y: 8px;
+    background-position-x: 8px;
+    content: '';
+  }
+  .checkbox input {
+    display: none;
+  }
+
+  .checkbox label:before {
+    margin-top: 25px;
+    width: 6px;
+    float: right;
+    height: 11px;
+    border: solid ${Theme.orange};
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
   }
 `;
