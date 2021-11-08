@@ -49,19 +49,6 @@ function InventoryScoreGraph({ chartId, pieData }) {
     ).properties.shiftRadius = 0;
     pieSeries.slices.template.states.getKey('hover').properties.shiftRadius = 0;
     pieSeries.slices.template.states.getKey('hover').properties.scale = 1;
-
-    const customLabelHTML = `[font-size:36px; color:#000000]${
-      pieData && pieData.length && !Number.isNaN(pieData[0].value)
-        ? pieData[0].value
-        : 'N/A'
-    }\n[font-size:14px; color:#556178;]Out of 1000`;
-
-    const label = chart.current.seriesContainer.createChild(am4core.Label);
-    label.textAlign = 'middle';
-    label.horizontalCenter = 'middle';
-    label.verticalCenter = 'middle';
-    label.text = customLabelHTML;
-    // label.fill = am4core.color('#556178');
   }, [chartId, pieData]);
 
   useEffect(() => {

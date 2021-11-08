@@ -700,7 +700,7 @@ export const WhiteCard = styled.div`
     color: ${Theme.black};
     font-size: ${Theme.primaryTitleFontSize};
     position: absolute;
-    left: 68px;
+    left: 70px;
     top: 142px;
     text-align: center;
 

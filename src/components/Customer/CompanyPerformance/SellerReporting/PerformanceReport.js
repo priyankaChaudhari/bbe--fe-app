@@ -710,12 +710,12 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             pieData={pieData}
             dspData={dspData}
           />
-          {/* <div className="average">
-          {pieData && pieData.length && !Number.isNaN(pieData[0].value)
-            ? pieData[0].value
-            : 'N/A'}
-          <div className="out-off">Out of 1000</div>
-        </div> */}
+          <div className="average">
+            {pieData && pieData.length && !Number.isNaN(pieData[0].value)
+              ? pieData[0].value
+              : 'N/A'}
+            <div className="out-off">Out of 1000</div>
+          </div>
           <div className="last-update mt-3 ">
             Last updated: {dspData && dspData.latest_date}
           </div>
