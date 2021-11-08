@@ -683,6 +683,12 @@ export const WhiteCard = styled.div`
       .black {
         background: ${Theme.black};
       }
+      .label-block {
+        border-radius: 2px;
+        width: 14px;
+        height: 14px;
+        margin-right: 8px;
+      }
       span {
         color: ${Theme.black};
         font-size: ${Theme.normal};

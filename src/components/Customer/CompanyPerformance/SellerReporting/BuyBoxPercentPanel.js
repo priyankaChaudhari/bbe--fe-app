@@ -99,13 +99,13 @@ export default function BuyBoxPercentPanel({
               <ul className="rechart-item">
                 <li>
                   <div className="weeks">
-                    <span className="black block" />
+                    <span className="black label-block" />
                     <span>Daily %</span>
                   </div>
                 </li>
                 <li>
                   <div className="weeks">
-                    <span className="gray block" />
+                    <span className="gray label-block" />
                     <span>Average</span>
                   </div>
                 </li>
