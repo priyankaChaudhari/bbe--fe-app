@@ -700,8 +700,9 @@ export const WhiteCard = styled.div`
     color: ${Theme.black};
     font-size: ${Theme.primaryTitleFontSize};
     position: absolute;
-    left: 70px;
-    top: 142px;
+    left: 0;
+    right: 0;
+    top: 136px;
     text-align: center;
 
     .out-off {
@@ -806,6 +807,12 @@ export const WhiteCard = styled.div`
       &.one-time-service {
         max-width: 80%;
       }
+    }
+  }
+  @media only screen and (max-width: 1350px) and (min-width: 991px) {
+    .average {
+      font-size: 18px;
+      top: 160px;
     }
   }
   @media only screen and (max-width: 1150px) {

@@ -70,8 +70,8 @@ InventoryScoreGraph.propTypes = {
 };
 
 const PieChartDiv = styled.div`
-  max-width: 170px;
+  max-width: 250px;
   width: 100%;
   height: 140px;
-  margin: 0 auto 70px 0;
+  margin: 0 auto;
 `;

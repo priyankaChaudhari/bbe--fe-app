@@ -210,7 +210,7 @@ export default function SalesPerformancePanel({
     return (
       <div className="row mt-4 mb-3">
         {_.size(activeSales) <= 2 ? (
-          <div className="col-md-5 col-sm-12 order-md-1 order-2 mt-2">
+          <div className="col-md-5 col-sm-12 order-md-1 order-2 mt-2 pr-0">
             <ul className="rechart-item">
               <li>
                 <div className="weeks">
@@ -252,9 +252,9 @@ export default function SalesPerformancePanel({
             </ul>
           </div>
         ) : (
-          <div className="col-md-5 col-sm-12 order-md-1 order-2 mt-2" />
+          <div className="col-md-5 col-sm-12 order-md-1 order-2 mt-2 " />
         )}
-        <div className="col-md-7 col-sm-12 order-md-2 order-1">
+        <div className="col-md-7 col-sm-12 order-md-2 order-1 pl-0">
           <ToggleButton>
             <div className="days-container ">
               <ul className="days-tab">

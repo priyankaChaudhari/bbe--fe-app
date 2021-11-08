@@ -47,7 +47,7 @@ const ToggleButton = styled.div`
 
         label {
           color: ${Theme.black};
-          padding: 7px 19px;
+          padding: 7px 18px;
           font-size: 14px;
           display: inline-block;
           cursor: pointer;
