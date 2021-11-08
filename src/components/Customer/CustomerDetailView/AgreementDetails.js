@@ -26,6 +26,7 @@ import {
   ModalBox,
   Button,
   InputFormField,
+  DropDownList,
 } from '../../../common';
 import {
   ClockIcon,
@@ -856,7 +857,27 @@ export default function AgreementDetails({
                       alt="add"
                     />
                     Add New Agreement
+                    <img
+                      width="20px"
+                      style={{ verticalAlign: 'middle', marginLeft: '6px' }}
+                      src={CaretUp}
+                      alt="caret"
+                      className="dropdown-arrow-icon"
+                    />
                   </div>{' '}
+                  <DropDownList>
+                    <ul className="new-agreement-list">
+                      <li>
+                        Recurring Service Agreement
+                        <div className="sub-title"> Standard Cancellation</div>
+                      </li>
+                      <li>
+                        Recurring Service Agreement
+                        <div className="sub-title"> 90 Day Cancellation</div>
+                      </li>
+                      <li>DSP-Only Agreement</li>
+                    </ul>
+                  </DropDownList>
                   {generateHTML()}
                   <div
                     className="looking-past-agre"
