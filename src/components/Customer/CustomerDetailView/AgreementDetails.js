@@ -846,34 +846,37 @@ export default function AgreementDetails({
             <>
               {viewComponent === 'current' ? (
                 <>
-                  <div
-                    className=" mt-4  mb-3 cursor "
-                    style={{ color: '#171725', fontSize: '14px' }}
+                  <AddNewAgreement
+                    className=" mt-4 mb-3  checkbox"
                     role="presentation">
-                    <img
-                      width="16px"
-                      style={{ verticalAlign: 'middle' }}
-                      src={AddIcons}
-                      className="mr-2"
-                      alt="add"
-                    />
-                    Add New Agreement
-                    <input
-                      type="checkbox"
-                      checked={showAgreementOptions}
-                      onClick={() =>
-                        setShowAgreementOptions(!showAgreementOptions)
-                      }
-                      onBlur={() => setShowAgreementOptions(false)}
-                    />
-                    <img
-                      width="20px"
-                      style={{ verticalAlign: 'middle', marginLeft: '6px' }}
-                      src={CaretUp}
-                      alt="caret"
-                      className="dropdown-arrow-icon"
-                    />
-                  </div>{' '}
+                    <label
+                      className="cursor check-container-label"
+                      htmlFor="checklabel">
+                      <input
+                        type="checkbox"
+                        checked={showAgreementOptions}
+                        id="checklabel"
+                        name="checklabel"
+                        onClick={() =>
+                          setShowAgreementOptions(!showAgreementOptions)
+                        }
+                        onBlur={() => setShowAgreementOptions(false)}
+                      />
+                      <img
+                        width="16px"
+                        src={AddIcons}
+                        className="mr-2 caretup-icon"
+                        alt="add"
+                      />
+                      Add New Agreement
+                      <img
+                        width="20px"
+                        src={CaretUp}
+                        alt="caret"
+                        className="dropdown-arrow-icon"
+                      />
+                    </label>
+                  </AddNewAgreement>{' '}
                   <DropDownList showOptions={showAgreementOptions}>
                     <ul className="new-agreement-list">
                       <li
@@ -1187,5 +1190,26 @@ const CheckBoxContract = styled.div`
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+  }
+`;
+
+const AddNewAgreement = styled.div`
+  color: ${Theme.gray85};
+  font-size: ${Theme.extraNormal};
+
+  .dropdown-arrow-icon {
+    vertical-align: middle;
+    margin-left: 6px;
+  }
+  .check-container-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    height: 10px;
+    width: 160px;
+  }
+  .caretup-icon {
+    vertical-align: middle;
   }
 `;

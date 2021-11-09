@@ -199,11 +199,7 @@ h2 {
     font-weight: 300;
     line-height: 32px;
   }
-  /* &.ghq-card-content__medium-heading {
-    color: ${Theme.gray90};
-    font-size: ${Theme.title};
-    font-family: ${Theme.baseFontFamily};
-  } */
+ 
 }
 
 
@@ -256,41 +252,12 @@ h6 {
   color: ${Theme.black};
   font-size: ${Theme.title};
   font-weight: 600;
-  
 }
-
-/* .ghq-card-content__horizontal-rule {
-  display: block;
-  &:first-of-type {
-    display: none;
-  }
-}
-
-.ghq-card-content__video-responsive-wrapper {
-  .ghq-card-content__video {
-    width: 90%;
-    height: 400px;
-  }
-  @media only screen and (min-width: 1600px) and (max-width: 1920px) {
-    .ghq-card-content__video {
-      width: 90%;
-      height: 500px;
-    }
-  }
-}
-
-.remove-author > .ghq-card-content__paragraph {
-  display: block;
-  &:first-of-type {
-    display: none;
-  }
-} */
 
 .black-heading-title {
   font-size: ${Theme.extraMedium}; 
   color: ${Theme.black};
-   /* font-family: ${Theme.baseMediumFontFamily}; */
-   font-family: ${Theme.baseFontFamily};
+  font-family: ${Theme.baseFontFamily};
   font-weight: 600;
 }
  .card-title {
@@ -313,7 +280,6 @@ p {
   &.black-heading-title {
     font-size: ${Theme.extraMedium}; 
     color: ${Theme.black};
-     /* font-family: ${Theme.baseMediumFontFamily}; */
     font-family: ${Theme.baseFontFamily};
     font-weight: 600;
   }
@@ -356,20 +322,6 @@ p {
     line-height: 24px;
     font-weight: 500;
   }
-
-  /* &.ghq-card-content__paragraph {
-    color: ${Theme.gray90};
-    font-size: ${Theme.extraMedium}; 
-    line-height: 24px;
-    font-weight: 300; */
-
-   /* .ghq-card-content__bold {
-      font-weight: lighter;
-    }  */
-  }
-  /* .ghq-card-content__image {
-    width: -webkit-fill-available !important;
-  } */
 
   &.text-detail-modal {
     font-size: ${Theme.title};
@@ -543,7 +495,6 @@ p {
     height: 12px;
     border: solid ${Theme.gray35};
     border-width: 0 2px 2px 0;
-
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
