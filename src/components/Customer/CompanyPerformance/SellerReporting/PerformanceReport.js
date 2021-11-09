@@ -7,10 +7,10 @@ import Select from 'react-select';
 import * as am4core from '@amcharts/amcharts4/core';
 import am4themes_dataviz from '@amcharts/amcharts4/themes/dataviz';
 import { instanceOf, shape, string } from 'prop-types';
-import { ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 import SalesPerformancePanel from './SalesPerformancePanel';
 import BuyBoxPercentPanel from './BuyBoxPercentPanel';
+import InventoryScoreGraph from './InventoryScoreGraph';
 import Theme from '../../../../theme/Theme';
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -38,7 +38,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     { name: 'Inventory', value: 'N/A' },
     { name: 'Total', value: 1000 },
   ]);
-  const COLORS = ['#97ca61', '#EAEFF2'];
+
   const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
@@ -612,10 +612,10 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         <ViewData>
           <div className="row">
             <div className="col-md-4  col-sm-12 ">
-              <div className="view-data-for mt-4 ">View data for</div>{' '}
+              <div className="view-data-for mt-2 pt-1 ">View data for:</div>{' '}
             </div>
             <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0"> </div>
-            <div className="col-md-4 col-sm-6  mt-2 pt-1 pl-0">
+            <div className="col-md-4 col-sm-6  1 pl-0">
               {' '}
               <DropDownSelect
                 id="BT-salesperformancedata-countryfilter"
@@ -705,34 +705,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       <div className="col-md-4 col-sm-12 mb-3">
         <WhiteCard className="fix-height ">
           <p className="black-heading-title mt-0 mb-4">Inventory Score (IPI)</p>
-
-          <ResponsiveContainer width="100%" height={200}>
-            <PieChart>
-              <Pie
-                data={pieData}
-                cx={72}
-                cy={100}
-                startAngle={170}
-                marginBottom={40}
-                endAngle={10}
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884D8"
-                paddingAngle={6}
-                dataKey="value">
-                <Cell key="cell-0" fill={COLORS[0]} />
-                <Cell key="cell-1" fill={COLORS[1]} />
-              </Pie>
-            </PieChart>
-          </ResponsiveContainer>
-
+          <InventoryScoreGraph
+            chartId="inventory-score-graph"
+            pieData={pieData}
+            dspData={dspData}
+          />
           <div className="average">
             {pieData && pieData.length && !Number.isNaN(pieData[0].value)
               ? pieData[0].value
               : 'N/A'}
             <div className="out-off">Out of 1000</div>
           </div>
-          <br />
           <div className="last-update mt-3 ">
             Last updated: {dspData && dspData.latest_date}
           </div>
