@@ -378,14 +378,14 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   const renderCustomDateSubLabel = (props, flag) => {
     if (flag === 'sp') {
       if (selectedValue.value === 'custom' && isSPCustomDateApply) {
-        return `From- ${dayjs(state[0].startDate).format(
+        return `From - ${dayjs(state[0].startDate).format(
           'MMM D, YYYY',
-        )}  To- ${dayjs(state[0].endDate).format('MMM D, YYYY')}`;
+        )}  To - ${dayjs(state[0].endDate).format('MMM D, YYYY')}`;
       }
     } else if (bBDailyFact.value === 'custom' && isBBCustomDateApply) {
-      return `From- ${dayjs(BBstate[0].startDate).format(
+      return `From - ${dayjs(BBstate[0].startDate).format(
         'MMM D, YYYY',
-      )}  To- ${dayjs(BBstate[0].endDate).format('MMM D, YYYY')}`;
+      )}  To - ${dayjs(BBstate[0].endDate).format('MMM D, YYYY')}`;
     }
 
     return props.data.sub;

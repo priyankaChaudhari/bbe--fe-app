@@ -683,6 +683,12 @@ export const WhiteCard = styled.div`
       .black {
         background: ${Theme.black};
       }
+      .label-block {
+        border-radius: 2px;
+        width: 14px;
+        height: 14px;
+        margin-right: 8px;
+      }
       span {
         color: ${Theme.black};
         font-size: ${Theme.normal};
@@ -906,6 +912,9 @@ export const WhiteCard = styled.div`
       margin: 0 auto;
       text-align: center;
       padding-top: 10px;
+    }
+    .bbpercent-graph-label {
+      text-align: left !important;
     }
   }
   @media only screen and (max-width: 460px) {

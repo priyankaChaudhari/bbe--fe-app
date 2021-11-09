@@ -95,18 +95,18 @@ export default function BuyBoxPercentPanel({
             </div>
           </div>
           <div className="row">
-            <div className="col-md-6 col-sm-12 order-md-1 order-2">
-              <ul className="rechart-item">
+            <div className="col-lg-12 col-md-6 col-sm-12 order-md-1 order-2">
+              <ul className="rechart-item bbpercent-graph-label">
                 <li>
                   <div className="weeks">
-                    <span className="black block" />
+                    <span className="black label-block" />
                     <span>Daily %</span>
                   </div>
                 </li>
                 <li>
                   <div className="weeks">
-                    <span className="gray block" />
-                    <span>Average</span>
+                    <span className="gray label-block" />
+                    <span> Average</span>
                   </div>
                 </li>
               </ul>
