@@ -848,15 +848,12 @@ export default function AgreementDetails({
                 <>
                   <AddNewAgreement
                     className=" mt-4 mb-3  checkbox"
-                    role="presentation">
-                    <label
-                      className="cursor check-container-label"
-                      htmlFor="checklabel">
+                    role="presentation"
+                    showAgreementOptions={showAgreementOptions}>
+                    <span className="cursor check-container-label">
                       <input
                         type="checkbox"
                         checked={showAgreementOptions}
-                        id="checklabel"
-                        name="checklabel"
                         onClick={() =>
                           setShowAgreementOptions(!showAgreementOptions)
                         }
@@ -875,7 +872,7 @@ export default function AgreementDetails({
                         alt="caret"
                         className="dropdown-arrow-icon"
                       />
-                    </label>
+                    </span>
                   </AddNewAgreement>{' '}
                   <DropDownList showOptions={showAgreementOptions}>
                     <ul className="new-agreement-list">
@@ -1200,6 +1197,8 @@ const AddNewAgreement = styled.div`
   .dropdown-arrow-icon {
     vertical-align: middle;
     margin-left: 6px;
+    transform: ${(props) =>
+      props.showAgreementOptions ? 'rotate(180deg)' : ''};
   }
   .check-container-label input {
     position: absolute;
@@ -1207,7 +1206,7 @@ const AddNewAgreement = styled.div`
     cursor: pointer;
     height: 0;
     height: 10px;
-    width: 160px;
+    width: 170px;
   }
   .caretup-icon {
     vertical-align: middle;
