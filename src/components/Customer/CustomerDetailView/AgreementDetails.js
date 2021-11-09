@@ -80,6 +80,7 @@ export default function AgreementDetails({
     end_date: null,
   });
   const [bgsManagerEmail, setBgsManagerEmail] = useState(null);
+  const [showAgreementOptions, setShowAgreementOptions] = useState(false);
 
   const customStyles = {
     content: {
@@ -848,7 +849,6 @@ export default function AgreementDetails({
                   <div
                     className=" mt-4  mb-3 cursor "
                     style={{ color: '#171725', fontSize: '14px' }}
-                    // onClick={() => addNewOneTime()}
                     role="presentation">
                     <img
                       width="16px"
@@ -858,6 +858,14 @@ export default function AgreementDetails({
                       alt="add"
                     />
                     Add New Agreement
+                    <input
+                      type="checkbox"
+                      checked={showAgreementOptions}
+                      onClick={() =>
+                        setShowAgreementOptions(!showAgreementOptions)
+                      }
+                      onBlur={() => setShowAgreementOptions(false)}
+                    />
                     <img
                       width="20px"
                       style={{ verticalAlign: 'middle', marginLeft: '6px' }}
@@ -866,7 +874,7 @@ export default function AgreementDetails({
                       className="dropdown-arrow-icon"
                     />
                   </div>{' '}
-                  <DropDownList>
+                  <DropDownList showOptions={showAgreementOptions}>
                     <ul className="new-agreement-list">
                       <li
                         onClick={() => setShowModal(true)}
@@ -881,6 +889,10 @@ export default function AgreementDetails({
                       <li>DSP-Only Agreement</li>
                     </ul>
                   </DropDownList>
+                  {/* <DropDownUncontained
+                    options={newAgreementOptions}
+                    placeholder="Add New Agreement"
+                  /> */}
                   {generateHTML()}
                   <div
                     className="looking-past-agre"
@@ -1036,7 +1048,7 @@ export default function AgreementDetails({
           </ModalBox>
         </Modal>
         <Modal
-          isOpen={showModal}
+          isOpen={false}
           style={customStyles}
           ariaHideApp={false}
           contentLabel="Edit modal">

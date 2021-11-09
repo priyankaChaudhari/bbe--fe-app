@@ -12,6 +12,7 @@ const DropDownList = styled.div`
   z-index: 99999;
   top: 90px;
   width: 100%;
+  display: ${(props) => (props.showOptions ? 'block' : 'none')};
   .new-agreement-list {
     list-style-type: none;
     padding: 0;
