@@ -1015,7 +1015,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           isApiCall={contributionLoader}
         />
         <CustomDateModal
-          id="BT-sponsoreddashboard-daterange"
+          id="BT-salesSponsoredDashboard-daterange"
           isOpen={showAdCustomDateModal}
           range={customDateState}
           onClick={() => {

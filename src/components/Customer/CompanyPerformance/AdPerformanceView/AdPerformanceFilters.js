@@ -121,7 +121,7 @@ const ViewData = styled.div`
       }
     }
     .view-data-for {
-      text-align: center;
+      text-align: left;
       padding-bottom: 10px;
     }
   }
