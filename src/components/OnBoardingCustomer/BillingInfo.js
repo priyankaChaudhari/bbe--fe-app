@@ -519,11 +519,12 @@ export default function BillingInfo({
           <p className="account-steps m-0">Payment Type</p>
           <ul className="payment-type">
             <li>
-              <label
+              {/* <label
                 className="radio-container  contact-billing"
                 htmlFor="card">
                 Credit Card
-              </label>
+              </label> */}
+              Credit Card
             </li>
           </ul>
 
