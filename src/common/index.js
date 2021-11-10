@@ -41,7 +41,7 @@ import NoData from './NoData';
 import PdfAnnotator from './PdfAnnotator';
 import ToggleButton from './ToggleButton';
 import CardMetrics from './CardMetrics';
-import DropDownList from './DropDownList';
+import DropDownUncontained from './DropDownUncontained';
 
 export {
   Button,
@@ -87,5 +87,5 @@ export {
   PdfAnnotator,
   ToggleButton,
   CardMetrics,
-  DropDownList,
+  DropDownUncontained,
 };
