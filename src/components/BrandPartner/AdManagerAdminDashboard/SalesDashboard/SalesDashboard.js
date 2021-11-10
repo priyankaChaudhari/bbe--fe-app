@@ -32,8 +32,8 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SalesDashboard({ marketplaceChoices, userInfo }) {
-  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
-
+  const isBGSManager = userInfo?.role === 'BGS Manager';
+  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [salesChartData, setSalesChartData] = useState([]);
@@ -49,14 +49,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     label: 'Recent 7 days',
     sub: 'vs Previous 7 days',
   });
-  const [selectedBgsUser, setSelectedBgsUser] = useState(
-    isBGSManager
+  const [selectedManager, setSelectedManager] = useState(
+    isBGSManager || isAdManagerAdmin
       ? {
           value: 'all',
+          label: 'All',
         }
-      : { value: userInfo.id, label: '' },
+      : { value: userInfo.id },
   );
-  const [bgsList, setBgsList] = useState([]);
+  const [managerList, setManagerList] = useState([]);
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState({
     value: 'all',
@@ -95,10 +96,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [pageNumber, setPageNumber] = useState();
   const [contributionCount, setContributionCount] = useState(null);
 
-  const getBGSList = useCallback(() => {
-    getManagersList('BGS').then((bgsData) => {
-      if (bgsData && bgsData.data && bgsData.data.length) {
-        const results = bgsData.data;
+  const getManagerList = useCallback(() => {
+    getManagersList(
+      isBGSManager ? 'BGS' : 'Sponsored Advertising Ad Manager',
+    ).then((managersData) => {
+      if (managersData && managersData.data && managersData.data.length) {
+        const results = managersData.data;
         const list = [{ value: 'all', label: 'All' }];
 
         for (const brand of results) {
@@ -112,10 +115,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
               Object.values(brand.documents[0])[0],
           });
         }
-        setBgsList(list);
+        setManagerList(list);
       }
     });
-  }, []);
+  }, [isBGSManager]);
 
   const bindSalesResponseData = (response) => {
     const tempData = [];
@@ -248,7 +251,6 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedBgs,
         startDate,
         endDate,
-        userInfo,
       ).then((res) => {
         if (res && res.status === 400) {
           setSalesGraphLoader(false);
@@ -277,7 +279,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         setSalesGraphLoader(false);
       });
     },
-    [userInfo],
+    [],
   );
 
   const getContributionData = useCallback(
@@ -336,11 +338,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      getBGSList();
+      if (isBGSManager || isAdManagerAdmin) getManagerList();
       getContributionData(
         selectedSalesDF.value,
         'all',
-        selectedBgsUser.value,
+        selectedManager.value,
         selectedContributionOption,
         selectedTabMetrics,
         null,
@@ -351,7 +353,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedSalesDF.value,
         salesGroupBy,
         'all',
-        selectedBgsUser.value,
+        selectedManager.value,
       );
 
       setCurrency('USD');
@@ -364,13 +366,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     currency,
     selectedSalesDF,
     salesGroupBy,
-    selectedBgsUser,
-    getBGSList,
+    selectedManager,
+    getManagerList,
     getSalesData,
     selectedContributionOption,
     selectedTabMetrics,
     getContributionData,
     pageNumber,
+    isBGSManager,
+    isAdManagerAdmin,
   ]);
 
   const setGropuByFilter = (value) => {
@@ -382,12 +386,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -403,12 +407,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -425,12 +429,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -490,7 +494,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         getContributionData(
           dailyFactFlag,
           marketplace,
-          selectedBgsUser.value,
+          selectedManager.value,
           selectedContributionOption,
           selectedTabMetrics,
           sd,
@@ -503,7 +507,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getContributionData(
         dailyFactFlag,
         marketplace,
-        selectedBgsUser.value,
+        selectedManager.value,
         selectedContributionOption,
         selectedTabMetrics,
         null,
@@ -525,19 +529,19 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           customDateState[0].endDate,
           'custom',
           event.value,
-          selectedBgsUser.value,
+          selectedManager.value,
         );
       } else {
         getSalesData(
           selectedSalesDF.value,
           salesGroupBy,
           event.value,
-          selectedBgsUser.value,
+          selectedManager.value,
         );
         getContributionData(
           selectedSalesDF.value,
           event.value,
-          selectedBgsUser.value,
+          selectedManager.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -568,7 +572,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           new Date(),
           'year',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
           selectedContributionOption,
         );
       }
@@ -581,11 +585,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     }
   };
 
-  const handleBgsList = (event) => {
-    const { value } = event.target;
-    setSelectedBgsUser({
-      value,
-    });
+  const handleManagerList = (event) => {
+    const { value } = event;
+    setSelectedManager(event);
     if (selectedSalesDF.value === 'custom') {
       salesYearAndCustomDateFilter(
         customDateState[0].startDate,
@@ -635,7 +637,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedSalesDF.value,
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
           sd,
           ed,
         );
@@ -644,7 +646,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedSalesDF.value,
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
         );
       }
     }
@@ -661,12 +663,13 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       currency: 'USD',
     });
 
-    if (isBGSManager) {
-      setSelectedBgsUser({
+    if (isBGSManager || isAdManagerAdmin) {
+      setSelectedManager({
         value: 'all',
+        label: 'All',
       });
     } else {
-      setSelectedBgsUser({
+      setSelectedManager({
         value: userInfo.id,
       });
     }
@@ -707,7 +710,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getContributionData(
         selectedSalesDF.value,
         selectedMarketplace.value,
-        selectedBgsUser.value,
+        selectedManager.value,
         type,
         selectedTabMetrics,
         null,
@@ -723,7 +726,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getContributionData(
         selectedSalesDF.value,
         selectedMarketplace.value,
-        selectedBgsUser.value,
+        selectedManager.value,
         selectedContributionOption,
         value,
         null,
@@ -750,7 +753,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       customDateState[0].endDate,
       'custom',
       selectedMarketplace.value,
-      selectedBgsUser.value,
+      selectedManager.value,
     );
 
     setShowAdCustomDateModal(false);
@@ -761,7 +764,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     getContributionData(
       selectedSalesDF.value,
       selectedMarketplace.value,
-      selectedBgsUser.value,
+      selectedManager.value,
       selectedContributionOption,
       selectedTabMetrics,
       null,
@@ -952,12 +955,13 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           getSelectComponents={getMarketplaceSelectComponents}
           marketplaceOptions={marketplaceOptions}
           handleMarketplace={handleMarketplace}
-          bgsList={bgsList}
-          handleBgsList={handleBgsList}
-          selectedBgs={selectedBgsUser}
+          managerList={managerList}
+          handleManagerList={handleManagerList}
+          selectedManager={selectedManager}
           isApiCall={salesGraphLoader}
           selectedMarketplace={selectedMarketplace}
           isBGSManager={isBGSManager}
+          isAdManagerAdmin={isAdManagerAdmin}
         />
       </div>
       <div className="col-lg-9 col-md-12">

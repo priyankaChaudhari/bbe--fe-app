@@ -5,22 +5,42 @@ import { arrayOf, bool, func, shape } from 'prop-types';
 
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { CaretUp } from '../../../../theme/images';
-import { WhiteCard, ModalRadioCheck } from '../../../../common';
+import { WhiteCard } from '../../../../common';
 
 const SalesFilter = ({
   handleResetFilter,
   getSelectComponents,
   marketplaceOptions,
   handleMarketplace,
-  bgsList,
-  handleBgsList,
-  selectedBgs,
+  managerList,
+  handleManagerList,
+  selectedManager,
   isApiCall,
   selectedMarketplace,
   isBGSManager,
+  isAdManagerAdmin,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
+
+  const renderManagerDropdown = (className) => {
+    return (
+      <div className="col-12 ">
+        <div className="label mt-3">{isBGSManager ? 'BGS' : 'Ad Manager'}</div>
+        {DropDown(
+          className,
+          managerList,
+          managerList && managerList[0] && managerList[0].label,
+          getSelectComponents,
+          managerList && managerList[0],
+          handleManagerList,
+          isApiCall,
+          null,
+          selectedManager,
+        )}
+      </div>
+    );
+  };
 
   const renderMarketplaceDropdown = (className) => {
     return (
@@ -43,33 +63,6 @@ const SalesFilter = ({
     );
   };
 
-  const renderBgsUsersList = () => {
-    return bgsList.map((item, index) => (
-      <ModalRadioCheck className="pb-1" key={item.value}>
-        {' '}
-        <label
-          style={{ textTransform: 'capitalize' }}
-          className={`${
-            index === 0
-              ? 'checkboxes radio-container customer-list'
-              : 'checkboxes radio-container customer-list mt-2'
-          }`}
-          htmlFor={item.value}>
-          {item.label}
-          <input
-            type="radio"
-            name="radio"
-            id={item.value}
-            value={item.value}
-            onChange={(event) => handleBgsList(event)}
-            defaultChecked={item.value === selectedBgs.value}
-          />
-          <span className="checkmark checkmark-customer-list" />
-        </label>
-      </ModalRadioCheck>
-    ));
-  };
-
   const renderDekstopView = () => {
     return (
       <WhiteCard className="mb-3 d-lg-block d-none">
@@ -87,14 +80,9 @@ const SalesFilter = ({
           </div>
 
           {renderMarketplaceDropdown('cursor')}
-          {isBGSManager ? (
-            <>
-              <div className="col-12">
-                <div className="label mt-4 mb-2">BGS</div>
-              </div>
-              <div className="col-12">{renderBgsUsersList()}</div>
-            </>
-          ) : null}
+          {isAdManagerAdmin || isBGSManager
+            ? renderManagerDropdown('cursor')
+            : null}
         </div>
       </WhiteCard>
     );
@@ -141,14 +129,13 @@ const SalesFilter = ({
                 {renderMarketplaceDropdown('customer-list-header')}
               </div>
             </div>
-            <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
-              <div className="row ">
-                <div className="col-12">
-                  <div className="label mt-4 mb-2">BGS</div>
+            {isAdManagerAdmin || isBGSManager ? (
+              <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
+                <div className="row ">
+                  {renderManagerDropdown('customer-list-header')}
                 </div>
-                <div className="col-12">{renderBgsUsersList()}</div>
               </div>
-            </div>
+            ) : null}
           </div>
         ) : null}
       </WhiteCard>
@@ -162,13 +149,14 @@ export default SalesFilter;
 
 SalesFilter.defaultProps = {
   isApiCall: false,
-  marketplaceOptions: [],
-  bgsList: [],
-  selectedBgs: {},
-  selectedMarketplace: {},
+  isAdManagerAdmin: false,
   isBGSManager: false,
+  marketplaceOptions: [],
+  managerList: [],
+  selectedManager: {},
+  selectedMarketplace: {},
   getSelectComponents: () => {},
-  handleBgsList: () => {},
+  handleManagerList: () => {},
   handleMarketplace: () => {},
   handleResetFilter: () => {},
 };
@@ -176,12 +164,13 @@ SalesFilter.defaultProps = {
 SalesFilter.propTypes = {
   isApiCall: bool,
   isBGSManager: bool,
-  selectedBgs: shape({}),
+  isAdManagerAdmin: bool,
+  selectedManager: shape({}),
   selectedMarketplace: shape({}),
   marketplaceOptions: arrayOf(Array),
-  bgsList: arrayOf(Array),
+  managerList: arrayOf(Array),
   handleMarketplace: func,
   handleResetFilter: func,
   getSelectComponents: func,
-  handleBgsList: func,
+  handleManagerList: func,
 };

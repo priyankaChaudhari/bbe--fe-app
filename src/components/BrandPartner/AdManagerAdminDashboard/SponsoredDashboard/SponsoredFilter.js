@@ -172,7 +172,9 @@ const SponsoredFilter = ({
           <div className="row ">
             <div className="col-lg-6 col-md-6 col-sm-12">
               <div className="row">
-                {renderAdManagerDropdown('customer-list-header')}
+                {isAdManagerAdmin || isBGSManager
+                  ? renderAdManagerDropdown('customer-list-header')
+                  : null}
                 {renderMarketplaceDropdown('customer-list-header')}
               </div>
             </div>

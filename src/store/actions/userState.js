@@ -19,6 +19,7 @@ import {
   PATH_CUSTOMER_DETAILS,
   PATH_COMPANY_DETAILS,
   PATH_BGS_DASHBOARD,
+  PATH_BGS_MANAGER_DASHBOARD,
   PATH_AMAZON_MERCHANT,
   PATH_SUMMARY,
   PATH_BILLING_DETAILS,
@@ -89,7 +90,7 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     'DSP Ad Manager': PATH_DSP_DASHBOARD,
     'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
     BGS: PATH_BGS_DASHBOARD,
-    'BGS Manager': PATH_BGS_DASHBOARD,
+    'BGS Manager': PATH_BGS_MANAGER_DASHBOARD,
     Finance: PATH_FINANCE_DASHBOARD,
   };
 

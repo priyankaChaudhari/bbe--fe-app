@@ -195,14 +195,8 @@ export async function getSalesGraphData(
   user,
   startDate,
   endDate,
-  userInfo,
 ) {
-  let selectedUser = '';
-  if (userInfo && userInfo.role === 'BGS Manager') {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
-  }
+  const selectedUser = user;
 
   let params = {
     daily_facts: dailyFacts,

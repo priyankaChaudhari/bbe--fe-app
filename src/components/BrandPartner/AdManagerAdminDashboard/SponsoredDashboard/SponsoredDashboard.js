@@ -404,7 +404,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      getAdManagersList();
+      if (isAdManagerAdmin) getAdManagersList();
       getContributionData(
         selectedAdType,
         selectedAdDF.value,
@@ -442,6 +442,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     selectedTabMetrics,
     getContributionData,
     pageNumber,
+    isAdManagerAdmin,
   ]);
 
   const setGropuByFilter = (value) => {
