@@ -615,7 +615,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
 
       {/* custom date modal for sale performance graph */}
       <CustomDateModal
-        id="BT-performancereport-daterange-SPdate"
+        id="BT-vendorPerformanceReport-daterange-SPdate"
         isOpen={showCustomDateModal}
         ranges={state}
         onClick={() => {

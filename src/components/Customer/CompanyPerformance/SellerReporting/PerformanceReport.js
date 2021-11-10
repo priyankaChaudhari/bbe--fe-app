@@ -822,7 +822,7 @@ const ViewData = styled.div`
 
   @media only screen and (max-width: 767px) {
     .view-data-for {
-      text-align: center;
+      text-align: left;
       padding-bottom: 10px;
     }
   }

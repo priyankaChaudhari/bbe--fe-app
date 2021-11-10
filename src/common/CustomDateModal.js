@@ -29,6 +29,7 @@ const customStyles = {
 };
 
 const CustomDateModal = ({
+  id,
   isOpen,
   style,
   onClick,
@@ -41,6 +42,7 @@ const CustomDateModal = ({
 }) => {
   return (
     <Modal
+      id={id}
       isOpen={isOpen}
       style={{ ...customStyles, ...style }}
       ariaHideApp={false}
@@ -85,6 +87,7 @@ const CustomDateModal = ({
 export default CustomDateModal;
 
 CustomDateModal.defaultProps = {
+  id: '',
   isOpen: false,
   onClick: () => {},
   onChange: () => {},
@@ -102,6 +105,7 @@ CustomDateModal.defaultProps = {
 };
 
 CustomDateModal.propTypes = {
+  id: string,
   onClick: func,
   onChange: func,
   onApply: func,

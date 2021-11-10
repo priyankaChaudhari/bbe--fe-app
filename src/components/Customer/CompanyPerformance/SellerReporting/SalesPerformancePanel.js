@@ -518,7 +518,7 @@ export default function SalesPerformancePanel({
       {renderSalePerformancePanel()}
       {/* custom date modal for sale performance graph */}
       <CustomDateModal
-        id="BT-performancereport-daterange-SPdate"
+        id="BT-salePerformanceReport-daterange-SPdate"
         isOpen={showCustomDateModal}
         ranges={state}
         onClick={() => {
