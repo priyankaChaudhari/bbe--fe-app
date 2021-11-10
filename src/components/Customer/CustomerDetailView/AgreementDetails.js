@@ -81,6 +81,7 @@ export default function AgreementDetails({
   });
   const [bgsManagerEmail, setBgsManagerEmail] = useState(null);
   const [showAddContractModal, setShowAddContractModal] = useState(false);
+  const [typeOfNewAgreement, setTypeOfNewAgreement] = useState({});
 
   const customStyles = {
     content: {
@@ -848,8 +849,9 @@ export default function AgreementDetails({
                 <>
                   <DropDownUncontained
                     options={newAgreementTypes}
+                    setSelectedOption={setTypeOfNewAgreement}
+                    extraAction={() => setShowAddContractModal(true)}
                     DropdownIndicator={DropdownIndicator}
-                    handleOnChange={() => setShowAddContractModal(true)}
                   />
                   {generateHTML()}
                   <div
@@ -1009,6 +1011,7 @@ export default function AgreementDetails({
           customStyles={customStyles}
           showAddContractModal={showAddContractModal}
           setShowAddContractModal={setShowAddContractModal}
+          typeOfNewAgreement={typeOfNewAgreement}
         />
       </div>
     </>

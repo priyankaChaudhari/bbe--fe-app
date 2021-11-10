@@ -9,10 +9,16 @@ import { AddIcons } from '../theme/images';
 
 const DropDownUncontained = ({
   options,
-  handleOnChange,
+  setSelectedOption,
+  extraAction,
   DropdownIndicator,
 }) => {
   const { Option, SingleValue } = components;
+
+  const onChange = (selected) => {
+    setSelectedOption(selected);
+    extraAction();
+  };
 
   const IconOption = (dataProps) => (
     <Option {...dataProps}>
@@ -57,7 +63,7 @@ const DropDownUncontained = ({
         sub: 'Standard Cancellation',
       }}
       isSearchable={false}
-      onChange={handleOnChange}
+      onChange={onChange}
       components={getSelectComponents()}
       componentsValue={{ Option: IconOption }}
     />
@@ -66,10 +72,15 @@ const DropDownUncontained = ({
 
 export default DropDownUncontained;
 
+DropDownUncontained.defaultProps = {
+  extraAction: () => {},
+};
+
 DropDownUncontained.propTypes = {
   options: arrayOf(shape({})).isRequired,
-  handleOnChange: func.isRequired,
+  extraAction: func,
   DropdownIndicator: func.isRequired,
+  setSelectedOption: func.isRequired,
 };
 
 const AddNewAgreement = styled.div`

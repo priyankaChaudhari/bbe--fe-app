@@ -12,6 +12,7 @@ const AddNewContractModal = ({
   customStyles,
   showAddContractModal,
   setShowAddContractModal,
+  typeOfNewAgreement,
 }) => {
   return (
     <Modal
@@ -28,12 +29,13 @@ const AddNewContractModal = ({
       />
       <ModalBox>
         <div className="modal-body">
-          <h4 className="on-boarding ">ADD &#60;CONTRACT TYPE&#62; </h4>{' '}
-          <p className="long-text">
-            This partner already has an active &#60;Contract Type&#62; . Please
-            confirm whether this
-            <br /> is a new agreement to run in parallel with the existing
-            agreement(s).
+          <h4 className="on-boarding ">
+            ADD {typeOfNewAgreement.label} &#60;{typeOfNewAgreement.sub}&#62;{' '}
+          </h4>{' '}
+          <p className="medium-text-label">
+            This partner already has an active {typeOfNewAgreement.label}.
+            Please confirm whether this is a new agreement to run in parallel
+            with the existing agreement(s).
           </p>
           <ModalRadioCheck className="pb-3" key="alongside">
             <label
@@ -110,6 +112,7 @@ AddNewContractModal.propTypes = {
   customStyles: shape({}).isRequired,
   showAddContractModal: bool.isRequired,
   setShowAddContractModal: func.isRequired,
+  typeOfNewAgreement: shape({}).isRequired,
 };
 
 const OrangeFieldSet = styled.div`

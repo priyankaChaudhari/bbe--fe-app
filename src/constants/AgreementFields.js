@@ -218,7 +218,7 @@ export const newAgreementTypes = [
     label: 'Recurring Service Agreement',
     sub: '90 Day Cancellation',
   },
-  { value: 'dsp_only', label: 'DSP-Only Agreement', sub: '' },
+  { value: 'dsp_only', label: 'DSP-Only Agreement', sub: null },
 ];
 
 export const additionaMarketplaceAmount = 1500;
