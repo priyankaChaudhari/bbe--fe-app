@@ -57,7 +57,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         }
       : { value: userInfo.id },
   );
-  const [managerList, setManagerList] = useState([]);
+  const [bgsList, setBGSList] = useState([]);
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState({
     value: 'all',
@@ -70,8 +70,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [responseId, setResponseId] = useState(null);
   const [salesGraphLoader, setSalesGraphLoader] = useState(false);
   const [selectedTabMetrics, setSelectedTabMetrics] = useState('revenue');
+  const tab = isAdManagerAdmin ? 'positive' : 'contribution';
+
   const [selectedContributionOption, setSelectedContributionOption] = useState(
-    'contribution',
+    tab,
   );
   const [organicSale, setOrganicSale] = useState(0);
   const [inorganicSale, setInorganicSale] = useState(0);
@@ -97,27 +99,27 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [contributionCount, setContributionCount] = useState(null);
 
   const getManagerList = useCallback(() => {
-    getManagersList(
-      isBGSManager ? 'BGS' : 'Sponsored Advertising Ad Manager',
-    ).then((managersData) => {
-      if (managersData && managersData.data && managersData.data.length) {
-        const results = managersData.data;
-        const list = [{ value: 'all', label: 'All' }];
+    getManagersList(isBGSManager ? 'BGS' : 'sales_performance').then(
+      (managersData) => {
+        if (managersData && managersData.data && managersData.data.length) {
+          const results = managersData.data;
+          const list = [{ value: 'all', label: 'All' }];
 
-        for (const brand of results) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-          });
+          for (const brand of results) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+            });
+          }
+          setBGSList(list);
         }
-        setManagerList(list);
-      }
-    });
+      },
+    );
   }, [isBGSManager]);
 
   const bindSalesResponseData = (response) => {
@@ -302,7 +304,6 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedMetrics,
         startDate,
         endDate,
-        userInfo,
         page,
       ).then((res) => {
         if (res && (res.status === 400 || res.status === 400)) {
@@ -323,7 +324,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         }
       });
     },
-    [userInfo],
+    [],
   );
 
   useEffect(() => {
@@ -587,33 +588,45 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
   const handleManagerList = (event) => {
     const { value } = event;
-    setSelectedManager(event);
-    if (selectedSalesDF.value === 'custom') {
-      salesYearAndCustomDateFilter(
-        customDateState[0].startDate,
-        customDateState[0].endDate,
-        'custom',
-        selectedMarketplace.value,
-        value,
-        selectedContributionOption,
-      );
-    } else {
-      getSalesData(
-        selectedSalesDF.value,
-        salesGroupBy,
-        selectedMarketplace.value,
-        value,
-      );
-      getContributionData(
-        selectedSalesDF.value,
-        selectedMarketplace.value,
-        value,
-        selectedContributionOption,
-        selectedTabMetrics,
-        null,
-        null,
-        pageNumber,
-      );
+    let tabOption = '';
+
+    if (event.value !== selectedManager.value) {
+      setSelectedManager(event);
+      if (isAdManagerAdmin && value === 'all') {
+        tabOption = 'positive';
+      } else {
+        tabOption = 'contribution';
+      }
+
+      setSelectedContributionOption(tabOption);
+
+      if (selectedSalesDF.value === 'custom') {
+        salesYearAndCustomDateFilter(
+          customDateState[0].startDate,
+          customDateState[0].endDate,
+          'custom',
+          selectedMarketplace.value,
+          value,
+          tabOption,
+        );
+      } else {
+        getSalesData(
+          selectedSalesDF.value,
+          salesGroupBy,
+          selectedMarketplace.value,
+          value,
+        );
+        getContributionData(
+          selectedSalesDF.value,
+          selectedMarketplace.value,
+          value,
+          tabOption,
+          selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
+        );
+      }
     }
   };
 
@@ -653,8 +666,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   };
 
   const handleResetFilter = () => {
+    let contributionTab = 'contribution';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
-
     setCurrency('USD');
     setCurrencySymbol(getSymbolFromCurrency('USD'));
     setSelectedMarketplace({
@@ -663,18 +676,21 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       currency: 'USD',
     });
 
-    if (isBGSManager || isAdManagerAdmin) {
+    // contributionTab = isBGSManager ? 'contribution' : 'positive';
+
+    if (isAdManagerAdmin || isBGSManager) {
       setSelectedManager({
         value: 'all',
         label: 'All',
       });
+      contributionTab = isBGSManager ? 'contribution' : 'positive';
     } else {
       setSelectedManager({
         value: userInfo.id,
       });
     }
-
-    setSelectedContributionOption('contribution');
+    setSelectedContributionOption(contributionTab);
+    // setSelectedContributionOption('contribution');
 
     if (selectedSalesDF.value === 'custom') {
       salesYearAndCustomDateFilter(
@@ -691,7 +707,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedSalesDF.value,
         'all',
         'all',
-        'contribution',
+        contributionTab,
         selectedTabMetrics,
         null,
         null,
@@ -955,7 +971,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           getSelectComponents={getMarketplaceSelectComponents}
           marketplaceOptions={marketplaceOptions}
           handleMarketplace={handleMarketplace}
-          managerList={managerList}
+          bgsList={bgsList}
           handleManagerList={handleManagerList}
           selectedManager={selectedManager}
           isApiCall={salesGraphLoader}
@@ -1011,12 +1027,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics={selectedTabMetrics}
           handleOnMetricsTabChange={handleOnMetricsTabChange}
           currencySymbol={currencySymbol}
+          selectedManager={selectedManager.value}
           selectedSalesDF={selectedSalesDF}
           handlePageChange={handlePageChange}
           contributionCount={contributionCount}
           pageNumber={pageNumber}
           count={contributionCount}
           isApiCall={contributionLoader}
+          isBGSManager={isBGSManager}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"

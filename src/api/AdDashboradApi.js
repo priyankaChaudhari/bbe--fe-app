@@ -232,21 +232,14 @@ export async function getSalesKeyContributionData(
   selectedMetric,
   startDate,
   endDate,
-  userInfo,
   pageNumber,
 ) {
-  let selectedUser = '';
   const metricName = metricsNameForAPI[selectedMetric];
-  if (userInfo && userInfo.role === 'BGS Manager') {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
-  }
 
   let params = {
     daily_facts: dailyFacts,
     marketplace,
-    user: selectedUser,
+    user,
     dashboard: 'sales_performance',
   };
 

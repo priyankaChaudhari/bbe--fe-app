@@ -135,7 +135,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   );
 
   const getAdManagersList = useCallback(() => {
-    getManagersList(isBGSManager ? 'BGS' : 'DSP Ad Manager').then((adm) => {
+    getManagersList(isBGSManager ? 'BGS' : 'dsp_ad_performance').then((adm) => {
       if (adm && adm.data && adm.data.length) {
         const list = [
           { value: 'all', label: isBGSManager ? 'All BGS' : 'All Ad Managers' },

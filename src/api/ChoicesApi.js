@@ -106,24 +106,18 @@ export async function getContactRoles() {
   return result;
 }
 
-export async function getManagersList(type, hybridSelectedDashboard) {
-  const api =
-    type === 'Growth Strategist' || type === 'BGS' || type === 'BGS Manager'
-      ? API_BGS
-      : API_ADM;
-
+export async function getManagersList(type) {
+  let api = API_BGS;
   let params = {
     'order-by': 'first_name',
   };
-  if (type === 'Sponsored Advertising Ad Manager') {
-    params = { ...params, dashboard: 'sponsored_ad_dashboard' };
-  }
-  if (type === 'DSP Ad Manager') {
-    params = { ...params, dashboard: 'dsp_ad_performance' };
-  }
 
-  if (hybridSelectedDashboard && type === 'Hybrid Ad Manager') {
-    params = { ...params, dashboard: hybridSelectedDashboard };
+  if (type !== 'BGS') {
+    api = API_ADM;
+    params = {
+      ...params,
+      dashboard: type,
+    };
   }
 
   const result = await axiosInstance

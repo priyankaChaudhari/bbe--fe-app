@@ -123,7 +123,9 @@ const SponsoredFilter = ({
             </p>
           </div>
 
-          {isAdManagerAdmin ? renderAdManagerDropdown('cursor') : null}
+          {isAdManagerAdmin || isBGSManager
+            ? renderAdManagerDropdown('cursor')
+            : null}
           {renderMarketplaceDropdown()}
           <div className="col-12">
             <div className="label mt-4 mb-2">Sponsored Ad Type</div>

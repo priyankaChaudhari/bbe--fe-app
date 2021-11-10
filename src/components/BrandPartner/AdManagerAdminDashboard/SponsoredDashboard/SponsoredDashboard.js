@@ -40,10 +40,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
-  const isAdManagerAdmin =
-    (userInfo && userInfo.role === 'Ad Manager Admin') ||
-    userInfo.role === 'BGS Manager';
-
+  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -59,12 +56,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     sub: 'vs Previous 7 days',
   });
   const [selectedAdManager, setSelectedAdManager] = useState(
-    isAdManagerAdmin
+    isAdManagerAdmin || isBGSManager
       ? {
           value: 'all',
           label: isBGSManager ? 'All BGS' : 'All Ad Manager',
         }
-      : { value: userInfo.id, label: '' },
+      : { value: userInfo.id },
   );
   const [adManagerList, setAdManagerList] = useState([]);
   const [selectedAdType, setSelectedAdType] = useState('all');
@@ -79,19 +76,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [adGraphLoader, setAdGraphLoader] = useState(false);
-
   const [selectedTabMetrics, setSelectedTabMetrics] = useState('adSales');
-
-  const tab = isBGSManager
-    ? 'contribution'
-    : isAdManagerAdmin
-    ? 'positive'
-    : 'contribution';
-
+  const tab = isAdManagerAdmin ? 'positive' : 'contribution';
   const [selectedContributionOption, setSelectedContributionOption] = useState(
     tab,
   );
-
   const [keyContributionLoader, setKeyContributionLoader] = useState(false);
   const [contributionData, setContributionData] = useState([]);
 
@@ -115,27 +104,30 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const [contributionCount, setContributionCount] = useState(null);
 
   const getAdManagersList = useCallback(() => {
-    getManagersList(
-      isBGSManager ? 'BGS' : 'Sponsored Advertising Ad Manager',
-    ).then((adm) => {
-      if (adm && adm.data && adm.data.length) {
-        const list = [
-          { value: 'all', label: isBGSManager ? 'All BGS' : 'All Ad Managers' },
-        ];
-        for (const brand of adm.data) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-          });
+    getManagersList(isBGSManager ? 'BGS' : 'sponsored_ad_dashboard').then(
+      (adm) => {
+        if (adm && adm.data && adm.data.length) {
+          const list = [
+            {
+              value: 'all',
+              label: isBGSManager ? 'All BGS' : 'All Ad Managers',
+            },
+          ];
+          for (const brand of adm.data) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+            });
+          }
+          setAdManagerList(list);
         }
-        setAdManagerList(list);
-      }
-    });
+      },
+    );
   }, [isBGSManager]);
 
   const bindAdResponseData = (response) => {
@@ -404,7 +396,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      if (isAdManagerAdmin) getAdManagersList();
+      if (isAdManagerAdmin || isBGSManager) getAdManagersList();
       getContributionData(
         selectedAdType,
         selectedAdDF.value,
@@ -443,6 +435,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     getContributionData,
     pageNumber,
     isAdManagerAdmin,
+    isBGSManager,
   ]);
 
   const setGropuByFilter = (value) => {
@@ -764,7 +757,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   };
 
   const handleResetFilter = () => {
-    let contributionTab = '';
+    let contributionTab = 'contribution';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
     setSelectedAdType('all');
     setCurrency('USD');
@@ -774,24 +767,17 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       label: 'All Marketplaces',
       currency: 'USD',
     });
-    if (isAdManagerAdmin) {
+
+    if (isAdManagerAdmin || isBGSManager) {
+      setSelectedAdManager({
+        value: 'all',
+        label: isBGSManager ? 'All BGS' : 'All Ad Manager',
+      });
+
       contributionTab = isBGSManager ? 'contribution' : 'positive';
-      if (isBGSManager) {
-        setSelectedAdManager({
-          value: 'all',
-          label: 'All BGS',
-        });
-      } else {
-        setSelectedAdManager({
-          value: 'all',
-          label: 'All Ad Manager',
-        });
-      }
     } else {
-      contributionTab = 'contribution';
       setSelectedAdManager({
         value: userInfo.id,
-        label: '',
       });
     }
     setSelectedContributionOption(contributionTab);

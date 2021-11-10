@@ -38,11 +38,13 @@ const SalesKeyContribution = ({
   selectedTabMetrics,
   handleOnMetricsTabChange,
   currencySymbol,
+  selectedManager,
   selectedSalesDF,
   handlePageChange,
   pageNumber,
   count,
   isApiCall,
+  isBGSManager,
 }) => {
   const history = useHistory();
 
@@ -122,7 +124,12 @@ const SalesKeyContribution = ({
   };
 
   const renderKeyContributionOptions = () => {
-    const keyTabOptions = keyContributionConstant.adManagerSelected;
+    const keyTabOptions =
+      selectedManager === 'all' && !isBGSManager
+        ? keyContributionConstant.noAdManagerSelected
+        : keyContributionConstant.adManagerSelected;
+
+    // const keyTabOptions = keyContributionConstant.adManagerSelected;
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
@@ -731,7 +738,9 @@ SalesKeyContribution.defaultProps = {
   keyContributionLoader: false,
   isDesktop: false,
   isApiCall: false,
+  isBGSManager: false,
   currencySymbol: '',
+  selectedManager: '',
   contributionData: {},
   selectedContributionOption: {},
   selectedTabMetrics: {},
@@ -747,9 +756,11 @@ SalesKeyContribution.propTypes = {
   keyContributionLoader: bool,
   isDesktop: bool,
   isApiCall: bool,
+  isBGSManager: bool,
   selectedContributionOption: string,
   selectedTabMetrics: string,
   currencySymbol: string,
+  selectedManager: string,
   count: number,
   pageNumber: number,
   selectedSalesDF: objectOf(Object),

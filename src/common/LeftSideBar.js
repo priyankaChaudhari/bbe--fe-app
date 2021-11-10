@@ -84,8 +84,7 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo &&
-          userInfo.role &&
+          {userInfo?.role &&
           userInfo.role.includes('Sponsored Advertising Ad Manager') ? (
             <li
               className={
@@ -111,9 +110,8 @@ export default function LeftSideBar({ userInfo }) {
               />
             </li>
           ) : null}
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('DSP Ad Manager') ? (
+
+          {userInfo?.role && userInfo.role.includes('DSP Ad Manager') ? (
             <li
               className={
                 history.location.pathname &&
@@ -139,9 +137,7 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('Hybrid Ad Manager') ? (
+          {userInfo?.role && userInfo.role.includes('Hybrid Ad Manager') ? (
             <li
               className={
                 history.location.pathname &&
@@ -167,13 +163,11 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('Ad Manager Admin') ? (
+          {userInfo?.role && userInfo.role.includes('Ad Manager Admin') ? (
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('adManager/admin')
+                history.location.pathname.includes('adMangerAdmin')
                   ? ' cursor active'
                   : ' cursor'
               }
