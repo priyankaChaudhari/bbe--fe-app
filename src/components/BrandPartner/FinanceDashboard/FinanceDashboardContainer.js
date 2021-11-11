@@ -14,6 +14,7 @@ export default function FinanceDashboardContainer() {
       case 'revShare':
       case 'upSell':
       case 'dspInvoicing':
+      case 'retainer':
         return (
           <InvoiceContainer
             selectedNavigation={viewComponent}

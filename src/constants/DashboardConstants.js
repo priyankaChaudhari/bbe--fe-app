@@ -1,4 +1,5 @@
 export const financeNavigationOptions = [
+  { key: 'retainer', value: 'Monthly Retainer' },
   { key: 'revShare', value: 'Rev Share' },
   { key: 'upSell', value: 'Upsell' },
   { key: 'dspInvoicing', value: 'DSP' },
