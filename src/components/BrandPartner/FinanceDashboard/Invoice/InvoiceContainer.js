@@ -86,6 +86,6 @@ export default function InvoiceContainer({ selectedNavigation }) {
 }
 
 InvoiceContainer.defaultProps = {
-  selectedNavigation: 'revShare',
+  selectedNavigation: 'rev share',
 };
 InvoiceContainer.propTypes = { selectedNavigation: string };

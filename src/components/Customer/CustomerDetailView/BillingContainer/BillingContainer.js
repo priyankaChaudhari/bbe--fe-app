@@ -14,16 +14,12 @@ const BillingContainer = ({
   customerStatus,
   redirectType,
 }) => {
-  const [viewComponent, setViewComponent] = useState('rev share');
+  const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    if (redirectType === 'dspInvoicing') {
-      setViewComponent('dsp service');
-    } else if (redirectType === 'upSell') {
-      setViewComponent('upsell');
-    } else {
-      setViewComponent('rev share');
+    if (redirectType) {
+      setViewComponent(redirectType);
     }
   }, [redirectType]);
 
@@ -45,7 +41,9 @@ const BillingContainer = ({
                     ? 'disabled'
                     : ''
                 }
-                onClick={() => setViewComponent(item.key)}
+                onClick={() => {
+                  setViewComponent(item.key);
+                }}
                 role="presentation">
                 {item.value}
               </li>
@@ -64,7 +62,8 @@ const BillingContainer = ({
       </Tabs>
       {viewComponent === 'dsp service' ||
       viewComponent === 'rev share' ||
-      viewComponent === 'upsell' ? (
+      viewComponent === 'upsell' ||
+      viewComponent === 'retainer' ? (
         <Invoice
           onLoading={onLoading}
           invoiceType={viewComponent}
@@ -87,7 +86,7 @@ export default BillingContainer;
 BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
-  redirectType: null,
+  redirectType: 'retainer',
 };
 
 BillingContainer.propTypes = {
