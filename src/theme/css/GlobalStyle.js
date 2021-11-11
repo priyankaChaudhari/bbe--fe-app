@@ -503,9 +503,9 @@ p {
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     font-size: ${Theme.smallRes};
 
-    /* &.long-text {
+    &.long-text {
       font-size: ${Theme.extraMediumRes}; 
-    } */
+    }
 
     &.gray-text {
       font-size: ${Theme.extraMediumRes}; 

@@ -32,7 +32,7 @@ const AddNewContractModal = ({
           <h4 className="on-boarding ">
             ADD {typeOfNewAgreement.label} &#60;{typeOfNewAgreement.sub}&#62;{' '}
           </h4>{' '}
-          <p className="long-text">
+          <p className="long-text-agr">
             This partner already has an active {typeOfNewAgreement.label}.
             Please confirm whether this is a new agreement to run in parallel
             with the existing agreement(s).
