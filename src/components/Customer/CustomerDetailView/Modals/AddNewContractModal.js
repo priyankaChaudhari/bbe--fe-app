@@ -25,7 +25,7 @@ const AddNewContractModal = ({
   setReplacedContract,
 }) => {
   useEffect(() => {
-    console.log('old', typeOfNewAgreement);
+    console.log('old', existingContracts);
   });
 
   const renderExistigContracts = () => {
@@ -69,8 +69,20 @@ const AddNewContractModal = ({
                   <li>
                     <span className="dot" />
                     <p className="basic-text ">
-                      {contract.primary_marketplace?.name}{' '}
-                      (Primary),Amazon.ca,Amazon.co.uk
+                      {contract?.primary_marketplace?.name}
+                      {contract?.primary_marketplace?.name ? (
+                        <> &#40;Primary&#41;</>
+                      ) : null}
+
+                      {contract.additional_marketplaces
+                        ? contract.additional_marketplaces.map(
+                            (marketplace) => (
+                              <React.Fragment key={marketplace.id}>
+                                , {marketplace.name}
+                              </React.Fragment>
+                            ),
+                          )
+                        : null}
                     </p>
                   </li>
                 </ul>
@@ -99,7 +111,10 @@ const AddNewContractModal = ({
       <ModalBox>
         <div className="modal-body">
           <h4 className="on-boarding ">
-            ADD {typeOfNewAgreement.label} &#60;{typeOfNewAgreement.sub}&#62;{' '}
+            ADD {typeOfNewAgreement.label}{' '}
+            {typeOfNewAgreement.sub ? (
+              <>&#60;{typeOfNewAgreement.sub}&#62;</>
+            ) : null}
           </h4>{' '}
           <p className="long-text-agr">
             This partner already has an active {typeOfNewAgreement.label}.
