@@ -84,6 +84,7 @@ export default function AgreementDetails({
   const [typeOfNewAgreement, setTypeOfNewAgreement] = useState({});
   const [existingContracts, setExistingContracts] = useState([]);
   const [replaceExisting, setReplaceExisting] = useState('alongside');
+  const [replacedContract, setReplacedContract] = useState('');
 
   const customStyles = {
     content: {
@@ -825,8 +826,10 @@ export default function AgreementDetails({
           agreement.contract_status.value === 'renewed'),
     );
     setExistingContracts([...filteredContracts]);
+
     if (filteredContracts.length > 0) {
       setShowAddContractModal(true);
+      setReplacedContract(filteredContracts[0].id);
     } else {
       console.log('else***********');
     }
@@ -1033,6 +1036,8 @@ export default function AgreementDetails({
             existingContracts={existingContracts}
             replaceExisting={replaceExisting}
             setReplaceExisting={setReplaceExisting}
+            replacedContract={replacedContract}
+            setReplacedContract={setReplacedContract}
           />
         ) : null}
       </div>

@@ -6,7 +6,11 @@ import styled from 'styled-components';
 import { func, shape, bool, arrayOf, string } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
-import { CloseIcon, RecurringIcon } from '../../../../theme/images';
+import {
+  CloseIcon,
+  RecurringIcon,
+  DspOnlyIcon,
+} from '../../../../theme/images';
 import { ModalBox, Button, ModalRadioCheck } from '../../../../common';
 
 const AddNewContractModal = ({
@@ -17,23 +21,38 @@ const AddNewContractModal = ({
   existingContracts,
   replaceExisting,
   setReplaceExisting,
+  replacedContract,
+  setReplacedContract,
 }) => {
   useEffect(() => {
-    console.log('old', existingContracts);
-  }, [existingContracts]);
+    console.log('old', typeOfNewAgreement);
+  });
 
   const renderExistigContracts = () => {
     return existingContracts.map((contract) => (
-      <OrangeFieldSet className="mt-4 " key={contract.id}>
+      <OrangeFieldSet
+        className={`mt-4 + ${replacedContract === contract.id ? 'active' : ''}`}
+        key={contract.id}>
         <CheckBoxContract>
           <div className="checkbox" role="presentation">
-            <input type="checkbox" id="check1" name="check1" value="check12" />
-            <label htmlFor="check1">
+            <input
+              type="radio"
+              id={contract.id}
+              name={contract.id}
+              value={contract.id}
+              checked={replacedContract === contract.id}
+              onChange={() => setReplacedContract(contract.id)}
+            />
+            <label htmlFor={contract.id}>
               <div className="solid-icon mt-2">
                 <img
                   width="48px"
                   className="solid-icon"
-                  src={RecurringIcon}
+                  src={
+                    typeOfNewAgreement.value === 'recurring'
+                      ? RecurringIcon
+                      : DspOnlyIcon
+                  }
                   alt="sync"
                 />
               </div>
@@ -141,6 +160,8 @@ AddNewContractModal.propTypes = {
   existingContracts: arrayOf(shape({})),
   replaceExisting: string.isRequired,
   setReplaceExisting: func.isRequired,
+  replacedContract: string.isRequired,
+  setReplacedContract: func.isRequired,
 };
 
 const OrangeFieldSet = styled.div`
