@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
-import { func, shape, bool, arrayOf } from 'prop-types';
+import { func, shape, bool, arrayOf, string } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { CloseIcon, RecurringIcon } from '../../../../theme/images';
@@ -15,6 +15,8 @@ const AddNewContractModal = ({
   setShowAddContractModal,
   typeOfNewAgreement,
   existingContracts,
+  replaceExisting,
+  setReplaceExisting,
 }) => {
   useEffect(() => {
     console.log('old', existingContracts);
@@ -95,6 +97,8 @@ const AddNewContractModal = ({
                 name="radio"
                 id="alongside"
                 value="alongside"
+                checked={replaceExisting === 'alongside'}
+                onChange={() => setReplaceExisting('alongside')}
               />
               <span className="checkmark checkmark-customer-list" />
             </label>
@@ -104,11 +108,18 @@ const AddNewContractModal = ({
               className="checkboxes radio-container medium-text-label"
               htmlFor="replace">
               No, this agreement will replace an existing agreement
-              <input type="radio" name="radio" id="replace" value="replace" />
+              <input
+                type="radio"
+                name="radio"
+                id="replace"
+                value="replace"
+                checked={replaceExisting === 'replace'}
+                onChange={() => setReplaceExisting('replace')}
+              />
               <span className="checkmark checkmark-customer-list" />
             </label>
           </ModalRadioCheck>
-          {renderExistigContracts()}
+          {replaceExisting === 'replace' ? renderExistigContracts() : null}
           <Button className="btn-primary w-100 mt-4">Confirm</Button>
         </div>
       </ModalBox>
@@ -128,6 +139,8 @@ AddNewContractModal.propTypes = {
   setShowAddContractModal: func.isRequired,
   typeOfNewAgreement: shape({}).isRequired,
   existingContracts: arrayOf(shape({})),
+  replaceExisting: string.isRequired,
+  setReplaceExisting: func.isRequired,
 };
 
 const OrangeFieldSet = styled.div`

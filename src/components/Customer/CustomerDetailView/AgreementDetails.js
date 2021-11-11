@@ -83,6 +83,7 @@ export default function AgreementDetails({
   const [showAddContractModal, setShowAddContractModal] = useState(false);
   const [typeOfNewAgreement, setTypeOfNewAgreement] = useState({});
   const [existingContracts, setExistingContracts] = useState([]);
+  const [replaceExisting, setReplaceExisting] = useState('alongside');
 
   const customStyles = {
     content: {
@@ -1030,6 +1031,8 @@ export default function AgreementDetails({
             setShowAddContractModal={setShowAddContractModal}
             typeOfNewAgreement={typeOfNewAgreement}
             existingContracts={existingContracts}
+            replaceExisting={replaceExisting}
+            setReplaceExisting={setReplaceExisting}
           />
         ) : null}
       </div>
