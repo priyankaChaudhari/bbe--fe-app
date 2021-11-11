@@ -22,9 +22,14 @@ const DropDownUncontained = ({
 
   const IconOption = (dataProps) => (
     <Option {...dataProps}>
-      <div>
+      <div style={{ fontSize: '14px', fontWeight: '500', color: '#000000' }}>
         {dataProps.data.label}
-        <div className="sub-title"> {dataProps.data.sub}</div>{' '}
+        <div
+          style={{ fontSize: '12px', color: '#556178', paddingBottom: '8px' }}
+          className="sub-title">
+          {' '}
+          {dataProps.data.sub}
+        </div>{' '}
       </div>
     </Option>
   );
@@ -54,19 +59,21 @@ const DropDownUncontained = ({
   };
 
   return (
-    <Select
-      classNamePrefix="react-select"
-      options={options}
-      value={{
-        value: 'standard_cancellation',
-        label: 'Recurring Service Agreement',
-        sub: 'Standard Cancellation',
-      }}
-      isSearchable={false}
-      onChange={onChange}
-      components={getSelectComponents()}
-      componentsValue={{ Option: IconOption }}
-    />
+    <AddNewAgreementDropDown className="w-50">
+      <Select
+        classNamePrefix="react-select"
+        options={options}
+        value={{
+          value: 'standard_cancellation',
+          label: 'Recurring Service Agreement',
+          sub: 'Standard Cancellation',
+        }}
+        isSearchable={false}
+        onChange={onChange}
+        components={getSelectComponents()}
+        componentsValue={{ Option: IconOption }}
+      />
+    </AddNewAgreementDropDown>
   );
 };
 
@@ -103,5 +110,67 @@ const AddNewAgreement = styled.div`
   }
   .caretup-icon {
     vertical-align: middle;
+  }
+`;
+const AddNewAgreementDropDown = styled.div`
+  &.w-50 {
+    width: 180px;
+  }
+  .css-2b097c-container {
+    .css-yk16xz-control {
+      background-color: transparent;
+      border-style: none;
+      min-height: 40px;
+      margin: 0;
+      border-width: 0px;
+      .css-g1d714-ValueContainer {
+        padding: 2px 0;
+      }
+      .css-tlfecz-indicatorContainer {
+        padding: 6px 0 0 0;
+        cursor: pointer;
+        img {
+          width: 20px !important;
+          height: 20px !important;
+        }
+      }
+    }
+    .css-1pahdxg-control {
+      border-color: transparent !important;
+      box-shadow: none !important;
+      outline: none;
+      background-color: transparent;
+      margin: 0;
+      caret-color: transparent;
+      min-height: 40px;
+      .css-g1d714-ValueContainer {
+        padding: 2px 0;
+      }
+      .css-1gtu0rj-indicatorContainer {
+        padding: 6px 0 0 0;
+        cursor: pointer;
+
+        img {
+          width: 20px !important;
+          height: 20px !important;
+        }
+      }
+      .css-1uccc91-singleValue {
+        margin: 0;
+      }
+    }
+
+    .css-1okebmr-indicatorSeparator {
+      display: none;
+    }
+    .react-select__menu {
+      width: 220px !important;
+      width: 100%;
+
+      .css-26l3qy-menu {
+        max-width: 220px !important;
+        width: 100%;
+      }
+    }
   }
 `;

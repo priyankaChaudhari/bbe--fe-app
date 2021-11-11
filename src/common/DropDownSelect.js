@@ -254,12 +254,13 @@ const DropDownSelect = styled.div`
       display: none;
     }
   }
-   @media only screen and (max-width: 768px) { 
-      &.days-performance {
-        max-width: 100%;
-        float: left;
-        text-align: initial;
-      }
+  @media only screen and (max-width: 768px) {
+    &.days-performance {
+      max-width: 100%;
+      float: left;
+      text-align: initial;
+    }
+  }
 `;
 
 export default DropDownSelect;
