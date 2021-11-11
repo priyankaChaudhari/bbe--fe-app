@@ -209,16 +209,16 @@ export const DSPAddendumDetails = [
 
 export const newAgreementTypes = [
   {
-    value: 'standard_cancellation',
+    value: 'recurring',
     label: 'Recurring Service Agreement',
     sub: 'Standard Cancellation',
   },
   {
-    value: '90_day_cancellation',
+    value: 'recurring (90 day notice)',
     label: 'Recurring Service Agreement',
     sub: '90 Day Cancellation',
   },
-  { value: 'dsp_only', label: 'DSP-Only Agreement', sub: null },
+  { value: 'dsp only', label: 'DSP-Only Agreement', sub: null },
 ];
 
 export const additionaMarketplaceAmount = 1500;

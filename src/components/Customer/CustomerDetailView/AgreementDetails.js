@@ -11,7 +11,7 @@ import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { func, string, shape } from 'prop-types';
+import { func, string, bool, shape, oneOfType } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import PastAgreement from './PastAgreement';
@@ -82,6 +82,7 @@ export default function AgreementDetails({
   const [bgsManagerEmail, setBgsManagerEmail] = useState(null);
   const [showAddContractModal, setShowAddContractModal] = useState(false);
   const [typeOfNewAgreement, setTypeOfNewAgreement] = useState({});
+  const [existingContracts, setExistingContracts] = useState([]);
 
   const customStyles = {
     content: {
@@ -815,6 +816,21 @@ export default function AgreementDetails({
     }
   };
 
+  const addNewAgreement = (agreementType) => {
+    const filteredContracts = multipleAgreement.filter(
+      (agreement) =>
+        agreement.contract_type === agreementType.value &&
+        (agreement.contract_status.value === 'active' ||
+          agreement.contract_status.value === 'renewed'),
+    );
+    setExistingContracts([...filteredContracts]);
+    if (filteredContracts.length > 0) {
+      setShowAddContractModal(true);
+    } else {
+      console.log('else***********');
+    }
+  };
+
   return (
     <>
       <div className="col-lg-6 col-12 cutomer-middle-panel">
@@ -850,7 +866,7 @@ export default function AgreementDetails({
                   <DropDownUncontained
                     options={newAgreementTypes}
                     setSelectedOption={setTypeOfNewAgreement}
-                    extraAction={() => setShowAddContractModal(true)}
+                    extraAction={addNewAgreement}
                     DropdownIndicator={DropdownIndicator}
                   />
                   {generateHTML()}
@@ -1007,12 +1023,15 @@ export default function AgreementDetails({
             </div>
           </ModalBox>
         </Modal>
-        <AddNewContractModal
-          customStyles={customStyles}
-          showAddContractModal={showAddContractModal}
-          setShowAddContractModal={setShowAddContractModal}
-          typeOfNewAgreement={typeOfNewAgreement}
-        />
+        {showAddContractModal ? (
+          <AddNewContractModal
+            customStyles={customStyles}
+            showAddContractModal={showAddContractModal}
+            setShowAddContractModal={setShowAddContractModal}
+            typeOfNewAgreement={typeOfNewAgreement}
+            existingContracts={existingContracts}
+          />
+        ) : null}
       </div>
     </>
   );
@@ -1023,7 +1042,7 @@ AgreementDetails.propTypes = {
   userId: string.isRequired,
   setShowMemberList: func.isRequired,
   setShowModal: func.isRequired,
-  showModal: shape({}).isRequired,
+  showModal: oneOfType([bool, shape({})]).isRequired,
   userRole: string.isRequired,
   customerStatus: string.isRequired,
   getActivityLogInfo: func.isRequired,

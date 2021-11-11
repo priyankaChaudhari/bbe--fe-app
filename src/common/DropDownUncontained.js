@@ -17,7 +17,7 @@ const DropDownUncontained = ({
 
   const onChange = (selected) => {
     setSelectedOption(selected);
-    extraAction();
+    extraAction(selected);
   };
 
   const IconOption = (dataProps) => (

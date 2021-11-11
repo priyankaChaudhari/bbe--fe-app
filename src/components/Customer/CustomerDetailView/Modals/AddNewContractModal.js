@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Modal from 'react-modal';
+import dayjs from 'dayjs';
 import styled from 'styled-components';
-import { func, shape, bool } from 'prop-types';
+import { func, shape, bool, arrayOf } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { CloseIcon, RecurringIcon } from '../../../../theme/images';
@@ -13,7 +14,54 @@ const AddNewContractModal = ({
   showAddContractModal,
   setShowAddContractModal,
   typeOfNewAgreement,
+  existingContracts,
 }) => {
+  useEffect(() => {
+    console.log('old', existingContracts);
+  }, [existingContracts]);
+
+  const renderExistigContracts = () => {
+    return existingContracts.map((contract) => (
+      <OrangeFieldSet className="mt-4 " key={contract.id}>
+        <CheckBoxContract>
+          <div className="checkbox" role="presentation">
+            <input type="checkbox" id="check1" name="check1" value="check12" />
+            <label htmlFor="check1">
+              <div className="solid-icon mt-2">
+                <img
+                  width="48px"
+                  className="solid-icon"
+                  src={RecurringIcon}
+                  alt="sync"
+                />
+              </div>
+              <div className="contract-status" role="presentation">
+                <p className="black-heading-title mt-2 pt-1 mb-0">
+                  {typeOfNewAgreement.label}
+                </p>
+                <ul className="recurring-contact">
+                  <li>
+                    <p className="basic-text ">
+                      Expires {dayjs(contract.end_date).format('MMM DD, YYYY')}
+                    </p>
+                  </li>
+                  <li>
+                    <span className="dot" />
+                    <p className="basic-text ">
+                      {contract.primary_marketplace?.name}{' '}
+                      (Primary),Amazon.ca,Amazon.co.uk
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </label>
+          </div>
+        </CheckBoxContract>
+        <div className="clear-fix" />
+      </OrangeFieldSet>
+    ));
+  };
+
   return (
     <Modal
       isOpen={showAddContractModal}
@@ -60,45 +108,7 @@ const AddNewContractModal = ({
               <span className="checkmark checkmark-customer-list" />
             </label>
           </ModalRadioCheck>
-          <OrangeFieldSet className="mt-4 ">
-            <CheckBoxContract>
-              <div className="checkbox" role="presentation">
-                <input
-                  type="checkbox"
-                  id="check1"
-                  name="check1"
-                  value="check12"
-                />
-                <label htmlFor="check1">
-                  <div className="solid-icon mt-2">
-                    <img
-                      width="48px"
-                      className="solid-icon"
-                      src={RecurringIcon}
-                      alt="sync"
-                    />
-                  </div>
-                  <div className="contract-status" role="presentation">
-                    <p className="black-heading-title mt-2 pt-1 mb-0">
-                      Recurring Service Agreement
-                    </p>
-                    <ul className="recurring-contact">
-                      <li>
-                        <p className="basic-text ">Expires Mar 20,2021</p>
-                      </li>
-                      <li>
-                        <span className="dot" />
-                        <p className="basic-text ">
-                          Amazon US (Primary),Amazon.ca,Amazon.co.uk
-                        </p>
-                      </li>
-                    </ul>
-                  </div>
-                </label>
-              </div>
-            </CheckBoxContract>
-            <div className="clear-fix" />
-          </OrangeFieldSet>
+          {renderExistigContracts()}
           <Button className="btn-primary w-100 mt-4">Confirm</Button>
         </div>
       </ModalBox>
@@ -108,11 +118,16 @@ const AddNewContractModal = ({
 
 export default AddNewContractModal;
 
+AddNewContractModal.defaultProps = {
+  existingContracts: [],
+};
+
 AddNewContractModal.propTypes = {
   customStyles: shape({}).isRequired,
   showAddContractModal: bool.isRequired,
   setShowAddContractModal: func.isRequired,
   typeOfNewAgreement: shape({}).isRequired,
+  existingContracts: arrayOf(shape({})),
 };
 
 const OrangeFieldSet = styled.div`
