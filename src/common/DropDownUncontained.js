@@ -38,12 +38,7 @@ const DropDownUncontained = ({
     <SingleValue {...dataProps}>
       <AddNewAgreement className=" mt-4 mb-3  checkbox" role="presentation">
         <span className="cursor check-container-label">
-          <img
-            width="16px"
-            src={AddIcons}
-            className="mr-2 caretup-icon"
-            alt="add"
-          />
+          <img src={AddIcons} className="mr-2 add-icon" alt="add" />
           Add New Agreement
         </span>
       </AddNewAgreement>
@@ -108,13 +103,14 @@ const AddNewAgreement = styled.div`
     height: 10px;
     width: 170px;
   }
-  .caretup-icon {
-    vertical-align: middle;
+  .add-icon {
+    vertical-align: text-top;
+    width: 14px;
   }
 `;
 const AddNewAgreementDropDown = styled.div`
   &.w-50 {
-    width: 180px;
+    width: 175px;
   }
   .css-2b097c-container {
     .css-yk16xz-control {
@@ -124,15 +120,18 @@ const AddNewAgreementDropDown = styled.div`
       margin: 0;
       border-width: 0px;
       .css-g1d714-ValueContainer {
-        padding: 2px 0;
+        padding: 4px 0;
       }
       .css-tlfecz-indicatorContainer {
-        padding: 6px 0 0 0;
+        padding: 10px 0 0 0;
         cursor: pointer;
         img {
-          width: 20px !important;
-          height: 20px !important;
+          width: 18px !important;
+          height: 18px !important;
         }
+      }
+      &:hover {
+        border-color: none !important;
       }
     }
     .css-1pahdxg-control {
@@ -140,23 +139,27 @@ const AddNewAgreementDropDown = styled.div`
       box-shadow: none !important;
       outline: none;
       background-color: transparent;
+      border-width: 0px;
       margin: 0;
       caret-color: transparent;
       min-height: 40px;
       .css-g1d714-ValueContainer {
-        padding: 2px 0;
+        padding: 4px 0;
       }
       .css-1gtu0rj-indicatorContainer {
-        padding: 6px 0 0 0;
+        padding: 10px 0 0 0;
         cursor: pointer;
 
         img {
-          width: 20px !important;
-          height: 20px !important;
+          width: 18px !important;
+          height: 18px !important;
         }
       }
-      .css-1uccc91-singleValue {
+      /* .css-1uccc91-singleValue {
         margin: 0;
+      } */
+      &:hover {
+        border-color: none !important;
       }
     }
 

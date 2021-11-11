@@ -649,7 +649,7 @@ export default function AgreementDetails({
     }
 
     return fields && fields.length === 0 ? (
-      <WhiteCard className="text-center">No Agreements Found.</WhiteCard>
+      <WhiteCard className="text-center mt-2">No Agreements Found.</WhiteCard>
     ) : (
       fields
     );
