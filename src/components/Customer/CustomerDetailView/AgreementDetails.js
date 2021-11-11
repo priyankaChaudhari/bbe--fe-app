@@ -49,7 +49,7 @@ import {
 } from '../../../constants';
 import {
   createTransactionData,
-  createContract,
+  // createContract,
   deleteContract,
   getBGSManagers,
   savePauseAgreement,
@@ -155,21 +155,20 @@ export default function AgreementDetails({
     return diffDays;
   };
 
-  const createNewDraftVersion = (agreementId) => {
-    const data = {
-      customer_id: id,
-      draft_from: agreementId,
-    };
-    createContract(data).then((res) => {
-      history.push({
-        pathname: PATH_AGREEMENT.replace(':id', id).replace(
-          ':contract_id',
-          res && res.data && res.data.id,
-        ),
-        state: history && history.location && history.location.pathname,
-        showEditView: true,
-      });
-    });
+  const createNewContract = (params) => {
+    // Check if the agreemnt is draft or not & send API params accordingly
+
+    console.log('API data', params);
+    // createContract(params).then((res) => {
+    //   history.push({
+    //     pathname: PATH_AGREEMENT.replace(':id', id).replace(
+    //       ':contract_id',
+    //       res && res.data && res.data.id,
+    //     ),
+    //     state: history && history.location && history.location.pathname,
+    //     showEditView: true,
+    //   });
+    // });
   };
 
   const addBGSMangerEmail = () => {
@@ -221,7 +220,10 @@ export default function AgreementDetails({
         });
         break;
       case 'draft':
-        createNewDraftVersion(agreementId);
+        createNewContract({
+          customer_id: id,
+          draft_from: agreementId,
+        });
         break;
       case 'pause':
         setShowModal({ pause: true, agreementId });
@@ -818,7 +820,8 @@ export default function AgreementDetails({
     }
   };
 
-  const addNewAgreement = (agreementType) => {
+  const checkExistingAgreements = (agreementType) => {
+    // Filter active & renewed agreements of selected type
     const filteredContracts = multipleAgreement.filter(
       (agreement) =>
         agreement.contract_type === agreementType.value &&
@@ -827,11 +830,33 @@ export default function AgreementDetails({
     );
     setExistingContracts([...filteredContracts]);
 
+    // if there are any filterd agreements present then show modal, else create new agreement
     if (filteredContracts.length > 0) {
       setShowAddContractModal(true);
       setReplacedContract(filteredContracts[0].id);
     } else {
-      console.log('else***********');
+      createNewContract({
+        customer_id: id,
+        contract_type: agreementType.value,
+        start_date: new Date(),
+      });
+    }
+  };
+
+  const confirmContract = () => {
+    // if agreement will run alongside current agreement, else replace existing agreement
+
+    if (replaceExisting === 'alongside') {
+      createNewContract({
+        customer_id: id,
+        contract_type: typeOfNewAgreement.value,
+        start_date: new Date(),
+      });
+    } else {
+      createNewContract({
+        customer_id: id,
+        draft_from: replacedContract,
+      });
     }
   };
 
@@ -870,7 +895,7 @@ export default function AgreementDetails({
                   <DropDownUncontained
                     options={newAgreementTypes}
                     setSelectedOption={setTypeOfNewAgreement}
-                    extraAction={addNewAgreement}
+                    extraAction={checkExistingAgreements}
                     DropdownIndicator={DropdownIndicator}
                   />
                   {generateHTML()}
@@ -1038,6 +1063,7 @@ export default function AgreementDetails({
             setReplaceExisting={setReplaceExisting}
             replacedContract={replacedContract}
             setReplacedContract={setReplacedContract}
+            confirmContract={confirmContract}
           />
         ) : null}
       </div>

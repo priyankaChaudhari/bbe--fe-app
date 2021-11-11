@@ -23,6 +23,7 @@ const AddNewContractModal = ({
   setReplaceExisting,
   replacedContract,
   setReplacedContract,
+  confirmContract,
 }) => {
   useEffect(() => {
     console.log('old', existingContracts);
@@ -154,7 +155,9 @@ const AddNewContractModal = ({
             </label>
           </ModalRadioCheck>
           {replaceExisting === 'replace' ? renderExistigContracts() : null}
-          <Button className="btn-primary w-100 mt-4">Confirm</Button>
+          <Button className="btn-primary w-100 mt-4" onClick={confirmContract}>
+            Confirm
+          </Button>
         </div>
       </ModalBox>
     </Modal>
@@ -177,6 +180,7 @@ AddNewContractModal.propTypes = {
   setReplaceExisting: func.isRequired,
   replacedContract: string.isRequired,
   setReplacedContract: func.isRequired,
+  confirmContract: func.isRequired,
 };
 
 const OrangeFieldSet = styled.div`
