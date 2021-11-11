@@ -192,11 +192,17 @@ export async function getSalesGraphData(
   dailyFacts,
   groupBy,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
+  isBGSManager,
+  isBGSAdmin,
   startDate,
   endDate,
 ) {
-  const selectedUser = user;
+  let selectedUser = managerUser;
+  if (isBGSManager || isBGSAdmin) {
+    selectedUser = bgsUser;
+  }
 
   let params = {
     daily_facts: dailyFacts,
@@ -204,6 +210,15 @@ export async function getSalesGraphData(
     marketplace,
     user: selectedUser,
   };
+
+  if (isBGSAdmin) {
+    params = {
+      ...params,
+      managerUser,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -227,21 +242,38 @@ export async function getSalesGraphData(
 export async function getSalesKeyContributionData(
   dailyFacts,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
   contributionType,
   selectedMetric,
+  isBGSManager,
+  isBGSAdmin,
   startDate,
   endDate,
   pageNumber,
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
 
+  let selectedUser = managerUser;
+  if (isBGSManager || isBGSAdmin) {
+    selectedUser = bgsUser;
+  }
+
   let params = {
     daily_facts: dailyFacts,
     marketplace,
-    user,
+    user: selectedUser,
     dashboard: 'sales_performance',
   };
+
+  if (isBGSAdmin) {
+    params = {
+      ...params,
+      managerUser,
+      start_date: startDate,
+      end_date: endDate,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -259,7 +291,7 @@ export async function getSalesKeyContributionData(
       dashboard: 'sale_performance',
       page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     };
-    if (user === 'all') {
+    if (selectedUser === 'all') {
       delete params.user;
     }
     if (marketplace === 'all') {

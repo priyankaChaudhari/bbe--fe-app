@@ -118,6 +118,11 @@ export async function getManagersList(type) {
       ...params,
       dashboard: type,
     };
+  } else {
+    params = {
+      ...params,
+      'bgs-manager': 'all',
+    };
   }
 
   const result = await axiosInstance
@@ -130,6 +135,54 @@ export async function getManagersList(type) {
     });
   return result;
 }
+
+export async function getBgsUserList(id = null) {
+  let params = {
+    'order-by': 'first_name',
+  };
+
+  if (id !== null) {
+    params = {
+      ...params,
+      'bgs-manager': id,
+    };
+  }
+
+  const result = await axiosInstance
+    .get(`${API_BGS}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+// export async function getManagersList(type) {
+//   let api = API_BGS;
+//   let params = {
+//     'order-by': 'first_name',
+//   };
+
+//   if (type !== 'BGS') {
+//     api = API_ADM;
+//     params = {
+//       ...params,
+//       dashboard: type,
+//     };
+//   }
+
+//   const result = await axiosInstance
+//     .get(`${api}`, { params })
+//     .then((response) => {
+//       return response;
+//     })
+//     .catch((error) => {
+//       return error.response;
+//     });
+//   return result;
+// }
 
 export async function getGrowthStrategist() {
   const result = await axiosInstance

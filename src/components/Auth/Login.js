@@ -22,6 +22,7 @@ import {
   PATH_AMAZON_MERCHANT,
   PATH_BGS_DASHBOARD,
   PATH_BGS_MANAGER_DASHBOARD,
+  PATH_BGS_ADMIN_DASHBOARD,
   PATH_COMPANY_DETAILS,
   PATH_CUSTOMER_DETAILS,
   PATH_CUSTOMER_LIST,
@@ -124,6 +125,8 @@ export default function Login() {
         history.push(PATH_BGS_DASHBOARD);
       } else if (role === 'BGS Manager') {
         history.push(PATH_BGS_MANAGER_DASHBOARD);
+      } else if (role === 'BGS Admin') {
+        history.push(PATH_BGS_ADMIN_DASHBOARD);
       } else if (role === 'Sponsored Advertising Ad Manager') {
         history.push(PATH_SPONSORED_DASHBOARD);
       } else if (role.includes('DSP Ad Manager')) {

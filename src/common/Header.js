@@ -17,6 +17,7 @@ import {
   PATH_ARTICLE_LIST,
   PATH_BGS_DASHBOARD,
   PATH_BGS_MANAGER_DASHBOARD,
+  PATH_BGS_ADMIN_DASHBOARD,
   PATH_CUSTOMER_LIST,
   PATH_SPONSORED_DASHBOARD,
   PATH_DSP_DASHBOARD,
@@ -316,6 +317,10 @@ export default function Header({ type, userInfo }) {
                       'bgsManager',
                       PATH_BGS_MANAGER_DASHBOARD,
                     )
+                  : null}
+
+                {userInfo?.role === 'BGS Admin'
+                  ? renderDashboardIcon('bgsAdmin', PATH_BGS_ADMIN_DASHBOARD)
                   : null}
 
                 {userInfo?.role?.includes('Sponsored Advertising Ad Manager')

@@ -12,27 +12,52 @@ const SalesFilter = ({
   getSelectComponents,
   marketplaceOptions,
   handleMarketplace,
-  bgsList,
+  managersList,
   handleManagerList,
+  handleBGSList,
+  selectedBgs,
+  bgsList,
   selectedManager,
   isApiCall,
   selectedMarketplace,
   isBGSManager,
   isAdManagerAdmin,
+  isBGSAdmin,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
 
-  const renderManagerDropdown = (className) => {
+  const renderBGSDropdown = (className) => {
     return (
       <div className="col-12 ">
-        <div className="label mt-3">{isBGSManager ? 'BGS' : 'Ad Manager'}</div>
+        <div className="label mt-3">BGS</div>
         {DropDown(
           className,
           bgsList,
           bgsList && bgsList[0] && bgsList[0].label,
           getSelectComponents,
           bgsList && bgsList[0],
+          handleBGSList,
+          isApiCall,
+          null,
+          selectedBgs,
+        )}
+      </div>
+    );
+  };
+
+  const renderManagerDropdown = (className) => {
+    return (
+      <div className="col-12 ">
+        <div className="label mt-3">
+          {isBGSAdmin ? 'BGS Manager' : 'Ad Manager'}
+        </div>
+        {DropDown(
+          className,
+          managersList,
+          managersList && managersList[0] && managersList[0].label,
+          getSelectComponents,
+          managersList && managersList[0],
           handleManagerList,
           isApiCall,
           null,
@@ -80,9 +105,10 @@ const SalesFilter = ({
           </div>
 
           {renderMarketplaceDropdown('cursor')}
-          {isAdManagerAdmin || isBGSManager
+          {isBGSAdmin || isAdManagerAdmin
             ? renderManagerDropdown('cursor')
             : null}
+          {isBGSManager || isBGSAdmin ? renderBGSDropdown('cursor') : null}
         </div>
       </WhiteCard>
     );
@@ -129,10 +155,19 @@ const SalesFilter = ({
                 {renderMarketplaceDropdown('customer-list-header')}
               </div>
             </div>
-            {isAdManagerAdmin || isBGSManager ? (
+
+            {isBGSAdmin || isAdManagerAdmin ? (
               <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
                 <div className="row ">
                   {renderManagerDropdown('customer-list-header')}
+                </div>
+              </div>
+            ) : null}
+
+            {isBGSManager || isBGSAdmin ? (
+              <div className="col-lg-6 col-md-6 pl-md-5 col-sm-12">
+                <div className="row ">
+                  {renderBGSDropdown('customer-list-header')}
                 </div>
               </div>
             ) : null}
@@ -151,26 +186,34 @@ SalesFilter.defaultProps = {
   isApiCall: false,
   isAdManagerAdmin: false,
   isBGSManager: false,
+  isBGSAdmin: false,
   marketplaceOptions: [],
-  bgsList: [],
+  managersList: [],
   selectedManager: {},
+  bgsList: {},
+  selectedBgs: {},
   selectedMarketplace: {},
   getSelectComponents: () => {},
   handleManagerList: () => {},
   handleMarketplace: () => {},
   handleResetFilter: () => {},
+  handleBGSList: () => {},
 };
 
 SalesFilter.propTypes = {
   isApiCall: bool,
   isBGSManager: bool,
   isAdManagerAdmin: bool,
+  isBGSAdmin: bool,
   selectedManager: shape({}),
   selectedMarketplace: shape({}),
   marketplaceOptions: arrayOf(Array),
+  managersList: arrayOf(Array),
   bgsList: arrayOf(Array),
+  selectedBgs: shape({}),
   handleMarketplace: func,
   handleResetFilter: func,
   getSelectComponents: func,
   handleManagerList: func,
+  handleBGSList: func,
 };

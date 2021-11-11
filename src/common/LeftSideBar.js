@@ -23,6 +23,7 @@ import {
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
+  PATH_BGS_ADMIN_DASHBOARD,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
@@ -68,6 +69,32 @@ export default function LeftSideBar({ userInfo }) {
               }
               role="presentation"
               onClick={() => history.push(PATH_BGS_MANAGER_DASHBOARD)}>
+              {' '}
+              <img
+                width="32px"
+                className=" speed0meter-icon active"
+                src={SpeedometerActive}
+                alt=""
+              />
+              <img
+                width="32px"
+                className=" speed0meter-icon  disactive"
+                src={Speedometer}
+                alt=""
+              />
+            </li>
+          ) : null}
+
+          {userInfo?.role && userInfo.role === 'BGS Admin' ? (
+            <li
+              className={
+                history.location.pathname &&
+                history.location.pathname.includes('bgsAdmin')
+                  ? ' cursor active'
+                  : ' cursor'
+              }
+              role="presentation"
+              onClick={() => history.push(PATH_BGS_ADMIN_DASHBOARD)}>
               {' '}
               <img
                 width="32px"
