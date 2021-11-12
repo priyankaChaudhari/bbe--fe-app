@@ -159,31 +159,6 @@ export async function getBgsUserList(id = null) {
   return result;
 }
 
-// export async function getManagersList(type) {
-//   let api = API_BGS;
-//   let params = {
-//     'order-by': 'first_name',
-//   };
-
-//   if (type !== 'BGS') {
-//     api = API_ADM;
-//     params = {
-//       ...params,
-//       dashboard: type,
-//     };
-//   }
-
-//   const result = await axiosInstance
-//     .get(`${api}`, { params })
-//     .then((response) => {
-//       return response;
-//     })
-//     .catch((error) => {
-//       return error.response;
-//     });
-//   return result;
-// }
-
 export async function getGrowthStrategist() {
   const result = await axiosInstance
     .get(`${API_BGS}`)
