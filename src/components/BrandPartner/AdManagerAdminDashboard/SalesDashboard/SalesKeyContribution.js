@@ -129,8 +129,6 @@ const SalesKeyContribution = ({
         ? keyContributionConstant.noManagerSelected
         : keyContributionConstant.managerSelected;
 
-    // const keyTabOptions = keyContributionConstant.adManagerSelected;
-
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
         <ToggleButton>

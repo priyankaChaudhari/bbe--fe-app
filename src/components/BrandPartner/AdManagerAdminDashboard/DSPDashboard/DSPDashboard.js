@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 
 import dayjs from 'dayjs';

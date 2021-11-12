@@ -52,7 +52,6 @@ const DSPKeyContributors = ({
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
-
   const returnMetricsValue = (value) => {
     let decimalDigits = 2;
     if (selectedTabMatrics === 'dspImpressions') {
@@ -722,52 +721,7 @@ const DSPKeyContributors = ({
               {keyContributionHeaders[selectedContributionOption]}
             </p>
           </div>
-
           {renderKeyContributionOptions()}
-          {/* <div className="col-md-6 col-sm1-12  mb-3">
-            <ToggleButton>
-              <div className="days-container ">
-                <ul className={loader ? 'days-tab disabled' : 'days-tab'}>
-                  <li>
-                    {' '}
-                    <input
-                      className="d-none"
-                      type="radio"
-                      id={keyContribution.id}
-                      name="flexRadioDefault"
-                      value={selectedKeyContribution}
-                      checked={selectedKeyContribution}
-                      onClick={() => {
-                        handleContribution(true);
-                      }}
-                      onChange={() => {}}
-                    />
-                    <label htmlFor={keyContribution.id}>
-                      {keyContribution.label}{' '}
-                    </label>
-                  </li>
-
-                  <li>
-                    <input
-                      className="d-none"
-                      type="radio"
-                      id={keyContribution.id2}
-                      name="flexRadioDefault"
-                      value={!selectedKeyContribution}
-                      checked={!selectedKeyContribution}
-                      onClick={() => {
-                        handleContribution(false);
-                      }}
-                      onChange={() => {}}
-                    />
-                    <label htmlFor={keyContribution.id2}>
-                      {keyContribution.label2}{' '}
-                    </label>
-                  </li>
-                </ul>
-              </div>
-            </ToggleButton>
-          </div> */}
         </div>
         {selectedAdDF.value === 'custom' &&
         selectedContributionOption !== 'keyMetrics' ? (
@@ -813,7 +767,7 @@ const DSPKeyContributors = ({
 export default DSPKeyContributors;
 
 DSPKeyContributors.defaultProps = {
-  selectedContributionOption: true,
+  selectedContributionOption: '',
   selectedManager: 'all',
   handleContribution: () => {},
   selectedDSPMatrics: {
@@ -831,7 +785,7 @@ DSPKeyContributors.defaultProps = {
 };
 
 DSPKeyContributors.propTypes = {
-  selectedContributionOption: bool,
+  selectedContributionOption: string,
   selectedManager: string,
   handleContribution: func,
   selectedDSPMatrics: objectOf(Object),

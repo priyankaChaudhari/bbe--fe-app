@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, shape, string } from 'prop-types';
+import { arrayOf, bool, func, shape } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import {
@@ -163,8 +163,8 @@ DSPFilter.defaultProps = {
   selectInputRef: {},
   selectedManager: {},
   selectedMarketplace: {},
-  selectedBgs: '',
-  bgsList: {},
+  selectedBgs: {},
+  bgsList: [],
   handleBGSList: () => {},
   handleResetFilter: () => {},
   handleManagerFilter: () => {},
@@ -174,15 +174,15 @@ DSPFilter.defaultProps = {
 DSPFilter.propTypes = {
   isApiCall: bool,
   isAdManagerAdmin: bool,
-  isBGSAdmin: false,
+  isBGSAdmin: bool,
   isBGSManager: bool,
-  selectedBgs: string,
+  selectedBgs: shape({}),
   selectInputRef: shape({}),
   selectedManager: shape({}),
   selectedMarketplace: shape({}),
   options: arrayOf(Array),
   managerList: arrayOf(Array),
-  bgsList: shape({}),
+  bgsList: arrayOf(Array),
   handleBGSList: func,
   handleMarketplaceOptions: func,
   getAdManagerComponents: func,

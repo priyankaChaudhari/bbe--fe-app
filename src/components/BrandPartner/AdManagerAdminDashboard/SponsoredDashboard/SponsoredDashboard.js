@@ -1,12 +1,8 @@
-/* eslint-disable react/destructuring-assignment */
-/* eslint-disable react/prop-types */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import $ from 'jquery';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import PropTypes, { shape, string } from 'prop-types';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
@@ -1324,11 +1320,21 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
 SponsoredDashboard.defaultProps = {
   marketplaceChoices: [],
   selectedMarketplace: '',
+  userInfo: {
+    role: '',
+    id: '',
+  },
+  data: {},
 };
 
 SponsoredDashboard.propTypes = {
   marketplaceChoices: PropTypes.arrayOf(PropTypes.object),
   selectedMarketplace: PropTypes.string,
+  userInfo: shape({
+    role: string,
+    id: string,
+  }),
+  data: shape({ sub: string, label: string }),
 };
 
 const NoData = styled.div`
