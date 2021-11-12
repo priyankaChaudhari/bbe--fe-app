@@ -27,6 +27,7 @@ import {
   getDspPacingDahboardData,
   getKeyContributionData,
   getManagersList,
+  getBgsUserList,
 } from '../../../../api';
 import useBindDSPResponseData from '../../../../hooks/useBindDspData';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
@@ -37,33 +38,42 @@ currentDate.setDate(currentDate.getDate() - 2);
 const month = dayjs(currentDate).format('MMMM');
 
 const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
-  const isAdManagerAdmin =
-    (userInfo && userInfo.role === 'Ad Manager Admin') ||
-    userInfo.role === 'BGS Manager';
-
-  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
+  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
+  const isBGSManager = userInfo?.role === 'BGS Manager';
+  const isBGSAdmin = userInfo?.role === 'BGS Admin';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [dspGraphLoader, setDspGraphLoader] = useState(false);
-
-  const [selectedKeyContribution, setSelectedKeyContribution] = useState(true);
+  const tab = isAdManagerAdmin || isBGSAdmin ? 'positive' : 'contribution';
+  const [selectedContributionOption, setSelectedContributionOption] = useState(
+    tab,
+  );
   const [keyContributionLoader, setKeyContributionLoader] = useState(false);
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
   const [isCustomDateApply, setIsCustomDateApply] = useState(false);
   const [dspPacingLoader, setDspPacingLoader] = useState(false);
-
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
-  const [dspManagerList, setDSPManagerList] = useState([]);
-  const [selectedAdManager, setSelectedAdManager] = useState(
-    isAdManagerAdmin
-      ? {
-          value: 'all',
-          label: isBGSManager ? 'All BGS' : 'All Ad Manager',
-        }
-      : { value: userInfo.id, label: '' },
+  const [managerList, setManagersList] = useState([]);
+  const [bgsList, setBgsList] = useState([]);
+  const [currency, setCurrency] = useState(null);
+  const [currencySymbol, setCurrencySymbol] = useState(null);
+  const [contributionData, setContributionData] = useState(null);
+  const [tempDspChartData, setTempDSPChartData] = useState(null);
+  const [dspPacingData, setDspPacingData] = useState(null);
+  const [responseId, setResponseId] = useState(null);
+  const [pageNumber, setPageNumber] = useState();
+  const [contributionCount, setContributionCount] = useState(null);
+  const [dspGroupBy, setDSPGroupBy] = useState('daily');
+  const [selectedSpendingOption, setSelectedSpendingOption] = useState(
+    'overspending',
   );
-
+  const [selectedDspMetrics, setSelectedDspMetrics] = useState({
+    dspImpressions: true,
+  });
+  const [selectedTabMatrics, setSelectedTabMetrics] = useState(
+    'dspImpressions',
+  );
   const [selectedMarketplace, setSelectedMarketplace] = useState({
     value: 'all',
     label: 'All Marketplaces',
@@ -74,20 +84,10 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     label: 'Recent 7 days',
     sub: 'vs Previous 7 days',
   });
-  const [dspGroupBy, setDSPGroupBy] = useState('daily');
-  const [selectedSpendingOption, setSelectedSpendingOption] = useState(
-    'overspending',
-  );
-
-  const [currency, setCurrency] = useState(null);
-  const [currencySymbol, setCurrencySymbol] = useState(null);
-  const [contributionData, setContributionData] = useState(null);
-  const [tempDspChartData, setTempDSPChartData] = useState(null);
-  const [dspPacingData, setDspPacingData] = useState(null);
-  const [responseId, setResponseId] = useState(null);
-
-  const [selectedDspMetrics, setSelectedDspMetrics] = useState({
-    dspImpressions: true,
+  const [dspFilters, setDSPFilters] = useState({
+    daily: true,
+    weekly: false,
+    month: false,
   });
   const [adState, setAdState] = useState([
     {
@@ -96,19 +96,22 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       key: 'adSelection',
     },
   ]);
-
-  const [dspFilters, setDSPFilters] = useState({
-    daily: true,
-    weekly: false,
-    month: false,
-  });
-
-  const [selectedTabMatrics, setSelectedTabMetrics] = useState(
-    'dspImpressions',
+  const [selectedManager, setSelectedManager] = useState(
+    isAdManagerAdmin || isBGSAdmin
+      ? {
+          value: 'all',
+          label: isBGSAdmin ? 'All BGS Manager' : 'All Ad Manager',
+        }
+      : { value: userInfo.id },
   );
-
-  const [pageNumber, setPageNumber] = useState();
-  const [contributionCount, setContributionCount] = useState(null);
+  const [selectedBgs, setSelectedBgs] = useState(
+    isBGSManager || isBGSAdmin
+      ? {
+          value: 'all',
+          label: 'All',
+        }
+      : { value: userInfo.id },
+  );
 
   const {
     dspChartData,
@@ -117,30 +120,35 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     dspDifference,
   } = useBindDSPResponseData(tempDspChartData);
 
-  const keyContributionValue = useCallback(
-    (adManager, keyContribution) => {
-      if (adManager === 'all' && !isBGSManager) {
-        if (keyContribution) {
-          return 'positive';
+  const getManagerList = useCallback(() => {
+    getManagersList(isBGSAdmin ? 'BGS' : 'dsp_ad_performance').then(
+      (managersData) => {
+        if (managersData && managersData.data && managersData.data.length) {
+          const list = [{ value: 'all', label: 'All' }];
+          for (const brand of managersData.data) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+            });
+            setManagersList(list);
+          }
         }
+      },
+    );
+  }, [isBGSAdmin]);
 
-        return 'negative';
-      }
-      if (keyContribution) {
-        return 'contribution';
-      }
-      return 'keyMetrics';
-    },
-    [isBGSManager],
-  );
+  const getBGSList = useCallback((id) => {
+    getBgsUserList(id).then((bgsData) => {
+      if (bgsData && bgsData.data && bgsData.data.length) {
+        const results = bgsData.data;
+        const list = [{ value: 'all', label: 'All' }];
 
-  const getAdManagersList = useCallback(() => {
-    getManagersList(isBGSManager ? 'BGS' : 'dsp_ad_performance').then((adm) => {
-      if (adm && adm.data && adm.data.length) {
-        const list = [
-          { value: 'all', label: isBGSManager ? 'All BGS' : 'All Ad Managers' },
-        ];
-        for (const brand of adm.data) {
+        for (const brand of results) {
           list.push({
             value: brand.id,
             label: `${brand.first_name} ${brand.last_name}`,
@@ -150,24 +158,19 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
           });
-          setDSPManagerList(list);
         }
+        setBgsList(list);
       }
     });
-  }, [isBGSManager]);
-
-  const getDays = (startDate, endDate) => {
-    const diffTime = Math.abs(startDate - endDate);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
-  };
+  }, []);
 
   const getDSPData = useCallback(
     (
       selectedDailyFact,
       selectedGroupBy,
       marketplace,
-      selectedAdManagerUser,
+      selectedManagerUser,
+      selectedBgsUser,
       startDate = null,
       endDate = null,
     ) => {
@@ -178,10 +181,12 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedDailyFact,
         selectedGroupBy,
         marketplace,
-        selectedAdManagerUser,
+        selectedManagerUser,
+        selectedBgsUser,
+        isBGSManager,
+        isBGSAdmin,
         startDate,
         endDate,
-        userInfo,
       ).then((res) => {
         if (res && res.status === 400) {
           setDspGraphLoader(false);
@@ -196,14 +201,15 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         }
       });
     },
-    [userInfo],
+    [isBGSManager, isBGSAdmin],
   );
 
   const getContributionData = useCallback(
     (
       selectedDailyFact,
       marketplace,
-      selectedAdManagerUser,
+      selectedManagerUser,
+      selectedBgsUser,
       contributionType,
       selectedMatrics,
       startDate = null,
@@ -216,12 +222,14 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         null,
         selectedDailyFact,
         marketplace,
-        selectedAdManagerUser,
+        selectedManagerUser,
+        selectedBgsUser,
+        isBGSManager,
+        isBGSAdmin,
         contributionType,
         selectedMatrics,
         startDate,
         endDate,
-        userInfo,
         page,
       ).then((res) => {
         if (res && res.status === 500) {
@@ -246,16 +254,19 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         }
       });
     },
-    [userInfo],
+    [isBGSManager, isBGSAdmin],
   );
 
   const getDSPPacingData = useCallback(
-    (marketplace, selectedAdManagerUser, spendingOption) => {
+    (marketplace, selectedManagerUser, selectedBgsUser, spendingOption) => {
       setDspPacingLoader(true);
       getDspPacingDahboardData(
         marketplace,
-        selectedAdManagerUser,
+        selectedManagerUser,
+        selectedBgsUser,
         spendingOption,
+        isBGSManager,
+        isBGSAdmin,
       ).then((res) => {
         if (res && res.status === 400) {
           setDspPacingLoader(false);
@@ -272,7 +283,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         setDspPacingLoader(false);
       });
     },
-    [],
+    [isBGSManager, isBGSAdmin],
   );
 
   useEffect(() => {
@@ -287,13 +298,22 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      getAdManagersList();
-      getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace.value);
+      if (isAdManagerAdmin || isBGSAdmin) getManagerList();
+      if (isBGSAdmin || isBGSManager)
+        getBGSList(isBGSManager ? userInfo.id : null);
+      getDSPData(
+        selectedAdDF.value,
+        dspGroupBy,
+        selectedMarketplace.value,
+        selectedManager.value,
+        selectedBgs.value,
+      );
       getContributionData(
         selectedAdDF.value,
         'all',
-        selectedAdManager.value,
-        keyContributionValue(selectedAdManager.value, selectedKeyContribution),
+        selectedManager.value,
+        selectedBgs.value,
+        selectedContributionOption,
         selectedTabMatrics,
         null,
         null,
@@ -301,7 +321,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       );
       getDSPPacingData(
         selectedMarketplace.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedSpendingOption,
       );
       setCurrency('USD');
@@ -311,28 +332,39 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   }, [
     marketplaceChoices,
     currency,
-    getAdManagersList,
+    isAdManagerAdmin,
+    isBGSAdmin,
+    isBGSManager,
     responseId,
-    getDSPData,
+    userInfo,
     selectedAdDF,
     dspGroupBy,
     selectedMarketplace,
-    getContributionData,
-    selectedAdManager,
-    selectedTabMatrics,
-    keyContributionValue,
-    selectedKeyContribution,
-    getDSPPacingData,
     selectedSpendingOption,
     pageNumber,
+    selectedManager,
+    selectedTabMatrics,
+    selectedContributionOption,
+    selectedBgs,
+    getBGSList,
+    getDSPPacingData,
+    getManagerList,
+    getDSPData,
+    getContributionData,
   ]);
 
+  const getDays = (startDate, endDate) => {
+    const diffTime = Math.abs(startDate - endDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
+  };
   const DSPYearAndCustomDateFilter = (
     startDate,
     endDate,
     value,
     marketplace = selectedMarketplace.value,
-    adManagerUser,
+    managerUser,
+    bgsUser,
   ) => {
     let temp = '';
     let sd = startDate;
@@ -360,16 +392,14 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
 
-      getDSPData(value, temp, marketplace, adManagerUser, sd, ed);
-      if (!selectedKeyContribution) {
+      getDSPData(value, temp, marketplace, managerUser, bgsUser, sd, ed);
+      if (selectedContributionOption === 'keyMetrics') {
         getContributionData(
           value,
           marketplace,
-          selectedAdManager.value,
-          keyContributionValue(
-            selectedAdManager.value,
-            selectedKeyContribution,
-          ),
+          managerUser,
+          bgsUser,
+          selectedContributionOption,
           selectedTabMatrics,
           sd,
           ed,
@@ -389,20 +419,22 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         adState[0].endDate,
         'custom',
         event.value,
-        selectedAdManager.value,
+        selectedManager.value,
       );
     } else {
       getDSPData(
         selectedAdDF.value,
         dspGroupBy,
         event.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
       );
       getContributionData(
         selectedAdDF.value,
         event.value,
-        selectedAdManager.value,
-        keyContributionValue(selectedAdManager.value, selectedKeyContribution),
+        selectedManager.value,
+        selectedBgs.value,
+        selectedContributionOption,
         selectedTabMatrics,
         null,
         null,
@@ -410,16 +442,25 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       );
       getDSPPacingData(
         event.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedSpendingOption,
       );
     }
   };
 
-  const handleAdManagerFilter = (event) => {
+  const handleManagerFilter = (event) => {
     const { value } = event;
-    setSelectedAdManager(event);
-    setSelectedKeyContribution(true);
+    let tabOption = '';
+    setSelectedManager(event);
+
+    if (!isBGSManager && value === 'all') {
+      setSelectedContributionOption('positive');
+      tabOption = 'positive';
+    } else {
+      setSelectedContributionOption('contribution');
+      tabOption = 'contribution';
+    }
     if (selectedAdDF.value === 'custom') {
       DSPYearAndCustomDateFilter(
         adState[0].startDate,
@@ -427,6 +468,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         'custom',
         selectedMarketplace.value,
         value,
+        selectedBgs.value,
       );
     } else {
       getDSPData(
@@ -434,12 +476,14 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         dspGroupBy,
         selectedMarketplace.value,
         value,
+        selectedBgs.value,
       );
       getContributionData(
         selectedAdDF.value,
         selectedMarketplace.value,
         value,
-        keyContributionValue(value, true),
+        selectedBgs.value,
+        tabOption,
         selectedTabMatrics,
         null,
         null,
@@ -448,8 +492,53 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       getDSPPacingData(
         selectedMarketplace.value,
         value,
+        selectedBgs.value,
         selectedSpendingOption,
       );
+    }
+  };
+
+  const handleBGSList = (event) => {
+    const { value } = event;
+
+    if (event.value !== selectedBgs.value) {
+      setSelectedBgs(event);
+
+      if (selectedAdDF.value === 'custom') {
+        DSPYearAndCustomDateFilter(
+          adState[0].startDate,
+          adState[0].endDate,
+          'custom',
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+        );
+      } else {
+        getDSPData(
+          selectedAdDF.value,
+          dspGroupBy,
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+        );
+        getContributionData(
+          selectedAdDF.value,
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+          selectedContributionOption,
+          selectedTabMatrics,
+          null,
+          null,
+          pageNumber,
+        );
+        getDSPPacingData(
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+          selectedSpendingOption,
+        );
+      }
     }
   };
 
@@ -462,16 +551,15 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
-          keyContributionValue(
-            selectedAdManager.value,
-            selectedKeyContribution,
-          ),
+          selectedManager.value,
+          selectedBgs.value,
+          selectedContributionOption,
           selectedTabMatrics,
           null,
           null,
@@ -486,16 +574,15 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
-          keyContributionValue(
-            selectedAdManager.value,
-            selectedKeyContribution,
-          ),
+          selectedManager.value,
+          selectedBgs.value,
+          selectedContributionOption,
           selectedTabMatrics,
           null,
           null,
@@ -510,16 +597,15 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
-          keyContributionValue(
-            selectedAdManager.value,
-            selectedKeyContribution,
-          ),
+          selectedManager.value,
+          selectedBgs.value,
+          selectedContributionOption,
           selectedTabMatrics,
           null,
           null,
@@ -553,6 +639,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   };
 
   const handleResetFilter = () => {
+    let contributionTab = 'contribution';
+    let user = 'all';
     setSelectedMarketplace({
       value: 'all',
       label: 'All Marketplaces',
@@ -562,26 +650,27 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     setCurrency('USD');
     setCurrencySymbol(getSymbolFromCurrency('USD'));
 
-    if (isAdManagerAdmin) {
-      if (isBGSManager) {
-        setSelectedAdManager({
-          value: 'all',
-          label: 'All BGS',
-        });
-      } else {
-        setSelectedAdManager({
-          value: 'all',
-          label: 'All Ad Manager',
-        });
-      }
+    if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
+      user = 'all';
+      setSelectedManager({
+        value: 'all',
+        label: isBGSManager ? 'All' : 'All',
+      });
+      setSelectedBgs({
+        value: 'all',
+        label: 'All',
+      });
+      contributionTab = isBGSManager ? 'contribution' : 'positive';
     } else {
-      setSelectedAdManager({
+      user = userInfo.id;
+      setSelectedManager({
         value: userInfo.id,
-        label: '',
+      });
+      setSelectedBgs({
+        value: userInfo.id,
       });
     }
-
-    setSelectedKeyContribution(isAdManagerAdmin);
+    setSelectedContributionOption(contributionTab);
 
     if (selectedAdDF.value === 'custom') {
       DSPYearAndCustomDateFilter(
@@ -592,17 +681,19 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         'all',
       );
     } else {
-      getDSPData(selectedAdDF.value, dspGroupBy, 'all', 'all');
+      getDSPData(selectedAdDF.value, dspGroupBy, 'all', user, user);
       getContributionData(
         selectedAdDF.value,
         'all',
-        'all',
-        keyContributionValue(isAdManagerAdmin ? 'all' : '', true),
+        user,
+        user,
+        selectedContributionOption,
         selectedTabMatrics,
         null,
         null,
         pageNumber,
       );
+      getDSPPacingData('all', user, user, selectedSpendingOption);
     }
   };
 
@@ -694,7 +785,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedAdDF.value,
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
           sd,
           ed,
         );
@@ -703,7 +795,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedAdDF.value,
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
       }
     }
@@ -735,8 +828,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   };
 
   const handleContribution = (value) => {
-    if (value !== selectedKeyContribution) {
-      setSelectedKeyContribution(value);
+    if (value !== selectedContributionOption) {
+      setSelectedContributionOption(value);
       if (selectedAdDF.value === 'custom' && value) {
         return;
       }
@@ -744,8 +837,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       getContributionData(
         selectedAdDF.value,
         selectedMarketplace.value,
-        selectedAdManager.value,
-        keyContributionValue(selectedAdManager.value, value),
+        selectedManager.value,
+        value,
         selectedTabMatrics,
         null,
         null,
@@ -760,8 +853,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       getContributionData(
         selectedAdDF.value,
         selectedMarketplace.value,
-        selectedAdManager.value,
-        keyContributionValue(selectedAdManager.value, selectedKeyContribution),
+        selectedManager.value,
+        selectedContributionOption,
         value,
         null,
         null,
@@ -775,8 +868,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     getContributionData(
       selectedAdDF.value,
       selectedMarketplace.value,
-      selectedAdManager.value,
-      keyContributionValue(selectedAdManager.value, selectedKeyContribution),
+      selectedManager.value,
+      selectedContributionOption,
       selectedTabMatrics,
       null,
       null,
@@ -789,7 +882,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       setSelectedSpendingOption(type);
       getDSPPacingData(
         selectedMarketplace.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
         type,
       );
     }
@@ -826,20 +920,20 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         <DSPFilter
           options={marketplaceOptions}
           handleMarketplaceOptions={handleMarketplaceOptions}
-          adManagerList={dspManagerList}
+          managerList={managerList}
           getAdManagerComponents={getAdManagerComponents}
-          handleAdManagerFilter={handleAdManagerFilter}
+          handleManagerFilter={handleManagerFilter}
           isApiCall={dspGraphLoader}
           handleResetFilter={handleResetFilter}
           selectInputRef={selectInputRef}
-          selectedAdManager={selectedAdManager}
+          selectedManager={selectedManager}
+          selectedBgs={selectedBgs}
+          bgsList={bgsList}
+          handleBGSList={handleBGSList}
           selectedMarketplace={selectedMarketplace}
           isAdManagerAdmin={isAdManagerAdmin}
           isBGSManager={isBGSManager}
-          handlePageChange={handlePageChange}
-          contributionCount={contributionCount}
-          pageNumber={pageNumber}
-          count={contributionCount}
+          isBGSAdmin={isBGSAdmin}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -976,31 +1070,31 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         </WhiteCard>
 
         <DSPKeyContributors
-          selectedKeyContribution={selectedKeyContribution}
-          selectedAdManager={selectedAdManager.value}
-          handleContribution={handleContribution}
+          selectedContributionOption={selectedContributionOption}
+          selectedManager={selectedManager.value}
           selectedDSPMatrics={selectedDspMetrics}
           selectedTabMatrics={selectedTabMatrics}
-          handleOnMatricsTabChange={handleOnMatricsTabChange}
           loader={keyContributionLoader}
           data={contributionData}
           currencySymbol={currencySymbol}
           isDesktop={isDesktop}
           selectedAdDF={selectedAdDF}
           isBGSManager={isBGSManager}
-          handlePageChange={handlePageChange}
           contributionCount={contributionCount}
           pageNumber={pageNumber}
           count={contributionCount}
+          handleContribution={handleContribution}
+          handlePageChange={handlePageChange}
+          handleOnMatricsTabChange={handleOnMatricsTabChange}
         />
         <DSPPacing
           currencySymbol={currencySymbol}
           loader={dspPacingLoader}
           dspSpendData={dspPacingData && dspPacingData.dsp_pacing_all[0]}
           data={dspPacingData}
-          handleSpendingOptions={handleSpendingOptions}
           selectedOption={selectedSpendingOption}
           month={month}
+          handleSpendingOptions={handleSpendingOptions}
         />
       </div>
     </div>

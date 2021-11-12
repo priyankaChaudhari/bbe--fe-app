@@ -1,5 +1,4 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import _ from 'lodash';
 import styled from 'styled-components';
@@ -22,6 +21,7 @@ import {
   noGraphDataMessage,
   keyContributionHeaders,
   metricsCurrency,
+  keyContributionConstant,
 } from '../../../../constants';
 
 import {
@@ -35,8 +35,8 @@ import {
 } from '../../../../common';
 
 const DSPKeyContributors = ({
-  selectedKeyContribution,
-  selectedAdManager,
+  selectedContributionOption,
+  selectedManager,
   handleContribution,
   selectedDSPMatrics,
   handleOnMatricsTabChange,
@@ -52,30 +52,6 @@ const DSPKeyContributors = ({
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
-  const [keyContribution, setKeyContribution] = useState({
-    id: 'positive',
-    label: 'Positive',
-    id2: 'negative',
-    label2: 'Negative',
-  });
-
-  useEffect(() => {
-    if (selectedAdManager !== 'all' || isBGSManager) {
-      setKeyContribution({
-        id: 'contribution',
-        label: 'Contribution',
-        id2: 'keyMetrics',
-        label2: 'Key Metrics',
-      });
-    } else {
-      setKeyContribution({
-        id: 'positive',
-        label: 'Positive',
-        id2: 'negative',
-        label2: 'Negative',
-      });
-    }
-  }, [isBGSManager, loader, selectedAdManager, selectedKeyContribution]);
 
   const returnMetricsValue = (value) => {
     let decimalDigits = 2;
@@ -204,8 +180,7 @@ const DSPKeyContributors = ({
   };
 
   const renderTableHeader = () => {
-    return selectedKeyContribution === false &&
-      (selectedAdManager !== 'all' || isBGSManager) ? (
+    return selectedContributionOption === 'keyMetrics' ? (
       <tr>
         <th width="38%" className="product-header">
           CUSTOMER
@@ -249,8 +224,7 @@ const DSPKeyContributors = ({
   };
 
   const renderTableData = (itemData) => {
-    return selectedKeyContribution === false &&
-      (selectedAdManager !== 'all' || isBGSManager) ? (
+    return selectedContributionOption === 'keyMetrics' ? (
       <tr
         key={itemData.id}
         className="cursor"
@@ -434,10 +408,7 @@ const DSPKeyContributors = ({
   };
 
   const renderTabletKeyContributions = () => {
-    if (
-      selectedKeyContribution === false &&
-      (selectedAdManager !== 'all' || isBGSManager)
-    ) {
+    if (selectedContributionOption === 'keyMetrics') {
       return (
         <TabletViewManager className="d-lg-none d-md-block d-sm-block">
           <div className="container-fluid">
@@ -683,6 +654,40 @@ const DSPKeyContributors = ({
     );
   };
 
+  const renderKeyContributionOptions = () => {
+    const keyTabOptions =
+      selectedManager === 'all' && !isBGSManager
+        ? keyContributionConstant.noManagerSelected
+        : keyContributionConstant.managerSelected;
+
+    return (
+      <div className="col-md-6 col-sm1-12  mb-3">
+        <ToggleButton>
+          <div className="days-container">
+            <ul className={loader ? 'days-tab disabled' : 'days-tab'}>
+              {keyTabOptions.map((item) => (
+                <li key={item.id}>
+                  {' '}
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id={item.id}
+                    name="flexRadioDefault3"
+                    value={selectedContributionOption}
+                    checked={item.id === selectedContributionOption}
+                    onClick={() => handleContribution(item.id)}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor={item.id}>{item.label}</label>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </ToggleButton>
+      </div>
+    );
+  };
+
   const renderKeyContributionTabs = () => {
     let selectedTab = selectedTabMatrics;
     if (selectedDSPMatrics[selectedTabMatrics] === undefined) {
@@ -714,12 +719,12 @@ const DSPKeyContributors = ({
         <div className="row">
           <div className="col-md-6 col-sm1-12">
             <p className="black-heading-title mt-2 mb-4">
-              {selectedKeyContribution
-                ? keyContributionHeaders[keyContribution.id]
-                : keyContributionHeaders[keyContribution.id2]}
+              {keyContributionHeaders[selectedContributionOption]}
             </p>
           </div>
-          <div className="col-md-6 col-sm1-12  mb-3">
+
+          {renderKeyContributionOptions()}
+          {/* <div className="col-md-6 col-sm1-12  mb-3">
             <ToggleButton>
               <div className="days-container ">
                 <ul className={loader ? 'days-tab disabled' : 'days-tab'}>
@@ -762,18 +767,18 @@ const DSPKeyContributors = ({
                 </ul>
               </div>
             </ToggleButton>
-          </div>
+          </div> */}
         </div>
-        {selectedAdDF.value === 'custom' && selectedKeyContribution ? (
+        {selectedAdDF.value === 'custom' &&
+        selectedContributionOption !== 'keyMetrics' ? (
           <NoData>
             Top contributors cannot be calculated when using custom dates.
           </NoData>
         ) : (
           <>
-            {selectedKeyContribution === false &&
-            keyContribution.id2 === 'keyMetrics'
-              ? null
-              : renderKeyContributionTabs()}
+            {selectedContributionOption !== 'keyMetrics'
+              ? renderKeyContributionTabs()
+              : null}
             {loader ? (
               <PageLoader
                 component="performance-graph"
@@ -787,8 +792,7 @@ const DSPKeyContributors = ({
             ) : (
               renderTabletKeyContributions()
             )}
-            {selectedKeyContribution === false &&
-            (selectedAdManager !== 'all' || isBGSManager) &&
+            {selectedContributionOption === 'keyMetrics' &&
             data &&
             data.length >= 1 ? (
               <div className="mt-0">
@@ -809,8 +813,8 @@ const DSPKeyContributors = ({
 export default DSPKeyContributors;
 
 DSPKeyContributors.defaultProps = {
-  selectedKeyContribution: true,
-  selectedAdManager: 'all',
+  selectedContributionOption: true,
+  selectedManager: 'all',
   handleContribution: () => {},
   selectedDSPMatrics: {
     dspImpressions: true,
@@ -827,8 +831,8 @@ DSPKeyContributors.defaultProps = {
 };
 
 DSPKeyContributors.propTypes = {
-  selectedKeyContribution: bool,
-  selectedAdManager: string,
+  selectedContributionOption: bool,
+  selectedManager: string,
   handleContribution: func,
   selectedDSPMatrics: objectOf(Object),
   handleOnMatricsTabChange: func,

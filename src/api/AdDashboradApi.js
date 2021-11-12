@@ -16,19 +16,16 @@ export async function getAdManagerAdminGraphData(
   dailyFacts,
   groupBy,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
+  isBGSManager,
+  isBGSAdmin,
   startDate,
   endDate,
-  userInfo,
 ) {
-  let selectedUser = '';
-  if (
-    (userInfo && userInfo.role === 'Ad Manager Admin') ||
-    userInfo.role === 'BGS Manager'
-  ) {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
+  let selectedUser = managerUser;
+  if (isBGSManager || isBGSAdmin) {
+    selectedUser = bgsUser;
   }
 
   let params = {
@@ -37,6 +34,13 @@ export async function getAdManagerAdminGraphData(
     marketplace,
     user: selectedUser,
   };
+
+  if (isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -69,23 +73,21 @@ export async function getKeyContributionData(
   adType,
   dailyFacts,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
+  isBGSManager,
+  isBGSAdmin,
   contributionType,
   selectedMetric,
   startDate,
   endDate,
-  userInfo,
   pageNumber,
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
-  let selectedUser = '';
-  if (
-    (userInfo && userInfo.role === 'Ad Manager Admin') ||
-    userInfo.role === 'BGS Manager'
-  ) {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
+
+  let selectedUser = managerUser;
+  if (isBGSManager || isBGSAdmin) {
+    selectedUser = bgsUser;
   }
 
   let params = {
@@ -94,6 +96,13 @@ export async function getKeyContributionData(
     marketplace,
     user: selectedUser,
   };
+
+  if (isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -104,7 +113,7 @@ export async function getKeyContributionData(
   }
 
   if (contributionType === 'keyMetrics') {
-    if (user === 'all') {
+    if (selectedUser === 'all') {
       delete params.user;
     }
     if (marketplace === 'all') {
@@ -166,15 +175,31 @@ export async function getKeyContributionData(
 
 export async function getDspPacingDahboardData(
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
   spendingType,
+  isBGSManager = false,
+  isBGSAdmin = false,
 ) {
-  const params = {
+  let selectedUser = managerUser;
+
+  if (isBGSManager || isBGSAdmin) {
+    selectedUser = bgsUser;
+  }
+
+  let params = {
     daily_facts: 'month',
     marketplace,
-    user,
+    user: selectedUser,
     order_by: spendingType,
   };
+
+  if (isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+    };
+  }
 
   let result = {};
   result = await axiosInstance
@@ -214,9 +239,7 @@ export async function getSalesGraphData(
   if (isBGSAdmin) {
     params = {
       ...params,
-      managerUser,
-      start_date: startDate,
-      end_date: endDate,
+      bgs_manager: managerUser,
     };
   }
 
@@ -269,9 +292,7 @@ export async function getSalesKeyContributionData(
   if (isBGSAdmin) {
     params = {
       ...params,
-      managerUser,
-      start_date: startDate,
-      end_date: endDate,
+      bgs_manager: managerUser,
     };
   }
 

@@ -43,7 +43,7 @@ const SponsoredKeyContribution = ({
   isDesktop,
   contributionData,
   selectedContributionOption,
-  selectedAdManager,
+  selectedManager,
   handleContributionOptions,
   selectedAdMetrics,
   selectedTabMetrics,
@@ -165,9 +165,9 @@ const SponsoredKeyContribution = ({
 
   const renderKeyContributionOptions = () => {
     const keyTabOptions =
-      selectedAdManager === 'all' && !isBGSManager
-        ? keyContributionConstant.noAdManagerSelected
-        : keyContributionConstant.adManagerSelected;
+      selectedManager === 'all' && !isBGSManager
+        ? keyContributionConstant.noManagerSelected
+        : keyContributionConstant.managerSelected;
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
@@ -798,8 +798,8 @@ SponsoredKeyContribution.defaultProps = {
   keyContributionLoader: false,
   isDesktop: false,
   contributionData: {},
-  selectedContributionOption: {},
-  selectedAdManager: {},
+  selectedContributionOption: '',
+  selectedManager: {},
   handleContributionOptions: () => {},
   selectedAdMetrics: {},
   selectedTabMetrics: {},
@@ -817,7 +817,7 @@ SponsoredKeyContribution.propTypes = {
   isDesktop: bool,
   contributionData: arrayOf(Array),
   selectedContributionOption: string,
-  selectedAdManager: string,
+  selectedManager: string,
   handleContributionOptions: func,
   selectedAdMetrics: shape({}),
   selectedTabMetrics: string,

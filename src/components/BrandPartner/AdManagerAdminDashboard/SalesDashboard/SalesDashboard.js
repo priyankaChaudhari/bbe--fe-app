@@ -782,6 +782,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
   const handleResetFilter = () => {
     let contributionTab = 'contribution';
+    let user = 'all';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
     setCurrency('USD');
     setCurrencySymbol(getSymbolFromCurrency('USD'));
@@ -792,6 +793,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     });
 
     if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
+      user = 'all';
       setSelectedManager({
         value: 'all',
         label: 'All',
@@ -802,6 +804,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       });
       contributionTab = isBGSManager ? 'contribution' : 'positive';
     } else {
+      user = userInfo.id;
       setSelectedManager({
         value: userInfo.id,
       });
@@ -823,12 +826,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         'all',
       );
     } else {
-      getSalesData(selectedSalesDF.value, salesGroupBy, 'all', 'all', 'all');
+      getSalesData(selectedSalesDF.value, salesGroupBy, 'all', user, user);
       getContributionData(
         selectedSalesDF.value,
         'all',
-        'all',
-        'all',
+        user,
+        user,
         contributionTab,
         selectedTabMetrics,
         null,

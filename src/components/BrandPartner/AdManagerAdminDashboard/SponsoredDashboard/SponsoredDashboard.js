@@ -18,6 +18,7 @@ import AdPerformanceChart from '../../../Customer/CompanyPerformance/AdPerforman
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import {
   getManagersList,
+  getBgsUserList,
   getAdManagerAdminGraphData,
   getKeyContributionData,
 } from '../../../../api';
@@ -41,7 +42,8 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
-  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
+  const isBGSManager = userInfo?.role === 'BGS Manager';
+  const isBGSAdmin = userInfo?.role === 'BGS Admin';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -50,42 +52,33 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
   const [adDifference, setAdDifference] = useState([]);
   const [selectedAdMetrics, setSelectedAdMetrics] = useState({ adSales: true });
-  const [selectedAdDF, setSelectedAdDF] = useState({
-    value: 'week',
-    label: 'Recent 7 days',
-    sub: 'vs Previous 7 days',
-  });
-  const [selectedAdManager, setSelectedAdManager] = useState(
-    isAdManagerAdmin || isBGSManager
-      ? {
-          value: 'all',
-          label: isBGSManager ? 'All BGS' : 'All Ad Manager',
-        }
-      : { value: userInfo.id },
-  );
-  const [adManagerList, setAdManagerList] = useState([]);
+  const [managerList, setManagersList] = useState([]);
+  const [bgsList, setBgsList] = useState([]);
   const [selectedAdType, setSelectedAdType] = useState('all');
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
-  const [selectedMarketplace, setSelectedMarketplace] = useState({
-    value: 'all',
-    label: 'All Marketplaces',
-    currency: 'USD',
-  });
   const [isCustomDateApply, setIsCustomDateApply] = useState(false);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
   const [responseId, setResponseId] = useState(null);
   const [adGraphLoader, setAdGraphLoader] = useState(false);
   const [selectedTabMetrics, setSelectedTabMetrics] = useState('adSales');
-  const tab = isAdManagerAdmin ? 'positive' : 'contribution';
+  const [keyContributionLoader, setKeyContributionLoader] = useState(false);
+  const [contributionData, setContributionData] = useState([]);
+  const [adGroupBy, setAdGroupBy] = useState('daily');
+  const [pageNumber, setPageNumber] = useState();
+  const [contributionCount, setContributionCount] = useState(null);
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() - 2);
+  const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
+  const tab = isAdManagerAdmin || isBGSAdmin ? 'positive' : 'contribution';
   const [selectedContributionOption, setSelectedContributionOption] = useState(
     tab,
   );
-  const [keyContributionLoader, setKeyContributionLoader] = useState(false);
-  const [contributionData, setContributionData] = useState([]);
-
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 2);
+  const [selectedMarketplace, setSelectedMarketplace] = useState({
+    value: 'all',
+    label: 'All Marketplaces',
+    currency: 'USD',
+  });
   const [adState, setAdState] = useState([
     {
       startDate: currentDate,
@@ -93,27 +86,47 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       key: 'adSelection',
     },
   ]);
-  const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
+
   const [adFilters, setAdFilters] = useState({
     daily: true,
     weekly: false,
     month: false,
   });
-  const [adGroupBy, setAdGroupBy] = useState('daily');
-  const [pageNumber, setPageNumber] = useState();
-  const [contributionCount, setContributionCount] = useState(null);
 
-  const getAdManagersList = useCallback(() => {
-    getManagersList(isBGSManager ? 'BGS' : 'sponsored_ad_dashboard').then(
-      (adm) => {
-        if (adm && adm.data && adm.data.length) {
+  const [selectedAdDF, setSelectedAdDF] = useState({
+    value: 'week',
+    label: 'Recent 7 days',
+    sub: 'vs Previous 7 days',
+  });
+  const [selectedManager, setSelectedManager] = useState(
+    isAdManagerAdmin || isBGSAdmin
+      ? {
+          value: 'all',
+          label: isBGSAdmin ? 'All' : 'All',
+        }
+      : { value: userInfo.id },
+  );
+
+  const [selectedBgs, setSelectedBgs] = useState(
+    isBGSManager || isBGSAdmin
+      ? {
+          value: 'all',
+          label: 'All',
+        }
+      : { value: userInfo.id },
+  );
+
+  const getManagerList = useCallback(() => {
+    getManagersList(isBGSAdmin ? 'BGS' : 'sponsored_ad_dashboard').then(
+      (managersData) => {
+        if (managersData && managersData.data && managersData.data.length) {
           const list = [
             {
               value: 'all',
-              label: isBGSManager ? 'All BGS' : 'All Ad Managers',
+              label: 'All',
             },
           ];
-          for (const brand of adm.data) {
+          for (const brand of managersData.data) {
             list.push({
               value: brand.id,
               label: `${brand.first_name} ${brand.last_name}`,
@@ -124,11 +137,33 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
                 Object.values(brand.documents[0])[0],
             });
           }
-          setAdManagerList(list);
+          setManagersList(list);
         }
       },
     );
-  }, [isBGSManager]);
+  }, [isBGSAdmin]);
+
+  const getBGSList = useCallback((id) => {
+    getBgsUserList(id).then((bgsData) => {
+      if (bgsData && bgsData.data && bgsData.data.length) {
+        const results = bgsData.data;
+        const list = [{ value: 'all', label: 'All' }];
+
+        for (const brand of results) {
+          list.push({
+            value: brand.id,
+            label: `${brand.first_name} ${brand.last_name}`,
+            icon:
+              brand.documents &&
+              brand.documents[0] &&
+              Object.values(brand.documents[0]) &&
+              Object.values(brand.documents[0])[0],
+          });
+        }
+        setBgsList(list);
+      }
+    });
+  }, []);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
@@ -298,7 +333,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       selectedDailyFact,
       selectedGroupBy,
       marketplace,
-      selectedAdManagerUser,
+      selectedManagerUser,
+      selectedBgsUser,
       startDate = null,
       endDate = null,
     ) => {
@@ -309,10 +345,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedDailyFact,
         selectedGroupBy,
         marketplace,
-        selectedAdManagerUser,
+        selectedManagerUser,
+        selectedBgsUser,
+        isBGSManager,
+        isBGSAdmin,
         startDate,
         endDate,
-        userInfo,
       ).then((res) => {
         if (res && res.status === 400) {
           setAdGraphLoader(false);
@@ -331,7 +369,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         }
       });
     },
-    [userInfo],
+    [isBGSManager, isBGSAdmin],
   );
 
   const getContributionData = useCallback(
@@ -339,7 +377,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       adType,
       selectedDailyFact,
       marketplace,
-      selectedAdManagerUser,
+      selectedManagerUser,
+      selectedBgsUser,
       contributionType,
       selectedMetrics,
       startDate = null,
@@ -352,12 +391,14 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         adType,
         selectedDailyFact,
         marketplace,
-        selectedAdManagerUser,
+        selectedManagerUser,
+        selectedBgsUser,
+        isBGSManager,
+        isBGSAdmin,
         contributionType,
         selectedMetrics,
         startDate,
         endDate,
-        userInfo,
         page,
       ).then((res) => {
         if (res && res.status === 400) {
@@ -381,7 +422,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         }
       });
     },
-    [userInfo],
+    [isBGSManager, isBGSAdmin],
   );
 
   useEffect(() => {
@@ -396,12 +437,15 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      if (isAdManagerAdmin || isBGSManager) getAdManagersList();
+      if (isAdManagerAdmin || isBGSAdmin) getManagerList();
+      if (isBGSAdmin || isBGSManager)
+        getBGSList(isBGSManager ? userInfo.id : null);
       getContributionData(
         selectedAdType,
         selectedAdDF.value,
         'all',
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedContributionOption,
         selectedTabMetrics,
         null,
@@ -413,7 +457,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdDF.value,
         adGroupBy,
         'all',
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
       );
 
       setCurrency('USD');
@@ -427,15 +472,19 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     selectedAdType,
     selectedAdDF,
     adGroupBy,
-    selectedAdManager,
-    getAdManagersList,
-    getAdData,
+    selectedManager,
+    selectedBgs,
     selectedContributionOption,
     selectedTabMetrics,
-    getContributionData,
     pageNumber,
     isAdManagerAdmin,
     isBGSManager,
+    isBGSAdmin,
+    userInfo,
+    getContributionData,
+    getBGSList,
+    getManagerList,
+    getAdData,
   ]);
 
   const setGropuByFilter = (value) => {
@@ -448,13 +497,15 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           selectedAdType,
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -471,13 +522,15 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           selectedAdType,
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -495,13 +548,15 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           selectedAdType,
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -527,7 +582,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     dailyFactFlag,
     marketplace,
     adType,
-    adManagerUser,
+    managerUser,
+    bgsUser,
   ) => {
     let temp = '';
     let sd = startDate;
@@ -559,7 +615,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         dailyFactFlag,
         temp,
         marketplace,
-        adManagerUser,
+        managerUser,
+        bgsUser,
         sd,
         ed,
       );
@@ -568,7 +625,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdType,
           dailyFactFlag,
           marketplace,
-          selectedAdManager.value,
+          managerUser,
+          bgsUser,
           selectedContributionOption,
           selectedTabMetrics,
           sd,
@@ -582,8 +640,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const handleAdManagerFilter = (event) => {
     const { value } = event;
     let tabOption = '';
-    if (event.value !== selectedAdManager.value) {
-      setSelectedAdManager(event);
+    if (event.value !== selectedManager.value) {
+      setSelectedManager(event);
 
       if (!isBGSManager && value === 'all') {
         setSelectedContributionOption('positive');
@@ -600,7 +658,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedMarketplace.value,
           selectedAdType,
           value,
-          tabOption,
+          selectedBgs.value,
         );
       } else {
         getAdData(
@@ -609,13 +667,56 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           adGroupBy,
           selectedMarketplace.value,
           value,
+          selectedBgs.value,
         );
         getContributionData(
           selectedAdType,
           selectedAdDF.value,
           selectedMarketplace.value,
           value,
+          selectedBgs.value,
           tabOption,
+          selectedTabMetrics,
+          null,
+          null,
+          pageNumber,
+        );
+      }
+    }
+  };
+
+  const handleBGSList = (event) => {
+    const { value } = event;
+
+    if (event.value !== selectedBgs.value) {
+      setSelectedBgs(event);
+
+      if (selectedAdDF.value === 'custom') {
+        ADYearAndCustomDateFilter(
+          adState[0].startDate,
+          adState[0].endDate,
+          'custom',
+          selectedMarketplace.value,
+          selectedAdType,
+          selectedManager.value,
+          value,
+        );
+      } else {
+        getAdData(
+          selectedAdType,
+          selectedAdDF.value,
+          adGroupBy,
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+        );
+        getContributionData(
+          selectedAdType,
+          selectedAdDF.value,
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+          selectedContributionOption,
           selectedTabMetrics,
           null,
           null,
@@ -638,7 +739,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           'custom',
           event.value,
           selectedAdType,
-          selectedContributionOption,
+          selectedManager.value,
+          selectedBgs.value,
         );
       } else {
         getAdData(
@@ -646,13 +748,15 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdDF.value,
           adGroupBy,
           event.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           selectedAdType,
           selectedAdDF.value,
           event.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -695,7 +799,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         'custom',
         selectedMarketplace.value,
         value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
       );
     } else {
       getAdData(
@@ -703,13 +808,15 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdDF.value,
         adGroupBy,
         selectedMarketplace.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
       );
       getContributionData(
         value,
         selectedAdDF.value,
         selectedMarketplace.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedContributionOption,
         selectedTabMetrics,
         null,
@@ -740,7 +847,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdDF.value,
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
           sd,
           ed,
         );
@@ -750,7 +858,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdDF.value,
           value,
           selectedMarketplace.value,
-          selectedAdManager.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
       }
     }
@@ -758,6 +867,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
 
   const handleResetFilter = () => {
     let contributionTab = 'contribution';
+    let user = 'all';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
     setSelectedAdType('all');
     setCurrency('USD');
@@ -768,15 +878,23 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       currency: 'USD',
     });
 
-    if (isAdManagerAdmin || isBGSManager) {
-      setSelectedAdManager({
+    if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
+      user = 'all';
+      setSelectedManager({
         value: 'all',
-        label: isBGSManager ? 'All BGS' : 'All Ad Manager',
+        label: isBGSManager ? 'All' : 'All',
       });
-
+      setSelectedBgs({
+        value: 'all',
+        label: 'All',
+      });
       contributionTab = isBGSManager ? 'contribution' : 'positive';
     } else {
-      setSelectedAdManager({
+      user = userInfo.id;
+      setSelectedManager({
+        value: userInfo.id,
+      });
+      setSelectedBgs({
         value: userInfo.id,
       });
     }
@@ -790,14 +908,16 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         'all',
         'all',
         'all',
+        'all',
       );
     } else {
-      getAdData('all', selectedAdDF.value, adGroupBy, 'all', 'all');
+      getAdData('all', selectedAdDF.value, adGroupBy, 'all', user, user);
       getContributionData(
         'all',
         selectedAdDF.value,
         'all',
-        'all',
+        user,
+        user,
         contributionTab,
         selectedTabMetrics,
         null,
@@ -818,7 +938,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdType,
         selectedAdDF.value,
         selectedMarketplace.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
         type,
         selectedTabMetrics,
         null,
@@ -835,7 +956,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedAdType,
         selectedAdDF.value,
         selectedMarketplace.value,
-        selectedAdManager.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedContributionOption,
         value,
         null,
@@ -851,7 +973,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       selectedAdType,
       selectedAdDF.value,
       selectedMarketplace.value,
-      selectedAdManager.value,
+      selectedManager.value,
+      selectedBgs.value,
       selectedContributionOption,
       selectedTabMetrics,
       null,
@@ -877,7 +1000,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       'custom',
       selectedMarketplace.value,
       selectedAdType,
-      selectedAdManager.value,
+      selectedManager.value,
+      selectedBgs.value,
     );
 
     setShowAdCustomDateModal(false);
@@ -1057,22 +1181,26 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     <div className="row mt-3">
       <div className="col-lg-3 col-md-12">
         <SponsoredFilter
-          handleResetFilter={handleResetFilter}
-          DropdownIndicator={DropDownIndicator}
-          marketplaceOptions={marketplaceOptions}
-          handleMarketplace={handleMarketplace}
-          adManagerList={adManagerList}
-          getAdManagerComponents={getAdManagerComponents}
-          handleAdManagerFilter={handleAdManagerFilter}
-          SponsoredAdTypeOptions={SponsoredAdTypeOptions}
-          handleAdType={handleAdType}
-          selectedAdType={selectedAdType}
-          isApiCall={adGraphLoader}
-          selectedAdManager={selectedAdManager}
-          selectedMarketplace={selectedMarketplace}
-          selectInputRef={selectInputRef}
           isAdManagerAdmin={isAdManagerAdmin}
           isBGSManager={isBGSManager}
+          isBGSAdmin={isBGSAdmin}
+          isApiCall={adGraphLoader}
+          DropdownIndicator={DropDownIndicator}
+          marketplaceOptions={marketplaceOptions}
+          managerList={managerList}
+          selectedManager={selectedManager}
+          selectedBgs={selectedBgs}
+          bgsList={bgsList}
+          selectedMarketplace={selectedMarketplace}
+          selectInputRef={selectInputRef}
+          SponsoredAdTypeOptions={SponsoredAdTypeOptions}
+          selectedAdType={selectedAdType}
+          handleResetFilter={handleResetFilter}
+          handleMarketplace={handleMarketplace}
+          getAdManagerComponents={getAdManagerComponents}
+          handleAdManagerFilter={handleAdManagerFilter}
+          handleBGSList={handleBGSList}
+          handleAdType={handleAdType}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -1114,7 +1242,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           isDesktop={isDesktop}
           contributionData={contributionData}
           selectedContributionOption={selectedContributionOption}
-          selectedAdManager={selectedAdManager.value}
+          selectedManager={selectedManager.value}
           handleContributionOptions={handleContributionOptions}
           selectedAdMetrics={selectedAdMetrics}
           selectedTabMetrics={selectedTabMetrics}

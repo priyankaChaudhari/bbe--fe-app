@@ -126,8 +126,8 @@ const SalesKeyContribution = ({
   const renderKeyContributionOptions = () => {
     const keyTabOptions =
       selectedManager === 'all' && !isBGSManager
-        ? keyContributionConstant.noAdManagerSelected
-        : keyContributionConstant.adManagerSelected;
+        ? keyContributionConstant.noManagerSelected
+        : keyContributionConstant.managerSelected;
 
     // const keyTabOptions = keyContributionConstant.adManagerSelected;
 

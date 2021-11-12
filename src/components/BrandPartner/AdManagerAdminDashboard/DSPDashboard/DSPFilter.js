@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import { arrayOf, bool, func, shape } from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import {
@@ -15,41 +15,65 @@ import { CaretUp } from '../../../../theme/images';
 const DSPFilter = ({
   options,
   handleMarketplaceOptions,
-  adManagerList,
+  managerList,
   getAdManagerComponents,
-  handleAdManagerFilter,
+  handleManagerFilter,
   isApiCall,
   handleResetFilter,
   selectInputRef,
-  selectedAdManager,
+  selectedManager,
+  selectedBgs,
+  bgsList,
+  handleBGSList,
   selectedMarketplace,
   isAdManagerAdmin,
   isBGSManager,
+  isBGSAdmin,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [isCollapseOpen, setIsCollapseOpen] = useState(false);
 
+  const renderBGSDropdown = (className) => {
+    return (
+      <div className="col-12 ">
+        <div className="label mt-3">BGS</div>
+        {DropDown(
+          className,
+          bgsList,
+          bgsList && bgsList[0] && bgsList[0].label,
+          getAdManagerComponents,
+          bgsList && bgsList[0],
+          handleBGSList,
+          isApiCall,
+          null,
+          selectedBgs,
+        )}
+      </div>
+    );
+  };
+
   const renderFilters = () => {
     return (
       <>
-        {isAdManagerAdmin ? (
+        {isBGSAdmin || isAdManagerAdmin ? (
           <div className="col-lg-12 col-md-6">
             <div className="label mt-3">
               {isBGSManager ? 'BGS' : 'Ad Manager'}
             </div>
             {DropDown(
               'cursor',
-              adManagerList,
-              adManagerList && adManagerList[0] && adManagerList[0].label,
+              managerList,
+              managerList && managerList[0] && managerList[0].label,
               getAdManagerComponents,
-              adManagerList && adManagerList[0],
-              handleAdManagerFilter,
+              managerList && managerList[0],
+              handleManagerFilter,
               isApiCall,
               selectInputRef,
-              selectedAdManager,
+              selectedManager,
             )}
           </div>
         ) : null}
+        {isBGSManager || isBGSAdmin ? renderBGSDropdown('cursor') : null}
         <div className="col-lg-12 col-md-6">
           <div className="label mt-3">Marketplace</div>
           <DropDownSelect
@@ -131,29 +155,37 @@ export default DSPFilter;
 DSPFilter.defaultProps = {
   isAdManagerAdmin: false,
   isBGSManager: false,
+  isBGSAdmin: false,
   isApiCall: false,
   options: [],
-  adManagerList: [],
+  managerList: [],
   getAdManagerComponents: null,
   selectInputRef: {},
-  selectedAdManager: {},
+  selectedManager: {},
   selectedMarketplace: {},
+  selectedBgs: '',
+  bgsList: {},
+  handleBGSList: () => {},
   handleResetFilter: () => {},
-  handleAdManagerFilter: () => {},
+  handleManagerFilter: () => {},
   handleMarketplaceOptions: () => {},
 };
 
 DSPFilter.propTypes = {
   isApiCall: bool,
   isAdManagerAdmin: bool,
+  isBGSAdmin: false,
   isBGSManager: bool,
+  selectedBgs: string,
   selectInputRef: shape({}),
-  selectedAdManager: shape({}),
+  selectedManager: shape({}),
   selectedMarketplace: shape({}),
   options: arrayOf(Array),
-  adManagerList: arrayOf(Array),
+  managerList: arrayOf(Array),
+  bgsList: shape({}),
+  handleBGSList: func,
   handleMarketplaceOptions: func,
   getAdManagerComponents: func,
-  handleAdManagerFilter: func,
+  handleManagerFilter: func,
   handleResetFilter: func,
 };
