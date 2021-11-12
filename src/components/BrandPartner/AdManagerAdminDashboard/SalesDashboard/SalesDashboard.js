@@ -36,6 +36,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const isBGSManager = userInfo?.role === 'BGS Manager';
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSAdmin = userInfo?.role === 'BGS Admin';
+  const isBGS = userInfo?.role === 'BGS';
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [salesChartData, setSalesChartData] = useState([]);
@@ -52,7 +53,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     sub: 'vs Previous 7 days',
   });
   const [selectedManager, setSelectedManager] = useState(
-    isAdManagerAdmin || isBGSAdmin
+    isAdManagerAdmin || isBGSAdmin || isBGS
       ? {
           value: 'all',
           label: 'All',
@@ -291,6 +292,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedBgsUser,
         isBGSManager,
         isBGSAdmin,
+        isBGS,
         startDate,
         endDate,
       ).then((res) => {
@@ -321,7 +323,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         setSalesGraphLoader(false);
       });
     },
-    [isBGSManager, isBGSAdmin],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   const getContributionData = useCallback(
@@ -346,6 +348,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedMetrics,
         isBGSManager,
         isBGSAdmin,
+        isBGS,
         startDate,
         endDate,
         page,
@@ -368,7 +371,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         }
       });
     },
-    [isBGSManager, isBGSAdmin],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   useEffect(() => {
@@ -800,7 +803,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
   const handleResetFilter = () => {
     let contributionTab = 'contribution';
-    let user = 'all';
+    let userManger = 'all';
+    let userBgs = 'all';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
     setCurrency('USD');
     setCurrencySymbol(getSymbolFromCurrency('USD'));
@@ -813,8 +817,18 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getBGSList(null);
     }
 
-    if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
-      user = 'all';
+    if (isBGSManager) {
+      userBgs = 'all';
+      userManger = userInfo.id;
+      setSelectedBgs({
+        value: 'all',
+        label: 'All',
+      });
+      contributionTab = 'contribution';
+    }
+
+    if (isAdManagerAdmin || isBGSAdmin) {
+      userManger = 'all';
       setSelectedManager({
         value: 'all',
         label: 'All',
@@ -823,9 +837,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         value: 'all',
         label: 'All',
       });
-      contributionTab = isBGSManager ? 'contribution' : 'positive';
-    } else {
-      user = userInfo.id;
+      contributionTab = 'positive';
+    } else if (!isBGSManager) {
+      userManger = userInfo.id;
       setSelectedManager({
         value: userInfo.id,
       });
@@ -834,7 +848,6 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       });
     }
     setSelectedContributionOption(contributionTab);
-    // setSelectedContributionOption('contribution');
 
     if (selectedSalesDF.value === 'custom') {
       salesYearAndCustomDateFilter(
@@ -843,16 +856,22 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         'custom',
         'all',
         'all',
-        'all',
-        'all',
+        userManger,
+        userBgs,
       );
     } else {
-      getSalesData(selectedSalesDF.value, salesGroupBy, 'all', user, user);
+      getSalesData(
+        selectedSalesDF.value,
+        salesGroupBy,
+        'all',
+        userManger,
+        userBgs,
+      );
       getContributionData(
         selectedSalesDF.value,
         'all',
-        user,
-        user,
+        userManger,
+        userBgs,
         contributionTab,
         selectedTabMetrics,
         null,

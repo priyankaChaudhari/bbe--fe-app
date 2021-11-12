@@ -41,6 +41,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSManager = userInfo?.role === 'BGS Manager';
   const isBGSAdmin = userInfo?.role === 'BGS Admin';
+  const isBGS = userInfo?.role === 'BGS';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -97,7 +98,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     },
   ]);
   const [selectedManager, setSelectedManager] = useState(
-    isAdManagerAdmin || isBGSAdmin
+    isAdManagerAdmin || isBGSAdmin || isBGS
       ? {
           value: 'all',
           label: 'All',
@@ -187,6 +188,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedBgsUser,
         isBGSManager,
         isBGSAdmin,
+        isBGS,
         startDate,
         endDate,
       ).then((res) => {
@@ -203,7 +205,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         }
       });
     },
-    [isBGSManager, isBGSAdmin],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   const getContributionData = useCallback(
@@ -422,6 +424,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         'custom',
         event.value,
         selectedManager.value,
+        selectedBgs.value,
       );
     } else {
       getDSPData(
@@ -442,13 +445,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         null,
         pageNumber,
       );
-      getDSPPacingData(
-        event.value,
-        selectedManager.value,
-        selectedBgs.value,
-        selectedSpendingOption,
-      );
     }
+    getDSPPacingData(
+      event.value,
+      selectedManager.value,
+      selectedBgs.value,
+      selectedSpendingOption,
+    );
   };
 
   const handleManagerFilter = (event) => {
@@ -506,13 +509,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         null,
         pageNumber,
       );
-      getDSPPacingData(
-        selectedMarketplace.value,
-        value,
-        bgsUser,
-        selectedSpendingOption,
-      );
     }
+    getDSPPacingData(
+      selectedMarketplace.value,
+      value,
+      bgsUser,
+      selectedSpendingOption,
+    );
   };
 
   const handleBGSList = (event) => {
@@ -549,13 +552,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           null,
           pageNumber,
         );
-        getDSPPacingData(
-          selectedMarketplace.value,
-          selectedManager.value,
-          value,
-          selectedSpendingOption,
-        );
       }
+      getDSPPacingData(
+        selectedMarketplace.value,
+        selectedManager.value,
+        value,
+        selectedSpendingOption,
+      );
     }
   };
 
@@ -657,7 +660,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
 
   const handleResetFilter = () => {
     let contributionTab = 'contribution';
-    let user = 'all';
+    let userManger = 'all';
+    let userBgs = 'all';
     setSelectedMarketplace({
       value: 'all',
       label: 'All Marketplaces',
@@ -671,19 +675,29 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       getBGSList(null);
     }
 
-    if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
-      user = 'all';
+    if (isBGSManager) {
+      userBgs = 'all';
+      userManger = userInfo.id;
+      setSelectedBgs({
+        value: 'all',
+        label: 'All',
+      });
+      contributionTab = 'contribution';
+    }
+
+    if (isAdManagerAdmin || isBGSAdmin) {
+      userManger = 'all';
       setSelectedManager({
         value: 'all',
-        label: isBGSManager ? 'All' : 'All',
+        label: 'All',
       });
       setSelectedBgs({
         value: 'all',
         label: 'All',
       });
-      contributionTab = isBGSManager ? 'contribution' : 'positive';
-    } else {
-      user = userInfo.id;
+      contributionTab = 'positive';
+    } else if (!isBGSManager) {
+      userManger = userInfo.id;
       setSelectedManager({
         value: userInfo.id,
       });
@@ -699,23 +713,24 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         adState[0].endDate,
         'custom',
         'all',
-        'all',
+        userManger,
+        userBgs,
       );
     } else {
-      getDSPData(selectedAdDF.value, dspGroupBy, 'all', user, user);
+      getDSPData(selectedAdDF.value, dspGroupBy, 'all', userManger, userBgs);
       getContributionData(
         selectedAdDF.value,
         'all',
-        user,
-        user,
+        userManger,
+        userBgs,
         selectedContributionOption,
         selectedTabMatrics,
         null,
         null,
         pageNumber,
       );
-      getDSPPacingData('all', user, user, selectedSpendingOption);
     }
+    getDSPPacingData('all', userManger, userBgs, selectedSpendingOption);
   };
 
   const renderCustomDateSubLabel = (data) => {
@@ -781,6 +796,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       adState[0].startDate,
       adState[0].endDate,
       'custom',
+      selectedMarketplace.value,
+      selectedManager.value,
+      selectedBgs.value,
     );
 
     setShowAdCustomDateModal(false);

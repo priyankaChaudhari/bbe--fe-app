@@ -44,6 +44,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSManager = userInfo?.role === 'BGS Manager';
   const isBGSAdmin = userInfo?.role === 'BGS Admin';
+  const isBGS = userInfo?.role === 'BGS';
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -99,7 +100,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     sub: 'vs Previous 7 days',
   });
   const [selectedManager, setSelectedManager] = useState(
-    isAdManagerAdmin || isBGSAdmin
+    isAdManagerAdmin || isBGSAdmin || isBGS
       ? {
           value: 'all',
           label: isBGSAdmin ? 'All' : 'All',
@@ -351,6 +352,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedBgsUser,
         isBGSManager,
         isBGSAdmin,
+        isBGS,
         startDate,
         endDate,
       ).then((res) => {
@@ -371,7 +373,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         }
       });
     },
-    [isBGSManager, isBGSAdmin],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   const getContributionData = useCallback(
@@ -884,7 +886,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
 
   const handleResetFilter = () => {
     let contributionTab = 'contribution';
-    let user = 'all';
+    let userManger = 'all';
+    let userBgs = 'all';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
     setSelectedAdType('all');
     setCurrency('USD');
@@ -899,19 +902,29 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       getBGSList(null);
     }
 
-    if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
-      user = 'all';
+    if (isBGSManager) {
+      userBgs = 'all';
+      userManger = userInfo.id;
+      setSelectedBgs({
+        value: 'all',
+        label: 'All',
+      });
+      contributionTab = 'contribution';
+    }
+
+    if (isAdManagerAdmin || isBGSAdmin) {
+      userManger = 'all';
       setSelectedManager({
         value: 'all',
-        label: isBGSManager ? 'All' : 'All',
+        label: 'All',
       });
       setSelectedBgs({
         value: 'all',
         label: 'All',
       });
-      contributionTab = isBGSManager ? 'contribution' : 'positive';
-    } else {
-      user = userInfo.id;
+      contributionTab = 'positive';
+    } else if (!isBGSManager) {
+      userManger = userInfo.id;
       setSelectedManager({
         value: userInfo.id,
       });
@@ -928,17 +941,24 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         'custom',
         'all',
         'all',
-        'all',
-        'all',
+        userManger,
+        userBgs,
       );
     } else {
-      getAdData('all', selectedAdDF.value, adGroupBy, 'all', user, user);
+      getAdData(
+        'all',
+        selectedAdDF.value,
+        adGroupBy,
+        'all',
+        userManger,
+        userBgs,
+      );
       getContributionData(
         'all',
         selectedAdDF.value,
         'all',
-        user,
-        user,
+        userManger,
+        userBgs,
         contributionTab,
         selectedTabMetrics,
         null,

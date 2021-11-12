@@ -20,25 +20,31 @@ export async function getAdManagerAdminGraphData(
   bgsUser,
   isBGSManager,
   isBGSAdmin,
+  isBGS,
   startDate,
   endDate,
 ) {
-  let selectedUser = managerUser;
-  if (isBGSManager || isBGSAdmin) {
-    selectedUser = bgsUser;
-  }
-
   let params = {
     daily_facts: dailyFacts,
     group_by: groupBy,
     marketplace,
-    user: selectedUser,
   };
-
-  if (isBGSAdmin) {
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
     params = {
       ...params,
       bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
     };
   }
 
@@ -77,6 +83,7 @@ export async function getKeyContributionData(
   bgsUser,
   isBGSManager,
   isBGSAdmin,
+  isBGS,
   contributionType,
   selectedMetric,
   startDate,
@@ -85,23 +92,31 @@ export async function getKeyContributionData(
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
 
-  let selectedUser = managerUser;
-  if (isBGSManager || isBGSAdmin) {
-    selectedUser = bgsUser;
-  }
-
   let params = {
     dashboard: dashboardType,
     daily_facts: dailyFacts,
     marketplace,
-    user: selectedUser,
   };
 
-  if (isBGSAdmin) {
-    params = {
-      ...params,
-      bgs_manager: managerUser,
-    };
+  if (contributionType !== 'keyMetrics') {
+    if (isBGS) {
+      params = {
+        ...params,
+        bgs_manager: 'all',
+        user: bgsUser,
+      };
+    } else if (isBGSManager || isBGSAdmin) {
+      params = {
+        ...params,
+        bgs_manager: managerUser,
+        user: bgsUser,
+      };
+    } else {
+      params = {
+        ...params,
+        user: managerUser,
+      };
+    }
   }
 
   if (startDate && endDate) {
@@ -113,9 +128,6 @@ export async function getKeyContributionData(
   }
 
   if (contributionType === 'keyMetrics') {
-    if (selectedUser === 'all') {
-      delete params.user;
-    }
     if (marketplace === 'all') {
       delete params.marketplace;
     }
@@ -180,24 +192,29 @@ export async function getDspPacingDahboardData(
   spendingType,
   isBGSManager = false,
   isBGSAdmin = false,
+  isBGS = false,
 ) {
-  let selectedUser = managerUser;
-
-  if (isBGSManager || isBGSAdmin) {
-    selectedUser = bgsUser;
-  }
-
   let params = {
     daily_facts: 'month',
     marketplace,
-    user: selectedUser,
     order_by: spendingType,
   };
-
-  if (isBGSAdmin) {
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
     params = {
       ...params,
       bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
     };
   }
 
@@ -221,25 +238,32 @@ export async function getSalesGraphData(
   bgsUser,
   isBGSManager,
   isBGSAdmin,
+  isBGS,
   startDate,
   endDate,
 ) {
-  let selectedUser = managerUser;
-  if (isBGSManager || isBGSAdmin) {
-    selectedUser = bgsUser;
-  }
-
   let params = {
     daily_facts: dailyFacts,
     group_by: groupBy,
     marketplace,
-    user: selectedUser,
   };
 
-  if (isBGSAdmin) {
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
     params = {
       ...params,
       bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
     };
   }
 
@@ -271,29 +295,38 @@ export async function getSalesKeyContributionData(
   selectedMetric,
   isBGSManager,
   isBGSAdmin,
+  isBGS,
   startDate,
   endDate,
   pageNumber,
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
 
-  let selectedUser = managerUser;
-  if (isBGSManager || isBGSAdmin) {
-    selectedUser = bgsUser;
-  }
-
   let params = {
     daily_facts: dailyFacts,
     marketplace,
-    user: selectedUser,
     dashboard: 'sales_performance',
   };
 
-  if (isBGSAdmin) {
-    params = {
-      ...params,
-      bgs_manager: managerUser,
-    };
+  if (contributionType !== 'keyMetrics') {
+    if (isBGS) {
+      params = {
+        ...params,
+        bgs_manager: 'all',
+        user: bgsUser,
+      };
+    } else if (isBGSManager || isBGSAdmin) {
+      params = {
+        ...params,
+        bgs_manager: managerUser,
+        user: bgsUser,
+      };
+    } else {
+      params = {
+        ...params,
+        user: managerUser,
+      };
+    }
   }
 
   if (startDate && endDate) {
@@ -312,9 +345,6 @@ export async function getSalesKeyContributionData(
       dashboard: 'sale_performance',
       page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     };
-    if (selectedUser === 'all') {
-      delete params.user;
-    }
     if (marketplace === 'all') {
       delete params.marketplace;
     }
