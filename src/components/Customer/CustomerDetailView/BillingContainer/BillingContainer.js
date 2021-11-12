@@ -5,6 +5,7 @@ import { shape, string } from 'prop-types';
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
+import { financeTabsOptions } from '../../../../constants';
 
 const BillingContainer = ({
   id,
@@ -13,40 +14,42 @@ const BillingContainer = ({
   customerStatus,
   redirectType,
 }) => {
-  const [viewComponent, setViewComponent] = useState('rev share');
+  const [viewComponent, setViewComponent] = useState(redirectType);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    if (redirectType === 'dspInvoicing') {
-      setViewComponent('dsp service');
-    } else if (redirectType === 'upSell') {
-      setViewComponent('upsell');
-    } else {
-      setViewComponent('rev share');
+    if (redirectType) {
+      setViewComponent(redirectType);
     }
   }, [redirectType]);
+
+  const onLoading = (value) => {
+    setLoader(value);
+  };
 
   return (
     <div className="col-lg-6 col-12">
       <Tabs>
         <ul className="tabs">
-          <li
-            className={viewComponent === 'rev share' ? 'active' : ''}
-            onClick={() => setViewComponent('rev share')}
-            role="presentation">
-            Rev Share
-          </li>
-          <li
-            className={viewComponent === 'upsell' ? 'active' : ''}
-            onClick={() => setViewComponent('upsell')}
-            role="presentation">
-            Upsell
-          </li>
-          <li
-            className={viewComponent === 'dsp service' ? 'active' : ''}
-            onClick={() => setViewComponent('dsp service')}
-            role="presentation">
-            DSP
-          </li>
+          {financeTabsOptions.map((item) => {
+            return (
+              <li
+                className={
+                  viewComponent === item.key
+                    ? 'active'
+                    : loader
+                    ? 'disabled'
+                    : ''
+                }
+                onClick={() => {
+                  setViewComponent(item.key);
+                }}
+                role="presentation">
+                {item.value}
+              </li>
+            );
+          })}
+
           {customerStatus && customerStatus.value !== 'pending' ? (
             <li
               className={viewComponent === 'Billing' ? 'active' : ''}
@@ -59,8 +62,14 @@ const BillingContainer = ({
       </Tabs>
       {viewComponent === 'dsp service' ||
       viewComponent === 'rev share' ||
-      viewComponent === 'upsell' ? (
-        <Invoice invoiceType={viewComponent} id={id} userInfo={userInfo} />
+      viewComponent === 'upsell' ||
+      viewComponent === 'retainer' ? (
+        <Invoice
+          onLoading={onLoading}
+          invoiceType={viewComponent}
+          id={id}
+          userInfo={userInfo}
+        />
       ) : (
         <BillingDetails
           id={id}
@@ -77,7 +86,7 @@ export default BillingContainer;
 BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
-  redirectType: null,
+  redirectType: 'retainer',
 };
 
 BillingContainer.propTypes = {

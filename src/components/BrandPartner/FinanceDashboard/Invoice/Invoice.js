@@ -303,10 +303,12 @@ export default function Invoice({
       <div className="row mb-4">
         <div className="col-md-6 col-lg-6 col-5 mt-2 ">
           <div className="medium-text-title ">
-            {selectedNavigation === 'revShare'
+            {selectedNavigation === 'rev share'
               ? 'Rev Share Invoicing'
-              : selectedNavigation === 'upSell'
+              : selectedNavigation === 'upsell'
               ? 'Upsell Invoices'
+              : selectedNavigation === 'retainer'
+              ? 'Monthly Retainer Invoices'
               : 'DSP Invoices'}
           </div>{' '}
         </div>

@@ -127,9 +127,10 @@ export default function CustomerMainContainer() {
 
   useEffect(() => {
     if (
-      history.location.state === 'revShare' ||
-      history.location.state === 'dspInvoicing' ||
-      history.location.state === 'upSell'
+      history.location.state === 'rev share' ||
+      history.location.state === 'dsp service' ||
+      history.location.state === 'retainer' ||
+      history.location.state === 'upsell'
     ) {
       setViewComponent('billing');
     }

@@ -7,13 +7,14 @@ import { DashboardCard } from '../../../theme/Global';
 import { financeNavigationOptions } from '../../../constants';
 
 export default function FinanceDashboardContainer() {
-  const [viewComponent, setViewComponent] = useState('revShare');
+  const [viewComponent, setViewComponent] = useState('retainer');
 
   const renderComponent = () => {
     switch (viewComponent) {
-      case 'revShare':
-      case 'upSell':
-      case 'dspInvoicing':
+      case 'rev share':
+      case 'upsell':
+      case 'dsp service':
+      case 'retainer':
         return (
           <InvoiceContainer
             selectedNavigation={viewComponent}
