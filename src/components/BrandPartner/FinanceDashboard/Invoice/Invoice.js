@@ -287,7 +287,11 @@ export default function Invoice({
               className="fix-height"
               heading={item.label}
               title={renderTitle(dspData, item.key)}
-              titleColor={item.titleColor}
+              titleColor={
+                item.key === 'total_overdue' && !dspData[item.key]
+                  ? Theme.black
+                  : item.titleColor
+              }
               prefix={dspData[item.key] !== null ? item.prefix : ''}
               postfix={item.postfix}
               type="invoices"

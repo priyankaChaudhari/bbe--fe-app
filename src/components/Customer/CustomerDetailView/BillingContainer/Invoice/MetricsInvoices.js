@@ -46,7 +46,7 @@ const MetricsInvoices = ({ data }) => {
             'Amount Overdue',
             returnFromatNumber(data.amount_overdue, 'currency'),
             `${data.amount_overdue_cnt} overdue invoice`,
-            Theme.red,
+            !data.amount_overdue ? Theme.gray35 : Theme.red,
           )}
           {renderCard(
             'Average days past due',

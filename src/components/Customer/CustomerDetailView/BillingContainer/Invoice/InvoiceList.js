@@ -35,6 +35,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
                   ? 'Revenue Share Invoices'
                   : invoiceType === 'upsell'
                   ? 'Upsell Invoices'
+                  : invoiceType === 'retainer'
+                  ? 'Monthly Retainer Invoices'
                   : 'DSP Invoices'}
               </div>
             </div>
@@ -67,7 +69,17 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
             );
           })
         ) : (
-          <NoData>No DSPInvoices Found</NoData>
+          <NoData>
+            No{' '}
+            {invoiceType === 'rev share'
+              ? 'Revenue Share Invoices'
+              : invoiceType === 'upsell'
+              ? 'Upsell Invoices'
+              : invoiceType === 'retainer'
+              ? 'Monthly Retainer Invoices'
+              : 'DSP Invoices'}{' '}
+            Found
+          </NoData>
         )}
       </>
     );
@@ -137,6 +149,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               ? 'Revenue Share Invoices'
               : invoiceType === 'upsell'
               ? 'Upsell Invoices'
+              : invoiceType === 'retainer'
+              ? 'Monthly Retainer Invoices'
               : 'DSP Invoices'}
           </p>
           <div className="straight-line horizontal-line spacing " />
@@ -153,6 +167,8 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
                 ? 'Revenue Share Invoices'
                 : invoiceType === 'upsell'
                 ? 'Upsell Invoices'
+                : invoiceType === 'retainer'
+                ? 'Monthly Retainer Invoices'
                 : 'DSP Invoices'}{' '}
               Found
             </NoData>
