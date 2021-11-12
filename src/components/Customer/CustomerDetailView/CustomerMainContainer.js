@@ -58,17 +58,17 @@ export default function CustomerMainContainer() {
   const loader = useSelector((state) => state.customerState.isLoading);
   const customerLoader = useSelector((state) => state.customerState.isLoading);
   const customer = useSelector((state) => state.customerState.data);
-  // const customerSelectedTab = useSelector(
-  //   (state) => state.customerState.customerSelectedTab,
-  // );
+  const customerSelectedTab = useSelector(
+    (state) => state.customerState.customerSelectedTab,
+  );
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  // const [viewComponent, setViewComponent] = useState(
-  //   customerSelectedTab || 'performance',
-  // );
+  const [viewComponent, setViewComponent] = useState(
+    customerSelectedTab || 'performance',
+  );
 
-  const [viewComponent, setViewComponent] = useState('agreement');
+  // const [viewComponent, setViewComponent] = useState('agreement');
 
   const [subViewComponent, setSubViewComponent] = useState('seller');
   const [showMemberList, setShowMemberList] = useState({

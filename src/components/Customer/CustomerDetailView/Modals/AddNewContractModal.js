@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
@@ -32,10 +32,6 @@ const AddNewContractModal = ({
   contractLoader,
   setContractLoader,
 }) => {
-  useEffect(() => {
-    console.log('old', existingContracts);
-  });
-
   const handleConfirm = () => {
     setContractLoader(true);
     confirmContract();

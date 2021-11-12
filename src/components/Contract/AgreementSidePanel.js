@@ -1619,9 +1619,12 @@ export default function AgreementSidePanel({
   };
 
   const tileDisabled = (date, agreementStartDate) => {
-    return (
-      dayjs(date.date).get('date') !== dayjs(agreementStartDate).get('date')
-    );
+    if (formData?.draft_from) {
+      return (
+        dayjs(date.date).get('date') !== dayjs(agreementStartDate).get('date')
+      );
+    }
+    return false;
   };
 
   const generateHTML = (item) => {
