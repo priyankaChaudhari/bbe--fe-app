@@ -49,7 +49,7 @@ import {
 } from '../../../constants';
 import {
   createTransactionData,
-  // createContract,
+  createContract,
   deleteContract,
   getBGSManagers,
   savePauseAgreement,
@@ -85,6 +85,7 @@ export default function AgreementDetails({
   const [existingContracts, setExistingContracts] = useState([]);
   const [replaceExisting, setReplaceExisting] = useState('alongside');
   const [replacedContract, setReplacedContract] = useState('');
+  const [contractLoader, setContractLoader] = useState(false);
 
   const customStyles = {
     content: {
@@ -159,16 +160,19 @@ export default function AgreementDetails({
     // Check if the agreemnt is draft or not & send API params accordingly
 
     console.log('API data', params);
-    // createContract(params).then((res) => {
-    //   history.push({
-    //     pathname: PATH_AGREEMENT.replace(':id', id).replace(
-    //       ':contract_id',
-    //       res && res.data && res.data.id,
-    //     ),
-    //     state: history && history.location && history.location.pathname,
-    //     showEditView: true,
-    //   });
-    // });
+
+    createContract(params).then((res) => {
+      setContractLoader(false);
+      setIsLoading(false);
+      history.push({
+        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+          ':contract_id',
+          res && res.data && res.data.id,
+        ),
+        state: history && history.location && history.location.pathname,
+        showEditView: true,
+      });
+    });
   };
 
   const addBGSMangerEmail = () => {
@@ -835,10 +839,11 @@ export default function AgreementDetails({
       setShowAddContractModal(true);
       setReplacedContract(filteredContracts[0].id);
     } else {
+      setIsLoading(true);
       createNewContract({
         customer_id: id,
         contract_type: agreementType.value,
-        start_date: new Date(),
+        start_date: dayjs(new Date()).format('YYYY-MM-DD'),
       });
     }
   };
@@ -850,7 +855,7 @@ export default function AgreementDetails({
       createNewContract({
         customer_id: id,
         contract_type: typeOfNewAgreement.value,
-        start_date: new Date(),
+        start_date: dayjs(new Date()).format('YYYY-MM-DD'),
       });
     } else {
       createNewContract({
@@ -1064,6 +1069,8 @@ export default function AgreementDetails({
             replacedContract={replacedContract}
             setReplacedContract={setReplacedContract}
             confirmContract={confirmContract}
+            contractLoader={contractLoader}
+            setContractLoader={setContractLoader}
           />
         ) : null}
       </div>

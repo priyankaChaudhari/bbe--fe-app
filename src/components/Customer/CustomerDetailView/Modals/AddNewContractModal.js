@@ -11,7 +11,12 @@ import {
   RecurringIcon,
   DspOnlyIcon,
 } from '../../../../theme/images';
-import { ModalBox, Button, ModalRadioCheck } from '../../../../common';
+import {
+  ModalBox,
+  Button,
+  ModalRadioCheck,
+  PageLoader,
+} from '../../../../common';
 
 const AddNewContractModal = ({
   customStyles,
@@ -24,10 +29,17 @@ const AddNewContractModal = ({
   replacedContract,
   setReplacedContract,
   confirmContract,
+  contractLoader,
+  setContractLoader,
 }) => {
   useEffect(() => {
     console.log('old', existingContracts);
   });
+
+  const handleConfirm = () => {
+    setContractLoader(true);
+    confirmContract();
+  };
 
   const renderExistigContracts = () => {
     return existingContracts.map((contract) => (
@@ -155,8 +167,12 @@ const AddNewContractModal = ({
             </label>
           </ModalRadioCheck>
           {replaceExisting === 'replace' ? renderExistigContracts() : null}
-          <Button className="btn-primary w-100 mt-4" onClick={confirmContract}>
-            Confirm
+          <Button className="btn-primary w-100 mt-4" onClick={handleConfirm}>
+            {contractLoader ? (
+              <PageLoader color="#fff" type="button" />
+            ) : (
+              <>Confirm</>
+            )}
           </Button>
         </div>
       </ModalBox>
@@ -181,6 +197,8 @@ AddNewContractModal.propTypes = {
   replacedContract: string.isRequired,
   setReplacedContract: func.isRequired,
   confirmContract: func.isRequired,
+  contractLoader: bool.isRequired,
+  setContractLoader: func.isRequired,
 };
 
 const OrangeFieldSet = styled.div`
