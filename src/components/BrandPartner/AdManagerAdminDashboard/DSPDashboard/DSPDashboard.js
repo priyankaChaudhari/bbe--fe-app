@@ -229,6 +229,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedBgsUser,
         isBGSManager,
         isBGSAdmin,
+        isBGS,
         contributionType,
         selectedMatrics,
         startDate,
@@ -257,7 +258,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         }
       });
     },
-    [isBGSManager, isBGSAdmin],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   const getDSPPacingData = useCallback(
@@ -1117,7 +1118,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           currencySymbol={currencySymbol}
           isDesktop={isDesktop}
           selectedAdDF={selectedAdDF}
-          isBGSManager={isBGSManager}
+          isAdManagerAdmin={isAdManagerAdmin}
+          isBGSAdmin={isBGSAdmin}
           contributionCount={contributionCount}
           pageNumber={pageNumber}
           count={contributionCount}

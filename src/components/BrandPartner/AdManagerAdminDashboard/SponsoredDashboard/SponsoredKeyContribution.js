@@ -50,7 +50,9 @@ const SponsoredKeyContribution = ({
   handleOnMetricsTabChange,
   currencySymbol,
   selectedAdDF,
-  isBGSManager,
+
+  isAdManagerAdmin,
+  isBGSAdmin,
   handlePageChange,
   pageNumber,
   count,
@@ -165,7 +167,7 @@ const SponsoredKeyContribution = ({
 
   const renderKeyContributionOptions = () => {
     const keyTabOptions =
-      selectedManager === 'all' && !isBGSManager
+      (isAdManagerAdmin || isBGSAdmin) && selectedManager === 'all'
         ? keyContributionConstant.noManagerSelected
         : keyContributionConstant.managerSelected;
 
@@ -796,38 +798,40 @@ export default SponsoredKeyContribution;
 
 SponsoredKeyContribution.defaultProps = {
   keyContributionLoader: false,
+  isAdManagerAdmin: false,
+  isBGSAdmin: false,
   isDesktop: false,
   contributionData: {},
+  selectedManager: '',
   selectedContributionOption: '',
-  selectedManager: {},
-  handleContributionOptions: () => {},
+  currencySymbol: '',
+  count: null,
+  pageNumber: 1,
   selectedAdMetrics: {},
   selectedTabMetrics: {},
   selectedAdDF: {},
-  handleOnMetricsTabChange: () => {},
-  currencySymbol: '',
-  isBGSManager: false,
   handlePageChange: () => {},
-  count: null,
-  pageNumber: 1,
+  handleContributionOptions: () => {},
+  handleOnMetricsTabChange: () => {},
 };
 
 SponsoredKeyContribution.propTypes = {
   keyContributionLoader: bool,
   isDesktop: bool,
-  contributionData: arrayOf(Array),
-  selectedContributionOption: string,
+  isAdManagerAdmin: bool,
+  isBGSAdmin: bool,
   selectedManager: string,
-  handleContributionOptions: func,
-  selectedAdMetrics: shape({}),
+  selectedContributionOption: string,
   selectedTabMetrics: string,
-  handleOnMetricsTabChange: func,
-  selectedAdDF: objectOf(Object),
   currencySymbol: string,
-  isBGSManager: bool,
-  handlePageChange: func,
   count: number,
   pageNumber: number,
+  contributionData: arrayOf(Array),
+  selectedAdMetrics: shape({}),
+  selectedAdDF: objectOf(Object),
+  handleOnMetricsTabChange: func,
+  handleContributionOptions: func,
+  handlePageChange: func,
 };
 
 const Wrapper = styled.div`

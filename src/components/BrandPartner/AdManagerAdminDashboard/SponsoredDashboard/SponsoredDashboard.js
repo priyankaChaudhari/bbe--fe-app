@@ -395,6 +395,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedBgsUser,
         isBGSManager,
         isBGSAdmin,
+        isBGS,
         contributionType,
         selectedMetrics,
         startDate,
@@ -422,7 +423,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         }
       });
     },
-    [isBGSManager, isBGSAdmin],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   useEffect(() => {
@@ -1286,7 +1287,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           handleOnMetricsTabChange={handleOnMetricsTabChange}
           currencySymbol={currencySymbol}
           selectedAdDF={selectedAdDF}
-          isBGSManager={isBGSManager}
+          isBGSAdmin={isBGSAdmin}
+          isAdManagerAdmin={isAdManagerAdmin}
           handlePageChange={handlePageChange}
           contributionCount={contributionCount}
           pageNumber={pageNumber}

@@ -45,13 +45,15 @@ const DSPKeyContributors = ({
   loader,
   currencySymbol,
   selectedAdDF,
-  isBGSManager,
+  isAdManagerAdmin,
+  isBGSAdmin,
   handlePageChange,
   pageNumber,
   count,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
+
   const returnMetricsValue = (value) => {
     let decimalDigits = 2;
     if (selectedTabMatrics === 'dspImpressions') {
@@ -655,7 +657,7 @@ const DSPKeyContributors = ({
 
   const renderKeyContributionOptions = () => {
     const keyTabOptions =
-      selectedManager === 'all' && !isBGSManager
+      (isAdManagerAdmin || isBGSAdmin) && selectedManager === 'all'
         ? keyContributionConstant.noManagerSelected
         : keyContributionConstant.managerSelected;
 
@@ -767,38 +769,40 @@ const DSPKeyContributors = ({
 export default DSPKeyContributors;
 
 DSPKeyContributors.defaultProps = {
-  selectedContributionOption: '',
-  selectedManager: 'all',
-  handleContribution: () => {},
+  isAdManagerAdmin: false,
+  isBGSAdmin: false,
   selectedDSPMatrics: {
     dspImpressions: true,
   },
-  handleOnMatricsTabChange: () => {},
+  selectedManager: '',
+  selectedContributionOption: '',
+  currencySymbol: '',
   selectedTabMatrics: 'dspImpression',
   data: null,
-  currencySymbol: '',
   selectedAdDF: {},
-  isBGSManager: false,
-  handlePageChange: () => {},
   count: null,
   pageNumber: 1,
+  handleOnMatricsTabChange: () => {},
+  handlePageChange: () => {},
+  handleContribution: () => {},
 };
 
 DSPKeyContributors.propTypes = {
-  selectedContributionOption: string,
-  selectedManager: string,
-  handleContribution: func,
-  selectedDSPMatrics: objectOf(Object),
-  handleOnMatricsTabChange: func,
-  selectedTabMatrics: string,
-  data: arrayOf(Array),
+  isAdManagerAdmin: bool,
+  isBGSAdmin: bool,
   loader: bool.isRequired,
+  selectedManager: string,
+  selectedContributionOption: string,
+  selectedTabMatrics: string,
   currencySymbol: string,
-  selectedAdDF: objectOf(Object),
-  isBGSManager: bool,
-  handlePageChange: func,
   count: number,
   pageNumber: number,
+  selectedDSPMatrics: objectOf(Object),
+  data: arrayOf(Array),
+  selectedAdDF: objectOf(Object),
+  handlePageChange: func,
+  handleOnMatricsTabChange: func,
+  handleContribution: func,
 };
 
 const Wrapper = styled.div`

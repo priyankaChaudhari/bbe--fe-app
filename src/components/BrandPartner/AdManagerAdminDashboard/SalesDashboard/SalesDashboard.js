@@ -1207,7 +1207,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           pageNumber={pageNumber}
           count={contributionCount}
           isApiCall={contributionLoader}
-          isBGSManager={isBGSManager}
+          isAdManagerAdmin={isAdManagerAdmin}
+          isBGSAdmin={isBGSAdmin}
         />
         <CustomDateModal
           id="BT-sponsoreddashboard-daterange"
