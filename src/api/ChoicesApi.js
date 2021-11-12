@@ -121,7 +121,7 @@ export async function getManagersList(type) {
   } else {
     params = {
       ...params,
-      'bgs-manager': 'all',
+      bgs_manager: 'all',
     };
   }
 
@@ -144,7 +144,7 @@ export async function getBgsUserList(id = null) {
   if (id !== null) {
     params = {
       ...params,
-      'bgs-manager': id,
+      bgs_manager: id,
     };
   }
 
