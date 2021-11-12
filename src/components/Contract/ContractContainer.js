@@ -2315,7 +2315,7 @@ export default function ContractContainer() {
     const dspFee = Number(details?.dsp_fee);
     const contractTermLength = parseInt(details?.length?.value, 10);
     if (details?.contract_type?.toLowerCase().includes('recurring')) {
-      if (details && details.draft_from) {
+      if (details && (details.draft_from || !details.hs_deal_id)) {
         return true;
       }
       if (
@@ -2327,7 +2327,7 @@ export default function ContractContainer() {
       }
     }
     if (
-      details?.draft_from &&
+      (details.draft_from || !details.hs_deal_id) &&
       details?.contract_type?.toLowerCase().includes('dsp')
     ) {
       return true;

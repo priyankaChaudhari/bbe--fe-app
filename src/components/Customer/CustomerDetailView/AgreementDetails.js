@@ -159,8 +159,6 @@ export default function AgreementDetails({
   const createNewContract = (params) => {
     // Check if the agreemnt is draft or not & send API params accordingly
 
-    console.log('API data', params);
-
     createContract(params).then((res) => {
       setContractLoader(false);
       setIsLoading(false);
