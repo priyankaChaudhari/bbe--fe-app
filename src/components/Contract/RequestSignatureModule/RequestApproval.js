@@ -65,7 +65,7 @@ function RequestApproval({
   const displayApprovalInfo = () => {
     return (
       <>
-        {draftFrom ? (
+        {draftFrom || agreementData.hs_deal_id === null ? (
           BGSManagerEmail ? (
             ''
           ) : (
@@ -89,7 +89,7 @@ function RequestApproval({
           ''
         )}
         <div className="edit-profile-text float-left mb-4">
-          {draftFrom ? (
+          {draftFrom || agreementData.hs_deal_id === null ? (
             BGSManager?.profile ? (
               <img
                 src={BGSManager?.profile}
@@ -112,18 +112,20 @@ function RequestApproval({
           )}
           <div className="name-email">
             <div className="team-member-name">
-              {draftFrom
+              {draftFrom || agreementData.hs_deal_id === null
                 ? BGSManagerEmail
                   ? `${BGSManager?.first_name} ${BGSManager?.last_name}`
                   : ''
                 : 'Thaddeus Hay'}
             </div>
             <span>
-              {draftFrom ? BGSManagerEmail || '' : 'thay@buyboxexperts.com'}
+              {draftFrom || agreementData.hs_deal_id === null
+                ? BGSManagerEmail || ''
+                : 'thay@buyboxexperts.com'}
             </span>
           </div>
         </div>
-        {draftFrom && BGSManagerEmail ? (
+        {(draftFrom || agreementData.hs_deal_id === null) && BGSManagerEmail ? (
           <FormField>
             <textarea
               className="form-control "
@@ -137,7 +139,7 @@ function RequestApproval({
         ) : (
           ''
         )}
-        {draftFrom ? (
+        {draftFrom || agreementData.hs_deal_id === null ? (
           ''
         ) : (
           <FormField>
@@ -171,7 +173,7 @@ function RequestApproval({
         .replace('CUSTOMER_ROLE', mapValue('customer_role')),
     };
 
-    if (draftFrom) {
+    if (draftFrom || agreementData.hs_deal_id === null) {
       requestApprovalData.primary_email = BGSManagerEmail || '';
     } else {
       requestApprovalData.primary_email = 'thay@buyboxexperts.com';
@@ -217,7 +219,8 @@ function RequestApproval({
                 {displayApprovalInfo()}
                 <div className=" mt-4">
                   {renderbuttonHtml(
-                    draftFrom && !BGSManagerEmail,
+                    (draftFrom || agreementData.hs_deal_id === null) &&
+                      !BGSManagerEmail,
                     () => sendRequestApproval(),
                     'Request Approval',
                   )}

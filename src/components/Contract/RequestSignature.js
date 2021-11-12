@@ -79,7 +79,7 @@ function RequestSignature({
         );
       });
     setIsLoading({ loader: false, type: 'page' });
-    if (draftFrom) {
+    if (draftFrom || agreementData.hs_deal_id === null) {
       setIsLoading({ loader: true, type: 'page' });
       getBGSManagersData();
     }

@@ -44,6 +44,11 @@ const ModalRadioCheck = styled.div`
     .checkmark-customer-list {
       top: 0px;
     }
+    &.medium-text-label {
+      font-size: ${Theme.extraMedium};
+      color: ${Theme.black};
+      padding-left: 30px;
+    }
   }
 
   .delete-contact {

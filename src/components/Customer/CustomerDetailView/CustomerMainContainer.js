@@ -68,6 +68,8 @@ export default function CustomerMainContainer() {
     customerSelectedTab || 'performance',
   );
 
+  // const [viewComponent, setViewComponent] = useState('agreement');
+
   const [subViewComponent, setSubViewComponent] = useState('seller');
   const [showMemberList, setShowMemberList] = useState({
     show: false,

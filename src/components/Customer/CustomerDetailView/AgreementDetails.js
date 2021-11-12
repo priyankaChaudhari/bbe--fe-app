@@ -11,12 +11,13 @@ import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
 import { Link, useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { func, string, shape } from 'prop-types';
+import { func, string, bool, shape, oneOfType } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
 import PastAgreement from './PastAgreement';
 import OneTimeAgreement from './OneTimeAgreement';
 import { getAccountDetails } from '../../../store/actions/accountState';
+import { AddNewContractModal } from './Modals';
 import {
   PageLoader,
   WhiteCard,
@@ -26,6 +27,7 @@ import {
   ModalBox,
   Button,
   InputFormField,
+  DropDownUncontained,
 } from '../../../common';
 import {
   ClockIcon,
@@ -43,6 +45,7 @@ import {
   draftContractOptions,
   agreementOptions,
   pauseAgreementOptions,
+  newAgreementTypes,
 } from '../../../constants';
 import {
   createTransactionData,
@@ -77,6 +80,12 @@ export default function AgreementDetails({
     end_date: null,
   });
   const [bgsManagerEmail, setBgsManagerEmail] = useState(null);
+  const [showAddContractModal, setShowAddContractModal] = useState(false);
+  const [typeOfNewAgreement, setTypeOfNewAgreement] = useState({});
+  const [existingContracts, setExistingContracts] = useState([]);
+  const [replaceExisting, setReplaceExisting] = useState('alongside');
+  const [replacedContract, setReplacedContract] = useState('');
+  const [contractLoader, setContractLoader] = useState(false);
 
   const customStyles = {
     content: {
@@ -147,12 +156,12 @@ export default function AgreementDetails({
     return diffDays;
   };
 
-  const createNewDraftVersion = (agreementId) => {
-    const data = {
-      customer_id: id,
-      draft_from: agreementId,
-    };
-    createContract(data).then((res) => {
+  const createNewContract = (params) => {
+    // Check if the agreemnt is draft or not & send API params accordingly
+
+    createContract(params).then((res) => {
+      setContractLoader(false);
+      setIsLoading(false);
       history.push({
         pathname: PATH_AGREEMENT.replace(':id', id).replace(
           ':contract_id',
@@ -213,7 +222,10 @@ export default function AgreementDetails({
         });
         break;
       case 'draft':
-        createNewDraftVersion(agreementId);
+        createNewContract({
+          customer_id: id,
+          draft_from: agreementId,
+        });
         break;
       case 'pause':
         setShowModal({ pause: true, agreementId });
@@ -644,7 +656,7 @@ export default function AgreementDetails({
     }
 
     return fields && fields.length === 0 ? (
-      <WhiteCard className="text-center">No Agreements Found.</WhiteCard>
+      <WhiteCard className="text-center mt-2">No Agreements Found.</WhiteCard>
     ) : (
       fields
     );
@@ -810,6 +822,47 @@ export default function AgreementDetails({
     }
   };
 
+  const checkExistingAgreements = (agreementType) => {
+    // Filter active & renewed agreements of selected type
+    const filteredContracts = multipleAgreement.filter(
+      (agreement) =>
+        agreement.contract_type === agreementType.value &&
+        (agreement.contract_status.value === 'active' ||
+          agreement.contract_status.value === 'renewed'),
+    );
+    setExistingContracts([...filteredContracts]);
+
+    // if there are any filterd agreements present then show modal, else create new agreement
+    if (filteredContracts.length > 0) {
+      setShowAddContractModal(true);
+      setReplacedContract(filteredContracts[0].id);
+    } else {
+      setIsLoading(true);
+      createNewContract({
+        customer_id: id,
+        contract_type: agreementType.value,
+        start_date: dayjs(new Date()).format('YYYY-MM-DD'),
+      });
+    }
+  };
+
+  const confirmContract = () => {
+    // if agreement will run alongside current agreement, else replace existing agreement
+
+    if (replaceExisting === 'alongside') {
+      createNewContract({
+        customer_id: id,
+        contract_type: typeOfNewAgreement.value,
+        start_date: dayjs(new Date()).format('YYYY-MM-DD'),
+      });
+    } else {
+      createNewContract({
+        customer_id: id,
+        draft_from: replacedContract,
+      });
+    }
+  };
+
   return (
     <>
       <div className="col-lg-6 col-12 cutomer-middle-panel">
@@ -842,6 +895,12 @@ export default function AgreementDetails({
             <>
               {viewComponent === 'current' ? (
                 <>
+                  <DropDownUncontained
+                    options={newAgreementTypes}
+                    setSelectedOption={setTypeOfNewAgreement}
+                    extraAction={checkExistingAgreements}
+                    DropdownIndicator={DropdownIndicator}
+                  />
                   {generateHTML()}
                   <div
                     className="looking-past-agre"
@@ -996,6 +1055,22 @@ export default function AgreementDetails({
             </div>
           </ModalBox>
         </Modal>
+        {showAddContractModal ? (
+          <AddNewContractModal
+            customStyles={customStyles}
+            showAddContractModal={showAddContractModal}
+            setShowAddContractModal={setShowAddContractModal}
+            typeOfNewAgreement={typeOfNewAgreement}
+            existingContracts={existingContracts}
+            replaceExisting={replaceExisting}
+            setReplaceExisting={setReplaceExisting}
+            replacedContract={replacedContract}
+            setReplacedContract={setReplacedContract}
+            confirmContract={confirmContract}
+            contractLoader={contractLoader}
+            setContractLoader={setContractLoader}
+          />
+        ) : null}
       </div>
     </>
   );
@@ -1006,7 +1081,7 @@ AgreementDetails.propTypes = {
   userId: string.isRequired,
   setShowMemberList: func.isRequired,
   setShowModal: func.isRequired,
-  showModal: shape({}).isRequired,
+  showModal: oneOfType([bool, shape({})]).isRequired,
   userRole: string.isRequired,
   customerStatus: string.isRequired,
   getActivityLogInfo: func.isRequired,
