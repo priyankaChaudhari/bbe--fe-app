@@ -100,7 +100,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     isAdManagerAdmin || isBGSAdmin
       ? {
           value: 'all',
-          label: isBGSAdmin ? 'All BGS Manager' : 'All Ad Manager',
+          label: 'All',
         }
       : { value: userInfo.id },
   );
@@ -160,6 +160,8 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           });
         }
         setBgsList(list);
+      } else {
+        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -452,7 +454,22 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const handleManagerFilter = (event) => {
     const { value } = event;
     let tabOption = '';
+    let bgsUser = selectedBgs.value;
     setSelectedManager(event);
+
+    if (isBGSAdmin) {
+      if (value === 'all') {
+        getBGSList(null);
+      } else {
+        getBGSList(value);
+      }
+      setBgsList([{ value: 'all', label: 'All' }]);
+      bgsUser = 'all';
+      setSelectedBgs({
+        value: 'all',
+        label: 'All',
+      });
+    }
 
     if (!isBGSManager && value === 'all') {
       setSelectedContributionOption('positive');
@@ -468,7 +485,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         'custom',
         selectedMarketplace.value,
         value,
-        selectedBgs.value,
+        bgsUser,
       );
     } else {
       getDSPData(
@@ -476,13 +493,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         dspGroupBy,
         selectedMarketplace.value,
         value,
-        selectedBgs.value,
+        bgsUser,
       );
       getContributionData(
         selectedAdDF.value,
         selectedMarketplace.value,
         value,
-        selectedBgs.value,
+        bgsUser,
         tabOption,
         selectedTabMatrics,
         null,
@@ -492,7 +509,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       getDSPPacingData(
         selectedMarketplace.value,
         value,
-        selectedBgs.value,
+        bgsUser,
         selectedSpendingOption,
       );
     }
@@ -649,6 +666,10 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
 
     setCurrency('USD');
     setCurrencySymbol(getSymbolFromCurrency('USD'));
+
+    if (isBGSAdmin) {
+      getBGSList(null);
+    }
 
     if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
       user = 'all';

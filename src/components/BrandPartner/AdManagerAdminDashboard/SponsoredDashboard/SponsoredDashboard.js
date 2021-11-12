@@ -161,6 +161,8 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           });
         }
         setBgsList(list);
+      } else {
+        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -640,8 +642,23 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const handleAdManagerFilter = (event) => {
     const { value } = event;
     let tabOption = '';
+    let bgsUser = selectedBgs.value;
     if (event.value !== selectedManager.value) {
       setSelectedManager(event);
+
+      if (isBGSAdmin) {
+        if (value === 'all') {
+          getBGSList(null);
+        } else {
+          getBGSList(value);
+        }
+        setBgsList([{ value: 'all', label: 'All' }]);
+        bgsUser = 'all';
+        setSelectedBgs({
+          value: 'all',
+          label: 'All',
+        });
+      }
 
       if (!isBGSManager && value === 'all') {
         setSelectedContributionOption('positive');
@@ -658,7 +675,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedMarketplace.value,
           selectedAdType,
           value,
-          selectedBgs.value,
+          bgsUser,
         );
       } else {
         getAdData(
@@ -667,14 +684,14 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           adGroupBy,
           selectedMarketplace.value,
           value,
-          selectedBgs.value,
+          bgsUser,
         );
         getContributionData(
           selectedAdType,
           selectedAdDF.value,
           selectedMarketplace.value,
           value,
-          selectedBgs.value,
+          bgsUser,
           tabOption,
           selectedTabMetrics,
           null,
@@ -877,6 +894,10 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       label: 'All Marketplaces',
       currency: 'USD',
     });
+
+    if (isBGSAdmin) {
+      getBGSList(null);
+    }
 
     if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
       user = 'all';

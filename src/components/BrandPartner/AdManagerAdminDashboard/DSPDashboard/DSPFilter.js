@@ -58,7 +58,7 @@ const DSPFilter = ({
         {isBGSAdmin || isAdManagerAdmin ? (
           <div className="col-lg-12 col-md-6">
             <div className="label mt-3">
-              {isBGSManager ? 'BGS' : 'Ad Manager'}
+              {isBGSAdmin ? 'BGS Manager' : 'Ad Manager'}
             </div>
             {DropDown(
               'cursor',

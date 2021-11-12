@@ -152,6 +152,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           });
         }
         setBgsList(list);
+      } else {
+        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -660,10 +662,26 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
   const handleManagerList = (event) => {
     const { value } = event;
+    let bgsUser = selectedBgs.value;
     let tabOption = '';
 
     if (event.value !== selectedManager.value) {
       setSelectedManager(event);
+
+      if (isBGSAdmin) {
+        if (value === 'all') {
+          getBGSList(null);
+        } else {
+          getBGSList(value);
+        }
+        setBgsList([{ value: 'all', label: 'All' }]);
+        bgsUser = 'all';
+        setSelectedBgs({
+          value: 'all',
+          label: 'All',
+        });
+      }
+
       if ((isAdManagerAdmin || isBGSAdmin) && value === 'all') {
         tabOption = 'positive';
       } else {
@@ -679,7 +697,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           'custom',
           selectedMarketplace.value,
           value,
-          selectedBgs.value,
+          bgsUser,
           tabOption,
         );
       } else {
@@ -688,13 +706,13 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           salesGroupBy,
           selectedMarketplace.value,
           value,
-          selectedBgs.value,
+          bgsUser,
         );
         getContributionData(
           selectedSalesDF.value,
           selectedMarketplace.value,
           value,
-          selectedBgs.value,
+          bgsUser,
           tabOption,
           selectedTabMetrics,
           null,
@@ -791,6 +809,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       label: 'All Marketplaces',
       currency: 'USD',
     });
+    if (isBGSAdmin) {
+      getBGSList(null);
+    }
 
     if (isAdManagerAdmin || isBGSManager || isBGSAdmin) {
       user = 'all';
