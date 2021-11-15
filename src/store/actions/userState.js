@@ -29,6 +29,7 @@ import {
   PATH_DSP_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
+  PATH_BGS_ADMIN_DASHBOARD,
 } from '../../constants/index';
 
 const _ = require('lodash');
@@ -89,8 +90,9 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
     'DSP Ad Manager': PATH_DSP_DASHBOARD,
     'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
-    BGS: PATH_BGS_DASHBOARD,
+    'BGS Admin': PATH_BGS_ADMIN_DASHBOARD,
     'BGS Manager': PATH_BGS_MANAGER_DASHBOARD,
+    BGS: PATH_BGS_DASHBOARD,
     Finance: PATH_FINANCE_DASHBOARD,
   };
 

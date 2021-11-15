@@ -271,6 +271,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         spendingOption,
         isBGSManager,
         isBGSAdmin,
+        isBGS,
       ).then((res) => {
         if (res && res.status === 400) {
           setDspPacingLoader(false);
@@ -287,7 +288,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         setDspPacingLoader(false);
       });
     },
-    [isBGSManager, isBGSAdmin],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   useEffect(() => {
@@ -409,6 +410,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           ed,
           1,
         );
+        setPageNumber(1);
       }
     }
   };
@@ -445,6 +447,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         null,
         1,
       );
+      setPageNumber(1);
     }
     getDSPPacingData(
       event.value,
@@ -509,6 +512,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         null,
         1,
       );
+      setPageNumber(1);
     }
     getDSPPacingData(
       selectedMarketplace.value,
@@ -552,6 +556,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           null,
           1,
         );
+        setPageNumber(1);
       }
       getDSPPacingData(
         selectedMarketplace.value,
@@ -675,7 +680,10 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       getBGSList(null);
     }
 
-    if (isBGSManager) {
+    if (isBGS) {
+      userBgs = userInfo.id;
+      userManger = 'all';
+    } else if (isBGSManager) {
       userBgs = 'all';
       userManger = userInfo.id;
       setSelectedBgs({
@@ -683,9 +691,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         label: 'All',
       });
       contributionTab = 'contribution';
-    }
-
-    if (isAdManagerAdmin || isBGSAdmin) {
+    } else if (isAdManagerAdmin || isBGSAdmin) {
       userManger = 'all';
       setSelectedManager({
         value: 'all',
@@ -696,7 +702,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         label: 'All',
       });
       contributionTab = 'positive';
-    } else if (!isBGSManager) {
+    } else {
       userManger = userInfo.id;
       setSelectedManager({
         value: userInfo.id,
@@ -729,6 +735,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         null,
         1,
       );
+      setPageNumber(1);
     }
     getDSPPacingData('all', userManger, userBgs, selectedSpendingOption);
   };
@@ -884,6 +891,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         null,
         1,
       );
+      setPageNumber(1);
     }
   };
 

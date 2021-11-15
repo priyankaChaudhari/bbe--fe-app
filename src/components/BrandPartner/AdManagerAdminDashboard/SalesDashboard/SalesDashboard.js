@@ -590,6 +590,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         1,
       );
     }
+    setPageNumber(1);
   };
 
   const handleMarketplace = (event) => {
@@ -626,6 +627,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           null,
           1,
         );
+        setPageNumber(1);
       }
     }
   };
@@ -723,6 +725,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           null,
           1,
         );
+        setPageNumber(1);
       }
     }
   };
@@ -761,6 +764,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           null,
           1,
         );
+        setPageNumber(1);
       }
     }
   };
@@ -818,7 +822,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getBGSList(null);
     }
 
-    if (isBGSManager) {
+    if (isBGS) {
+      userBgs = userInfo.id;
+      userManger = 'all';
+    } else if (isBGSManager) {
       userBgs = 'all';
       userManger = userInfo.id;
       setSelectedBgs({
@@ -826,9 +833,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         label: 'All',
       });
       contributionTab = 'contribution';
-    }
-
-    if (isAdManagerAdmin || isBGSAdmin) {
+    } else if (isAdManagerAdmin || isBGSAdmin) {
       userManger = 'all';
       setSelectedManager({
         value: 'all',
@@ -839,7 +844,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         label: 'All',
       });
       contributionTab = 'positive';
-    } else if (!isBGSManager) {
+    } else {
       userManger = userInfo.id;
       setSelectedManager({
         value: userInfo.id,
@@ -879,6 +884,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         null,
         1,
       );
+      setPageNumber(1);
     }
   };
 
@@ -900,6 +906,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         null,
         1,
       );
+      setPageNumber(1);
     }
   };
 
