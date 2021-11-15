@@ -288,7 +288,6 @@ export default function AgreementDetails({
       if (
         agreement?.contract_status?.value !== 'inactive' &&
         agreement?.contract_status?.value !== 'cancel' &&
-        // agreement.contract_type &&
         !agreement?.contract_type?.toLowerCase().includes('one')
       )
         fields.push(
