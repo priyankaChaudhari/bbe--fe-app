@@ -572,10 +572,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           sd,
           ed,
-          pageNumber,
+          1,
         );
       }
     } else {
+      // for year to date
       getSalesData(dailyFactFlag, temp, marketplace, managerUser, bgsUser);
       getContributionData(
         dailyFactFlag,
@@ -586,7 +587,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
   };
@@ -623,7 +624,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           null,
           null,
-          pageNumber,
+          1,
         );
       }
     }
@@ -720,7 +721,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           null,
           null,
-          pageNumber,
+          1,
         );
       }
     }
@@ -758,7 +759,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           null,
           null,
-          pageNumber,
+          1,
         );
       }
     }
@@ -876,7 +877,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
   };
@@ -897,7 +898,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
   };

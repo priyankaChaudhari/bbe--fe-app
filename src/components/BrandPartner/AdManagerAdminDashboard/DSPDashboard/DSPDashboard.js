@@ -407,7 +407,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedTabMatrics,
           sd,
           ed,
-          pageNumber,
+          1,
         );
       }
     }
@@ -443,7 +443,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedTabMatrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
     getDSPPacingData(
@@ -507,7 +507,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedTabMatrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
     getDSPPacingData(
@@ -550,7 +550,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedTabMatrics,
           null,
           null,
-          pageNumber,
+          1,
         );
       }
       getDSPPacingData(
@@ -727,7 +727,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedTabMatrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
     getDSPPacingData('all', userManger, userBgs, selectedSpendingOption);
@@ -877,11 +877,12 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdDF.value,
         selectedMarketplace.value,
         selectedManager.value,
+        selectedBgs.value,
         value,
         selectedTabMatrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
   };
@@ -893,6 +894,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         selectedAdDF.value,
         selectedMarketplace.value,
         selectedManager.value,
+        selectedBgs.value,
         selectedContributionOption,
         value,
         null,
@@ -908,6 +910,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       selectedAdDF.value,
       selectedMarketplace.value,
       selectedManager.value,
+      selectedBgs.value,
       selectedContributionOption,
       selectedTabMatrics,
       null,

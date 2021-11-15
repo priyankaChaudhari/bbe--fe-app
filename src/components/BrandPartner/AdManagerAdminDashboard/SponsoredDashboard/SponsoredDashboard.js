@@ -632,7 +632,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           sd,
           ed,
-          pageNumber,
+          1,
         );
       }
     }
@@ -695,7 +695,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           null,
           null,
-          pageNumber,
+          1,
         );
       }
     }
@@ -736,7 +736,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           null,
           null,
-          pageNumber,
+          1,
         );
       }
     }
@@ -777,7 +777,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics,
           null,
           null,
-          pageNumber,
+          1,
         );
       }
     }
@@ -837,7 +837,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
   };
@@ -960,7 +960,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
   };
@@ -982,7 +982,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
   };

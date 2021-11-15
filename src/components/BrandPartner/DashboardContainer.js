@@ -16,9 +16,9 @@ function DashboardContainer() {
     'Sponsored Advertising Ad Manager': 'Ad Manager Dashboard',
     'DSP Ad Manager': 'Ad Manager Dashboard',
     'Hybrid Ad Manager': 'Ad Manager Dashboard',
-    BGS: 'BGS Dashboard',
-    'BGS Manager': 'BGS Manager Dashboard',
-    'BGS Admin': 'BGS Dashboard',
+    BGS: 'Dashboard',
+    'BGS Manager': 'Dashboard',
+    'BGS Admin': 'Dashboard',
     Finance: 'Dashboard',
   };
 
