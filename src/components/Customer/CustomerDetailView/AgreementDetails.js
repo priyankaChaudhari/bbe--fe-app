@@ -158,7 +158,6 @@ export default function AgreementDetails({
 
   const createNewContract = (params) => {
     // Check if the agreemnt is draft or not & send API params accordingly
-
     createContract(params).then((res) => {
       setContractLoader(false);
       setIsLoading(false);
@@ -842,6 +841,7 @@ export default function AgreementDetails({
         customer_id: id,
         contract_type: agreementType.value,
         start_date: dayjs(new Date()).format('YYYY-MM-DD'),
+        length: agreementType.value === 'dsp only' ? '3 Months' : '12 Months',
       });
     }
   };
@@ -854,6 +854,8 @@ export default function AgreementDetails({
         customer_id: id,
         contract_type: typeOfNewAgreement.value,
         start_date: dayjs(new Date()).format('YYYY-MM-DD'),
+        length:
+          typeOfNewAgreement.value === 'dsp only' ? '3 Months' : '12 Months',
       });
     } else {
       createNewContract({
