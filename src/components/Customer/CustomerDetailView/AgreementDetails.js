@@ -286,11 +286,9 @@ export default function AgreementDetails({
     const fields = [];
     for (const agreement of multipleAgreement) {
       if (
-        agreement &&
-        agreement.contract_status &&
-        agreement.contract_status.value !== 'inactive' &&
-        agreement.contract_status.value !== 'cancel' &&
-        !agreement.contract_type.toLowerCase().includes('one')
+        agreement?.contract_status?.value !== 'inactive' &&
+        agreement?.contract_status?.value !== 'cancel' &&
+        !agreement?.contract_type?.toLowerCase().includes('one')
       )
         fields.push(
           <WhiteCard

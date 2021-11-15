@@ -264,6 +264,17 @@ export default function useActivityLog({ viewComponent }) {
     }
 
     // For requested Activity
+    if (item && item.history_change_reason.includes('requested')) {
+      activityMessage = item.history_change_reason.split('requested');
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>requested</span>
+          {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+    // For requested Activity
     if (item && item.history_change_reason.includes('requested for')) {
       activityMessage = item.history_change_reason.split('requested for');
       return (
@@ -274,7 +285,6 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
-
     // For added Activity
     if (item && item.history_change_reason.includes('added')) {
       activityMessage = item.history_change_reason.split('added');
@@ -314,6 +324,50 @@ export default function useActivityLog({ viewComponent }) {
           {activityMessage && activityMessage[0]}
           <span>removed</span>
           {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+    // For signed Activity
+    if (item && item.history_change_reason.includes('signed')) {
+      activityMessage = item.history_change_reason.split('signed');
+      return (
+        <>
+          {activityMessage && activityMessage[0]}
+          <span>signed</span>
+          {activityMessage && activityMessage[1]}
+        </>
+      );
+    }
+    // For approved and sent Activity
+    if (item.history_change_reason.includes('approved and sent')) {
+      activityMessage = item.history_change_reason?.split('approved and sent');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>approved and sent </span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+    // for sent activity
+    if (item.history_change_reason.includes('sent')) {
+      activityMessage = item.history_change_reason?.split('sent');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>sent</span>
+          {activityMessage[1]}
+        </>
+      );
+    }
+    // for delegated activity
+    if (item.history_change_reason.includes('delegated')) {
+      activityMessage = item.history_change_reason?.split('delegated');
+      return (
+        <>
+          {activityMessage[0]}
+          <span>delegated</span>
+          {activityMessage[1]}
         </>
       );
     }
