@@ -22,7 +22,6 @@ export default function SalePerformanceChart({
   selectedDF,
   isDashboard = false,
 }) {
-  console.log('chartData', chartData);
   const chart = useRef(null);
   useEffect(() => {
     const colorSet = {
