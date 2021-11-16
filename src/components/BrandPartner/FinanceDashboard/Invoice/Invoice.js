@@ -287,7 +287,11 @@ export default function Invoice({
               className="fix-height"
               heading={item.label}
               title={renderTitle(dspData, item.key)}
-              titleColor={item.titleColor}
+              titleColor={
+                item.key === 'total_overdue' && !dspData[item.key]
+                  ? Theme.black
+                  : item.titleColor
+              }
               prefix={dspData[item.key] !== null ? item.prefix : ''}
               postfix={item.postfix}
               type="invoices"
@@ -303,10 +307,12 @@ export default function Invoice({
       <div className="row mb-4">
         <div className="col-md-6 col-lg-6 col-5 mt-2 ">
           <div className="medium-text-title ">
-            {selectedNavigation === 'revShare'
+            {selectedNavigation === 'rev share'
               ? 'Rev Share Invoicing'
-              : selectedNavigation === 'upSell'
+              : selectedNavigation === 'upsell'
               ? 'Upsell Invoices'
+              : selectedNavigation === 'retainer'
+              ? 'Monthly Retainer Invoices'
               : 'DSP Invoices'}
           </div>{' '}
         </div>

@@ -33,6 +33,7 @@ const SalesKeyContribution = ({
   keyContributionLoader,
   isDesktop,
   contributionData,
+  selectedManager,
   selectedContributionOption,
   handleContributionOptions,
   selectedTabMetrics,
@@ -43,6 +44,8 @@ const SalesKeyContribution = ({
   pageNumber,
   count,
   isApiCall,
+  isAdManagerAdmin,
+  isBGSAdmin,
 }) => {
   const history = useHistory();
 
@@ -122,7 +125,10 @@ const SalesKeyContribution = ({
   };
 
   const renderKeyContributionOptions = () => {
-    const keyTabOptions = keyContributionConstant.adManagerSelected;
+    const keyTabOptions =
+      (isAdManagerAdmin || isBGSAdmin) && selectedManager === 'all'
+        ? keyContributionConstant.noManagerSelected
+        : keyContributionConstant.managerSelected;
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
@@ -731,6 +737,9 @@ SalesKeyContribution.defaultProps = {
   keyContributionLoader: false,
   isDesktop: false,
   isApiCall: false,
+  isAdManagerAdmin: false,
+  isBGSAdmin: false,
+  selectedManager: '',
   currencySymbol: '',
   contributionData: {},
   selectedContributionOption: {},
@@ -747,6 +756,9 @@ SalesKeyContribution.propTypes = {
   keyContributionLoader: bool,
   isDesktop: bool,
   isApiCall: bool,
+  isAdManagerAdmin: bool,
+  isBGSAdmin: bool,
+  selectedManager: string,
   selectedContributionOption: string,
   selectedTabMetrics: string,
   currencySymbol: string,

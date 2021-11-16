@@ -247,6 +247,8 @@ const OnBoardingBody = styled.div`
       li {
         display: inline-block;
         margin-right: 46px;
+        font-size: ${Theme.extraNormal};
+        color: ${Theme.gray85};
         &:last-child {
           margin-right: 0px;
         }

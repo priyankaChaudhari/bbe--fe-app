@@ -16,27 +16,37 @@ export async function getAdManagerAdminGraphData(
   dailyFacts,
   groupBy,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
+  isBGSManager,
+  isBGSAdmin,
+  isBGS,
   startDate,
   endDate,
-  userInfo,
 ) {
-  let selectedUser = '';
-  if (
-    (userInfo && userInfo.role === 'Ad Manager Admin') ||
-    userInfo.role === 'BGS Manager'
-  ) {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
-  }
-
   let params = {
     daily_facts: dailyFacts,
     group_by: groupBy,
     marketplace,
-    user: selectedUser,
   };
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -69,31 +79,43 @@ export async function getKeyContributionData(
   adType,
   dailyFacts,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
+  isBGSManager,
+  isBGSAdmin,
+  isBGS,
   contributionType,
   selectedMetric,
   startDate,
   endDate,
-  userInfo,
   pageNumber,
 ) {
   const metricName = metricsNameForAPI[selectedMetric];
-  let selectedUser = '';
-  if (
-    (userInfo && userInfo.role === 'Ad Manager Admin') ||
-    userInfo.role === 'BGS Manager'
-  ) {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
-  }
 
   let params = {
     dashboard: dashboardType,
     daily_facts: dailyFacts,
     marketplace,
-    user: selectedUser,
   };
+
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -104,8 +126,11 @@ export async function getKeyContributionData(
   }
 
   if (contributionType === 'keyMetrics') {
-    if (user === 'all') {
+    if (params?.user === 'all') {
       delete params.user;
+    }
+    if (params?.bgs_manager === 'all') {
+      delete params.bgs_manager;
     }
     if (marketplace === 'all') {
       delete params.marketplace;
@@ -166,15 +191,36 @@ export async function getKeyContributionData(
 
 export async function getDspPacingDahboardData(
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
   spendingType,
+  isBGSManager = false,
+  isBGSAdmin = false,
+  isBGS = false,
 ) {
-  const params = {
+  let params = {
     daily_facts: 'month',
     marketplace,
-    user,
     order_by: spendingType,
   };
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
+    };
+  }
 
   let result = {};
   result = await axiosInstance
@@ -192,24 +238,38 @@ export async function getSalesGraphData(
   dailyFacts,
   groupBy,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
+  isBGSManager,
+  isBGSAdmin,
+  isBGS,
   startDate,
   endDate,
-  userInfo,
 ) {
-  let selectedUser = '';
-  if (userInfo && userInfo.role === 'BGS Manager') {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
-  }
-
   let params = {
     daily_facts: dailyFacts,
     group_by: groupBy,
     marketplace,
-    user: selectedUser,
   };
+
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -233,28 +293,43 @@ export async function getSalesGraphData(
 export async function getSalesKeyContributionData(
   dailyFacts,
   marketplace,
-  user,
+  managerUser,
+  bgsUser,
   contributionType,
   selectedMetric,
+  isBGSManager,
+  isBGSAdmin,
+  isBGS,
   startDate,
   endDate,
-  userInfo,
   pageNumber,
 ) {
-  let selectedUser = '';
   const metricName = metricsNameForAPI[selectedMetric];
-  if (userInfo && userInfo.role === 'BGS Manager') {
-    selectedUser = user;
-  } else {
-    selectedUser = userInfo && userInfo.id;
-  }
 
   let params = {
     daily_facts: dailyFacts,
     marketplace,
-    user: selectedUser,
     dashboard: 'sales_performance',
   };
+
+  if (isBGS) {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+      user: bgsUser,
+    };
+  } else if (isBGSManager || isBGSAdmin) {
+    params = {
+      ...params,
+      bgs_manager: managerUser,
+      user: bgsUser,
+    };
+  } else {
+    params = {
+      ...params,
+      user: managerUser,
+    };
+  }
 
   if (startDate && endDate) {
     params = {
@@ -272,9 +347,14 @@ export async function getSalesKeyContributionData(
       dashboard: 'sale_performance',
       page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
     };
-    if (user === 'all') {
+
+    if (params?.user === 'all') {
       delete params.user;
     }
+    if (params?.bgs_manager === 'all') {
+      delete params.bgs_manager;
+    }
+
     if (marketplace === 'all') {
       delete params.marketplace;
     }
@@ -322,6 +402,7 @@ export async function getFinanceInvoices(
   let params = {
     page,
     type,
+    invoice_type: selectedNavigation,
   };
 
   if (sortBy !== '') {
@@ -361,22 +442,6 @@ export async function getFinanceInvoices(
     };
   }
 
-  if (selectedNavigation === 'revShare') {
-    params = {
-      ...params,
-      invoice_type: 'rev share',
-    };
-  } else if (selectedNavigation === 'dspInvoicing') {
-    params = {
-      ...params,
-      invoice_type: 'dsp service',
-    };
-  } else {
-    params = {
-      ...params,
-      invoice_type: 'upsell',
-    };
-  }
   let result = {};
   result = await axiosInstance
     .get(`${API_DSP_INVOICES}`, { params })
@@ -395,7 +460,9 @@ export async function getDSPFinances(
   endDate,
   selectedNavigation,
 ) {
-  let params = {};
+  let params = {
+    invoice_type: selectedNavigation,
+  };
 
   if (timeFilter === 'custom') {
     params = {
@@ -403,23 +470,6 @@ export async function getDSPFinances(
       start_month_year: startDate,
       end_month_year: endDate,
       timeframe: timeFilter,
-    };
-  }
-
-  if (selectedNavigation === 'revShare') {
-    params = {
-      ...params,
-      invoice_type: 'rev share',
-    };
-  } else if (selectedNavigation === 'dspInvoicing') {
-    params = {
-      ...params,
-      invoice_type: 'dsp service',
-    };
-  } else {
-    params = {
-      ...params,
-      invoice_type: 'upsell',
     };
   }
 

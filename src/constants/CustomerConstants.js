@@ -235,3 +235,10 @@ export const agreementOptions = [
     label: 'Design Optimization',
   },
 ];
+
+export const financeTabsOptions = [
+  { key: 'retainer', value: 'Monthly Retainer' },
+  { key: 'rev share', value: 'Rev Share' },
+  { key: 'upsell', value: 'Upsell' },
+  { key: 'dsp service', value: 'DSP' },
+];

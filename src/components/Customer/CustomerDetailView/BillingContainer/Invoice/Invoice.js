@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { string } from 'prop-types';
+import { func, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import MetricsInvoices from './MetricsInvoices';
@@ -8,7 +8,7 @@ import InvoiceList from './InvoiceList';
 import { PageLoader } from '../../../../../common';
 import { getInvoiceData, getMetricsInvoiceData } from '../../../../../api';
 
-const Invoice = ({ id, invoiceType }) => {
+const Invoice = ({ id, invoiceType, onLoading }) => {
   const [loader, setLoader] = useState(false);
   const [invoicesData, setInvoicesData] = useState(null);
   const [invoiceMetricsData, setMetricsData] = useState(null);
@@ -68,6 +68,10 @@ const Invoice = ({ id, invoiceType }) => {
     getDSPMetricsData(invoiceType);
   }, [getDSPInvoicesData, getDSPMetricsData, invoiceType]);
 
+  useEffect(() => {
+    onLoading(loader);
+  }, [loader, onLoading]);
+
   return (
     <div className="mt-4">
       {loader ? (
@@ -96,9 +100,11 @@ export default Invoice;
 
 Invoice.defaultProps = {
   invoiceType: 'rev share',
+  onLoading: () => {},
 };
 
 Invoice.propTypes = {
   id: string.isRequired,
   invoiceType: string,
+  onLoading: func,
 };

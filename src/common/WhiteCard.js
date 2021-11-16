@@ -683,6 +683,12 @@ export const WhiteCard = styled.div`
       .black {
         background: ${Theme.black};
       }
+      .label-block {
+        border-radius: 2px;
+        width: 14px;
+        height: 14px;
+        margin-right: 8px;
+      }
       span {
         color: ${Theme.black};
         font-size: ${Theme.normal};
@@ -700,8 +706,9 @@ export const WhiteCard = styled.div`
     color: ${Theme.black};
     font-size: ${Theme.primaryTitleFontSize};
     position: absolute;
-    left: 68px;
-    top: 142px;
+    left: 0;
+    right: 0;
+    top: 150px;
     text-align: center;
 
     .out-off {
@@ -808,6 +815,12 @@ export const WhiteCard = styled.div`
       }
     }
   }
+  @media only screen and (max-width: 1350px) and (min-width: 991px) {
+    .average {
+      font-size: 18px;
+      top: 165px;
+    }
+  }
   @media only screen and (max-width: 1150px) {
     .company-label-info {
       margin-top: 10px;
@@ -899,6 +912,9 @@ export const WhiteCard = styled.div`
       margin: 0 auto;
       text-align: center;
       padding-top: 10px;
+    }
+    .bbpercent-graph-label {
+      text-align: left !important;
     }
   }
   @media only screen and (max-width: 460px) {

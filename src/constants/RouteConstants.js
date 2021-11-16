@@ -36,18 +36,23 @@ export const PATH_ARTICLE_LIST = '/collections/';
 export const PATH_ARTICLE_DETAILS = `${PATH_ARTICLE_LIST}:id/`;
 
 // Brand Partner
-export const PATH_BGS_DASHBOARD = '/bgs-dashboard/';
+
 export const PATH_TEAM_MEMBER = '/team-member/';
 export const PATH_TABLET_TEAM_MEMBER = '/tablet-team-member';
 
-// Ad manager
-export const PATH_AD_MANAGER_ADMIN_DASHBOARD = '/adManager/admin/';
-export const PATH_SPONSORED_DASHBOARD = '/adManager/sponsored/';
-export const PATH_DSP_DASHBOARD = '/adManager/dsp/';
-export const PATH_HYBRID_DASHBOARD = '/adManager/hybrid/';
+// bgs dashboard
+export const PATH_BGS_DASHBOARD = '/dashboard/bgs';
+export const PATH_BGS_MANAGER_DASHBOARD = '/dashboard/bgsManager';
+export const PATH_BGS_ADMIN_DASHBOARD = '/dashboard/bgsAdmin';
 
-// Finance dashboar
-export const PATH_FINANCE_DASHBOARD = '/finance';
+// Ad manager dashboard
+export const PATH_AD_MANAGER_ADMIN_DASHBOARD = '/dashboard/adMangerAdmin/';
+export const PATH_SPONSORED_DASHBOARD = '/dashboard/sponsored/';
+export const PATH_DSP_DASHBOARD = '/dashboard/dsp/';
+export const PATH_HYBRID_DASHBOARD = '/dashboard/hybrid/';
+
+// Finance dashboard
+export const PATH_FINANCE_DASHBOARD = '/dashboard/finance/';
 
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/:brandId`;

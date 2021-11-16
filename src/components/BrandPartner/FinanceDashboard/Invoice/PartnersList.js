@@ -351,7 +351,7 @@ export default function PartnersList({
       <div className="col-lg-9">
         {isDesktop || isTablet ? (
           <>
-            {selectedNavigation === 'revShare' ? (
+            {selectedNavigation === 'rev share' ? (
               <EnableInvoiceing view="desktop" />
             ) : null}
 
@@ -393,7 +393,7 @@ export default function PartnersList({
         ) : (
           // for mobile view
           <>
-            {selectedNavigation === 'revShare' ? (
+            {selectedNavigation === 'rev share' ? (
               <EnableInvoiceing view="mobile" />
             ) : null}
             <div className="d-lg-none d-md-none d-sm-block mt-3 mb-3">

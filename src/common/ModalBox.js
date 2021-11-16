@@ -6,7 +6,6 @@ const ModalBox = styled.div`
   margin: 0 auto;
   border-radius: 8px;
 
-  
   .modal-back-arrow {
     margin-top: -2px;
     margin-right: 4px;
@@ -20,105 +19,149 @@ const ModalBox = styled.div`
   }
 
   .modal-body {
-      .role-selected {
-        color: ${Theme.gray90};
+    .role-selected {
+      color: ${Theme.gray90};
+      font-size: ${Theme.normal};
+      font-family: ${Theme.titleFontFamily};
+    }
+
+    .light-bg {
+      border-radius: 5px;
+      background: ${Theme.lightOrange};
+      text-align: center;
+      padding: 4px 11px;
+      font-size: ${Theme.extraNormal};
+      color: ${Theme.gray85};
+      font-family: ${Theme.baseFontFamily};
+      font-weight: 600;
+    }
+    .gray {
+      color: ${Theme.gray85};
+      background: ${Theme.gray8};
+      font-weight: 500;
+    }
+    .signature-request {
+      font-size: ${Theme.verySmall};
+      color: ${Theme.gray40};
+      font-family: ${Theme.titleFontFamily};
+
+      .email-address {
+        color: ${Theme.black};
         font-size: ${Theme.normal};
-        font-family: ${Theme.titleFontFamily};
       }
+    }
 
-      .light-bg {
-        border-radius: 5px;
-        background: ${Theme.lightOrange};
-        text-align: center;
-        padding: 4px 11px;
-        font-size: ${Theme.extraNormal};
-        color: ${Theme.gray85};
-        font-family: ${Theme.baseFontFamily};
-        font-weight: 600;
+    .send-copy-contract {
+      color: ${Theme.gray30};
+      font-size: ${Theme.extraSmall};
+      text-transform: uppercase;
+      font-weight: 500;
+      letter-spacing: 1.13px;
+      font-family: ${Theme.titleFontFamily};
+    }
+    .copy-review {
+      font-size: ${Theme.small};
+      color: ${Theme.gray35};
+    }
+
+    .add-new-contact {
+      color: ${Theme.orange};
+      font-size: ${Theme.small};
+
+      .add-new-icon {
+        vertical-align: top;
+        width: 16px;
       }
-      .gray {
-          color: ${Theme.gray85};
-          background: ${Theme.gray8};
-          font-weight: 500;
-      }
-      .signature-request {
-        font-size: ${Theme.verySmall};
-        color: ${Theme.gray40};
-        font-family: ${Theme.titleFontFamily};
-      
-        .email-address {
-          color: ${Theme.black};
-          font-size: ${Theme.normal};
+    }
+    .contract-status {
+      float: left;
+      max-width: 85%;
+      width: 100%;
+      word-break: keep-all;
+    }
+    .solid-icon {
+      margin-right: 8px;
+      vertical-align: middle;
+      float: left;
+    }
+    .long-text-agr {
+      color: ${Theme.black};
+      font-size: ${Theme.extraMedium};
+      line-height: 24px;
+    }
+    .recurring-contact {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
+      display: inline-block;
+
+      li {
+        display: inline-block;
+        margin-right: 18px;
+        position: relative;
+
+        &:last-child {
+          margin-right: 0;
         }
-      }
-
-      .send-copy-contract {
-        color: ${Theme.gray30};
-        font-size: ${Theme.extraSmall};
-        text-transform: uppercase;
-        font-weight: 500;
-        letter-spacing: 1.13px;
-        font-family: ${Theme.titleFontFamily};
-      }
-      .copy-review {
-        font-size: ${Theme.small};
-        color: ${Theme.gray35};
-      }
-
-      .add-new-contact {
-        color: ${Theme.orange};
-        font-size: ${Theme.small};
-
-        .add-new-icon {
-          vertical-align: top;
-          width: 16px;
-        } 
-      }
-       .default-user-activity {
-          width: 42px;
-          height: 42px;
+        .dot {
+          background-color: #8798ad;
           border-radius: 50%;
-          float: left;
-          margin-right: 15px;
-          margin-top: -2px;
+          width: 3px;
+          height: 3px;
+          position: absolute;
+          top: 7px;
+          margin-left: -10px;
         }
-       @media not all and (min-resolution:.001dpcm)
-      { @supports (-webkit-appearance:none) {
-          .modal-heading{ 
-            padding: 7px 15px 7px 0 !important;
-            padding-left:15px !important;
-          }
-      }}
+      }
+    }
+    .default-user-activity {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      float: left;
+      margin-right: 15px;
+      margin-top: -2px;
+    }
+
+    @media not all and (min-resolution: 0.001dpcm) {
+      @supports (-webkit-appearance: none) {
+        .modal-heading {
+          padding: 7px 15px 7px 0 !important;
+          padding-left: 15px !important;
+        }
+      }
+    }
+    .modal-heading {
+      padding: 0px 0;
+      padding-left: 0;
+
+      ::i-block-chrome,
+      .modal-heading {
+        padding: 7px 15px 7px 0 !important;
+        padding-left: 15px !important;
+      }
+
+      @media not all and (min-resolution: 0.001dpcm) {
+        @supports (-webkit-appearance: none) {
           .modal-heading {
-            padding: 0px 0;
-            padding-left: 0;
-
-            ::i-block-chrome, .modal-heading {
-              padding: 7px 15px 7px 0 !important;
-              padding-left:15px !important;
-          }
-
-          @media not all and (min-resolution:.001dpcm)
-      { @supports (-webkit-appearance:none) {
-
-          .modal-heading{ 
             padding: 7px 15px 7px 0 !important;
-            padding-left:15px !important;
+            padding-left: 15px !important;
           }
-      }}
+        }
+      }
     }
 
     .apply-discount {
       list-style-type: none;
       padding: 0;
-      margin: 0; 
+      margin: 0;
 
-      li{
+      li {
         display: inline-block;
         margin-right: 30px;
       }
     }
-  }
+
     .edit-profile-text {
       position: relative;
 
@@ -126,17 +169,17 @@ const ModalBox = styled.div`
         color: ${Theme.gray36};
         font-size: ${Theme.small};
 
-        .team-member-name{
+        .team-member-name {
           color: ${Theme.gray90};
           font-size: ${Theme.medium};
         }
       }
-       .brand-pratner {
-          color: ${Theme.gray85};
-          .team-member-name {
-            color: ${Theme.black};
-          }
+      .brand-pratner {
+        color: ${Theme.gray85};
+        .team-member-name {
+          color: ${Theme.black};
         }
+      }
     }
     .trash-icons {
       position: absolute;
@@ -243,7 +286,6 @@ const ModalBox = styled.div`
           margin-top: 4px;
           vertical-align: bottom;
         }
-       
       }
       .customer-company-profile {
         border: 8px solid ${Theme.gray6};
@@ -251,20 +293,20 @@ const ModalBox = styled.div`
         width: 120px;
         height: 120px;
         margin-left: 10px;
-        position:relative;
+        position: relative;
 
-         .edit-profile-picture {
-            background: #f0f2fc;
-            border-radius: 18px;
-            border: 3px solid white;
-            position: absolute;
-            right: -25px;
-            top: 79px;
-            width:50px;
-            height:50px;
-            padding: 9px;
-            cursor:pointer;
-          }
+        .edit-profile-picture {
+          background: #f0f2fc;
+          border-radius: 18px;
+          border: 3px solid white;
+          position: absolute;
+          right: -25px;
+          top: 79px;
+          width: 50px;
+          height: 50px;
+          padding: 9px;
+          cursor: pointer;
+        }
       }
 
       .drop-down {
@@ -288,31 +330,30 @@ const ModalBox = styled.div`
       background: ${Theme.black};
     }
     .payment-option {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        li {
-          display: inline-block;
-          margin-right: 20px;
-          text-transform:capitalize;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      li {
+        display: inline-block;
+        margin-right: 20px;
+        text-transform: capitalize;
 
-          &:last-child {
-            margin-right: 0px;
-          }
-
-          .card {
-            width: 17px; 
-            vertical-align: top;
-          }
+        &:last-child {
+          margin-right: 0px;
         }
+
+        .card {
+          width: 17px;
+          vertical-align: top;
+        }
+      }
     }
 
     @media screen and (-webkit-min-device-pixel-ratio: 0) {
       .modal-heading {
-          padding: 7px 15px 7px 0;
-          padding-left:15px;
-        }
-     }
+        padding: 7px 15px 7px 0;
+        padding-left: 15px;
+      }
     }
 
     .footer-line {
@@ -340,18 +381,17 @@ const ModalBox = styled.div`
       }
     }
     .cropper-crop-box {
-       max-width: 540px !important;
+      max-width: 540px !important;
     }
-
 
     .automatic-reminder {
       border-radius: 2px;
       border-radius: 2px;
-      background:${Theme.extraLightYellow};
+      background: ${Theme.extraLightYellow};
       padding: 10px;
       color: ${Theme.black};
       font-size: ${Theme.normal};
-    } 
+    }
 
     .select-new-owner {
       list-style-type: none;
@@ -390,18 +430,18 @@ const ModalBox = styled.div`
       }
     }
     .does-not-match-box {
-       background-color: #FFDED6;
-       border-radius: 5px;
-       color: ${Theme.black};
-       font-size: ${Theme.normal};
-       padding: 14px;
-       .times-circle-icon {
-         width: 20px;
-         vertical-align: text-bottom;
-       }
+      background-color: #ffded6;
+      border-radius: 5px;
+      color: ${Theme.black};
+      font-size: ${Theme.normal};
+      padding: 14px;
+      .times-circle-icon {
+        width: 20px;
+        vertical-align: text-bottom;
+      }
     }
 
-    @media only screen and (min-width: 1700px) and (max-width: 1920px) { 
+    @media only screen and (min-width: 1700px) and (max-width: 1920px) {
       &.on-boarding {
         .role-selected {
           font-size: ${Theme.normalRes};
@@ -420,42 +460,33 @@ const ModalBox = styled.div`
         .add-new-contact {
           font-size: ${Theme.smallRes};
         }
-          
       }
       .edit-profile-text {
-          position: relative;
+        position: relative;
 
-         .name-email {
-           font-size: ${Theme.smallRes};
+        .name-email {
+          font-size: ${Theme.smallRes};
 
-            .team-member-name{
-              font-size: ${Theme.mediumRes};
-            }
-        
+          .team-member-name {
+            font-size: ${Theme.mediumRes};
           }
-         
         }
+      }
 
       .alert-msg {
         font-size: ${Theme.mediumRes};
       }
 
       .body-content {
-        
         .heading {
           font-size: ${Theme.extraSmallRes};
         }
         .drop-down {
           font-size: ${Theme.normalRes};
         }
-      
       }
-          
     }
-     
   }
-   
-  
 `;
 
 export default ModalBox;

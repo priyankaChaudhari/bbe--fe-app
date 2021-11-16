@@ -1618,6 +1618,15 @@ export default function AgreementSidePanel({
     return '';
   };
 
+  const tileDisabled = (date, agreementStartDate) => {
+    if (formData?.draft_from) {
+      return (
+        dayjs(date.date).get('date') !== dayjs(agreementStartDate).get('date')
+      );
+    }
+    return false;
+  };
+
   const generateHTML = (item) => {
     if (item.type.includes('number')) {
       return (
@@ -1688,7 +1697,8 @@ export default function AgreementSidePanel({
           monthPlaceholder="MM"
           yearPlaceholder="YYYY"
           placeholderText="Select Date"
-          disabled={formData && formData.draft_from}
+          tileDisabled={(date) => tileDisabled(date, agreementData?.start_date)}
+          // disabled={formData && formData.draft_from}
         />
       );
     }

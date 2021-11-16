@@ -13,6 +13,7 @@ export const CustomerDetailsBody = styled.div`
     font-size: ${Theme.extraNormal};
     text-transform: initial;
     cursor: pointer;
+    display: contents;
 
     .left-arrow {
       width: 16px;
