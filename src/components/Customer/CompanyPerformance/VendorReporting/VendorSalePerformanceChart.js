@@ -39,6 +39,7 @@ export default function VendorSalePerformanceChart({
     dateAxis.renderer.labels.template.location = 0.5;
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
+    dateAxis.periodChangeDateFormats.setKey('month', 'MMM');
 
     // create object of first value axis
     const valueAxis = chart.current.yAxes.push(new am4charts.ValueAxis());

@@ -43,6 +43,7 @@ export default function SalePerformanceChart({
     chart.current.data = chartData;
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
+
     // render X axis
     const dateAxis = chart.current.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
@@ -50,7 +51,7 @@ export default function SalePerformanceChart({
     dateAxis.renderer.labels.template.location = 0.5;
     dateAxis.dy = 10;
     dateAxis.cursorTooltipEnabled = false;
-
+    dateAxis.periodChangeDateFormats.setKey('month', 'MMM');
     // create object of first value axis
     const valueAxis = chart.current.yAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.grid.template.disabled = true;
