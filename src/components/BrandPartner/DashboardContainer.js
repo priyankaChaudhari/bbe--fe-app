@@ -12,12 +12,13 @@ function DashboardContainer() {
   const userInfo = useSelector((state) => state.userState.userInfo);
 
   const dashboardHeaders = {
-    'Ad Manager Admin': 'Ad Manager Dashboard',
+    'Ad Manager Admin': 'Advertising Dashboard',
     'Sponsored Advertising Ad Manager': 'Ad Manager Dashboard',
     'DSP Ad Manager': 'Ad Manager Dashboard',
     'Hybrid Ad Manager': 'Ad Manager Dashboard',
-    BGS: 'BGS Dashboard',
-    'BGS Manager': 'BGS Dashboard',
+    BGS: 'Dashboard',
+    'BGS Manager': 'Dashboard',
+    'BGS Admin': 'Dashboard',
     Finance: 'Dashboard',
   };
 
@@ -27,6 +28,7 @@ function DashboardContainer() {
     'DSP Ad Manager': '',
     'Hybrid Ad Manager': '',
     'BGS Manager': '',
+    'BGS Admin': '',
     BGS: '',
   };
 

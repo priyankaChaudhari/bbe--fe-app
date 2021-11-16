@@ -314,8 +314,8 @@ export default function CustomerList() {
   useEffect(() => {
     if (showAdPerformance || showDspAdPerformance) {
       const type = showAdPerformance
-        ? 'Sponsored Advertising Ad Manager'
-        : 'DSP Ad Manager';
+        ? 'sponsored_ad_dashboard'
+        : 'dsp_ad_performance';
       getManagersList(type).then((adm) => {
         if (adm && adm.data) {
           const list = [{ value: 'any', label: 'All' }]; // for select one user

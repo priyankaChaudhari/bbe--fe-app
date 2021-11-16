@@ -106,28 +106,50 @@ export async function getContactRoles() {
   return result;
 }
 
-export async function getManagersList(type, hybridSelectedDashboard) {
-  const api =
-    type === 'Growth Strategist' || type === 'BGS' || type === 'BGS Manager'
-      ? API_BGS
-      : API_ADM;
-
+export async function getManagersList(type) {
+  let api = API_BGS;
   let params = {
     'order-by': 'first_name',
   };
-  if (type === 'Sponsored Advertising Ad Manager') {
-    params = { ...params, dashboard: 'sponsored_ad_dashboard' };
-  }
-  if (type === 'DSP Ad Manager') {
-    params = { ...params, dashboard: 'dsp_ad_performance' };
-  }
 
-  if (hybridSelectedDashboard && type === 'Hybrid Ad Manager') {
-    params = { ...params, dashboard: hybridSelectedDashboard };
+  if (type !== 'BGS') {
+    api = API_ADM;
+    params = {
+      ...params,
+      dashboard: type,
+    };
+  } else {
+    params = {
+      ...params,
+      bgs_manager: 'all',
+    };
   }
 
   const result = await axiosInstance
     .get(`${api}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsUserList(id = null) {
+  let params = {
+    'order-by': 'first_name',
+  };
+
+  if (id !== null) {
+    params = {
+      ...params,
+      bgs_manager: id,
+    };
+  }
+
+  const result = await axiosInstance
+    .get(`${API_BGS}`, { params })
     .then((response) => {
       return response;
     })

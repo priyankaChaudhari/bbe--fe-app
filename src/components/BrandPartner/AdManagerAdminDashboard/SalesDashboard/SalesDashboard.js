@@ -16,6 +16,7 @@ import {
   getManagersList,
   getSalesGraphData,
   getSalesKeyContributionData,
+  getBgsUserList,
 } from '../../../../api';
 import {
   WhiteCard,
@@ -32,8 +33,10 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SalesDashboard({ marketplaceChoices, userInfo }) {
-  const isBGSManager = userInfo && userInfo.role === 'BGS Manager';
-
+  const isBGSManager = userInfo?.role === 'BGS Manager';
+  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
+  const isBGSAdmin = userInfo?.role === 'BGS Admin';
+  const isBGS = userInfo?.role === 'BGS';
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [salesChartData, setSalesChartData] = useState([]);
@@ -49,13 +52,24 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     label: 'Recent 7 days',
     sub: 'vs Previous 7 days',
   });
-  const [selectedBgsUser, setSelectedBgsUser] = useState(
-    isBGSManager
+  const [selectedManager, setSelectedManager] = useState(
+    isAdManagerAdmin || isBGSAdmin || isBGS
       ? {
           value: 'all',
+          label: 'All',
         }
-      : { value: userInfo.id, label: '' },
+      : { value: userInfo.id },
   );
+
+  const [selectedBgs, setSelectedBgs] = useState(
+    isBGSManager || isBGSAdmin
+      ? {
+          value: 'all',
+          label: 'All',
+        }
+      : { value: userInfo.id },
+  );
+  const [managersList, setManagersList] = useState([]);
   const [bgsList, setBgsList] = useState([]);
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState({
@@ -69,8 +83,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [responseId, setResponseId] = useState(null);
   const [salesGraphLoader, setSalesGraphLoader] = useState(false);
   const [selectedTabMetrics, setSelectedTabMetrics] = useState('revenue');
+  const tab = isAdManagerAdmin || isBGSAdmin ? 'positive' : 'contribution';
+
   const [selectedContributionOption, setSelectedContributionOption] = useState(
-    'contribution',
+    tab,
   );
   const [organicSale, setOrganicSale] = useState(0);
   const [inorganicSale, setInorganicSale] = useState(0);
@@ -95,8 +111,32 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const [pageNumber, setPageNumber] = useState();
   const [contributionCount, setContributionCount] = useState(null);
 
-  const getBGSList = useCallback(() => {
-    getManagersList('BGS').then((bgsData) => {
+  const getManagerList = useCallback(() => {
+    getManagersList(isBGSAdmin ? 'BGS' : 'sales_performance').then(
+      (managersData) => {
+        if (managersData && managersData.data && managersData.data.length) {
+          const results = managersData.data;
+          const list = [{ value: 'all', label: 'All' }];
+
+          for (const brand of results) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+            });
+          }
+          setManagersList(list);
+        }
+      },
+    );
+  }, [isBGSAdmin]);
+
+  const getBGSList = useCallback((id) => {
+    getBgsUserList(id).then((bgsData) => {
       if (bgsData && bgsData.data && bgsData.data.length) {
         const results = bgsData.data;
         const list = [{ value: 'all', label: 'All' }];
@@ -113,6 +153,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           });
         }
         setBgsList(list);
+      } else {
+        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -236,7 +278,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       selectedDailyFact,
       selectedGroupBy,
       marketplace,
-      selectedBgs,
+      selectedManagerUser,
+      selectedBgsUser,
       startDate = null,
       endDate = null,
     ) => {
@@ -245,10 +288,13 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedDailyFact,
         selectedGroupBy,
         marketplace,
-        selectedBgs,
+        selectedManagerUser,
+        selectedBgsUser,
+        isBGSManager,
+        isBGSAdmin,
+        isBGS,
         startDate,
         endDate,
-        userInfo,
       ).then((res) => {
         if (res && res.status === 400) {
           setSalesGraphLoader(false);
@@ -277,14 +323,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         setSalesGraphLoader(false);
       });
     },
-    [userInfo],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   const getContributionData = useCallback(
     (
       selectedDailyFact,
       marketplace,
-      selectedBgs,
+      selectedManagerUser,
+      selectedBgsUser,
       contributionType,
       selectedMetrics,
       startDate = null,
@@ -295,12 +342,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getSalesKeyContributionData(
         selectedDailyFact,
         marketplace,
-        selectedBgs,
+        selectedManagerUser,
+        selectedBgsUser,
         contributionType,
         selectedMetrics,
+        isBGSManager,
+        isBGSAdmin,
+        isBGS,
         startDate,
         endDate,
-        userInfo,
         page,
       ).then((res) => {
         if (res && (res.status === 400 || res.status === 400)) {
@@ -321,7 +371,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         }
       });
     },
-    [userInfo],
+    [isBGSManager, isBGSAdmin, isBGS],
   );
 
   useEffect(() => {
@@ -336,11 +386,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       }
     setMarketplaceOptions(list);
     if (responseId === null && list.length && list[0].value !== null) {
-      getBGSList();
+      if (isAdManagerAdmin || isBGSAdmin) getManagerList();
+      if (isBGSAdmin || isBGSManager)
+        getBGSList(isBGSManager ? userInfo.id : null);
+
       getContributionData(
         selectedSalesDF.value,
         'all',
-        selectedBgsUser.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedContributionOption,
         selectedTabMetrics,
         null,
@@ -351,7 +405,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedSalesDF.value,
         salesGroupBy,
         'all',
-        selectedBgsUser.value,
+        selectedManager.value,
+        selectedBgs.value,
       );
 
       setCurrency('USD');
@@ -364,13 +419,19 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     currency,
     selectedSalesDF,
     salesGroupBy,
-    selectedBgsUser,
-    getBGSList,
-    getSalesData,
+    selectedManager,
+    selectedBgs,
     selectedContributionOption,
     selectedTabMetrics,
-    getContributionData,
     pageNumber,
+    isBGSManager,
+    isAdManagerAdmin,
+    isBGSAdmin,
+    userInfo,
+    getContributionData,
+    getBGSList,
+    getManagerList,
+    getSalesData,
   ]);
 
   const setGropuByFilter = (value) => {
@@ -382,12 +443,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -403,12 +466,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -425,12 +490,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value,
           'daily',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
@@ -455,6 +522,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     endDate,
     dailyFactFlag,
     marketplace,
+    managerUser,
     bgsUser,
   ) => {
     let temp = '';
@@ -484,33 +552,45 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       ed = `${endDate.getDate()}-${
         endDate.getMonth() + 1
       }-${endDate.getFullYear()}`;
-      getSalesData(dailyFactFlag, temp, marketplace, bgsUser, sd, ed);
+      getSalesData(
+        dailyFactFlag,
+        temp,
+        marketplace,
+        managerUser,
+        bgsUser,
+        sd,
+        ed,
+      );
 
       if (selectedContributionOption === 'keyMetrics') {
         getContributionData(
           dailyFactFlag,
           marketplace,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           sd,
           ed,
-          pageNumber,
+          1,
         );
       }
     } else {
-      getSalesData(dailyFactFlag, temp, marketplace, bgsUser);
+      // for year to date
+      getSalesData(dailyFactFlag, temp, marketplace, managerUser, bgsUser);
       getContributionData(
         dailyFactFlag,
         marketplace,
-        selectedBgsUser.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedContributionOption,
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
     }
+    setPageNumber(1);
   };
 
   const handleMarketplace = (event) => {
@@ -525,25 +605,29 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           customDateState[0].endDate,
           'custom',
           event.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
       } else {
         getSalesData(
           selectedSalesDF.value,
           salesGroupBy,
           event.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
         getContributionData(
           selectedSalesDF.value,
           event.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
           selectedTabMetrics,
           null,
           null,
-          pageNumber,
+          1,
         );
+        setPageNumber(1);
       }
     }
   };
@@ -568,7 +652,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           new Date(),
           'year',
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
           selectedContributionOption,
         );
       }
@@ -581,37 +666,106 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     }
   };
 
-  const handleBgsList = (event) => {
-    const { value } = event.target;
-    setSelectedBgsUser({
-      value,
-    });
-    if (selectedSalesDF.value === 'custom') {
-      salesYearAndCustomDateFilter(
-        customDateState[0].startDate,
-        customDateState[0].endDate,
-        'custom',
-        selectedMarketplace.value,
-        value,
-        selectedContributionOption,
-      );
-    } else {
-      getSalesData(
-        selectedSalesDF.value,
-        salesGroupBy,
-        selectedMarketplace.value,
-        value,
-      );
-      getContributionData(
-        selectedSalesDF.value,
-        selectedMarketplace.value,
-        value,
-        selectedContributionOption,
-        selectedTabMetrics,
-        null,
-        null,
-        pageNumber,
-      );
+  const handleManagerList = (event) => {
+    const { value } = event;
+    let bgsUser = selectedBgs.value;
+    let tabOption = '';
+
+    if (event.value !== selectedManager.value) {
+      setSelectedManager(event);
+
+      if (isBGSAdmin) {
+        if (value === 'all') {
+          getBGSList(null);
+        } else {
+          getBGSList(value);
+        }
+        setBgsList([{ value: 'all', label: 'All' }]);
+        bgsUser = 'all';
+        setSelectedBgs({
+          value: 'all',
+          label: 'All',
+        });
+      }
+
+      if ((isAdManagerAdmin || isBGSAdmin) && value === 'all') {
+        tabOption = 'positive';
+      } else {
+        tabOption = 'contribution';
+      }
+
+      setSelectedContributionOption(tabOption);
+
+      if (selectedSalesDF.value === 'custom') {
+        salesYearAndCustomDateFilter(
+          customDateState[0].startDate,
+          customDateState[0].endDate,
+          'custom',
+          selectedMarketplace.value,
+          value,
+          bgsUser,
+          tabOption,
+        );
+      } else {
+        getSalesData(
+          selectedSalesDF.value,
+          salesGroupBy,
+          selectedMarketplace.value,
+          value,
+          bgsUser,
+        );
+        getContributionData(
+          selectedSalesDF.value,
+          selectedMarketplace.value,
+          value,
+          bgsUser,
+          tabOption,
+          selectedTabMetrics,
+          null,
+          null,
+          1,
+        );
+        setPageNumber(1);
+      }
+    }
+  };
+
+  const handleBGSList = (event) => {
+    const { value } = event;
+
+    if (event.value !== selectedBgs.value) {
+      setSelectedBgs(event);
+
+      if (selectedSalesDF.value === 'custom') {
+        salesYearAndCustomDateFilter(
+          customDateState[0].startDate,
+          customDateState[0].endDate,
+          'custom',
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+        );
+      } else {
+        getSalesData(
+          selectedSalesDF.value,
+          salesGroupBy,
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+        );
+        getContributionData(
+          selectedSalesDF.value,
+          selectedMarketplace.value,
+          selectedManager.value,
+          value,
+          selectedContributionOption,
+          selectedTabMetrics,
+          null,
+          null,
+          1,
+        );
+        setPageNumber(1);
+      }
     }
   };
 
@@ -635,7 +789,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedSalesDF.value,
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
           sd,
           ed,
         );
@@ -644,15 +799,18 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedSalesDF.value,
           value,
           selectedMarketplace.value,
-          selectedBgsUser.value,
+          selectedManager.value,
+          selectedBgs.value,
         );
       }
     }
   };
 
   const handleResetFilter = () => {
+    let contributionTab = 'contribution';
+    let userManger = 'all';
+    let userBgs = 'all';
     $('.checkboxes input:radio').filter("[value='all']").prop('checked', true);
-
     setCurrency('USD');
     setCurrencySymbol(getSymbolFromCurrency('USD'));
     setSelectedMarketplace({
@@ -660,18 +818,42 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       label: 'All Marketplaces',
       currency: 'USD',
     });
+    if (isBGSAdmin) {
+      getBGSList(null);
+    }
 
-    if (isBGSManager) {
-      setSelectedBgsUser({
+    if (isBGS) {
+      userBgs = userInfo.id;
+      userManger = 'all';
+    } else if (isBGSManager) {
+      userBgs = 'all';
+      userManger = userInfo.id;
+      setSelectedBgs({
         value: 'all',
+        label: 'All',
       });
+      contributionTab = 'contribution';
+    } else if (isAdManagerAdmin || isBGSAdmin) {
+      userManger = 'all';
+      setSelectedManager({
+        value: 'all',
+        label: 'All',
+      });
+      setSelectedBgs({
+        value: 'all',
+        label: 'All',
+      });
+      contributionTab = 'positive';
     } else {
-      setSelectedBgsUser({
+      userManger = userInfo.id;
+      setSelectedManager({
+        value: userInfo.id,
+      });
+      setSelectedBgs({
         value: userInfo.id,
       });
     }
-
-    setSelectedContributionOption('contribution');
+    setSelectedContributionOption(contributionTab);
 
     if (selectedSalesDF.value === 'custom') {
       salesYearAndCustomDateFilter(
@@ -680,20 +862,29 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         'custom',
         'all',
         'all',
-        'all',
+        userManger,
+        userBgs,
       );
     } else {
-      getSalesData(selectedSalesDF.value, salesGroupBy, 'all', 'all');
+      getSalesData(
+        selectedSalesDF.value,
+        salesGroupBy,
+        'all',
+        userManger,
+        userBgs,
+      );
       getContributionData(
         selectedSalesDF.value,
         'all',
-        'all',
-        'contribution',
+        userManger,
+        userBgs,
+        contributionTab,
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
+      setPageNumber(1);
     }
   };
 
@@ -707,13 +898,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getContributionData(
         selectedSalesDF.value,
         selectedMarketplace.value,
-        selectedBgsUser.value,
+        selectedManager.value,
+        selectedBgs.value,
         type,
         selectedTabMetrics,
         null,
         null,
-        pageNumber,
+        1,
       );
+      setPageNumber(1);
     }
   };
 
@@ -723,7 +916,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       getContributionData(
         selectedSalesDF.value,
         selectedMarketplace.value,
-        selectedBgsUser.value,
+        selectedManager.value,
+        selectedBgs.value,
         selectedContributionOption,
         value,
         null,
@@ -750,7 +944,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       customDateState[0].endDate,
       'custom',
       selectedMarketplace.value,
-      selectedBgsUser.value,
+      selectedManager.value,
+      selectedBgs.value,
     );
 
     setShowAdCustomDateModal(false);
@@ -761,7 +956,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     getContributionData(
       selectedSalesDF.value,
       selectedMarketplace.value,
-      selectedBgsUser.value,
+      selectedManager.value,
+      selectedBgs.value,
       selectedContributionOption,
       selectedTabMetrics,
       null,
@@ -952,12 +1148,17 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           getSelectComponents={getMarketplaceSelectComponents}
           marketplaceOptions={marketplaceOptions}
           handleMarketplace={handleMarketplace}
+          managersList={managersList}
+          handleManagerList={handleManagerList}
+          handleBGSList={handleBGSList}
+          selectedManager={selectedManager}
+          selectedBgs={selectedBgs}
           bgsList={bgsList}
-          handleBgsList={handleBgsList}
-          selectedBgs={selectedBgsUser}
           isApiCall={salesGraphLoader}
           selectedMarketplace={selectedMarketplace}
           isBGSManager={isBGSManager}
+          isAdManagerAdmin={isAdManagerAdmin}
+          isBGSAdmin={isBGSAdmin}
         />
       </div>
       <div className="col-lg-9 col-md-12">
@@ -1007,12 +1208,15 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedTabMetrics={selectedTabMetrics}
           handleOnMetricsTabChange={handleOnMetricsTabChange}
           currencySymbol={currencySymbol}
+          selectedManager={selectedManager.value}
           selectedSalesDF={selectedSalesDF}
           handlePageChange={handlePageChange}
           contributionCount={contributionCount}
           pageNumber={pageNumber}
           count={contributionCount}
           isApiCall={contributionLoader}
+          isAdManagerAdmin={isAdManagerAdmin}
+          isBGSAdmin={isBGSAdmin}
         />
         <CustomDateModal
           id="BT-salesSponsoredDashboard-daterange"

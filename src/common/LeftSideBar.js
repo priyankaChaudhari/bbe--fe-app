@@ -17,11 +17,13 @@ import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
   PATH_BGS_DASHBOARD,
+  PATH_BGS_MANAGER_DASHBOARD,
   PATH_SPONSORED_DASHBOARD,
   PATH_DSP_DASHBOARD,
   PATH_HYBRID_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
+  PATH_BGS_ADMIN_DASHBOARD,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
@@ -31,15 +33,11 @@ export default function LeftSideBar({ userInfo }) {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          {(userInfo &&
-            userInfo.role &&
-            userInfo.role.includes('Growth Strategist')) ||
-          (userInfo && userInfo.role && userInfo.role === 'BGS') ||
-          (userInfo && userInfo.role && userInfo.role === 'BGS Manager') ? (
+          {userInfo?.role && userInfo.role === 'BGS' ? (
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('bgs-dashboard')
+                history.location.pathname.includes('bgs')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -60,8 +58,60 @@ export default function LeftSideBar({ userInfo }) {
               />
             </li>
           ) : null}
-          {userInfo &&
-          userInfo.role &&
+
+          {userInfo?.role && userInfo.role === 'BGS Manager' ? (
+            <li
+              className={
+                history.location.pathname &&
+                history.location.pathname.includes('bgsManager')
+                  ? ' cursor active'
+                  : ' cursor'
+              }
+              role="presentation"
+              onClick={() => history.push(PATH_BGS_MANAGER_DASHBOARD)}>
+              {' '}
+              <img
+                width="32px"
+                className=" speed0meter-icon active"
+                src={SpeedometerActive}
+                alt=""
+              />
+              <img
+                width="32px"
+                className=" speed0meter-icon  disactive"
+                src={Speedometer}
+                alt=""
+              />
+            </li>
+          ) : null}
+
+          {userInfo?.role && userInfo.role === 'BGS Admin' ? (
+            <li
+              className={
+                history.location.pathname &&
+                history.location.pathname.includes('bgsAdmin')
+                  ? ' cursor active'
+                  : ' cursor'
+              }
+              role="presentation"
+              onClick={() => history.push(PATH_BGS_ADMIN_DASHBOARD)}>
+              {' '}
+              <img
+                width="32px"
+                className=" speed0meter-icon active"
+                src={SpeedometerActive}
+                alt=""
+              />
+              <img
+                width="32px"
+                className=" speed0meter-icon  disactive"
+                src={Speedometer}
+                alt=""
+              />
+            </li>
+          ) : null}
+
+          {userInfo?.role &&
           userInfo.role.includes('Sponsored Advertising Ad Manager') ? (
             <li
               className={
@@ -87,9 +137,8 @@ export default function LeftSideBar({ userInfo }) {
               />
             </li>
           ) : null}
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('DSP Ad Manager') ? (
+
+          {userInfo?.role && userInfo.role.includes('DSP Ad Manager') ? (
             <li
               className={
                 history.location.pathname &&
@@ -115,9 +164,7 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('Hybrid Ad Manager') ? (
+          {userInfo?.role && userInfo.role.includes('Hybrid Ad Manager') ? (
             <li
               className={
                 history.location.pathname &&
@@ -143,13 +190,11 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo &&
-          userInfo.role &&
-          userInfo.role.includes('Ad Manager Admin') ? (
+          {userInfo?.role && userInfo.role.includes('Ad Manager Admin') ? (
             <li
               className={
                 history.location.pathname &&
-                history.location.pathname.includes('adManager/admin')
+                history.location.pathname.includes('adMangerAdmin')
                   ? ' cursor active'
                   : ' cursor'
               }

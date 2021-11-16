@@ -78,7 +78,7 @@ export const noGraphDataMessage =
   'We are not pulling data for this dashboard. If we should, please file a help desk ticket and \n we will resolve this issue as soon as possible.';
 
 export const keyContributionConstant = {
-  noAdManagerSelected: [
+  noManagerSelected: [
     {
       id: 'positive',
       label: 'Positive',
@@ -89,7 +89,7 @@ export const keyContributionConstant = {
     },
   ],
 
-  adManagerSelected: [
+  managerSelected: [
     {
       id: 'contribution',
       label: 'Contribution',

@@ -43,14 +43,16 @@ const SponsoredKeyContribution = ({
   isDesktop,
   contributionData,
   selectedContributionOption,
-  selectedAdManager,
+  selectedManager,
   handleContributionOptions,
   selectedAdMetrics,
   selectedTabMetrics,
   handleOnMetricsTabChange,
   currencySymbol,
   selectedAdDF,
-  isBGSManager,
+
+  isAdManagerAdmin,
+  isBGSAdmin,
   handlePageChange,
   pageNumber,
   count,
@@ -165,9 +167,9 @@ const SponsoredKeyContribution = ({
 
   const renderKeyContributionOptions = () => {
     const keyTabOptions =
-      selectedAdManager === 'all' && !isBGSManager
-        ? keyContributionConstant.noAdManagerSelected
-        : keyContributionConstant.adManagerSelected;
+      (isAdManagerAdmin || isBGSAdmin) && selectedManager === 'all'
+        ? keyContributionConstant.noManagerSelected
+        : keyContributionConstant.managerSelected;
 
     return (
       <div className="col-md-6 col-sm1-12  mb-3">
@@ -796,38 +798,40 @@ export default SponsoredKeyContribution;
 
 SponsoredKeyContribution.defaultProps = {
   keyContributionLoader: false,
+  isAdManagerAdmin: false,
+  isBGSAdmin: false,
   isDesktop: false,
   contributionData: {},
-  selectedContributionOption: {},
-  selectedAdManager: {},
-  handleContributionOptions: () => {},
+  selectedManager: '',
+  selectedContributionOption: '',
+  currencySymbol: '',
+  count: null,
+  pageNumber: 1,
   selectedAdMetrics: {},
   selectedTabMetrics: {},
   selectedAdDF: {},
-  handleOnMetricsTabChange: () => {},
-  currencySymbol: '',
-  isBGSManager: false,
   handlePageChange: () => {},
-  count: null,
-  pageNumber: 1,
+  handleContributionOptions: () => {},
+  handleOnMetricsTabChange: () => {},
 };
 
 SponsoredKeyContribution.propTypes = {
   keyContributionLoader: bool,
   isDesktop: bool,
-  contributionData: arrayOf(Array),
+  isAdManagerAdmin: bool,
+  isBGSAdmin: bool,
+  selectedManager: string,
   selectedContributionOption: string,
-  selectedAdManager: string,
-  handleContributionOptions: func,
-  selectedAdMetrics: shape({}),
   selectedTabMetrics: string,
-  handleOnMetricsTabChange: func,
-  selectedAdDF: objectOf(Object),
   currencySymbol: string,
-  isBGSManager: bool,
-  handlePageChange: func,
   count: number,
   pageNumber: number,
+  contributionData: arrayOf(Array),
+  selectedAdMetrics: shape({}),
+  selectedAdDF: objectOf(Object),
+  handleOnMetricsTabChange: func,
+  handleContributionOptions: func,
+  handlePageChange: func,
 };
 
 const Wrapper = styled.div`
