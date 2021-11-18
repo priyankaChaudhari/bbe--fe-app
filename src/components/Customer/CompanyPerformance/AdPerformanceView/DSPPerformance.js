@@ -6,7 +6,7 @@ import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import DSPMetrics from '../../../BrandPartner/AdManagerAdminDashboard/DSPDashboard/DSPMetrics';
 import { ArrowRightBlackIcon } from '../../../../theme/images';
-import { PageLoader, WhiteCard,ToggleButton } from '../../../../common';
+import { PageLoader, WhiteCard, ToggleButton } from '../../../../common';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -30,6 +30,8 @@ export default function DSPPerformance({
   dspGraphLoader,
   dspChartData,
   noGraphDataMessage,
+  peformaceSapcing,
+  handlePeformanceSpacing,
 }) {
   const displayDspPacingLabel = () => {
     if (
@@ -213,7 +215,7 @@ export default function DSPPerformance({
   return (
     <WhiteCard className="mt-3 mb-3">
       <div className="row">
-        <div className="col-12">
+        <div className="col-md-6  col-sm1-12 pr-0">
           {' '}
           <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
           <p className="gray-normal-text mb-4 mt-1">
@@ -227,6 +229,41 @@ export default function DSPPerformance({
               {displayDspPacingLabel()}
             </span>
           </p>
+        </div>
+        <div className="col-md-6 col-sm1-12  mb-3 pl-0">
+          <ToggleButton>
+            <div className="days-container ">
+              <ul className="days-tab">
+                <li id="BT-performance-toggle">
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="peformanceCheck"
+                    name="performanceRadioDefault"
+                    value={peformaceSapcing}
+                    checked={peformaceSapcing === 'performance'}
+                    onClick={() => handlePeformanceSpacing('performance')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="peformanceCheck">Performance</label>
+                </li>
+
+                <li id="BT-spacing-toggle">
+                  <input
+                    className="d-none"
+                    type="radio"
+                    id="spacingCheck"
+                    name="spacingRadioDefault"
+                    value={peformaceSapcing}
+                    checked={peformaceSapcing === 'spacing'}
+                    onClick={() => handlePeformanceSpacing('spacing')}
+                    onChange={() => {}}
+                  />
+                  <label htmlFor="spacingCheck">Spacing</label>
+                </li>
+              </ul>
+            </div>
+          </ToggleButton>
         </div>
       </div>
       <div className="row mr-1 ml-1">
@@ -280,6 +317,8 @@ DSPPerformance.defaultProps = {
   dspGraphLoader: {},
   dspChartData: {},
   noGraphDataMessage: {},
+  peformaceSapcing: 'performance',
+  handlePeformanceSpacing: () => {},
 };
 
 DSPPerformance.propTypes = {
@@ -299,6 +338,8 @@ DSPPerformance.propTypes = {
   dspGraphLoader: bool,
   dspChartData: arrayOf(Array),
   noGraphDataMessage: string,
+  peformaceSapcing: string,
+  handlePeformanceSpacing: () => {},
 };
 
 const NoData = styled.div`

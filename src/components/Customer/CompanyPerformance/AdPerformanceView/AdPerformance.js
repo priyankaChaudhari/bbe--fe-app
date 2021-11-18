@@ -51,6 +51,7 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     show: false,
   });
   const [adGroupBy, setAdGroupBy] = useState('daily');
+  const [peformaceSapcing, setPeformaceSapcing] = useState('performance');
   const [adChartData, setAdChartData] = useState([]);
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
@@ -932,6 +933,11 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     }
   };
 
+  const handlePeformanceSpacing = (value) => {
+    setPeformaceSapcing(value);
+    getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+  };
+
   const setBoxToggle = (name, GraphType) => {
     if (GraphType === 'ad') {
       if (
@@ -1051,6 +1057,8 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           dspChartData={dspChartData}
           dspGraphLoader={dspGraphLoader}
           noGraphDataMessage={noGraphDataMessage}
+          peformaceSapcing={peformaceSapcing}
+          handlePeformanceSpacing={handlePeformanceSpacing}
         />
       ) : null}
 
