@@ -487,6 +487,14 @@ const ModalBox = styled.div`
       }
     }
   }
+  .modal-footer {
+    padding: 10px 30px 20px 30px;
+  }
+  .footer-line {
+    border-bottom: 1px solid ${Theme.gray5};
+    margin: 10px 0;
+    width: 100%;
+  }
 `;
 
 export default ModalBox;
