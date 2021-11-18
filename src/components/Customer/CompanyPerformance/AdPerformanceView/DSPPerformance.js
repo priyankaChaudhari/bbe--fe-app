@@ -103,6 +103,76 @@ export default function DSPPerformance({
     return dayjs(new Date()).format('MMMM');
   };
 
+  const renderDspAdHeaderSection = () => {
+    return (
+      <>
+        <div className="row">
+          <div className="col-md-6  col-sm1-12 pr-0">
+            {' '}
+            <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
+            <p className="gray-normal-text mb-4 mt-1">
+              {dspData && dspData.dsp_pacing
+                ? `Monthly Budget Pacing ( ${displayMonth()} )`
+                : ''}{' '}
+              <span
+                className="orange-text"
+                role="presentation"
+                onClick={() => setShowDspAdPacingModal({ show: true })}>
+                {displayDspPacingLabel()}
+              </span>
+            </p>
+          </div>
+          <div className="col-md-6 col-sm1-12  mb-3 pl-0">
+            <ToggleButton>
+              <div className="days-container ">
+                <ul className="days-tab">
+                  <li id="BT-performance-toggle">
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="peformanceCheck"
+                      name="performanceRadioDefault"
+                      value={peformaceSapcing}
+                      checked={peformaceSapcing === 'performance'}
+                      onClick={() => handlePeformanceSpacing('performance')}
+                      onChange={() => {}}
+                    />
+                    <label htmlFor="peformanceCheck">Performance</label>
+                  </li>
+
+                  <li id="BT-spacing-toggle">
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="spacingCheck"
+                      name="spacingRadioDefault"
+                      value={peformaceSapcing}
+                      checked={peformaceSapcing === 'spacing'}
+                      onClick={() => handlePeformanceSpacing('spacing')}
+                      onChange={() => {}}
+                    />
+                    <label htmlFor="spacingCheck">Spacing</label>
+                  </li>
+                </ul>
+              </div>
+            </ToggleButton>
+          </div>
+        </div>
+        <AllocateBar className="mb-4">
+          {' '}
+          <div className="remaing-label">
+            Remaining Balance:<span>$18,000</span>
+          </div>{' '}
+          <div className="allocate-balance cursor">
+            Allocate Balance{' '}
+            <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+          </div>
+          <div className="clear-fix" />
+        </AllocateBar>
+      </>
+    );
+  };
+
   const renderDSPGroupBy = () => {
     return (
       <>
@@ -219,69 +289,7 @@ export default function DSPPerformance({
 
   return (
     <WhiteCard className="mt-3 mb-3">
-      <div className="row">
-        <div className="col-md-6  col-sm1-12 pr-0">
-          {' '}
-          <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
-          <p className="gray-normal-text mb-4 mt-1">
-            {dspData && dspData.dsp_pacing
-              ? `Monthly Budget Pacing ( ${displayMonth()} )`
-              : ''}{' '}
-            <span
-              className="orange-text"
-              role="presentation"
-              onClick={() => setShowDspAdPacingModal({ show: true })}>
-              {displayDspPacingLabel()}
-            </span>
-          </p>
-        </div>
-        <div className="col-md-6 col-sm1-12  mb-3 pl-0">
-          <ToggleButton>
-            <div className="days-container ">
-              <ul className="days-tab">
-                <li id="BT-performance-toggle">
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id="peformanceCheck"
-                    name="performanceRadioDefault"
-                    value={peformaceSapcing}
-                    checked={peformaceSapcing === 'performance'}
-                    onClick={() => handlePeformanceSpacing('performance')}
-                    onChange={() => {}}
-                  />
-                  <label htmlFor="peformanceCheck">Performance</label>
-                </li>
-
-                <li id="BT-spacing-toggle">
-                  <input
-                    className="d-none"
-                    type="radio"
-                    id="spacingCheck"
-                    name="spacingRadioDefault"
-                    value={peformaceSapcing}
-                    checked={peformaceSapcing === 'spacing'}
-                    onClick={() => handlePeformanceSpacing('spacing')}
-                    onChange={() => {}}
-                  />
-                  <label htmlFor="spacingCheck">Spacing</label>
-                </li>
-              </ul>
-            </div>
-          </ToggleButton>
-        </div>
-      </div>
-      <AllocateBar className="mb-4">
-        {' '}
-        <div className="remaing-label">
-          Remaining Balance:<span>$18,000</span>
-        </div>{' '}
-        <div className="allocate-balance cursor">
-          Allocate Balance{' '}
-          <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
-        </div>
-        <div className="clear-fix" />
-      </AllocateBar>
+      {renderDspAdHeaderSection()}
       <div className="row mr-1 ml-1">
         <DSPMetrics
           currencySymbol={currencySymbol}
