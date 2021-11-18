@@ -9,8 +9,9 @@ import styled from 'styled-components';
 
 import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
 import Theme from '../../../../theme/Theme';
+import { LeftArrowIcon } from '../../../../theme/images';
 
-import { PageLoader } from '../../../../common';
+import { PageLoader, AllocateBar } from '../../../../common';
 
 export default function DspAdPacing({
   dspData,
@@ -336,21 +337,20 @@ export default function DspAdPacing({
             </div>
           </div>
 
-          <div className="row">
-            <div className="col-10">
-              <div className="label-info text-bold ">
-                $7,000 of the escrow is planned carry-over for the future month
-              </div>
+          <AllocateBar className="mb-4">
+            {' '}
+            <div className="remaing-label">
+              Remaining Balance:<span>$18,000</span>
+            </div>{' '}
+            <div
+              className="allocate-balance cursor"
+              onClick={() => setShowAllocatedBalanceModal(true)}
+              role="presentation">
+              Allocate Balance{' '}
+              <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
             </div>
-            <div className="col-2">
-              <div
-                className="label-info text-bold text-right"
-                onClick={() => setShowAllocatedBalanceModal(true)}
-                role="presentation">
-                Allocated Balance
-              </div>{' '}
-            </div>
-          </div>
+            <div className="clear-fix" />
+          </AllocateBar>
         </div>
       </DspAdPacingModal>
       {renderDspAdPacingModal()}
