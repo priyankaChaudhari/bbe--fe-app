@@ -5,8 +5,13 @@ import styled from 'styled-components';
 import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
 import DSPPerformanceChart from './DSPPerformanceChart';
 import DSPMetrics from '../../../BrandPartner/AdManagerAdminDashboard/DSPDashboard/DSPMetrics';
-import { ArrowRightBlackIcon } from '../../../../theme/images';
-import { PageLoader, WhiteCard, ToggleButton } from '../../../../common';
+import { ArrowRightBlackIcon, LeftArrowIcon } from '../../../../theme/images';
+import {
+  PageLoader,
+  WhiteCard,
+  ToggleButton,
+  AllocateBar,
+} from '../../../../common';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -266,6 +271,17 @@ export default function DSPPerformance({
           </ToggleButton>
         </div>
       </div>
+      <AllocateBar className="mb-4">
+        {' '}
+        <div className="remaing-label">
+          Remaining Balance:<span>$18,000</span>
+        </div>{' '}
+        <div className="allocate-balance cursor">
+          Allocate Balance{' '}
+          <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+        </div>
+        <div className="clear-fix" />
+      </AllocateBar>
       <div className="row mr-1 ml-1">
         <DSPMetrics
           currencySymbol={currencySymbol}

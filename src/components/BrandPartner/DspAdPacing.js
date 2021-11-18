@@ -5,7 +5,8 @@ import dayjs from 'dayjs';
 import PropTypes, { instanceOf } from 'prop-types';
 import styled from 'styled-components';
 import Theme from '../../theme/Theme';
-import { PageLoader } from '../../common';
+import { LeftArrowIcon } from '../../theme/images';
+import { PageLoader, AllocateBar } from '../../common';
 
 export default function DspAdPacing({
   dspData,
@@ -299,6 +300,27 @@ export default function DspAdPacing({
           )}
         </div>
         <div className="straight-line horizontal-line  mt-3 mb-3" />
+        <div className="row">
+          <div className="col-7">
+            <div className="label-info text-bold text-right">
+              Escrow Balance
+            </div>
+          </div>
+          <div className="col-5">
+            <div className="label-info text-bold text-right">$24,000</div>
+          </div>
+        </div>
+        <AllocateBar className="mb-4">
+          {' '}
+          <div className="remaing-label">
+            Remaining Balance:<span>$18,000</span>
+          </div>{' '}
+          <div className="allocate-balance cursor">
+            Allocate Balance{' '}
+            <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+          </div>
+          <div className="clear-fix" />
+        </AllocateBar>
       </div>
     </DspAdPacingModal>
   ) : (

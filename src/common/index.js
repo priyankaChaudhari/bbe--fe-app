@@ -42,6 +42,7 @@ import PdfAnnotator from './PdfAnnotator';
 import ToggleButton from './ToggleButton';
 import CardMetrics from './CardMetrics';
 import DropDownUncontained from './DropDownUncontained';
+import AllocateBar from './AllocateBar';
 
 export {
   Button,
@@ -88,4 +89,5 @@ export {
   ToggleButton,
   CardMetrics,
   DropDownUncontained,
+  AllocateBar,
 };
