@@ -327,7 +327,7 @@ export default function DspAdPacing({
           </div>
           <div className="straight-line horizontal-line  mt-3 mb-3" />
 
-          <div className="row">
+          <div className="row mb-3">
             <div className="col-7">
               <div className="label-info text-bold ">Escrow Balance</div>
             </div>
@@ -340,7 +340,7 @@ export default function DspAdPacing({
           <AllocateBar className="mb-4">
             {' '}
             <div className="remaing-label">
-              Remaining Balance:<span>$18,000</span>
+              $6,000 of the escrow is planned carry-over for future months
             </div>{' '}
             <div
               className="allocate-balance cursor"

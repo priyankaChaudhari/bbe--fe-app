@@ -487,14 +487,24 @@ const ModalBox = styled.div`
       }
     }
   }
+<<<<<<< HEAD
   .modal-footer {
     padding: 10px 30px 20px 30px;
   }
+=======
+>>>>>>> pdv-2869 escrow- added styling for budget allocation modal.
   .footer-line {
     border-bottom: 1px solid ${Theme.gray5};
     margin: 10px 0;
     width: 100%;
   }
+<<<<<<< HEAD
+=======
+
+  .modal-footer {
+    padding: 10px 20px 20px 20px;
+  }
+>>>>>>> pdv-2869 escrow- added styling for budget allocation modal.
 `;
 
 export default ModalBox;

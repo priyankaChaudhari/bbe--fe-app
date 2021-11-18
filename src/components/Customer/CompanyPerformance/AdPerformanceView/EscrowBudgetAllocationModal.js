@@ -3,8 +3,8 @@ import React from 'react';
 import Modal from 'react-modal';
 import { bool, func, string } from 'prop-types';
 
-import { ModalBox, Button } from '../../../../common';
-import { CloseIcon } from '../../../../theme/images';
+import { ModalBox, Button, InputFormField } from '../../../../common';
+import { CloseIcon, AddIcons } from '../../../../theme/images';
 
 const todaysDate = new Date();
 todaysDate.setDate(todaysDate.getDate() - 2);
@@ -15,9 +15,8 @@ const customStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    maxWidth: '420px ',
+    maxWidth: '518px ',
     width: '100% ',
-    minHeight: '390px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
@@ -40,15 +39,76 @@ const EscrowBudgetAllocationModal = ({ id, isOpen, onClick, onApply }) => {
         role="presentation"
       />
       <ModalBox>
-        <div className="modal-body">
-          <h4>Allocation Balance</h4>
-
-          <div className="text-center mt-3">
+        <div className="modal-body pb-0">
+          <h4>Allocate Balance</h4>
+          <div className="row">
+            <div className="col-6">
+              {' '}
+              <InputFormField className="mt-3">
+                <label htmlFor="emailAddress">
+                  Month
+                  <br />
+                  <input className="form-control" />
+                </label>
+              </InputFormField>
+            </div>
+            <div className="col-6">
+              {' '}
+              <InputFormField className="mt-3">
+                <label className="modal-field " htmlFor="emailAddress">
+                  Amount
+                  <div className="input-container">
+                    <span className="input-icon">$</span>
+                    <input className="form-control" />
+                  </div>
+                </label>
+              </InputFormField>
+            </div>
+            <div className="col-6">
+              {' '}
+              <InputFormField className="mt-3">
+                <label htmlFor="emailAddress">
+                  Month
+                  <br />
+                  <input className="form-control" />
+                </label>
+              </InputFormField>
+            </div>
+            <div className="col-6">
+              {' '}
+              <InputFormField className="mt-3">
+                <label className="modal-field " htmlFor="emailAddress">
+                  Amount
+                  <div className="input-container">
+                    <span className="input-icon">$</span>
+                    <input className="form-control" />
+                  </div>
+                </label>
+              </InputFormField>
+            </div>
             <Button
+              style={{ textTransform: 'uppercase' }}
+              className="btn-add-contact mt-3">
+              {' '}
+              <img
+                width="14px"
+                style={{ verticalAlign: 'middle' }}
+                src={AddIcons}
+                className="ml-1 add-icon"
+                alt="add"
+              />{' '}
+              Add another Month
+            </Button>
+          </div>
+        </div>
+        <div className="footer-line" />
+        <div className="modal-footer">
+          <div className="text-center ">
+            <Button
+              className="btn-primary on-boarding  w-100"
               onClick={onApply}
-              type="button"
-              className="btn-primary on-boarding   w-100">
-              Apply
+              type="button">
+              Confirm
             </Button>
           </div>
         </div>
