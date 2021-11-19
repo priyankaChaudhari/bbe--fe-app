@@ -948,6 +948,9 @@ export default function AgreementDetails({
                   id={id}
                   history={history}
                   setViewComponent={setViewComponent}
+                  DropdownIndicator={DropdownIndicator}
+                  IconOption={IconOption}
+                  setShowModal={setShowModal}
                 />
               )}
             </>
