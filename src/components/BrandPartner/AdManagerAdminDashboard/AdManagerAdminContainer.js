@@ -11,7 +11,7 @@ import { getMarketPlaceList } from '../../../api';
 import BGSComissionContainer from './BGSComission/BGSComissionContainer';
 
 export default function AdManagerAdminContainer({ userInfo }) {
-  const [viewComponent, setViewComponent] = useState('sales');
+  const [viewComponent, setViewComponent] = useState('comissions');
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const getMarketPlace = useCallback(() => {
     getMarketPlaceList().then((res) => {
