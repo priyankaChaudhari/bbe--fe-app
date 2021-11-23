@@ -5,6 +5,7 @@ import { arrayOf } from 'prop-types';
 import Theme from '../../../../theme/Theme';
 import { Card } from '../../../../common';
 import { BGSComissionMetrics } from '../../../../constants';
+// import { divide } from 'lodash';
 
 const ComissionsMetrics = ({ comissionData }) => {
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
