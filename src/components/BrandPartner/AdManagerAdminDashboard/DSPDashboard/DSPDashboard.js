@@ -157,6 +157,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
               brand.documents[0] &&
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
+            bgsManager: brand.bgs_manager,
           });
         }
         setBgsList(list);
@@ -524,17 +525,39 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
 
   const handleBGSList = (event) => {
     const { value } = event;
+    let manager = selectedManager.value;
 
     if (event.value !== selectedBgs.value) {
       setSelectedBgs(event);
 
+      if (isBGSAdmin) {
+        const found = bgsList.find(
+          (bgsUser) => bgsUser.value === value && bgsUser.bgsManager !== null,
+        );
+
+        if (found !== undefined) {
+          setSelectedManager({
+            value: found?.bgsManager?.id,
+            label: `${found.bgsManager.first_name} ${found.bgsManager.last_name}`,
+          });
+          manager = found?.bgsManager?.id;
+          getBGSList(manager);
+        } else {
+          setSelectedManager({
+            value: 'all',
+            label: 'All',
+          });
+          manager = 'all';
+          getBGSList(null);
+        }
+      }
       if (selectedAdDF.value === 'custom') {
         DSPYearAndCustomDateFilter(
           adState[0].startDate,
           adState[0].endDate,
           'custom',
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
         );
       } else {
@@ -542,13 +565,13 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           selectedAdDF.value,
           dspGroupBy,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
         );
         getContributionData(
           selectedAdDF.value,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
           selectedContributionOption,
           selectedTabMatrics,
@@ -560,7 +583,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       }
       getDSPPacingData(
         selectedMarketplace.value,
-        selectedManager.value,
+        manager,
         value,
         selectedSpendingOption,
       );
