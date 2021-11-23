@@ -3,14 +3,12 @@
 import React, { useState } from 'react';
 
 import dayjs from 'dayjs';
-
 import PropTypes, { instanceOf } from 'prop-types';
 import styled from 'styled-components';
 
 import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
 import Theme from '../../../../theme/Theme';
 import { LeftArrowIcon } from '../../../../theme/images';
-
 import { PageLoader, AllocateBar } from '../../../../common';
 
 export default function DspAdPacing({

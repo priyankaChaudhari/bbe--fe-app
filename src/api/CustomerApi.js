@@ -684,6 +684,41 @@ export async function getDSPPerformance(
   return result;
 }
 
+export async function getDSPPacingGraphData(
+  customer,
+  dailyFacts,
+  groupBy,
+  marketplace,
+  startDate,
+  endDate,
+) {
+  let params = {};
+  if (startDate && endDate) {
+    params = {
+      dsp_daily_facts: dailyFacts,
+      dsp_group_by: groupBy,
+      dsp_marketplace: marketplace,
+      dsp_start_date: startDate,
+      dsp_end_date: endDate,
+    };
+  } else {
+    params = {
+      dsp_daily_facts: dailyFacts,
+      dsp_group_by: groupBy,
+      dsp_marketplace: marketplace,
+    };
+  }
+  const result = await axiosInstance
+    .get(`${API_AD_PERFORMANCE + customer}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function getCustomers(
   pageNumber,
   dashboard,

@@ -18,6 +18,7 @@ import {
   getAdPerformance,
   getDSPPerformance,
   getDspPacingData,
+  getDSPPacingGraphData,
 } from '../../../../api';
 
 import 'react-date-range/dist/styles.css'; // main style file
@@ -51,7 +52,9 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     show: false,
   });
   const [adGroupBy, setAdGroupBy] = useState('daily');
-  const [performancePacing, setPerformancePacing] = useState('performance');
+  const [performancePacingFlag, setPerformancePacingFlag] = useState(
+    'performance',
+  );
   const [adChartData, setAdChartData] = useState([]);
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
@@ -528,6 +531,48 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     [id],
   );
 
+  const getPacingGraphData = useCallback(
+    (
+      selectedDailyFact,
+      selectedGroupBy,
+      marketplace,
+      startDate = null,
+      endDate = null,
+    ) => {
+      setIsApiCall(true);
+      setDspGraphLoader(true);
+      getDSPPacingGraphData(
+        id,
+        selectedDailyFact,
+        selectedGroupBy,
+        marketplace,
+        startDate,
+        endDate,
+      ).then((res) => {
+        if (res && res.status === 400) {
+          setIsApiCall(false);
+          setDspGraphLoader(false);
+        }
+        if (res && res.status === 200) {
+          // setDspData(res.data);
+          if (res.data && res.data.dsp_spend) {
+            const dspGraphData = bindDSPResponseData(res.data);
+
+            setDSPChartData(dspGraphData);
+          } else {
+            setDSPChartData([]);
+            setDspCurrentTotal([]);
+            setDspPreviousTotal([]);
+            setDspDifference([]);
+          }
+          setIsApiCall(false);
+          setDspGraphLoader(false);
+        }
+      });
+    },
+    [id],
+  );
+
   useEffect(() => {
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
@@ -934,8 +979,12 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
   };
 
   const handlePeformancePacing = (value) => {
-    setPerformancePacing(value);
-    getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+    setPerformancePacingFlag(value);
+    if (value === 'performance') {
+      getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+    } else {
+      getPacingGraphData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+    }
   };
 
   const setBoxToggle = (name, GraphType) => {
@@ -1057,7 +1106,7 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           dspChartData={dspChartData}
           dspGraphLoader={dspGraphLoader}
           noGraphDataMessage={noGraphDataMessage}
-          performancePacing={performancePacing}
+          performancePacingFlag={performancePacingFlag}
           handlePeformancePacing={handlePeformancePacing}
         />
       ) : null}
