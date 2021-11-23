@@ -35,8 +35,8 @@ export default function DSPPerformance({
   dspGraphLoader,
   dspChartData,
   noGraphDataMessage,
-  peformaceSapcing,
-  handlePeformanceSpacing,
+  performancePacing,
+  handlePeformancePacing,
 }) {
   const displayDspPacingLabel = () => {
     if (
@@ -132,26 +132,26 @@ export default function DSPPerformance({
                       type="radio"
                       id="peformanceCheck"
                       name="performanceRadioDefault"
-                      value={peformaceSapcing}
-                      checked={peformaceSapcing === 'performance'}
-                      onClick={() => handlePeformanceSpacing('performance')}
+                      value={performancePacing}
+                      checked={performancePacing === 'performance'}
+                      onClick={() => handlePeformancePacing('performance')}
                       onChange={() => {}}
                     />
                     <label htmlFor="peformanceCheck">Performance</label>
                   </li>
 
-                  <li id="BT-spacing-toggle">
+                  <li id="BT-pacing-toggle">
                     <input
                       className="d-none"
                       type="radio"
-                      id="spacingCheck"
-                      name="spacingRadioDefault"
-                      value={peformaceSapcing}
-                      checked={peformaceSapcing === 'spacing'}
-                      onClick={() => handlePeformanceSpacing('spacing')}
+                      id="pacingCheck"
+                      name="pacingRadioDefault"
+                      value={performancePacing}
+                      checked={performancePacing === 'pacing'}
+                      onClick={() => handlePeformancePacing('pacing')}
                       onChange={() => {}}
                     />
-                    <label htmlFor="spacingCheck">Spacing</label>
+                    <label htmlFor="pacingCheck">Pacing</label>
                   </li>
                 </ul>
               </div>
@@ -161,7 +161,7 @@ export default function DSPPerformance({
         <AllocateBar className="mb-4">
           {' '}
           <div className="remaing-label">
-            Remaining Balance:<span>$18,000</span>
+            Remaining Budget (November):<span> $18,000</span>
           </div>{' '}
           <div className="allocate-balance cursor">
             Allocate Balance{' '}
@@ -341,8 +341,8 @@ DSPPerformance.defaultProps = {
   dspGraphLoader: {},
   dspChartData: {},
   noGraphDataMessage: {},
-  peformaceSapcing: 'performance',
-  handlePeformanceSpacing: () => {},
+  performancePacing: 'performance',
+  handlePeformancePacing: () => {},
 };
 
 DSPPerformance.propTypes = {
@@ -362,8 +362,8 @@ DSPPerformance.propTypes = {
   dspGraphLoader: bool,
   dspChartData: arrayOf(Array),
   noGraphDataMessage: string,
-  peformaceSapcing: string,
-  handlePeformanceSpacing: () => {},
+  performancePacing: string,
+  handlePeformancePacing: () => {},
 };
 
 const NoData = styled.div`

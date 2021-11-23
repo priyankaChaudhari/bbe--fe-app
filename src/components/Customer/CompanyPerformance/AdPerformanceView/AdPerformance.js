@@ -51,7 +51,7 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     show: false,
   });
   const [adGroupBy, setAdGroupBy] = useState('daily');
-  const [peformaceSapcing, setPeformaceSapcing] = useState('performance');
+  const [performancePacing, setPerformancePacing] = useState('performance');
   const [adChartData, setAdChartData] = useState([]);
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
@@ -933,8 +933,8 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     }
   };
 
-  const handlePeformanceSpacing = (value) => {
-    setPeformaceSapcing(value);
+  const handlePeformancePacing = (value) => {
+    setPerformancePacing(value);
     getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
   };
 
@@ -1057,8 +1057,8 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           dspChartData={dspChartData}
           dspGraphLoader={dspGraphLoader}
           noGraphDataMessage={noGraphDataMessage}
-          peformaceSapcing={peformaceSapcing}
-          handlePeformanceSpacing={handlePeformanceSpacing}
+          performancePacing={performancePacing}
+          handlePeformancePacing={handlePeformancePacing}
         />
       ) : null}
 

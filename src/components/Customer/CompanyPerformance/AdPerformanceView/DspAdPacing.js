@@ -167,7 +167,7 @@ export default function DspAdPacing({
               </div>{' '}
             </div>
             <div className="col-7">
-              <div className="label-info mt-2">Daily Budget</div>
+              <div className="label-info mt-2">Initial Daily Budget</div>
             </div>
             <div className="col-5">
               {' '}

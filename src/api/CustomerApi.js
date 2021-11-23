@@ -18,6 +18,7 @@ import {
   API_ACCOUNT_MARKETPLACE,
   API_VENDOR_ORDERED,
   API_VENDOR_SHIPPED,
+  API_ALLOCATED_MONTHS,
 } from '../constants/ApiConstants';
 
 export async function getCustomerList(
@@ -733,6 +734,18 @@ export async function getDspPacingData(id, marketplace) {
   const params = { dsp_pacing: 'month', dsp_marketplace: marketplace };
   const result = await axiosInstance
     .get(`${API_AD_PERFORMANCE + id}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getAllocatedMonths() {
+  const result = await axiosInstance
+    .get(API_ALLOCATED_MONTHS)
     .then((response) => {
       return response;
     })

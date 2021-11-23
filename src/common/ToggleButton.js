@@ -33,7 +33,7 @@ const ToggleButton = styled.div`
       #positive:checked + label,
       #negative:checked + label,
       #peformanceCheck:checked + label,
-      #spacingCheck:checked + label,
+      #pacingCheck:checked + label,
       #contribution:checked + label,
       #keyMetrics:checked + label,
       #overspending:checked + label,
