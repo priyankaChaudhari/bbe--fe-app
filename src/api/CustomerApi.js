@@ -684,30 +684,9 @@ export async function getDSPPerformance(
   return result;
 }
 
-export async function getDSPPacingGraphData(
-  customer,
-  dailyFacts,
-  groupBy,
-  marketplace,
-  startDate,
-  endDate,
-) {
-  let params = {};
-  if (startDate && endDate) {
-    params = {
-      dsp_daily_facts: dailyFacts,
-      dsp_group_by: groupBy,
-      dsp_marketplace: marketplace,
-      dsp_start_date: startDate,
-      dsp_end_date: endDate,
-    };
-  } else {
-    params = {
-      dsp_daily_facts: dailyFacts,
-      dsp_group_by: groupBy,
-      dsp_marketplace: marketplace,
-    };
-  }
+export async function getDSPPacingGraphData(customer, marketplace) {
+  const params = { dsp_marketplace: marketplace, dsp_pacing_graph: true };
+
   const result = await axiosInstance
     .get(`${API_AD_PERFORMANCE + customer}/`, { params })
     .then((response) => {

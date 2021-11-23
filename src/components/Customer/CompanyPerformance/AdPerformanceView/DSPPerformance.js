@@ -35,6 +35,7 @@ export default function DSPPerformance({
   setBoxClasses,
   dspGraphLoader,
   dspChartData,
+  dspPacingChartData,
   noGraphDataMessage,
   performancePacingFlag,
   handlePeformancePacing,
@@ -342,10 +343,8 @@ export default function DSPPerformance({
           ) : dspChartData.length >= 1 ? (
             <DSPPerformanceChart
               chartId="dspChart"
-              chartData={dspChartData}
+              chartData={dspPacingChartData}
               currencySymbol={currencySymbol}
-              selectedBox={selectedDspBox}
-              selectedDF={selectedAdDF.value}
             />
           ) : (
             <NoData>{noGraphDataMessage}</NoData>
@@ -372,6 +371,7 @@ DSPPerformance.defaultProps = {
   setBoxClasses: () => {},
   dspGraphLoader: {},
   dspChartData: {},
+  dspPacingChartData: {},
   noGraphDataMessage: {},
   performancePacingFlag: 'performance',
   handlePeformancePacing: () => {},
@@ -393,6 +393,7 @@ DSPPerformance.propTypes = {
   setBoxClasses: func,
   dspGraphLoader: bool,
   dspChartData: arrayOf(Array),
+  dspPacingChartData: arrayOf(Array),
   noGraphDataMessage: string,
   performancePacingFlag: string,
   handlePeformancePacing: () => {},
