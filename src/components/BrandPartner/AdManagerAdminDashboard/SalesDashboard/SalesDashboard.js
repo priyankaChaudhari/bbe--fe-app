@@ -150,6 +150,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
               brand.documents[0] &&
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
+            bgsManager: brand.bgs_manager,
           });
         }
         setBgsList(list);
@@ -732,9 +733,32 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
   const handleBGSList = (event) => {
     const { value } = event;
+    let manager = selectedManager.value;
 
     if (event.value !== selectedBgs.value) {
       setSelectedBgs(event);
+
+      if (isBGSAdmin) {
+        const found = bgsList.find(
+          (bgsUser) => bgsUser.value === value && bgsUser.bgsManager !== null,
+        );
+
+        if (found !== undefined) {
+          setSelectedManager({
+            value: found?.bgsManager?.id,
+            label: `${found.bgsManager.first_name} ${found.bgsManager.last_name}`,
+          });
+          manager = found?.bgsManager?.id;
+          getBGSList(manager);
+        } else {
+          setSelectedManager({
+            value: 'all',
+            label: 'All',
+          });
+          manager = 'all';
+          getBGSList(null);
+        }
+      }
 
       if (selectedSalesDF.value === 'custom') {
         salesYearAndCustomDateFilter(
@@ -742,7 +766,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           customDateState[0].endDate,
           'custom',
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
         );
       } else {
@@ -750,13 +774,13 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedSalesDF.value,
           salesGroupBy,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
         );
         getContributionData(
           selectedSalesDF.value,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
           selectedContributionOption,
           selectedTabMetrics,
