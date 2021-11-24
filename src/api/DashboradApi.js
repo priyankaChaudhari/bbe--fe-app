@@ -8,6 +8,7 @@ import {
   API_CUSTOMER_CONTRACT,
   API_SALES_DASHBOARD,
   metricsNameForAPI,
+  API_BGS_COMMISSION_DASHBOARD,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -575,6 +576,26 @@ export async function getEnableInvoices(page) {
 export async function setEnableInvoices(id) {
   const result = await axiosInstance
     .patch(`${API_CUSTOMER_CONTRACT}${id}/`, { is_invoicing_enable: true })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsCommissionData(startDate, endDate, groupBy) {
+  const params = {
+    start_month_year: startDate,
+    end_month_year: endDate,
+    group_by: groupBy,
+  };
+
+  console.log('params---', params);
+
+  const result = await axiosInstance
+    .get(`${API_BGS_COMMISSION_DASHBOARD}finance-detail/`, { params })
     .then((response) => {
       return response;
     })
