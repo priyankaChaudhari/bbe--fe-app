@@ -442,17 +442,16 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     // filterout previous data in one temporary object.
     if (response && response.length) {
       response.forEach((item) => {
-        // const monthYearDate = dayjs(item.month_year).format('MMM, YY');
+        const monthYearDate = dayjs(item.month_year).format('MMM YY');
         tempData.push({
-          // monthYearDate,
+          monthYearDate,
           monthYear: item.month_year,
-          invoiceAmount:
-            item.invoice_amount !== null ? item.invoice_amount : 50000,
+          invoiceAmount: item.invoice_amount !== null ? item.invoice_amount : 0,
           invoiceAmountUsd:
             item.invoice_amount_converted_usd !== null
               ? item.invoice_amount_converted_usd
               : 0,
-          carryOver: item.carry_over !== null ? item.carry_over : 40000,
+          carryOver: item.carry_over !== null ? item.carry_over : 0,
           carryOverUsd:
             item.carry_over_converted_usd !== null
               ? item.carry_over_converted_usd
