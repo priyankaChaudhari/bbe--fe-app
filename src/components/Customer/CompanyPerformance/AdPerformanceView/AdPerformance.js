@@ -440,158 +440,37 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     const tempData = [];
 
     // filterout previous data in one temporary object.
-    if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
-      response.dsp_spend.previous.forEach((item) => {
-        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+    if (response && response.length) {
+      response.forEach((item) => {
+        // const monthYearDate = dayjs(item.month_year).format('MMM, YY');
         tempData.push({
-          dspImpressionsPrevious: item.impressions,
-          dspSpendPrevious: item.dsp_spend,
-          dspTotalProductSalesPrevious: item.total_product_sales,
-          dspTotalRoasPrevious: item.total_roas,
-          dspTotalDpvrPrevious: item.total_dpvr,
-          dspTtlNewBrandPurchasesPrevious: item.ttl_new_brand_purchases,
-          dspProductSalesPrevious: item.product_sales,
-          dspRoasPrevious: item.roas,
-          previousDate,
-
-          dspImpressionsPreviousLabel:
-            item.impressions !== null ? item.impressions.toFixed(2) : '0.00',
-          dspSpendPreviousLabel:
-            item.dsp_spend !== null ? item.dsp_spend.toFixed(2) : '0.00',
-          dspTotalProductSalesPreviousLabel:
-            item.total_product_sales !== null
-              ? item.total_product_sales.toFixed(2)
-              : '0.00',
-          dspTotalRoasPreviousLabel:
-            item.total_roas !== null ? item.total_roas : '0',
-          dspTotalDpvrPreviousLabel:
-            item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00',
-          dspTtlNewBrandPurchasesPreviousLabel:
-            item.ttl_new_brand_purchases !== null
-              ? item.ttl_new_brand_purchases
-              : '0',
-          dspProductSalesPreviousLabel:
-            item.product_sales !== null
-              ? item.product_sales.toFixed(2)
-              : '0.00',
-          dspRoasPreviousLabel:
-            item.roas !== null ? item.roas.toFixed(2) : '0.00',
+          // monthYearDate,
+          monthYear: item.month_year,
+          invoiceAmount:
+            item.invoice_amount !== null ? item.invoice_amount : 50000,
+          invoiceAmountUsd:
+            item.invoice_amount_converted_usd !== null
+              ? item.invoice_amount_converted_usd
+              : 0,
+          carryOver: item.carry_over !== null ? item.carry_over : 40000,
+          carryOverUsd:
+            item.carry_over_converted_usd !== null
+              ? item.carry_over_converted_usd
+              : 0,
+          totalInitialBudget:
+            item.total_budget !== null ? item.total_budget : 0,
+          totalInitialbudgetUsd:
+            item.total_budget_converted_usd !== null
+              ? item.total_budget_converted_usd
+              : 0,
+          actualSpent: item.total_spend !== null ? item.total_spend : 0,
+          actualSpentUsd:
+            item.total_spend_converted_usd !== null
+              ? item.total_spend_converted_usd
+              : 0,
+          dspPacingFlag: item.dsp_pacing_flag,
         });
       });
-    }
-
-    // filterout current data in one temporary object.
-    if (response.dsp_spend.current && response.dsp_spend.current.length) {
-      response.dsp_spend.current.forEach((item, index) => {
-        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
-        // add the current data at same index of prevoius in temporary object
-        if (
-          response.dsp_spend.previous &&
-          index < response.dsp_spend.previous.length
-        ) {
-          tempData[index].date = currentReportDate;
-          tempData[index].dspImpressionsCurrent = item.impressions;
-          tempData[index].dspSpendCurrent = item.dsp_spend;
-          tempData[index].dspTotalProductSalesCurrent =
-            item.total_product_sales;
-          tempData[index].dspTotalRoasCurrent = item.total_roas;
-          tempData[index].dspTotalDpvrCurrent = item.total_dpvr;
-          tempData[index].dspTtlNewBrandPurchasesCurrent =
-            item.ttl_new_brand_purchases;
-          tempData[index].dspProductSalesCurrent = item.product_sales;
-          tempData[index].dspRoasCurrent = item.roas;
-
-          tempData[index].dspImpressionsCurrentLabel =
-            item.impressions !== null ? item.impressions.toFixed(2) : '0.00';
-          tempData[index].dspSpendCurrentLabel =
-            item.dsp_spend !== null ? item.dsp_spend.toFixed(2) : '0.00';
-          tempData[index].dspTotalProductSalesCurrentLabel =
-            item.total_product_sales !== null
-              ? item.total_product_sales.toFixed(2)
-              : '0.00';
-          tempData[index].dspTotalRoasCurrentLabel =
-            item.total_roas !== null ? item.total_roas : '0';
-          tempData[index].dspTotalDpvrCurrentLabel =
-            item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00';
-          tempData[index].dspTtlNewBrandPurchasesCurrentLabel =
-            item.ttl_new_brand_purchases !== null
-              ? item.ttl_new_brand_purchases.toFixed(2)
-              : '0.00';
-          tempData[index].dspProductSalesCurrentLabel =
-            item.product_sales !== null ? item.product_sales : '0';
-          tempData[index].dspRoasCurrentLabel =
-            item.roas !== null ? item.roas.toFixed(2) : '0.00';
-        } else {
-          // if current data count is larger than previous count then
-          // generate separate key for current data and defien previou value null and previous label 0
-          tempData.push({
-            dspImpressionsCurrent: item.impressions,
-            dspSpendCurrent: item.dsp_spend,
-            dspTotalProductSalesCurrent: item.total_product_sales,
-            dspTotalRoasCurrent: item.total_roas,
-            dspTotalDpvrCurrent: item.total_dpvr,
-            dspTtlNewBrandPurchasesCurrent: item.ttl_new_brand_purchases,
-            dspProductSalesCurrent: item.product_sales,
-            dspRoasCurrent: item.roas,
-            date: currentReportDate,
-
-            dspImpressionsPrevious: null,
-            dspSpendPrevious: null,
-            dspTotalProductSalesPrevious: null,
-            dspTotalRoasPrevious: null,
-            dspTotalDpvrPrevious: null,
-            dspTtlNewBrandPurchasesPrevious: null,
-            dspProductSalesPrevious: null,
-            dspRoasPrevious: null,
-
-            dspImpressionsCurrentLabel:
-              item.impressions !== null ? item.impressions.toFixed(2) : '0.00',
-            dspSpendCurrentLabel:
-              item.dsp_spend !== null ? item.dsp_spend.toFixed(2) : '0.00',
-            dspTotalProductSalesCurrentLabel:
-              item.total_product_sales !== null
-                ? item.total_product_sales.toFixed(2)
-                : '0.00',
-            dspTotalRoasCurrentLabel:
-              item.total_roas !== null ? item.total_roas : '0',
-            dspTotalDpvrCurrentLabel:
-              item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00',
-            dspTtlNewBrandPurchasesCurrentLabel:
-              item.ttl_new_brand_purchases !== null
-                ? item.ttl_new_brand_purchases.toFixed(2)
-                : '0.00',
-            dspProductSalesCurrentLabel:
-              item.product_sales !== null ? item.product_sales : '0',
-            dspRoasCurrentLabel:
-              item.roas !== null ? item.roas.toFixed(2) : '0.00',
-
-            dspImpressionsPreviousLabel: '0.00',
-            dspSpendPreviousLabel: '0.00',
-            dspTotalProductSalesPreviousLabel: '0.00',
-            dspTotalRoasPreviousLabel: '0',
-            dspTotalDpvrPreviousLabel: '0.00',
-            dspTtlNewBrandPurchasesPreviousLabel: '0.00',
-            dspProductSalesPreviousLabel: '0',
-            dspRoasPreviousLabel: '0.00',
-          });
-        }
-      });
-    }
-    // filterout the dsp current total, previous total, and diffrence
-    if (response.dsp_spend && response.dsp_spend.current_sum) {
-      setDspCurrentTotal(response.dsp_spend.current_sum);
-    } else {
-      setDspCurrentTotal([]);
-    }
-    if (response.dsp_spend && response.dsp_spend.previous_sum) {
-      setDspPreviousTotal(response.dsp_spend.previous_sum);
-    } else {
-      setDspPreviousTotal([]);
-    }
-    if (response.dsp_spend && response.dsp_spend.difference_data) {
-      setDspDifference(response.dsp_spend.difference_data);
-    } else {
-      setDspDifference([]);
     }
     return tempData;
   };
@@ -662,10 +541,8 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           setDspGraphLoader(false);
         }
         if (res && res.status === 200) {
-          // setDspData(res.data);
           if (res.data && res.data.dsp_spend) {
             const dspGraphData = bindDSPResponseData(res.data);
-
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
@@ -703,8 +580,10 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
         }
         if (res && res.status === 200) {
           // setDspData(res.data);
-          if (res.data && res.data.dsp_spend) {
-            const dspPacingGraphData = bindDSPPacingResponseData(res.data);
+          if (res.data && res.data.dsp_pacing_graph) {
+            const dspPacingGraphData = bindDSPPacingResponseData(
+              res.data && res.data.dsp_pacing_graph,
+            );
             setDSPPacingChartData(dspPacingGraphData);
           } else {
             setDSPPacingChartData([]);

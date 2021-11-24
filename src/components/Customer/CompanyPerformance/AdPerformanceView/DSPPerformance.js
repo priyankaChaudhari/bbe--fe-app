@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
 
 import DSPPerformanceChart from './DSPPerformanceChart';
+import DspPacingBarGraph from './DspPacingBarGraph';
 import DSPMetrics from '../../../BrandPartner/AdManagerAdminDashboard/DSPDashboard/DSPMetrics';
 import { ArrowRightBlackIcon, LeftArrowIcon } from '../../../../theme/images';
 import {
@@ -41,6 +42,8 @@ export default function DSPPerformance({
   handlePeformancePacing,
 }) {
   const displayDspPacingLabel = () => {
+    console.log(' dspPacingChartData', dspPacingChartData);
+
     if (
       dspData &&
       dspData.dsp_pacing &&
@@ -340,15 +343,35 @@ export default function DSPPerformance({
               width={40}
               height={40}
             />
-          ) : dspChartData.length >= 1 ? (
-            <DSPPerformanceChart
-              chartId="dspChart"
+          ) : dspPacingChartData.length >= 1 ? (
+            <DspPacingBarGraph
+              chartId="dspPacingBarGraph"
               chartData={dspPacingChartData}
               currencySymbol={currencySymbol}
             />
           ) : (
             <NoData>{noGraphDataMessage}</NoData>
           )}
+          {/* {dspPacingGraphLoader ? (
+            <PageLoader
+              component="performance-graph"
+              color="#FF5933"
+              type="detail"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <DspPacingBarGraph
+              chartId="dspPacingBarGraph"
+              chartData={dspPacingChartData}
+              currencySymbol={currencySymbol}
+            />
+          )} */}
+          {/* <DspPacingBarGraph
+            chartId="dspPacingBarGraph"
+            chartData={dspPacingChartData}
+            currencySymbol={currencySymbol}
+          /> */}
         </>
       )}
     </WhiteCard>
