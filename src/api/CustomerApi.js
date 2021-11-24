@@ -769,6 +769,18 @@ export async function getAllocatedMonths() {
   return result;
 }
 
+export async function storeAllocatedBudget(data) {
+  const result = await axiosInstance
+    .post(API_ALLOCATED_MONTHS, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function getAccountMarketplace(id) {
   const result = await axiosInstance
     .get(API_ACCOUNT_MARKETPLACE.replace(':id', id))

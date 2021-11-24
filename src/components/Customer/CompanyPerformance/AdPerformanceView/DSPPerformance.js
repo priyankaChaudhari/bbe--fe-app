@@ -42,8 +42,6 @@ export default function DSPPerformance({
   handlePeformancePacing,
 }) {
   const displayDspPacingLabel = () => {
-    console.log(' dspPacingChartData', dspPacingChartData);
-
     if (
       dspData &&
       dspData.dsp_pacing &&
@@ -167,7 +165,16 @@ export default function DSPPerformance({
           {' '}
           <div className="remaing-label">
             {`Remaining Budget (${displayMonth()}):`}
-            <span> $18,000</span>
+            <span>
+              {' '}
+              {currencySymbol}
+              {dspData?.dsp_pacing?.remaining_budget
+                ? dspData?.dsp_pacing?.remaining_budget
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : 0}
+            </span>
           </div>{' '}
           <div
             className="allocate-balance cursor"

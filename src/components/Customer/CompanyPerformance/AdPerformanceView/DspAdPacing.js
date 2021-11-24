@@ -1,7 +1,6 @@
-/* eslint-disable camelcase */
-
 import React, { useState } from 'react';
 
+import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
 import PropTypes, { instanceOf } from 'prop-types';
 import styled from 'styled-components';
@@ -16,79 +15,27 @@ export default function DspAdPacing({
   isDspPacingLoading,
   currencySymbol,
 }) {
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const userRole = userInfo?.role;
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
     false,
   );
-  const { dsp_pacing } = dspData;
+  const dspPacing = dspData.dsp_pacing;
 
-  const displayDspPacingLabel = () => {
-    if (
-      dspData &&
-      dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === '1'
-    ) {
-      return (
-        <>
-          <div className="status-heading-red">Overspending</div>
-          <p className="basic-text">
-            {' '}
-            You are currently overspending by an average of {currencySymbol}
-            {dsp_pacing &&
-              dsp_pacing.current_spend_status &&
-              dsp_pacing.current_spend_status
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-            per day.
-          </p>
-        </>
-      );
+  const addThousandSeperator = (value) => {
+    if (value !== null && value !== 0) {
+      return value
+        .toFixed(2)
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
-
-    if (
-      dspData &&
-      dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === '0'
-    ) {
-      return (
-        <>
-          <div className="status-heading-red green">On Track</div>
-          <p className="basic-text">
-            {' '}
-            You are currently on tract to hit your monthly DSP budget.
-          </p>
-        </>
-      );
-    }
-    if (
-      dspData &&
-      dspData.dsp_pacing &&
-      dspData.dsp_pacing.dsp_pacing_flag === '-1'
-    ) {
-      return (
-        <>
-          <div className="status-heading-red">Underspending</div>
-          <p className="basic-text">
-            {' '}
-            You are currently underspending by an average of {currencySymbol}
-            {dsp_pacing &&
-              dsp_pacing.current_spend_status &&
-              dsp_pacing.current_spend_status
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-            per day.
-          </p>
-        </>
-      );
-    }
-    return '';
+    return 0;
   };
 
   const calculateDspDiff = () => {
     const result =
-      (dsp_pacing && dsp_pacing.planed_to_spend) -
-      (dsp_pacing && dsp_pacing.total_spend);
+      (dspPacing && dspPacing.planed_to_spend) -
+      (dspPacing && dspPacing.total_spend);
 
     if (Math.sign(result) === 1) {
       return 'Underspend to Date';
@@ -109,236 +56,250 @@ export default function DspAdPacing({
     return dayjs(new Date()).format('MMMM');
   };
 
-  const renderDspAdPacingModal = () => {
+  const renderDspPacingLabel = () => {
+    if (dspData?.dsp_pacing?.dsp_pacing_flag === '1') {
+      return (
+        <>
+          <div className="status-heading-red">Overspending</div>
+          <p className="basic-text">
+            {' '}
+            You are currently overspending by an average of {currencySymbol}
+            {addThousandSeperator(dspPacing.current_spend_status)} per day.
+          </p>
+        </>
+      );
+    }
+
+    if (dspData?.dsp_pacing?.dsp_pacing_flag === '0') {
+      return (
+        <>
+          <div className="status-heading-red green">On Track</div>
+          <p className="basic-text">
+            {' '}
+            You are currently on tract to hit your monthly DSP budget.
+          </p>
+        </>
+      );
+    }
+    if (dspData?.dsp_pacing?.dsp_pacing_flag === '-1') {
+      return (
+        <>
+          <div className="status-heading-red">Underspending</div>
+          <p className="basic-text">
+            {' '}
+            You are currently underspending by an average of {currencySymbol}
+            {addThousandSeperator(dspPacing.current_spend_status)}
+            per day.
+          </p>
+        </>
+      );
+    }
+    return '';
+  };
+
+  const renderBreakdownFields = () => {
     return (
-      <EscrowBudgetAllocationModal
-        id="BT-escrowAllocation"
-        isOpen={showAllocatedBalanceModal}
-        onClick={() => {
-          setShowAllocatedBalanceModal(false);
-        }}
-        onApply={() => console.log('aa')}
-      />
+      <div className="row">
+        <div className="col-7">
+          <div className="label-info mt-2">Invoice Amount</div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right">
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.invoice_amount)}
+          </div>{' '}
+        </div>
+
+        <div className="col-7">
+          <div className="label-info mt-2">Carry-over</div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right">
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.carry_over)}
+          </div>{' '}
+        </div>
+
+        <div className="col-7">
+          <div className="label-info  text-bold mt-2">
+            Initial Total Budget for {displayMonth()}
+          </div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right">
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.total_budget)}
+          </div>{' '}
+        </div>
+
+        <div className="col-7">
+          <div className="label-info text-bold mt-2">Initial Daily Budget</div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right">
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.daily_budget)}
+          </div>{' '}
+        </div>
+        <div className="col-7">
+          <div className="label-info mt-2">Days Passed</div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right">
+            {' '}
+            {dspPacing?.days_passed}
+          </div>{' '}
+        </div>
+      </div>
     );
   };
 
-  return isDspPacingLoading &&
-    isDspPacingLoading.loader &&
-    isDspPacingLoading.type === 'modal' ? (
-    <PageLoader component="Notes-modal-loader" color="#FF5933" type="page" />
-  ) : Object.keys(dspData).length ? (
-    <>
-      <DspAdPacingModal
-        id="BT-dsp-adpacing"
-        onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h4 className="on-boarding ">DSP Monthly Budget Pacing</h4>
-          <p className="basic-text">
-            {' '}
-            {displayMonth()} 1 - {dsp_pacing && dsp_pacing.last_day}{' '}
-            <span className="dot" /> &nbsp;&nbsp;&nbsp;
-            {dsp_pacing && dsp_pacing.days_remains} days remaining
-          </p>
+  const renderSpendDetails = () => {
+    return (
+      <div className="row">
+        <div className="col-7">
+          <div className="label-info mt-2">Planned Spend to Date</div>
         </div>
-        <div className="straight-line horizontal-line  mt-3 mb-3" />
-        <div className="modal-body-section">
-          <div className="label-heading mb-2 pb-1">Spend Status</div>
-          {displayDspPacingLabel()}
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right mt-2">
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.planed_to_spend)}(
+            {addThousandSeperator(dspPacing.planed_to_spend_percentage)}
+            %)
+          </div>{' '}
+        </div>
+        <div className="col-7">
+          <div className="label-info mt-2">Actual Spend to Date</div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right mt-2">
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.total_spend)}(
+            {addThousandSeperator(dspPacing.total_spend_percentage)}
+            %)
+          </div>{' '}
+        </div>
+        <div className="col-7">
+          <div
+            className={
+              dspData &&
+              dspData.dsp_pacing &&
+              dspData.dsp_pacing.dsp_pacing_flag === '0'
+                ? 'label-info mt-2'
+                : 'label-info text-red mt-2'
+            }>
+            {' '}
+            {calculateDspDiff()}{' '}
+          </div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div
+            className={
+              dspData &&
+              dspData.dsp_pacing &&
+              dspData.dsp_pacing.dsp_pacing_flag === '0'
+                ? 'label-info text-right mt-2'
+                : 'label-info text-right text-red mt-2'
+            }>
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.dsp_pacing_diff)}(
+            {addThousandSeperator(dspPacing.dsp_pacing_diff_percentage)}
+            %)
+          </div>{' '}
+        </div>
 
-          <div className="straight-line horizontal-line  mt-3 mb-3" />
-          <div className="label-heading mb-2">Breakdown</div>
-          <div className="row">
-            <div className="col-7">
-              <div className="label-info mt-2">Monthly Budget</div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div className="label-info text-right">
-                {' '}
-                {currencySymbol}
-                {dsp_pacing &&
-                  dsp_pacing.total_budget &&
-                  dsp_pacing.total_budget
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </div>{' '}
-            </div>
-            <div className="col-7">
-              <div className="label-info mt-2">Initial Daily Budget</div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div className="label-info text-right">
-                {' '}
-                {currencySymbol}
-                {dsp_pacing &&
-                  dsp_pacing.daily_budget &&
-                  dsp_pacing.daily_budget
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </div>{' '}
-            </div>
-            <div className="col-7">
-              <div className="label-info mt-2">Days Passed</div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div className="label-info text-right">
-                {' '}
-                {dsp_pacing && dsp_pacing.days_passed}
-              </div>{' '}
-            </div>
+        <div className="col-7">
+          <div className="label-info text-bold mt-2">
+            Remaining Budget for {displayMonth()}
           </div>
-          <div className="dotted-horizontal-line  mt-3 mb-3" />
-          <div className="row">
-            <div className="col-7">
-              <div className="label-info mt-2">Planned Spend to Date</div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div className="label-info text-right mt-2">
-                {' '}
-                {currencySymbol}
-                {dsp_pacing &&
-                  dsp_pacing.planed_to_spend &&
-                  dsp_pacing.planed_to_spend
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-                (
-                {dsp_pacing &&
-                  dsp_pacing.planed_to_spend_percentage &&
-                  dsp_pacing.planed_to_spend_percentage
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                %)
-              </div>{' '}
-            </div>
-            <div className="col-7">
-              <div className="label-info mt-2">Actual Spend to Date</div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div className="label-info text-right mt-2">
-                {' '}
-                {currencySymbol}
-                {dsp_pacing &&
-                  dsp_pacing.total_spend &&
-                  dsp_pacing.total_spend
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-                (
-                {dsp_pacing &&
-                  dsp_pacing.total_spend_percentage &&
-                  dsp_pacing.total_spend_percentage
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                %)
-              </div>{' '}
-            </div>
-            <div className="col-7">
-              <div
-                className={
-                  dspData &&
-                  dspData.dsp_pacing &&
-                  dspData.dsp_pacing.dsp_pacing_flag === '0'
-                    ? 'label-info mt-2'
-                    : 'label-info text-red mt-2'
-                }>
-                {' '}
-                {calculateDspDiff()}{' '}
-              </div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div
-                className={
-                  dspData &&
-                  dspData.dsp_pacing &&
-                  dspData.dsp_pacing.dsp_pacing_flag === '0'
-                    ? 'label-info text-right mt-2'
-                    : 'label-info text-right text-red mt-2'
-                }>
-                {' '}
-                {currencySymbol}
-                {dsp_pacing &&
-                  dsp_pacing.dsp_pacing_diff &&
-                  dsp_pacing.dsp_pacing_diff
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-                (
-                {dsp_pacing &&
-                  dsp_pacing.dsp_pacing_diff_percentage &&
-                  dsp_pacing.dsp_pacing_diff_percentage
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                %)
-              </div>{' '}
-            </div>
-          </div>
-          <div className="straight-line horizontal-line  mt-3 mb-3" />
-          <div className="row">
-            <div className="col-7">
-              <div className="label-info text-bold ">
-                Suggested Daily Budget
-              </div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div className="label-info text-bold text-right">
-                {' '}
-                {isNaN(dsp_pacing && dsp_pacing.suggested_spend)
-                  ? ''
-                  : currencySymbol}
-                {dsp_pacing &&
-                dsp_pacing.suggested_spend &&
-                isNaN(dsp_pacing && dsp_pacing.suggested_spend)
-                  ? dsp_pacing && dsp_pacing.suggested_spend
-                  : dsp_pacing.suggested_spend
-                      .toFixed(2)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </div>{' '}
-            </div>
-            <div className="col-7">
-              <div className="label-info  budget-text mt-1">
-                For rest of month to hit budget
-              </div>
-            </div>
-            {isNaN(dsp_pacing && dsp_pacing.suggested_spend) ? (
-              ''
-            ) : (
-              <div className="col-5">
-                {' '}
-                <div className="label-info budget-text text-right mt-1">
-                  Per day
-                </div>
-              </div>
-            )}
-          </div>
-          <div className="straight-line horizontal-line  mt-3 mb-3" />
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-right mt-2">
+            {' '}
+            {currencySymbol}
+            {addThousandSeperator(dspPacing.remaining_budget)}
+          </div>{' '}
+        </div>
+      </div>
+    );
+  };
 
-          <div className="row mb-3">
-            <div className="col-7">
-              <div className="label-info text-bold ">Escrow Balance</div>
-            </div>
-            <div className="col-5">
-              {' '}
-              <div className="label-info text-bold text-right">$24000</div>{' '}
+  const renderDailyBudget = () => {
+    return (
+      <div className="row">
+        <div className="col-7">
+          <div className="label-info text-bold ">Suggested Daily Budget</div>
+        </div>
+        <div className="col-5">
+          {' '}
+          <div className="label-info text-bold text-right">
+            {' '}
+            {isNaN(dspPacing?.suggested_spend) ? '' : currencySymbol}
+            {dspPacing?.suggested_spend && isNaN(dspPacing.suggested_spend)
+              ? dspPacing?.suggested_spend
+              : addThousandSeperator(dspPacing.suggested_spend)}
+          </div>{' '}
+        </div>
+        <div className="col-7">
+          <div className="label-info  budget-text mt-1">
+            For rest of month to hit budget
+          </div>
+        </div>
+        {isNaN(dspPacing?.suggested_spend) ? (
+          ''
+        ) : (
+          <div className="col-5">
+            {' '}
+            <div className="label-info budget-text text-right mt-1">
+              Per day
             </div>
           </div>
+        )}
+      </div>
+    );
+  };
 
+  const renderEscrowBalance = () => {
+    return (
+      <>
+        <div className="row mb-3">
+          <div className="col-7">
+            <div className="label-info text-bold ">Escrow Balance</div>
+          </div>
+          <div className="col-5">
+            {' '}
+            <div className="label-info text-bold text-right">
+              {currencySymbol}
+              {addThousandSeperator(dspPacing.escrow)}
+            </div>{' '}
+          </div>
+        </div>
+
+        {userRole === 'Hybrid Ad Manager' ||
+        userRole === 'DSP Ad Manager' ||
+        userRole === 'Ad Manager Admin' ? (
           <AllocateBar className="mb-4">
             {' '}
             <div className="remaing-label">
-              $6,000 of the escrow is planned carry-over for future months
+              {currencySymbol}
+              {addThousandSeperator(dspPacing.escrow_sum)} of the escrow is
+              planned carry-over for future months
             </div>{' '}
             <div
               className="allocate-balance cursor"
@@ -349,12 +310,75 @@ export default function DspAdPacing({
             </div>
             <div className="clear-fix" />
           </AllocateBar>
-        </div>
-      </DspAdPacingModal>
-      {renderDspAdPacingModal()}
+        ) : null}
+      </>
+    );
+  };
+
+  const renderEscrowBudgetAllocationModal = () => {
+    return (
+      <EscrowBudgetAllocationModal
+        id="BT-escrowAllocation"
+        isOpen={showAllocatedBalanceModal}
+        onClick={() => {
+          setShowAllocatedBalanceModal(false);
+        }}
+        // onApply={() => console.log('aa')}
+      />
+    );
+  };
+
+  return (
+    <>
+      {isDspPacingLoading?.loader && isDspPacingLoading.type === 'modal' ? (
+        <PageLoader
+          component="Notes-modal-loader"
+          color="#FF5933"
+          type="page"
+        />
+      ) : Object.keys(dspData).length ? (
+        <>
+          <DspAdPacingModal
+            id="BT-dsp-adpacing"
+            onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h4 className="on-boarding ">DSP Monthly Budget Pacing</h4>
+              <p className="basic-text">
+                {' '}
+                {displayMonth()} 1 - {dspPacing?.last_day}{' '}
+                <span className="dot" /> &nbsp;&nbsp;&nbsp;
+                {dspPacing?.days_remains} days remaining
+              </p>
+            </div>
+            <div className="straight-line horizontal-line  mt-3 mb-3" />
+            <div className="modal-body-section">
+              <div className="label-heading mb-2 pb-1">Spend Status</div>
+              {renderDspPacingLabel()}
+
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+              <div className="label-heading mb-2">Breakdown</div>
+              {renderBreakdownFields()}
+
+              <div className="dotted-horizontal-line  mt-3 mb-3" />
+              {renderSpendDetails()}
+
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+              {renderDailyBudget()}
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+
+              {renderEscrowBalance()}
+            </div>
+          </DspAdPacingModal>
+          {renderEscrowBudgetAllocationModal()}
+        </>
+      ) : (
+        <PageLoader
+          component="Notes-modal-loader"
+          color="#FF5933"
+          type="page"
+        />
+      )}
     </>
-  ) : (
-    <PageLoader component="Notes-modal-loader" color="#FF5933" type="page" />
   );
 }
 

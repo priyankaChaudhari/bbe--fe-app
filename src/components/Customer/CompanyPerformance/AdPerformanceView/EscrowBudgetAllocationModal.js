@@ -3,12 +3,13 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
 import { bool, func, string } from 'prop-types';
 
-import { getAllocatedMonths } from '../../../../api';
+import { getAllocatedMonths, storeAllocatedBudget } from '../../../../api';
 import {
   ModalBox,
   Button,
   InputFormField,
   PageLoader,
+  AllocateBar,
 } from '../../../../common';
 import { CloseIcon, AddIcons } from '../../../../theme/images';
 
@@ -33,10 +34,10 @@ export default function EscrowBudgetAllocationModal({
   id,
   isOpen,
   onClick,
-  onApply,
+  // onApply,
 }) {
   const [actualAllocatedMonths, setActualAllocatedMonths] = useState([
-    { name: 'November', amount: '18000', label: 'current' },
+    { name: 'November', amount: '24000', label: 'current' },
   ]);
   const monthNames = [
     'January',
@@ -54,6 +55,8 @@ export default function EscrowBudgetAllocationModal({
   ];
   const [allocatedMonths, setAllocatedMonths] = useState(actualAllocatedMonths);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitLoader, setIsSubmitLoader] = useState(false);
+  const [isEscrowbalanceExceed, setIsEscrowbalanceExceed] = useState(false);
 
   const getAllocatedMonth = useCallback(() => {
     setIsLoading(true);
@@ -73,13 +76,40 @@ export default function EscrowBudgetAllocationModal({
     });
   }, []);
 
+  const submitAllocatedBudget = useCallback(
+    (data) => {
+      setIsSubmitLoader(true);
+      storeAllocatedBudget(data).then((res) => {
+        if (res && res.status === 200) {
+          onClick();
+        }
+        setIsSubmitLoader(false);
+        onClick();
+      });
+    },
+    [onClick],
+  );
+
   useEffect(() => {
     getAllocatedMonth();
   }, [getAllocatedMonth]);
 
+  const calculateSumOfFutureMonths = (newValues) => {
+    const sumAll = newValues
+      .map((item, index) => index !== 0 && item.amount)
+      .reduce((prev, curr) => Number(prev) + Number(curr), 0);
+    return sumAll;
+  };
+
   const handleOnChange = (event, index) => {
     const tempData = [...allocatedMonths];
+    const escrowBalance = 24000;
     tempData[index].amount = event.target.value;
+    const sumOfFutureMonths = calculateSumOfFutureMonths(tempData);
+    const currentMonthAmount = escrowBalance - sumOfFutureMonths;
+    tempData[0].amount = String(currentMonthAmount);
+    if (currentMonthAmount < 0) setIsEscrowbalanceExceed(true);
+    else setIsEscrowbalanceExceed(false);
     setAllocatedMonths(tempData);
   };
 
@@ -139,6 +169,10 @@ export default function EscrowBudgetAllocationModal({
     ]);
   };
 
+  const onHandleConfirm = () => {
+    submitAllocatedBudget();
+  };
+
   return (
     <Modal
       id={id}
@@ -169,8 +203,13 @@ export default function EscrowBudgetAllocationModal({
           <div className="modal-body pb-0">
             <h4>Allocate Balance</h4>
             <div className="row">
+              <AllocateBar className="mt-2 mb-2">
+                {' '}
+                <div className="remaing-label">Escrow Balance</div>{' '}
+                <div className="allocate-balance cursor">$24000</div>
+                <div className="clear-fix" />
+              </AllocateBar>
               {renderMonths()}
-
               <Button
                 style={{ textTransform: 'uppercase' }}
                 className={
@@ -189,16 +228,30 @@ export default function EscrowBudgetAllocationModal({
                 />{' '}
                 Add another Month
               </Button>
+              {isEscrowbalanceExceed ? (
+                <div>
+                  All budgets across the selected months need to add up to the
+                  available escrow balance.
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="footer-line" />
           <div className="modal-footer">
             <div className="text-center ">
               <Button
-                className="btn-primary on-boarding  w-100"
-                onClick={onApply}
+                className={
+                  isEscrowbalanceExceed
+                    ? 'btn-primary on-boarding  w-100 disabled'
+                    : 'btn-primary on-boarding  w-100'
+                }
+                onClick={() => onHandleConfirm()}
                 type="button">
-                Confirm
+                {isSubmitLoader ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Confirm'
+                )}
               </Button>
             </div>
           </div>
@@ -212,12 +265,12 @@ EscrowBudgetAllocationModal.defaultProps = {
   id: '',
   isOpen: false,
   onClick: () => {},
-  onApply: () => {},
+  // onApply: () => {},
 };
 
 EscrowBudgetAllocationModal.propTypes = {
   id: string,
   onClick: func,
-  onApply: func,
+  // onApply: func,
   isOpen: bool,
 };
