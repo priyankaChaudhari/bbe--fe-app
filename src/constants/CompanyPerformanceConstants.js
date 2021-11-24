@@ -161,3 +161,42 @@ export const toogleMetricsData = [
     label: 'ROAS',
   },
 ];
+
+export const bgsCommissionsFilterOptions = [
+  {
+    name: 'bgs_manager',
+    label: 'Team Member',
+  },
+  {
+    name: 'retainer',
+    label: 'Retainer',
+  },
+  {
+    name: 'rev_share',
+    label: 'Rev Share',
+  },
+  {
+    name: 'bgs_manager',
+    label: 'Team Member',
+  },
+  {
+    name: 'bgs_manager',
+    label: 'Team Member',
+  },
+  {
+    name: 'bgs_manager',
+    label: 'Team Member',
+  },
+  {
+    name: 'bgs_manager',
+    label: 'Team Member',
+  },
+  {
+    name: 'bgs_manager',
+    label: 'Team Member',
+  },
+  {
+    name: 'bgs_manager',
+    label: 'Team Member',
+  },
+];
