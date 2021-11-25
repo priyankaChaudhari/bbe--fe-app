@@ -19,6 +19,27 @@ const TableGap = styled.div`
     &:last-child {
       border-bottom: none;
     }
+    &:nth-last-child(2) {
+      border-bottom: none;
+    }
+
+    &.overlay-modal-header {
+      border-bottom: 1px solid #e0e6e8;
+    }
+
+    &.partners {
+      font-size: 14px;
+    }
+
+    &.all-partners {
+      font-weight: 600;
+      background-color: #f4f6fc;
+
+      td {
+        font-size: 14px;
+      }
+    }
+
     th {
       padding: 15px 5px 15px 5px;
       text-transform: uppercase;
