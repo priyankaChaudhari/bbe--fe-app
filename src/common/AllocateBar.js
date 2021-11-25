@@ -7,7 +7,7 @@ const AllocateBar = styled.div`
   border: 1px solid rgb(213, 216, 225);
   width: 100%;
   height: 40px;
-  padding: 11px 20px;
+  padding: 11px 13px;
   .remaing-label {
     color: ${Theme.gray90};
     font-size: ${Theme.extraNormal};

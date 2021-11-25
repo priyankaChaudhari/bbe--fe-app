@@ -120,11 +120,15 @@ export default function EscrowBudgetAllocationModal({
       return (
         <>
           <div className="col-md-6 col-12 ">
-            <InputFormField className="mt-1">
+            <InputFormField className="mt-1 hide-spinner">
               <label htmlFor="emailAddress">
                 Month
                 <br />
-                <input className="form-control" value={item.name} type="text" />
+                <input
+                  className="form-control "
+                  value={item.name}
+                  type="text"
+                />
               </label>
             </InputFormField>
           </div>

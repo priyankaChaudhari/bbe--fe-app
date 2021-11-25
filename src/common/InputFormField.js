@@ -2,44 +2,44 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const InputFormField = styled.div`
-  position:relative;
-   .edit-field {
-      position: absolute;
-      right: 0;
-      top: 0px;
-      color: ${Theme.gray85};
-      font-size: ${Theme.extraNormal};
+  position: relative;
+  .edit-field {
+    position: absolute;
+    right: 0;
+    top: 0px;
+    color: ${Theme.gray85};
+    font-size: ${Theme.extraNormal};
 
-      .edit-icon{
-         vertical-align: text-top
-      }
+    .edit-icon {
+      vertical-align: text-top;
     }
+  }
 
   label {
     color: ${Theme.gray40};
-    font-size:${Theme.verySmall};
+    font-size: ${Theme.verySmall};
     text-transform: uppercase;
     font-family: ${Theme.titleFontFamily};
   }
 
   .deleteSocial {
-      position: absolute;
-      width: 16px;
-      top: 11px;
-      right: 6px;
+    position: absolute;
+    width: 16px;
+    top: 11px;
+    right: 6px;
   }
 
   .remove-field-icon {
     background: ${Theme.gray5};
     width: 18px;
     padding: 4px;
-    border-radius:50%;
+    border-radius: 50%;
   }
-   .input-container {
+  .input-container {
     display: flex;
     width: 100%;
 
-   .input-icon {
+    .input-icon {
       padding: 12px 15px;
       border-radius: 2px 0 0 2px;
       width: 40px;
@@ -49,7 +49,7 @@ const InputFormField = styled.div`
       font-size: 14px;
       text-align: center;
       color: ${Theme.gray85};
-      background: #EAEDF6;
+      background: #eaedf6;
       border-left: 1px solid ${Theme.gray45};
       border-top: 1px solid ${Theme.gray45} !important;
       border-bottom: 1px solid ${Theme.gray45};
@@ -66,60 +66,59 @@ const InputFormField = styled.div`
         border-left: 1px solid ${Theme.red};
         border-top: 1px solid ${Theme.red} !important;
         border-bottom: 1px solid ${Theme.red};
-        background:  ${Theme.lightRed};
+        background: ${Theme.lightRed};
       }
-   
     }
 
-     &.form-control-error {
-     border: 1px solid ${Theme.red} ;
-     background: ${Theme.lightRed};
-  
+    &.form-control-error {
+      border: 1px solid ${Theme.red};
+      background: ${Theme.lightRed};
     }
-    
   }
 
-  .form-control  {
-    position:relative;
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .form-control {
+    position: relative;
     color: ${Theme.gray85};
     border: 1px solid ${Theme.gray45};
     border-radius: 2px;
-    padding: 5px  10px ;
+    padding: 5px 10px;
     display: block;
     width: 100%;
     height: 40px;
     background-color: ${Theme.gray8};
     margin-top: 7px;
     font-family: ${Theme.baseFontFamily};
-    font-size:  ${Theme.extraNormal};
+    font-size: ${Theme.extraNormal};
 
-   
     &.extra-space {
-       padding: 4px 27px 4px 10px ;
+      padding: 4px 27px 4px 10px;
     }
 
     &::placeholder {
       color: ${Theme.gray40} !important;
-      font-size: color: ${Theme.extraNormal};
+      font-size: ${Theme.extraNormal};
     }
 
     &:focus {
       outline: none;
-      border:1px solid ${Theme.gray25};
+      border: 1px solid ${Theme.gray25};
     }
 
     &.form-control-error {
-     border: 1px solid ${Theme.red} ;
-     background: ${Theme.lightRed};
-  
+      border: 1px solid ${Theme.red};
+      background: ${Theme.lightRed};
     }
   }
-  
 
   .css-14jk2my-container {
     background-color: ${Theme.gray8};
-    margin-top: 7px;  
+    margin-top: 7px;
   }
-  
 `;
 export default InputFormField;
