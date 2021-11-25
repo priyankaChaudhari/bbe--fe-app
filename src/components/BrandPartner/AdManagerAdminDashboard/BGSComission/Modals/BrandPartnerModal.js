@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import Modal from 'react-modal';
-import { useMediaQuery } from 'react-responsive';
 import { bool, func } from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
 
 import { CloseIcon } from '../../../../../theme/images';
-import { commissionsTableHeaders } from '../../../../../constants';
 import { CommissionResseque } from '../BGSComissionContainerStyle';
+import { commissionsTableHeaders } from '../../../../../constants';
 import { HeaderDownloadFuntionality, TableGap } from '../../../../../common';
+
+import { brandPartners, totalOfPartner } from '../dummydata';
 
 const BrandPartnerModal = ({ showModal, setShowModal }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
@@ -84,61 +86,42 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
                     {commissionsTableHeaders.map((header) => (
                       <th className="text-left">{header}</th>
                     ))}
-                    {/* <th className="text-left">team member</th>
-                    <th className="text-left">retainer</th>
-                    <th className="text-left">rev share</th>
-                    <th className="text-left">dsp</th>
-                    <th className="text-left">total book size</th>
-                    <th className="text-left">BOOK Size commission</th>
-                    <th className="text-left">upsells</th>
-                    <th className="text-left">Upsells commission</th>
-                    <th className="text-left">total commission</th> */}
                   </tr>
                 </thead>
                 <tbody style={{ width: '100%', display: 'table' }}>
-                  <tr className="partners">
-                    <td>Team Jake</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">0</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">$805.00</td>
-                    <td className="text-bold">$1,714.59</td>
-                  </tr>
-                  <tr className="partners">
-                    <td>Team Jake</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">0</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">$805.00</td>
-                    <td className="text-bold">$1,714.59</td>
-                  </tr>
-                  <tr className="partners">
-                    <td>Team Jake</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">0</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">$805.00</td>
-                    <td className="text-bold">$1,714.59</td>
-                  </tr>
+                  {brandPartners.map((partner) => (
+                    <tr className="partners" key={partner.id}>
+                      <td>{partner.team_member}</td>
+                      <td>{partner.retainer}</td>
+                      <td>{partner.rev_share}</td>
+                      <td>{partner.dsp}</td>
+                      <td>{partner.total_book_size}</td>
+                      <td className="text-bold">
+                        {partner.book_size_commission}
+                      </td>
+                      <td>{partner.upsells}</td>
+                      <td className="text-bold">
+                        {partner.upsells_commission}
+                      </td>
+                      <td className="text-bold">{partner.total_commission}</td>
+                    </tr>
+                  ))}
                   <tr className="all-partners">
-                    <td>Team Jake</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$2,597.20</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">0</td>
-                    <td>$805.00</td>
-                    <td className="text-bold">$805.00</td>
-                    <td className="text-bold">$1,714.59</td>
+                    <td>{totalOfPartner.team_member}</td>
+                    <td>{totalOfPartner.retainer}</td>
+                    <td>{totalOfPartner.rev_share}</td>
+                    <td>{totalOfPartner.dsp}</td>
+                    <td>{totalOfPartner.total_book_size}</td>
+                    <td className="text-bold">
+                      {totalOfPartner.book_size_commission}
+                    </td>
+                    <td>{totalOfPartner.upsells}</td>
+                    <td className="text-bold">
+                      {totalOfPartner.upsells_commission}
+                    </td>
+                    <td className="text-bold">
+                      {totalOfPartner.total_commission}
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -146,84 +129,105 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
           </div>
         ) : (
           <div className="container-fluid">
-            <ul className="commission-Resseque mt-3">
-              <li>
-                <div className="label">Brand Partner</div>
-                <div className="label-info">Ripley Tools LLC</div>
-              </li>
-              <li>
-                <div className="label">retainer</div>
-                <div className="label-info">$21,000.00</div>
-              </li>
-              <li>
-                <div className="label">rev share</div>
-                <div className="label-info">$21,000.00</div>
-              </li>
-              <li>
-                <div className="label">DSP</div>
-                <div className="label-info">0</div>
-              </li>
-              <li>
-                <div className="label">total Book Size</div>
-                <div className="label-info ">$21,000.00</div>
-              </li>
-              <li>
-                <div className="label">BOOK Size Comm.</div>
-                <div className="label-info label-info-dark">$21,000.00</div>
-              </li>
-              <li>
-                <div className="label">upsells </div>
-                <div className="label-info label-info-dark">$21,000.00</div>
-              </li>
-              <li>
-                <div className="label">Upsells comm.</div>
-                <div className="label-info label-info-dark ">$2,597.20</div>
-              </li>
-              <li>
-                <div className="label">total commission</div>
-                <div className="label-info label-info-dark ">$2,597.20</div>
-              </li>
-            </ul>
-            <div className="straight-line horizontal-line " />
+            {brandPartners.map((partner) => (
+              <Fragment key={partner.id}>
+                <div className="straight-line horizontal-line " />
+                <ul className="commission-Resseque mt-3">
+                  <li>
+                    <div className="label">Brand Partner</div>
+                    <div className="label-info">{partner.team_member}</div>
+                  </li>
+                  <li>
+                    <div className="label">retainer</div>
+                    <div className="label-info">{partner.retainer}</div>
+                  </li>
+                  <li>
+                    <div className="label">rev share</div>
+                    <div className="label-info">{partner.rev_share}</div>
+                  </li>
+                  <li>
+                    <div className="label">DSP</div>
+                    <div className="label-info">{partner.dsp}</div>
+                  </li>
+                  <li>
+                    <div className="label">total Book Size</div>
+                    <div className="label-info ">{partner.total_book_size}</div>
+                  </li>
+                  <li>
+                    <div className="label">BOOK Size Comm.</div>
+                    <div className="label-info label-info-dark">
+                      {partner.book_size_commission}
+                    </div>
+                  </li>
+                  <li>
+                    <div className="label">upsells </div>
+                    <div className="label-info label-info-dark">
+                      {partner.upsells}
+                    </div>
+                  </li>
+                  <li>
+                    <div className="label">Upsells comm.</div>
+                    <div className="label-info label-info-dark ">
+                      {partner.upsells_commission}
+                    </div>
+                  </li>
+                  <li>
+                    <div className="label">total commission</div>
+                    <div className="label-info label-info-dark ">
+                      {partner.total_commission}
+                    </div>
+                  </li>
+                </ul>
+              </Fragment>
+            ))}
             <ul className="commission-Resseque  active pt-3">
               <li>
                 <div className="label">Brand Partner</div>
-                <div className="label-info">Ripley Tools LLC</div>
+                <div className="label-info">{totalOfPartner.team_member}</div>
               </li>
               <li>
                 <div className="label">retainer</div>
-                <div className="label-info">$21,000.00</div>
+                <div className="label-info">{totalOfPartner.retainer}</div>
               </li>
               <li>
                 <div className="label">rev share</div>
-                <div className="label-info">$21,000.00</div>
+                <div className="label-info">{totalOfPartner.rev_share}</div>
               </li>
               <li>
                 <div className="label">DSP</div>
-                <div className="label-info">0</div>
+                <div className="label-info">{totalOfPartner.dsp}</div>
               </li>
               <li>
                 <div className="label">total Book Size</div>
-                <div className="label-info ">$21,000.00</div>
+                <div className="label-info ">
+                  {totalOfPartner.total_book_size}
+                </div>
               </li>
               <li>
                 <div className="label">BOOK Size Comm.</div>
-                <div className="label-info label-info-dark">$21,000.00</div>
+                <div className="label-info label-info-dark">
+                  {totalOfPartner.book_size_commission}
+                </div>
               </li>
               <li>
                 <div className="label">upsells </div>
-                <div className="label-info label-info-dark">$21,000.00</div>
+                <div className="label-info label-info-dark">
+                  {totalOfPartner.upsells}
+                </div>
               </li>
               <li>
                 <div className="label">Upsells comm.</div>
-                <div className="label-info label-info-dark ">$2,597.20</div>
+                <div className="label-info label-info-dark ">
+                  {totalOfPartner.upsells_commission}
+                </div>
               </li>
               <li>
                 <div className="label">total commission</div>
-                <div className="label-info label-info-dark ">$2,597.20</div>
+                <div className="label-info label-info-dark ">
+                  {totalOfPartner.total_commission}
+                </div>
               </li>
             </ul>
-            <div className="straight-line horizontal-line " />
           </div>
         )}
       </CommissionResseque>
