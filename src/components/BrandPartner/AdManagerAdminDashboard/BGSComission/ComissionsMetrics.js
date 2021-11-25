@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { arrayOf } from 'prop-types';
+import { shape } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { Card } from '../../../../common';
 import { BGSComissionMetrics } from '../../../../constants';
 // import { divide } from 'lodash';
 
-const ComissionsMetrics = ({ comissionData }) => {
+const ComissionsMetrics = ({ commissionMetrics }) => {
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
     const number = Number(orignalNumber);
     if (number !== undefined && number !== null) {
@@ -36,13 +36,13 @@ const ComissionsMetrics = ({ comissionData }) => {
             <Card
               className="fix-height"
               heading={item.label}
-              title={renderTitle(comissionData, item.key)}
+              title={renderTitle(commissionMetrics, item.key)}
               titleColor={
-                item.key === 'total_overdue' && !comissionData[item.key]
+                item.key === 'total_overdue' && !commissionMetrics[item.key]
                   ? Theme.black
                   : item.titleColor
               }
-              prefix={comissionData[item.key] !== null ? item.prefix : ''}
+              prefix={commissionMetrics[item.key] !== null ? item.prefix : ''}
               postfix={item.postfix}
               type="invoices"
             />
@@ -56,9 +56,9 @@ const ComissionsMetrics = ({ comissionData }) => {
 export default ComissionsMetrics;
 
 ComissionsMetrics.defaultProps = {
-  comissionData: [],
+  commissionMetrics: {},
 };
 
 ComissionsMetrics.propTypes = {
-  comissionData: arrayOf(Array),
+  commissionMetrics: shape({}),
 };

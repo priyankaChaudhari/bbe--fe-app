@@ -144,7 +144,7 @@ export const BGSComissionMetrics = [
   },
   {
     value: 'totalOverdue',
-    key: 'total_book_size_comission',
+    key: 'total_book_size_commission',
     label: 'TOTAL BOOK SIZE COMMISSION',
     titleColor: '#333333',
     prefix: '$',
@@ -160,7 +160,7 @@ export const BGSComissionMetrics = [
   },
   {
     value: '%pastDue',
-    key: 'total_upsells_comission',
+    key: 'total_upselles_commission',
     label: 'TOTAL UPSELL COMMISSION',
     titleColor: '#333333',
     prefix: '$',

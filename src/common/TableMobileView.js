@@ -1,11 +1,12 @@
-import { bool, func, string } from 'prop-types';
 import React from 'react';
 
 import styled from 'styled-components';
+import { func, string, bool } from 'prop-types';
+
+import Status from './Status';
+import Theme from '../theme/Theme';
 import { CompanyDefaultUser, BellNotification } from '../theme/images';
 import { WhiteCard } from './WhiteCard';
-import Theme from '../theme/Theme';
-import Status from './Status';
 
 const TableMobileView = ({
   className,
@@ -22,6 +23,7 @@ const TableMobileView = ({
   label5,
   label6,
   label7,
+  label8,
   labelInfo1,
   sublabel,
   sublabel1,
@@ -31,6 +33,7 @@ const TableMobileView = ({
   labelInfo5,
   labelInfo6,
   labelInfo7,
+  labelInfo8,
   status,
   statusColor,
   onClick,
@@ -39,49 +42,69 @@ const TableMobileView = ({
   isColumnOnClick = false,
   isShowBellIcon = false,
   onColumnClick,
+  mainLabel,
 }) => {
   const col = `${label3 ? (label7 ? 'col-4' : 'col-6') : 'col-4'}`;
   return (
     <TableMobileViewWrapper className={[className]} onClick={onClick}>
       <WhiteCard>
         <div className="row">
-          <div className="col-7 pr-0">
-            {CompanyName ? (
-              <>
-                <img
-                  className="company-logo"
-                  src={icon || CompanyDefaultUser}
-                  alt="logo"
-                />
-                <div className="CompanyName">{CompanyName}</div>
-                {invoiceType !== null ? (
-                  <div className="CompanyName">{invoiceType}</div>
-                ) : null}
-                {invoiceId ? (
-                  <div className="CompanyId">{`#${invoiceId}`}</div>
-                ) : null}
-              </>
-            ) : (
-              <>
-                <div className="CompanyName">{invoiceType}</div>
-                <div className="CompanyId">
-                  {invoiceId ? `#${invoiceId}` : null}
-                  {marketplaces}
-                </div>
-              </>
-            )}
-          </div>
+          {CompanyName ||
+          CompanyDefaultUser ||
+          invoiceType ||
+          invoiceId ||
+          CompanyDefaultUser ||
+          mainLabel ? (
+            <div className="col-7 pr-0">
+              {CompanyName ? (
+                <>
+                  <img
+                    className="company-logo"
+                    src={icon || CompanyDefaultUser}
+                    alt="logo"
+                  />
+                  <div className="CompanyName">{CompanyName}</div>
+                  {invoiceType !== null ? (
+                    <div className="CompanyName">{invoiceType}</div>
+                  ) : null}
+                  {invoiceId ? (
+                    <div className="CompanyId">{`${invoiceId}`}</div>
+                  ) : null}
+                </>
+              ) : (
+                <>
+                  {mainLabel ? (
+                    <div className="CompanyName LargeCompanyName">
+                      {mainLabel}
+                    </div>
+                  ) : invoiceType ? (
+                    <>
+                      <div className="CompanyName LargeCompanyName">
+                        {invoiceType}
+                      </div>
+                      <div className="CompanyId">
+                        {invoiceId ? `${invoiceId}` : null}
+                        {marketplaces}
+                      </div>
+                    </>
+                  ) : null}
+                </>
+              )}
+            </div>
+          ) : null}
 
-          <div className="col-5   text-right">
-            {' '}
-            <Status
-              className="card-staus-right"
-              label={status}
-              backgroundColor={statusColor}
-              labelColor={statusLabelColor}
-            />
-            <div className="clear-fix" />
-          </div>
+          {status ? (
+            <div className="col-5   text-right">
+              {' '}
+              <Status
+                className="card-staus-right"
+                label={status}
+                backgroundColor={statusColor}
+                labelColor={statusLabelColor}
+              />
+              <div className="clear-fix" />
+            </div>
+          ) : null}
         </div>
         <div className="straight-line horizontal-line mb-3 mt-2" />
         <div className="row">
@@ -149,6 +172,11 @@ const TableMobileView = ({
                 <div className="label">{label7}</div>
                 <div className="label-info "> {labelInfo7}</div>
               </div>
+              <div className={`${col} mb-3`}>
+                {' '}
+                <div className="label">{label8}</div>
+                <div className="label-info "> {labelInfo8}</div>
+              </div>
             </>
           ) : null}
         </div>
@@ -186,6 +214,7 @@ const TableMobileViewWrapper = styled.div`
 
     &.LargeCompanyName {
       font-size: ${Theme.title};
+      margin-bottom: 10px;
     }
   }
   .CompanyId {
@@ -230,12 +259,15 @@ TableMobileView.defaultProps = {
   labelInfo6: '',
   label7: '',
   labelInfo7: '',
+  label8: '',
+  labelInfo8: '',
   invoiceType: '',
   invoiceId: '',
   status: '',
   statusColor: '',
   icon: '',
   marketplaces: '',
+  mainLabel: '',
   onClick: () => {},
   onColumnClick: () => {},
 };
@@ -264,12 +296,15 @@ TableMobileView.propTypes = {
   labelInfo6: string,
   label7: string,
   labelInfo7: string,
+  label8: string,
+  labelInfo8: string,
   invoiceType: string,
   invoiceId: string,
   status: string,
   statusColor: string,
   icon: string,
   marketplaces: string,
+  mainLabel: string,
   onClick: func,
   onColumnClick: func,
 };

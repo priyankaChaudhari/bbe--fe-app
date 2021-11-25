@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 
 import styled from 'styled-components';
-import Select from 'react-select';
-import { bool, func, string } from 'prop-types';
+import { components } from 'react-select';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 
 import TableMobileView from '../../../../common/TableMobileView';
 import Theme from '../../../../theme/Theme';
+import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import {
   WhiteCard,
   CheckBox,
-  DropDownSelect,
   DropDownIndicator,
+  PageLoader,
+  NoData,
 } from '../../../../common';
 import {
   ComissionHeader,
@@ -24,24 +26,55 @@ const BGScommissionTable = ({
   handleCommissionFilter,
   isGroupBy,
   onHandleGroupBy,
+  loader,
+  commissionData,
 }) => {
+  const { Option, SingleValue } = components;
+
   useEffect(() => {
-    console.log(isGroupBy, '-----', selectedTableFilter);
-  }, [isGroupBy, selectedTableFilter]);
+    console.log(selectedTableFilter, '<<group By-----');
+  }, [selectedTableFilter]);
+
+  const filterOption = ({ data, ...props }) => (
+    <Option {...props}>
+      <div className="pb-2">
+        <span style={{ fontSize: '15px', color: '#000000' }}>{data.label}</span>
+
+        <div style={{ fontSize: '12px', color: '#556178' }}>{data.sub}</div>
+      </div>
+    </Option>
+  );
+
+  const singleFilterOption = (props) => (
+    <SingleValue {...props}>
+      <span style={{ fontSize: '15px', color: '#000000' }}>
+        {`Sort by: ${props.data.label}`}
+      </span>
+      <div style={{ fontSize: '12px', color: '#556178' }}>{props.data.sub}</div>
+    </SingleValue>
+  );
+
+  const getSelectComponents = () => {
+    return {
+      Option: filterOption,
+      SingleValue: singleFilterOption,
+      DropDownIndicator,
+    };
+  };
 
   const renderDropDown = () => {
-    return (
-      <DropDownSelect>
-        <Select
-          classNamePrefix="react-select"
-          className="active"
-          components={DropDownIndicator}
-          options={bgsCommissionsFilterOptions}
-          placeholder={bgsCommissionsFilterOptions[0].label}
-          defaultValue={bgsCommissionsFilterOptions[0]}
-          onChange={handleCommissionFilter}
-        />
-      </DropDownSelect>
+    return DropDown(
+      '',
+      bgsCommissionsFilterOptions,
+      bgsCommissionsFilterOptions &&
+        bgsCommissionsFilterOptions[0] &&
+        bgsCommissionsFilterOptions[0].label,
+      getSelectComponents,
+      bgsCommissionsFilterOptions && bgsCommissionsFilterOptions[0],
+      handleCommissionFilter,
+      false,
+      null,
+      selectedTableFilter,
     );
   };
 
@@ -49,6 +82,7 @@ const BGScommissionTable = ({
     return (
       <CommissionTabletView className="mt-4 d-md-none d-block">
         <TableMobileView
+          mainLabel="Team Jake"
           label="retainer"
           labelInfo="$52,000.00"
           label1="rev share"
@@ -109,50 +143,105 @@ const BGScommissionTable = ({
               </th>
             </tr>
           </thead>
+          {loader ? (
+            <PageLoader
+              component="performance-graph"
+              color="#FF5933"
+              type="detail"
+              width={40}
+              height={40}
+            />
+          ) : null}
+          {!isGroupBy && commissionData && commissionData.length > 0 ? (
+            <tbody style={{ width: '100%', display: 'table' }}>
+              <tr>
+                <td width="10%">Team Jake</td>
+                <td width="10%">$2,597.20</td>
+                <td width="10%">$2,597.20</td>
+                <td width="5%">$2,597.20</td>
+                <td width="12%">$805.00</td>
+                <td width="15%" className="text-bold">
+                  0
+                </td>
+                <td width="8%">$805.00</td>
+                <td width="12%" className="text-bold">
+                  $805.00
+                </td>
+                <td width="10%" className="text-bold">
+                  {' '}
+                  $1,714.59
+                </td>
+              </tr>
+              <tr>
+                <td width="10%">Team Jake</td>
+                <td width="10%">$2,597.20</td>
+                <td width="10%">$2,597.20</td>
+                <td width="5%">$2,597.20</td>
+                <td width="12%">$805.00</td>
+                <td width="15%" className="text-bold">
+                  0
+                </td>
+                <td width="8%">$805.00</td>
+                <td width="12%" className="text-bold">
+                  $805.00
+                </td>
+                <td width="10%" className="text-bold">
+                  {' '}
+                  $1,714.59
+                </td>
+              </tr>
+            </tbody>
+          ) : null}
+
+          {!loader && !commissionData ? (
+            <NoData>No commissions Found</NoData>
+          ) : null}
         </WhiteCard>
 
-        <WhiteCard className="mt-3 ">
-          <tbody style={{ width: '100%', display: 'table' }}>
-            <tr>
-              <td width="10%" className="text-bold">
-                Team Jake
-              </td>
-              <td width="10%">$2,597.20</td>
-              <td width="10%">$2,597.20</td>
-              <td width="5%">$2,597.20</td>
-              <td width="12%">$805.00</td>
-              <td width="15%" className="text-bold">
-                0
-              </td>
-              <td width="8%">$805.00</td>
-              <td width="12%" className="text-bold">
-                $805.00
-              </td>
-              <td width="10%" className="text-bold">
-                {' '}
-                $1,714.59
-              </td>
-            </tr>
-            <tr>
-              <td width="10%">Team Jake</td>
-              <td width="10%">$2,597.20</td>
-              <td width="10%">$2,597.20</td>
-              <td width="5%">$2,597.20</td>
-              <td width="12%">$805.00</td>
-              <td width="15%" className="text-bold">
-                0
-              </td>
-              <td width="8%">$805.00</td>
-              <td width="12%" className="text-bold">
-                $805.00
-              </td>
-              <td width="10%" className="text-bold">
-                {' '}
-                $1,714.59
-              </td>
-            </tr>
-          </tbody>
-        </WhiteCard>
+        {isGroupBy && commissionData && commissionData.length > 0 ? (
+          <WhiteCard className="mt-3 ">
+            <tbody style={{ width: '100%', display: 'table' }}>
+              <tr>
+                <td width="10%" className="text-bold">
+                  Team Jake
+                </td>
+                <td width="10%">$2,597.20</td>
+                <td width="10%">$2,597.20</td>
+                <td width="5%">$2,597.20</td>
+                <td width="12%">$805.00</td>
+                <td width="15%" className="text-bold">
+                  0
+                </td>
+                <td width="8%">$805.00</td>
+                <td width="12%" className="text-bold">
+                  $805.00
+                </td>
+                <td width="10%" className="text-bold">
+                  {' '}
+                  $1,714.59
+                </td>
+              </tr>
+              <tr>
+                <td width="10%">Team Jake</td>
+                <td width="10%">$2,597.20</td>
+                <td width="10%">$2,597.20</td>
+                <td width="5%">$2,597.20</td>
+                <td width="12%">$805.00</td>
+                <td width="15%" className="text-bold">
+                  0
+                </td>
+                <td width="8%">$805.00</td>
+                <td width="12%" className="text-bold">
+                  $805.00
+                </td>
+                <td width="10%" className="text-bold">
+                  {' '}
+                  $1,714.59
+                </td>
+              </tr>
+            </tbody>
+          </WhiteCard>
+        ) : null}
       </TableGap>
     );
   };
@@ -186,6 +275,7 @@ const BGScommissionTable = ({
                           id="step"
                           checked={isGroupBy}
                           onChange={onHandleGroupBy}
+                          disabled={loader}
                         />
                         <span className="checkmark" />
                       </label>
@@ -229,17 +319,23 @@ export default BGScommissionTable;
 BGScommissionTable.defaultProps = {
   selectedTableFilter: 'bgs_manager',
   isGroupBy: true,
+  loader: false,
   OnSetShowModal: () => {},
   handleCommissionFilter: () => {},
   onHandleGroupBy: () => {},
+  commissionData: null,
+  data: {},
 };
 
 BGScommissionTable.propTypes = {
   isGroupBy: bool,
+  loader: bool,
   selectedTableFilter: string,
   OnSetShowModal: func,
   handleCommissionFilter: func,
   onHandleGroupBy: func,
+  commissionData: arrayOf(Array),
+  data: shape({ sub: string, label: string }),
 };
 
 const TableGap = styled.div`

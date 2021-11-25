@@ -585,11 +585,11 @@ export async function setEnableInvoices(id) {
   return result;
 }
 
-export async function getBgsCommissionData(startDate, endDate, groupBy) {
+export async function getBgsCommissionData(date) {
   const params = {
-    start_month_year: startDate,
-    end_month_year: endDate,
-    group_by: groupBy,
+    start_month_year: `${date[0].getMonth() + 1}-${date[0].getFullYear()}`,
+    end_month_year: `${date[1].getMonth() + 1}-${date[1].getFullYear()}`,
+    // group_by: groupBy,
   };
 
   console.log('params---', params);
