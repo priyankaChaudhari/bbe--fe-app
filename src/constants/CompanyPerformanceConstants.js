@@ -164,39 +164,39 @@ export const toogleMetricsData = [
 
 export const bgsCommissionsFilterOptions = [
   {
-    name: 'bgs_manager',
+    value: 'bgs_manager',
     label: 'Team Member',
   },
   {
-    name: 'retainer',
+    value: 'retainer',
     label: 'Retainer',
   },
   {
-    name: 'rev_share',
+    value: 'rev_share',
     label: 'Rev Share',
   },
   {
-    name: 'bgs_manager',
+    value: 'bgs_manager',
     label: 'Team Member',
   },
   {
-    name: 'bgs_manager',
+    value: 'bgs_manager',
     label: 'Team Member',
   },
   {
-    name: 'bgs_manager',
+    value: 'bgs_manager',
     label: 'Team Member',
   },
   {
-    name: 'bgs_manager',
+    value: 'bgs_manager',
     label: 'Team Member',
   },
   {
-    name: 'bgs_manager',
+    value: 'bgs_manager',
     label: 'Team Member',
   },
   {
-    name: 'bgs_manager',
+    value: 'bgs_manager',
     label: 'Team Member',
   },
 ];
