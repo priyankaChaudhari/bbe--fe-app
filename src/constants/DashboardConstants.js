@@ -248,3 +248,15 @@ export const monthNames = [
   'Nov',
   'Dec',
 ];
+
+export const commissionsTableHeaders = [
+  'TEAM MEMBER',
+  'RETAINER',
+  'REV SHARE',
+  'DSP',
+  'TOTAL BOOK SIZE',
+  'BOOK SIZE COMMISSION',
+  'UPSELLS',
+  'UPSELLS COMMISSION',
+  'TOTAL COMMISSION',
+];
