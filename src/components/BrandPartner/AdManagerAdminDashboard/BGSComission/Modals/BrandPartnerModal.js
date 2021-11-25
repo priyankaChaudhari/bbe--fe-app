@@ -46,14 +46,11 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
       ariaHideApp={false}
       contentLabel="Add team modal">
       <CommissionResseque>
-        {' '}
         <HeaderDownloadFuntionality className="border-none">
           <div className="container-fluid">
-            {' '}
             <div className="row">
               <div className="col-6 ">
                 <div className="header-title large-header-title ml-3 ">
-                  {' '}
                   Julia Resseque
                 </div>
               </div>
@@ -77,119 +74,69 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
           </div>
         </HeaderDownloadFuntionality>
         {isDesktop ? (
-          <div className=" ml-4 pr-4">
+          <div className="ml-4 pr-4">
             <TableGap>
-              {' '}
-              <thead style={{ width: '100%', display: 'table' }}>
-                <tr className="overlay-modal-header">
-                  <th width="10%" className=" text-left">
-                    team member
-                  </th>
-                  <th width="10%" className=" text-left">
-                    retainer
-                  </th>
-                  <th width="10%" className=" text-left">
-                    rev share
-                  </th>
-                  <th width="5%" className=" text-left">
-                    dsp
-                  </th>
-                  <th width="12%" className=" text-left">
-                    {' '}
-                    total book size
-                  </th>
-                  <th width="15%" className=" text-left">
-                    {' '}
-                    BOOK Size commission
-                  </th>
-                  <th width="8%" className=" text-left">
-                    {' '}
-                    upsells
-                  </th>
-                  <th width="12%" className=" text-left">
-                    {' '}
-                    Upsells commission
-                  </th>
-                  <th width="10%" className=" text-left">
-                    {' '}
-                    total commission
-                  </th>
-                </tr>
-              </thead>{' '}
-              <tbody style={{ width: '100%', display: 'table' }}>
-                <tr className="partners">
-                  <td width="10%">Team Jake</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="5%">$2,597.20</td>
-                  <td width="12%">$805.00</td>
-                  <td width="15%" className="text-bold">
-                    0
-                  </td>
-                  <td width="8%">$805.00</td>
-                  <td width="12%" className="text-bold">
-                    $805.00
-                  </td>
-                  <td width="10%" className="text-bold">
-                    {' '}
-                    $1,714.59
-                  </td>
-                </tr>
-                <tr className="partners">
-                  <td width="10%">Team Jake</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="5%">$2,597.20</td>
-                  <td width="12%">$805.00</td>
-                  <td width="15%" className="text-bold">
-                    0
-                  </td>
-                  <td width="8%">$805.00</td>
-                  <td width="12%" className="text-bold">
-                    $805.00
-                  </td>
-                  <td width="10%" className="text-bold">
-                    {' '}
-                    $1,714.59
-                  </td>
-                </tr>
-                <tr className="partners">
-                  <td width="10%">Team Jake</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="5%">$2,597.20</td>
-                  <td width="12%">$805.00</td>
-                  <td width="15%" className="text-bold">
-                    0
-                  </td>
-                  <td width="8%">$805.00</td>
-                  <td width="12%" className="text-bold">
-                    $805.00
-                  </td>
-                  <td width="10%" className="text-bold">
-                    {' '}
-                    $1,714.59
-                  </td>
-                </tr>
-                <tr className="all-partners">
-                  <td width="10%">Team Jake</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="10%">$2,597.20</td>
-                  <td width="5%">$2,597.20</td>
-                  <td width="12%">$805.00</td>
-                  <td width="15%" className="text-bold">
-                    0
-                  </td>
-                  <td width="8%">$805.00</td>
-                  <td width="12%" className="text-bold">
-                    $805.00
-                  </td>
-                  <td width="10%" className="text-bold">
-                    {' '}
-                    $1,714.59
-                  </td>
-                </tr>
-              </tbody>
+              <table>
+                <thead style={{ width: '100%', display: 'table' }}>
+                  <tr className="overlay-modal-header">
+                    <th className="text-left">team member</th>
+                    <th className="text-left">retainer</th>
+                    <th className="text-left">rev share</th>
+                    <th className="text-left">dsp</th>
+                    <th className="text-left">total book size</th>
+                    <th className="text-left">BOOK Size commission</th>
+                    <th className="text-left">upsells</th>
+                    <th className="text-left">Upsells commission</th>
+                    <th className="text-left">total commission</th>
+                  </tr>
+                </thead>
+                <tbody style={{ width: '100%', display: 'table' }}>
+                  <tr className="partners">
+                    <td>Team Jake</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">0</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">$805.00</td>
+                    <td className="text-bold">$1,714.59</td>
+                  </tr>
+                  <tr className="partners">
+                    <td>Team Jake</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">0</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">$805.00</td>
+                    <td className="text-bold">$1,714.59</td>
+                  </tr>
+                  <tr className="partners">
+                    <td>Team Jake</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">0</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">$805.00</td>
+                    <td className="text-bold">$1,714.59</td>
+                  </tr>
+                  <tr className="all-partners">
+                    <td>Team Jake</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$2,597.20</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">0</td>
+                    <td>$805.00</td>
+                    <td className="text-bold">$805.00</td>
+                    <td className="text-bold">$1,714.59</td>
+                  </tr>
+                </tbody>
+              </table>
             </TableGap>
           </div>
         ) : (
