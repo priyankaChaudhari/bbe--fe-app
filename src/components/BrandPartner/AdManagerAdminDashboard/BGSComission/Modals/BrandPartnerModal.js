@@ -1,14 +1,17 @@
 import React from 'react';
 
 import Modal from 'react-modal';
-import { bool, func } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
+import { bool, func } from 'prop-types';
 
 import { CloseIcon } from '../../../../../theme/images';
+import { commissionsTableHeaders } from '../../../../../constants';
 import { CommissionResseque } from '../BGSComissionContainerStyle';
 import { HeaderDownloadFuntionality, TableGap } from '../../../../../common';
 
 const BrandPartnerModal = ({ showModal, setShowModal }) => {
+  const isDesktop = useMediaQuery({ minWidth: 992 });
+
   const customStyles = {
     content: {
       top: '50%',
@@ -37,7 +40,6 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
       borderRadius: '0px !important',
     },
   };
-  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   return (
     <Modal
@@ -79,7 +81,10 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
               <table>
                 <thead style={{ width: '100%', display: 'table' }}>
                   <tr className="overlay-modal-header">
-                    <th className="text-left">team member</th>
+                    {commissionsTableHeaders.map((header) => (
+                      <th className="text-left">{header}</th>
+                    ))}
+                    {/* <th className="text-left">team member</th>
                     <th className="text-left">retainer</th>
                     <th className="text-left">rev share</th>
                     <th className="text-left">dsp</th>
@@ -87,7 +92,7 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
                     <th className="text-left">BOOK Size commission</th>
                     <th className="text-left">upsells</th>
                     <th className="text-left">Upsells commission</th>
-                    <th className="text-left">total commission</th>
+                    <th className="text-left">total commission</th> */}
                   </tr>
                 </thead>
                 <tbody style={{ width: '100%', display: 'table' }}>
