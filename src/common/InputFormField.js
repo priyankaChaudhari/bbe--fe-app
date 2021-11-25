@@ -48,6 +48,7 @@ const InputFormField = styled.div`
       z-index: 2;
       font-size: 14px;
       text-align: center;
+      color: ${Theme.gray85};
       background: #EAEDF6;
       border-left: 1px solid ${Theme.gray45};
       border-top: 1px solid ${Theme.gray45} !important;
@@ -55,7 +56,7 @@ const InputFormField = styled.div`
 
       &.end {
         border-left: 0;
-        border-right 1px solid ${Theme.gray45};
+        border-right: 1px solid ${Theme.gray45};
         border-top: 1px solid ${Theme.gray45} !important;
         border-bottom: 1px solid ${Theme.gray45};
         border-radius: 0px 2px 2px 0;

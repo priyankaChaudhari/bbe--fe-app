@@ -182,6 +182,7 @@ import DeleteIcon from './icons/delete.svg';
 import InvoiceIcon from './icons/icon_invoices.svg';
 import PartnersIcon from './icons/icon_partners.svg';
 import DisabledRecurring from './icons/disabled-recurring.svg';
+import InfoRedIcon from './icons/info-red-icon.svg';
 
 export {
   BannerBg,
@@ -368,4 +369,5 @@ export {
   InvoiceIcon,
   PartnersIcon,
   DisabledRecurring,
+  InfoRedIcon,
 };

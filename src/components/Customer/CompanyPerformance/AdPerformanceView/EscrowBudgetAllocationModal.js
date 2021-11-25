@@ -10,8 +10,10 @@ import {
   InputFormField,
   PageLoader,
   AllocateBar,
+  ErrorMsgBox,
 } from '../../../../common';
-import { CloseIcon, AddIcons } from '../../../../theme/images';
+
+import { CloseIcon, AddIcons, InfoRedIcon } from '../../../../theme/images';
 
 const todaysDate = new Date();
 todaysDate.setDate(todaysDate.getDate() - 2);
@@ -117,8 +119,8 @@ export default function EscrowBudgetAllocationModal({
     return allocatedMonths.map((item, index) => {
       return (
         <>
-          <div className="col-6">
-            <InputFormField className="mt-3">
+          <div className="col-md-6 col-12 ">
+            <InputFormField className="mt-1">
               <label htmlFor="emailAddress">
                 Month
                 <br />
@@ -126,9 +128,9 @@ export default function EscrowBudgetAllocationModal({
               </label>
             </InputFormField>
           </div>
-          <div className="col-6">
+          <div className="col-md-6 col-12 mt-md-0 mb-3">
             {' '}
-            <InputFormField className="mt-3">
+            <InputFormField className="mt-1 ">
               <label
                 className={
                   item.label === 'current'
@@ -203,36 +205,45 @@ export default function EscrowBudgetAllocationModal({
           <div className="modal-body pb-0">
             <h4>Allocate Balance</h4>
             <div className="row">
-              <AllocateBar className="mt-2 mb-2">
-                {' '}
-                <div className="remaing-label">Escrow Balance</div>{' '}
-                <div className="allocate-balance cursor">$24000</div>
-                <div className="clear-fix" />
-              </AllocateBar>
+              <div className="col-12">
+                <AllocateBar className="mt-2 mb-3">
+                  {' '}
+                  <div className="remaing-label text-bold">
+                    Escrow Balance
+                  </div>{' '}
+                  <div className="remaing-label text-bold float-right">
+                    $24000
+                  </div>
+                  <div className="clear-fix" />
+                </AllocateBar>
+              </div>
               {renderMonths()}
-              <Button
-                style={{ textTransform: 'uppercase' }}
-                className={
-                  allocatedMonths.length > 6
-                    ? 'btn-add-contact mt-3 disabled'
-                    : 'btn-add-contact mt-3'
-                }
-                onClick={() => handleOnAddAnotherMonth()}>
-                {' '}
-                <img
-                  width="14px"
-                  style={{ verticalAlign: 'middle' }}
-                  src={AddIcons}
-                  className="ml-1 add-icon"
-                  alt="add"
-                />{' '}
-                Add another Month
-              </Button>
+              <div className="col-12">
+                <Button
+                  style={{ textTransform: 'uppercase' }}
+                  className={
+                    allocatedMonths.length > 6
+                      ? 'btn-add-contact  disabled'
+                      : 'btn-add-contact '
+                  }
+                  onClick={() => handleOnAddAnotherMonth()}>
+                  {' '}
+                  <img
+                    width="14px"
+                    style={{ verticalAlign: 'middle' }}
+                    src={AddIcons}
+                    className="ml-1 add-icon"
+                    alt="add"
+                  />{' '}
+                  Add another Month
+                </Button>
+              </div>
               {isEscrowbalanceExceed ? (
-                <div>
-                  All budgets across the selected months need to add up to the
-                  available escrow balance.
-                </div>
+                <ErrorMsgBox className="mt-2">
+                  <img className="info-icon" src={InfoRedIcon} alt="info" /> All
+                  budges across the selected months need to add up to the
+                  available escrow balance
+                </ErrorMsgBox>
               ) : null}
             </div>
           </div>
