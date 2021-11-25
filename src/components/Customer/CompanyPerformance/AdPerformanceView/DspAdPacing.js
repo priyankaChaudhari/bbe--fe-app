@@ -250,10 +250,18 @@ export default function DspAdPacing({
           {' '}
           <div className="label-info text-bold text-right">
             {' '}
-            {isNaN(dspPacing?.suggested_spend) ? '' : currencySymbol}
+            {/* {isNaN(dspPacing?.suggested_spend) ? '' : currencySymbol}
             {dspPacing?.suggested_spend && isNaN(dspPacing.suggested_spend)
               ? dspPacing?.suggested_spend
-              : addThousandSeperator(dspPacing.suggested_spend)}
+              : addThousandSeperator(dspPacing.suggested_spend)} */}
+            {dspPacing?.suggested_spend === 0 ||
+            dspPacing?.suggested_spend === 0.0
+              ? 'N/A'
+              : currencySymbol}
+            {dspPacing?.suggested_spend !== 0 ||
+            dspPacing?.suggested_spend !== 0.0
+              ? addThousandSeperator(dspPacing.suggested_spend)
+              : null}
           </div>{' '}
         </div>
         <div className="col-7">
