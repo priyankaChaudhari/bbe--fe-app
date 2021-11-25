@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
+import NumberFormat from 'react-number-format';
 import { bool, func, string } from 'prop-types';
 
 import { getAllocatedMonths, storeAllocatedBudget } from '../../../../api';
@@ -106,7 +107,7 @@ export default function EscrowBudgetAllocationModal({
   const handleOnChange = (event, index) => {
     const tempData = [...allocatedMonths];
     const escrowBalance = 24000;
-    tempData[index].amount = event.target.value;
+    tempData[index].amount = event.target.value.replace(/,/g, '');
     const sumOfFutureMonths = calculateSumOfFutureMonths(tempData);
     const currentMonthAmount = escrowBalance - sumOfFutureMonths;
     tempData[0].amount = String(currentMonthAmount);
@@ -119,7 +120,7 @@ export default function EscrowBudgetAllocationModal({
     return allocatedMonths.map((item, index) => {
       return (
         <>
-          <div className="col-md-6 col-12 ">
+          <div className="col-md-6 col-12 " key={item.name}>
             <InputFormField className="mt-1 hide-spinner">
               <label htmlFor="emailAddress">
                 Month
@@ -128,34 +129,43 @@ export default function EscrowBudgetAllocationModal({
                   className="form-control "
                   value={item.name}
                   type="text"
+                  readOnly
                 />
               </label>
             </InputFormField>
           </div>
           <div className="col-md-6 col-12 mt-md-0 mb-3">
             {' '}
-            <InputFormField className="mt-1 ">
-              <label
-                className={
-                  item.label === 'current'
-                    ? 'modal-field disabled'
-                    : 'modal-field'
-                }
-                htmlFor="emailAddress">
-                Amount
-                <div className="input-container">
-                  <span className="input-icon">$</span>
-                  <input
-                    type="number"
-                    name={item.name}
-                    placeholder="0"
-                    className="form-control"
-                    value={item.amount}
-                    onChange={(event) => handleOnChange(event, index)}
-                  />
-                </div>
-              </label>
-            </InputFormField>
+            <NumberFormat
+              className={item.label === 'current' ? 'mt-1 disabled' : 'mt-1'}
+              name={item.name}
+              defaultValue={item.amount}
+              value={item.amount}
+              placeholder={0}
+              onChange={(event) => handleOnChange(event, index)}
+              thousandSeparator
+              decimalScale={2}
+            />
+            {/* <label
+              className={
+                item.label === 'current'
+                  ? 'modal-field disabled'
+                  : 'modal-field'
+              }
+              htmlFor="emailAddress">
+              Amount
+              <div className="input-container">
+                <span className="input-icon">$</span>
+                <input
+                  type="number"
+                  name={item.name}
+                  placeholder="0"
+                  className="form-control"
+                  value={item.amount}
+                  onChange={(event) => handleOnChange(event, index)}
+                />
+              </div>
+            </label> */}
           </div>
         </>
       );
