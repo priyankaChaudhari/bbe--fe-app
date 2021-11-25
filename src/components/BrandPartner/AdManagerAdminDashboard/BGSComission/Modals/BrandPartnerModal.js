@@ -2,13 +2,28 @@ import React from 'react';
 
 import Modal from 'react-modal';
 import { bool, func } from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
 
 import { CloseIcon } from '../../../../../theme/images';
 import { CommissionResseque } from '../BGSComissionContainerStyle';
-import { HeaderDownloadFuntionality } from '../../../../../common';
+import { HeaderDownloadFuntionality, TableGap } from '../../../../../common';
 
 const BrandPartnerModal = ({ showModal, setShowModal }) => {
   const customStyles = {
+    content: {
+      top: '50%',
+      right: '0px',
+      bottom: 'auto',
+      maxWidth: '1205px ',
+      width: '100% ',
+      maxHeight: '100%',
+      overlay: ' {zIndex: 1000}',
+      inset: '0% 0% 0% auto',
+      marginRight: '0',
+      borderRadius: '0px !important',
+    },
+  };
+  const customStylesTable = {
     content: {
       top: '50%',
       right: '0px',
@@ -22,33 +37,34 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
       borderRadius: '0px !important',
     },
   };
+  const isDesktop = useMediaQuery({ minWidth: 992 });
 
   return (
     <Modal
       isOpen={showModal}
-      style={customStyles}
+      style={isDesktop ? customStyles : customStylesTable}
       ariaHideApp={false}
       contentLabel="Add team modal">
       <CommissionResseque>
         {' '}
-        <HeaderDownloadFuntionality>
+        <HeaderDownloadFuntionality className="border-none">
           <div className="container-fluid">
             {' '}
             <div className="row">
-              <div className="col-md-6 col-sm-12">
+              <div className="col-6 ">
                 <div className="header-title large-header-title ml-3 ">
                   {' '}
                   Julia Resseque
                 </div>
               </div>
-              <div className="col-md-6 col-sm-12">
+              <div className="col-6  ">
                 <ul className="contract-download-nav">
                   <li>
                     <img
                       width="18px"
                       src={CloseIcon}
                       alt="close"
-                      className="float-right cursor remove-cross-icon"
+                      className="float-right cursor remove-cross-icon mr-3"
                       onClick={() => {
                         setShowModal(false);
                       }}
@@ -60,86 +76,204 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
             </div>
           </div>
         </HeaderDownloadFuntionality>
-        <div className="container-fluid">
-          <ul className="commission-Resseque mt-3">
-            <li>
-              <div className="label">Brand Partner</div>
-              <div className="label-info">Ripley Tools LLC</div>
-            </li>
-            <li>
-              <div className="label">retainer</div>
-              <div className="label-info">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">rev share</div>
-              <div className="label-info">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">DSP</div>
-              <div className="label-info">0</div>
-            </li>
-            <li>
-              <div className="label">total Book Size</div>
-              <div className="label-info ">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">BOOK Size Comm.</div>
-              <div className="label-info label-info-dark">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">upsells </div>
-              <div className="label-info label-info-dark">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">Upsells comm.</div>
-              <div className="label-info label-info-dark ">$2,597.20</div>
-            </li>
-            <li>
-              <div className="label">total commission</div>
-              <div className="label-info label-info-dark ">$2,597.20</div>
-            </li>
-          </ul>
-          <div className="straight-line horizontal-line " />
-          <ul className="commission-Resseque  active pt-3">
-            <li>
-              <div className="label">Brand Partner</div>
-              <div className="label-info">Ripley Tools LLC</div>
-            </li>
-            <li>
-              <div className="label">retainer</div>
-              <div className="label-info">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">rev share</div>
-              <div className="label-info">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">DSP</div>
-              <div className="label-info">0</div>
-            </li>
-            <li>
-              <div className="label">total Book Size</div>
-              <div className="label-info ">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">BOOK Size Comm.</div>
-              <div className="label-info label-info-dark">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">upsells </div>
-              <div className="label-info label-info-dark">$21,000.00</div>
-            </li>
-            <li>
-              <div className="label">Upsells comm.</div>
-              <div className="label-info label-info-dark ">$2,597.20</div>
-            </li>
-            <li>
-              <div className="label">total commission</div>
-              <div className="label-info label-info-dark ">$2,597.20</div>
-            </li>
-          </ul>
-          <div className="straight-line horizontal-line " />
-        </div>
+        {isDesktop ? (
+          <div className=" ml-4 pr-4">
+            <TableGap>
+              {' '}
+              <thead style={{ width: '100%', display: 'table' }}>
+                <tr className="overlay-modal-header">
+                  <th width="10%" className=" text-left">
+                    team member
+                  </th>
+                  <th width="10%" className=" text-left">
+                    retainer
+                  </th>
+                  <th width="10%" className=" text-left">
+                    rev share
+                  </th>
+                  <th width="5%" className=" text-left">
+                    dsp
+                  </th>
+                  <th width="12%" className=" text-left">
+                    {' '}
+                    total book size
+                  </th>
+                  <th width="15%" className=" text-left">
+                    {' '}
+                    BOOK Size commission
+                  </th>
+                  <th width="8%" className=" text-left">
+                    {' '}
+                    upsells
+                  </th>
+                  <th width="12%" className=" text-left">
+                    {' '}
+                    Upsells commission
+                  </th>
+                  <th width="10%" className=" text-left">
+                    {' '}
+                    total commission
+                  </th>
+                </tr>
+              </thead>{' '}
+              <tbody style={{ width: '100%', display: 'table' }}>
+                <tr className="partners">
+                  <td width="10%">Team Jake</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="5%">$2,597.20</td>
+                  <td width="12%">$805.00</td>
+                  <td width="15%" className="text-bold">
+                    0
+                  </td>
+                  <td width="8%">$805.00</td>
+                  <td width="12%" className="text-bold">
+                    $805.00
+                  </td>
+                  <td width="10%" className="text-bold">
+                    {' '}
+                    $1,714.59
+                  </td>
+                </tr>
+                <tr className="partners">
+                  <td width="10%">Team Jake</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="5%">$2,597.20</td>
+                  <td width="12%">$805.00</td>
+                  <td width="15%" className="text-bold">
+                    0
+                  </td>
+                  <td width="8%">$805.00</td>
+                  <td width="12%" className="text-bold">
+                    $805.00
+                  </td>
+                  <td width="10%" className="text-bold">
+                    {' '}
+                    $1,714.59
+                  </td>
+                </tr>
+                <tr className="partners">
+                  <td width="10%">Team Jake</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="5%">$2,597.20</td>
+                  <td width="12%">$805.00</td>
+                  <td width="15%" className="text-bold">
+                    0
+                  </td>
+                  <td width="8%">$805.00</td>
+                  <td width="12%" className="text-bold">
+                    $805.00
+                  </td>
+                  <td width="10%" className="text-bold">
+                    {' '}
+                    $1,714.59
+                  </td>
+                </tr>
+                <tr className="all-partners">
+                  <td width="10%">Team Jake</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="10%">$2,597.20</td>
+                  <td width="5%">$2,597.20</td>
+                  <td width="12%">$805.00</td>
+                  <td width="15%" className="text-bold">
+                    0
+                  </td>
+                  <td width="8%">$805.00</td>
+                  <td width="12%" className="text-bold">
+                    $805.00
+                  </td>
+                  <td width="10%" className="text-bold">
+                    {' '}
+                    $1,714.59
+                  </td>
+                </tr>
+              </tbody>
+            </TableGap>
+          </div>
+        ) : (
+          <div className="container-fluid">
+            <ul className="commission-Resseque mt-3">
+              <li>
+                <div className="label">Brand Partner</div>
+                <div className="label-info">Ripley Tools LLC</div>
+              </li>
+              <li>
+                <div className="label">retainer</div>
+                <div className="label-info">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">rev share</div>
+                <div className="label-info">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">DSP</div>
+                <div className="label-info">0</div>
+              </li>
+              <li>
+                <div className="label">total Book Size</div>
+                <div className="label-info ">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">BOOK Size Comm.</div>
+                <div className="label-info label-info-dark">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">upsells </div>
+                <div className="label-info label-info-dark">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">Upsells comm.</div>
+                <div className="label-info label-info-dark ">$2,597.20</div>
+              </li>
+              <li>
+                <div className="label">total commission</div>
+                <div className="label-info label-info-dark ">$2,597.20</div>
+              </li>
+            </ul>
+            <div className="straight-line horizontal-line " />
+            <ul className="commission-Resseque  active pt-3">
+              <li>
+                <div className="label">Brand Partner</div>
+                <div className="label-info">Ripley Tools LLC</div>
+              </li>
+              <li>
+                <div className="label">retainer</div>
+                <div className="label-info">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">rev share</div>
+                <div className="label-info">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">DSP</div>
+                <div className="label-info">0</div>
+              </li>
+              <li>
+                <div className="label">total Book Size</div>
+                <div className="label-info ">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">BOOK Size Comm.</div>
+                <div className="label-info label-info-dark">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">upsells </div>
+                <div className="label-info label-info-dark">$21,000.00</div>
+              </li>
+              <li>
+                <div className="label">Upsells comm.</div>
+                <div className="label-info label-info-dark ">$2,597.20</div>
+              </li>
+              <li>
+                <div className="label">total commission</div>
+                <div className="label-info label-info-dark ">$2,597.20</div>
+              </li>
+            </ul>
+            <div className="straight-line horizontal-line " />
+          </div>
+        )}
       </CommissionResseque>
     </Modal>
   );

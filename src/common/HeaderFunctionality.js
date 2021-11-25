@@ -12,6 +12,10 @@ const HeaderDownloadFuntionality = styled.div`
   font-size: ${Theme.normal};
   z-index: 9;
   top: 0px;
+
+  &.border-none {
+    border-bottom: 0;
+  }
   .header-title {
     font-family: ${Theme.titleFontFamily};
     font-size: 13px;
@@ -71,6 +75,12 @@ const HeaderDownloadFuntionality = styled.div`
       }
     }
   }
+   @media only screen and (max-width: 992px) {
+      &.border-none {
+        border-bottom: 1px solid ${Theme.gray5};
+    }
+   }
+    .contract-download-nav {
   @media only screen and (max-width: 767px) {
     .contract-download-nav {
       text-align: center;

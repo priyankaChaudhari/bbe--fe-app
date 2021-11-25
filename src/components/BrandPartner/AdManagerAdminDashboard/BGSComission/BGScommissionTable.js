@@ -165,7 +165,7 @@ const BGScommissionTable = ({
             <div className="row ">
               <div className="col-4">
                 <div
-                  className="black-heading-title"
+                  className="black-heading-title mt-2 pt-1"
                   onClick={() => OnSetShowModal()}
                   role="presentation">
                   {' '}
