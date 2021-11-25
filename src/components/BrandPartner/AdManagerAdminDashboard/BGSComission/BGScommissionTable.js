@@ -32,7 +32,7 @@ const BGScommissionTable = ({
   const { Option, SingleValue } = components;
 
   useEffect(() => {
-    console.log(selectedTableFilter, '<<group By-----');
+    console.log('group By-----', selectedTableFilter);
   }, [selectedTableFilter]);
 
   const filterOption = ({ data, ...props }) => (
@@ -66,9 +66,7 @@ const BGScommissionTable = ({
     return DropDown(
       '',
       bgsCommissionsFilterOptions,
-      bgsCommissionsFilterOptions &&
-        bgsCommissionsFilterOptions[0] &&
-        bgsCommissionsFilterOptions[0].label,
+      bgsCommissionsFilterOptions[0].label,
       getSelectComponents,
       bgsCommissionsFilterOptions && bgsCommissionsFilterOptions[0],
       handleCommissionFilter,
