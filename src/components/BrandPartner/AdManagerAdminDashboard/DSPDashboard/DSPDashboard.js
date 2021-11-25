@@ -530,7 +530,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     if (event.value !== selectedBgs.value) {
       setSelectedBgs(event);
 
-      if (isBGSAdmin) {
+      if (isBGSAdmin && selectedManager.value === 'all') {
         const found = bgsList.find(
           (bgsUser) => bgsUser.value === value && bgsUser.bgsManager !== null,
         );
