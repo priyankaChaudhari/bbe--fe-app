@@ -11,6 +11,8 @@ import { string, arrayOf, shape } from 'prop-types';
 
 am4core.useTheme(am4themes_animated);
 function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
+  // const [ActualSpentAmount, setActualSpentAmount] = useState([]);
+
   console.log('chartData', chartData);
   //
   //   const currentDate = 'Nov 18 2021';
@@ -20,157 +22,110 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     const currentMonthYear = dayjs(getDate).format('MMM YY');
     console.log('currentMonthYear', currentMonthYear);
     chart.current = am4core.create(chartId, am4charts.XYChart);
-    // chart.current.data = chartData;
+    chart.current.data = chartData;
     chart.current.logo.disabled = true;
     chart.current.padding(0, 30, 0, 0);
+    chart.current.zoomOutButton.disabled = true;
     //   chart.current.dateFormatter.dateFormat = 'yyyy-MM-dd';
 
-    chart.current.data = [
-      // {
-      //   monthYear: 'Jan 2021',
-      //   invoiceAmount: 150000,
-      //   carryOver: 50000,
-      //   actualSpent: 110000,
-      // },
-      // {
-      //   monthYear: 'Feb 2021',
-      //   invoiceAmount: 70000,
-      //   carryOver: 40000,
-      //   actualSpent: 130000,
-      // },
-      // {
-      //   monthYear: 'Mar 2021',
-      //   invoiceAmount: 150000,
-      //   carryOver: 50000,
-      //   actualSpent: 100000,
-      // },
-      // {
-      //   monthYear: 'Apr 2021',
-      //   invoiceAmount: 70000,
-      //   carryOver: 40000,
-      //   actualSpent: 90000,
-      // },
-      // {
-      //   monthYear: 'May 2021',
-      //   invoiceAmount: 120000,
-      //   carryOver: 70000,
-      //   actualSpent: 150000,
-      // },
-      // {
-      //   monthYear: 'Jun 2021',
-      //   invoiceAmount: 100000,
-      //   carryOver: 60000,
-      //   actualSpent: 40000,
-      // },
-      {
-        monthYear: 'Jul 2021',
-        invoiceAmount: 50000,
-        carryOver: 30000,
-        actualSpent: 40000,
-      },
-      {
-        monthYear: 'Aug 2021',
-        invoiceAmount: 70000,
-        carryOver: 40000,
-        actualSpent: 60000,
-      },
-      {
-        monthYear: 'Sep 2021',
-        invoiceAmount: 150000,
-        carryOver: 50000,
-        actualSpent: 100000,
-      },
-      {
-        monthYear: 'Oct 2021',
-        invoiceAmount: 70000,
-        carryOver: 40000,
-        actualSpent: 70000,
-      },
-      {
-        monthYear: 'Nov 2021',
-        invoiceAmount: 120000,
-        carryOver: 50000,
-        actualSpent: 150000,
-      },
-      {
-        monthYear: 'Dec 2021',
-        invoiceAmount: 150000,
-        carryOver: 0,
-        actualSpent: 120000,
-      },
-      {
-        monthYear: 'Jan 2022',
-        invoiceAmount: 100000,
-        carryOver: 50000,
-        actualSpent: 0,
-      },
-      {
-        monthYear: 'Feb 2022',
-        invoiceAmount: 100000,
-        carryOver: 30000,
-        actualSpent: 0,
-      },
-      // {
-      //   monthYear: 'Mar 2022',
-      //   invoiceAmount: 150000,
-      //   carryOver: 50000,
-      //   actualSpent: 0,
-      // },
-      // {
-      //   monthYear: 'Apr 2022',
-      //   invoiceAmount: 70000,
-      //   carryOver: 20000,
-      //   actualSpent: 0,
-      // },
-      // {
-      //   monthYear: 'May 2022',
-      //   invoiceAmount: 150000,
-      //   carryOver: 150000,
-      //   actualSpent: 0,
-      // },
-      // {
-      //   monthYear: 'Jun 2022',
-      //   invoiceAmount: 200000,
-      //   carryOver: 50000,
-      //   actualSpent: 0,
-      // },
-      // {
-      //   monthYear: 'Jan 2023',
-      //   invoiceAmount: 10000,
-      //   carryOver: 5000,
-      //   actualSpent: 8000,
-      // },
-      // {
-      //   monthYear: 'Feb 2023',
-      //   invoiceAmount: 12000,
-      //   carryOver: 3000,
-      //   actualSpent: 10000,
-      // },
-      // {
-      //   monthYear: 'Mar 2023',
-      //   invoiceAmount: 15000,
-      //   carryOver: 5000,
-      //   actualSpent: 10000,
-      // },
-      // {
-      //   monthYear: 'Apr 2023',
-      //   invoiceAmount: 7000,
-      //   carryOver: 2000,
-      //   actualSpent: 12000,
-      // },
-      // {
-      //   monthYear: 'May 2023',
-      //   invoiceAmount: 15000,
-      //   carryOver: 15000,
-      //   actualSpent: 20000,
-      // },
-      // {
-      //   monthYear: 'Jun 2023',
-      //   invoiceAmount: 20000,
-      //   carryOver: 5000,
-      //   actualSpent: 15000,
-      // },
-    ];
+    // chart.current.data = [
+    //   {
+    //     monthYear: 'Jan 21',
+    //     invoiceAmount: 150000,
+    //     carryOver: 50000,
+    //     actualSpent: 110000,
+    //   },
+    //   {
+    //     monthYear: 'Feb 21',
+    //     invoiceAmount: 70000,
+    //     carryOver: 40000,
+    //     actualSpent: 130000,
+    //   },
+    //   {
+    //     monthYear: 'Mar 21',
+    //     invoiceAmount: 150000,
+    //     carryOver: 50000,
+    //     actualSpent: 100000,
+    //   },
+    //   {
+    //     monthYear: 'Apr 21',
+    //     invoiceAmount: 70000,
+    //     carryOver: 40000,
+    //     actualSpent: 90000,
+    //   },
+    //   {
+    //     monthYear: 'May 21',
+    //     invoiceAmount: 120000,
+    //     carryOver: 70000,
+    //     actualSpent: 150000,
+    //   },
+    //   {
+    //     monthYear: 'Jun 21',
+    //     invoiceAmount: 100000,
+    //     carryOver: 60000,
+    //     actualSpent: 40000,
+    //   },
+    //   {
+    //     monthYear: 'Jul 21',
+    //     invoiceAmount: 50000,
+    //     carryOver: 30000,
+    //     actualSpent: 40000,
+    //   },
+    //   {
+    //     monthYear: 'Aug 21',
+    //     invoiceAmount: 70000,
+    //     carryOver: 40000,
+    //     actualSpent: 60000,
+    //   },
+    //   {
+    //     monthYear: 'Sep 21',
+    //     invoiceAmount: 150000,
+    //     carryOver: 50000,
+    //     actualSpent: 100000,
+    //   },
+    //   {
+    //     monthYear: 'Oct 21',
+    //     invoiceAmount: 70000,
+    //     carryOver: 40000,
+    //     actualSpent: 70000,
+    //   },
+    //   {
+    //     monthYear: 'Nov 21',
+    //     invoiceAmount: 120000,
+    //     carryOver: 50000,
+    //     actualSpent: 150000,
+    //   },
+    //   {
+    //     monthYear: 'Dec 21',
+    //     invoiceAmount: 150000,
+    //     carryOver: 0,
+    //     actualSpent: 120000,
+    //   },
+    //   {
+    //     monthYear: 'Jan 22',
+    //     invoiceAmount: 100000,
+    //     carryOver: 50000,
+    //     actualSpent: 0,
+    //   },
+    //   {
+    //     monthYear: 'Feb 22',
+    //     invoiceAmount: 100000,
+    //     carryOver: 30000,
+    //     actualSpent: 0,
+    //   },
+    //   {
+    //     monthYear: 'Mar 22',
+    //     invoiceAmount: 150000,
+    //     carryOver: 50000,
+    //     actualSpent: 0,
+    //   },
+    //   {
+    //     monthYear: 'Apr 22',
+    //     invoiceAmount: 70000,
+    //     carryOver: 20000,
+    //     actualSpent: 0,
+    //   },
+    // ];
 
     // Enable chart cursor
     chart.current.cursor = new am4charts.XYCursor();
@@ -182,13 +137,10 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     // categoryAxis.renderer.grid.template.disabled = true;
     // categoryAxis.renderer.minGridDistance = 20;
     // categoryAxis.cursorTooltipEnabled = false;
-    // categoryAxis.dataFields.category = 'monthYear';
+    // // categoryAxis.dataFields.category = 'monthYear';
+    // categoryAxis.dataFields.category = 'date';
     // categoryAxis.renderer.grid.template.location = 0;
     // // categoryAxis.renderer.inversed = true;
-    // categoryAxis.dateFormatter = new am4core.DateFormatter();
-    // categoryAxis.dateFormatter.dateFormat = 'MMM YY';
-    // // categoryAxis.dateFormats.setKey('day', 'MMM dd');
-    // // categoryAxis.periodChangeDateFormats.setKey('day', 'dd MMM');
     // // categoryAxis.renderer.labels.template.padding(0, 40, 0, 10);
     // categoryAxis.renderer.labels.template.fill = am4core.color('#556178');
     // categoryAxis.renderer.labels.template.paddingLeft = 20;
@@ -224,15 +176,18 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     valueAxis.renderer.grid.template.strokeWidth = 1;
     valueAxis.renderer.grid.template.strokeOpacity = 1;
     valueAxis.renderer.minGridDistance = 100;
+    // valueAxis.renderer.maxLabelPosition = 0.9;
     valueAxis.renderer.labels.template.dy = -5;
     valueAxis.renderer.labels.template.fill = am4core.color('#556178');
     valueAxis.numberFormatter = new am4core.NumberFormatter();
     valueAxis.numberFormatter.numberFormat = `${currencySymbol}#,###.##`;
     // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
     // custom tooltipHTML
-    const actualSpent = 1;
-
-    const tooltipHTML = `<div style="width:250px; padding:5px 5px 10px 5px"> 
+    // const actualSpent = 1;
+    function renderTooltipHTML(actualSpentValue) {
+      console.log('actualSpentValue', actualSpentValue);
+      const actualSpentAmount = actualSpentValue;
+      const tooltipHTML = `<div style="width:250px; padding:5px 5px 10px 5px"> 
         <div style="padding:5px 0 10px 0;"><strong>{categoryY}</strong></div>
         <ul style="padding:5px 0; margin:0; list-style-type:none;">
           <li style="display:inline;">
@@ -263,11 +218,11 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
           </li>
           <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:bold; text-transform: uppercase;
             padding:0 0 0 5px">INITIAL TOTAL BUDGET</li>
-          <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${currencySymbol}20,000</li>
+          <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${currencySymbol}{totalInitialBudget}</li>
           <li style="clear:both"></li>          
         </ul>
         ${
-          actualSpent !== 0
+          actualSpentAmount !== 0
             ? `<hr style="height:1px !important; font-weight:400; opacity:0.5" />
         <ul style="padding:5px 0; margin:0; list-style-type:none; width:100%;">
           <li style="display:inline; color:#ffffff !important;  border-left:2px solid #ffffff; font-size:11px;
@@ -279,16 +234,30 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
         }
     </div>`;
 
+      return tooltipHTML;
+    }
+    /* Configure axis tooltip */
+    // const axisTooltip = categoryAxis.tooltip;
+    // axisTooltip.background.fill = am4core.color('#2E384D');
+    // axisTooltip.background.fillOpacity = 1;
+    // axisTooltip.background.strokeWidth = 0;
+    // axisTooltip.background.filters.clear();
+    // axisTooltip.background.cornerRadius = 10;
+    // axisTooltip.tooltipHTML = renderTooltipHTML();
+    // axisTooltip.getFillFromObject = false;
+    // axisTooltip.dx = 0;
+
     const series1 = chart.current.series.push(new am4charts.ColumnSeries());
     series1.columns.template.height = am4core.percent(20);
     series1.name = 'Series 1';
     series1.dataFields.dateY = 'monthYear';
     // series1.dataFields.categoryY = 'monthYear';
+    // series1.dataFields.categoryY = 'date';
     series1.dataFields.valueX = 'invoiceAmount';
     series1.stacked = true;
     series1.columns.template.fill = am4core.color('#8798ad');
     series1.columns.template.column.cornerRadius(0, 10, 0, 10);
-    series1.tooltipHTML = tooltipHTML;
+    series1.tooltipHTML = renderTooltipHTML();
     series1.tooltip.getFillFromObject = false;
     series1.tooltip.background.fill = am4core.color('#2E384D');
     series1.tooltip.background.fillOpacity = 1;
@@ -301,6 +270,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series2.name = 'Series 2';
     series2.dataFields.dateY = 'monthYear';
     // series2.dataFields.categoryY = 'monthYear';
+    // series2.dataFields.categoryY = 'date';
     series2.dataFields.valueX = 'carryOver';
     series2.stacked = true;
     series2.columns.template.fill = am4core.color('#30a8bd');
@@ -311,6 +281,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series3.name = 'Series 3';
     series3.dataFields.dateY = 'monthYear';
     // series3.dataFields.categoryY = 'monthYear';
+    // series3.dataFields.categoryY = 'date';
     series3.dataFields.valueX = 'actualSpent';
     series3.stacked = false;
     series3.clustered = false;
@@ -329,21 +300,19 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     valueLabel.fillOpacity = 1;
 
     // const dateRange = categoryAxis.axisRanges.create();
-    const dateRange = dateAxis.axisRanges.create();
+    // // const dateRange = dateAxis.axisRanges.create();
     // dateRange.category = currentMonthYear;
     // dateRange.endCategory = currentMonthYear;
-    // dateRange.date = new Date(currentMonthYear);
-    // dateRange.endDate = new Date(currentMonthYear);
-    dateRange.date = new Date(currentMonthYear);
-    dateRange.endDate = new Date(currentMonthYear);
-    dateRange.label.fontWeight = 'bold';
-    // dateRange.label.fill = am4core.color('#000000');
-    // dateRange.label.isMeasured = true;
-    // dateRange.label.dx = 0;
-    dateRange.label.background.fill = am4core.color('#f4f6fc');
+    // // dateRange.date = new Date(currentMonthYear);
+    // // dateRange.endDate = new Date(currentMonthYear);
+    // dateRange.label.fontWeight = 'bold';
+    // // dateRange.label.fill = am4core.color('#000000');
+    // // dateRange.label.isMeasured = true;
+    // // dateRange.label.dx = 0;
+    // dateRange.label.background.fill = am4core.color('#f4f6fc');
     // dateRange.grid.disabled = true;
-    dateRange.axisFill.fill = am4core.color('#f4f6fc');
-    dateRange.axisFill.fillOpacity = 1;
+    // dateRange.axisFill.fill = am4core.color('#f4f6fc');
+    // dateRange.axisFill.fillOpacity = 1;
 
     // Set cell size in pixels
     const cellSize = 40;
@@ -359,7 +328,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
       // Set it on chart's container
       chart2.svgContainer.htmlElement.style.height = `${targetHeight}px`;
     });
-  }, [chartId, currencySymbol]);
+  }, [chartData, chartId, currencySymbol]);
 
   useEffect(() => {
     createDspPacingBarGraph();

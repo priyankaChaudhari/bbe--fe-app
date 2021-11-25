@@ -442,9 +442,9 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     // filterout previous data in one temporary object.
     if (response && response.length) {
       response.forEach((item) => {
-        const monthYearDate = dayjs(item.month_year).format('MMM YY');
+        const date = dayjs(item.month_year).format('MMM YY');
         tempData.push({
-          monthYearDate,
+          date,
           monthYear: item.month_year,
           invoiceAmount: item.invoice_amount !== null ? item.invoice_amount : 0,
           invoiceAmountUsd:
