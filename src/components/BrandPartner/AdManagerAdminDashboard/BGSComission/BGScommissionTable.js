@@ -315,7 +315,7 @@ const BGScommissionTable = ({
 export default BGScommissionTable;
 
 BGScommissionTable.defaultProps = {
-  selectedTableFilter: 'bgs_manager',
+  selectedTableFilter: { name: 'bgs_manager', label: 'Team Member' },
   isGroupBy: true,
   loader: false,
   OnSetShowModal: () => {},
@@ -328,7 +328,7 @@ BGScommissionTable.defaultProps = {
 BGScommissionTable.propTypes = {
   isGroupBy: bool,
   loader: bool,
-  selectedTableFilter: string,
+  selectedTableFilter: shape({}),
   OnSetShowModal: func,
   handleCommissionFilter: func,
   onHandleGroupBy: func,
