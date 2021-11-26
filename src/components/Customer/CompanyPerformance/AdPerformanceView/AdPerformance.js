@@ -447,10 +447,9 @@ export default function AdPerformance({
     // filterout previous data in one temporary object.
     if (response && response.length) {
       response.forEach((item) => {
-        const date = dayjs(item.month_year).format('MMM YY');
+        const monthYear = dayjs(item.month_year).format('MMM YY');
         tempData.push({
-          date,
-          monthYear: item.month_year,
+          monthYear,
           invoiceAmount: item.invoice_amount !== null ? item.invoice_amount : 0,
           invoiceAmountUsd:
             item.invoice_amount_converted_usd !== null
@@ -467,12 +466,10 @@ export default function AdPerformance({
             item.total_budget_converted_usd !== null
               ? item.total_budget_converted_usd
               : 0,
-          actualSpent: item.total_spend !== null ? item.total_spend : 0,
-          actualSpentUsd:
-            item.total_spend_converted_usd !== null
-              ? item.total_spend_converted_usd
-              : 0,
+          actualSpent: item.total_spend,
+          actualSpentUsd: item.total_spend_converted_usd,
           dspPacingFlag: item.dsp_pacing_flag,
+          colorCode: item.dsp_pacing_flag === '1' ? '#d63649' : '#d6a307',
         });
       });
     }
