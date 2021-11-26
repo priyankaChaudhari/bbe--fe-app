@@ -35,7 +35,7 @@ export default function AdPerformance({
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
-  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
+  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState([]);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
@@ -1179,17 +1179,14 @@ AdPerformance.defaultProps = {
   id: '',
   accountType: 'seller',
   memberData: [],
-  data: shape({
-    label: '',
-    sub: '',
-  }),
+  data: {},
 };
 
 AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
   accountType: string,
-  memberData: arrayOf([]),
+  memberData: arrayOf(shape({})),
   data: shape({
     label: string,
     sub: string,

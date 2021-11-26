@@ -21,7 +21,7 @@ export default function DspAdPacing({
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
-    false,
+    true,
   );
   const dspPacing = dspData?.dsp_pacing;
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
@@ -358,8 +358,6 @@ export default function DspAdPacing({
           setShowAllocatedBalanceModal(false);
           onModalClose();
         }}
-
-        // onApply={() => console.log('aa')}
       />
     );
   };
@@ -477,7 +475,7 @@ DspAdPacing.propTypes = {
   customerId: string,
   marketplace: string,
   dspData: shape({}),
-  memberData: arrayOf([]),
+  memberData: arrayOf(shape({})),
   isDspPacingLoading: PropTypes.bool,
   currencySymbol: PropTypes.string,
   onModalClose: func,

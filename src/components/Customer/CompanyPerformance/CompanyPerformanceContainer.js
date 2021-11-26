@@ -99,5 +99,5 @@ CompanyPerformance.propTypes = {
   marketplaceChoices: arrayOf(shape({})),
   id: string,
   subViewComponent: string,
-  memberData: arrayOf([]),
+  memberData: arrayOf(shape({})),
 };

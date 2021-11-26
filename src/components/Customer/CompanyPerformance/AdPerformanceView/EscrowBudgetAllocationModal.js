@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
@@ -60,8 +60,6 @@ export default function EscrowBudgetAllocationModal({
     escrowBalance < 0,
   );
 
-  useEffect(() => {}, []);
-
   const submitAllocatedBudget = useCallback(() => {
     setIsSubmitLoader(true);
     storeAllocatedBudget(allocatedMonths, customerId, marketplace).then(
@@ -99,8 +97,8 @@ export default function EscrowBudgetAllocationModal({
   const renderMonths = () => {
     return allocatedMonths.map((item, index) => {
       return (
-        <>
-          <div className="col-md-6 col-12 " key={item.month_year}>
+        <React.Fragment key={item.month_year}>
+          <div className="col-md-6 col-12 ">
             <InputFormField className="mt-1 hide-spinner">
               <label htmlFor="emailAddress">
                 Month
@@ -133,7 +131,7 @@ export default function EscrowBudgetAllocationModal({
               />
             </InputNumberFormat>
           </div>
-        </>
+        </React.Fragment>
       );
     });
   };
@@ -222,7 +220,7 @@ export default function EscrowBudgetAllocationModal({
             <Button
               className={
                 isEscrowbalanceExceed
-                  ? 'btn-primary on-boarding  w-100'
+                  ? 'btn-primary on-boarding  w-100 disabled'
                   : 'btn-primary on-boarding  w-100'
               }
               onClick={() => submitAllocatedBudget()}

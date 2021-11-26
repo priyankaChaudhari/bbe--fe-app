@@ -2,7 +2,7 @@ import React from 'react';
 
 import Select from 'react-select';
 import styled from 'styled-components';
-import { arrayOf, bool, func, instanceOf, oneOfType } from 'prop-types';
+import { arrayOf, bool, func, instanceOf, shape } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../DropDown';
@@ -79,7 +79,7 @@ export default VendorSalesPerformanceFilters;
 
 VendorSalesPerformanceFilters.defaultProps = {
   selectedSalesDF: {},
-  marketplaceDefaultValue: {},
+  marketplaceDefaultValue: [],
   marketplaceOptions: {},
   dateOptions: {},
   isApiCall: false,
@@ -91,7 +91,7 @@ VendorSalesPerformanceFilters.defaultProps = {
 
 VendorSalesPerformanceFilters.propTypes = {
   isApiCall: bool,
-  marketplaceDefaultValue: oneOfType(Object, Array),
+  marketplaceDefaultValue: arrayOf(shape({})),
   selectedSalesDF: instanceOf(Object),
   marketplaceOptions: arrayOf(Array),
   dateOptions: arrayOf(Array),

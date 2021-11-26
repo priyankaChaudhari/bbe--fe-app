@@ -2,7 +2,7 @@ import React from 'react';
 
 import Select from 'react-select';
 import styled from 'styled-components';
-import { arrayOf, bool, func, instanceOf, oneOfType } from 'prop-types';
+import { arrayOf, bool, func, instanceOf, shape } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../DropDown';
@@ -80,7 +80,7 @@ const AdPerformanceFilters = ({
 export default AdPerformanceFilters;
 
 AdPerformanceFilters.defaultProps = {
-  marketplaceDefaultValue: {},
+  marketplaceDefaultValue: [],
   marketplaceOptions: {},
   handleMarketplaceOptions: () => {},
   dateOptions: {},
@@ -92,7 +92,7 @@ AdPerformanceFilters.defaultProps = {
 };
 
 AdPerformanceFilters.propTypes = {
-  marketplaceDefaultValue: oneOfType(Object, Array),
+  marketplaceDefaultValue: arrayOf(shape({})),
   marketplaceOptions: arrayOf(Array),
   handleMarketplaceOptions: func,
   dateOptions: arrayOf(Array),
