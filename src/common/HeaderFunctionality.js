@@ -24,6 +24,7 @@ const HeaderDownloadFuntionality = styled.div`
     &.large-header-title {
       font-size: 20px;
       font-weight: 600;
+      margin-left: 25px;
     }
   }
 
@@ -75,12 +76,12 @@ const HeaderDownloadFuntionality = styled.div`
       }
     }
   }
-   @media only screen and (max-width: 992px) {
+  /* @media only screen and (max-width: px) {
       &.border-none {
         border-bottom: 1px solid ${Theme.gray5};
     }
-   }
-    .contract-download-nav {
+   } */
+  /* .contract-download-nav { */
   @media only screen and (max-width: 767px) {
     .contract-download-nav {
       text-align: center;
@@ -96,6 +97,13 @@ const HeaderDownloadFuntionality = styled.div`
         .hide-mobile {
           display: none;
         }
+      }
+    }
+  }
+  @media only screen and (max-width: 610px) {
+    .header-title {
+      &.large-header-title {
+        margin-left: 10px;
       }
     }
   }

@@ -6,64 +6,73 @@ const TableGap = styled.div`
   width: 100%;
   border-spacing: 0 10px;
   border-collapse: collapse;
-
-  tr {
-    text-align: left;
-    background: ${Theme.white};
-    border-radius: 1px;
-    font-family: ${Theme.baseFontFamily};
+  table {
     width: 100%;
-    border-bottom: 1px solid #e0e6e8;
-    display: table;
-    width: 100%;
-    &:last-child {
-      border-bottom: none;
-    }
-    &:nth-last-child(2) {
-      border-bottom: none;
-    }
-
-    &.overlay-modal-header {
-      border-bottom: 1px solid #e0e6e8;
-    }
-
-    &.partners {
-      font-size: 14px;
-    }
-
-    &.all-partners {
-      font-weight: 600;
-      background-color: #f4f6fc;
-
-      td {
-        font-size: 14px;
-      }
-    }
-
-    th {
-      padding: 15px 5px 15px 5px;
-      text-transform: uppercase;
-      color: ${Theme.gray40};
-      font-size: 11px;
+    tr {
+      text-align: left;
       background: ${Theme.white};
+      border-radius: 1px;
       font-family: ${Theme.baseFontFamily};
-      border-top: 1px solid #e0e6e8;
-      &:first-child {
-        border-bottom-left-radius: 8px;
-      }
+      width: 100%;
+      border-bottom: 1px solid #e0e6e8;
+      display: table;
+      width: 100%;
       &:last-child {
-        border-bottom-right-radius: 8px;
+        border-bottom: none;
       }
-    }
-    td {
-      padding: 15px 5px 15px 5px;
-      vertical-align: middle;
-      position: relative;
-      color: ${Theme.black};
-      font-size: ${Theme.extraMedium};
+      &:nth-last-child(2) {
+        border-bottom: none;
+      }
 
-      &.text-bold {
+      &.overlay-modal-header {
+        border-bottom: 1px solid #e0e6e8;
+        border-top: 1px solid #e0e6e8;
+
+        th {
+          border-top: none;
+        }
+      }
+
+      &.partners {
+        td {
+          font-size: 14px;
+        }
+      }
+
+      &.all-partners {
         font-weight: 600;
+        background-color: #f4f6fc;
+
+        td {
+          font-size: 14px;
+        }
+      }
+
+      th {
+        padding: 15px 5px 15px 5px;
+        text-transform: uppercase;
+        color: ${Theme.gray40};
+        font-size: 11px;
+        background: ${Theme.white};
+        font-family: ${Theme.baseFontFamily};
+        border-top: 1px solid #e0e6e8;
+        &:first-child {
+          border-bottom-left-radius: 8px;
+        }
+        &:last-child {
+          border-bottom-right-radius: 8px;
+        }
+      }
+      td {
+        padding: 15px 5px 15px 5px;
+        vertical-align: middle;
+        position: relative;
+        color: ${Theme.black};
+        font-size: ${Theme.extraMedium};
+
+        &.text-bold {
+          font-weight: 600;
+        }
       }
     }
   }
