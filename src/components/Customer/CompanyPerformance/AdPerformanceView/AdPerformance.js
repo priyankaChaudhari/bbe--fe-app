@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
-import { instanceOf, shape, string } from 'prop-types';
+import { arrayOf, instanceOf, shape, string } from 'prop-types';
 
 import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
@@ -26,7 +26,12 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
 
-export default function AdPerformance({ marketplaceChoices, id, accountType }) {
+export default function AdPerformance({
+  marketplaceChoices,
+  id,
+  accountType,
+  memberData,
+}) {
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -624,6 +629,7 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
         adGroupBy,
         marketplace[0].value,
       );
+
       if (accountType !== 'vendor') {
         getDSPData(selectedAdDF.value, dspGroupBy, marketplace[0].value);
         getDSPPacing(marketplace[0].value);
@@ -1078,6 +1084,7 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           currencySymbol={currencySymbol}
           customerId={id}
           marketplace={selectedMarketplace}
+          memberData={memberData}
           onModalClose={() => {
             getDSPPacing(selectedMarketplace);
           }}
@@ -1174,6 +1181,7 @@ AdPerformance.defaultProps = {
   marketplaceChoices: {},
   id: '',
   accountType: 'seller',
+  memberData: [],
   data: shape({
     label: '',
     sub: '',
@@ -1184,6 +1192,7 @@ AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
   accountType: string,
+  memberData: arrayOf([]),
   data: shape({
     label: string,
     sub: string,

@@ -430,6 +430,7 @@ export default function CustomerMainContainer() {
                       marketplaceChoices={marketplaceChoices}
                       id={id}
                       subViewComponent={subViewComponent}
+                      memberData={memberData}
                     />
                   ) : viewComponent === 'billing' ? (
                     <BillingContainer
