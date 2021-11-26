@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import PropTypes, { instanceOf } from 'prop-types';
+import PropTypes, { func, shape, string } from 'prop-types';
 import styled from 'styled-components';
 
 import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
@@ -14,16 +14,19 @@ export default function DspAdPacing({
   dspData,
   isDspPacingLoading,
   currencySymbol,
+  customerId,
+  marketplace,
+  onModalClose,
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
   const userRole = userInfo?.role;
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
     false,
   );
-  const dspPacing = dspData.dsp_pacing;
+  const dspPacing = dspData?.dsp_pacing;
 
   const addThousandSeperator = (value) => {
-    if (value !== null && value !== 0) {
+    if (value && value !== null && value !== 0) {
       return value
         .toFixed(2)
         .toString()
@@ -33,9 +36,7 @@ export default function DspAdPacing({
   };
 
   const calculateDspDiff = () => {
-    const result =
-      (dspPacing && dspPacing.planed_to_spend) -
-      (dspPacing && dspPacing.total_spend);
+    const result = dspPacing?.planed_to_spend - dspPacing?.total_spend;
 
     if (Math.sign(result) === 1) {
       return 'Underspend to Date';
@@ -64,7 +65,7 @@ export default function DspAdPacing({
           <p className="basic-text">
             {' '}
             You are currently overspending by an average of {currencySymbol}
-            {addThousandSeperator(dspPacing.current_spend_status)} per day.
+            {addThousandSeperator(dspPacing?.current_spend_status)} per day.
           </p>
         </>
       );
@@ -88,7 +89,7 @@ export default function DspAdPacing({
           <p className="basic-text">
             {' '}
             You are currently underspending by an average of {currencySymbol}
-            {addThousandSeperator(dspPacing.current_spend_status)}
+            {addThousandSeperator(dspPacing?.current_spend_status)}
             per day.
           </p>
         </>
@@ -108,7 +109,7 @@ export default function DspAdPacing({
           <div className="label-info text-right">
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.invoice_amount)}
+            {addThousandSeperator(dspPacing?.invoice_amount)}
           </div>{' '}
         </div>
 
@@ -120,7 +121,7 @@ export default function DspAdPacing({
           <div className="label-info text-right">
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.carry_over)}
+            {addThousandSeperator(dspPacing?.carry_over)}
           </div>{' '}
         </div>
 
@@ -134,7 +135,7 @@ export default function DspAdPacing({
           <div className="label-info text-right">
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.total_budget)}
+            {addThousandSeperator(dspPacing?.total_budget)}
           </div>{' '}
         </div>
 
@@ -146,7 +147,7 @@ export default function DspAdPacing({
           <div className="label-info text-right">
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.daily_budget)}
+            {addThousandSeperator(dspPacing?.daily_budget)}
           </div>{' '}
         </div>
         <div className="col-7">
@@ -174,8 +175,8 @@ export default function DspAdPacing({
           <div className="label-info text-right mt-2">
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.planed_to_spend)}(
-            {addThousandSeperator(dspPacing.planed_to_spend_percentage)}
+            {addThousandSeperator(dspPacing?.planed_to_spend)}(
+            {addThousandSeperator(dspPacing?.planed_to_spend_percentage)}
             %)
           </div>{' '}
         </div>
@@ -187,8 +188,8 @@ export default function DspAdPacing({
           <div className="label-info text-right mt-2">
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.total_spend)}(
-            {addThousandSeperator(dspPacing.total_spend_percentage)}
+            {addThousandSeperator(dspPacing?.total_spend)}(
+            {addThousandSeperator(dspPacing?.total_spend_percentage)}
             %)
           </div>{' '}
         </div>
@@ -217,8 +218,8 @@ export default function DspAdPacing({
             }>
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.dsp_pacing_diff)}(
-            {addThousandSeperator(dspPacing.dsp_pacing_diff_percentage)}
+            {addThousandSeperator(dspPacing?.dsp_pacing_diff)}(
+            {addThousandSeperator(dspPacing?.dsp_pacing_diff_percentage)}
             %)
           </div>{' '}
         </div>
@@ -233,7 +234,7 @@ export default function DspAdPacing({
           <div className="label-info text-right mt-2">
             {' '}
             {currencySymbol}
-            {addThousandSeperator(dspPacing.remaining_budget)}
+            {addThousandSeperator(dspPacing?.remaining_budget)}
           </div>{' '}
         </div>
       </div>
@@ -250,17 +251,13 @@ export default function DspAdPacing({
           {' '}
           <div className="label-info text-bold text-right">
             {' '}
-            {/* {isNaN(dspPacing?.suggested_spend) ? '' : currencySymbol}
-            {dspPacing?.suggested_spend && isNaN(dspPacing.suggested_spend)
-              ? dspPacing?.suggested_spend
-              : addThousandSeperator(dspPacing.suggested_spend)} */}
             {dspPacing?.suggested_spend === 0 ||
             dspPacing?.suggested_spend === 0.0
               ? 'N/A'
               : currencySymbol}
             {dspPacing?.suggested_spend !== 0 ||
             dspPacing?.suggested_spend !== 0.0
-              ? addThousandSeperator(dspPacing.suggested_spend)
+              ? addThousandSeperator(dspPacing?.suggested_spend)
               : null}
           </div>{' '}
         </div>
@@ -294,7 +291,7 @@ export default function DspAdPacing({
             {' '}
             <div className="label-info text-bold text-right">
               {currencySymbol}
-              {addThousandSeperator(dspPacing.escrow)}
+              {addThousandSeperator(dspPacing?.escrow)}
             </div>{' '}
           </div>
         </div>
@@ -308,7 +305,7 @@ export default function DspAdPacing({
                 {' '}
                 <div className="remaing-label">
                   {currencySymbol}
-                  {addThousandSeperator(dspPacing.escrow_sum)} of the escrow is
+                  {addThousandSeperator(dspPacing?.escrow_sum)} of the escrow is
                   planned carry-over for future months
                 </div>{' '}
               </div>
@@ -337,10 +334,16 @@ export default function DspAdPacing({
     return (
       <EscrowBudgetAllocationModal
         id="BT-escrowAllocation"
+        customerId={customerId}
+        marketplace={marketplace}
+        dspData={dspData}
         isOpen={showAllocatedBalanceModal}
+        addThousandSeperator={addThousandSeperator}
         onClick={() => {
           setShowAllocatedBalanceModal(false);
+          onModalClose();
         }}
+
         // onApply={() => console.log('aa')}
       />
     );
@@ -348,7 +351,7 @@ export default function DspAdPacing({
 
   return (
     <>
-      {isDspPacingLoading?.loader && isDspPacingLoading.type === 'modal' ? (
+      {isDspPacingLoading ? (
         <PageLoader
           component="Notes-modal-loader"
           color="#FF5933"
@@ -449,10 +452,16 @@ DspAdPacing.defaultProps = {
   dspData: {},
   isDspPacingLoading: false,
   currencySymbol: '',
+  customerId: '',
+  marketplace: '',
+  onModalClose: () => {},
 };
 
 DspAdPacing.propTypes = {
-  dspData: instanceOf(Object),
+  customerId: string,
+  marketplace: string,
+  dspData: shape({}),
   isDspPacingLoading: PropTypes.bool,
   currencySymbol: PropTypes.string,
+  onModalClose: func,
 };

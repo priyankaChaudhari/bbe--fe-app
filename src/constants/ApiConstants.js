@@ -32,7 +32,6 @@ export const API_AD_PERFORMANCE = '/performance-metrics/';
 export const API_ADM = '/manager-list/';
 export const API_SERVICES_FEE = '/type-of-services/';
 export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
-export const API_ALLOCATED_MONTHS = '/allocated-months/';
 
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';

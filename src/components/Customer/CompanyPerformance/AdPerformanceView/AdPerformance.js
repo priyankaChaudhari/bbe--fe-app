@@ -1,11 +1,10 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState, useCallback } from 'react';
 
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
-import { instanceOf, string } from 'prop-types';
+import { instanceOf, shape, string } from 'prop-types';
 
 import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
@@ -62,6 +61,7 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
   const [isApiCall, setIsApiCall] = useState(false);
   const [adGraphLoader, setAdGraphLoader] = useState(false);
   const [dspGraphLoader, setDspGraphLoader] = useState(false);
+  const [isDspPacingLoading, setIsDspPacingLoading] = useState(false);
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChartData] = useState([]);
@@ -559,10 +559,12 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
 
   const getDSPPacing = useCallback(
     (marketplace) => {
+      setIsDspPacingLoading(true);
       getDspPacingData(id, marketplace).then((res) => {
         if (res && res.status === 200) {
           setDspData(res.data);
         }
+        setIsDspPacingLoading(false);
       });
     },
     [id],
@@ -1062,7 +1064,6 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
         isOpen={showDspAdPacingModal.show}
         style={customDspAdPacingStyles}
         ariaHideApp={false}
-        // onRequestClose={() => setShowDspAdPacingModal({ show: false })}
         contentLabel="Add team modal">
         <img
           src={CloseIcon}
@@ -1071,7 +1072,16 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           onClick={() => setShowDspAdPacingModal({ show: false })}
           role="presentation"
         />
-        <DspAdPacing dspData={dspData} currencySymbol={currencySymbol} />
+        <DspAdPacing
+          dspData={dspData}
+          isDspPacingLoading={isDspPacingLoading}
+          currencySymbol={currencySymbol}
+          customerId={id}
+          marketplace={selectedMarketplace}
+          onModalClose={() => {
+            getDSPPacing(selectedMarketplace);
+          }}
+        />
       </Modal>
     );
   };
@@ -1164,12 +1174,20 @@ AdPerformance.defaultProps = {
   marketplaceChoices: {},
   id: '',
   accountType: 'seller',
+  data: shape({
+    label: '',
+    sub: '',
+  }),
 };
 
 AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
   accountType: string,
+  data: shape({
+    label: string,
+    sub: string,
+  }),
 };
 
 const AddPerformance = styled.div`

@@ -1,5 +1,3 @@
-/* eslint-disable guard-for-in */
-
 import queryString from 'query-string';
 
 import axiosInstance from '../axios';
@@ -18,7 +16,6 @@ import {
   API_ACCOUNT_MARKETPLACE,
   API_VENDOR_ORDERED,
   API_VENDOR_SHIPPED,
-  API_ALLOCATED_MONTHS,
 } from '../constants/ApiConstants';
 
 export async function getCustomerList(
@@ -757,21 +754,25 @@ export async function getDspPacingData(id, marketplace) {
   return result;
 }
 
-export async function getAllocatedMonths() {
-  const result = await axiosInstance
-    .get(API_ALLOCATED_MONTHS)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
+export async function storeAllocatedBudget(data, customerId, marketplace) {
+  const temp = [];
+  for (const option of data) {
+    temp.push({
+      escrow_allocated_converted_usd: Number(
+        option.escrow_allocated_converted_usd,
+      ),
+      month_year: option.month_year,
     });
-  return result;
-}
+  }
 
-export async function storeAllocatedBudget(data) {
+  const params = {
+    customer_id: customerId,
+    marketplace,
+    allocate_balance: temp,
+  };
+
   const result = await axiosInstance
-    .post(API_ALLOCATED_MONTHS, data)
+    .post(`${API_AD_PERFORMANCE}allocate-balance/`, params)
     .then((response) => {
       return response;
     })
