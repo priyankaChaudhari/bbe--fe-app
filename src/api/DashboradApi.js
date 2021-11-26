@@ -592,7 +592,7 @@ export async function getBgsCommissionData(date) {
     // group_by: groupBy,
   };
 
-  console.log('params---', params);
+  // console.log('params---', params);
 
   const result = await axiosInstance
     .get(`${API_BGS_COMMISSION_DASHBOARD}finance-detail/`, { params })
