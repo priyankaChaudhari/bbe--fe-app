@@ -48,7 +48,7 @@ export default function DSPPerformance({
       dspData.dsp_pacing.dsp_pacing_flag === '1'
     ) {
       return (
-        <span>
+        <>
           Overspending
           <img
             className="right-arrow-icon"
@@ -56,7 +56,7 @@ export default function DSPPerformance({
             src={ArrowRightBlackIcon}
             alt="arrow"
           />
-        </span>
+        </>
       );
     }
     if (
@@ -110,7 +110,7 @@ export default function DSPPerformance({
     return (
       <>
         <div className="row">
-          <div className="col-md-6  col-sm1-12 pr-0">
+          <div className="col-md-7  col-sm1-12 pr-0">
             {' '}
             <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
             <p className="gray-normal-text mb-4 mt-1">
@@ -125,7 +125,7 @@ export default function DSPPerformance({
               </span>
             </p>
           </div>
-          <div className="col-md-6 col-sm1-12  mb-3 pl-0">
+          <div className="col-md-5 col-sm1-12  mb-3 pl-0">
             <ToggleButton>
               <div className="days-container ">
                 <ul className="days-tab">
@@ -162,28 +162,34 @@ export default function DSPPerformance({
           </div>
         </div>
         <AllocateBar className="mb-4">
-          {' '}
-          <div className="remaing-label">
-            {`Remaining Budget (${displayMonth()}):`}
-            <span>
+          <div className="row">
+            <div className="col-8">
               {' '}
-              {currencySymbol}
-              {dspData?.dsp_pacing?.remaining_budget
-                ? dspData?.dsp_pacing?.remaining_budget
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : 0}
-            </span>
-          </div>{' '}
-          <div
-            className="allocate-balance cursor"
-            role="presentation"
-            onClick={() => setShowDspAdPacingModal({ show: true })}>
-            Allocate Balance{' '}
-            <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+              <div className="remaing-label">
+                {`Remaining Budget (${displayMonth()}):`}
+                <span>
+                  {' '}
+                  {currencySymbol}
+                  {dspData?.dsp_pacing?.remaining_budget
+                    ? dspData?.dsp_pacing?.remaining_budget
+                        .toFixed(2)
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    : 0}
+                </span>
+              </div>{' '}
+            </div>
+            <div className="col-4">
+              <div
+                className="allocate-balance cursor"
+                role="presentation"
+                onClick={() => setShowDspAdPacingModal({ show: true })}>
+                Allocate Balance{' '}
+                <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+              </div>
+              <div className="clear-fix" />
+            </div>
           </div>
-          <div className="clear-fix" />
         </AllocateBar>
       </>
     );

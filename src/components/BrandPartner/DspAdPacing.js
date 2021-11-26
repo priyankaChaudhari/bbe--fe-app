@@ -311,15 +311,20 @@ export default function DspAdPacing({
           </div>
         </div>
         <AllocateBar className="mb-4">
-          {' '}
-          <div className="remaing-label">
-            Remaining Balance:<span>$18,000</span>
-          </div>{' '}
-          <div className="allocate-balance cursor">
-            Allocate Balance{' '}
-            <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+          <div className="row">
+            <div className="col-8">
+              <div className="remaing-label">
+                Remaining Balance:<span>$18,000</span>
+              </div>{' '}
+            </div>
+            <div className="col-4">
+              <div className="allocate-balance cursor">
+                Allocate Balancejjj
+                <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+              </div>
+              <div className="clear-fix" />
+            </div>
           </div>
-          <div className="clear-fix" />
         </AllocateBar>
       </div>
     </DspAdPacingModal>

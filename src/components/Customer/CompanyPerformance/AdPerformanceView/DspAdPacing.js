@@ -303,20 +303,30 @@ export default function DspAdPacing({
         userRole === 'DSP Ad Manager' ||
         userRole === 'Ad Manager Admin' ? (
           <AllocateBar className="mb-4">
-            {' '}
-            <div className="remaing-label">
-              {currencySymbol}
-              {addThousandSeperator(dspPacing.escrow_sum)} of the escrow is
-              planned carry-over for future months
-            </div>{' '}
-            <div
-              className="allocate-balance cursor"
-              onClick={() => setShowAllocatedBalanceModal(true)}
-              role="presentation">
-              Allocate Balance{' '}
-              <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+            <div className="row">
+              <div className="col-8">
+                {' '}
+                <div className="remaing-label">
+                  {currencySymbol}
+                  {addThousandSeperator(dspPacing.escrow_sum)} of the escrow is
+                  planned carry-over for future months
+                </div>{' '}
+              </div>
+              <div className="col-4">
+                <div
+                  className="allocate-balance cursor"
+                  onClick={() => setShowAllocatedBalanceModal(true)}
+                  role="presentation">
+                  Allocate Balance{' '}
+                  <img
+                    className="orange-left-arrow"
+                    src={LeftArrowIcon}
+                    alt=""
+                  />
+                </div>
+                <div className="clear-fix" />
+              </div>
             </div>
-            <div className="clear-fix" />
           </AllocateBar>
         ) : null}
       </>

@@ -6,15 +6,18 @@ const AllocateBar = styled.div`
   border-radius: 6px;
   border: 1px solid rgb(213, 216, 225);
   width: 100%;
-  height: 40px;
+  min-height: 40px;
   padding: 11px 13px;
   .remaing-label {
     color: ${Theme.gray90};
     font-size: ${Theme.extraNormal};
     float: left;
+    /* width: 70%; */
 
     &.text-bold {
       font-weight: bold;
+      /* width: 30%;
+      float: right; */
     }
   }
   .allocate-balance {

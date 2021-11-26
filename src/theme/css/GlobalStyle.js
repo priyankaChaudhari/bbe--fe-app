@@ -738,6 +738,9 @@ button:disabled {
     .modal-body {
       padding: 20px 15px;
     }
+    .escrow {
+       padding: 25px 32px 30px 32px;
+    }
   }
 
   @media only screen and (max-width: 540px) {

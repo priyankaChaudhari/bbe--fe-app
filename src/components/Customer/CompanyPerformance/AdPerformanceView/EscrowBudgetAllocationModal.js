@@ -3,6 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import { bool, func, string } from 'prop-types';
+import styled from 'styled-components';
+import Theme from '../../../../theme/Theme';
 
 import { getAllocatedMonths, storeAllocatedBudget } from '../../../../api';
 import {
@@ -134,18 +136,23 @@ export default function EscrowBudgetAllocationModal({
               </label>
             </InputFormField>
           </div>
-          <div className="col-md-6 col-12 mt-md-0 mb-3">
-            {' '}
-            <NumberFormat
-              className={item.label === 'current' ? 'mt-1 disabled' : 'mt-1'}
-              name={item.name}
-              defaultValue={item.amount}
-              value={item.amount}
-              placeholder={0}
-              onChange={(event) => handleOnChange(event, index)}
-              thousandSeparator
-              decimalScale={2}
-            />
+          <div className="col-md-6 col-12 mt-1 mb-3">
+            <label className="label-heading" htmlFor="emailAddress">
+              Month
+            </label>
+            <br />
+            <InputNumberFormat>
+              <NumberFormat
+                className={item.label === 'current' ? 'mt-1 disabled' : 'mt-1'}
+                name={item.name}
+                defaultValue={item.amount}
+                value={item.amount}
+                placeholder={0}
+                onChange={(event) => handleOnChange(event, index)}
+                thousandSeparator
+                decimalScale={2}
+              />
+            </InputNumberFormat>
             {/* <label
               className={
                 item.label === 'current'
@@ -216,49 +223,51 @@ export default function EscrowBudgetAllocationModal({
         />
       ) : (
         <ModalBox>
-          <div className="modal-body pb-0">
+          <div className="modal-body escrow pb-0">
             <h4>Allocate Balance</h4>
-            <div className="row">
-              <div className="col-12">
-                <AllocateBar className="mt-2 mb-3">
-                  {' '}
-                  <div className="remaing-label text-bold">
-                    Escrow Balance
-                  </div>{' '}
-                  <div className="remaing-label text-bold float-right">
-                    $24000
-                  </div>
-                  <div className="clear-fix" />
-                </AllocateBar>
+            <div className="body-content">
+              <div className="row">
+                <div className="col-12">
+                  <AllocateBar className="mt-3 mb-3">
+                    {' '}
+                    <div className="remaing-label text-bold text-right">
+                      Escrow Balance
+                    </div>{' '}
+                    <div className="remaing-label text-bold float-right">
+                      $24000
+                    </div>
+                    <div className="clear-fix" />
+                  </AllocateBar>
+                </div>
+                {renderMonths()}
+                <div className="col-12">
+                  <Button
+                    style={{ textTransform: 'uppercase' }}
+                    className={
+                      allocatedMonths.length > 6
+                        ? 'btn-add-contact  disabled'
+                        : 'btn-add-contact '
+                    }
+                    onClick={() => handleOnAddAnotherMonth()}>
+                    {' '}
+                    <img
+                      width="14px"
+                      style={{ verticalAlign: 'middle' }}
+                      src={AddIcons}
+                      className="ml-1 add-icon"
+                      alt="add"
+                    />{' '}
+                    Add another Month
+                  </Button>
+                </div>
+                {isEscrowbalanceExceed ? (
+                  <ErrorMsgBox className="mt-2">
+                    <img className="info-icon" src={InfoRedIcon} alt="info" />{' '}
+                    All budges across the selected months need to add up to the
+                    available escrow balance
+                  </ErrorMsgBox>
+                ) : null}
               </div>
-              {renderMonths()}
-              <div className="col-12">
-                <Button
-                  style={{ textTransform: 'uppercase' }}
-                  className={
-                    allocatedMonths.length > 6
-                      ? 'btn-add-contact  disabled'
-                      : 'btn-add-contact '
-                  }
-                  onClick={() => handleOnAddAnotherMonth()}>
-                  {' '}
-                  <img
-                    width="14px"
-                    style={{ verticalAlign: 'middle' }}
-                    src={AddIcons}
-                    className="ml-1 add-icon"
-                    alt="add"
-                  />{' '}
-                  Add another Month
-                </Button>
-              </div>
-              {isEscrowbalanceExceed ? (
-                <ErrorMsgBox className="mt-2">
-                  <img className="info-icon" src={InfoRedIcon} alt="info" /> All
-                  budges across the selected months need to add up to the
-                  available escrow balance
-                </ErrorMsgBox>
-              ) : null}
             </div>
           </div>
           <div className="footer-line" />
@@ -299,3 +308,27 @@ EscrowBudgetAllocationModal.propTypes = {
   // onApply: func,
   isOpen: bool,
 };
+
+const InputNumberFormat = styled.div`
+  position: relative;
+  color: ${Theme.gray85};
+  border: 1px solid ${Theme.gray45};
+  border-radius: 2px;
+  padding: 5px 10px;
+  display: block;
+  width: 100%;
+  height: 40px;
+  background-color: ${Theme.gray8};
+  margin-top: 7px;
+  font-family: ${Theme.baseFontFamily};
+  font-size: ${Theme.extraNormal};
+
+  input {
+    border: none;
+    background-color: ${Theme.gray8};
+
+    &:focus {
+      outline: none;
+    }
+  }
+`;
