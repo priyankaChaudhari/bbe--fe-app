@@ -75,7 +75,7 @@ const DSPPacing = ({
                   <div className="row">
                     <div className="col-6 pb-3">
                       {' '}
-                      <div className="label">This Period</div>
+                      <div className="label">PLANNED</div>
                       <div className="label-info ">
                         {itemData && itemData.planned_spend_to_date
                           ? `${returnFromatNumber(
@@ -87,7 +87,7 @@ const DSPPacing = ({
                     </div>
                     <div className="col-6 pb-3">
                       {' '}
-                      <div className="label">Prev. Period</div>
+                      <div className="label">ACTUAL</div>
                       <div className="label-info ">
                         {itemData && itemData.actual_spend_to_date
                           ? `${returnFromatNumber(
@@ -99,7 +99,7 @@ const DSPPacing = ({
                     </div>
                     <div className="col-6 pb-3">
                       {' '}
-                      <div className="label">Change</div>
+                      <div className="label">DIFFERENCE</div>
                       {itemData && itemData.change_to_date ? (
                         <div className="decrease-rate large">
                           {itemData && itemData.change_to_date
@@ -111,9 +111,23 @@ const DSPPacing = ({
                         </div>
                       ) : null}
                     </div>
+
                     <div className="col-6 pb-3">
                       {' '}
-                      <div className="label">Contribution</div>
+                      <div className="label">REMAINING</div>
+                      <div className="label-info ">
+                        {itemData && itemData.actual_spend_to_date
+                          ? `${returnFromatNumber(
+                              itemData.actual_spend_to_date,
+                              'currency',
+                            )}`
+                          : `${currencySymbol}0`}
+                      </div>
+                    </div>
+
+                    <div className="col-6 pb-3">
+                      {' '}
+                      <div className="label">CONTRIBUTION</div>
                       <Status
                         label={itemData.contribution_bracket}
                         backgroundColor={
@@ -135,7 +149,7 @@ const DSPPacing = ({
       <thead>
         <tr>
           <th width="40%" className="product-header">
-            Customer
+            CUSTOMER
           </th>
           <th width="20%" className="product-header">
             PLANNED
@@ -149,7 +163,10 @@ const DSPPacing = ({
             {selectedOption === 'overspending' ? 'OVERSPEND' : 'UNDERSPEND'}
           </th>
           <th width="20%" className="product-header">
-            Contribution
+            REMAINING
+          </th>
+          <th width="20%" className="product-header">
+            CONTRIBUTION
           </th>
         </tr>
       </thead>
@@ -196,6 +213,10 @@ const DSPPacing = ({
           <div className="decrease-rate large">
             {returnFromatNumber(Math.abs(itemData.change_to_date), 'currency')}
           </div>
+        </td>
+        <td className="product-body">
+          {' '}
+          {returnFromatNumber(itemData.actual_spend_to_date, 'currency')}
         </td>
         <td className="product-body">
           <Status
@@ -264,7 +285,7 @@ const DSPPacing = ({
     <Wrapper>
       <WhiteCard className="mb-3">
         <div className="row">
-          <div className="col-12">
+          <div className="col-md-8 col-sm-12 pr-0 mb-3">
             <p className="black-heading-title mt-2 mb-0"> DSP Pacing</p>
             <p className="gray-normal-text mb-4 mt-1">
               Monthly Budget Pacing ({month}):
@@ -280,8 +301,11 @@ const DSPPacing = ({
               </span>
             </p>
           </div>
+          <div className="col-md-4 col-sm-12 pl-0 mt-2 mb-3">
+            {renderDspPacingOptions()}
+          </div>
           <div className="straight-line horizontal-line mb-3" />
-          <div className="col-md-8 col-sm-12 pr-0 mb-3">
+          <div className="col-md-12 col-sm-12 pr-0 mb-3">
             <ul className="dsp-spent-date">
               <li>
                 <div className="label ">Planned Spend to date </div>
@@ -351,11 +375,21 @@ const DSPPacing = ({
                   )
                 </div>
               </li>
+
+              <li>
+                <div className="label ">Remaining Budget </div>
+                <div className="label-range">
+                  {!loader &&
+                    dspSpendData &&
+                    returnFromatNumber(
+                      Math.abs(dspSpendData.actual_spend_to_date_all),
+                      'currency',
+                    )}
+                </div>
+              </li>
             </ul>
           </div>
-          <div className="col-md-4 col-sm-12 pl-0 mt-2 mb-3">
-            {renderDspPacingOptions()}
-          </div>
+
           <div className="straight-line horizontal-line " />
         </div>
         {loader ? (

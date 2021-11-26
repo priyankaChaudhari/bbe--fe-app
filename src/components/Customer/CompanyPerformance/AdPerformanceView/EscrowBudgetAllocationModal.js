@@ -151,6 +151,7 @@ export default function EscrowBudgetAllocationModal({
                 onChange={(event) => handleOnChange(event, index)}
                 thousandSeparator
                 decimalScale={2}
+                allowNegative={item.label === 'current'}
               />
             </InputNumberFormat>
             {/* <label
