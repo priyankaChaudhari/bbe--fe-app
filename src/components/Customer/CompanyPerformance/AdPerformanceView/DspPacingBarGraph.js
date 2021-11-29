@@ -17,9 +17,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
   const createDspPacingBarGraph = useCallback(() => {
     const getDate = new Date();
     const currentMonthYear = dayjs(getDate).format('MMM YY');
-    const date = new Date(currentMonthYear);
-    console.log('currentMonthYear', currentMonthYear);
-    console.log('date ', date);
+
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
     chart.current.logo.disabled = true;
@@ -179,11 +177,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     chart.current.cursor.lineX.disabled = true;
     chart.current.cursor.behavior = 'none';
     // custom tooltipHTML
-    function renderTooltipHTML(actualSpentValue) {
-      console.log('actualSpentValue', actualSpentValue);
-      const newDate = new Date('categoryY');
-      console.log('newDate', newDate);
-      const actualSpentAmount = actualSpentValue;
+    function renderTooltipHTML() {
       const tooltipHTML = `<div style="width:230px; padding:5px 5px 10px 5px"> 
         <div style="padding:5px 0 10px 0;"><strong>{categoryY}</strong></div>
         <ul style="padding:5px 0; margin:0; list-style-type:none;">
@@ -219,7 +213,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
           <li style="clear:both"></li>          
         </ul>
         ${
-          actualSpentAmount !== null
+          `{actualSpent}` !== null
             ? `<hr style="height:1px !important; background-color:#ffffff; font-weight:400; opacity:0.5" />
         <ul style="padding:5px 0; margin:0; list-style-type:none; width:100%;">
           <li style="display:inline; color:#ffffff !important;  border-left:2px solid #ffffff; font-size:11px;
@@ -229,7 +223,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
         </ul>`
             : ''
         }
-    </div>`;
+      </div>`;
 
       return tooltipHTML;
     }
@@ -246,7 +240,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     categoryAxis.renderer.labels.template.location = 0.5;
     // create value axis
     const valueAxis = chart.current.xAxes.push(new am4charts.ValueAxis());
-    // valueAxis.min = 0;
+    valueAxis.min = 0.1;
     valueAxis.renderer.opposite = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.renderer.baseGrid.disabled = true;
@@ -263,14 +257,13 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     const series1 = chart.current.series.push(new am4charts.ColumnSeries());
     series1.columns.template.height = am4core.percent(20);
     series1.name = 'Series 1';
-
     series1.dataFields.categoryY = 'monthYear';
     series1.dataFields.valueX = 'invoiceAmount';
     series1.stacked = true;
     series1.columns.template.fill = am4core.color('#8798ad');
     series1.columns.template.column.cornerRadius(0, 10, 0, 10);
     series1.columns.template.strokeWidth = 0;
-    series1.tooltipHTML = renderTooltipHTML(series1.dataFields.valueX);
+    series1.tooltipHTML = renderTooltipHTML();
     series1.tooltip.getFillFromObject = false;
     series1.tooltip.background.fill = am4core.color('#2E384D');
     series1.tooltip.background.fillOpacity = 1;
@@ -322,7 +315,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     dateRange.axisFill.fillOpacity = 1;
     dateRange.grid.disabled = true;
     dateRange.label.background.adapter.add('cornerRadius', function () {
-      return '5, 5, 5, 5';
+      return '10, 10,10, 10';
     });
     // Set cell size in pixels
     const cellSize = 50;
