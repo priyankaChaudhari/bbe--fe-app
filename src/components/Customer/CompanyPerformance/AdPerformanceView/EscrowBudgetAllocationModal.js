@@ -95,7 +95,9 @@ export default function EscrowBudgetAllocationModal({
       return (
         <React.Fragment key={item.month_year}>
           <div className="col-md-6 col-12 ">
-            <InputFormField className="mt-1 hide-spinner">
+            <InputFormField
+              id="BT-escrow-month-budgetAllocaion"
+              className="mt-1 hide-spinner">
               <label htmlFor="emailAddress">
                 Month
                 <br />
@@ -109,7 +111,10 @@ export default function EscrowBudgetAllocationModal({
             </InputFormField>
           </div>
           <div className="col-md-6 col-12 mt-1 mb-3">
-            <label className="label-heading" htmlFor="emailAddress">
+            <label
+              id="BT-escrow-numberFormat-budgetAllocaion"
+              className="label-heading"
+              htmlFor="emailAddress">
               Month
             </label>
             <br />
@@ -169,7 +174,9 @@ export default function EscrowBudgetAllocationModal({
           <div className="body-content">
             <div className="row">
               <div className="col-12">
-                <AllocateBar className="mt-3 mb-3">
+                <AllocateBar
+                  id="BT-escrowBalance-budgetAllocaion"
+                  className="mt-3 mb-3">
                   {' '}
                   <div className="remaing-label text-bold text-right">
                     Escrow Balance

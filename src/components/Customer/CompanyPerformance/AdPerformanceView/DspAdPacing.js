@@ -312,7 +312,9 @@ export default function DspAdPacing({
         </div>
 
         {isAllowToSplitBalance ? (
-          <AllocateBar className="mb-4">
+          <AllocateBar
+            id="BT-escrow-dspPacing-AllocateBalance"
+            className="mb-4">
             <div className="row">
               <div className="col-8">
                 {' '}
