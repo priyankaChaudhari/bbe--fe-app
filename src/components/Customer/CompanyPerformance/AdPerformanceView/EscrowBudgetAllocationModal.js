@@ -18,9 +18,6 @@ import {
   ErrorMsgBox,
 } from '../../../../common';
 
-const todaysDate = new Date();
-todaysDate.setDate(todaysDate.getDate() - 2);
-
 const customStyles = {
   content: {
     top: '50%',
@@ -137,6 +134,7 @@ export default function EscrowBudgetAllocationModal({
 
   const handleOnAddAnotherMonth = () => {
     const nextMonth = new Date();
+    nextMonth.setDate(1);
     nextMonth.setMonth(nextMonth.getMonth() + allocatedMonths.length);
     setAllocatedMonths([
       ...allocatedMonths,
