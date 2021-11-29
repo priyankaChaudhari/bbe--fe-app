@@ -51,7 +51,7 @@ export default function EscrowBudgetAllocationModal({
     : [
         {
           month_year: dayjs(new Date()).format('YYYY-MM-DD'),
-          escrow_allocated_converted_usd: addThousandSeperator(escrowBalance),
+          escrow_allocated_converted_usd: escrowBalance,
         },
       ];
   const [allocatedMonths, setAllocatedMonths] = useState(actualAllocatedMonths);
@@ -142,7 +142,7 @@ export default function EscrowBudgetAllocationModal({
       ...allocatedMonths,
       {
         month_year: dayjs(nextMonth).format('YYYY-MM-DD'),
-        escrow_allocated_converted_usd: '',
+        escrow_allocated_converted_usd: addThousandSeperator(0),
       },
     ]);
   };
