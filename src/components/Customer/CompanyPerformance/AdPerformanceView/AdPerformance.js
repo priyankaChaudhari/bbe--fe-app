@@ -1084,6 +1084,8 @@ export default function AdPerformance({
           memberData={memberData}
           onModalClose={() => {
             getDSPPacing(selectedMarketplace);
+            if (performancePacingFlag !== 'performance')
+              getPacingGraphData(selectedMarketplace);
           }}
         />
       </Modal>
