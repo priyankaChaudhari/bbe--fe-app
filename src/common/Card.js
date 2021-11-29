@@ -1,9 +1,59 @@
 import { number, oneOfType, string } from 'prop-types';
 import React from 'react';
+import ReactTooltip from 'react-tooltip';
 
 import styled from 'styled-components';
 
 import Theme from '../theme/Theme';
+
+const rendeTootipData = () => {
+  return `
+    <div style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
+      <div style="display: "> 
+        <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
+      </div>
+      <div class="row">
+          <div class="col-6">
+           <div style="color: #f4f6fc;
+          text-transform: uppercase;
+          font-size: 11px;
+          margin-top: 8px;
+         ">Organic Sales
+        </div>
+          </div>
+           <div class="col-6">
+             <div style="color: #f4f6fc;
+              font-size: 16px;
+              margin-left: 25px;
+              float: right;
+              text-align: right;
+              margin-top: 4px;
+             ">$7888
+           </div>
+           </div>
+             <div class="col-6">
+           <div style="color: #f4f6fc;
+          text-transform: uppercase;
+          font-size: 11px;
+          margin-top:7px;
+         ">In-Organic Sales
+        </div>
+          </div>
+           <div class="col-6">
+             <div style="color: #f4f6fc;
+              font-size: 16px;
+              margin-left: 25px;
+              float: right;
+              text-align: right;
+              margin-top: 4px;
+             ">
+            $9870
+           </div>
+           </div>
+      </div>
+     
+    </div>`;
+};
 
 const Card = ({
   className,
@@ -18,12 +68,16 @@ const Card = ({
   prefix = null,
   postfix = null,
   type,
+  breakDown,
 }) => (
   <CardWrapper className={[className]}>
     <p className="heading mt-0">{heading}</p>
     {type === 'invoices' ? (
       <>
-        <div style={{ marginBottom: subTitle ? '20px' : '32px' }}>
+        <div
+          style={{
+            marginBottom: subTitle ? (subTitle ? '20px' : '32px') : '0',
+          }}>
           <p style={{ color: titleColor }} className="title">
             {prefix}
             {title}
@@ -31,6 +85,15 @@ const Card = ({
           </p>
 
           {subTitle ? <p className="sub-title">{subTitle}</p> : null}
+          {breakDown ? (
+            <div
+              className="label-card-text "
+              data-tip={rendeTootipData()}
+              data-html
+              data-for="break-down">
+              {breakDown}
+            </div>
+          ) : null}
         </div>
       </>
     ) : (
@@ -51,6 +114,13 @@ const Card = ({
         </li>
       </ul>
     )}
+    <ReactTooltip
+      id="break-down"
+      aria-haspopup="true"
+      place="bottom"
+      effect="solid"
+      backgroundColor="#162c50"
+    />
   </CardWrapper>
 );
 
@@ -120,6 +190,7 @@ Card.defaultProps = {
   noBillText: '',
   totalBillText: '',
   type: '',
+  breakDown: '',
 };
 
 Card.propTypes = {
@@ -135,4 +206,5 @@ Card.propTypes = {
   noBillText: string,
   totalBillText: string,
   type: string,
+  breakDown: 'string',
 };

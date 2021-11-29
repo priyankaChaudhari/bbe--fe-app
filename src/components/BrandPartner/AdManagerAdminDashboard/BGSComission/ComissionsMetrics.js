@@ -45,6 +45,7 @@ const ComissionsMetrics = ({ commissionMetrics }) => {
               prefix={commissionMetrics[item.key] !== null ? item.prefix : ''}
               postfix={item.postfix}
               type="invoices"
+              breakDown={item.breakdown}
             />
           </div>
         ))}

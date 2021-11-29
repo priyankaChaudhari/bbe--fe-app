@@ -141,6 +141,7 @@ export const BGSComissionMetrics = [
     titleColor: '#333333',
     prefix: '$',
     postfix: '',
+    breakdown: 'View Breakdown',
   },
   {
     value: 'totalOverdue',

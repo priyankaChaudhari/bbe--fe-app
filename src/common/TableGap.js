@@ -7,6 +7,9 @@ const TableGap = styled.div`
   border-spacing: 0 10px;
   border-collapse: collapse;
   table {
+    /* display: flex;
+    flex-flow: column; */
+    height: 100%;
     width: 100%;
     tr {
       text-align: left;
@@ -20,8 +23,11 @@ const TableGap = styled.div`
       &:last-child {
         border-bottom: none;
       }
-      &:nth-last-child(2) {
-        border-bottom: none;
+
+      &.ungroup {
+        &:last-child {
+          border-bottom: 1px solid #e0e6e8;
+        }
       }
 
       &.overlay-modal-header {
@@ -33,9 +39,16 @@ const TableGap = styled.div`
         }
       }
 
+      &.BGSCommission-header {
+        border-top: 1px solid #e0e6e8;
+      }
+
       &.partners {
         td {
           font-size: 14px;
+        }
+        &:nth-last-child(2) {
+          border-bottom: none;
         }
       }
 
@@ -55,7 +68,7 @@ const TableGap = styled.div`
         font-size: 11px;
         background: ${Theme.white};
         font-family: ${Theme.baseFontFamily};
-        border-top: 1px solid #e0e6e8;
+        /* border-top: 1px solid #e0e6e8; */
         &:first-child {
           border-bottom-left-radius: 8px;
         }

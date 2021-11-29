@@ -1751,6 +1751,12 @@ text.cust-label-avg {
   }
 }
 
+/* .sticky-body {
+   flex: 1 1 auto;
+    display: block;
+    overflow-y: scroll;
+} */
+
 `;
 
 export default bodyStyles;
