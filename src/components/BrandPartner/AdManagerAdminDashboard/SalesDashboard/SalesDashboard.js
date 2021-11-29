@@ -534,11 +534,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
     if (diffDays <= 30) {
       temp = 'daily';
-      setGroupByFilters({ daily: true, weekly: true, month: false });
+      setGroupByFilters({ daily: true, weekly: false, month: false });
       setSalesGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setGroupByFilters({ daily: true, weekly: true, month: true });
+      setGroupByFilters({ daily: true, weekly: true, month: false });
       setSalesGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';

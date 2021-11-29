@@ -755,9 +755,9 @@ export async function getDspPacingData(id, marketplace) {
 }
 
 export async function storeAllocatedBudget(data, customerId, marketplace) {
-  const temp = [];
+  const allocateMonths = [];
   for (const option of data) {
-    temp.push({
+    allocateMonths.push({
       escrow_allocated_converted_usd: Number(
         option.escrow_allocated_converted_usd,
       ),
@@ -768,7 +768,7 @@ export async function storeAllocatedBudget(data, customerId, marketplace) {
   const params = {
     customer_id: customerId,
     marketplace,
-    allocate_balance: temp,
+    allocate_balance: allocateMonths,
   };
 
   const result = await axiosInstance
