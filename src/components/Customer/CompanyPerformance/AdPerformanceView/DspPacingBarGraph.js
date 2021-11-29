@@ -12,6 +12,7 @@ import { string, arrayOf, shape } from 'prop-types';
 am4core.useTheme(am4themes_animated);
 function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
   const chart = useRef(null);
+
   const createDspPacingBarGraph = useCallback(() => {
     const getDate = new Date();
     const currentMonthYear = dayjs(getDate).format('MMM YY');
@@ -20,9 +21,11 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     chart.current.data = chartData;
     chart.current.logo.disabled = true;
     chart.current.padding(0, 30, 0, 0);
-    chart.current.responsive.enabled = true;
     chart.current.zoomOutButton.disabled = true;
+<<<<<<< HEAD
 
+=======
+>>>>>>> Dsp pacing bar graph - height bug is solved
     // Enable chart cursor
     chart.current.cursor = new am4charts.XYCursor();
     chart.current.cursor.lineY.disabled = true;
@@ -76,7 +79,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
             : ''
         }
       </div>`;
-
       return tooltipHTML;
     }
     // create category axis
@@ -104,7 +106,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     valueAxis.renderer.labels.template.fill = am4core.color('#556178');
     valueAxis.numberFormatter = new am4core.NumberFormatter();
     valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
-
+    // create series for invoice amount
     const series1 = chart.current.series.push(new am4charts.ColumnSeries());
     series1.columns.template.height = am4core.percent(20);
     series1.name = 'Series 1';
@@ -121,7 +123,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series1.tooltip.background.strokeWidth = 0;
     series1.tooltip.background.filters.clear();
     series1.tooltip.background.cornerRadius = 10;
-
+    // create series for carry over
     const series2 = chart.current.series.push(new am4charts.ColumnSeries());
     series2.columns.template.height = am4core.percent(20);
     series2.name = 'Series 2';
@@ -131,7 +133,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series2.columns.template.fill = am4core.color('#30a8bd');
     series2.columns.template.column.cornerRadius(10, 10, 10, 10);
     series2.columns.template.strokeWidth = 0;
-
+    // create series for actual spent
     const series3 = chart.current.series.push(new am4charts.ColumnSeries());
     series3.columns.template.height = am4core.percent(80);
     series3.name = 'Series 3';
@@ -143,7 +145,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series3.columns.template.fillOpacity = 0.1;
     series3.columns.template.strokeWidth = 0;
 
-    // color bullets for series 3
+    // color bullets for actual spent series 3
     const valueLabel = series3.columns.template.createChild(am4core.Label);
     valueLabel.text = '';
     valueLabel.width = 2;
@@ -152,7 +154,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     valueLabel.valign = 'middle';
     valueLabel.background.propertyFields.fill = 'colorCode';
     valueLabel.fillOpacity = 1;
-
+    // create date range to highlight current month
     const dateRange = categoryAxis.axisRanges.create();
     dateRange.category = currentMonthYear;
     dateRange.endCategory = currentMonthYear;
