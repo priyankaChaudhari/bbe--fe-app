@@ -50,7 +50,7 @@ export default function EscrowBudgetAllocationModal({
     ? dspPacing?.allocated_balance
     : [
         {
-          month_year: dayjs(new Date()).format('YYYY-MM'),
+          month_year: dayjs(new Date()).format('YYYY-MM-DD'),
           escrow_allocated_converted_usd: addThousandSeperator(escrowBalance),
         },
       ];
@@ -68,7 +68,6 @@ export default function EscrowBudgetAllocationModal({
           onClick();
         }
         setIsSubmitLoader(false);
-        onClick();
       },
     );
   }, [onClick, customerId, marketplace, allocatedMonths]);
@@ -142,7 +141,7 @@ export default function EscrowBudgetAllocationModal({
     setAllocatedMonths([
       ...allocatedMonths,
       {
-        month_year: dayjs(nextMonth).format('YYYY-MM'),
+        month_year: dayjs(nextMonth).format('YYYY-MM-DD'),
         escrow_allocated_converted_usd: '',
       },
     ]);

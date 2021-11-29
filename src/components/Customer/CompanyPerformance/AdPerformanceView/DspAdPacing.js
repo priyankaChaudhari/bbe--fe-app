@@ -21,7 +21,7 @@ export default function DspAdPacing({
 }) {
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
-    true,
+    false,
   );
   const dspPacing = dspData?.dsp_pacing;
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
@@ -43,11 +43,10 @@ export default function DspAdPacing({
   }, [isAllowToSplitBalance, memberData, userInfo]);
 
   const addThousandSeperator = (value) => {
+    value = Number(value.toFixed(2));
+
     if (value && value !== null && value !== 0) {
-      return value
-        .toFixed(2)
-        .toString()
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
     return 0;
   };

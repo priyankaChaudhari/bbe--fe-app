@@ -161,36 +161,42 @@ export default function DSPPerformance({
             </ToggleButton>
           </div>
         </div>
-        <AllocateBar className="mb-4">
-          <div className="row">
-            <div className="col-8">
-              {' '}
-              <div className="remaing-label">
-                {`Remaining Budget (${displayMonth()}):`}
-                <span>
-                  {' '}
-                  {currencySymbol}
-                  {dspData?.dsp_pacing?.remaining_budget
-                    ? dspData?.dsp_pacing?.remaining_budget
-                        .toFixed(2)
-                        .toString()
-                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                    : 0}
-                </span>
-              </div>{' '}
-            </div>
-            <div className="col-4">
-              <div
-                className="allocate-balance cursor"
-                role="presentation"
-                onClick={() => setShowDspAdPacingModal({ show: true })}>
-                Allocate Balance{' '}
-                <img className="orange-left-arrow" src={LeftArrowIcon} alt="" />
+        {dspData && dspData.dsp_pacing ? (
+          <AllocateBar className="mb-4">
+            <div className="row">
+              <div className="col-8">
+                {' '}
+                <div className="remaing-label">
+                  {`Remaining Budget (${displayMonth()}):`}
+                  <span>
+                    {' '}
+                    {currencySymbol}
+                    {dspData?.dsp_pacing?.remaining_budget
+                      ? dspData?.dsp_pacing?.remaining_budget
+                          .toFixed(2)
+                          .toString()
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                      : 0}
+                  </span>
+                </div>{' '}
               </div>
-              <div className="clear-fix" />
+              <div className="col-4">
+                <div
+                  className="allocate-balance cursor"
+                  role="presentation"
+                  onClick={() => setShowDspAdPacingModal({ show: true })}>
+                  Allocate Balance{' '}
+                  <img
+                    className="orange-left-arrow"
+                    src={LeftArrowIcon}
+                    alt=""
+                  />
+                </div>
+                <div className="clear-fix" />
+              </div>
             </div>
-          </div>
-        </AllocateBar>
+          </AllocateBar>
+        ) : null}
       </>
     );
   };
