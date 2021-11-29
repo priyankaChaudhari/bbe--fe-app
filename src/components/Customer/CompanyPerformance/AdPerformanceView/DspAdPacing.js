@@ -43,9 +43,8 @@ export default function DspAdPacing({
   }, [isAllowToSplitBalance, memberData, userInfo]);
 
   const addThousandSeperator = (value) => {
-    value = Number(value.toFixed(2));
-
     if (value && value !== null && value !== 0) {
+      value = Number(value.toFixed(2));
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
     return 0;
