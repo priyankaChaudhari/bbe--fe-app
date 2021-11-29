@@ -11,8 +11,6 @@ import { string, arrayOf, shape } from 'prop-types';
 
 am4core.useTheme(am4themes_animated);
 function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
-  console.log('chartData', chartData);
-
   const chart = useRef(null);
   const createDspPacingBarGraph = useCallback(() => {
     const getDate = new Date();
@@ -24,152 +22,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     chart.current.padding(0, 30, 0, 0);
     chart.current.responsive.enabled = true;
     chart.current.zoomOutButton.disabled = true;
-
-    // chart.current.data = [
-    //   {
-    //     monthYear: 'Jan 21',
-    //     invoiceAmount: 150000,
-    //     carryOver: 50000,
-    //     totalInitialBudget: 200000,
-    //     actualSpent: 110000,
-    //     dspPacingFlag: -1,
-    //     colorCode: '#d6a307',
-    //   },
-    //   {
-    //     monthYear: 'Feb 21',
-    //     invoiceAmount: 70000,
-    //     carryOver: 40000,
-    //     totalInitialBudget: 110000,
-    //     actualSpent: 130000,
-    //     dspPacingFlag: 1,
-    //     colorCode: '#d63649',
-    //   },
-    //   {
-    //     monthYear: 'Mar 21',
-    //     invoiceAmount: 150000,
-    //     carryOver: 50000,
-    //     totalInitialBudget: 200000,
-    //     actualSpent: 100000,
-    //     dspPacingFlag: -1,
-    //     colorCode: '#d6a307',
-    //   },
-    //   {
-    //     monthYear: 'Apr 21',
-    //     invoiceAmount: 70000,
-    //     carryOver: -40000,
-    //     totalInitialBudget: 110000,
-    //     actualSpent: 90000,
-    //     dspPacingFlag: -1,
-    //     colorCode: '#d6a307',
-    //   },
-    //   {
-    //     monthYear: 'May 21',
-    //     invoiceAmount: 120000,
-    //     carryOver: 70000,
-    //     totalInitialBudget: 190000,
-    //     actualSpent: 130000,
-    //     dspPacingFlag: -1,
-    //     colorCode: '#d6a307',
-    //   },
-    //   {
-    //     monthYear: 'Jun 21',
-    //     invoiceAmount: 100000,
-    //     carryOver: 60000,
-    //     totalInitialBudget: 160000,
-    //     actualSpent: 180000,
-    //     dspPacingFlag: 1,
-    //     colorCode: '#d63649',
-    //   },
-    //   {
-    //     monthYear: 'Jul 21',
-    //     invoiceAmount: 50000,
-    //     carryOver: -30000,
-    //     totalInitialBudget: 80000,
-    //     actualSpent: 40000,
-    //     dspPacingFlag: -1,
-    //     colorCode: '#d6a307',
-    //   },
-    //   {
-    //     monthYear: 'Aug 21',
-    //     invoiceAmount: 70000,
-    //     carryOver: -40000,
-    //     totalInitialBudget: 110000,
-    //     actualSpent: 120000,
-    //     dspPacingFlag: 1,
-    //     colorCode: '#d63649',
-    //   },
-    //   {
-    //     monthYear: 'Sep 21',
-    //     invoiceAmount: 120000,
-    //     carryOver: 50000,
-    //     totalInitialBudget: 170000,
-    //     actualSpent: 180000,
-    //     dspPacingFlag: 1,
-    //     colorCode: '#d63649',
-    //   },
-    //   {
-    //     monthYear: 'Oct 21',
-    //     invoiceAmount: 70000,
-    //     carryOver: 40000,
-    //     totalInitialBudget: 110000,
-    //     actualSpent: 70000,
-    //     dspPacingFlag: -1,
-    //     colorCode: '#d6a307',
-    //   },
-    //   {
-    //     monthYear: 'Nov 21',
-    //     invoiceAmount: 120000,
-    //     carryOver: 50000,
-    //     totalInitialBudget: 170000,
-    //     actualSpent: 150000,
-    //     dspPacingFlag: -1,
-    //     colorCode: '#d6a307',
-    //   },
-    //   {
-    //     monthYear: 'Dec 21',
-    //     invoiceAmount: 150000,
-    //     carryOver: 0,
-    //     totalInitialBudget: 150000,
-    //     actualSpent: null,
-    //     dspPacingFlag: null,
-    //     colorCode: '#d63649',
-    //   },
-    //   {
-    //     monthYear: 'Jan 22',
-    //     invoiceAmount: 100000,
-    //     carryOver: 50000,
-    //     totalInitialBudget: 150000,
-    //     actualSpent: null,
-    //     dspPacingFlag: null,
-    //     colorCode: '#d63649',
-    //   },
-    //   {
-    //     monthYear: 'Feb 22',
-    //     invoiceAmount: 100000,
-    //     carryOver: 30000,
-    //     actualSpent: null,
-    //     totalInitialBudget: 130000,
-    //     dspPacingFlag: null,
-    //     colorCode: '#d63649',
-    //   },
-    //   {
-    //     monthYear: 'Mar 22',
-    //     invoiceAmount: 150000,
-    //     carryOver: 50000,
-    //     totalInitialBudget: 200000,
-    //     actualSpent: null,
-    //     dspPacingFlag: null,
-    //   },
-    //   {
-    //     monthYear: 'Apr 22',
-    //     invoiceAmount: 70000,
-    //     carryOver: 20000,
-    //     totalInitialBudget: 90000,
-    //     actualSpent: null,
-    //     dspPacingFlag: null,
-    //     colorCode: '#d63649',
-    //   },
-    // ];
 
     // Enable chart cursor
     chart.current.cursor = new am4charts.XYCursor();
@@ -251,7 +103,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     valueAxis.renderer.labels.template.dy = -5;
     valueAxis.renderer.labels.template.fill = am4core.color('#556178');
     valueAxis.numberFormatter = new am4core.NumberFormatter();
-    // valueAxis.numberFormatter.numberFormat = `${currencySymbol}#,###.##`;
     valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
 
     const series1 = chart.current.series.push(new am4charts.ColumnSeries());
@@ -308,7 +159,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     dateRange.label.fontWeight = 'bold';
     dateRange.label.horizontalCenter = 'center';
     dateRange.label.verticalCenter = 'middle';
-    // dateRange.label.fill = am4core.color('#000000');
     dateRange.label.isMeasured = true;
     dateRange.label.background.fill = am4core.color('#f4f6fc');
     dateRange.axisFill.fill = am4core.color('#f4f6fc');
