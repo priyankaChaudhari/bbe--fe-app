@@ -22,10 +22,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     chart.current.logo.disabled = true;
     chart.current.padding(0, 30, 0, 0);
     chart.current.zoomOutButton.disabled = true;
-<<<<<<< HEAD
-
-=======
->>>>>>> Dsp pacing bar graph - height bug is solved
     // Enable chart cursor
     chart.current.cursor = new am4charts.XYCursor();
     chart.current.cursor.lineY.disabled = true;
@@ -94,7 +90,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     categoryAxis.renderer.labels.template.location = 0.5;
     // create value axis
     const valueAxis = chart.current.xAxes.push(new am4charts.ValueAxis());
-    valueAxis.min = 0.1;
     valueAxis.renderer.opposite = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.renderer.baseGrid.disabled = true;
@@ -166,9 +161,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     dateRange.axisFill.fill = am4core.color('#f4f6fc');
     dateRange.axisFill.fillOpacity = 1;
     dateRange.grid.disabled = true;
-    dateRange.label.background.adapter.add('cornerRadius', function () {
-      return '10, 10,10, 10';
-    });
+
     // Set cell size in pixels
     const cellSize = 50;
     chart.current.events.on('datavalidated', function (ev) {
