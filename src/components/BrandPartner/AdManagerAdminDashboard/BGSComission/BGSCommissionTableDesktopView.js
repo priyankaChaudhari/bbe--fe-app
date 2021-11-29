@@ -11,8 +11,14 @@ export default function BGSCommissionTableDesktopView({
     <TableGap className="d-md-block d-none">
       <WhiteCard className="table-card">
         <table>
-          <thead style={{ width: '100%', display: 'table' }}>
-            <tr>
+          <thead
+            style={{
+              width: '100%',
+              display: 'table',
+
+              borderBottom: isGroupBy ? 'none' : '1px solid #e0e6e8',
+            }}>
+            <tr className="BGSCommission-header">
               <th width="10%" className=" text-left">
                 team member
               </th>
@@ -58,72 +64,19 @@ export default function BGSCommissionTableDesktopView({
           />
         ) : null}
         {!isGroupBy && commissionData && commissionData.length > 0 ? (
-          <table>
-            <tbody style={{ width: '100%', display: 'table' }}>
-              {commissionData.map((item) => {
-                return (
-                  <div key={item.id}>
-                    <tr>
-                      <td width="10%">Team Jake</td>
-                      <td width="10%">$2,597.20</td>
-                      <td width="10%">$2,597.20</td>
-                      <td width="5%">$2,597.20</td>
-                      <td width="12%">$805.00</td>
-                      <td width="15%" className="text-bold">
-                        0
-                      </td>
-                      <td width="8%">$805.00</td>
-                      <td width="12%" className="text-bold">
-                        $805.00
-                      </td>
-                      <td width="10%" className="text-bold">
-                        {' '}
-                        $1,714.59
-                      </td>
-                    </tr>
-                    <tr>
-                      <td width="10%">Team Jake</td>
-                      <td width="10%">$2,597.20</td>
-                      <td width="10%">$2,597.20</td>
-                      <td width="5%">$2,597.20</td>
-                      <td width="12%">$805.00</td>
-                      <td width="15%" className="text-bold">
-                        0
-                      </td>
-                      <td width="8%">$805.00</td>
-                      <td width="12%" className="text-bold">
-                        $805.00
-                      </td>
-                      <td width="10%" className="text-bold">
-                        {' '}
-                        $1,714.59
-                      </td>
-                    </tr>
-                  </div>
-                );
-              })}
-            </tbody>
-          </table>
-        ) : null}
-
-        {!loader && !commissionData ? (
-          <NoData>No commissions Found</NoData>
-        ) : null}
-      </WhiteCard>
-
-      {isGroupBy && commissionData && commissionData.length > 0
-        ? commissionData.map((item) => {
-            return (
-              <WhiteCard
-                key={item && item.bgs_manager && item.bgs_manager.id}
-                className="mt-3 ">
-                <table>
-                  <tbody style={{ width: '100%', display: 'table' }}>
-                    {item && item.bgs_manager ? (
-                      <tr>
-                        <td width="10%" className="text-bold">
-                          {item.bgs_manager.name}
-                        </td>
+          <div
+            style={{
+              overflow: 'auto',
+              // marginTop: '20px',
+              height: 'calc(100vh - 40vh)',
+            }}>
+            <table>
+              <tbody>
+                {commissionData.map((item) => {
+                  return (
+                    <div key={item.id}>
+                      <tr className="ungroup">
+                        <td width="10%">Team Jake</td>
                         <td width="10%">$2,597.20</td>
                         <td width="10%">$2,597.20</td>
                         <td width="5%">$2,597.20</td>
@@ -140,37 +93,103 @@ export default function BGSCommissionTableDesktopView({
                           $1,714.59
                         </td>
                       </tr>
-                    ) : null}
-                    {item &&
-                      item.members &&
-                      item.members.map((memberItem) => {
-                        return (
-                          <tr key={memberItem.id}>
-                            <td width="10%">Team Jake</td>
-                            <td width="10%">$2,597.20</td>
-                            <td width="10%">$2,597.20</td>
-                            <td width="5%">$2,597.20</td>
-                            <td width="12%">$805.00</td>
-                            <td width="15%" className="text-bold">
-                              0
-                            </td>
-                            <td width="8%">$805.00</td>
-                            <td width="12%" className="text-bold">
-                              $805.00
-                            </td>
-                            <td width="10%" className="text-bold">
-                              {' '}
-                              $1,714.59
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>
-              </WhiteCard>
-            );
-          })
-        : null}
+                      <tr className="ungroup">
+                        <td width="10%">Team Jake</td>
+                        <td width="10%">$2,597.20</td>
+                        <td width="10%">$2,597.20</td>
+                        <td width="5%">$2,597.20</td>
+                        <td width="12%">$805.00</td>
+                        <td width="15%" className="text-bold">
+                          0
+                        </td>
+                        <td width="8%">$805.00</td>
+                        <td width="12%" className="text-bold">
+                          $805.00
+                        </td>
+                        <td width="10%" className="text-bold">
+                          {' '}
+                          $1,714.59
+                        </td>
+                      </tr>
+                    </div>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
+
+        {!loader && !commissionData ? (
+          <NoData>No commissions Found</NoData>
+        ) : null}
+      </WhiteCard>
+      <div
+        style={{
+          overflow: 'auto',
+          marginTop: '20px',
+          height: 'calc(100vh - 40vh)',
+        }}>
+        {isGroupBy && commissionData && commissionData.length > 0
+          ? commissionData.map((item) => {
+              return (
+                <WhiteCard
+                  key={item && item.bgs_manager && item.bgs_manager.id}
+                  className="mb-3">
+                  <table>
+                    <tbody style={{ width: '100%', display: 'table' }}>
+                      {item && item.bgs_manager ? (
+                        <tr>
+                          <td width="10%" className="text-bold">
+                            {item.bgs_manager.name}
+                          </td>
+                          <td width="10%">$2,597.20</td>
+                          <td width="10%">$2,597.20</td>
+                          <td width="5%">$2,597.20</td>
+                          <td width="12%">$805.00</td>
+                          <td width="15%" className="text-bold">
+                            0
+                          </td>
+                          <td width="8%">$805.00</td>
+                          <td width="12%" className="text-bold">
+                            $805.00
+                          </td>
+                          <td width="10%" className="text-bold">
+                            {' '}
+                            $1,714.59
+                          </td>
+                        </tr>
+                      ) : null}
+                      {item &&
+                        item.members &&
+                        item.members.map((memberItem) => {
+                          return (
+                            <tr key={memberItem.id}>
+                              <td width="10%">Team Jake</td>
+                              <td width="10%">$2,597.20</td>
+                              <td width="10%">$2,597.20</td>
+                              <td width="5%">$2,597.20</td>
+                              <td width="12%">$805.00</td>
+                              <td width="15%" className="text-bold">
+                                0
+                              </td>
+                              <td width="8%">$805.00</td>
+                              <td width="12%" className="text-bold">
+                                $805.00
+                              </td>
+                              <td width="10%" className="text-bold">
+                                {' '}
+                                $1,714.59
+                              </td>
+                            </tr>
+                          );
+                        })}
+                    </tbody>
+                  </table>
+                </WhiteCard>
+              );
+            })
+          : null}
+      </div>
     </TableGap>
   );
 }
