@@ -33,7 +33,7 @@ const DSPPacing = ({
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const history = useHistory();
 
-  const returnFromatNumber = (value, type) => {
+  const returnFormatedNumber = (value, type) => {
     const decimalDigits = 2;
     if (value) {
       return `${type === 'currency' ? currencySymbol : ''}${value
@@ -78,7 +78,7 @@ const DSPPacing = ({
                       <div className="label">PLANNED</div>
                       <div className="label-info ">
                         {itemData && itemData.planned_spend_to_date
-                          ? `${returnFromatNumber(
+                          ? `${returnFormatedNumber(
                               itemData.planned_spend_to_date,
                               'currency',
                             )}`
@@ -90,7 +90,7 @@ const DSPPacing = ({
                       <div className="label">ACTUAL</div>
                       <div className="label-info ">
                         {itemData && itemData.actual_spend_to_date
-                          ? `${returnFromatNumber(
+                          ? `${returnFormatedNumber(
                               itemData.actual_spend_to_date,
                               'currency',
                             )}`
@@ -103,7 +103,7 @@ const DSPPacing = ({
                       {itemData && itemData.change_to_date ? (
                         <div className="decrease-rate large">
                           {itemData && itemData.change_to_date
-                            ? `${returnFromatNumber(
+                            ? `${returnFormatedNumber(
                                 Math.abs(itemData.change_to_date),
                                 'currency',
                               )}`
@@ -116,9 +116,9 @@ const DSPPacing = ({
                       {' '}
                       <div className="label">REMAINING</div>
                       <div className="label-info ">
-                        {itemData && itemData.actual_spend_to_date
-                          ? `${returnFromatNumber(
-                              itemData.actual_spend_to_date,
+                        {itemData && itemData.remaining_to_date
+                          ? `${returnFormatedNumber(
+                              itemData.remaining_to_date,
                               'currency',
                             )}`
                           : `${currencySymbol}0`}
@@ -202,21 +202,26 @@ const DSPPacing = ({
         </td>
         <td className="product-body">
           {' '}
-          {returnFromatNumber(itemData.planned_spend_to_date, 'currency')}
+          {returnFormatedNumber(itemData.planned_spend_to_date, 'currency')}
         </td>
         <td className="product-body">
           {' '}
-          {returnFromatNumber(itemData.actual_spend_to_date, 'currency')}
+          {returnFormatedNumber(itemData.actual_spend_to_date, 'currency')}
         </td>
         <td className="product-body">
           {' '}
           <div className="decrease-rate large">
-            {returnFromatNumber(Math.abs(itemData.change_to_date), 'currency')}
+            {returnFormatedNumber(
+              Math.abs(itemData.change_to_date),
+              'currency',
+            )}
           </div>
         </td>
         <td className="product-body">
           {' '}
-          {returnFromatNumber(itemData.actual_spend_to_date, 'currency')}
+          <div className="decrease-rate large">
+            {returnFormatedNumber(itemData.remaining_to_date, 'currency')}
+          </div>
         </td>
         <td className="product-body">
           <Status
@@ -312,7 +317,7 @@ const DSPPacing = ({
                 <div className="label-range">
                   {!loader &&
                     dspSpendData &&
-                    returnFromatNumber(
+                    returnFormatedNumber(
                       Math.abs(dspSpendData.planned_spend_to_date_all),
                       'currency',
                     )}
@@ -320,7 +325,7 @@ const DSPPacing = ({
                   {!loader &&
                   dspSpendData &&
                   dspSpendData.planned_spend_to_date_percentage_all !== 'N/A'
-                    ? returnFromatNumber(
+                    ? returnFormatedNumber(
                         dspSpendData.planned_spend_to_date_percentage_all,
                         'percentage',
                       )
@@ -333,7 +338,7 @@ const DSPPacing = ({
                 <div className="label-range">
                   {!loader &&
                     dspSpendData &&
-                    returnFromatNumber(
+                    returnFormatedNumber(
                       Math.abs(dspSpendData.actual_spend_to_date_all),
                       'currency',
                     )}
@@ -341,7 +346,7 @@ const DSPPacing = ({
                   {!loader &&
                   dspSpendData &&
                   dspSpendData.actual_spend_to_date_percentage_all !== 'N/A'
-                    ? returnFromatNumber(
+                    ? returnFormatedNumber(
                         dspSpendData.actual_spend_to_date_percentage_all,
                         'percentage',
                       )
@@ -359,7 +364,7 @@ const DSPPacing = ({
                 <div className="label-range red-range">
                   {!loader &&
                     dspSpendData &&
-                    returnFromatNumber(
+                    returnFormatedNumber(
                       Math.abs(dspSpendData.change_to_date_all),
                       'currency',
                     )}
@@ -367,7 +372,7 @@ const DSPPacing = ({
                   {!loader &&
                   dspSpendData &&
                   dspSpendData.change_to_date_percentage_all !== 'N/A'
-                    ? returnFromatNumber(
+                    ? returnFormatedNumber(
                         dspSpendData.change_to_date_percentage_all,
                         'percentage',
                       )
@@ -381,8 +386,8 @@ const DSPPacing = ({
                 <div className="label-range">
                   {!loader &&
                     dspSpendData &&
-                    returnFromatNumber(
-                      Math.abs(dspSpendData.actual_spend_to_date_all),
+                    returnFormatedNumber(
+                      dspSpendData.remaining_budget_all,
                       'currency',
                     )}
                 </div>

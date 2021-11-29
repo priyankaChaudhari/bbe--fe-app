@@ -223,7 +223,7 @@ export default function EscrowBudgetAllocationModal({
           <div className="text-center ">
             <Button
               className={
-                isEscrowbalanceExceed
+                isEscrowbalanceExceed || isSubmitLoader
                   ? 'btn-primary on-boarding  w-100 disabled'
                   : 'btn-primary on-boarding  w-100'
               }
