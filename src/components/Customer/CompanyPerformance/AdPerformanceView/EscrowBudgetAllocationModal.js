@@ -40,13 +40,15 @@ export default function EscrowBudgetAllocationModal({
   marketplace,
   getActivityLogInfo,
 }) {
+  const currentDate = new Date();
+  currentDate.setDate(1);
   const dspPacing = dspData?.dsp_pacing;
   const escrowBalance = dspPacing?.escrow_converted_usd;
   const actualAllocatedMonths = dspPacing?.allocated_balance.length
     ? dspPacing?.allocated_balance
     : [
         {
-          month_year: dayjs(new Date()).format('YYYY-MM-DD'),
+          month_year: dayjs(currentDate).format('YYYY-MM-DD'),
           escrow_allocated_converted_usd: escrowBalance,
         },
       ];
