@@ -3,10 +3,8 @@ import React, { useState, useCallback } from 'react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import { bool, func, shape, string } from 'prop-types';
-import styled from 'styled-components';
 import dayjs from 'dayjs';
 
-import Theme from '../../../../theme/Theme';
 import { storeAllocatedBudget } from '../../../../api';
 import { CloseIcon, AddIcons, InfoRedIcon } from '../../../../theme/images';
 import {
@@ -102,7 +100,9 @@ export default function EscrowBudgetAllocationModal({
                 Month
                 <br />
                 <input
-                  className="form-control "
+                  className={
+                    !index ? ' disabled form-control ' : 'form-control '
+                  }
                   value={dayjs(item.month_year).format('MMMM')}
                   type="text"
                   readOnly
@@ -111,26 +111,29 @@ export default function EscrowBudgetAllocationModal({
             </InputFormField>
           </div>
           <div className="col-md-6 col-12 mt-1 mb-3">
-            <label
-              id="BT-escrow-numberFormat-budgetAllocaion"
-              className="label-heading"
-              htmlFor="emailAddress">
-              Month
-            </label>
-            <br />
-            <InputNumberFormat>
-              <NumberFormat
-                className={!index ? 'mt-1 disabled' : 'mt-1'}
-                name={item.month_year}
-                defaultValue={item.escrow_allocated_converted_usd}
-                value={item.escrow_allocated_converted_usd}
-                placeholder={0}
-                onChange={(event) => handleOnChange(event, index)}
-                thousandSeparator
-                decimalScale={2}
-                allowNegative={!index}
-              />
-            </InputNumberFormat>
+            <InputFormField id="BT-escrow-numberFormat-budgetAllocaion">
+              <label htmlFor="amount"> amount </label>
+              <div className="input-container  ">
+                <span
+                  className={!index ? ' disabled input-icon ' : 'input-icon  '}>
+                  $
+                </span>
+
+                <NumberFormat
+                  className={
+                    !index ? 'mt-2 disabled form-control' : 'mt-2 form-control'
+                  }
+                  name={item.month_year}
+                  defaultValue={item.escrow_allocated_converted_usd}
+                  value={item.escrow_allocated_converted_usd}
+                  placeholder={0}
+                  onChange={(event) => handleOnChange(event, index)}
+                  thousandSeparator
+                  decimalScale={2}
+                  allowNegative={!index}
+                />
+              </div>
+            </InputFormField>
           </div>
         </React.Fragment>
       );
@@ -208,14 +211,14 @@ export default function EscrowBudgetAllocationModal({
                   Add another Month
                 </Button>
               </div>
-              {isEscrowbalanceExceed ? (
-                <ErrorMsgBox className="mt-2">
-                  <img className="info-icon" src={InfoRedIcon} alt="info" /> All
-                  budges across the selected months need to add up to the
-                  available escrow balance
-                </ErrorMsgBox>
-              ) : null}
             </div>
+            {isEscrowbalanceExceed ? (
+              <ErrorMsgBox className="mt-2">
+                <img className="info-icon" src={InfoRedIcon} alt="info" /> All
+                budges across the selected months need to add up to the
+                available escrow balance
+              </ErrorMsgBox>
+            ) : null}
           </div>
         </div>
         <div className="footer-line" />
@@ -261,27 +264,3 @@ EscrowBudgetAllocationModal.propTypes = {
   onClick: func,
   addThousandSeperator: func,
 };
-
-const InputNumberFormat = styled.div`
-  position: relative;
-  color: ${Theme.gray85};
-  border: 1px solid ${Theme.gray45};
-  border-radius: 2px;
-  padding: 5px 10px;
-  display: block;
-  width: 100%;
-  height: 40px;
-  background-color: ${Theme.gray8};
-  margin-top: 7px;
-  font-family: ${Theme.baseFontFamily};
-  font-size: ${Theme.extraNormal};
-
-  input {
-    border: none;
-    background-color: ${Theme.gray8};
-
-    &:focus {
-      outline: none;
-    }
-  }
-`;

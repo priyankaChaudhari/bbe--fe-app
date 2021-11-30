@@ -168,7 +168,7 @@ export default function DSPPerformance({
                 {' '}
                 <div className="remaing-label">
                   {`Remaining Budget (${displayMonth()}):`}
-                  <span>
+                  <span style={{ fontWeight: 'bold' }}>
                     {' '}
                     {dspData?.dsp_pacing?.remaining_budget
                       ? `${
