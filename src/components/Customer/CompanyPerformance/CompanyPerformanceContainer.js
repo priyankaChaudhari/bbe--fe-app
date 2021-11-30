@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { arrayOf, shape, string } from 'prop-types';
+import { arrayOf, shape, string, func } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import PerformanceReport from './SellerReporting/PerformanceReport';
@@ -14,6 +14,7 @@ export default function CompanyPerformance({
   id,
   subViewComponent,
   memberData,
+  getActivityLogInfo,
 }) {
   const history = useHistory();
   const currentDate = new Date();
@@ -39,6 +40,7 @@ export default function CompanyPerformance({
               id={id}
               accountType={subViewComponent}
               memberData={memberData}
+              getActivityLogInfo={getActivityLogInfo}
             />
           )}
         </div>
@@ -93,6 +95,7 @@ CompanyPerformance.defaultProps = {
   id: '',
   subViewComponent: 'seller',
   memberData: [],
+  getActivityLogInfo: () => {},
 };
 
 CompanyPerformance.propTypes = {
@@ -100,4 +103,5 @@ CompanyPerformance.propTypes = {
   id: string,
   subViewComponent: string,
   memberData: arrayOf(shape({})),
+  getActivityLogInfo: func,
 };
