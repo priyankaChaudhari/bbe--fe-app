@@ -173,7 +173,7 @@ export default function DSPPerformance({
                     {dspData?.dsp_pacing?.remaining_budget
                       ? `${
                           dspData?.dsp_pacing?.remaining_budget < 0 ? '-' : ''
-                        }${currencySymbol} ${dspData?.dsp_pacing?.remaining_budget
+                        }${currencySymbol}${dspData?.dsp_pacing?.remaining_budget
                           .toFixed(2)
                           .toString()
                           .replace('-', '')
