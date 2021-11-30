@@ -542,6 +542,7 @@ export const CustomerListTabletView = styled.div`
         padding: 10px 4px 10px 12px;
         color: ${Theme.gray85};
         font-size: 14px;
+        width: max-content;
 
         &.agreement {
           border: 1px solid ${Theme.gray45};
@@ -664,5 +665,14 @@ export const CustomerListTabletView = styled.div`
   }
   @media (max-width: 767px) {
     padding-top: ${(props) => (props.showPerformance ? '360px' : '260px')};
+  }
+  @media only screen and (max-width: 370px) {
+    .recurring-contact {
+      .recurring-service {
+        .active-contract-icon {
+          display: table-cell;
+        }
+      }
+    }
   }
 `;
