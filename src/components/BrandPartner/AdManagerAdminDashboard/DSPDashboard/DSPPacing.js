@@ -36,9 +36,11 @@ const DSPPacing = ({
   const returnFormatedNumber = (value, type) => {
     const decimalDigits = 2;
     if (value) {
-      return `${type === 'currency' ? currencySymbol : ''}${value
+      return `${value < 0 ? '-' : ''}${
+        type === 'currency' ? currencySymbol : ''
+      }${value
         .toFixed(decimalDigits)
-        .toString()
+        .replace('-', '')
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${
         type === 'percentage' ? '%' : ''
       }`;

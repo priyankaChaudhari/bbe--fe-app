@@ -33,7 +33,7 @@ import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { dateOptions, noGraphDataMessage } from '../../../../constants';
 
 const currentDate = new Date();
-currentDate.setDate(currentDate.getDate() - 2);
+currentDate.setDate(currentDate.getDate() - 1);
 const month = dayjs(currentDate).format('MMMM');
 
 const DSPDashboard = ({ marketplaceChoices, userInfo }) => {

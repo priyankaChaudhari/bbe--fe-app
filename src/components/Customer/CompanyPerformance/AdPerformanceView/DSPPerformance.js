@@ -170,13 +170,15 @@ export default function DSPPerformance({
                   {`Remaining Budget (${displayMonth()}):`}
                   <span>
                     {' '}
-                    {currencySymbol}
                     {dspData?.dsp_pacing?.remaining_budget
-                      ? dspData?.dsp_pacing?.remaining_budget
+                      ? `${
+                          dspData?.dsp_pacing?.remaining_budget < 0 ? '-' : ''
+                        }${currencySymbol} ${dspData?.dsp_pacing?.remaining_budget
                           .toFixed(2)
                           .toString()
-                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                      : 0}
+                          .replace('-', '')
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                      : `${currencySymbol}0`}
                   </span>
                 </div>{' '}
               </div>

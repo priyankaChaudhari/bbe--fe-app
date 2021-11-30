@@ -65,7 +65,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const [pageNumber, setPageNumber] = useState();
   const [contributionCount, setContributionCount] = useState(null);
   const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 2);
+  currentDate.setDate(currentDate.getDate() - 1);
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
   const tab = isAdManagerAdmin || isBGSAdmin ? 'positive' : 'contribution';
   const [selectedContributionOption, setSelectedContributionOption] = useState(

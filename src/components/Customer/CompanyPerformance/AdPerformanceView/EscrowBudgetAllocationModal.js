@@ -182,7 +182,7 @@ export default function EscrowBudgetAllocationModal({
                     Escrow Balance
                   </div>{' '}
                   <div className="remaing-label text-bold float-right">
-                    {addThousandSeperator(escrowBalance)}
+                    {addThousandSeperator(escrowBalance, 'currency')}
                   </div>
                   <div className="clear-fix" />
                 </AllocateBar>

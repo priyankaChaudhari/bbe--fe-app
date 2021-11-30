@@ -77,7 +77,7 @@ export default function AdPerformance({
   const [dspDifference, setDspDifference] = useState([]);
   const [isCustomDateApply, setIsCustomDateApply] = useState(false);
   const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 2);
+  currentDate.setDate(currentDate.getDate() - 1);
   const [adState, setAdState] = useState([
     {
       startDate: currentDate,
