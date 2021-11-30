@@ -440,7 +440,6 @@ export const WhiteCard = styled.div`
     margin: 0;
     list-style-type: none;
     display: inline-block;
-    /* width: max-content; */
 
     li {
       display: inline-block;
