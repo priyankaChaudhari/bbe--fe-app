@@ -350,6 +350,7 @@ const Table = styled.table`
         padding: 0;
         margin: 0;
         list-style-type: none;
+        width: max-content;
 
         li {
           display: inline-block;
@@ -368,6 +369,7 @@ const Table = styled.table`
             padding: 10px 4px 10px 12px;
             color: #171725;
             font-size: 14px;
+            width: max-content;
 
             &.agreement {
               border: 1px solid ${Theme.gray45};
