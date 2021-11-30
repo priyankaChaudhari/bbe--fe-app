@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { arrayOf, instanceOf, shape, string } from 'prop-types';
-
 import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
 import AdPerformanceFilters from './AdPerformanceFilters';
@@ -55,6 +55,7 @@ export default function AdPerformance({
   const [showDspAdPacingModal, setShowDspAdPacingModal] = useState({
     show: false,
   });
+  const [showDspBudgetModal, setShowDspBudgetModal] = useState(false);
   const [adGroupBy, setAdGroupBy] = useState('daily');
   const [performancePacingFlag, setPerformancePacingFlag] = useState(
     'performance',
@@ -114,6 +115,25 @@ export default function AdPerformance({
       borderRadius: '1px !important',
     },
   };
+
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
+  useEffect(() => {
+    if (userInfo.role === 'Ad Manager Admin') {
+      setIsAllowToSplitBalance(true);
+    } else if (
+      userInfo.role === 'Hybrid Ad Manager' ||
+      userInfo.role === 'DSP Ad Manager' ||
+      userInfo.role === 'BGS'
+    ) {
+      for (const user of memberData) {
+        if (user.user === userInfo.id) {
+          setIsAllowToSplitBalance(true);
+          break;
+        }
+      }
+    }
+  }, [isAllowToSplitBalance, memberData, userInfo]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
@@ -1081,12 +1101,14 @@ export default function AdPerformance({
           currencySymbol={currencySymbol}
           customerId={id}
           marketplace={selectedMarketplace}
-          memberData={memberData}
           onModalClose={() => {
             getDSPPacing(selectedMarketplace);
             if (performancePacingFlag !== 'performance')
               getPacingGraphData(selectedMarketplace);
           }}
+          isAllowToSplitBalance={isAllowToSplitBalance}
+          showDspBudgetModal={showDspBudgetModal}
+          setShowDspBudgetModal={setShowDspBudgetModal}
         />
       </Modal>
     );
@@ -1150,6 +1172,8 @@ export default function AdPerformance({
           noGraphDataMessage={noGraphDataMessage}
           performancePacingFlag={performancePacingFlag}
           handlePeformancePacing={handlePeformancePacingFlag}
+          isAllowToSplitBalance={isAllowToSplitBalance}
+          setShowDspBudgetModal={setShowDspBudgetModal}
         />
       ) : null}
 

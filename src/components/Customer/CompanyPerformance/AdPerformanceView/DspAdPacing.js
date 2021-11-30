@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
-import { useSelector } from 'react-redux';
 import dayjs from 'dayjs';
-import PropTypes, { arrayOf, func, shape, string } from 'prop-types';
+import { bool, func, shape, string } from 'prop-types';
 import styled from 'styled-components';
 
 import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
@@ -17,30 +16,14 @@ export default function DspAdPacing({
   customerId,
   marketplace,
   onModalClose,
-  memberData,
+  isAllowToSplitBalance,
+  showDspBudgetModal,
+  setShowDspBudgetModal,
 }) {
-  const userInfo = useSelector((state) => state.userState.userInfo);
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
-    false,
+    showDspBudgetModal,
   );
   const dspPacing = dspData?.dsp_pacing;
-  const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
-  useEffect(() => {
-    if (userInfo.role === 'Ad Manager Admin') {
-      setIsAllowToSplitBalance(true);
-    } else if (
-      userInfo.role === 'Hybrid Ad Manager' ||
-      userInfo.role === 'DSP Ad Manager' ||
-      userInfo.role === 'BGS'
-    ) {
-      for (const user of memberData) {
-        if (user.user === userInfo.id) {
-          setIsAllowToSplitBalance(true);
-          break;
-        }
-      }
-    }
-  }, [isAllowToSplitBalance, memberData, userInfo]);
 
   const addThousandSeperator = (value, type = '') => {
     if (value && value !== null && value !== 0) {
@@ -355,6 +338,7 @@ export default function DspAdPacing({
         addThousandSeperator={addThousandSeperator}
         onClick={() => {
           setShowAllocatedBalanceModal(false);
+          setShowDspBudgetModal(false);
           onModalClose();
         }}
       />
@@ -461,21 +445,25 @@ const DspAdPacingModal = styled.div`
 `;
 
 DspAdPacing.defaultProps = {
-  dspData: {},
+  isAllowToSplitBalance: false,
   isDspPacingLoading: false,
+  showDspBudgetModal: false,
   currencySymbol: '',
   customerId: '',
   marketplace: '',
-  memberData: [],
+  dspData: {},
   onModalClose: () => {},
+  setShowDspBudgetModal: () => {},
 };
 
 DspAdPacing.propTypes = {
+  isAllowToSplitBalance: bool,
+  isDspPacingLoading: bool,
+  showDspBudgetModal: bool,
   customerId: string,
   marketplace: string,
+  currencySymbol: string,
   dspData: shape({}),
-  memberData: arrayOf(shape({})),
-  isDspPacingLoading: PropTypes.bool,
-  currencySymbol: PropTypes.string,
   onModalClose: func,
+  setShowDspBudgetModal: func,
 };
