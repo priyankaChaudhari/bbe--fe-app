@@ -40,6 +40,8 @@ export default function DSPPerformance({
   noGraphDataMessage,
   performancePacingFlag,
   handlePeformancePacing,
+  isAllowToSplitBalance,
+  setShowDspBudgetModal,
 }) {
   const displayDspPacingLabel = () => {
     if (
@@ -125,6 +127,7 @@ export default function DSPPerformance({
               </span>
             </p>
           </div>
+
           <div className="col-md-5 col-sm1-12  mb-3 pl-0">
             <ToggleButton>
               <div className="days-container ">
@@ -161,7 +164,7 @@ export default function DSPPerformance({
             </ToggleButton>
           </div>
         </div>
-        {dspData && dspData.dsp_pacing ? (
+        {dspData && dspData.dsp_pacing && isAllowToSplitBalance ? (
           <AllocateBar className="mb-4">
             <div className="row">
               <div className="col-8">
@@ -186,7 +189,10 @@ export default function DSPPerformance({
                 <div
                   className="allocate-balance cursor"
                   role="presentation"
-                  onClick={() => setShowDspAdPacingModal({ show: true })}>
+                  onClick={() => {
+                    setShowDspAdPacingModal({ show: true });
+                    setShowDspBudgetModal(true);
+                  }}>
                   Allocate Balance{' '}
                   <img
                     className="orange-left-arrow"
@@ -373,26 +379,6 @@ export default function DSPPerformance({
           ) : (
             <NoData>{noGraphDataMessage}</NoData>
           )}
-          {/* {dspPacingGraphLoader ? (
-            <PageLoader
-              component="performance-graph"
-              color="#FF5933"
-              type="detail"
-              width={40}
-              height={40}
-            />
-          ) : (
-            <DspPacingBarGraph
-              chartId="dspPacingBarGraph"
-              chartData={dspPacingChartData}
-              currencySymbol={currencySymbol}
-            />
-          )} */}
-          {/* <DspPacingBarGraph
-            chartId="dspPacingBarGraph"
-            chartData={dspPacingChartData}
-            currencySymbol={currencySymbol}
-          /> */}
         </>
       )}
     </WhiteCard>
@@ -400,47 +386,51 @@ export default function DSPPerformance({
 }
 
 DSPPerformance.defaultProps = {
+  isAllowToSplitBalance: false,
+  dspGraphLoader: false,
+  performancePacingFlag: 'performance',
+  dspGroupBy: '',
   dspData: {},
-  setShowDspAdPacingModal: () => {},
   selectedDspBox: {},
   dspFilters: {},
-  handleDSPGroupBy: () => {},
-  dspGroupBy: '',
   selectedAdDF: {},
   currencySymbol: {},
   dspCurrentTotal: {},
   dspDifference: {},
   dspPreviousTotal: {},
-  setBoxToggle: () => {},
-  setBoxClasses: () => {},
-  dspGraphLoader: {},
   dspChartData: {},
   dspPacingChartData: {},
   noGraphDataMessage: {},
-  performancePacingFlag: 'performance',
   handlePeformancePacing: () => {},
+  setBoxToggle: () => {},
+  setBoxClasses: () => {},
+  handleDSPGroupBy: () => {},
+  setShowDspAdPacingModal: () => {},
+  setShowDspBudgetModal: () => {},
 };
 
 DSPPerformance.propTypes = {
+  isAllowToSplitBalance: bool,
+  dspGraphLoader: bool,
+  dspGroupBy: string,
+  currencySymbol: string,
+  noGraphDataMessage: string,
+  performancePacingFlag: string,
   dspData: instanceOf(Object),
-  setShowDspAdPacingModal: func,
   selectedDspBox: instanceOf(Object),
   dspFilters: instanceOf(Object),
-  handleDSPGroupBy: func,
-  dspGroupBy: string,
   selectedAdDF: instanceOf(Object),
-  currencySymbol: string,
   dspCurrentTotal: instanceOf(Object),
   dspDifference: instanceOf(Object),
   dspPreviousTotal: instanceOf(Object),
-  setBoxToggle: func,
-  setBoxClasses: func,
-  dspGraphLoader: bool,
   dspChartData: arrayOf(Array),
   dspPacingChartData: arrayOf(Array),
-  noGraphDataMessage: string,
-  performancePacingFlag: string,
-  handlePeformancePacing: () => {},
+  setShowDspAdPacingModal: func,
+  handleDSPGroupBy: func,
+  setShowDspBudgetModal: func,
+  handlePeformancePacing: func,
+  setBoxToggle: func,
+  setBoxClasses: func,
 };
 
 const NoData = styled.div`
