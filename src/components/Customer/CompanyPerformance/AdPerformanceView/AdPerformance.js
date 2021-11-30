@@ -490,7 +490,7 @@ export default function AdPerformance({
           actualSpent: item.total_spend,
           actualSpentUsd: item.total_spend_converted_usd,
           dspPacingFlag: item.dsp_pacing_flag,
-          colorCode: item.dsp_pacing_flag === '1' ? '#d63649' : '#d6a307',
+          colorCode: item.dsp_pacing_flag === '0' ? '#d6a307' : '#d63649',
         });
       });
     }
