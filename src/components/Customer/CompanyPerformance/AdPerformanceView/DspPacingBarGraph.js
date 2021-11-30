@@ -27,56 +27,40 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     chart.current.cursor.lineY.disabled = true;
     chart.current.cursor.lineX.disabled = true;
     chart.current.cursor.behavior = 'none';
-    // custom tooltipHTML
-    function renderTooltipHTML() {
-      const tooltipHTML = `<div style="width:230px; padding:5px 5px 10px 5px"> 
-        <div style="padding:5px 0 10px 0;"><strong>{categoryY}</strong></div>
-        <ul style="padding:5px 0; margin:0; list-style-type:none;">
-          <li style="display:inline;">
-            <div style="display:inline-block; background-color:#8798ad; border: 1px solid white; border-radius:50%;
-            width:10px; height:10px;"></div>
-          </li>
-          <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:400; text-transform: uppercase;
-            padding:0 0 0 5px">INVOICE AMOUNT</li>
-          <li style="display:inline; float: right; font-size:14px;">${currencySymbol}{invoiceAmount}</li>
-          <li style="clear:both"></li>
-        </ul>
 
-        <ul style="padding:5px 0; margin:0; list-style-type:none;">
-          <li style="display:inline;">
-            <div style="display:inline-block; background-color:#30a8bd; border: 1px solid white; border-radius:50%;
-            width:10px; height:10px;"></div>
-          </li>
-          <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:400; text-transform: uppercase;
-            padding:0 0 0 5px">CARRY-OVER</li>
-          <li style="display:inline; float: right; font-size:14px;">${currencySymbol}{carryOver}</li>
-          <li style="clear:both"></li>          
-        </ul>
+    const htmlTooptip = `<div style="padding:5px 0 10px 0;"><strong>{categoryY}</strong></div>
+    <ul style="padding:5px 0; margin:0; list-style-type:none;">
+      <li style="display:inline;">
+        <div style="display:inline-block; background-color:#8798ad; border: 1px solid white; border-radius:50%;
+        width:10px; height:10px;"></div>
+      </li>
+      <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:400; text-transform: uppercase;
+        padding:0 0 0 5px">INVOICE AMOUNT</li>
+      <li style="display:inline; float: right; font-size:14px;">${currencySymbol}{invoiceAmount}</li>
+      <li style="clear:both"></li>
+    </ul>
+    <ul style="padding:5px 0; margin:0; list-style-type:none;">
+      <li style="display:inline;">
+        <div style="display:inline-block; background-color:#30a8bd; border: 1px solid white; border-radius:50%;
+        width:10px; height:10px;"></div>
+      </li>
+      <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:400; text-transform: uppercase;
+        padding:0 0 0 5px">CARRY-OVER</li>
+      <li style="display:inline; float: right; font-size:14px;">${currencySymbol}{carryOver}</li>
+      <li style="clear:both"></li>
+    </ul>
 
-        <ul style="padding:5px 0; margin:0; list-style-type:none;">
-          <li style="display:inline;">
-            <div style="display:inline-block; background-color:#2E384D; border: 0px; border-radius:50%;
-            width:10px; height:10px;"></div>
-          </li>
-          <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:bold; text-transform: uppercase;
-            padding:0 0 0 5px">INITIAL TOTAL BUDGET</li>
-          <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${currencySymbol}{totalInitialBudget}</li>
-          <li style="clear:both"></li>          
-        </ul>
-        ${
-          `{actualSpent}` !== null
-            ? `<hr style="height:1px !important; background-color:#ffffff; font-weight:400; opacity:0.5" />
-        <ul style="padding:5px 0; margin:0; list-style-type:none; width:100%;">
-          <li style="display:inline; color:#ffffff !important;  border-left:2px solid #ffffff; font-size:11px;
-              font-weight:bold; text-transform: uppercase; padding: 3px 10px; margin-left:5px">ACTUAL SPENT</li>
-          <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${currencySymbol}{actualSpent}</li>
-          <li style="clear:both"></li>
-        </ul>`
-            : ''
-        }
-      </div>`;
-      return tooltipHTML;
-    }
+    <ul style="padding:5px 0; margin:0; list-style-type:none;">
+      <li style="display:inline;">
+        <div style="display:inline-block; background-color:#2E384D; border: 0px; border-radius:50%;
+        width:10px; height:10px;"></div>
+      </li>
+      <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:bold; text-transform: uppercase;
+        padding:0 0 0 5px">INITIAL TOTAL BUDGET</li>
+      <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${currencySymbol}{totalInitialBudget}</li>
+      <li style="clear:both"></li>
+    </ul>`;
+
     // create category axis
     const categoryAxis = chart.current.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.renderer.grid.template.disabled = true;
@@ -111,13 +95,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series1.columns.template.fill = am4core.color('#8798ad');
     series1.columns.template.column.cornerRadius(0, 10, 0, 10);
     series1.columns.template.strokeWidth = 0;
-    series1.tooltipHTML = renderTooltipHTML();
-    series1.tooltip.getFillFromObject = false;
-    series1.tooltip.background.fill = am4core.color('#2E384D');
-    series1.tooltip.background.fillOpacity = 1;
-    series1.tooltip.background.strokeWidth = 0;
-    series1.tooltip.background.filters.clear();
-    series1.tooltip.background.cornerRadius = 10;
+
     // create series for carry over
     const series2 = chart.current.series.push(new am4charts.ColumnSeries());
     series2.columns.template.height = am4core.percent(20);
@@ -128,6 +106,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series2.columns.template.fill = am4core.color('#30a8bd');
     series2.columns.template.column.cornerRadius(10, 10, 10, 10);
     series2.columns.template.strokeWidth = 0;
+
     // create series for actual spent
     const series3 = chart.current.series.push(new am4charts.ColumnSeries());
     series3.columns.template.height = am4core.percent(80);
@@ -139,6 +118,35 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series3.columns.template.propertyFields.fill = 'colorCode';
     series3.columns.template.fillOpacity = 0.1;
     series3.columns.template.strokeWidth = 0;
+
+    series3.tooltip.getFillFromObject = false;
+    series3.tooltip.background.fill = am4core.color('#2E384D');
+    series3.tooltip.background.fillOpacity = 1;
+    series3.tooltip.background.strokeWidth = 0;
+    series3.tooltip.background.filters.clear();
+    series3.tooltip.background.cornerRadius = 10;
+    series3.columns.template.adapter.add(
+      'tooltipHTML',
+      function (text, target) {
+        if (target.dataItem) {
+          if (target.dataItem.valueX > 0) {
+            return `<div style="width:250px; padding:5px 5px 10px 5px">
+            ${htmlTooptip}
+            <hr style="height:1px !important; background-color:#ffffff; font-weight:400; opacity:0.5" />
+            <ul style="padding:5px 0; margin:0; list-style-type:none; width:100%;">
+              <li style="display:inline; color:#ffffff !important;  border-left:2px solid #ffffff; font-size:11px;
+                  font-weight:bold; text-transform: uppercase; padding: 3px 10px; margin-left:5px">ACTUAL SPENT</li>
+              <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${currencySymbol}{actualSpent}</li>
+              <li style="clear:both"></li>
+            </ul>
+          </div>`;
+          }
+        }
+        return `<div style="width:250px; padding:5px 5px 10px 5px">
+            ${htmlTooptip}
+          </div>`;
+      },
+    );
 
     // color bullets for actual spent series 3
     const valueLabel = series3.columns.template.createChild(am4core.Label);
