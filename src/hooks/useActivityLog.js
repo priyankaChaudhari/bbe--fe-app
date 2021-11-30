@@ -371,6 +371,37 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
+    // for  reallocated escrow balance activity
+    if (item.history_change_reason.includes('reallocated')) {
+      activityMessage = item.history_change_reason?.split('reallocated');
+      [logUser, field] = activityMessage;
+      if (field.includes('worth of escrow from')) {
+        [oldValue, newValue] = field.split('worth of escrow from');
+        const splittedNewValue = newValue.split('to');
+        const [oldMonth, newMonth] = splittedNewValue;
+        return (
+          <>
+            {logUser}
+            <span>reallocated</span>
+            {oldValue}
+            <span>worth of escrow from</span>
+            {oldMonth}
+            <span>to</span>
+            {newMonth}
+          </>
+        );
+      }
+      [oldValue, newValue] = field.split('worth of escrow to');
+      return (
+        <>
+          {logUser}
+          <span>reallocated</span>
+          {oldValue}
+          <span>worth of escrow to</span>
+          {newValue}
+        </>
+      );
+    }
     return item && item.history_change_reason ? item.history_change_reason : '';
   };
   return activityDetail;
