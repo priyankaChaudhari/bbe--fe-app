@@ -3,10 +3,17 @@ import React from 'react';
 import dayjs from 'dayjs';
 import styled from 'styled-components';
 import { arrayOf, bool, func, instanceOf, string } from 'prop-types';
+
 import DSPPerformanceChart from './DSPPerformanceChart';
+import DspPacingBarGraph from './DspPacingBarGraph';
 import DSPMetrics from '../../../BrandPartner/AdManagerAdminDashboard/DSPDashboard/DSPMetrics';
-import { ArrowRightBlackIcon } from '../../../../theme/images';
-import { PageLoader, WhiteCard,ToggleButton } from '../../../../common';
+import { ArrowRightBlackIcon, LeftArrowIcon } from '../../../../theme/images';
+import {
+  PageLoader,
+  WhiteCard,
+  ToggleButton,
+  AllocateBar,
+} from '../../../../common';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -29,7 +36,10 @@ export default function DSPPerformance({
   setBoxClasses,
   dspGraphLoader,
   dspChartData,
+  dspPacingChartData,
   noGraphDataMessage,
+  performancePacingFlag,
+  handlePeformancePacing,
 }) {
   const displayDspPacingLabel = () => {
     if (
@@ -38,7 +48,7 @@ export default function DSPPerformance({
       dspData.dsp_pacing.dsp_pacing_flag === '1'
     ) {
       return (
-        <span>
+        <>
           Overspending
           <img
             className="right-arrow-icon"
@@ -46,7 +56,7 @@ export default function DSPPerformance({
             src={ArrowRightBlackIcon}
             alt="arrow"
           />
-        </span>
+        </>
       );
     }
     if (
@@ -94,6 +104,103 @@ export default function DSPPerformance({
       return dayjs(new Date(todayDate)).format('MMMM');
     }
     return dayjs(new Date()).format('MMMM');
+  };
+
+  const renderDspAdHeaderSection = () => {
+    return (
+      <>
+        <div className="row">
+          <div className="col-md-7  col-sm1-12 pr-0">
+            {' '}
+            <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
+            <p className="gray-normal-text mb-4 mt-1">
+              {dspData && dspData.dsp_pacing
+                ? `Monthly Budget Pacing ( ${displayMonth()} )`
+                : ''}{' '}
+              <span
+                className="orange-text"
+                role="presentation"
+                onClick={() => setShowDspAdPacingModal({ show: true })}>
+                {displayDspPacingLabel()}
+              </span>
+            </p>
+          </div>
+          <div className="col-md-5 col-sm1-12  mb-3 pl-0">
+            <ToggleButton>
+              <div className="days-container ">
+                <ul className="days-tab">
+                  <li id="BT-performance-toggle">
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="peformanceCheck"
+                      name="performanceRadioDefault"
+                      value={performancePacingFlag}
+                      checked={performancePacingFlag === 'performance'}
+                      onClick={() => handlePeformancePacing('performance')}
+                      onChange={() => {}}
+                    />
+                    <label htmlFor="peformanceCheck">Performance</label>
+                  </li>
+
+                  <li id="BT-pacing-toggle">
+                    <input
+                      className="d-none"
+                      type="radio"
+                      id="pacingCheck"
+                      name="pacingRadioDefault"
+                      value={performancePacingFlag}
+                      checked={performancePacingFlag === 'pacing'}
+                      onClick={() => handlePeformancePacing('pacing')}
+                      onChange={() => {}}
+                    />
+                    <label htmlFor="pacingCheck">Pacing</label>
+                  </li>
+                </ul>
+              </div>
+            </ToggleButton>
+          </div>
+        </div>
+        {dspData && dspData.dsp_pacing ? (
+          <AllocateBar className="mb-4">
+            <div className="row">
+              <div className="col-8">
+                {' '}
+                <div className="remaing-label">
+                  {`Remaining Budget (${displayMonth()}):`}
+                  <span>
+                    {' '}
+                    {dspData?.dsp_pacing?.remaining_budget
+                      ? `${
+                          dspData?.dsp_pacing?.remaining_budget < 0 ? '-' : ''
+                        }${currencySymbol} ${dspData?.dsp_pacing?.remaining_budget
+                          .toFixed(2)
+                          .toString()
+                          .replace('-', '')
+                          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                      : `${currencySymbol}0`}
+                  </span>
+                </div>{' '}
+              </div>
+              <div className="col-4">
+                <div
+                  className="allocate-balance cursor"
+                  role="presentation"
+                  onClick={() => setShowDspAdPacingModal({ show: true })}>
+                  Allocate Balance{' '}
+                  <img
+                    className="orange-left-arrow"
+                    src={LeftArrowIcon}
+                    alt=""
+                  />
+                </div>
+                <div className="clear-fix" />
+              </div>
+            </div>
+          </AllocateBar>
+        ) : null}
+      </>
+    );
   };
 
   const renderDSPGroupBy = () => {
@@ -212,52 +319,81 @@ export default function DSPPerformance({
 
   return (
     <WhiteCard className="mt-3 mb-3">
-      <div className="row">
-        <div className="col-12">
-          {' '}
-          <p className="black-heading-title mt-3 mb-0"> DSP Ad Performance</p>
-          <p className="gray-normal-text mb-4 mt-1">
-            {dspData && dspData.dsp_pacing
-              ? `Monthly Budget Pacing ( ${displayMonth()} )`
-              : ''}{' '}
-            <span
-              className="orange-text"
-              role="presentation"
-              onClick={() => setShowDspAdPacingModal({ show: true })}>
-              {displayDspPacingLabel()}
-            </span>
-          </p>
-        </div>
-      </div>
-      <div className="row mr-1 ml-1">
-        <DSPMetrics
-          currencySymbol={currencySymbol}
-          dspCurrentTotal={dspCurrentTotal}
-          dspDifference={dspDifference}
-          dspPreviousTotal={dspPreviousTotal}
-          setBoxToggle={setBoxToggle}
-          setBoxClasses={setBoxClasses}
-        />
-      </div>
-      {renderDSPGroupBy()}
-      {dspGraphLoader ? (
-        <PageLoader
-          component="performance-graph"
-          color="#FF5933"
-          type="detail"
-          width={40}
-          height={40}
-        />
-      ) : dspChartData.length >= 1 ? (
-        <DSPPerformanceChart
-          chartId="dspChart"
-          chartData={dspChartData}
-          currencySymbol={currencySymbol}
-          selectedBox={selectedDspBox}
-          selectedDF={selectedAdDF.value}
-        />
+      {renderDspAdHeaderSection()}
+
+      {performancePacingFlag === 'performance' ? (
+        <>
+          <div className="row mr-1 ml-1">
+            <DSPMetrics
+              currencySymbol={currencySymbol}
+              dspCurrentTotal={dspCurrentTotal}
+              dspDifference={dspDifference}
+              dspPreviousTotal={dspPreviousTotal}
+              setBoxToggle={setBoxToggle}
+              setBoxClasses={setBoxClasses}
+            />
+          </div>
+          {renderDSPGroupBy()}
+          {dspGraphLoader ? (
+            <PageLoader
+              component="performance-graph"
+              color="#FF5933"
+              type="detail"
+              width={40}
+              height={40}
+            />
+          ) : dspChartData.length >= 1 ? (
+            <DSPPerformanceChart
+              chartId="dspChart"
+              chartData={dspChartData}
+              currencySymbol={currencySymbol}
+              selectedBox={selectedDspBox}
+              selectedDF={selectedAdDF.value}
+            />
+          ) : (
+            <NoData>{noGraphDataMessage}</NoData>
+          )}
+        </>
       ) : (
-        <NoData>{noGraphDataMessage}</NoData>
+        <>
+          {dspGraphLoader ? (
+            <PageLoader
+              component="performance-graph"
+              color="#FF5933"
+              type="detail"
+              width={40}
+              height={40}
+            />
+          ) : dspPacingChartData.length >= 1 ? (
+            <DspPacingBarGraph
+              chartId="dspPacingBarGraph"
+              chartData={dspPacingChartData}
+              currencySymbol={currencySymbol}
+            />
+          ) : (
+            <NoData>{noGraphDataMessage}</NoData>
+          )}
+          {/* {dspPacingGraphLoader ? (
+            <PageLoader
+              component="performance-graph"
+              color="#FF5933"
+              type="detail"
+              width={40}
+              height={40}
+            />
+          ) : (
+            <DspPacingBarGraph
+              chartId="dspPacingBarGraph"
+              chartData={dspPacingChartData}
+              currencySymbol={currencySymbol}
+            />
+          )} */}
+          {/* <DspPacingBarGraph
+            chartId="dspPacingBarGraph"
+            chartData={dspPacingChartData}
+            currencySymbol={currencySymbol}
+          /> */}
+        </>
       )}
     </WhiteCard>
   );
@@ -279,7 +415,10 @@ DSPPerformance.defaultProps = {
   setBoxClasses: () => {},
   dspGraphLoader: {},
   dspChartData: {},
+  dspPacingChartData: {},
   noGraphDataMessage: {},
+  performancePacingFlag: 'performance',
+  handlePeformancePacing: () => {},
 };
 
 DSPPerformance.propTypes = {
@@ -298,7 +437,10 @@ DSPPerformance.propTypes = {
   setBoxClasses: func,
   dspGraphLoader: bool,
   dspChartData: arrayOf(Array),
+  dspPacingChartData: arrayOf(Array),
   noGraphDataMessage: string,
+  performancePacingFlag: string,
+  handlePeformancePacing: () => {},
 };
 
 const NoData = styled.div`

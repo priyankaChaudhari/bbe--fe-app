@@ -13,6 +13,7 @@ export default function CompanyPerformance({
   marketplaceChoices,
   id,
   subViewComponent,
+  memberData,
 }) {
   const history = useHistory();
   const currentDate = new Date();
@@ -37,6 +38,7 @@ export default function CompanyPerformance({
               marketplaceChoices={marketplaceChoices}
               id={id}
               accountType={subViewComponent}
+              memberData={memberData}
             />
           )}
         </div>
@@ -90,10 +92,12 @@ CompanyPerformance.defaultProps = {
   marketplaceChoices: [],
   id: '',
   subViewComponent: 'seller',
+  memberData: [],
 };
 
 CompanyPerformance.propTypes = {
   marketplaceChoices: arrayOf(shape({})),
   id: string,
   subViewComponent: string,
+  memberData: arrayOf(shape({})),
 };

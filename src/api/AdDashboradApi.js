@@ -224,7 +224,7 @@ export async function getDspPacingDahboardData(
 
   let result = {};
   result = await axiosInstance
-    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}dsp-pacing/`, { params })
+    .get(`${API_AD_DASHBOARD}dsp-pacing-dashboard/`, { params })
     .then((response) => {
       return response;
     })

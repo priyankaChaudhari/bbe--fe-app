@@ -30,7 +30,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     value: 'orderedRevenue',
     label: 'Ordered Revenue',
   });
-  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
+  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState([]);
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() - 3);
   const [state, setState] = useState([

@@ -65,7 +65,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const [pageNumber, setPageNumber] = useState();
   const [contributionCount, setContributionCount] = useState(null);
   const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 2);
+  currentDate.setDate(currentDate.getDate() - 1);
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
   const tab = isAdManagerAdmin || isBGSAdmin ? 'positive' : 'contribution';
   const [selectedContributionOption, setSelectedContributionOption] = useState(
@@ -593,11 +593,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     const diffDays = getDays(startDate, endDate);
     if (diffDays <= 30) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: true });
+      setAdFilters({ daily: true, weekly: false, month: false });
       setAdGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: true });
+      setAdFilters({ daily: true, weekly: true, month: false });
       setAdGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';
