@@ -5,6 +5,7 @@ import { bool, func } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import { CloseIcon } from '../../../../../theme/images';
+import { commissionsTableheader } from '../../../../../constants';
 import { CommissionResseque } from '../BGSComissionContainerStyle';
 
 import {
@@ -84,44 +85,12 @@ const BrandPartnerModal = ({ showModal, setShowModal }) => {
                 <TableGap>
                   <table>
                     <thead style={{ width: '100%', display: 'table' }}>
-                      {/* <tr className="overlay-modal-header">
-                    {commissionsTableHeaders.map((header) => (
-                      <th className="text-left">{header}</th>
-                    ))}
-                  </tr> */}
                       <tr className="overlay-modal-header">
-                        <th width="10%" className=" text-left">
-                          team member
-                        </th>
-                        <th width="10%" className=" text-left">
-                          retainer
-                        </th>
-                        <th width="10%" className=" text-left">
-                          rev share
-                        </th>
-                        <th width="5%" className=" text-left">
-                          dsp
-                        </th>
-                        <th width="12%" className=" text-left">
-                          {' '}
-                          total book size
-                        </th>
-                        <th width="15%" className=" text-left">
-                          {' '}
-                          BOOK Size commission
-                        </th>
-                        <th width="8%" className=" text-left">
-                          {' '}
-                          upsells
-                        </th>
-                        <th width="12%" className=" text-left">
-                          {' '}
-                          Upsells commission
-                        </th>
-                        <th width="10%" className=" text-left">
-                          {' '}
-                          total commission
-                        </th>
+                        {commissionsTableheader.map((header) => (
+                          <th width={header.width} className=" text-left">
+                            {header.label}
+                          </th>
+                        ))}
                       </tr>
                     </thead>
                     <tbody style={{ width: '100%', display: 'table' }}>
