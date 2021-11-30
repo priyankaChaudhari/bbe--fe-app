@@ -39,6 +39,7 @@ export default function DSPPerformanceChart({
     chart.current.data = chartData;
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
+    chart.current.zoomOutButton.disabled = true;
     // render X axis
     const dateAxis = chart.current.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;

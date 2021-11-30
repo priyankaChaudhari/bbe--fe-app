@@ -722,6 +722,9 @@ button:disabled {
 
   .modal-body {
     padding: 25px 32px 30px 32px;
+    &.escrow {
+       padding: 25px 20px 30px 20px;
+    }
   }
 
   .edit-profiles {

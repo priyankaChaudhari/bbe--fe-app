@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 const ErrorMsgBox = styled.div`
   color: ${Theme.red};
   background-color: #fbf2f2;
-  padding: 9px 15px 11px 15px;
+  padding: 9px 13px 11px 13px;
   border-radius: 4px;
   font-weight: 500;
   text-align: left;
