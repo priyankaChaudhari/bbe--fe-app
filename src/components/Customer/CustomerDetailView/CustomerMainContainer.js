@@ -431,6 +431,7 @@ export default function CustomerMainContainer() {
                       id={id}
                       subViewComponent={subViewComponent}
                       memberData={memberData}
+                      getActivityLogInfo={getActivityLogInfo}
                     />
                   ) : viewComponent === 'billing' ? (
                     <BillingContainer
