@@ -9,6 +9,7 @@ import {
   API_SALES_DASHBOARD,
   metricsNameForAPI,
   API_BGS_COMMISSION_DASHBOARD,
+  API_BGS_COMMISSION_DETAILS,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -596,6 +597,24 @@ export async function getBgsCommissionData(date) {
 
   const result = await axiosInstance
     .get(`${API_BGS_COMMISSION_DASHBOARD}finance-detail/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsBrandPartners(BgsID, startDate, endDate, orderBy) {
+  const params = {
+    start_date: startDate,
+    end_date: endDate,
+    'order-by': orderBy,
+  };
+
+  const result = await axiosInstance
+    .get(`${API_BGS_COMMISSION_DETAILS + BgsID}/`, { params })
     .then((response) => {
       return response;
     })
