@@ -1,6 +1,8 @@
-import { number, oneOfType, string } from 'prop-types';
 import React from 'react';
+
 import ReactTooltip from 'react-tooltip';
+
+import { number, oneOfType, string } from 'prop-types';
 
 import styled from 'styled-components';
 
@@ -206,5 +208,5 @@ Card.propTypes = {
   noBillText: string,
   totalBillText: string,
   type: string,
-  breakDown: 'string',
+  breakDown: string,
 };
