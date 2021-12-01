@@ -117,14 +117,3 @@ export const brandPartners = [
     total_commission: 17664.15,
   },
 ];
-
-export const totalOfPartner = {
-  retainer: 62991.53,
-  rev_share: 46077.72,
-  dsp: 157784.48,
-  total_book_size: 88113.87,
-  total_book_size_commission: 103621.17,
-  upsell: 147263.44,
-  total_commission: 107369.79,
-  upsell_commission: 156046.14,
-};

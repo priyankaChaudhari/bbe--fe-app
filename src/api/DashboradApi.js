@@ -606,11 +606,10 @@ export async function getBgsCommissionData(date) {
   return result;
 }
 
-export async function getBgsBrandPartners(BgsID, startDate, endDate, orderBy) {
+export async function getBgsBrandPartners(BgsID, startDate, endDate) {
   const params = {
     start_date: startDate,
     end_date: endDate,
-    'order-by': orderBy,
   };
 
   const result = await axiosInstance
