@@ -107,7 +107,7 @@ export default function EscrowBudgetAllocationModal({
                   className={
                     !index ? ' disabled form-control ' : 'form-control '
                   }
-                  value={dayjs(item.month_year).format('MMMM')}
+                  value={dayjs(item.month_year).format('MMMM YYYY')}
                   type="text"
                   readOnly
                 />
@@ -219,7 +219,7 @@ export default function EscrowBudgetAllocationModal({
             {isEscrowbalanceExceed ? (
               <ErrorMsgBox className="mt-2">
                 <img className="info-icon" src={InfoRedIcon} alt="info" /> All
-                budges across the selected months need to add up to the
+                budgets across the selected months need to add up to the
                 available escrow balance
               </ErrorMsgBox>
             ) : null}
