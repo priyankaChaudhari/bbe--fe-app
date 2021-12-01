@@ -15,16 +15,12 @@ import {
   TableGap,
 } from '../../../../../common';
 
-// Remove this after actual integration
-import { brandPartners, totalOfPartner } from '../dummydata';
-
 const BrandPartnerModal = ({
   showModal,
   setShowModal,
   BgsID,
   startDate,
   endDate,
-  orderBy,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
 
@@ -58,22 +54,22 @@ const BrandPartnerModal = ({
   };
 
   const [isLoading, setIsLoading] = useState(true);
-  // const [brandPartners, setBrandPartners] = useState(null);
+  const [brandPartners, setBrandPartners] = useState(null);
 
   useEffect(() => {
     setIsLoading(true);
-    getBgsBrandPartners(BgsID, startDate, endDate, orderBy).then((res) => {
+    getBgsBrandPartners(BgsID, startDate, endDate).then((res) => {
       if (res && (res.status === 400 || res.status === 404)) {
         setIsLoading(false);
       }
       if (res && res.status === 200) {
-        if (res.data && res.data) {
-          // setDSPData(res.data);
+        if (res?.data) {
+          setBrandPartners(res.data);
         }
       }
       setIsLoading(false);
     });
-  }, [BgsID, startDate, endDate, orderBy]);
+  }, [BgsID, startDate, endDate]);
 
   return (
     <Modal
@@ -127,7 +123,7 @@ const BrandPartnerModal = ({
                         </tr>
                       </thead>
                       <tbody style={{ width: '100%', display: 'table' }}>
-                        {brandPartners.map((partner) => (
+                        {brandPartners?.records.map((partner) => (
                           <tr className="partners" key={partner.id}>
                             <td width="10%">{partner.company_name}</td>
                             <td width="10%">{partner.retainer}</td>
@@ -146,21 +142,26 @@ const BrandPartnerModal = ({
                             </td>
                           </tr>
                         ))}
+
+                        {/* Brand Partners Total */}
+
                         <tr className="all-partners">
                           <td width="10%">All Partners</td>
-                          <td width="10%">{totalOfPartner.retainer}</td>
-                          <td width="10%">{totalOfPartner.rev_share}</td>
-                          <td width="5%">{totalOfPartner.dsp}</td>
-                          <td width="12%">{totalOfPartner.total_book_size}</td>
-                          <td width="15%" className="text-bold">
-                            {totalOfPartner.total_book_size_commission}
+                          <td width="10%">{brandPartners.total.retainer}</td>
+                          <td width="10%">{brandPartners.total.rev_share}</td>
+                          <td width="5%">{brandPartners.total.dsp}</td>
+                          <td width="12%">
+                            {brandPartners.total.total_book_size}
                           </td>
-                          <td width="8%">{totalOfPartner.upsell}</td>
+                          <td width="15%" className="text-bold">
+                            {brandPartners.total.total_book_size_commission}
+                          </td>
+                          <td width="8%">{brandPartners.total.upsell}</td>
                           <td width="12%" className="text-bold">
-                            {totalOfPartner.upsell_commission}
+                            {brandPartners.total.upsell_commission}
                           </td>
                           <td width="10%" className="text-bold">
-                            {totalOfPartner.total_commission}
+                            {brandPartners.total.total_commission}
                           </td>
                         </tr>
                       </tbody>
@@ -169,10 +170,11 @@ const BrandPartnerModal = ({
                 </div>
               </div>
             ) : (
-              // <div className="container-fluid">
+              // Tablet & Mobile View
+
               <div className="modal-body pt-0">
                 <div className="body-content ">
-                  {brandPartners.map((partner) => (
+                  {brandPartners?.records.map((partner) => (
                     <Fragment key={partner.id}>
                       <div className="straight-line horizontal-line mt-2 " />
                       <ul className="commission-Resseque mt-3">
@@ -203,19 +205,19 @@ const BrandPartnerModal = ({
                         <li>
                           <div className="label">BOOK Size Comm.</div>
                           <div className="label-info label-info-dark">
-                            {partner.book_size_commission}
+                            {partner.total_book_size_commission}
                           </div>
                         </li>
                         <li>
                           <div className="label">upsells </div>
                           <div className="label-info label-info-dark">
-                            {partner.upsells}
+                            {partner.upsell}
                           </div>
                         </li>
                         <li>
                           <div className="label">Upsells comm.</div>
                           <div className="label-info label-info-dark ">
-                            {partner.upsells_commission}
+                            {partner.upsell_commission}
                           </div>
                         </li>
                         <li>
@@ -231,53 +233,55 @@ const BrandPartnerModal = ({
                     <li>
                       <div className="label">Brand Partner</div>
                       <div className="label-info">
-                        {totalOfPartner.team_member}
+                        {brandPartners.total.team_member}
                       </div>
                     </li>
                     <li>
                       <div className="label">retainer</div>
                       <div className="label-info">
-                        {totalOfPartner.retainer}
+                        {brandPartners.total.retainer}
                       </div>
                     </li>
                     <li>
                       <div className="label">rev share</div>
                       <div className="label-info">
-                        {totalOfPartner.rev_share}
+                        {brandPartners.total.rev_share}
                       </div>
                     </li>
                     <li>
                       <div className="label">DSP</div>
-                      <div className="label-info">{totalOfPartner.dsp}</div>
+                      <div className="label-info">
+                        {brandPartners.total.dsp}
+                      </div>
                     </li>
                     <li>
                       <div className="label">total Book Size</div>
                       <div className="label-info ">
-                        {totalOfPartner.total_book_size}
+                        {brandPartners.total.total_book_size}
                       </div>
                     </li>
                     <li>
                       <div className="label">BOOK Size Comm.</div>
                       <div className="label-info label-info-dark">
-                        {totalOfPartner.book_size_commission}
+                        {brandPartners.total.book_size_commission}
                       </div>
                     </li>
                     <li>
                       <div className="label">upsells </div>
                       <div className="label-info label-info-dark">
-                        {totalOfPartner.upsells}
+                        {brandPartners.total.upsell}
                       </div>
                     </li>
                     <li>
                       <div className="label">Upsells comm.</div>
                       <div className="label-info label-info-dark ">
-                        {totalOfPartner.upsells_commission}
+                        {brandPartners.total.upsell_commission}
                       </div>
                     </li>
                     <li>
                       <div className="label">total commission</div>
                       <div className="label-info label-info-dark ">
-                        {totalOfPartner.total_commission}
+                        {brandPartners.total.total_commission}
                       </div>
                     </li>
                   </ul>
@@ -300,5 +304,4 @@ BrandPartnerModal.propTypes = {
   BgsID: string.isRequired,
   startDate: string.isRequired,
   endDate: string.isRequired,
-  orderBy: string.isRequired,
 };
