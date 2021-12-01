@@ -41,7 +41,12 @@ export default function EscrowBudgetAllocationModal({
   getActivityLogInfo,
 }) {
   const currentDate = new Date();
-  currentDate.setDate(1);
+  if (currentDate.getDate() === 1) {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+  } else {
+    currentDate.setDate(1);
+  }
+
   const dspPacing = dspData?.dsp_pacing;
   const escrowBalance = dspPacing?.escrow_converted_usd;
   const actualAllocatedMonths = dspPacing?.allocated_balance.length
@@ -145,9 +150,10 @@ export default function EscrowBudgetAllocationModal({
   };
 
   const handleOnAddAnotherMonth = () => {
-    const nextMonth = new Date();
+    const lastRecord = allocatedMonths[allocatedMonths.length - 1];
+    const nextMonth = new Date(lastRecord?.month_year);
     nextMonth.setDate(1);
-    nextMonth.setMonth(nextMonth.getMonth() + allocatedMonths.length);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
     setAllocatedMonths([
       ...allocatedMonths,
       {
