@@ -8,8 +8,8 @@ import {
   API_CUSTOMER_CONTRACT,
   API_SALES_DASHBOARD,
   metricsNameForAPI,
-  API_BGS_COMMISSION_DASHBOARD,
   API_BGS_COMMISSION_DETAILS,
+  API_BGS_COMMISSION,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -586,17 +586,45 @@ export async function setEnableInvoices(id) {
   return result;
 }
 
-export async function getBgsCommissionData(date) {
+export async function getBgsCommissionTableIndividualsData(date) {
   const params = {
-    start_month_year: `${date[0].getMonth() + 1}-${date[0].getFullYear()}`,
-    end_month_year: `${date[1].getMonth() + 1}-${date[1].getFullYear()}`,
-    // group_by: groupBy,
+    start_date: `${date[0].getFullYear()}-${
+      date[0].getMonth() + 1
+    }-${date[0].getDate()}`,
+    end_date: `${date[1].getFullYear()}-${
+      date[1].getMonth() + 1
+    }-${date[1].getDate()}`,
+    'order-by': '-full_name',
   };
 
-  // console.log('params---', params);
+  const result = await axiosInstance
+    .get(`${API_BGS_COMMISSION}individuals`, {
+      params,
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsCommissionMetrics(date) {
+  const params = {
+    start_date: `${date[0].getFullYear()}-${
+      date[0].getMonth() + 1
+    }-${date[0].getDate()}`,
+    end_date: `${date[1].getFullYear()}-${
+      date[1].getMonth() + 1
+    }-${date[1].getDate()}`,
+    'order-by': '-full_name',
+  };
 
   const result = await axiosInstance
-    .get(`${API_BGS_COMMISSION_DASHBOARD}finance-detail/`, { params })
+    .get(`${API_BGS_COMMISSION}individuals`, {
+      params,
+    })
     .then((response) => {
       return response;
     })
