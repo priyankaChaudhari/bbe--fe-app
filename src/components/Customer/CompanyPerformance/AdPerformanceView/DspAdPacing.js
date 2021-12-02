@@ -69,7 +69,7 @@ export default function DspAdPacing({
 
   const displayMonth = () => {
     const currentDateOfMonth = new Date().getDate();
-    if (currentDateOfMonth === 1 || currentDateOfMonth === 2) {
+    if (currentDateOfMonth === 1) {
       const currentDate = new Date();
       currentDate.setMonth(currentDate.getMonth() - 1, 1);
       return dayjs(new Date(currentDate)).format('MMMM');
