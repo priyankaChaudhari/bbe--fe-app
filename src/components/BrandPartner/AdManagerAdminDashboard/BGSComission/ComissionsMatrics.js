@@ -4,10 +4,10 @@ import { shape } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { Card } from '../../../../common';
-import { BGSComissionMetrics } from '../../../../constants';
+import { BGSComissionMatrics } from '../../../../constants';
 // import { divide } from 'lodash';
 
-const ComissionsMetrics = ({ commissionMetrics }) => {
+const ComissionsMetrics = ({ commissionMatrics }) => {
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
     const number = Number(orignalNumber);
     if (number !== undefined && number !== null) {
@@ -31,18 +31,18 @@ const ComissionsMetrics = ({ commissionMetrics }) => {
   return (
     <>
       <div className="white-card-container mb-4">
-        {BGSComissionMetrics.map((item) => (
+        {BGSComissionMatrics.map((item) => (
           <div className="col-md-3 col-6 mb-3" key={item.value}>
             <Card
               className="fix-height"
               heading={item.label}
-              title={renderTitle(commissionMetrics, item.key)}
+              title={renderTitle(commissionMatrics, item.key)}
               titleColor={
-                item.key === 'total_overdue' && !commissionMetrics[item.key]
+                item.key === 'total_overdue' && !commissionMatrics[item.key]
                   ? Theme.black
                   : item.titleColor
               }
-              prefix={commissionMetrics[item.key] !== null ? item.prefix : ''}
+              prefix={commissionMatrics[item.key] !== null ? item.prefix : ''}
               postfix={item.postfix}
               type="invoices"
               breakDown={item.breakdown}
@@ -57,9 +57,9 @@ const ComissionsMetrics = ({ commissionMetrics }) => {
 export default ComissionsMetrics;
 
 ComissionsMetrics.defaultProps = {
-  commissionMetrics: {},
+  commissionMatrics: {},
 };
 
 ComissionsMetrics.propTypes = {
-  commissionMetrics: shape({}),
+  commissionMatrics: shape({}),
 };

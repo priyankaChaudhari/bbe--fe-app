@@ -9,7 +9,9 @@ import {
   API_SALES_DASHBOARD,
   metricsNameForAPI,
   API_BGS_COMMISSION_DETAILS,
-  API_BGS_COMMISSION,
+  API_BGS_COMMISSION_INDIVIDUALS,
+  API_BGS_COMMISSION_MATRICS,
+  API_BGS_COMMISSION_GROUP_BY_MANAGER,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -586,7 +588,7 @@ export async function setEnableInvoices(id) {
   return result;
 }
 
-export async function getBgsCommissionTableIndividualsData(date) {
+export async function getBgsCommissionMatrics(date) {
   const params = {
     start_date: `${date[0].getFullYear()}-${
       date[0].getMonth() + 1
@@ -594,11 +596,10 @@ export async function getBgsCommissionTableIndividualsData(date) {
     end_date: `${date[1].getFullYear()}-${
       date[1].getMonth() + 1
     }-${date[1].getDate()}`,
-    'order-by': '-full_name',
   };
 
   const result = await axiosInstance
-    .get(`${API_BGS_COMMISSION}individuals`, {
+    .get(API_BGS_COMMISSION_MATRICS, {
       params,
     })
     .then((response) => {
@@ -610,7 +611,10 @@ export async function getBgsCommissionTableIndividualsData(date) {
   return result;
 }
 
-export async function getBgsCommissionMetrics(date) {
+export async function getBgsCommissionGroupByTable(
+  date,
+  orderBy = 'full_name',
+) {
   const params = {
     start_date: `${date[0].getFullYear()}-${
       date[0].getMonth() + 1
@@ -618,11 +622,35 @@ export async function getBgsCommissionMetrics(date) {
     end_date: `${date[1].getFullYear()}-${
       date[1].getMonth() + 1
     }-${date[1].getDate()}`,
-    'order-by': '-full_name',
+    'order-by': `-${orderBy}`,
   };
 
   const result = await axiosInstance
-    .get(`${API_BGS_COMMISSION}individuals`, {
+    .get(API_BGS_COMMISSION_GROUP_BY_MANAGER, {
+      params,
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsCommissionTableIndividualsData(date, orderBy) {
+  const params = {
+    start_date: `${date[0].getFullYear()}-${
+      date[0].getMonth() + 1
+    }-${date[0].getDate()}`,
+    end_date: `${date[1].getFullYear()}-${
+      date[1].getMonth() + 1
+    }-${date[1].getDate()}`,
+    'order-by': `-${orderBy}`,
+  };
+
+  const result = await axiosInstance
+    .get(API_BGS_COMMISSION_INDIVIDUALS, {
       params,
     })
     .then((response) => {
