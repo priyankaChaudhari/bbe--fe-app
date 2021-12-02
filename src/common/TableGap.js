@@ -86,6 +86,9 @@ const TableGap = styled.div`
         &.text-bold {
           font-weight: 600;
         }
+        &.text-medium {
+          font-family: ${Theme.baseMediumFontFamily};
+        }
       }
     }
   }
