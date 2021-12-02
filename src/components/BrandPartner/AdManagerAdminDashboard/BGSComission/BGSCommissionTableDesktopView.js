@@ -1,6 +1,7 @@
 import { arrayOf, bool } from 'prop-types';
 import React from 'react';
 import { NoData, PageLoader, TableGap, WhiteCard } from '../../../../common';
+import { numberWithCommas } from '../../../../hooks/numberWithComas';
 
 export default function BGSCommissionTableDesktopView({
   commissionData,
@@ -76,59 +77,36 @@ export default function BGSCommissionTableDesktopView({
                   return (
                     <div key={item.id}>
                       <tr className="ungroup">
-                        <td width="10%">Team Jake</td>
-                        <td width="10%" className="text-medium">
-                          $2,597.20
+                        <td width="10%">
+                          {item.full_name.replace(/\b(\w)/g, (s) =>
+                            s.toUpperCase(),
+                          )}
                         </td>
                         <td width="10%" className="text-medium">
-                          $2,597.20
+                          {`$${numberWithCommas(item.retainer)}`}
+                        </td>
+                        <td width="10%" className="text-medium">
+                          {`$${numberWithCommas(item.rev_share)}`}
                         </td>
                         <td width="5%" className="text-medium">
-                          $2,597.20
+                          {`$${numberWithCommas(item.dsp)}`}
                         </td>
                         <td width="12%" className="text-medium">
-                          $805.00
+                          {`$${numberWithCommas(item.total_book_size)}`}
                         </td>
                         <td width="15%" className="text-bold">
-                          0
+                          {`$${numberWithCommas(
+                            item.total_book_size_commission,
+                          )}`}
                         </td>
                         <td width="8%" className="text-medium">
-                          $805.00
+                          {`$${numberWithCommas(item.upsell)}`}
                         </td>
                         <td width="12%" className="text-bold">
-                          $805.00
+                          {`$${numberWithCommas(item.upsell_commission)}`}
                         </td>
                         <td width="10%" className="text-bold">
-                          {' '}
-                          $1,714.59
-                        </td>
-                      </tr>
-                      <tr className="ungroup">
-                        <td width="10%">Team Jake</td>
-                        <td width="10%" className="text-medium">
-                          $2,597.20
-                        </td>
-                        <td width="10%" className="text-medium">
-                          $2,597.20
-                        </td>
-                        <td width="5%" className="text-medium">
-                          $2,597.20
-                        </td>
-                        <td width="12%" className="text-medium">
-                          $805.00
-                        </td>
-                        <td width="15%" className="text-bold">
-                          0
-                        </td>
-                        <td width="8%" className="text-medium">
-                          $805.00
-                        </td>
-                        <td width="12%" className="text-bold">
-                          $805.00
-                        </td>
-                        <td width="10%" className="text-bold">
-                          {' '}
-                          $1,714.59
+                          {`$${numberWithCommas(item.total_commission)}`}
                         </td>
                       </tr>
                     </div>
@@ -140,7 +118,7 @@ export default function BGSCommissionTableDesktopView({
         ) : null}
 
         {!loader && !commissionData ? (
-          <NoData>No commissions Found</NoData>
+          <NoData>No Commission Data Found</NoData>
         ) : null}
       </WhiteCard>
       <div
@@ -160,32 +138,42 @@ export default function BGSCommissionTableDesktopView({
                       {item && item.bgs_manager ? (
                         <tr>
                           <td width="10%" className="text-bold">
-                            {item.bgs_manager.name}
+                            {item.bgs_manager.full_name.replace(
+                              /\b(\w)/g,
+                              (s) => s.toUpperCase(),
+                            )}
                           </td>
                           <td width="10%" className="text-medium">
-                            $2,597.20
+                            {`$${numberWithCommas(item.bgs_manager.retainer)}`}
                           </td>
                           <td width="10%" className="text-medium">
-                            $2,597.20
+                            {`$${numberWithCommas(item.bgs_manager.rev_share)}`}
                           </td>
                           <td width="5%" className="text-medium">
-                            $2,597.20
+                            {`$${numberWithCommas(item.bgs_manager.dsp)}`}
                           </td>
                           <td width="12%" className="text-medium">
-                            $805.00
+                            {`$${numberWithCommas(
+                              item.bgs_manager.total_book_size,
+                            )}`}
                           </td>
                           <td width="15%" className="text-bold">
-                            0
+                            {`$${numberWithCommas(
+                              item.bgs_manager.total_book_size_commission,
+                            )}`}
                           </td>
                           <td width="8%" className="text-medium">
-                            $805.00
+                            {`$${numberWithCommas(item.bgs_manager.upsell)}`}
                           </td>
                           <td width="12%" className="text-bold">
-                            $805.00
+                            {`$${numberWithCommas(
+                              item.bgs_manager.upsell_commission,
+                            )}`}
                           </td>
                           <td width="10%" className="text-bold">
-                            {' '}
-                            $1,714.59
+                            {`$${numberWithCommas(
+                              item.bgs_manager.total_commission,
+                            )}`}
                           </td>
                         </tr>
                       ) : null}
@@ -194,31 +182,42 @@ export default function BGSCommissionTableDesktopView({
                         item.members.map((memberItem) => {
                           return (
                             <tr key={memberItem.id}>
-                              <td width="10%">Team Jake</td>
-                              <td width="10%" className="text-medium">
-                                $2,597.20
+                              <td width="10%">
+                                {memberItem.full_name.replace(/\b(\w)/g, (s) =>
+                                  s.toUpperCase(),
+                                )}
                               </td>
                               <td width="10%" className="text-medium">
-                                $2,597.20
+                                {`$${numberWithCommas(memberItem.retainer)}`}
+                              </td>
+                              <td width="10%" className="text-medium">
+                                {`$${numberWithCommas(memberItem.rev_share)}`}
                               </td>
                               <td width="5%" className="text-medium">
-                                $2,597.20
+                                {`$${numberWithCommas(memberItem.dsp)}`}
                               </td>
                               <td width="12%" className="text-medium">
-                                $805.00
+                                {`$${numberWithCommas(
+                                  memberItem.total_book_size,
+                                )}`}
                               </td>
                               <td width="15%" className="text-bold">
-                                0
+                                {`$${numberWithCommas(
+                                  memberItem.total_book_size_commission,
+                                )}`}
                               </td>
                               <td width="8%" className="text-medium">
-                                $805.00
+                                {`$${numberWithCommas(memberItem.upsell)}`}
                               </td>
                               <td width="12%" className="text-bold">
-                                $805.00
+                                {`$${numberWithCommas(
+                                  memberItem.upsell_commission,
+                                )}`}
                               </td>
                               <td width="10%" className="text-bold">
-                                {' '}
-                                $1,714.59
+                                {`$${numberWithCommas(
+                                  memberItem.total_commission,
+                                )}`}
                               </td>
                             </tr>
                           );
