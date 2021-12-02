@@ -41,11 +41,7 @@ export default function EscrowBudgetAllocationModal({
   getActivityLogInfo,
 }) {
   const currentDate = new Date();
-  if (currentDate.getDate() === 1) {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-  } else {
-    currentDate.setDate(1);
-  }
+  currentDate.setDate(1);
 
   const dspPacing = dspData?.dsp_pacing;
   const escrowBalance = dspPacing?.escrow_converted_usd;
