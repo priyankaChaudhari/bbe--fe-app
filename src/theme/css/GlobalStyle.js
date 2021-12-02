@@ -2,7 +2,6 @@
 import { createGlobalStyle } from 'styled-components';
 import Theme from '../Theme';
 import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
-// import NoahRegular from '../fonts/noah-font/Noah Regular.otf';
 import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
 import NoahRegularItalic from '../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff';
 import NoahBoldItalic from '../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff';
@@ -13,8 +12,6 @@ import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
 import NoahMedium from '../fonts/Noah/Noah/WEB/NoahMedium.otf';
 
 import { CalendarFontBackArrow } from '../images/index';
-
-// import theme from '@amcharts/amcharts4/themes/dataviz';
 
 const bodyStyles = createGlobalStyle`
 

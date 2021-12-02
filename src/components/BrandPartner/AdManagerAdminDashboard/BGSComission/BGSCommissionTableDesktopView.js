@@ -77,14 +77,24 @@ export default function BGSCommissionTableDesktopView({
                     <div key={item.id}>
                       <tr className="ungroup">
                         <td width="10%">Team Jake</td>
-                        <td width="10%">$2,597.20</td>
-                        <td width="10%">$2,597.20</td>
-                        <td width="5%">$2,597.20</td>
-                        <td width="12%">$805.00</td>
+                        <td width="10%" className="text-medium">
+                          $2,597.20
+                        </td>
+                        <td width="10%" className="text-medium">
+                          $2,597.20
+                        </td>
+                        <td width="5%" className="text-medium">
+                          $2,597.20
+                        </td>
+                        <td width="12%" className="text-medium">
+                          $805.00
+                        </td>
                         <td width="15%" className="text-bold">
                           0
                         </td>
-                        <td width="8%">$805.00</td>
+                        <td width="8%" className="text-medium">
+                          $805.00
+                        </td>
                         <td width="12%" className="text-bold">
                           $805.00
                         </td>
@@ -95,14 +105,24 @@ export default function BGSCommissionTableDesktopView({
                       </tr>
                       <tr className="ungroup">
                         <td width="10%">Team Jake</td>
-                        <td width="10%">$2,597.20</td>
-                        <td width="10%">$2,597.20</td>
-                        <td width="5%">$2,597.20</td>
-                        <td width="12%">$805.00</td>
+                        <td width="10%" className="text-medium">
+                          $2,597.20
+                        </td>
+                        <td width="10%" className="text-medium">
+                          $2,597.20
+                        </td>
+                        <td width="5%" className="text-medium">
+                          $2,597.20
+                        </td>
+                        <td width="12%" className="text-medium">
+                          $805.00
+                        </td>
                         <td width="15%" className="text-bold">
                           0
                         </td>
-                        <td width="8%">$805.00</td>
+                        <td width="8%" className="text-medium">
+                          $805.00
+                        </td>
                         <td width="12%" className="text-bold">
                           $805.00
                         </td>
@@ -134,7 +154,7 @@ export default function BGSCommissionTableDesktopView({
               return (
                 <WhiteCard
                   key={item && item.bgs_manager && item.bgs_manager.id}
-                  className="mb-3">
+                  className="mb-3 pt-1 pb-2">
                   <table>
                     <tbody style={{ width: '100%', display: 'table' }}>
                       {item && item.bgs_manager ? (
@@ -142,14 +162,24 @@ export default function BGSCommissionTableDesktopView({
                           <td width="10%" className="text-bold">
                             {item.bgs_manager.name}
                           </td>
-                          <td width="10%">$2,597.20</td>
-                          <td width="10%">$2,597.20</td>
-                          <td width="5%">$2,597.20</td>
-                          <td width="12%">$805.00</td>
+                          <td width="10%" className="text-medium">
+                            $2,597.20
+                          </td>
+                          <td width="10%" className="text-medium">
+                            $2,597.20
+                          </td>
+                          <td width="5%" className="text-medium">
+                            $2,597.20
+                          </td>
+                          <td width="12%" className="text-medium">
+                            $805.00
+                          </td>
                           <td width="15%" className="text-bold">
                             0
                           </td>
-                          <td width="8%">$805.00</td>
+                          <td width="8%" className="text-medium">
+                            $805.00
+                          </td>
                           <td width="12%" className="text-bold">
                             $805.00
                           </td>
@@ -165,14 +195,24 @@ export default function BGSCommissionTableDesktopView({
                           return (
                             <tr key={memberItem.id}>
                               <td width="10%">Team Jake</td>
-                              <td width="10%">$2,597.20</td>
-                              <td width="10%">$2,597.20</td>
-                              <td width="5%">$2,597.20</td>
-                              <td width="12%">$805.00</td>
+                              <td width="10%" className="text-medium">
+                                $2,597.20
+                              </td>
+                              <td width="10%" className="text-medium">
+                                $2,597.20
+                              </td>
+                              <td width="5%" className="text-medium">
+                                $2,597.20
+                              </td>
+                              <td width="12%" className="text-medium">
+                                $805.00
+                              </td>
                               <td width="15%" className="text-bold">
                                 0
                               </td>
-                              <td width="8%">$805.00</td>
+                              <td width="8%" className="text-medium">
+                                $805.00
+                              </td>
                               <td width="12%" className="text-bold">
                                 $805.00
                               </td>
