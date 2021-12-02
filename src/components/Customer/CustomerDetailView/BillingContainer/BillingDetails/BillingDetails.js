@@ -1,15 +1,27 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable react/no-unused-prop-types */
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import { useDispatch } from 'react-redux';
-import { shape, string } from 'prop-types';
+import { shape, string, bool } from 'prop-types';
+import Select, { components } from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
 import { showProfileLoader } from '../../../../../store/actions/userState';
-import { CloseIcon, EditOrangeIcon } from '../../../../../theme/images';
-import { billingAddress, creditCardDetails } from '../../../../../constants';
+import {
+  CaretUp,
+  CloseIcon,
+  EditOrangeIcon,
+  helpCircleIcon,
+} from '../../../../../theme/images';
+import {
+  billingAddress,
+  creditCardDetails,
+  payemntTermsDetails,
+} from '../../../../../constants';
 import { getBillingDetails, saveBillingInfo } from '../../../../../api';
 import {
   Button,
@@ -19,6 +31,7 @@ import {
   ModalBox,
   PageLoader,
   WhiteCard,
+  ContractInputSelect,
 } from '../../../../../common';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
@@ -26,12 +39,84 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
+  const [showPaymentTermsModal, setShowPaymentTermsModal] = useState(false);
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({
     billing_contact: {},
     billing_address: {},
     card_details: {},
+    payment_terms: {},
   });
+  const paymentData = [
+    {
+      payment_terms: {
+        monthlyRetainer: 'Autopay',
+        revenueShare: 'NET-30',
+        dspAdditional: 'Due on receipt',
+        upsells: 'NET-14',
+      },
+    },
+  ];
+
+  // const [paymentData, setPaymentData] = useState({});
+  console.log('formData', formData);
+  console.log('data', data);
+  const monthlyRetainer = [
+    { value: '3 Months', label: '3 Months' },
+    { value: '4 Months', label: '4 Months' },
+    { value: '5 Months', label: '5 Months' },
+    { value: '6 Months', label: '6 Months' },
+    { value: '7 Months', label: '7 Months' },
+    { value: '8 Months', label: '8 Months' },
+    { value: '9 Months', label: '9 Months' },
+    { value: '10 Months', label: '10 Months' },
+    { value: '11 Months', label: '11 Months' },
+    { value: '12 Months', label: '12 Months' },
+    { value: '18 Months', label: '18 Months' },
+    { value: '24 Months', label: '24 Months' },
+  ];
+  const revenueShare = [
+    { value: '3 Months', label: '3 Months' },
+    { value: '4 Months', label: '4 Months' },
+    { value: '5 Months', label: '5 Months' },
+    { value: '6 Months', label: '6 Months' },
+    { value: '7 Months', label: '7 Months' },
+    { value: '8 Months', label: '8 Months' },
+    { value: '9 Months', label: '9 Months' },
+    { value: '10 Months', label: '10 Months' },
+    { value: '11 Months', label: '11 Months' },
+    { value: '12 Months', label: '12 Months' },
+    { value: '18 Months', label: '18 Months' },
+    { value: '24 Months', label: '24 Months' },
+  ];
+  const dspAdditional = [
+    { value: '3 Months', label: '3 Months' },
+    { value: '4 Months', label: '4 Months' },
+    { value: '5 Months', label: '5 Months' },
+    { value: '6 Months', label: '6 Months' },
+    { value: '7 Months', label: '7 Months' },
+    { value: '8 Months', label: '8 Months' },
+    { value: '9 Months', label: '9 Months' },
+    { value: '10 Months', label: '10 Months' },
+    { value: '11 Months', label: '11 Months' },
+    { value: '12 Months', label: '12 Months' },
+    { value: '18 Months', label: '18 Months' },
+    { value: '24 Months', label: '24 Months' },
+  ];
+  const upsells = [
+    { value: '3 Months', label: '3 Months' },
+    { value: '4 Months', label: '4 Months' },
+    { value: '5 Months', label: '5 Months' },
+    { value: '6 Months', label: '6 Months' },
+    { value: '7 Months', label: '7 Months' },
+    { value: '8 Months', label: '8 Months' },
+    { value: '9 Months', label: '9 Months' },
+    { value: '10 Months', label: '10 Months' },
+    { value: '11 Months', label: '11 Months' },
+    { value: '12 Months', label: '12 Months' },
+    { value: '18 Months', label: '18 Months' },
+    { value: '24 Months', label: '24 Months' },
+  ];
   const [showBtn, setShowBtn] = useState(false);
 
   const customStyles = {
@@ -75,6 +160,11 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           response.data.card_details &&
           response.data.card_details[0] &&
           response.data.card_details[0].expiry_info,
+        payment_terms:
+          response &&
+          response.data &&
+          response.data.payment_terms &&
+          response.data.payment_terms[0],
       });
     });
   }, [id]);
@@ -84,6 +174,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   }, [billingDetails]);
 
   const mapDefaultValues = (type, key) => {
+    console.log('data[type]', data[type]);
+    console.log('paymentData[type]', paymentData[type]);
     if (key === 'expiration_date') {
       const getDate =
         data.card_details && data.card_details[0] && data.card_details[0][key]
@@ -97,6 +189,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     }
     if (data && data[type] && data[type][0]) {
       return data[type][0][key];
+    }
+    if (paymentData && paymentData[type] && paymentData[type][0]) {
+      return paymentData[type][0][key];
     }
     return '';
   };
@@ -289,6 +384,82 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             })}
           </div>
         ))}
+      </>
+    );
+  };
+  const DropdownIndicator = (props) => {
+    const { selectProps } = props;
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...props}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: selectProps.menuIsOpen ? 'rotate(180deg)' : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+  const getOptions = (key) => {
+    if (key === 'monthly_retainer') return monthlyRetainer;
+    if (key === 'revenue_share') return revenueShare;
+    if (key === 'dsp_additional') return dspAdditional;
+    if (key === 'upsells') return upsells;
+    return '';
+  };
+  const generateDropdown = (item, type) => {
+    if (type === 'payment_terms') {
+      console.log('item', item);
+      console.log('type', type);
+      return (
+        <Select
+          classNamePrefix="react-select"
+          placeholder={item.placeholder ? item.placeholder : 'Select'}
+          defaultValue={
+            formData &&
+            formData[type] &&
+            formData[type][0] &&
+            formData[type][0][item.key]
+          }
+          options={getOptions(item.key)}
+          name={item.key}
+          components={{ DropdownIndicator }}
+          onChange={(event) => handleChange(event, item, type)}
+        />
+      );
+    }
+
+    return '';
+  };
+  const mapPaymentTermsDetails = () => {
+    return (
+      <>
+        <div className="row">
+          {payemntTermsDetails.map((item) => (
+            <div className="col-12" key={item.key}>
+              <div className="label mt-3">
+                {item.label}{' '}
+                {item.key === 'dsp_additional' ? (
+                  <img src={helpCircleIcon} alt="helpCircleIcon" width="18px" />
+                ) : null}
+              </div>
+              <ContractInputSelect>
+                {generateDropdown(item, 'payment_terms')}
+              </ContractInputSelect>
+              <ErrorMsg>
+                {apiError &&
+                  apiError.payment_terms &&
+                  apiError.payment_terms[item.key] &&
+                  apiError.payment_terms[item.key][0]}
+              </ErrorMsg>
+            </div>
+          ))}
+        </div>
       </>
     );
   };
@@ -499,6 +670,86 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             </WhiteCard> */}
 
               <WhiteCard className="mt-3">
+                <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
+
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowPaymentTermsModal(true)}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
+
+                <div className="row">
+                  <div className="col-6">
+                    <div className="label mt-3">Monthly Retainer</div>
+                    <div className="label-info">
+                      {mapDefaultValues('payment_terms', 'monthly_retainer')}
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="label mt-3">Revenue Share </div>
+                    <div className="label-info">
+                      {mapDefaultValues('payment_terms', 'revenue_share')}
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-6">
+                    <div className="label mt-3">DSP (Additional)</div>
+                    <div className="label-info">
+                      {mapDefaultValues('payment_terms', 'dsp_additional')}
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="label mt-3">Upsells</div>
+                    <div className="label-info">
+                      {mapDefaultValues('payment_terms', 'upsells')}
+                    </div>
+                  </div>
+                </div>
+              </WhiteCard>
+            </div>
+            <div className="col-md-6 col-sm-12 mb-3">
+              <WhiteCard>
+                {' '}
+                <p className="black-heading-title mt-0 mb-4">
+                  {' '}
+                  Billing Contact
+                </p>
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowModal(true)}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
+                <GroupUser className="mt-3">
+                  {data && data.id ? (
+                    <GetInitialName
+                      property="float-left mr-3"
+                      userInfo={data.billing_contact && data.billing_contact[0]}
+                    />
+                  ) : (
+                    ''
+                  )}
+                  <div className="activity-user">
+                    {mapDefaultValues('billing_contact', 'first_name')}{' '}
+                    {mapDefaultValues('billing_contact', 'last_name')}
+                    <br />
+                    <div className="user-email-address">
+                      {mapDefaultValues('billing_contact', 'email')}
+                    </div>
+                    <br />
+                    <div className="user-email-address">
+                      {mapDefaultValues('billing_contact', 'phone_number')}
+                    </div>
+                  </div>
+                  <div className="clear-fix" />
+                </GroupUser>
+              </WhiteCard>
+
+              <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
 
                 <div
@@ -542,45 +793,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                     </div>
                   </div>
                 </div>
-              </WhiteCard>
-            </div>
-            <div className="col-md-6 col-sm-12 mb-3">
-              <WhiteCard>
-                {' '}
-                <p className="black-heading-title mt-0 mb-4">
-                  {' '}
-                  Billing Contact
-                </p>
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
-                <GroupUser className="mt-3">
-                  {data && data.id ? (
-                    <GetInitialName
-                      property="float-left mr-3"
-                      userInfo={data.billing_contact && data.billing_contact[0]}
-                    />
-                  ) : (
-                    ''
-                  )}
-                  <div className="activity-user">
-                    {mapDefaultValues('billing_contact', 'first_name')}{' '}
-                    {mapDefaultValues('billing_contact', 'last_name')}
-                    <br />
-                    <div className="user-email-address">
-                      {mapDefaultValues('billing_contact', 'email')}
-                    </div>
-                    <br />
-                    <div className="user-email-address">
-                      {mapDefaultValues('billing_contact', 'phone_number')}
-                    </div>
-                  </div>
-                  <div className="clear-fix" />
-                </GroupUser>
               </WhiteCard>
             </div>
           </div>
@@ -648,15 +860,79 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           )}
         </ModalBox>
       </Modal>
+
+      <Modal
+        isOpen={showPaymentTermsModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowPaymentTermsModal(false);
+            setShowBtn(false);
+            setApiError({});
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Payment Terms</h4>
+            <div className="footer-line " />
+            <div className="body-content mt-3 ">
+              {mapPaymentTermsDetails()}
+              <ErrorMsg style={{ textAlign: 'center' }}>
+                {apiError && apiError[0]}
+              </ErrorMsg>
+            </div>
+          </div>
+          {showBtn ? (
+            <>
+              <div className="footer-line " />
+              <div className="col-12  modal-footer">
+                <Button
+                  className=" btn-primary mr-4"
+                  // onClick={() => saveBillingData()}
+                >
+                  {isLoading.loader && isLoading.type === 'button' ? (
+                    <PageLoader color={Theme.white} type="button" />
+                  ) : (
+                    'Save Changes'
+                  )}
+                </Button>
+                <Button
+                  className=" btn-borderless"
+                  onClick={() => {
+                    setShowPaymentTermsModal(false);
+                    setShowBtn(false);
+                    setApiError({});
+                  }}>
+                  Discard Changes
+                </Button>
+              </div>
+            </>
+          ) : (
+            ''
+          )}
+        </ModalBox>
+      </Modal>
     </>
   );
 }
 
 BillingDetails.defaultProps = {
+  Props: {},
   onBoardingId: null,
 };
 
 BillingDetails.propTypes = {
+  Props: shape({
+    selectProps: shape({
+      menuIsOpen: bool,
+    }),
+  }),
   id: string.isRequired,
   userInfo: shape({
     customer_onboarding: string,

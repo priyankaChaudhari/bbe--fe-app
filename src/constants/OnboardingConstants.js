@@ -111,6 +111,29 @@ export const paymentType = [
   { key: 'credit_card', label: 'Credit Card', type: 'radio' },
 ];
 
+export const payemntTermsDetails = [
+  {
+    key: 'monthly_retainer',
+    label: 'Monthly Retainer',
+    type: 'text',
+  },
+  {
+    key: 'revenue_share',
+    label: 'Revenue Share',
+    type: 'text',
+  },
+  {
+    key: 'dsp_additional',
+    label: 'DSP (Additional)',
+    type: 'text',
+  },
+  {
+    key: 'upsells',
+    label: 'Upsells',
+    type: 'text',
+  },
+];
+
 export const whichStep = [
   {
     key: 'digital presence',
