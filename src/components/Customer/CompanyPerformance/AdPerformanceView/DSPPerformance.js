@@ -100,7 +100,7 @@ export default function DSPPerformance({
 
   const displayMonth = () => {
     const currentDateOfMonth = new Date().getDate();
-    if (currentDateOfMonth === 1 || currentDateOfMonth === 2) {
+    if (currentDateOfMonth === 1) {
       const todayDate = new Date();
       todayDate.setMonth(todayDate.getMonth() - 1, 1);
       return dayjs(new Date(todayDate)).format('MMMM');
