@@ -91,7 +91,9 @@ export default function EscrowBudgetAllocationModal({
     );
     const sumOfFutureMonths = calculateSumOfFutureMonths(tempData);
     const currentMonthAmount = escrowBalance - sumOfFutureMonths;
-    tempData[0].escrow_allocated_converted_usd = String(currentMonthAmount);
+    tempData[0].escrow_allocated_converted_usd = String(
+      currentMonthAmount.toFixed(2),
+    );
     if (currentMonthAmount < 0) setIsEscrowbalanceExceed(true);
     else setIsEscrowbalanceExceed(false);
     setAllocatedMonths(tempData);
