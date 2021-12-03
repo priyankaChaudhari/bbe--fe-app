@@ -12,6 +12,7 @@ import { commissionsTableheader } from '../../../../../constants';
 import {
   HeaderDownloadFuntionality,
   ModalBox,
+  PageLoader,
   TableGap,
 } from '../../../../../common';
 
@@ -78,7 +79,13 @@ const BrandPartnerModal = ({
       ariaHideApp={false}
       contentLabel="Add team modal">
       {isLoading ? (
-        <h1>isLoading..</h1>
+        <PageLoader
+          component="performance-graph"
+          color="#FF5933"
+          type="detail"
+          width={40}
+          height={40}
+        />
       ) : (
         <ModalBox>
           <CommissionResseque>

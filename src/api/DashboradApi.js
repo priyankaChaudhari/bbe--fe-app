@@ -622,7 +622,7 @@ export async function getBgsCommissionGroupByTable(
     end_date: `${date[1].getFullYear()}-${
       date[1].getMonth() + 1
     }-${date[1].getDate()}`,
-    'order-by': `-${orderBy}`,
+    'order-by': `${orderBy}`,
   };
 
   const result = await axiosInstance
@@ -646,7 +646,7 @@ export async function getBgsCommissionTableIndividualsData(date, orderBy) {
     end_date: `${date[1].getFullYear()}-${
       date[1].getMonth() + 1
     }-${date[1].getDate()}`,
-    'order-by': `-${orderBy}`,
+    'order-by': `${orderBy}`,
   };
 
   const result = await axiosInstance
