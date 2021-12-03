@@ -109,7 +109,7 @@ function BGSCommissionTableResponsiveView({
               <TableMobileView
                 key={memberItem.id}
                 label="Team Member"
-                labelInfo={memberItem.full_name.replace(/\b(\w)/g, (s) =>
+                labelInfo={memberItem.full_name?.replace(/\b(\w)/g, (s) =>
                   s.toUpperCase(),
                 )}
                 label1="retainer"

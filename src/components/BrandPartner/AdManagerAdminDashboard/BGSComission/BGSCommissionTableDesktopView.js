@@ -1,4 +1,4 @@
-import { arrayOf, bool } from 'prop-types';
+import { arrayOf, bool, func } from 'prop-types';
 import React from 'react';
 import { NoData, PageLoader, TableGap, WhiteCard } from '../../../../common';
 import { numberWithCommas } from '../../../../hooks/numberWithComas';
@@ -7,6 +7,7 @@ export default function BGSCommissionTableDesktopView({
   commissionData,
   isGroupBy,
   loader,
+  OnSetShowModal,
 }) {
   return (
     <TableGap className="d-md-block d-none">
@@ -78,7 +79,7 @@ export default function BGSCommissionTableDesktopView({
                     <div key={item.id}>
                       <tr className="ungroup">
                         <td width="10%">
-                          {item.full_name.replace(/\b(\w)/g, (s) =>
+                          {item.full_name?.replace(/\b(\w)/g, (s) =>
                             s.toUpperCase(),
                           )}
                         </td>
@@ -136,7 +137,7 @@ export default function BGSCommissionTableDesktopView({
                   <table>
                     <tbody style={{ width: '100%', display: 'table' }}>
                       {item && item.bgs_manager ? (
-                        <tr>
+                        <tr onClick={() => OnSetShowModal(item.bgs_manager.id)}>
                           <td width="10%" className="text-bold">
                             {item.bgs_manager.full_name.replace(
                               /\b(\w)/g,
@@ -181,7 +182,9 @@ export default function BGSCommissionTableDesktopView({
                         item.members &&
                         item.members.map((memberItem) => {
                           return (
-                            <tr key={memberItem.id}>
+                            <tr
+                              key={memberItem.id}
+                              onClick={() => OnSetShowModal(memberItem.id)}>
                               <td width="10%">
                                 {memberItem.full_name.replace(/\b(\w)/g, (s) =>
                                   s.toUpperCase(),
@@ -237,10 +240,12 @@ BGSCommissionTableDesktopView.defaultProps = {
   isGroupBy: true,
   loader: false,
   commissionData: null,
+  OnSetShowModal: () => {},
 };
 
 BGSCommissionTableDesktopView.propTypes = {
   isGroupBy: bool,
   loader: bool,
   commissionData: arrayOf(Array),
+  OnSetShowModal: func,
 };
