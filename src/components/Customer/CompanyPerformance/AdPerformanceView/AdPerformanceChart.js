@@ -45,9 +45,6 @@ export default function AdPerformanceChart({
       costPerClick: 'COST PER CLICK',
     };
 
-    // const tooltipDate =
-    //   '<div style="color: white; font-size: 16px;">{date}</div>';
-
     chart.current = am4core.create(chartId, am4charts.XYChart);
     chart.current.data = chartData;
     chart.current.paddingRight = 20;
@@ -109,9 +106,7 @@ export default function AdPerformanceChart({
       </div>
       </li>
     </ul>
-  
     `;
-
       return tooltipText;
     }
 
@@ -325,11 +320,13 @@ export default function AdPerformanceChart({
     } else {
       // else part- for multiple metrics selected
 
-      // create object of 2nd value axis
       let firstAxis = null;
       let secondAxis = null;
       let thirdAxis = null;
+      let valueAxis3;
+      let valueAxis4;
 
+      // create object of 2nd value axis
       const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
       valueAxis2.renderer.grid.template.disabled = true;
       valueAxis2.cursorTooltipEnabled = false;
@@ -344,42 +341,50 @@ export default function AdPerformanceChart({
       valueAxis2.min = 0;
       valueAxis2.numberFormatter.smallNumberPrefixes = [];
 
-      // create object of 3rd value axis
-      const valueAxis3 = chart.current.yAxes.push(new am4charts.ValueAxis());
-      valueAxis3.renderer.grid.template.disabled = true;
-      valueAxis3.cursorTooltipEnabled = false;
-      valueAxis3.numberFormatter = new am4core.NumberFormatter();
-      valueAxis3.numberFormatter.numberFormat = `#.#a`;
-      valueAxis3.extraMax = 0.005;
-      valueAxis3.numberFormatter.bigNumberPrefixes = [
-        { number: 1e3, suffix: 'K' },
-        { number: 1e6, suffix: 'M' },
-        { number: 1e9, suffix: 'B' },
-      ];
-      valueAxis3.numberFormatter.smallNumberPrefixes = [];
-      valueAxis3.min = 0;
+      if (
+        !(
+          _.size(selectedBox) === 3 &&
+          _.has(selectedBox, 'adSales') &&
+          _.has(selectedBox, 'adSpend')
+        )
+      ) {
+        // create object of 3rd value axis
+        valueAxis3 = chart.current.yAxes.push(new am4charts.ValueAxis());
+        valueAxis3.renderer.grid.template.disabled = true;
+        valueAxis3.cursorTooltipEnabled = false;
+        valueAxis3.numberFormatter = new am4core.NumberFormatter();
+        valueAxis3.numberFormatter.numberFormat = `#.#a`;
+        valueAxis3.extraMax = 0.005;
+        valueAxis3.numberFormatter.bigNumberPrefixes = [
+          { number: 1e3, suffix: 'K' },
+          { number: 1e6, suffix: 'M' },
+          { number: 1e9, suffix: 'B' },
+        ];
+        valueAxis3.numberFormatter.smallNumberPrefixes = [];
+        valueAxis3.min = 0;
 
-      // create object of 4th value axis
-      const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
-      valueAxis4.renderer.grid.template.disabled = true;
-      valueAxis4.cursorTooltipEnabled = false;
-      valueAxis4.numberFormatter = new am4core.NumberFormatter();
-      valueAxis4.numberFormatter.numberFormat = `#.#a`;
-      valueAxis4.extraMax = 0.005;
-      valueAxis4.numberFormatter.bigNumberPrefixes = [
-        { number: 1e3, suffix: 'K' },
-        { number: 1e6, suffix: 'M' },
-        { number: 1e9, suffix: 'B' },
-      ];
-      valueAxis4.numberFormatter.smallNumberPrefixes = [];
-      valueAxis4.min = 0;
+        // create object of 4th value axis
+        valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
+        valueAxis4.renderer.grid.template.disabled = true;
+        valueAxis4.cursorTooltipEnabled = false;
+        valueAxis4.numberFormatter = new am4core.NumberFormatter();
+        valueAxis4.numberFormatter.numberFormat = `#.#a`;
+        valueAxis4.extraMax = 0.005;
+        valueAxis4.numberFormatter.bigNumberPrefixes = [
+          { number: 1e3, suffix: 'K' },
+          { number: 1e6, suffix: 'M' },
+          { number: 1e9, suffix: 'B' },
+        ];
+        valueAxis4.numberFormatter.smallNumberPrefixes = [];
+        valueAxis4.min = 0;
+      }
+
       const snapToSeries = [];
       let tooltipValue = '';
 
       // loop for genearate tooltip
       _.keys(selectedBox).map((item) => {
         const value = `${item}CurrentLabel`;
-        // const currentLabel = `${_.keys(selectedBox)[0]}CurrentLabel`;
 
         if (
           item === 'adSales' ||
@@ -435,14 +440,12 @@ export default function AdPerformanceChart({
 
         if (item === 'adSales' || item === 'adSpend') {
           if (firstAxis === null || firstAxis === 'currency') {
-            // console.log('if currency');
             series.yAxis = valueAxis;
             firstAxis = 'currency';
             valueAxis.numberFormatter.numberFormat = bindValueAxisFormatter(
               item,
             );
           } else if (secondAxis === null || secondAxis === 'currency') {
-            // console.log('second axis null/currency');
             series.yAxis = valueAxis2;
             valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
               item,
@@ -450,7 +453,6 @@ export default function AdPerformanceChart({
             valueAxis2.renderer.opposite = true;
             secondAxis = 'currency';
           } else if (thirdAxis === null || thirdAxis === 'currency') {
-            // console.log('second axis not null/currency');
             series.yAxis = valueAxis3;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
               item,
@@ -470,7 +472,6 @@ export default function AdPerformanceChart({
             valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
               item,
             );
-
             valueAxis.renderer.line.strokeOpacity = 0;
             valueAxis2.renderer.line.strokeOpacity = 0;
             valueAxis3.renderer.line.strokeOpacity = 0;
@@ -514,7 +515,6 @@ export default function AdPerformanceChart({
             thirdAxis = 'others';
           }
         } else if (index === 3) {
-          // console.log('index last else 3');
           if (thirdAxis === null) {
             series.yAxis = valueAxis3;
             valueAxis3.renderer.opposite = true;
