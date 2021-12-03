@@ -170,13 +170,25 @@ export default function DSPPerformance({
               <div className="col-8">
                 {' '}
                 <div className="remaing-label">
-                  {`Remaining Budget (${displayMonth()}):`}
+                  {performancePacingFlag === 'performance'
+                    ? `Remaining Budget (${displayMonth()}):`
+                    : `Escrow Balance :`}
                   <span style={{ fontWeight: 'bold' }}>
                     {' '}
-                    {dspData?.dsp_pacing?.remaining_budget
+                    {performancePacingFlag === 'performance'
+                      ? dspData?.dsp_pacing?.remaining_budget
+                        ? `${
+                            dspData?.dsp_pacing?.remaining_budget < 0 ? '-' : ''
+                          }${currencySymbol}${dspData?.dsp_pacing?.remaining_budget
+                            .toFixed(2)
+                            .toString()
+                            .replace('-', '')
+                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                        : `${currencySymbol}0`
+                      : dspData?.dsp_pacing?.escrow
                       ? `${
-                          dspData?.dsp_pacing?.remaining_budget < 0 ? '-' : ''
-                        }${currencySymbol}${dspData?.dsp_pacing?.remaining_budget
+                          dspData?.dsp_pacing?.escrow < 0 ? '-' : ''
+                        }${currencySymbol}${dspData?.dsp_pacing?.escrow
                           .toFixed(2)
                           .toString()
                           .replace('-', '')
