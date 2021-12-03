@@ -6,7 +6,6 @@ import { useMediaQuery } from 'react-responsive';
 import { func, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
-// import TableMobileView from '../../../../../common/TableMobileView';
 import { StatusColorSet } from '../../../../../constants';
 import { getInvoiceData } from '../../../../../api';
 import InvoiceAdjustPauseModal from './InvoiceAdjustmentModals/InvoiceAdjustPauseModal';
@@ -19,6 +18,7 @@ import {
   WhiteCard,
   NoData,
   Button,
+  TableMobileView,
 } from '../../../../../common';
 
 const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
@@ -121,77 +121,117 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
     );
   };
 
-  const renderDesktopDSPInvoices = () => {
+  const renderDesktopView = () => {
     return (
       <>
-        <WhiteCard className="mb-3">
-          <div className="row">
-            <div className="col-md-9  col-sm1-12 pr-0">
-              <p
-                style={{ marginTop: '0px' }}
-                className="black-heading-title mb-4">
-                Invoices Adjustments
-              </p>
-            </div>
-            <div className="col-md-3 col-sm1-12  mb-3 pl-0">
-              <Button
-                onClick={() => setShowInvoiceAdjustmentModal(true)}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Create Adjustment
-              </Button>
-            </div>
-          </div>
-
-          {invoiceAdjustmentLoader ? (
-            <PageLoader
-              component="performance-graph"
-              type="detail"
-              color={Theme.orange}
-              width={40}
-              height={40}
-            />
-          ) : (
-            <>
-              <div className="straight-line horizontal-line spacing " />
-              <Table className="mt-0">
-                <thead>{renderTableHeader()}</thead>
-                {invoicesAdjustmentData &&
-                invoicesAdjustmentData.length >= 1 ? (
-                  <tbody>
-                    {invoicesAdjustmentData.map((item) =>
-                      renderTableData(item),
-                    )}
-                  </tbody>
-                ) : null}
-              </Table>
+        {invoiceAdjustmentLoader ? (
+          <PageLoader
+            component="performance-graph"
+            type="detail"
+            color={Theme.orange}
+            width={40}
+            height={40}
+          />
+        ) : (
+          <>
+            <div className="straight-line horizontal-line spacing " />
+            <Table className="mt-0">
+              <thead>{renderTableHeader()}</thead>
               {invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
-                <>
-                  <div className="straight-line horizontal-line spacing " />
-                  <p
-                    onClick={() => setShowAllPastInvoicesModal(true)}
-                    role="presentation">
-                    {' '}
-                    View all past adjustments
-                  </p>
-                </>
+                <tbody>
+                  {invoicesAdjustmentData.map((item) => renderTableData(item))}
+                </tbody>
               ) : null}
+            </Table>
+            {invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
+              <>
+                <div className="straight-line horizontal-line spacing " />
+                <p
+                  onClick={() => setShowAllPastInvoicesModal(true)}
+                  role="presentation">
+                  {' '}
+                  View all past adjustments
+                </p>
+              </>
+            ) : null}
 
-              {!invoicesAdjustmentData ||
-              (invoicesAdjustmentData &&
-                invoicesAdjustmentData.length === 0) ? (
-                <NoData>No Invoices Adjustments Found</NoData>
-              ) : null}
-            </>
-          )}
-        </WhiteCard>
+            {!invoicesAdjustmentData ||
+            (invoicesAdjustmentData && invoicesAdjustmentData.length === 0) ? (
+              <NoData>No Invoices Adjustments Found</NoData>
+            ) : null}
+          </>
+        )}
+      </>
+    );
+  };
+
+  const renderMobileView = () => {
+    return (
+      <>
+        {invoiceAdjustmentLoader ? (
+          <PageLoader
+            component="performance-graph"
+            type="detail"
+            color={Theme.orange}
+            width={40}
+            height={40}
+          />
+        ) : invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
+          invoicesAdjustmentData.map((item) => {
+            return (
+              <TableMobileView
+                key={item.id}
+                className="mb-3"
+                invoiceType={item.invoice_type}
+                invoiceId={item.next_next_invoiced_id}
+                status={item.invoice_status}
+                statusColor={
+                  StatusColorSet[
+                    item.invoice_status.split(' ')[0].toLowerCase()
+                  ]
+                    ? StatusColorSet[
+                        item.invoice_status.split(' ')[0].toLowerCase()
+                      ]
+                    : '#E3F2D2'
+                }
+                label="Amount"
+                labelInfo={addThousandComma(item.monthly_budget, 0)}
+                label1="Created on"
+                labelInfo1={dayjs(item.generated_at).format('MM/DD/YYYY')}
+                label2="Due"
+                labelInfo2={dayjs(item.due_date).format('MM/DD/YYYY')}
+              />
+            );
+          })
+        ) : (
+          <NoData>No Invoices Found</NoData>
+        )}
       </>
     );
   };
 
   return (
     <Wrapper>
-      {!isMobile ? renderDesktopDSPInvoices() : null}
+      <WhiteCard className="mb-3">
+        <div className="row">
+          <div className="col-md-9  col-sm1-12 pr-0">
+            <p
+              style={{ marginTop: '0px' }}
+              className="black-heading-title mb-4">
+              Invoices Adjustments
+            </p>
+          </div>
+          <div className="col-md-3 col-sm1-12  mb-3 pl-0">
+            <Button
+              onClick={() => setShowInvoiceAdjustmentModal(true)}
+              type="button"
+              className="btn-primary on-boarding   w-100">
+              Create Adjustment
+            </Button>
+          </div>
+        </div>
+        {!isMobile ? renderDesktopView() : renderMobileView()}
+      </WhiteCard>
       <InvoiceAdjustPauseModal
         id="BT-invoiceAdjustmentModal"
         isOpen={showInvoiceAdjustmentModal}
