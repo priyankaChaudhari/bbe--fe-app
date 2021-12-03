@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
+import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
 import { shape, string, bool } from 'prop-types';
 import Select, { components } from 'react-select';
@@ -131,7 +132,16 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       transform: 'translate(-50%, -50%)',
     },
   };
-
+  const renderDspToolTipInfo = () => {
+    return (
+      <div>
+        The payment terms you select here will only apply to one-time and
+        permanent additional DSP invoices. <br />
+        Standard monthly DSP invoices have default payment terms which cannot be
+        changed);
+      </div>
+    );
+  };
   const billingDetails = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
     getBillingDetails(id).then((response) => {
@@ -139,30 +149,17 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       setIsLoading({ loader: false, type: 'page' });
       setFormData({
         billing_contact:
-          response &&
-          response.data &&
-          response.data.billing_contact &&
-          response.data.billing_contact[0],
+          response?.data?.billing_contact && response.data.billing_contact[0],
         billing_address:
-          response &&
-          response.data &&
-          response.data.billing_address &&
-          response.data.billing_address[0],
+          response?.data?.billing_address && response.data.billing_address[0],
         card_details:
-          response &&
-          response.data &&
-          response.data.card_details &&
-          response.data.card_details[0],
+          response?.data?.card_details && response.data.card_details[0],
         expiryMessage:
-          response.data &&
-          response.data.card_details &&
+          response?.data?.card_details &&
           response.data.card_details[0] &&
           response.data.card_details[0].expiry_info,
-        // payment_terms:
-        //   response &&
-        //   response.data &&
-        //   response.data.payment_terms &&
-        //   response.data.payment_terms[0],
+        payment_terms:
+          response?.data?.payment_terms && response.data.payment_terms[0],
       });
       setPaymentData({
         payment_terms: {
@@ -204,6 +201,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return '';
   };
   const mapPaymentTermsDefaultValues = (type, key) => {
+    console.log('paymentData[type]', paymentData[type]);
     if (paymentData && paymentData[type] && paymentData[type][0]) {
       console.log('paymentData[type]', paymentData[type]);
       return paymentData[type][0][key];
@@ -742,8 +740,16 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                           verticalAlign: 'middle',
                           paddingBottom: '3px',
                         }}
+                        data-tip={renderDspToolTipInfo()}
+                        data-for="dspAdditionalInfo"
                       />
                     </div>
+                    <ReactTooltip
+                      id="dspAdditionalInfo"
+                      aria-haspopup="true"
+                      place="bottom"
+                      effect="solid"
+                    />
                     <div className="label-info">
                       {mapPaymentTermsDefaultValues(
                         'payment_terms',
@@ -938,25 +944,22 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
               </ErrorMsg>
             </div>
           </div>
-          {showBtn ? (
-            <>
-              <div className="footer-line " />
-              <div className="col-12  modal-footer">
-                <Button
-                  className=" btn-primary mr-4"
-                  // onClick={() => saveBillingData()}
-                >
-                  {isLoading.loader && isLoading.type === 'button' ? (
-                    <PageLoader color={Theme.white} type="button" />
-                  ) : (
-                    'Save Changes'
-                  )}
-                </Button>
-              </div>
-            </>
-          ) : (
-            ''
-          )}
+
+          <div className="footer-line " />
+          <div className="modal-footer">
+            <div className="col-12">
+              <Button
+                className=" btn-primary mr-4 w-100"
+                // onClick={() => saveBillingData()}
+              >
+                {isLoading.loader && isLoading.type === 'button' ? (
+                  <PageLoader color={Theme.white} type="button" />
+                ) : (
+                  'Save Changes'
+                )}
+              </Button>
+            </div>
+          </div>
         </ModalBox>
       </Modal>
     </>
