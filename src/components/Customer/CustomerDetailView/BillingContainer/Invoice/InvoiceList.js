@@ -1,17 +1,62 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
-import { arrayOf, bool, string } from 'prop-types';
+import { bool, string } from 'prop-types';
 
+import InvoiceAdjustmentsContainer from './InvoiceAdjustmentsContainer';
 import Theme from '../../../../../theme/Theme';
 import TableMobileView from '../../../../../common/TableMobileView';
-import { PageLoader, Status, Table, WhiteCard } from '../../../../../common';
 import { StatusColorSet } from '../../../../../constants';
+import { getInvoiceData } from '../../../../../api';
+import {
+  PageLoader,
+  Status,
+  Table,
+  WhiteCard,
+  Tabs,
+  NoData,
+} from '../../../../../common';
 
-const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
+const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
+  const [selectedComponent, setSelectedComponent] = useState('past');
+  const [invoicesData, setInvoicesData] = useState();
+  const [pastInvoiceLoader, setPastInvoiceLoader] = useState(false);
+  const [isApicall, setIsApiCall] = useState(false);
+
+  const getDSPInvoicesData = useCallback(
+    (type) => {
+      setPastInvoiceLoader(true);
+      getInvoiceData(type, id).then((res) => {
+        if (res && res.status === 500) {
+          setPastInvoiceLoader(false);
+          setInvoicesData(null);
+        }
+
+        if (res && res.status === 400) {
+          setPastInvoiceLoader(false);
+        }
+        if (res && res.status === 200) {
+          if (res.data && res.data.results) {
+            setInvoicesData(res.data.results);
+          } else {
+            setInvoicesData(null);
+          }
+          setPastInvoiceLoader(false);
+        }
+      });
+    },
+    [id],
+  );
+
+  useEffect(() => {
+    if (!isApicall) {
+      getDSPInvoicesData(invoiceType);
+      setIsApiCall(true);
+    }
+  }, [getDSPInvoicesData, invoiceType, isApicall, setIsApiCall]);
 
   const addThousandComma = useCallback((number, decimalDigits = 2) => {
     if (number !== undefined && number !== null) {
@@ -23,6 +68,39 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
 
     return number;
   }, []);
+
+  const renderPastUpcomingTab = () => {
+    return (
+      <>
+        {invoiceType === 'dsp service' ? (
+          <Tabs className="mb-3">
+            <ul className="tabs">
+              <li
+                className={selectedComponent === 'past' ? 'active' : ''}
+                onClick={() => {
+                  getDSPInvoicesData(invoiceType);
+                  setSelectedComponent('past');
+                }}
+                role="presentation">
+                Past Invoices
+              </li>
+              <li
+                className={selectedComponent === 'upcoming' ? 'active' : ''}
+                onClick={() => {
+                  getDSPInvoicesData(invoiceType);
+                  setSelectedComponent('upcoming');
+                }}
+                role="presentation">
+                Upcoming Invoices
+              </li>
+            </ul>
+          </Tabs>
+        ) : (
+          <div className="straight-line horizontal-line spacing " />
+        )}
+      </>
+    );
+  };
 
   const renderMobileDSPInvoices = () => {
     return (
@@ -42,10 +120,20 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
             </div>
           </div>
         </WhiteCard>
-        {data && data.length >= 1 ? (
-          data.map((item) => {
+        {renderPastUpcomingTab()}
+        {pastInvoiceLoader && invoiceType === 'dsp service' ? (
+          <PageLoader
+            component="performance-graph"
+            type="detail"
+            color={Theme.orange}
+            width={40}
+            height={40}
+          />
+        ) : invoicesData && invoicesData.length >= 1 ? (
+          invoicesData.map((item) => {
             return (
               <TableMobileView
+                key={item.id}
                 className="mb-3"
                 invoiceType={item.invoice_type}
                 invoiceId={item.next_next_invoiced_id}
@@ -109,7 +197,7 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
 
   const renderTableData = (item) => {
     return (
-      <tr>
+      <tr key={item.id}>
         <td className="product-body">
           <div className="company-name">{item.invoice_type}</div>
           <div className="status">#{item.next_invoiced_id}</div>
@@ -153,26 +241,41 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
               ? 'Monthly Retainer Invoices'
               : 'DSP Invoices'}
           </p>
-          <div className="straight-line horizontal-line spacing " />
-          <Table className="mt-0">
-            <thead>{renderTableHeader()}</thead>
-            {data && data.length >= 1 ? (
-              <tbody>{data.map((item) => renderTableData(item))}</tbody>
-            ) : null}
-          </Table>
-          {!data || (data && data.length === 0) ? (
-            <NoData>
-              No{' '}
-              {invoiceType === 'rev share'
-                ? 'Revenue Share Invoices'
-                : invoiceType === 'upsell'
-                ? 'Upsell Invoices'
-                : invoiceType === 'retainer'
-                ? 'Monthly Retainer Invoices'
-                : 'DSP Invoices'}{' '}
-              Found
-            </NoData>
-          ) : null}
+          {renderPastUpcomingTab()}
+
+          {pastInvoiceLoader && invoiceType === 'dsp service' ? (
+            <PageLoader
+              component="performance-graph"
+              type="detail"
+              color={Theme.orange}
+              width={40}
+              height={40}
+            />
+          ) : (
+            <>
+              <Table className="mt-0">
+                <thead>{renderTableHeader()}</thead>
+                {invoicesData && invoicesData.length >= 1 ? (
+                  <tbody>
+                    {invoicesData.map((item) => renderTableData(item))}
+                  </tbody>
+                ) : null}
+              </Table>
+              {!invoicesData || (invoicesData && invoicesData.length === 0) ? (
+                <NoData>
+                  No{' '}
+                  {invoiceType === 'rev share'
+                    ? 'Revenue Share Invoices'
+                    : invoiceType === 'upsell'
+                    ? 'Upsell Invoices'
+                    : invoiceType === 'retainer'
+                    ? 'Monthly Retainer Invoices'
+                    : 'DSP Invoices'}{' '}
+                  Found
+                </NoData>
+              ) : null}
+            </>
+          )}
         </WhiteCard>
       </>
     );
@@ -193,6 +296,13 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
       ) : (
         renderMobileDSPInvoices()
       )}
+      {invoiceType === 'dsp service' ? (
+        <InvoiceAdjustmentsContainer
+          id={id}
+          invoiceType={invoiceType}
+          addThousandComma={addThousandComma}
+        />
+      ) : null}
     </Wrapper>
   );
 };
@@ -200,14 +310,14 @@ const DSPInvoiceDetails = ({ loader, data, invoiceType }) => {
 export default DSPInvoiceDetails;
 
 DSPInvoiceDetails.defaultProps = {
-  data: null,
   invoiceType: 'rev share',
+  id: '',
 };
 
 DSPInvoiceDetails.propTypes = {
-  data: arrayOf(Array),
   loader: bool.isRequired,
   invoiceType: string,
+  id: string,
 };
 
 const Wrapper = styled.div`
@@ -217,9 +327,4 @@ const Wrapper = styled.div`
   .statusContainer {
     margin-top: 0px !important;
   }
-`;
-
-const NoData = styled.div`
-  margin: 3em;
-  text-align: center;
 `;
