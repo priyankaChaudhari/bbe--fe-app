@@ -47,20 +47,18 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     card_details: {},
     payment_terms: {},
   });
-  const paymentData = [
-    {
-      payment_terms: {
-        monthlyRetainer: 'Autopay',
-        revenueShare: 'NET-30',
-        dspAdditional: 'Due on receipt',
-        upsells: 'NET-14',
-      },
-    },
-  ];
 
-  // const [paymentData, setPaymentData] = useState({});
+  const [paymentData, setPaymentData] = useState({
+    payment_terms: {},
+    payment_details: {},
+    billing_contact: {},
+    billing_address: {},
+    card_details: {},
+  });
+
   console.log('formData', formData);
   console.log('data', data);
+  console.log('paymentData', paymentData);
   const monthlyRetainer = [
     { value: '3 Months', label: '3 Months' },
     { value: '4 Months', label: '4 Months' },
@@ -160,11 +158,25 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           response.data.card_details &&
           response.data.card_details[0] &&
           response.data.card_details[0].expiry_info,
-        payment_terms:
-          response &&
-          response.data &&
-          response.data.payment_terms &&
-          response.data.payment_terms[0],
+        // payment_terms:
+        //   response &&
+        //   response.data &&
+        //   response.data.payment_terms &&
+        //   response.data.payment_terms[0],
+      });
+      setPaymentData({
+        payment_terms: {
+          monthlyRetainer: 'Autopay',
+          revenueShare: 'NET-30',
+          dspAdditional: 'Due on receipt',
+          upsells: 'NET-14',
+        },
+        payment_details: {
+          monthlyRetainer: 'Autopay Autopay',
+          revenueShare: 'NET-30 NET-30',
+          dspAdditional: 'Due on receipt Due on receipt',
+          upsells: 'NET-14 NET-14',
+        },
       });
     });
   }, [id]);
@@ -174,8 +186,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   }, [billingDetails]);
 
   const mapDefaultValues = (type, key) => {
-    console.log('data[type]', data[type]);
-    console.log('paymentData[type]', paymentData[type]);
     if (key === 'expiration_date') {
       const getDate =
         data.card_details && data.card_details[0] && data.card_details[0][key]
@@ -188,9 +198,14 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         : '';
     }
     if (data && data[type] && data[type][0]) {
+      console.log('data[type]', data[type]);
       return data[type][0][key];
     }
+    return '';
+  };
+  const mapPaymentTermsDefaultValues = (type, key) => {
     if (paymentData && paymentData[type] && paymentData[type][0]) {
+      console.log('paymentData[type]', paymentData[type]);
       return paymentData[type][0][key];
     }
     return '';
@@ -413,18 +428,25 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return '';
   };
   const generateDropdown = (item, type) => {
+    console.log('item', item);
+    console.log('type', type);
     if (type === 'payment_terms') {
-      console.log('item', item);
-      console.log('type', type);
       return (
         <Select
           classNamePrefix="react-select"
-          placeholder={item.placeholder ? item.placeholder : 'Select'}
+          placeholder={
+            paymentData[type] &&
+            paymentData[type] &&
+            paymentData[type][0] &&
+            paymentData[type][0][item.key]
+              ? paymentData[type][0][item.key]
+              : 'Select the terms'
+          }
           defaultValue={
-            formData &&
-            formData[type] &&
-            formData[type][0] &&
-            formData[type][0][item.key]
+            paymentData[type] &&
+            paymentData[type] &&
+            paymentData[type][0] &&
+            paymentData[type][0][item.key]
           }
           options={getOptions(item.key)}
           name={item.key}
@@ -445,7 +467,15 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
               <div className="label mt-3">
                 {item.label}{' '}
                 {item.key === 'dsp_additional' ? (
-                  <img src={helpCircleIcon} alt="helpCircleIcon" width="18px" />
+                  <img
+                    src={helpCircleIcon}
+                    alt="helpCircleIcon"
+                    style={{
+                      width: '14px',
+                      verticalAlign: 'middle',
+                      paddingBottom: '3px',
+                    }}
+                  />
                 ) : null}
               </div>
               <ContractInputSelect>
@@ -684,27 +714,47 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   <div className="col-6">
                     <div className="label mt-3">Monthly Retainer</div>
                     <div className="label-info">
-                      {mapDefaultValues('payment_terms', 'monthly_retainer')}
+                      {mapPaymentTermsDefaultValues(
+                        'payment_terms',
+                        'monthly_retainer',
+                      )}
                     </div>
                   </div>
                   <div className="col-6">
                     <div className="label mt-3">Revenue Share </div>
                     <div className="label-info">
-                      {mapDefaultValues('payment_terms', 'revenue_share')}
+                      {mapPaymentTermsDefaultValues(
+                        'payment_terms',
+                        'revenue_share',
+                      )}
                     </div>
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-6">
-                    <div className="label mt-3">DSP (Additional)</div>
+                    <div className="label mt-3">
+                      DSP (Additional)
+                      <img
+                        src={helpCircleIcon}
+                        alt="helpCircleIcon"
+                        style={{
+                          width: '14px',
+                          verticalAlign: 'middle',
+                          paddingBottom: '3px',
+                        }}
+                      />
+                    </div>
                     <div className="label-info">
-                      {mapDefaultValues('payment_terms', 'dsp_additional')}
+                      {mapPaymentTermsDefaultValues(
+                        'payment_terms',
+                        'dsp_additional',
+                      )}
                     </div>
                   </div>
                   <div className="col-6">
                     <div className="label mt-3">Upsells</div>
                     <div className="label-info">
-                      {mapDefaultValues('payment_terms', 'upsells')}
+                      {mapPaymentTermsDefaultValues('payment_terms', 'upsells')}
                     </div>
                   </div>
                 </div>
@@ -901,15 +951,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   ) : (
                     'Save Changes'
                   )}
-                </Button>
-                <Button
-                  className=" btn-borderless"
-                  onClick={() => {
-                    setShowPaymentTermsModal(false);
-                    setShowBtn(false);
-                    setApiError({});
-                  }}>
-                  Discard Changes
                 </Button>
               </div>
             </>
