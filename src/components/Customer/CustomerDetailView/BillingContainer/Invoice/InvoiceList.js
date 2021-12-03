@@ -7,7 +7,6 @@ import { bool, string } from 'prop-types';
 
 import InvoiceAdjustmentsContainer from './InvoiceAdjustmentsContainer';
 import Theme from '../../../../../theme/Theme';
-import TableMobileView from '../../../../../common/TableMobileView';
 import { StatusColorSet } from '../../../../../constants';
 import { getInvoiceData } from '../../../../../api';
 import {
@@ -17,6 +16,7 @@ import {
   WhiteCard,
   Tabs,
   NoData,
+  TableMobileView,
 } from '../../../../../common';
 
 const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
