@@ -46,6 +46,9 @@ const ComissionsMetrics = ({ commissionMatrics }) => {
               postfix={item.postfix}
               type="invoices"
               breakDown={item.breakdown}
+              retainer={commissionMatrics.total_retainer}
+              revShare={commissionMatrics.total_rev_share}
+              dsp={commissionMatrics.total_dsp}
             />
           </div>
         ))}

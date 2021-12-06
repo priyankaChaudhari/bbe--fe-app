@@ -138,11 +138,17 @@ const BrandPartnerModal = ({
                             <td width="5%">{partner.dsp}</td>
                             <td width="12%">{partner.total_book_size}</td>
                             <td width="15%" className="text-bold">
-                              {partner.total_book_size_commission}
+                              {partner.total_book_size_commission === null
+                                ? '-'
+                                : partner.total_book_size_commission}
                             </td>
-                            <td width="8%">{partner.upsell}</td>
+                            <td width="8%">
+                              {partner.upsell === null ? '-' : partner.upsell}
+                            </td>
                             <td width="12%" className="text-bold">
-                              {partner.upsell_commission}
+                              {partner.upsell_commission === null
+                                ? '-'
+                                : partner.upsell_commission}
                             </td>
                             <td width="10%" className="text-bold">
                               {partner.total_commission}
@@ -212,19 +218,23 @@ const BrandPartnerModal = ({
                         <li>
                           <div className="label">BOOK Size Comm.</div>
                           <div className="label-info label-info-dark">
-                            {partner.total_book_size_commission}
+                            {partner.total_book_size_commission === null
+                              ? '-'
+                              : partner.total_book_size_commission}
                           </div>
                         </li>
                         <li>
                           <div className="label">upsells </div>
                           <div className="label-info label-info-dark">
-                            {partner.upsell}
+                            {partner.upsell === null ? '-' : partner.upsell}
                           </div>
                         </li>
                         <li>
                           <div className="label">Upsells comm.</div>
                           <div className="label-info label-info-dark ">
-                            {partner.upsell_commission}
+                            {partner.upsell_commission === null
+                              ? '-'
+                              : partner.upsell_commission}
                           </div>
                         </li>
                         <li>
