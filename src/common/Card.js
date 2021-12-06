@@ -12,7 +12,7 @@ const rendeTootipData = () => {
   return `
     <div style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
       <div style="display: "> 
-        <div style="color:#ffffff; font-size: 12px">Sales Breakdown</div>
+        <div style="color:#ffffff; font-size: 12px">Total Book Size BreakDown</div>
       </div>
       <div class="row">
           <div class="col-6">
@@ -20,7 +20,8 @@ const rendeTootipData = () => {
           text-transform: uppercase;
           font-size: 11px;
           margin-top: 8px;
-         ">Organic Sales
+         ">Retainer
+         
         </div>
           </div>
            <div class="col-6">
@@ -38,7 +39,7 @@ const rendeTootipData = () => {
           text-transform: uppercase;
           font-size: 11px;
           margin-top:7px;
-         ">In-Organic Sales
+         ">Rev Share
         </div>
           </div>
            <div class="col-6">
@@ -52,8 +53,26 @@ const rendeTootipData = () => {
             $9870
            </div>
            </div>
-      </div>
-     
+           <div class="col-6">
+           <div style="color: #f4f6fc;
+          text-transform: uppercase;
+          font-size: 11px;
+          margin-top:7px;
+         ">DSP
+        </div>
+          </div>
+           <div class="col-6">
+             <div style="color: #f4f6fc;
+              font-size: 16px;
+              margin-left: 25px;
+              float: right;
+              text-align: right;
+              margin-top: 4px;
+             ">
+            $9870
+           </div>
+           </div>
+      </div>     
     </div>`;
 };
 

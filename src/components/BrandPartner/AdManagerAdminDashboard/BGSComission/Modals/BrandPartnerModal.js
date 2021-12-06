@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 
 import Modal from 'react-modal';
 import { useMediaQuery } from 'react-responsive';
-import { bool, func, string } from 'prop-types';
+import { bool, func, shape, string } from 'prop-types';
 
 import { CloseIcon } from '../../../../../theme/images';
 import { CommissionResseque } from '../BGSComissionContainerStyle';
@@ -19,7 +19,7 @@ import {
 const BrandPartnerModal = ({
   showModal,
   setShowModal,
-  BgsID,
+  Bgs,
   startDate,
   endDate,
 }) => {
@@ -59,7 +59,7 @@ const BrandPartnerModal = ({
 
   useEffect(() => {
     setIsLoading(true);
-    getBgsBrandPartners(BgsID, startDate, endDate).then((res) => {
+    getBgsBrandPartners(Bgs.id, startDate, endDate).then((res) => {
       if (res && (res.status === 400 || res.status === 404)) {
         setIsLoading(false);
       }
@@ -70,7 +70,7 @@ const BrandPartnerModal = ({
       }
       setIsLoading(false);
     });
-  }, [BgsID, startDate, endDate]);
+  }, [Bgs, startDate, endDate]);
 
   return (
     <Modal
@@ -94,7 +94,7 @@ const BrandPartnerModal = ({
                 <div className="row">
                   <div className="col-8 ">
                     <div className="header-title large-header-title  ">
-                      Julia Resseque
+                      {Bgs.name}
                     </div>
                   </div>
                   <div className="col-4">
@@ -308,7 +308,7 @@ export default BrandPartnerModal;
 BrandPartnerModal.propTypes = {
   showModal: bool.isRequired,
   setShowModal: func.isRequired,
-  BgsID: string.isRequired,
+  Bgs: shape.isRequired,
   startDate: string.isRequired,
   endDate: string.isRequired,
 };

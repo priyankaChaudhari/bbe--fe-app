@@ -77,7 +77,9 @@ export default function BGSCommissionTableDesktopView({
                 {commissionData.map((item) => {
                   return (
                     <div key={item.id}>
-                      <tr className="ungroup">
+                      <tr
+                        onClick={() => OnSetShowModal(item.id, item.full_name)}
+                        className="ungroup">
                         <td width="10%">
                           {item.full_name?.replace(/\b(\w)/g, (s) =>
                             s.toUpperCase(),
@@ -137,7 +139,13 @@ export default function BGSCommissionTableDesktopView({
                   <table>
                     <tbody style={{ width: '100%', display: 'table' }}>
                       {item && item.bgs_manager ? (
-                        <tr onClick={() => OnSetShowModal(item.bgs_manager.id)}>
+                        <tr
+                          onClick={() =>
+                            OnSetShowModal(
+                              item.bgs_manager.id,
+                              item.bgs_manager.full_name,
+                            )
+                          }>
                           <td width="10%" className="text-bold">
                             {item.bgs_manager.full_name.replace(
                               /\b(\w)/g,
@@ -184,7 +192,12 @@ export default function BGSCommissionTableDesktopView({
                           return (
                             <tr
                               key={memberItem.id}
-                              onClick={() => OnSetShowModal(memberItem.id)}>
+                              onClick={() =>
+                                OnSetShowModal(
+                                  memberItem.id,
+                                  memberItem.full_name,
+                                )
+                              }>
                               <td width="10%">
                                 {memberItem.full_name.replace(/\b(\w)/g, (s) =>
                                   s.toUpperCase(),

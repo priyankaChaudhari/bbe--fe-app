@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { arrayOf, bool } from 'prop-types';
+import { arrayOf, bool, func } from 'prop-types';
 import { NoData, PageLoader } from '../../../../common';
 
 import TableMobileView from '../../../../common/TableMobileView';
@@ -11,6 +11,7 @@ function BGSCommissionTableResponsiveView({
   isGroupBy,
   loader,
   commissionData,
+  OnSetShowModal,
 }) {
   return (
     <CommissionTabletView className="mt-4 d-md-none d-block">
@@ -21,6 +22,12 @@ function BGSCommissionTableResponsiveView({
                 <div key={item.bgs_manager?.id}>
                   {item && item.bgs_manager ? (
                     <TableMobileView
+                      onClick={() =>
+                        OnSetShowModal(
+                          item.bgs_manager.id,
+                          item.bgs_manager.full_name,
+                        )
+                      }
                       mainLabel={item.bgs_manager.full_name.replace(
                         /\b(\w)/g,
                         (s) => s.toUpperCase(),
@@ -63,6 +70,9 @@ function BGSCommissionTableResponsiveView({
                       return (
                         <TableMobileView
                           key={memberItem.id}
+                          onClick={() =>
+                            OnSetShowModal(memberItem.id, memberItem.full_name)
+                          }
                           label="Team Member"
                           labelInfo={memberItem.full_name.replace(
                             /\b(\w)/g,
@@ -108,6 +118,9 @@ function BGSCommissionTableResponsiveView({
             return (
               <TableMobileView
                 key={memberItem.id}
+                onClick={() =>
+                  OnSetShowModal(memberItem.id, memberItem.full_name)
+                }
                 label="Team Member"
                 labelInfo={memberItem.full_name?.replace(/\b(\w)/g, (s) =>
                   s.toUpperCase(),
@@ -158,10 +171,12 @@ BGSCommissionTableResponsiveView.defaultProps = {
   isGroupBy: true,
   loader: false,
   commissionData: null,
+  OnSetShowModal: () => {},
 };
 
 BGSCommissionTableResponsiveView.propTypes = {
   isGroupBy: bool,
   loader: bool,
   commissionData: arrayOf(Array),
+  OnSetShowModal: func,
 };
