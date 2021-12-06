@@ -7,8 +7,9 @@ import { number, oneOfType, string } from 'prop-types';
 import styled from 'styled-components';
 
 import Theme from '../theme/Theme';
+import { numberWithCommas } from '../hooks/numberWithComas';
 
-const rendeTootipData = () => {
+const rendeTootipData = (retainer, dsp, revShare) => {
   return `
     <div style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
       <div style="display: "> 
@@ -31,7 +32,7 @@ const rendeTootipData = () => {
               float: right;
               text-align: right;
               margin-top: 4px;
-             ">$7888
+             "> $${numberWithCommas(retainer)}
            </div>
            </div>
              <div class="col-6">
@@ -50,7 +51,7 @@ const rendeTootipData = () => {
               text-align: right;
               margin-top: 4px;
              ">
-            $9870
+             $${numberWithCommas(revShare)}
            </div>
            </div>
            <div class="col-6">
@@ -69,7 +70,7 @@ const rendeTootipData = () => {
               text-align: right;
               margin-top: 4px;
              ">
-            $9870
+             $${numberWithCommas(dsp)}
            </div>
            </div>
       </div>     
@@ -90,6 +91,9 @@ const Card = ({
   postfix = null,
   type,
   breakDown,
+  retainer,
+  dsp,
+  revShare,
 }) => (
   <CardWrapper className={[className]}>
     <p className="heading mt-0">{heading}</p>
@@ -109,7 +113,7 @@ const Card = ({
           {breakDown ? (
             <div
               className="label-card-text "
-              data-tip={rendeTootipData()}
+              data-tip={rendeTootipData(retainer, revShare, dsp)}
               data-html
               data-for="break-down">
               {breakDown}
@@ -212,6 +216,9 @@ Card.defaultProps = {
   totalBillText: '',
   type: '',
   breakDown: '',
+  retainer: 0,
+  dsp: 0,
+  revShare: 0,
 };
 
 Card.propTypes = {
@@ -228,4 +235,7 @@ Card.propTypes = {
   totalBillText: string,
   type: string,
   breakDown: string,
+  retainer: number,
+  dsp: number,
+  revShare: number,
 };
