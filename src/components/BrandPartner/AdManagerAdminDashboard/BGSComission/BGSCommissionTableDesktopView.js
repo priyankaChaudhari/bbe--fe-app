@@ -79,7 +79,7 @@ export default function BGSCommissionTableDesktopView({
                     <div key={item.id}>
                       <tr
                         onClick={() => OnSetShowModal(item.id, item.full_name)}
-                        className="ungroup">
+                        className="ungroup cursor">
                         <td width="10%">
                           {item.full_name?.replace(/\b(\w)/g, (s) =>
                             s.toUpperCase(),
@@ -140,6 +140,7 @@ export default function BGSCommissionTableDesktopView({
                     <tbody style={{ width: '100%', display: 'table' }}>
                       {item && item.bgs_manager ? (
                         <tr
+                          className="cursor"
                           onClick={() =>
                             OnSetShowModal(
                               item.bgs_manager.id,
