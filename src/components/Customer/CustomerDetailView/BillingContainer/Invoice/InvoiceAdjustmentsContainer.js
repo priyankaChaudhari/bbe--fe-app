@@ -115,7 +115,8 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
           />
         </td>
         <td className="product-table-body light-font text-right">
-          {dayjs(item.due_date).format('MM/DD/YYYY')}
+          {/* {dayjs(item.due_date).format('MM/DD/YYYY')} */}
+          <div className="orange-status"> Send Reminder</div>
         </td>
       </tr>
     );

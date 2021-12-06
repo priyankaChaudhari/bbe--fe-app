@@ -18,6 +18,7 @@ import {
   NoData,
   TableMobileView,
 } from '../../../../../common';
+import { BellNotification } from '../../../../../theme/images';
 
 const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -202,8 +203,17 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
           <div className="company-name">{item.invoice_type}</div>
           <div className="status">#{item.next_invoiced_id}</div>
         </td>
-        <td className="product-body">
-          ${addThousandComma(item.monthly_budget, 0)}
+        <td className="product-body dsp-invoice">
+          <div className="notification-bell">
+            ${addThousandComma(item.monthly_budget, 0)}
+            <img
+              width="16px"
+              className="ml-1"
+              style={{ verticalAlign: 'middle' }}
+              src={BellNotification}
+              alt="bell"
+            />
+          </div>
         </td>
         <td className="product-table-body light-font">
           {dayjs(item.generated_at).format('MM/DD/YYYY')}
