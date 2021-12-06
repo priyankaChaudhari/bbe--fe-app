@@ -51,6 +51,9 @@ const Table = styled.table`
           border-bottom: 1px solid #e0e6e8;
         }
       }
+      &.dsp-invoice {
+        margin-left: 10px;
+      }
       &.agreement {
         font-size: ${Theme.normal};
         border-bottom: 1px solid ${Theme.gray11};
@@ -68,6 +71,17 @@ const Table = styled.table`
         &.light-font {
           font-weight: 300;
         }
+        .orange-status {
+          color: ${Theme.orange};
+          font-size: ${Theme.extraNormal};
+          font-weight: ${Theme.baseMediumFontFamily};
+        }
+      }
+
+      .notification-bell:hover {
+        background-color: ${Theme.gray8};
+        border-radius: 5px;
+        padding: 3px;
       }
       &.product-catalog-body {
         border-top: 1px solid ${Theme.gray11};

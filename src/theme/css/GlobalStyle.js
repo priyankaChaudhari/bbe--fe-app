@@ -10,7 +10,7 @@ import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.wof
 import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff';
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
-// import NoahMedium from '../fonts/noah-font/NoahMedium.otf';
+import NoahMedium from '../fonts/Noah/Noah/WEB/NoahMedium.otf';
 
 import { CalendarFontBackArrow } from '../images/index';
 
@@ -52,6 +52,10 @@ const bodyStyles = createGlobalStyle`
    @font-face {
     font-family: 'Helvetica-Bold';
     src: url(${HelveticaBold});
+  } 
+   @font-face {
+    font-family: 'Noah-Medium';
+    src: url(${NoahMedium});
   } 
 
 html,
@@ -273,7 +277,12 @@ h6 {
   flex: initial;
   height: 100%;
 }
-
+.text-bold {
+   font-family: ${Theme.titleFontFamily};
+}
+.text-medium{
+   font-family: ${Theme.baseMediumFontFamily};
+}
 p {
   font-size: ${Theme.small};
 
@@ -331,6 +340,12 @@ p {
   &.gray-text {
     color: ${Theme.gray90};
     font-size: ${Theme.extraMedium}; 
+  }
+
+  &.orange-text {
+    color: ${Theme.orange};
+    font-size: ${Theme.extraNormal};
+    font-weight: ${Theme.baseFontFamily};
   }
   &.extra-bold {
     color: ${Theme.gray90};

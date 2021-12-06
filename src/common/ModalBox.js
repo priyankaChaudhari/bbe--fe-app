@@ -123,7 +123,16 @@ const ModalBox = styled.div`
       margin-right: 15px;
       margin-top: -2px;
     }
+    .invoice-adj-radio {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
 
+      li {
+        display: inline-block;
+        margin-right: 25px;
+      }
+    }
     @media not all and (min-resolution: 0.001dpcm) {
       @supports (-webkit-appearance: none) {
         .modal-heading {
