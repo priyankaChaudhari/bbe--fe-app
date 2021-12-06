@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { shape, string } from 'prop-types';
+import { oneOfType, shape, string, object } from 'prop-types';
 
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
@@ -41,6 +41,7 @@ const BillingContainer = ({
                     ? 'disabled'
                     : ''
                 }
+                key={item.key}
                 onClick={() => {
                   setViewComponent(item.key);
                 }}
@@ -95,6 +96,10 @@ BillingContainer.propTypes = {
     customer_onboarding: string,
   }).isRequired,
   onBoardingId: string,
-  customerStatus: string,
+  customerStatus: oneOfType({
+    string,
+    object,
+  }),
+  // customerStatus: string,
   redirectType: string,
 };

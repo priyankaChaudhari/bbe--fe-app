@@ -21,7 +21,7 @@ import {
 import {
   billingAddress,
   creditCardDetails,
-  payemntTermsDetails,
+  payemntTerms,
 } from '../../../../../constants';
 import { getBillingDetails, saveBillingInfo } from '../../../../../api';
 import {
@@ -51,70 +51,38 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   const [paymentData, setPaymentData] = useState({
     payment_terms: {},
-    payment_details: {},
+    payment_terms_two: {},
     billing_contact: {},
     billing_address: {},
     card_details: {},
   });
 
-  console.log('formData', formData);
-  console.log('data', data);
-  console.log('paymentData', paymentData);
+  // console.log('formData', formData);
+  // console.log('data', data);
+  // console.log('paymentData', paymentData);
   const monthlyRetainer = [
-    { value: '3 Months', label: '3 Months' },
-    { value: '4 Months', label: '4 Months' },
-    { value: '5 Months', label: '5 Months' },
-    { value: '6 Months', label: '6 Months' },
-    { value: '7 Months', label: '7 Months' },
-    { value: '8 Months', label: '8 Months' },
-    { value: '9 Months', label: '9 Months' },
-    { value: '10 Months', label: '10 Months' },
-    { value: '11 Months', label: '11 Months' },
-    { value: '12 Months', label: '12 Months' },
-    { value: '18 Months', label: '18 Months' },
-    { value: '24 Months', label: '24 Months' },
+    { key: 'monthly_retainer', label: 'Monthly Retainer' },
+    { key: 'due_on_reciept', label: 'Due on receipt' },
+    { key: 'net_30', label: 'NET 30' },
+    { key: 'net_14', label: 'NET 14' },
   ];
   const revenueShare = [
-    { value: '3 Months', label: '3 Months' },
-    { value: '4 Months', label: '4 Months' },
-    { value: '5 Months', label: '5 Months' },
-    { value: '6 Months', label: '6 Months' },
-    { value: '7 Months', label: '7 Months' },
-    { value: '8 Months', label: '8 Months' },
-    { value: '9 Months', label: '9 Months' },
-    { value: '10 Months', label: '10 Months' },
-    { value: '11 Months', label: '11 Months' },
-    { value: '12 Months', label: '12 Months' },
-    { value: '18 Months', label: '18 Months' },
-    { value: '24 Months', label: '24 Months' },
+    { key: 'autopay', label: 'Autopay' },
+    { key: 'due_on_reciept', label: 'Due on receipt' },
+    { key: 'net_30', label: 'NET 30' },
+    { key: 'net_14', label: 'NET 14' },
   ];
   const dspAdditional = [
-    { value: '3 Months', label: '3 Months' },
-    { value: '4 Months', label: '4 Months' },
-    { value: '5 Months', label: '5 Months' },
-    { value: '6 Months', label: '6 Months' },
-    { value: '7 Months', label: '7 Months' },
-    { value: '8 Months', label: '8 Months' },
-    { value: '9 Months', label: '9 Months' },
-    { value: '10 Months', label: '10 Months' },
-    { value: '11 Months', label: '11 Months' },
-    { value: '12 Months', label: '12 Months' },
-    { value: '18 Months', label: '18 Months' },
-    { value: '24 Months', label: '24 Months' },
+    { key: 'autopay', label: 'Autopay' },
+    { key: 'due_on_reciept', label: 'Due on receipt' },
+    { key: 'net_30', label: 'NET 30' },
+    { key: 'net_14', label: 'NET 14' },
   ];
   const upsells = [
-    { value: '3 Months', label: '3 Months' },
-    { value: '4 Months', label: '4 Months' },
-    { value: '5 Months', label: '5 Months' },
-    { value: '6 Months', label: '6 Months' },
-    { value: '7 Months', label: '7 Months' },
-    { value: '8 Months', label: '8 Months' },
-    { value: '9 Months', label: '9 Months' },
-    { value: '10 Months', label: '10 Months' },
-    { value: '11 Months', label: '11 Months' },
-    { value: '12 Months', label: '12 Months' },
-    { value: '18 Months', label: '18 Months' },
-    { value: '24 Months', label: '24 Months' },
+    { key: 'autopay', label: 'Autopay' },
+    { key: 'due_on_reciept', label: 'Due on receipt' },
+    { key: 'net_30', label: 'NET 30' },
+    { key: 'net_14', label: 'NET 14' },
   ];
   const [showBtn, setShowBtn] = useState(false);
 
@@ -132,16 +100,11 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       transform: 'translate(-50%, -50%)',
     },
   };
-  const renderDspToolTipInfo = () => {
-    return (
-      <div>
-        The payment terms you select here will only apply to one-time and
-        permanent additional DSP invoices. <br />
-        Standard monthly DSP invoices have default payment terms which cannot be
-        changed);
-      </div>
-    );
-  };
+  const renderDspToolTipInfo = `The payment terms you select here will only apply to one-time and
+          permanent additional DSP invoices. <br />
+          Standard monthly DSP invoices have default payment terms which cannot
+          be changed)`;
+
   const billingDetails = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
     getBillingDetails(id).then((response) => {
@@ -158,22 +121,26 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           response?.data?.card_details &&
           response.data.card_details[0] &&
           response.data.card_details[0].expiry_info,
-        payment_terms:
-          response?.data?.payment_terms && response.data.payment_terms[0],
+        // payment_terms:
+        //   response?.data?.payment_terms && response.data.payment_terms[0],
       });
       setPaymentData({
-        payment_terms: {
-          monthlyRetainer: 'Autopay',
-          revenueShare: 'NET-30',
-          dspAdditional: 'Due on receipt',
-          upsells: 'NET-14',
-        },
-        payment_details: {
-          monthlyRetainer: 'Autopay Autopay',
-          revenueShare: 'NET-30 NET-30',
-          dspAdditional: 'Due on receipt Due on receipt',
-          upsells: 'NET-14 NET-14',
-        },
+        payment_terms: [
+          {
+            monthly_retainer: 'Autopay',
+            revenue_share: 'NET-30',
+            dsp_additional: 'Due on receipt',
+            upsells: 'NET-14',
+          },
+        ],
+        payment_terms_two: [
+          {
+            monthly_retainer: 'Autopay two',
+            revenue_share: 'NET-30 two',
+            dsp_additional: 'Due on receipt two',
+            upsells: 'NET-14 two',
+          },
+        ],
       });
     });
   }, [id]);
@@ -201,7 +168,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return '';
   };
   const mapPaymentTermsDefaultValues = (type, key) => {
-    console.log('paymentData[type]', paymentData[type]);
     if (paymentData && paymentData[type] && paymentData[type][0]) {
       console.log('paymentData[type]', paymentData[type]);
       return paymentData[type][0][key];
@@ -211,14 +177,24 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   const handleChange = (event, item, type) => {
     setShowBtn(true);
-    setFormData({
-      ...formData,
+    if (type !== 'payment_terms') {
+      setFormData({
+        ...formData,
+        [type]: {
+          ...formData[type],
+          [item.key]: item.key === 'card_number' ? event : event.target.value,
+        },
+      });
+    }
+    console.log('item.key', item.key);
+    console.log('type', type);
+    setPaymentData({
+      ...paymentData,
       [type]: {
-        ...formData[type],
-        [item.key]: item.key === 'card_number' ? event : event.target.value,
+        ...paymentData[type],
+        [item.key]: event,
       },
     });
-
     setApiError({
       ...apiError,
       [type]: {
@@ -426,41 +402,46 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return '';
   };
   const generateDropdown = (item, type) => {
-    console.log('item', item);
-    console.log('type', type);
-    if (type === 'payment_terms') {
-      return (
-        <Select
-          classNamePrefix="react-select"
-          placeholder={
-            paymentData[type] &&
-            paymentData[type] &&
-            paymentData[type][0] &&
-            paymentData[type][0][item.key]
-              ? paymentData[type][0][item.key]
-              : 'Select the terms'
-          }
-          defaultValue={
-            paymentData[type] &&
-            paymentData[type] &&
-            paymentData[type][0] &&
-            paymentData[type][0][item.key]
-          }
-          options={getOptions(item.key)}
-          name={item.key}
-          components={{ DropdownIndicator }}
-          onChange={(event) => handleChange(event, item, type)}
-        />
-      );
-    }
+    // console.log('item', item);
+    // console.log('type', type);
+    // console.log(
+    //   'key',
+    //   paymentData &&
+    //     paymentData[type] &&
+    //     paymentData[type][0] &&
+    //     paymentData[type][0][item.key],
+    // );
 
-    return '';
+    return (
+      <Select
+        classNamePrefix="react-select"
+        placeholder={
+          paymentData &&
+          paymentData[type] &&
+          paymentData[type][0] &&
+          paymentData[type][0][item.key]
+            ? paymentData[type][0][item.key]
+            : 'Select the terms'
+        }
+        defaultValue={
+          paymentData &&
+          paymentData[type] &&
+          paymentData[type][0] &&
+          paymentData[type][0][item.key]
+        }
+        options={getOptions(item.key)}
+        name={item.key}
+        value={item.key}
+        components={{ DropdownIndicator }}
+        onChange={(event) => handleChange(event, item, type)}
+      />
+    );
   };
   const mapPaymentTermsDetails = () => {
     return (
       <>
         <div className="row">
-          {payemntTermsDetails.map((item) => (
+          {payemntTerms.map((item) => (
             <div className="col-12" key={item.key}>
               <div className="label mt-3">
                 {item.label}{' '}
@@ -473,9 +454,18 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                       verticalAlign: 'middle',
                       paddingBottom: '3px',
                     }}
+                    data-tip={renderDspToolTipInfo}
+                    data-for="dspAdditionalInfo"
                   />
                 ) : null}
               </div>
+              <ReactTooltip
+                id="dspAdditionalInfo"
+                aria-haspopup="true"
+                place="bottom"
+                effect="solid"
+                html
+              />
               <ContractInputSelect>
                 {generateDropdown(item, 'payment_terms')}
               </ContractInputSelect>
@@ -573,7 +563,18 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         setApiError(res && res.data);
       }
     });
+    setPaymentData({
+      ...paymentData,
+      payment_terms: paymentData.payment_terms,
+      payment_terms_two: paymentData.payment_terms_two,
+    });
+    console.log('formData', formData);
+    console.log('paymentData.payment_terms', paymentData.payment_terms);
   };
+
+  // const savePaymentData = () => {
+
+  // };
 
   return (
     <>
@@ -740,7 +741,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                           verticalAlign: 'middle',
                           paddingBottom: '3px',
                         }}
-                        data-tip={renderDspToolTipInfo()}
+                        data-tip={renderDspToolTipInfo}
                         data-for="dspAdditionalInfo"
                       />
                     </div>
@@ -749,6 +750,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                       aria-haspopup="true"
                       place="bottom"
                       effect="solid"
+                      html
                     />
                     <div className="label-info">
                       {mapPaymentTermsDefaultValues(
@@ -947,18 +949,15 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
           <div className="footer-line " />
           <div className="modal-footer">
-            <div className="col-12">
-              <Button
-                className=" btn-primary mr-4 w-100"
-                // onClick={() => saveBillingData()}
-              >
-                {isLoading.loader && isLoading.type === 'button' ? (
-                  <PageLoader color={Theme.white} type="button" />
-                ) : (
-                  'Save Changes'
-                )}
-              </Button>
-            </div>
+            <Button
+              className=" btn-primary mr-4 w-100"
+              onClick={() => saveBillingData()}>
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color={Theme.white} type="button" />
+              ) : (
+                'Save Changes'
+              )}
+            </Button>
           </div>
         </ModalBox>
       </Modal>

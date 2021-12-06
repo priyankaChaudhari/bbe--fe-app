@@ -111,7 +111,7 @@ export const paymentType = [
   { key: 'credit_card', label: 'Credit Card', type: 'radio' },
 ];
 
-export const payemntTermsDetails = [
+export const payemntTerms = [
   {
     key: 'monthly_retainer',
     label: 'Monthly Retainer',
