@@ -148,6 +148,7 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
               <>
                 <div className="straight-line horizontal-line spacing " />
                 <p
+                  className="orange-text-label cursor"
                   onClick={() => setShowAllPastInvoicesModal(true)}
                   role="presentation">
                   {' '}
@@ -180,33 +181,44 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
         ) : invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
           invoicesAdjustmentData.map((item) => {
             return (
-              <TableMobileView
-                key={item.id}
-                className="mb-3"
-                invoiceType={item.invoice_type}
-                invoiceId={item.next_next_invoiced_id}
-                status={item.invoice_status}
-                statusColor={
-                  StatusColorSet[
-                    item.invoice_status.split(' ')[0].toLowerCase()
-                  ]
-                    ? StatusColorSet[
-                        item.invoice_status.split(' ')[0].toLowerCase()
-                      ]
-                    : '#E3F2D2'
-                }
-                label="Amount"
-                labelInfo={addThousandComma(item.monthly_budget, 0)}
-                label1="Created on"
-                labelInfo1={dayjs(item.generated_at).format('MM/DD/YYYY')}
-                label2="Due"
-                labelInfo2={dayjs(item.due_date).format('MM/DD/YYYY')}
-              />
+              <>
+                <TableMobileView
+                  key={item.id}
+                  className="mb-3"
+                  invoiceType={item.invoice_type}
+                  invoiceId={item.next_next_invoiced_id}
+                  status={item.invoice_status}
+                  statusColor={
+                    StatusColorSet[
+                      item.invoice_status.split(' ')[0].toLowerCase()
+                    ]
+                      ? StatusColorSet[
+                          item.invoice_status.split(' ')[0].toLowerCase()
+                        ]
+                      : '#E3F2D2'
+                  }
+                  label="Amount"
+                  labelInfo={addThousandComma(item.monthly_budget, 0)}
+                  label1="Created on"
+                  labelInfo1={dayjs(item.generated_at).format('MM/DD/YYYY')}
+                  label2="Due"
+                  labelInfo2={dayjs(item.due_date).format('MM/DD/YYYY')}
+                />
+
+                <div className="straight-line horizontal-line spacing " />
+              </>
             );
           })
         ) : (
           <NoData>No Invoices Found</NoData>
         )}
+        <p
+          className="orange-text-label cursor"
+          onClick={() => setShowAllPastInvoicesModal(true)}
+          role="presentation">
+          {' '}
+          View all past adjustments
+        </p>
       </>
     );
   };
@@ -215,18 +227,18 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
     <Wrapper>
       <WhiteCard className="mb-3">
         <div className="row">
-          <div className="col-md-9  col-sm1-12 pr-0">
+          <div className="col-5">
             <p
               style={{ marginTop: '0px' }}
-              className="black-heading-title mb-4">
+              className="black-heading-title mb-4 mt-3">
               Invoices Adjustments
             </p>
           </div>
-          <div className="col-md-3 col-sm1-12  mb-3 pl-0">
+          <div className="col-7 mb-3 text-right">
             <Button
               onClick={() => setShowInvoiceAdjustmentModal(true)}
               type="button"
-              className="btn-primary on-boarding   w-100">
+              className="btn-primary invoice-adjustment">
               Create Adjustment
             </Button>
           </div>

@@ -180,7 +180,7 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
         <th width="31%" className="product-header">
           Invoice Type / Number
         </th>
-        <th width="17%" className="product-header">
+        <th width="17%" className="product-header pl-2">
           Amount
         </th>
         <th width="17%" className="product-header">
@@ -203,8 +203,8 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
           <div className="company-name">{item.invoice_type}</div>
           <div className="status">#{item.next_invoiced_id}</div>
         </td>
-        <td className="product-body dsp-invoice">
-          <div className="notification-bell">
+        <td className="product-body dsp-invoice pl-2">
+          <div className="notification-bell pl-2">
             ${addThousandComma(item.monthly_budget, 0)}
             <img
               width="16px"
