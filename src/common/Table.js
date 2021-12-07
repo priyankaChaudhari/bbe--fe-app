@@ -12,7 +12,7 @@ const Table = styled.table`
   tr {
     text-align: left;
     background: ${Theme.white};
-    border: 1px solid rgba(46, 91, 255, 0.08);
+    /* border: 1px solid rgba(46, 91, 255, 0.08); */
     border-radius: 1px;
     font-family: ${Theme.baseFontFamily};
     width: 100%;
@@ -51,9 +51,20 @@ const Table = styled.table`
           border-bottom: 1px solid #e0e6e8;
         }
       }
-      &.dsp-invoice {
-        margin-left: 10px;
+
+      &.small-label-text {
+        font-size: ${Theme.extraNormal};
+        /* border-bottom: 1px solid ${Theme.gray11}; */
+
+        .type {
+          font-family: ${Theme.baseMediumFontFamily};
+        }
+        .marketplace {
+          font-family: ${Theme.baseFontFamily};
+          font-weight: 300;
+        }
       }
+
       &.agreement {
         font-size: ${Theme.normal};
         border-bottom: 1px solid ${Theme.gray11};
@@ -80,8 +91,10 @@ const Table = styled.table`
 
       .notification-bell:hover {
         background-color: ${Theme.gray8};
+        padding: 4px 6px;
+        width: fit-content;
         border-radius: 5px;
-        padding: 3px;
+        cursor: pointer;
       }
       &.product-catalog-body {
         border-top: 1px solid ${Theme.gray11};

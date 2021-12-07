@@ -56,6 +56,7 @@ const bodyStyles = createGlobalStyle`
    @font-face {
     font-family: 'Noah-Medium';
     src: url(${NoahMedium});
+    font-weight: 500;
   } 
 
 html,
@@ -342,7 +343,7 @@ p {
     font-size: ${Theme.extraMedium}; 
   }
 
-  &.orange-text {
+  &.orange-text-label {
     color: ${Theme.orange};
     font-size: ${Theme.extraNormal};
     font-weight: ${Theme.baseFontFamily};

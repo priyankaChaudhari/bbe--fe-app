@@ -234,6 +234,11 @@ const Button = styled.button`
       width: 152px;
     }
   }
+  @media only screen and (max-width: 450px) {
+    &.invoice-adjustment {
+      width: 100%;
+    }
+  }
 `;
 
 export default Button;
