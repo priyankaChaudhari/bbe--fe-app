@@ -346,7 +346,8 @@ export default function CustomerMainContainer() {
                             <ModalRadioCheck
                               className={`pb-1 ${
                                 customer?.customer_account_type === 'Vendor'
-                                  ? 'disabled'
+                                  ? // ? 'disabled'
+                                    null
                                   : null
                               }`}
                               key="seller">
@@ -371,7 +372,8 @@ export default function CustomerMainContainer() {
                             <ModalRadioCheck
                               className={`pb-1 ${
                                 customer?.customer_account_type === 'Seller'
-                                  ? 'disabled'
+                                  ? // ? 'disabled'
+                                    null
                                   : null
                               }`}
                               key="vendor">
