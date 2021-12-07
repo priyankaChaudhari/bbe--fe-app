@@ -22,6 +22,7 @@ export default function CustomerTabDetails({
   subViewComponent,
   setSubViewComponent,
 }) {
+  const customerAccountType = customer?.customer_account_type;
   const dispatch = useDispatch();
   const [isCollapseOpen, setIsCollapseOpen] = useState(
     viewComponent === 'performance',
@@ -100,8 +101,8 @@ export default function CustomerTabDetails({
                 }}
                 role="presentation"
                 className={`sub-category-details ${
-                  subViewComponent === 'seller' ? 'active' : ''
-                }`}>
+                  customerAccountType === 'Vendor' ? 'disabled' : null
+                }${subViewComponent === 'seller' ? ' active' : ''}`}>
                 {' '}
                 Seller Reporting
               </li>
@@ -111,8 +112,8 @@ export default function CustomerTabDetails({
                 }}
                 role="presentation"
                 className={`sub-category-details ${
-                  subViewComponent === 'vendor' ? 'active' : ''
-                }`}>
+                  customerAccountType === 'Seller' ? 'disabled' : null
+                }${subViewComponent === 'vendor' ? ' active' : ''}`}>
                 Vendor Reporting
               </li>
             </ul>

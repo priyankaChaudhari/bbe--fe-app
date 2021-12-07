@@ -67,10 +67,20 @@ export default function CustomerMainContainer() {
   const [viewComponent, setViewComponent] = useState(
     customerSelectedTab || 'performance',
   );
+  const [subViewComponent, setSubViewComponent] = useState();
+  useEffect(() => {
+    if (
+      customer?.customer_account_type !== undefined &&
+      customer?.customer_account_type !== 'Vendor'
+    )
+      setSubViewComponent('seller');
+    else if (
+      customer?.customer_account_type !== undefined &&
+      customer?.customer_account_type === 'Vendor'
+    )
+      setSubViewComponent('vendor');
+  }, [customer, setSubViewComponent]);
 
-  // const [viewComponent, setViewComponent] = useState('agreement');
-
-  const [subViewComponent, setSubViewComponent] = useState('seller');
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
@@ -333,7 +343,13 @@ export default function CustomerMainContainer() {
                         <ul className="sub-category-mobile-view">
                           <li>
                             {' '}
-                            <ModalRadioCheck className="pb-1" key="seller">
+                            <ModalRadioCheck
+                              className={`pb-1 ${
+                                customer?.customer_account_type === 'Vendor'
+                                  ? 'disabled'
+                                  : null
+                              }`}
+                              key="seller">
                               <label
                                 className="checkboxes radio-container customer-list"
                                 htmlFor="seller">
@@ -344,7 +360,7 @@ export default function CustomerMainContainer() {
                                   id="seller"
                                   value="seller"
                                   onChange={() => setSubViewComponent('seller')}
-                                  defaultChecked={subViewComponent === 'seller'}
+                                  checked={subViewComponent === 'seller'}
                                 />
                                 <span className="checkmark checkmark-customer-list" />
                               </label>
@@ -352,7 +368,13 @@ export default function CustomerMainContainer() {
                           </li>
                           <li>
                             {' '}
-                            <ModalRadioCheck className="pb-1" key="vendor">
+                            <ModalRadioCheck
+                              className={`pb-1 ${
+                                customer?.customer_account_type === 'Seller'
+                                  ? 'disabled'
+                                  : null
+                              }`}
+                              key="vendor">
                               {' '}
                               <label
                                 className="checkboxes radio-container customer-list"
@@ -364,7 +386,7 @@ export default function CustomerMainContainer() {
                                   id="vendor"
                                   value="vendor"
                                   onChange={() => setSubViewComponent('vendor')}
-                                  defaultChecked={subViewComponent === 'vendor'}
+                                  checked={subViewComponent === 'vendor'}
                                 />
                                 <span className="checkmark checkmark-customer-list" />
                               </label>
