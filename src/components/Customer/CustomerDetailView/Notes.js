@@ -385,18 +385,18 @@ function Notes({
                         dangerouslySetInnerHTML={{
                           __html: item.showMore
                             ? item?.note
-                            : item?.note.slice(0, 150),
+                            : item?.note.slice(0, 155),
                         }}
                       />
 
-                      {item?.note.length > 150 ? (
+                      {item?.note.length > 155 ? (
                         <span style={{ color: 'black' }}>
                           {!item.showMore ? '...' : ''}
                         </span>
                       ) : (
                         ''
                       )}
-                      {item?.note.length > 150 ? (
+                      {item?.note.length > 155 ? (
                         <span
                           style={{ color: '#FF5933' }}
                           role="presentation"
