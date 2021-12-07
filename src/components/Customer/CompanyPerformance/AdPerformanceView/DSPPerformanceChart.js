@@ -159,7 +159,7 @@ export default function DSPPerformanceChart({
             currentLabel,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
           if (selectedDF !== 'custom') {
             tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -168,7 +168,7 @@ export default function DSPPerformanceChart({
               previousLabel,
               currencySymbol,
               null,
-              null,
+              '#,###',
             )}`;
           }
         } else if (
@@ -424,7 +424,7 @@ export default function DSPPerformanceChart({
             value,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
         } else if (
           item === 'dspTtlNewBrandPurchases' ||
@@ -454,7 +454,7 @@ export default function DSPPerformanceChart({
             value,
             null,
             null,
-            null,
+            '#,###',
           )}`;
         }
         return '';

@@ -85,7 +85,7 @@ export default function DspAdPacing({
           <div className="status-heading-red green">On Track</div>
           <p className="basic-text">
             {' '}
-            You are currently on tract to hit your monthly DSP budget.
+            You are currently on track to hit your monthly DSP budget.
           </p>
         </>
       );

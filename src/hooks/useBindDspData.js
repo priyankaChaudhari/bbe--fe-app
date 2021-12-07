@@ -38,7 +38,7 @@ const useBindDSPResponseData = (response) => {
                 ? item.total_product_sales.toFixed(2)
                 : '0.00',
             dspTotalRoasPreviousLabel:
-              item.total_roas !== null ? item.total_roas : '0',
+              item.total_roas !== null ? item.total_roas.toFixed(2) : '0',
             dspTotalDpvrPreviousLabel:
               item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00',
             dspTtlNewBrandPurchasesPreviousLabel:
@@ -84,7 +84,7 @@ const useBindDSPResponseData = (response) => {
                 ? item.total_product_sales.toFixed(2)
                 : '0.00';
             tempData[index].dspTotalRoasCurrentLabel =
-              item.total_roas !== null ? item.total_roas : '0';
+              item.total_roas !== null ? item.total_roas.toFixed(2) : '0';
             tempData[index].dspTotalDpvrCurrentLabel =
               item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00';
             tempData[index].dspTtlNewBrandPurchasesCurrentLabel =
@@ -129,7 +129,7 @@ const useBindDSPResponseData = (response) => {
                   ? item.total_product_sales.toFixed(2)
                   : '0.00',
               dspTotalRoasCurrentLabel:
-                item.total_roas !== null ? item.total_roas : '0',
+                item.total_roas !== null ? item.total_roas.toFixed(2) : '0',
               dspTotalDpvrCurrentLabel:
                 item.total_dpvr !== null ? item.total_dpvr.toFixed(2) : '0.00',
               dspTtlNewBrandPurchasesCurrentLabel:

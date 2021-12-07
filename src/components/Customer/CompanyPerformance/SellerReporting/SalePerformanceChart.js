@@ -142,7 +142,7 @@ export default function SalePerformanceChart({
             currentLabel,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
           if (selectedDF !== 'custom') {
             tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -151,7 +151,7 @@ export default function SalePerformanceChart({
               previousLabel,
               currencySymbol,
               null,
-              null,
+              '#,###',
             )}`;
           }
         } else if (item === 'traffic' || item === 'unitsSold') {
@@ -161,7 +161,7 @@ export default function SalePerformanceChart({
             currentLabel,
             null,
             null,
-            null,
+            '#,###',
           )}`;
           if (selectedDF !== 'custom') {
             tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -170,7 +170,7 @@ export default function SalePerformanceChart({
               previousLabel,
               null,
               null,
-              null,
+              '#,###',
             )}`;
           }
         } else if (item === 'conversion') {
@@ -327,7 +327,7 @@ export default function SalePerformanceChart({
             currentLabel,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
         } else if (item === 'traffic' || item === 'unitsSold') {
           tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -336,7 +336,7 @@ export default function SalePerformanceChart({
             currentLabel,
             null,
             null,
-            null,
+            '#,###',
           )}`;
         } else if (item === 'conversion') {
           tooltipValue = `${tooltipValue} ${renderTooltip(

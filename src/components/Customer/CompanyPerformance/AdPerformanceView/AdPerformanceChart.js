@@ -156,7 +156,7 @@ export default function AdPerformanceChart({
             currentLabel,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
           if (selectedDF !== 'custom') {
             tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -165,7 +165,7 @@ export default function AdPerformanceChart({
               previousLabel,
               currencySymbol,
               null,
-              null,
+              '#,###',
             )}`;
           }
         } else if (
@@ -217,7 +217,7 @@ export default function AdPerformanceChart({
             currentLabel,
             null,
             null,
-            null,
+            '#,###',
           )}`;
           if (selectedDF !== 'custom') {
             tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -226,7 +226,7 @@ export default function AdPerformanceChart({
               previousLabel,
               null,
               null,
-              null,
+              '#,###',
             )}`;
           }
         }
@@ -398,7 +398,7 @@ export default function AdPerformanceChart({
             value,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
         } else if (
           item === 'adConversion' ||
@@ -429,7 +429,7 @@ export default function AdPerformanceChart({
             value,
             null,
             null,
-            null,
+            '#,###',
           )}`;
         }
         return '';
