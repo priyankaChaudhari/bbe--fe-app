@@ -101,7 +101,10 @@ export default function CustomerTabDetails({
                 }}
                 role="presentation"
                 className={`sub-category-details ${
-                  customerAccountType === 'Vendor' ? 'disabled' : null
+                  customerAccountType === 'Vendor'
+                    ? // disabled
+                      null
+                    : null
                 }${subViewComponent === 'seller' ? ' active' : ''}`}>
                 {' '}
                 Seller Reporting
@@ -112,7 +115,9 @@ export default function CustomerTabDetails({
                 }}
                 role="presentation"
                 className={`sub-category-details ${
-                  customerAccountType === 'Seller' ? 'disabled' : null
+                  customerAccountType === 'Seller' // disabled
+                    ? null
+                    : null
                 }${subViewComponent === 'vendor' ? ' active' : ''}`}>
                 Vendor Reporting
               </li>

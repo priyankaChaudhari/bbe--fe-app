@@ -96,7 +96,7 @@ export default function DspAdPacing({
           <div className="status-heading-red">Underspending</div>
           <p className="basic-text">
             {' '}
-            You are currently underspending by an average of
+            You are currently underspending by an average of{' '}
             {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}
             per day.
           </p>
