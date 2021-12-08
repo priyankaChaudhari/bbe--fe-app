@@ -16,6 +16,9 @@ export const PATH_PAUSE_AGREEMENT = `${PATH_CUSTOMER_DETAILS}/agreement/:contrac
 export const PATH_HELLO_SIGN = `/contract-signature`;
 export const PATH_WARNING = '/warning/';
 
+// DSP budget proposal
+export const PATH_DSP_BUDGET_APPROVAL = '/dsp-budget-approval/';
+
 // Account Setup
 export const PATH_ACCOUNT_SETUP = '/account-setup/';
 export const PATH_ACCOUNT_SETUP_CHOOSE = `${PATH_ACCOUNT_SETUP}choose`;
