@@ -1,0 +1,125 @@
+import { func, shape } from 'prop-types';
+import React from 'react';
+
+import NumberFormat from 'react-number-format';
+import styled from 'styled-components';
+import { ModalRadioCheck, InputFormField } from '../../../../../../common';
+import { adjustInvoiceInputs } from '../../../../../../constants/CustomerConstants';
+
+const InvoiceAdjust = ({ newAmount, setNewAmount, returnTotalAmount }) => {
+  return (
+    <GrayTable>
+      <div className="modal-body pb-3">
+        <div className="row">
+          <div className="col-4 text-left">
+            <div className="label">Marketplace</div>
+          </div>
+          <div className="col-4 text-left">
+            <div className="label">Current</div>
+          </div>
+          <div className="col-4 text-left">
+            <div className="label">New amount</div>
+          </div>
+
+          <div className=" straight-line horizontal-line pt-1 mb-2 " />
+          <div className="col-4 text-left mt-3">
+            <div className="normal-text ">US</div>
+          </div>
+          <div className="col-4 text-left mt-3">
+            <div className="normal-text ">$5,000</div>
+          </div>
+          <div className="col-4 text-left">
+            <ul className="invoice-adj-radio mt-4">
+              <li>
+                <ModalRadioCheck className="mb-3">
+                  {' '}
+                  <label
+                    className=" checkboxes radio-container customer-list"
+                    htmlFor="yes">
+                    <input type="radio" name="radio" id="yes" />
+                    <span className="checkmark checkmark-customer-list" />
+                    Yes
+                  </label>
+                </ModalRadioCheck>
+              </li>
+              <li>
+                <ModalRadioCheck className="mb-3">
+                  {' '}
+                  <label
+                    className=" checkboxes radio-container customer-list"
+                    htmlFor="no">
+                    <input type="radio" name="radio" id="no" />
+                    <span className="checkmark checkmark-customer-list" />
+                    No
+                  </label>
+                </ModalRadioCheck>
+              </li>
+            </ul>
+          </div>
+          {adjustInvoiceInputs.map((input) => {
+            return (
+              <>
+                <div className="col-4 text-left mt-3">
+                  <div className="normal-text ">{input.label}</div>
+                </div>
+                <div className="col-4 text-left mt-3">
+                  <div className="normal-text ">$5,000</div>
+                </div>
+                <div className="col-4 text-left">
+                  <InputFormField id={input.id}>
+                    <div className="input-container  ">
+                      <span className="input-icon ">$</span>
+                      <NumberFormat
+                        className="mt-2 form-control"
+                        name={input.name}
+                        placeholder={0}
+                        onChange={({ target }) => {
+                          setNewAmount((state) => ({
+                            ...state,
+                            [input.name]: target.value,
+                          }));
+                        }}
+                        value={newAmount[input.name]}
+                        thousandSeparator
+                        decimalScale={2}
+                        allowNegative={false}
+                      />
+                    </div>
+                  </InputFormField>
+                </div>
+              </>
+            );
+          })}
+          <div className=" straight-line horizontal-line pt-2 " />
+          <div className="col-4 text-left mt-3">
+            <div className="normal-text text-bold ">Total</div>
+          </div>
+          <div className="col-4 text-left mt-3">
+            <div className="normal-text text-bold">$10,000</div>
+          </div>
+          <div className="col-4 text-left mt-3">
+            <div className="normal-text text-bold">${returnTotalAmount()}</div>
+          </div>
+        </div>
+      </div>
+    </GrayTable>
+  );
+};
+
+export default InvoiceAdjust;
+
+InvoiceAdjust.defaultProps = {
+  newAmount: {},
+  setNewAmount: () => {},
+  returnTotalAmount: () => {},
+};
+
+InvoiceAdjust.propTypes = {
+  newAmount: shape({}),
+  setNewAmount: func,
+  returnTotalAmount: func,
+};
+
+const GrayTable = styled.div`
+  background-color: #f4f6fc;
+`;
