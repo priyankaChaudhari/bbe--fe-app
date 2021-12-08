@@ -34,6 +34,9 @@ export const API_ADM = '/manager-list/';
 export const API_SERVICES_FEE = '/type-of-services/';
 export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
 
+// BP Proposal
+export const API_BP_PROPOSAL = '/dsp-budget-proosal/';
+
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
 export const API_AD_DASHBOARD = '/ad-dashboard/';
