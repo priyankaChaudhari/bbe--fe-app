@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
+import dayjs from 'dayjs';
 import Modal from 'react-modal';
 import Select from 'react-select';
 import { bool, func, shape, string } from 'prop-types';
 
-import InvoiceAdjustDetailsModal from './InvoiceAdjustDetailsModal';
 import { CloseIcon } from '../../../../../../theme/images';
 import {
   ModalBox,
@@ -12,10 +12,12 @@ import {
   Tabs,
   ModalRadioCheck,
   ContractInputSelect,
+  DropDownIndicator,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
 import InvoiceAdjust from './InvoiceAdjust';
 import InvoicePause from './InvoicePause';
+import InvoiceAdjustConfirm from './InvoiceAdjustConfirm';
 
 const todaysDate = new Date();
 todaysDate.setDate(todaysDate.getDate() - 2);
@@ -35,34 +37,45 @@ const customStyles = {
   },
 };
 
-const InvoiceAdjustPauseModal = ({
-  id,
-  isOpen,
-  style,
-  onModalClose,
-  onApply,
-}) => {
-  const [showInvoiceDetailsModal, setShowInvoiceDetailsModal] = useState(false);
-  const [newAmount, setNewAmount] = useState({});
+const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
-
-  useEffect(() => {
-    console.log('new amount----', newAmount);
-  }, [newAmount]);
+  const [selectedMonthYear, setselectedMonthYear] = useState({
+    value: dayjs().add(0, 'M').format('MMMM YYYY'),
+    label: dayjs().add(0, 'M').format('MMMM YYYY'),
+  });
 
   const returnTotalAmount = () => {
-    const amounts = Object.values(newAmount);
-    if (amounts && amounts.length > 0) {
+    if (invoiceInputs && invoiceInputs.length > 0) {
       let temp = 0;
-      amounts.forEach((value) => {
-        temp += isNaN(parseFloat(value.replace(/,/g, '')))
-          ? 0
-          : parseFloat(value.replace(/,/g, ''));
-      });
+      for (const i in invoiceInputs) {
+        if ('newAmount' in invoiceInputs[i]) {
+          temp += isNaN(
+            parseFloat(invoiceInputs[i].newAmount.replace(/,/g, '')),
+          )
+            ? 0
+            : parseFloat(invoiceInputs[i].newAmount.replace(/,/g, ''));
+        }
+      }
+
       return temp;
     }
     return 0;
+  };
+
+  const getMonthYearOptions = () => {
+    const monthsYears = [];
+
+    for (let i = 0; i <= 5; i += 1) {
+      monthsYears.push({
+        value: dayjs().add(i, 'M').format('MMMM YYYY'),
+        label: dayjs().add(i, 'M').format('MMMM YYYY'),
+      });
+    }
+
+    return monthsYears;
   };
 
   return (
@@ -80,96 +93,115 @@ const InvoiceAdjustPauseModal = ({
           onClick={onModalClose}
           role="presentation"
         />
-        <ModalBox>
-          <div className="modal-body pb-1">
-            <h4>Invoice Adjustment</h4>
-            <Tabs className="mt-3">
-              {' '}
-              <ul className="tabs">
-                <li
-                  className={`modal-tab ${
-                    viewComponent === 'adjustInvoice' ? 'active' : ''
-                  }`}
-                  role="presentation"
-                  onClick={() => {
-                    setViewComponent('adjustInvoice');
-                  }}>
-                  Adjust Invoice
-                </li>
-                <li
-                  className={`modal-tab ${
-                    viewComponent === 'pauseInvoice' ? 'active' : ''
-                  }`}
-                  role="presentation"
-                  onClick={() => {
-                    setViewComponent('pauseInvoice');
-                  }}>
-                  Pause Invoice
-                </li>
-              </ul>
-            </Tabs>
-            {viewComponent === 'adjustInvoice' ? (
-              <ul className="invoice-adj-radio mt-4">
-                {adjustInvoiceChoices.map((item) => {
-                  return (
-                    <li>
-                      <ModalRadioCheck className="mb-3">
-                        <label
-                          className=" checkboxes radio-container customer-list"
-                          htmlFor={item.id}>
-                          <input
-                            type="radio"
-                            name={item.name}
-                            checked={invoiceType === item.name}
-                            onChange={(e) => {
-                              setInvoiceType(e.target.name);
-                            }}
-                            id={item.id}
-                          />
-                          <span className="checkmark checkmark-customer-list" />
-                          {item.label}
-                        </label>
-                      </ModalRadioCheck>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : null}
-          </div>
-
-          {viewComponent === 'adjustInvoice' ? (
-            <InvoiceAdjust
-              newAmount={newAmount}
-              setNewAmount={setNewAmount}
-              returnTotalAmount={returnTotalAmount}
-            />
-          ) : (
-            <InvoicePause returnTotalAmount={returnTotalAmount} />
-          )}
-          <div className="modal-body pb-1 pt-3">
-            <ContractInputSelect>
-              <label htmlFor="amount">applies from </label>
-              <Select />
-            </ContractInputSelect>
-          </div>
-          <div className="footer-line" />
-          <div className="modal-footer">
-            <div className="text-center ">
-              <Button
-                onClick={() => {
-                  onApply();
-                  setShowInvoiceDetailsModal(true);
-                }}
-                type="button"
-                className="btn-primary on-boarding   w-100">
-                Continue
-              </Button>
+        {!showConfirmationModal ? (
+          <ModalBox>
+            <div className="modal-body pb-1">
+              <h4>Invoice Adjustment</h4>
+              <Tabs className="mt-3">
+                {' '}
+                <ul className="tabs">
+                  <li
+                    className={`modal-tab ${
+                      viewComponent === 'adjustInvoice' ? 'active' : ''
+                    }`}
+                    role="presentation"
+                    onClick={() => {
+                      setViewComponent('adjustInvoice');
+                    }}>
+                    Adjust Invoice
+                  </li>
+                  <li
+                    className={`modal-tab ${
+                      viewComponent === 'pauseInvoice' ? 'active' : ''
+                    }`}
+                    role="presentation"
+                    onClick={() => {
+                      setViewComponent('pauseInvoice');
+                    }}>
+                    Pause Invoice
+                  </li>
+                </ul>
+              </Tabs>
+              {viewComponent === 'adjustInvoice' ? (
+                <ul className="invoice-adj-radio mt-4">
+                  {adjustInvoiceChoices.map((item) => {
+                    return (
+                      <li key={item.id}>
+                        <ModalRadioCheck className="mb-3">
+                          <label
+                            className=" checkboxes radio-container customer-list"
+                            htmlFor={item.id}>
+                            <input
+                              type="radio"
+                              name={item.name}
+                              checked={invoiceType === item.name}
+                              onChange={(e) => {
+                                setInvoiceType(e.target.name);
+                              }}
+                              id={item.id}
+                            />
+                            <span className="checkmark checkmark-customer-list" />
+                            {item.label}
+                          </label>
+                        </ModalRadioCheck>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : null}
             </div>
-          </div>
-        </ModalBox>
+
+            {viewComponent === 'adjustInvoice' ? (
+              <InvoiceAdjust
+                invoiceInputs={invoiceInputs}
+                setInvoiceInputs={setInvoiceInputs}
+                returnTotalAmount={returnTotalAmount}
+              />
+            ) : (
+              <InvoicePause returnTotalAmount={returnTotalAmount} />
+            )}
+            <div className="modal-body pb-1 pt-3">
+              <ContractInputSelect>
+                <label htmlFor="amount">applies from </label>
+                <Select
+                  classNamePrefix="react-select"
+                  isSearchable={false}
+                  defaultValue={getMonthYearOptions()[0]}
+                  value={selectedMonthYear}
+                  options={getMonthYearOptions()}
+                  name="applies_month_year"
+                  components={{ DropDownIndicator }}
+                  onChange={(event) => {
+                    setselectedMonthYear(event);
+                  }}
+                  placeholder={getMonthYearOptions()[0].label}
+                />
+              </ContractInputSelect>
+            </div>
+            <div className="footer-line" />
+            <div className="modal-footer">
+              <div className="text-center ">
+                <Button
+                  onClick={() => {
+                    setShowConfirmationModal(true);
+                  }}
+                  type="button"
+                  className="btn-primary on-boarding   w-100">
+                  Continue
+                </Button>
+              </div>
+            </div>
+          </ModalBox>
+        ) : (
+          <InvoiceAdjustConfirm
+            onBackClick={() => {
+              setShowConfirmationModal(false);
+            }}
+          />
+        )}
       </Modal>
 
-      <InvoiceAdjustDetailsModal
+      {/* <InvoiceAdjustDetailsModal
         id="BT-invoiceDetailsModal"
         isOpen={showInvoiceDetailsModal}
         onClick={() => {
@@ -178,7 +210,7 @@ const InvoiceAdjustPauseModal = ({
         onApply={() => {
           setShowInvoiceDetailsModal(false);
         }}
-      />
+      /> */}
     </>
   );
 };
@@ -190,7 +222,6 @@ InvoiceAdjustPauseModal.defaultProps = {
   id: '',
   style: {},
   onModalClose: () => {},
-  onApply: () => {},
 };
 
 InvoiceAdjustPauseModal.propTypes = {
@@ -198,5 +229,4 @@ InvoiceAdjustPauseModal.propTypes = {
   id: string,
   style: shape({}),
   onModalClose: func,
-  onApply: func,
 };
