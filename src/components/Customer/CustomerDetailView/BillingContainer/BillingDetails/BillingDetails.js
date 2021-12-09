@@ -2,15 +2,27 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
+import ReactTooltip from 'react-tooltip';
+import Select from 'react-select';
 import { useDispatch } from 'react-redux';
 import { shape, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
 import { showProfileLoader } from '../../../../../store/actions/userState';
-import { CloseIcon, EditOrangeIcon } from '../../../../../theme/images';
+import {
+  CloseIcon,
+  EditOrangeIcon,
+  helpCircleIcon,
+} from '../../../../../theme/images';
 import { billingAddress, creditCardDetails } from '../../../../../constants';
-import { getBillingDetails, saveBillingInfo } from '../../../../../api';
+import {
+  getBillingDetails,
+  getPaymentTermsDetails,
+  getPaymentTermsOptions,
+  saveBillingInfo,
+  savePaymentTerms,
+} from '../../../../../api';
 import {
   Button,
   InputFormField,
@@ -19,6 +31,8 @@ import {
   ModalBox,
   PageLoader,
   WhiteCard,
+  ContractInputSelect,
+  DropDownIndicator,
 } from '../../../../../common';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
@@ -26,12 +40,16 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
+  const [showPaymentTermsModal, setShowPaymentTermsModal] = useState(false);
   const [apiError, setApiError] = useState({});
   const [formData, setFormData] = useState({
     billing_contact: {},
     billing_address: {},
     card_details: {},
   });
+  const [paymentTermsData, setPaymentTermsData] = useState([]);
+  const [paymentTermsOptions, setPaymentTermsOptions] = useState([]);
+  const [paymentTermsValue, setPaymentTermsValue] = useState([]);
   const [showBtn, setShowBtn] = useState(false);
 
   const customStyles = {
@@ -48,6 +66,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       transform: 'translate(-50%, -50%)',
     },
   };
+  const renderDspToolTipInfo = `The payment terms you select here will only apply to one-time and
+          permanent additional DSP invoices. <br />
+          Standard monthly DSP invoices have default payment terms which cannot
+          be changed)`;
 
   const billingDetails = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
@@ -56,32 +78,34 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       setIsLoading({ loader: false, type: 'page' });
       setFormData({
         billing_contact:
-          response &&
-          response.data &&
-          response.data.billing_contact &&
-          response.data.billing_contact[0],
+          response?.data?.billing_contact && response.data.billing_contact[0],
         billing_address:
-          response &&
-          response.data &&
-          response.data.billing_address &&
-          response.data.billing_address[0],
+          response?.data?.billing_address && response.data.billing_address[0],
         card_details:
-          response &&
-          response.data &&
-          response.data.card_details &&
-          response.data.card_details[0],
+          response?.data?.card_details && response.data.card_details[0],
         expiryMessage:
-          response.data &&
-          response.data.card_details &&
+          response?.data?.card_details &&
           response.data.card_details[0] &&
           response.data.card_details[0].expiry_info,
       });
     });
   }, [id]);
+  const getPaymentTerms = useCallback(() => {
+    setIsLoading({ loader: true, type: 'page' });
+    getPaymentTermsDetails(id).then((response) => {
+      setIsLoading({ loader: false, type: 'page' });
+      setPaymentTermsData(response?.data?.results);
+    });
+    getPaymentTermsOptions(id).then((response) => {
+      setIsLoading({ loader: false, type: 'page' });
+      setPaymentTermsOptions(response?.data);
+    });
+  }, [id]);
 
   useEffect(() => {
     billingDetails();
-  }, [billingDetails]);
+    getPaymentTerms();
+  }, [billingDetails, getPaymentTerms]);
 
   const mapDefaultValues = (type, key) => {
     if (key === 'expiration_date') {
@@ -100,6 +124,41 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     }
     return '';
   };
+  const mapPaymentTermsDefaultValues = (type, label) => {
+    const value = paymentTermsData.filter((op) => op.invoice_type === type);
+    return value && value.length ? (
+      <div className="col-6">
+        {label === 'Dsp' ? (
+          <>
+            <div className="label mt-3">
+              DSP (Additional)
+              <img
+                src={helpCircleIcon}
+                alt="helpCircleIcon"
+                style={{
+                  width: '14px',
+                  verticalAlign: 'middle',
+                  paddingBottom: '3px',
+                }}
+                data-tip={renderDspToolTipInfo}
+                data-for="dspAdditionalInfo"
+              />
+            </div>
+            <ReactTooltip
+              id="dspAdditionalInfo"
+              aria-haspopup="true"
+              place="bottom"
+              effect="solid"
+              html
+            />
+          </>
+        ) : (
+          <div className="label mt-3">{label}</div>
+        )}
+        <div className="label-info">{value[0].payment_term}</div>
+      </div>
+    ) : null;
+  };
 
   const handleChange = (event, item, type) => {
     setShowBtn(true);
@@ -110,7 +169,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         [item.key]: item.key === 'card_number' ? event : event.target.value,
       },
     });
-
     setApiError({
       ...apiError,
       [type]: {
@@ -120,7 +178,16 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       0: '',
     });
   };
-
+  const handlePaymentTermChange = (event, type) => {
+    setShowBtn(true);
+    setPaymentTermsValue([
+      ...paymentTermsValue,
+      {
+        invoice_type: type,
+        payment_term: event.label,
+      },
+    ]);
+  };
   const mapPaymentDefaultValues = (item) => {
     if (item === 'card_number')
       return `************${
@@ -162,11 +229,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             : ''
         }
         isNumericString
-        // readOnly={
-        //   (type === 'card_details' || type === 'billing_address') &&
-        //   data &&
-        //   data.id
-        // }
       />
     );
   };
@@ -293,6 +355,61 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     );
   };
 
+  const getOptions = () => {
+    const options = paymentTermsOptions.filter((op) => op.value !== 'standard');
+    return options;
+  };
+  const generateDropdown = (type) => {
+    const value = paymentTermsData.filter((op) => op.invoice_type === type);
+    return (
+      <Select
+        classNamePrefix="react-select"
+        placeholder={
+          value && value.length ? value[0].payment_term : 'Select the terms'
+        }
+        defaultValue={value && value.length ? value[0].payment_term : null}
+        options={getOptions()}
+        components={{ DropDownIndicator }}
+        onChange={(event) => handlePaymentTermChange(event, type)}
+      />
+    );
+  };
+  const mapPaymentTermsModalDetails = (type, label) => {
+    const paymentTerm = paymentTermsData.filter(
+      (item) => item.invoice_type === type,
+    );
+    return paymentTerm && paymentTerm.length ? (
+      <div className="col-12" key={paymentTerm[0].invoice_type}>
+        <div className="label mt-3">
+          {label}
+          {paymentTerm[0].invoice_type === 'dsp service' ? (
+            <img
+              src={helpCircleIcon}
+              alt="helpCircleIcon"
+              style={{
+                width: '14px',
+                verticalAlign: 'middle',
+                paddingBottom: '3px',
+              }}
+              data-tip={renderDspToolTipInfo}
+              data-for="dspAdditionalInfo"
+            />
+          ) : null}
+        </div>
+        <ReactTooltip
+          id="dspAdditionalInfo"
+          aria-haspopup="true"
+          place="bottom"
+          effect="solid"
+          html
+        />
+        <ContractInputSelect>
+          {generateDropdown(paymentTerm[0].invoice_type)}
+        </ContractInputSelect>
+      </div>
+    ) : null;
+  };
+
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
 
@@ -351,7 +468,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         ...formData,
         billing_address: formData.billing_address,
         billing_contact: formData.billing_contact,
-        // card_details: formData.card_details,
         customer_onboarding: userInfo.customer_onboarding || onBoardingId,
         payment_type: 'credit card',
       };
@@ -364,6 +480,24 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       if ((res && res.status === 200) || (res && res.status === 201)) {
         setIsLoading({ loader: false, type: 'button' });
         billingDetails();
+        setShowModal(false);
+        setShowBtn(false);
+        dispatch(showProfileLoader(true));
+        dispatch(showProfileLoader(false));
+      }
+      if (res && res.status === 400) {
+        setIsLoading({ loader: false, type: 'button' });
+        setApiError(res && res.data);
+      }
+    });
+  };
+
+  const savePaymentTermsData = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    savePaymentTerms(paymentTermsValue, id).then((res) => {
+      if ((res && res.status === 200) || (res && res.status === 201)) {
+        setIsLoading({ loader: false, type: 'button' });
+        getPaymentTerms();
         setShowModal(false);
         setShowBtn(false);
         dispatch(showProfileLoader(true));
@@ -421,16 +555,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                     <div className="label">Payment Type</div>
                     <div className="label-info">Credit Card</div>
                   </div>
-                  {/* <div className="col-6">
-                  <div className="label-info mt-4">
-                    <img
-                      className="master-card-icon"
-                      src={MasterCardIcons}
-                      alt="master-card"
-                    />{' '}
-                    Mastercard
-                  </div>
-                </div> */}
                 </div>
                 <div className="label mt-3">Cardholder name</div>
                 <div className="label-info">
@@ -461,86 +585,23 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </div>
                 </div>
               </WhiteCard>
-              {/* <WhiteCard>
-              <p className="black-heading-title mt-0 mb-3"> Billing Details</p>
-              <div className="edit-details" role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-              <div className="label">Payment Type</div>
-              <div className="label-info">
-                ACH{' '}
-                <span className="ACH-status unverified pending">
-                  {' '}
-                  <img
-                    className="checked-mark-icon"
-                    src={BlackCheckMark}
-                    alt="check"
-                  />{' '}
-                  <img className="bell-icon" src={BellNotification} alt="" />{' '}
-                  <img className="bell-icon ml-1" src={CountDayClock} alt="" />{' '}
-                  Pending
-                </span>
-              </div>
-              <div className="label mt-3">Name on Account </div>
-              <div className="label-info">TRX Training Inc.</div>
-              <div className="label mt-3">Bank Name</div>
-              <div className="label-info">Chase</div>
-              <div className="row">
-                <div className="col-6">
-                  <div className="label mt-3">Routing Number</div>
-                  <div className="label-info">685 448 298</div>
-                </div>
-                <div className="col-6">
-                  <div className="label mt-3">Account Number</div>
-                  <div className="label-info">7847 0412 80</div>
-                </div>
-              </div>
-            </WhiteCard> */}
 
               <WhiteCard className="mt-3">
-                <p className="black-heading-title mt-0 mb-0">Billing Address</p>
+                <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
 
                 <div
                   className="edit-details"
                   role="presentation"
-                  onClick={() => setShowModal(true)}>
+                  onClick={() => setShowPaymentTermsModal(true)}>
                   <img src={EditOrangeIcon} alt="" />
                   Edit
                 </div>
 
-                {/* {formData.expiryMessage && formData.expiryMessage.message ? (
-                  <div
-                    className="edit-details"
-                    role="presentation"
-                    onClick={() => setShowModal(true)}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
-                  </div>
-                ) : (
-                  ''
-                )} */}
-                <div className="label mt-3">Address </div>
-                <div className="label-info">
-                  {mapDefaultValues('billing_address', 'address')}
-                </div>
-                <div className="label mt-3">City </div>
-                <div className="label-info">
-                  {mapDefaultValues('billing_address', 'city')}
-                </div>
                 <div className="row">
-                  <div className="col-6">
-                    <div className="label mt-3">State</div>
-                    <div className="label-info">
-                      {mapDefaultValues('billing_address', 'state')}
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="label mt-3">Postal Code</div>
-                    <div className="label-info">
-                      {mapDefaultValues('billing_address', 'postal_code')}
-                    </div>
-                  </div>
+                  {mapPaymentTermsDefaultValues('retainer', 'Monthly Retainer')}
+                  {mapPaymentTermsDefaultValues('rev share', 'Revenue share')}
+                  {mapPaymentTermsDefaultValues('dsp service', 'Dsp')}
+                  {mapPaymentTermsDefaultValues('upsell', 'Upsells')}
                 </div>
               </WhiteCard>
             </div>
@@ -581,6 +642,40 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </div>
                   <div className="clear-fix" />
                 </GroupUser>
+              </WhiteCard>
+
+              <WhiteCard className="mt-3">
+                <p className="black-heading-title mt-0 mb-0">Billing Address</p>
+
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => setShowModal(true)}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
+                <div className="label mt-3">Address </div>
+                <div className="label-info">
+                  {mapDefaultValues('billing_address', 'address')}
+                </div>
+                <div className="label mt-3">City </div>
+                <div className="label-info">
+                  {mapDefaultValues('billing_address', 'city')}
+                </div>
+                <div className="row">
+                  <div className="col-6">
+                    <div className="label mt-3">State</div>
+                    <div className="label-info">
+                      {mapDefaultValues('billing_address', 'state')}
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="label mt-3">Postal Code</div>
+                    <div className="label-info">
+                      {mapDefaultValues('billing_address', 'postal_code')}
+                    </div>
+                  </div>
+                </div>
               </WhiteCard>
             </div>
           </div>
@@ -646,6 +741,53 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           ) : (
             ''
           )}
+        </ModalBox>
+      </Modal>
+
+      <Modal
+        isOpen={showPaymentTermsModal}
+        style={customStyles}
+        ariaHideApp={false}
+        contentLabel="Edit modal">
+        <img
+          src={CloseIcon}
+          alt="close"
+          className="float-right cursor cross-icon"
+          onClick={() => {
+            setShowPaymentTermsModal(false);
+            setShowBtn(false);
+            setApiError({});
+          }}
+          role="presentation"
+        />
+        <ModalBox>
+          <div className="modal-body">
+            <h4>Payment Terms</h4>
+            <div className="body-content mt-3 ">
+              <div className="row">
+                {mapPaymentTermsModalDetails('retainer', 'Monthly Retainer')}
+                {mapPaymentTermsModalDetails('rev share', 'Revenue share')}
+                {mapPaymentTermsModalDetails('dsp service', 'Dsp (Additional)')}
+                {mapPaymentTermsModalDetails('upsell', 'Upsells')}
+              </div>
+              <ErrorMsg style={{ textAlign: 'center' }}>
+                {apiError && apiError[0]}
+              </ErrorMsg>
+            </div>
+          </div>
+
+          <div className="footer-line " />
+          <div className="modal-footer">
+            <Button
+              className=" btn-primary mr-4 w-100"
+              onClick={() => savePaymentTermsData()}>
+              {isLoading.loader && isLoading.type === 'button' ? (
+                <PageLoader color={Theme.white} type="button" />
+              ) : (
+                'Save Changes'
+              )}
+            </Button>
+          </div>
         </ModalBox>
       </Modal>
     </>

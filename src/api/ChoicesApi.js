@@ -8,6 +8,7 @@ import {
   API_ADM,
   API_THRESHOLD_TYPE,
   API_YOY_PERCENTAGE,
+  API_PAYMENT_TERMS_OPTIONS,
 } from '../constants/ApiConstants';
 
 export async function getStatus() {
@@ -297,6 +298,18 @@ export async function getYoyPercentage() {
     .get(`${API_CHOICES + API_YOY_PERCENTAGE}`)
     .then((response) => {
       return response && response.data;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getPaymentTermsOptions() {
+  const result = await axiosInstance
+    .get(`${API_PAYMENT_TERMS_OPTIONS}`)
+    .then((response) => {
+      return response;
     })
     .catch((error) => {
       return error.response;
