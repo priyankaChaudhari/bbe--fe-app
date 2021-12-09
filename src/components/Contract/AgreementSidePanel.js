@@ -118,7 +118,6 @@ export default function AgreementSidePanel({
   checkContractStatus,
 }) {
   const [accountLength, setAccountLength] = useState([]);
-  console.log('accountLength', accountLength);
   const [revShare, setRevShare] = useState([]);
   const [amazonService, setSelectedAmazonStorePackService] = useState({});
   const [selectedThreshold, setSelectedThreshold] = useState('');
