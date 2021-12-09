@@ -18,12 +18,14 @@ import {
   EditOrangeIcon,
   helpCircleIcon,
 } from '../../../../../theme/images';
+import { billingAddress, creditCardDetails } from '../../../../../constants';
 import {
-  billingAddress,
-  creditCardDetails,
-  payemntTerms,
-} from '../../../../../constants';
-import { getBillingDetails, saveBillingInfo } from '../../../../../api';
+  getBillingDetails,
+  getPaymentTermsDetails,
+  getPaymentTermsOptions,
+  saveBillingInfo,
+  savePaymentTerms,
+} from '../../../../../api';
 import {
   Button,
   InputFormField,
@@ -46,44 +48,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     billing_contact: {},
     billing_address: {},
     card_details: {},
-    payment_terms: {},
   });
-
-  const [paymentData, setPaymentData] = useState({
-    payment_terms: {},
-    payment_terms_two: {},
-    billing_contact: {},
-    billing_address: {},
-    card_details: {},
-  });
-
-  // console.log('formData', formData);
-  // console.log('data', data);
-  // console.log('paymentData', paymentData);
-  const monthlyRetainer = [
-    { key: 'monthly_retainer', label: 'Monthly Retainer' },
-    { key: 'due_on_reciept', label: 'Due on receipt' },
-    { key: 'net_30', label: 'NET 30' },
-    { key: 'net_14', label: 'NET 14' },
-  ];
-  const revenueShare = [
-    { key: 'autopay', label: 'Autopay' },
-    { key: 'due_on_reciept', label: 'Due on receipt' },
-    { key: 'net_30', label: 'NET 30' },
-    { key: 'net_14', label: 'NET 14' },
-  ];
-  const dspAdditional = [
-    { key: 'autopay', label: 'Autopay' },
-    { key: 'due_on_reciept', label: 'Due on receipt' },
-    { key: 'net_30', label: 'NET 30' },
-    { key: 'net_14', label: 'NET 14' },
-  ];
-  const upsells = [
-    { key: 'autopay', label: 'Autopay' },
-    { key: 'due_on_reciept', label: 'Due on receipt' },
-    { key: 'net_30', label: 'NET 30' },
-    { key: 'net_14', label: 'NET 14' },
-  ];
+  const [paymentTermsData, setPaymentTermsData] = useState([]);
+  const [paymentTermsOptions, setPaymentTermsOptions] = useState([]);
+  const [paymentTermsValue, setPaymentTermsValue] = useState([]);
   const [showBtn, setShowBtn] = useState(false);
 
   const customStyles = {
@@ -121,33 +89,25 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           response?.data?.card_details &&
           response.data.card_details[0] &&
           response.data.card_details[0].expiry_info,
-        // payment_terms:
-        //   response?.data?.payment_terms && response.data.payment_terms[0],
       });
-      setPaymentData({
-        payment_terms: [
-          {
-            monthly_retainer: 'Autopay',
-            revenue_share: 'NET-30',
-            dsp_additional: 'Due on receipt',
-            upsells: 'NET-14',
-          },
-        ],
-        payment_terms_two: [
-          {
-            monthly_retainer: 'Autopay two',
-            revenue_share: 'NET-30 two',
-            dsp_additional: 'Due on receipt two',
-            upsells: 'NET-14 two',
-          },
-        ],
-      });
+    });
+  }, [id]);
+  const getPaymentTerms = useCallback(() => {
+    setIsLoading({ loader: true, type: 'page' });
+    getPaymentTermsDetails(id).then((response) => {
+      setIsLoading({ loader: false, type: 'page' });
+      setPaymentTermsData(response?.data?.results);
+    });
+    getPaymentTermsOptions(id).then((response) => {
+      setIsLoading({ loader: false, type: 'page' });
+      setPaymentTermsOptions(response?.data);
     });
   }, [id]);
 
   useEffect(() => {
     billingDetails();
-  }, [billingDetails]);
+    getPaymentTerms();
+  }, [billingDetails, getPaymentTerms]);
 
   const mapDefaultValues = (type, key) => {
     if (key === 'expiration_date') {
@@ -162,37 +122,53 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         : '';
     }
     if (data && data[type] && data[type][0]) {
-      console.log('data[type]', data[type]);
       return data[type][0][key];
     }
     return '';
   };
-  const mapPaymentTermsDefaultValues = (type, key) => {
-    if (paymentData && paymentData[type] && paymentData[type][0]) {
-      console.log('paymentData[type]', paymentData[type]);
-      return paymentData[type][0][key];
-    }
-    return '';
+  const mapPaymentTermsDefaultValues = (type, label) => {
+    const value = paymentTermsData.filter((op) => op.invoice_type === type);
+    return value && value.length ? (
+      <div className="col-6">
+        {label === 'Dsp' ? (
+          <>
+            <div className="label mt-3">
+              DSP (Additional)
+              <img
+                src={helpCircleIcon}
+                alt="helpCircleIcon"
+                style={{
+                  width: '14px',
+                  verticalAlign: 'middle',
+                  paddingBottom: '3px',
+                }}
+                data-tip={renderDspToolTipInfo}
+                data-for="dspAdditionalInfo"
+              />
+            </div>
+            <ReactTooltip
+              id="dspAdditionalInfo"
+              aria-haspopup="true"
+              place="bottom"
+              effect="solid"
+              html
+            />
+          </>
+        ) : (
+          <div className="label mt-3">{label}</div>
+        )}
+        <div className="label-info">{value[0].payment_term}</div>
+      </div>
+    ) : null;
   };
 
   const handleChange = (event, item, type) => {
     setShowBtn(true);
-    if (type !== 'payment_terms') {
-      setFormData({
-        ...formData,
-        [type]: {
-          ...formData[type],
-          [item.key]: item.key === 'card_number' ? event : event.target.value,
-        },
-      });
-    }
-    console.log('item.key', item.key);
-    console.log('type', type);
-    setPaymentData({
-      ...paymentData,
+    setFormData({
+      ...formData,
       [type]: {
-        ...paymentData[type],
-        [item.key]: event,
+        ...formData[type],
+        [item.key]: item.key === 'card_number' ? event : event.target.value,
       },
     });
     setApiError({
@@ -204,7 +180,16 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       0: '',
     });
   };
-
+  const handlePaymentTermChange = (event, type) => {
+    setShowBtn(true);
+    setPaymentTermsValue([
+      ...paymentTermsValue,
+      {
+        invoice_type: type,
+        payment_term: event.label,
+      },
+    ]);
+  };
   const mapPaymentDefaultValues = (item) => {
     if (item === 'card_number')
       return `************${
@@ -394,92 +379,59 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       )
     );
   };
-  const getOptions = (key) => {
-    if (key === 'monthly_retainer') return monthlyRetainer;
-    if (key === 'revenue_share') return revenueShare;
-    if (key === 'dsp_additional') return dspAdditional;
-    if (key === 'upsells') return upsells;
-    return '';
+  const getOptions = () => {
+    const options = paymentTermsOptions.filter((op) => op.value !== 'standard');
+    return options;
   };
-  const generateDropdown = (item, type) => {
-    // console.log('item', item);
-    // console.log('type', type);
-    // console.log(
-    //   'key',
-    //   paymentData &&
-    //     paymentData[type] &&
-    //     paymentData[type][0] &&
-    //     paymentData[type][0][item.key],
-    // );
-
+  const generateDropdown = (type) => {
+    const value = paymentTermsData.filter((op) => op.invoice_type === type);
     return (
       <Select
         classNamePrefix="react-select"
         placeholder={
-          paymentData &&
-          paymentData[type] &&
-          paymentData[type][0] &&
-          paymentData[type][0][item.key]
-            ? paymentData[type][0][item.key]
-            : 'Select the terms'
+          value && value.length ? value[0].payment_term : 'Select the terms'
         }
-        defaultValue={
-          paymentData &&
-          paymentData[type] &&
-          paymentData[type][0] &&
-          paymentData[type][0][item.key]
-        }
-        options={getOptions(item.key)}
-        name={item.key}
-        value={item.key}
+        defaultValue={value && value.length ? value[0].payment_term : null}
+        options={getOptions()}
         components={{ DropdownIndicator }}
-        onChange={(event) => handleChange(event, item, type)}
+        onChange={(event) => handlePaymentTermChange(event, type)}
       />
     );
   };
-  const mapPaymentTermsDetails = () => {
-    return (
-      <>
-        <div className="row">
-          {payemntTerms.map((item) => (
-            <div className="col-12" key={item.key}>
-              <div className="label mt-3">
-                {item.label}{' '}
-                {item.key === 'dsp_additional' ? (
-                  <img
-                    src={helpCircleIcon}
-                    alt="helpCircleIcon"
-                    style={{
-                      width: '14px',
-                      verticalAlign: 'middle',
-                      paddingBottom: '3px',
-                    }}
-                    data-tip={renderDspToolTipInfo}
-                    data-for="dspAdditionalInfo"
-                  />
-                ) : null}
-              </div>
-              <ReactTooltip
-                id="dspAdditionalInfo"
-                aria-haspopup="true"
-                place="bottom"
-                effect="solid"
-                html
-              />
-              <ContractInputSelect>
-                {generateDropdown(item, 'payment_terms')}
-              </ContractInputSelect>
-              <ErrorMsg>
-                {apiError &&
-                  apiError.payment_terms &&
-                  apiError.payment_terms[item.key] &&
-                  apiError.payment_terms[item.key][0]}
-              </ErrorMsg>
-            </div>
-          ))}
-        </div>
-      </>
+  const mapPaymentTermsModalDetails = (type, label) => {
+    const paymentTerm = paymentTermsData.filter(
+      (item) => item.invoice_type === type,
     );
+    return paymentTerm && paymentTerm.length ? (
+      <div className="col-12" key={paymentTerm[0].invoice_type}>
+        <div className="label mt-3">
+          {label}
+          {paymentTerm[0].invoice_type === 'dsp service' ? (
+            <img
+              src={helpCircleIcon}
+              alt="helpCircleIcon"
+              style={{
+                width: '14px',
+                verticalAlign: 'middle',
+                paddingBottom: '3px',
+              }}
+              data-tip={renderDspToolTipInfo}
+              data-for="dspAdditionalInfo"
+            />
+          ) : null}
+        </div>
+        <ReactTooltip
+          id="dspAdditionalInfo"
+          aria-haspopup="true"
+          place="bottom"
+          effect="solid"
+          html
+        />
+        <ContractInputSelect>
+          {generateDropdown(paymentTerm[0].invoice_type)}
+        </ContractInputSelect>
+      </div>
+    ) : null;
   };
 
   const saveBillingData = () => {
@@ -563,18 +515,25 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         setApiError(res && res.data);
       }
     });
-    setPaymentData({
-      ...paymentData,
-      payment_terms: paymentData.payment_terms,
-      payment_terms_two: paymentData.payment_terms_two,
-    });
-    console.log('formData', formData);
-    console.log('paymentData.payment_terms', paymentData.payment_terms);
   };
 
-  // const savePaymentData = () => {
-
-  // };
+  const savePaymentTermsData = () => {
+    setIsLoading({ loader: true, type: 'button' });
+    savePaymentTerms(paymentTermsValue, id).then((res) => {
+      if ((res && res.status === 200) || (res && res.status === 201)) {
+        setIsLoading({ loader: false, type: 'button' });
+        getPaymentTerms();
+        setShowModal(false);
+        setShowBtn(false);
+        dispatch(showProfileLoader(true));
+        dispatch(showProfileLoader(false));
+      }
+      if (res && res.status === 400) {
+        setIsLoading({ loader: false, type: 'button' });
+        setApiError(res && res.data);
+      }
+    });
+  };
 
   return (
     <>
@@ -710,61 +669,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                 </div>
 
                 <div className="row">
-                  <div className="col-6">
-                    <div className="label mt-3">Monthly Retainer</div>
-                    <div className="label-info">
-                      {mapPaymentTermsDefaultValues(
-                        'payment_terms',
-                        'monthly_retainer',
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="label mt-3">Revenue Share </div>
-                    <div className="label-info">
-                      {mapPaymentTermsDefaultValues(
-                        'payment_terms',
-                        'revenue_share',
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="col-6">
-                    <div className="label mt-3">
-                      DSP (Additional)
-                      <img
-                        src={helpCircleIcon}
-                        alt="helpCircleIcon"
-                        style={{
-                          width: '14px',
-                          verticalAlign: 'middle',
-                          paddingBottom: '3px',
-                        }}
-                        data-tip={renderDspToolTipInfo}
-                        data-for="dspAdditionalInfo"
-                      />
-                    </div>
-                    <ReactTooltip
-                      id="dspAdditionalInfo"
-                      aria-haspopup="true"
-                      place="bottom"
-                      effect="solid"
-                      html
-                    />
-                    <div className="label-info">
-                      {mapPaymentTermsDefaultValues(
-                        'payment_terms',
-                        'dsp_additional',
-                      )}
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="label mt-3">Upsells</div>
-                    <div className="label-info">
-                      {mapPaymentTermsDefaultValues('payment_terms', 'upsells')}
-                    </div>
-                  </div>
+                  {mapPaymentTermsDefaultValues('retainer', 'Monthly Retainer')}
+                  {mapPaymentTermsDefaultValues('rev share', 'Revenue share')}
+                  {mapPaymentTermsDefaultValues('dsp service', 'Dsp')}
+                  {mapPaymentTermsDefaultValues('upsell', 'Upsells')}
                 </div>
               </WhiteCard>
             </div>
@@ -938,9 +846,13 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         <ModalBox>
           <div className="modal-body">
             <h4>Payment Terms</h4>
-            <div className="footer-line " />
             <div className="body-content mt-3 ">
-              {mapPaymentTermsDetails()}
+              <div className="row">
+                {mapPaymentTermsModalDetails('retainer', 'Monthly Retainer')}
+                {mapPaymentTermsModalDetails('rev share', 'Revenue share')}
+                {mapPaymentTermsModalDetails('dsp service', 'Dsp (Additional)')}
+                {mapPaymentTermsModalDetails('upsell', 'Upsells')}
+              </div>
               <ErrorMsg style={{ textAlign: 'center' }}>
                 {apiError && apiError[0]}
               </ErrorMsg>
@@ -951,7 +863,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           <div className="modal-footer">
             <Button
               className=" btn-primary mr-4 w-100"
-              onClick={() => saveBillingData()}>
+              onClick={() => savePaymentTermsData()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color={Theme.white} type="button" />
               ) : (
