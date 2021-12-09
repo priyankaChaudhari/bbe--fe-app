@@ -4,10 +4,9 @@ import { shape } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { Card } from '../../../../common';
-import { BGSComissionMatrics } from '../../../../constants';
-// import { divide } from 'lodash';
+import { BGSCommissionMatrics } from '../../../../constants';
 
-const ComissionsMetrics = ({ commissionMatrics }) => {
+const BGSCommissionsMatrics = ({ commissionMatrics }) => {
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
     const number = Number(orignalNumber);
     if (number !== undefined && number !== null) {
@@ -31,7 +30,7 @@ const ComissionsMetrics = ({ commissionMatrics }) => {
   return (
     <>
       <div className="white-card-container mb-4">
-        {BGSComissionMatrics.map((item) => (
+        {BGSCommissionMatrics.map((item) => (
           <div className="col-md-3 col-6 mb-3" key={item.value}>
             <Card
               className="fix-height"
@@ -57,12 +56,12 @@ const ComissionsMetrics = ({ commissionMatrics }) => {
   );
 };
 
-export default ComissionsMetrics;
+export default BGSCommissionsMatrics;
 
-ComissionsMetrics.defaultProps = {
+BGSCommissionsMatrics.defaultProps = {
   commissionMatrics: {},
 };
 
-ComissionsMetrics.propTypes = {
+BGSCommissionsMatrics.propTypes = {
   commissionMatrics: shape({}),
 };

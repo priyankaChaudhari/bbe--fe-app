@@ -41,7 +41,6 @@ export const API_BP_PROPOSAL = '/dsp-budget-proposal/';
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
 export const API_AD_DASHBOARD = '/ad-dashboard/';
 export const API_SALES_DASHBOARD = 'sales-dashboard/';
-export const API_BGS_COMMISSION_DASHBOARD = 'bgs-comission-dashboard/';
 export const API_BGS_COMMISSION = '/bgs-commission/';
 export const API_BGS_COMMISSION_MATRICS = `${API_BGS_COMMISSION}top-matrics/`;
 export const API_BGS_COMMISSION_INDIVIDUALS = `${API_BGS_COMMISSION}individuals/`;
