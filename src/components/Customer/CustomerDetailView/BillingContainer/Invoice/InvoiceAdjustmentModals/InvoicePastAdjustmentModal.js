@@ -2,7 +2,7 @@ import React from 'react';
 
 import Modal from 'react-modal';
 import styled from 'styled-components';
-import { bool, shape, string } from 'prop-types';
+import { bool, func, shape, string } from 'prop-types';
 
 import { CloseIcon } from '../../../../../../theme/images';
 import Theme from '../../../../../../theme/Theme';
@@ -28,7 +28,7 @@ const customStyles = {
   },
 };
 
-const InvoicePastAdjustmntModal = ({ id, isOpen, style }) => {
+const InvoicePastAdjustmntModal = ({ id, isOpen, style, onClick }) => {
   return (
     <Modal
       id={id}
@@ -59,6 +59,7 @@ const InvoicePastAdjustmntModal = ({ id, isOpen, style }) => {
                 <img
                   width="18px"
                   src={CloseIcon}
+                  onClick={() => onClick()}
                   alt="close"
                   className="float-right cursor remove-cross-icon"
                   role="presentation"
@@ -206,14 +207,14 @@ InvoicePastAdjustmntModal.defaultProps = {
   isOpen: false,
   id: '',
   style: {},
-  // onClick: () => {},
+  onClick: () => {},
 };
 
 InvoicePastAdjustmntModal.propTypes = {
   isOpen: bool,
   id: string,
   style: shape({}),
-  // onClick: func,
+  onClick: func,
 };
 
 const PastInvoices = styled.div`

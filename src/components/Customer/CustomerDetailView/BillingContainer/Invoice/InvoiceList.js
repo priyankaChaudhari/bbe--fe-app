@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
@@ -198,43 +199,53 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
 
   const renderTableData = (item) => {
     return (
-      <tr key={item.id}>
-        <td className="product-body">
-          <div className="company-name">{item.invoice_type}</div>
-          <div className="status">#{item.next_invoiced_id}</div>
-        </td>
-        <td className="product-body dsp-invoice pl-2">
-          <div className="notification-bell pl-2">
-            ${addThousandComma(item.monthly_budget, 0)}
-            <img
-              width="16px"
-              className="ml-1"
-              style={{ verticalAlign: 'middle' }}
-              src={BellNotification}
-              alt="bell"
+      <>
+        <tr key={item.id}>
+          <td className="product-body">
+            <div className="company-name">{item.invoice_type}</div>
+            <div className="status">#{item.next_invoiced_id}</div>
+          </td>
+          <td className="product-body dsp-invoice pl-2">
+            <div className="notification-bell pl-2">
+              ${addThousandComma(item.monthly_budget, 0)}
+              <img
+                width="16px"
+                className="ml-1"
+                style={{ verticalAlign: 'middle' }}
+                src={BellNotification}
+                alt="bell"
+                data-tip="Pending BP Sign-off"
+                data-for="Pending-BP-Sign-off"
+              />
+            </div>
+          </td>
+          <td className="product-table-body light-font">
+            {dayjs(item.generated_at).format('MM/DD/YYYY')}
+          </td>
+          <td className="product-table-body light-font ">
+            {dayjs(item.due_date).format('MM/DD/YYYY')}
+          </td>
+          <td className="product-table-body text-right">
+            <Status
+              className="float-right"
+              label={item.invoice_status}
+              backgroundColor={
+                StatusColorSet[item.invoice_status.split(' ')[0].toLowerCase()]
+                  ? StatusColorSet[
+                      item.invoice_status.split(' ')[0].toLowerCase()
+                    ]
+                  : '#E3F2D2'
+              }
             />
-          </div>
-        </td>
-        <td className="product-table-body light-font">
-          {dayjs(item.generated_at).format('MM/DD/YYYY')}
-        </td>
-        <td className="product-table-body light-font ">
-          {dayjs(item.due_date).format('MM/DD/YYYY')}
-        </td>
-        <td className="product-table-body text-right">
-          <Status
-            className="float-right"
-            label={item.invoice_status}
-            backgroundColor={
-              StatusColorSet[item.invoice_status.split(' ')[0].toLowerCase()]
-                ? StatusColorSet[
-                    item.invoice_status.split(' ')[0].toLowerCase()
-                  ]
-                : '#E3F2D2'
-            }
-          />
-        </td>
-      </tr>
+          </td>
+        </tr>
+        <ReactTooltip
+          id="Pending-BP-Sign-off"
+          aria-haspopup="true"
+          place="bottom"
+          effect="solid"
+        />
+      </>
     );
   };
 

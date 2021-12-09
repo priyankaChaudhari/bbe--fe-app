@@ -1,4 +1,4 @@
-import { func, string } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 import React from 'react';
 
 import styled from 'styled-components';
@@ -32,6 +32,8 @@ const TableMobileView = ({
   statusColor,
   onClick,
   icon,
+  isColumnOnClick = false,
+  onColumnClick,
 }) => {
   const col = `${label3 ? (label7 ? 'col-4' : 'col-6') : 'col-4'}`;
   return (
@@ -89,7 +91,13 @@ const TableMobileView = ({
           <div className={`${col} mb-3`}>
             {' '}
             <div className="label">{label2}</div>
-            <div className="label-info "> {labelInfo2}</div>
+            <div
+              role="presentation"
+              className="label-info "
+              onClick={isColumnOnClick ? () => onColumnClick() : null}>
+              {' '}
+              {labelInfo2}
+            </div>
           </div>
           {label3 ? (
             <div className={`${col} mb-3`}>
@@ -174,6 +182,7 @@ const TableMobileViewWrapper = styled.div`
 `;
 
 TableMobileView.defaultProps = {
+  isColumnOnClick: false,
   className: '',
   CompanyName: '',
   label: '',
@@ -198,6 +207,7 @@ TableMobileView.defaultProps = {
   statusColor: '',
   icon: '',
   onClick: () => {},
+  onColumnClick: () => {},
 };
 
 TableMobileView.propTypes = {
@@ -225,4 +235,6 @@ TableMobileView.propTypes = {
   statusColor: string,
   icon: string,
   onClick: func,
+  isColumnOnClick: bool,
+  onColumnClick: func,
 };
