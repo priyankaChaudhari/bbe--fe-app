@@ -242,6 +242,13 @@ h5 {
   margin: 0;
   color: ${Theme.gray90};
 
+  &.sub-title-text {
+     font-size: ${Theme.subTitle};
+     color: ${Theme.black};
+     font-family: ${Theme.titleFontFamily};  
+     font-weight: 800;
+  }
+
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     font-size:  ${Theme.smallTitleFontSizeRes};
   }
