@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { arrayOf, bool, func } from 'prop-types';
-import { NoData, PageLoader } from '../../../../common';
 
 import TableMobileView from '../../../../common/TableMobileView';
+import { NoData, PageLoader } from '../../../../common';
 import numberWithCommas from '../../../../hooks/numberWithComas';
-import { CommissionTabletView } from './BGSComissionContainerStyle';
+import { CommissionTabletView } from './BGSCommissionContainerStyle';
 
 function BGSCommissionTableResponsiveView({
   isGroupBy,
@@ -26,6 +26,7 @@ function BGSCommissionTableResponsiveView({
                         OnSetShowModal(
                           item.bgs_manager.id,
                           item.bgs_manager.full_name,
+                          true,
                         )
                       }
                       mainLabel={item.bgs_manager.full_name.replace(

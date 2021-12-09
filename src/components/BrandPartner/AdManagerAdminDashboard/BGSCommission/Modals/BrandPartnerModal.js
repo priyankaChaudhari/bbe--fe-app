@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { bool, func, shape, string } from 'prop-types';
 
 import { CloseIcon } from '../../../../../theme/images';
-import { CommissionResseque } from '../BGSComissionContainerStyle';
+import { CommissionResseque } from '../BGSCommissionContainerStyle';
 import { getBgsBrandPartners } from '../../../../../api';
 import { commissionsTableheader } from '../../../../../constants';
 

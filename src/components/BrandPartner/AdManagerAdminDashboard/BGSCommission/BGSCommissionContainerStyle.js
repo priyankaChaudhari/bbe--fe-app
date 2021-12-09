@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+
 import Theme from '../../../../theme/Theme';
 
-export const ComissionHeader = styled.div`
+export const CommissionHeader = styled.div`
   .comission-header {
     list-style-type: none;
     padding: 0;
