@@ -1,19 +1,16 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react/no-unused-prop-types */
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
+import Select from 'react-select';
 import { useDispatch } from 'react-redux';
-import { shape, string, bool } from 'prop-types';
-import Select, { components } from 'react-select';
+import { shape, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
 import { showProfileLoader } from '../../../../../store/actions/userState';
 import {
-  CaretUp,
   CloseIcon,
   EditOrangeIcon,
   helpCircleIcon,
@@ -35,6 +32,7 @@ import {
   PageLoader,
   WhiteCard,
   ContractInputSelect,
+  DropDownIndicator,
 } from '../../../../../common';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
@@ -231,11 +229,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             : ''
         }
         isNumericString
-        // readOnly={
-        //   (type === 'card_details' || type === 'billing_address') &&
-        //   data &&
-        //   data.id
-        // }
       />
     );
   };
@@ -361,24 +354,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       </>
     );
   };
-  const DropdownIndicator = (props) => {
-    const { selectProps } = props;
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
+
   const getOptions = () => {
     const options = paymentTermsOptions.filter((op) => op.value !== 'standard');
     return options;
@@ -393,7 +369,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         }
         defaultValue={value && value.length ? value[0].payment_term : null}
         options={getOptions()}
-        components={{ DropdownIndicator }}
+        components={{ DropDownIndicator }}
         onChange={(event) => handlePaymentTermChange(event, type)}
       />
     );
@@ -492,7 +468,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         ...formData,
         billing_address: formData.billing_address,
         billing_contact: formData.billing_contact,
-        // card_details: formData.card_details,
         customer_onboarding: userInfo.customer_onboarding || onBoardingId,
         payment_type: 'credit card',
       };
@@ -580,16 +555,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                     <div className="label">Payment Type</div>
                     <div className="label-info">Credit Card</div>
                   </div>
-                  {/* <div className="col-6">
-                  <div className="label-info mt-4">
-                    <img
-                      className="master-card-icon"
-                      src={MasterCardIcons}
-                      alt="master-card"
-                    />{' '}
-                    Mastercard
-                  </div>
-                </div> */}
                 </div>
                 <div className="label mt-3">Cardholder name</div>
                 <div className="label-info">
@@ -620,42 +585,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </div>
                 </div>
               </WhiteCard>
-              {/* <WhiteCard>
-              <p className="black-heading-title mt-0 mb-3"> Billing Details</p>
-              <div className="edit-details" role="presentation">
-                <img src={EditOrangeIcon} alt="" />
-                Edit
-              </div>
-              <div className="label">Payment Type</div>
-              <div className="label-info">
-                ACH{' '}
-                <span className="ACH-status unverified pending">
-                  {' '}
-                  <img
-                    className="checked-mark-icon"
-                    src={BlackCheckMark}
-                    alt="check"
-                  />{' '}
-                  <img className="bell-icon" src={BellNotification} alt="" />{' '}
-                  <img className="bell-icon ml-1" src={CountDayClock} alt="" />{' '}
-                  Pending
-                </span>
-              </div>
-              <div className="label mt-3">Name on Account </div>
-              <div className="label-info">TRX Training Inc.</div>
-              <div className="label mt-3">Bank Name</div>
-              <div className="label-info">Chase</div>
-              <div className="row">
-                <div className="col-6">
-                  <div className="label mt-3">Routing Number</div>
-                  <div className="label-info">685 448 298</div>
-                </div>
-                <div className="col-6">
-                  <div className="label mt-3">Account Number</div>
-                  <div className="label-info">7847 0412 80</div>
-                </div>
-              </div>
-            </WhiteCard> */}
 
               <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
@@ -725,18 +654,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   <img src={EditOrangeIcon} alt="" />
                   Edit
                 </div>
-
-                {/* {formData.expiryMessage && formData.expiryMessage.message ? (
-                  <div
-                    className="edit-details"
-                    role="presentation"
-                    onClick={() => setShowModal(true)}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
-                  </div>
-                ) : (
-                  ''
-                )} */}
                 <div className="label mt-3">Address </div>
                 <div className="label-info">
                   {mapDefaultValues('billing_address', 'address')}
@@ -878,16 +795,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 }
 
 BillingDetails.defaultProps = {
-  Props: {},
   onBoardingId: null,
 };
 
 BillingDetails.propTypes = {
-  Props: shape({
-    selectProps: shape({
-      menuIsOpen: bool,
-    }),
-  }),
   id: string.isRequired,
   userInfo: shape({
     customer_onboarding: string,
