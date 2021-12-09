@@ -91,16 +91,18 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
         </>
       )}
 
-      <InvoiceAdjustPauseModal
-        id="BT-invoiceAdjustmentModal"
-        isOpen={showInvoiceAdjustmentModal}
-        onModalClose={() => {
-          setShowInvoiceAdjustmentModal(false);
-        }}
-        onApply={() => {
-          setShowInvoiceAdjustmentModal(false);
-        }}
-      />
+      {showInvoiceAdjustmentModal && (
+        <InvoiceAdjustPauseModal
+          id="BT-invoiceAdjustmentModal"
+          isOpen={showInvoiceAdjustmentModal}
+          onModalClose={() => {
+            setShowInvoiceAdjustmentModal(false);
+          }}
+          onApply={() => {
+            setShowInvoiceAdjustmentModal(false);
+          }}
+        />
+      )}
       {showAllPastInvoicesModal ? (
         <InvoicePastAdjustmentModal
           id="BT-allPastInvoiceModal"
