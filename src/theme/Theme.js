@@ -59,6 +59,7 @@ const Theme = {
   extraMedium: '16px',
   medium: '17px',
   title: '18px',
+  subTitle: '22px',
 
   verySmallRes: '14px',
   extraSmallRes: '15px',
