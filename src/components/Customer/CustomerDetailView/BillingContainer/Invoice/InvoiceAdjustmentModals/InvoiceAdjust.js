@@ -5,23 +5,32 @@ import styled from 'styled-components';
 import { arrayOf, func } from 'prop-types';
 
 import { InputFormField } from '../../../../../../common';
-import { adjustInvoiceInputs } from '../../../../../../constants/CustomerConstants';
+import numberWithCommas from '../../../../../../hooks/numberWithComas';
 
 const InvoiceAdjust = ({
   invoiceInputs,
   setInvoiceInputs,
   returnTotalAmount,
+  parseNumber,
 }) => {
+  // useEffect(() => {
+  //   console.log('----=====', invoiceInputs);
+  // }, [invoiceInputs]);
   const onChangeInput = (input, { target }) => {
     if (invoiceInputs && invoiceInputs.length > 0) {
       let flag = 0;
       const resultArray = [...invoiceInputs];
       invoiceInputs.forEach((item, index) => {
-        if (item.marketplace === input.label) {
+        if (item.marketplace === input.marketplace) {
           flag = 1;
           resultArray[index] = {
+            ...invoiceInputs[index],
             newAmount: target.value,
-            marketplace: input.label,
+            marketplace: input.marketplace,
+            change:
+              parseNumber(target.value) - input.old_budget > 0
+                ? `+${Math.abs(input.old_budget - parseNumber(target.value))}`
+                : `-${Math.abs(input.old_budget - parseNumber(target.value))}`,
           };
           setInvoiceInputs(resultArray);
         }
@@ -31,7 +40,7 @@ const InvoiceAdjust = ({
           ...state,
           {
             newAmount: target.value,
-            marketplace: input.label,
+            marketplace: input.marketplace,
           },
         ]);
       }
@@ -40,7 +49,7 @@ const InvoiceAdjust = ({
         ...state,
         {
           newAmount: target.value,
-          marketplace: input.label,
+          marketplace: input.marketplace,
         },
       ]);
     }
@@ -60,45 +69,54 @@ const InvoiceAdjust = ({
           </div>
 
           <div className=" straight-line horizontal-line pt-1 mb-2" />
-          {adjustInvoiceInputs.map((input) => {
-            return (
-              <>
-                <div className="col-4 text-left mt-3">
-                  <div className="normal-text ">{input.label}</div>
-                </div>
-                <div className="col-4 text-left mt-3">
-                  <div className="normal-text ">$5,000</div>
-                </div>
-                <div className="col-4 text-left">
-                  <InputFormField id={input.id}>
-                    <div className="input-container  ">
-                      <span className="input-icon ">$</span>
-                      <NumberFormat
-                        className="mt-2 form-control"
-                        name={input.name}
-                        placeholder={0}
-                        onChange={(e) => {
-                          onChangeInput(input, e);
-                        }}
-                        thousandSeparator
-                        decimalScale={2}
-                        allowNegative={false}
-                      />
+          {invoiceInputs &&
+            invoiceInputs.length > 0 &&
+            invoiceInputs.map((input) => {
+              return (
+                <>
+                  <div className="col-4 text-left mt-3">
+                    <div className="normal-text ">{input.marketplace}</div>
+                  </div>
+                  <div className="col-4 text-left mt-3">
+                    <div className="normal-text ">
+                      ${numberWithCommas(input.old_budget)}
                     </div>
-                  </InputFormField>
-                </div>
-              </>
-            );
-          })}
+                  </div>
+                  <div className="col-4 text-left">
+                    <InputFormField id={input.marketplace}>
+                      <div className="input-container  ">
+                        <span className="input-icon ">$</span>
+                        <NumberFormat
+                          className="mt-2 form-control"
+                          name={input.marketplace}
+                          placeholder={input.old_budget}
+                          onChange={(e) => {
+                            onChangeInput(input, e);
+                          }}
+                          thousandSeparator
+                          decimalScale={2}
+                          allowNegative={false}
+                          value={input?.newAmount}
+                        />
+                      </div>
+                    </InputFormField>
+                  </div>
+                </>
+              );
+            })}
           <div className=" straight-line horizontal-line pt-2 " />
           <div className="col-4 text-left mt-3">
             <div className="normal-text text-bold ">Total</div>
           </div>
           <div className="col-4 text-left mt-3">
-            <div className="normal-text text-bold">$10,000</div>
+            <div className="normal-text text-bold">
+              ${returnTotalAmount()?.currentBudget}
+            </div>
           </div>
           <div className="col-4 text-left mt-3">
-            <div className="normal-text text-bold">${returnTotalAmount()}</div>
+            <div className="normal-text text-bold">
+              ${returnTotalAmount()?.newBudget}
+            </div>
           </div>
         </div>
       </div>
@@ -112,12 +130,14 @@ InvoiceAdjust.defaultProps = {
   invoiceInputs: [],
   setInvoiceInputs: () => {},
   returnTotalAmount: () => {},
+  parseNumber: () => {},
 };
 
 InvoiceAdjust.propTypes = {
   invoiceInputs: arrayOf(Array),
   setInvoiceInputs: func,
   returnTotalAmount: func,
+  parseNumber: func,
 };
 
 const GrayTable = styled.div`
