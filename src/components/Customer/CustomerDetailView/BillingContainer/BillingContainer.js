@@ -87,7 +87,7 @@ export default BillingContainer;
 BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
-  redirectType: 'retainer',
+  redirectType: 'Billing',
 };
 
 BillingContainer.propTypes = {

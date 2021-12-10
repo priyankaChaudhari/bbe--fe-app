@@ -3,9 +3,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-// import Select from 'react-select';
 import { useDispatch } from 'react-redux';
 import { shape, string } from 'prop-types';
+import { toast, ToastContainer } from 'react-toastify';
 import Select, { components } from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
@@ -34,7 +34,6 @@ import {
   PageLoader,
   WhiteCard,
   ContractInputSelect,
-  // DropDownIndicator,
 } from '../../../../../common';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
@@ -365,14 +364,17 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   };
   const generateDropdown = (type) => {
     const value = paymentTermsData.filter((op) => op.invoice_type === type);
+    const invoiceType = value && value.length ? value[0].invoice_type : null;
+    const paymentTerm = value && value.length ? value[0].payment_term : null;
     return (
       <Select
         classNamePrefix="react-select"
         placeholder={
           value?.length ? value?.[0]?.payment_term : 'Select the terms'
         }
-        defaultValue={value?.length ? value?.[0]?.payment_term : null}
+        defaultValue={paymentTerm}
         options={getOptions()}
+        name={invoiceType}
         components={{ DropdownIndicator }}
         onChange={(event) => handlePaymentTermChange(event, type)}
       />
@@ -495,6 +497,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         setShowBtn(false);
         dispatch(showProfileLoader(true));
         dispatch(showProfileLoader(false));
+        toast.success('You have successfully changed your payment terms');
       }
       if (res && res.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
@@ -505,6 +508,12 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   return (
     <>
+      {' '}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+      />
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="performance-graph"
@@ -736,7 +745,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           )}
         </ModalBox>
       </Modal>
-
       <Modal
         isOpen={showPaymentTermsModal}
         style={customStyles}
@@ -763,9 +771,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                 {mapPaymentTermsModalDetails('dsp service', 'Dsp (Additional)')}
                 {mapPaymentTermsModalDetails('upsell', 'Upsells')}
               </div>
-              <ErrorMsg style={{ textAlign: 'center' }}>
-                {apiError && apiError[0]}
-              </ErrorMsg>
             </div>
           </div>
 
