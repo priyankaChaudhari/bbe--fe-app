@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { func } from 'prop-types';
+import { arrayOf, func } from 'prop-types';
 
 import {
   ArrowRightBlackIcon,
@@ -8,8 +8,13 @@ import {
   LeftArrowIcon,
 } from '../../../../../../theme/images';
 import { ModalBox, Button, GreyCard } from '../../../../../../common';
+import numberWithCommas from '../../../../../../hooks/numberWithComas';
 
-const InvoiceAdjustConfirm = ({ onBackClick }) => {
+const InvoiceAdjustConfirm = ({
+  onBackClick,
+  adjustmentData,
+  returnTotalAmount,
+}) => {
   return (
     <>
       <ModalBox>
@@ -45,63 +50,42 @@ const InvoiceAdjustConfirm = ({ onBackClick }) => {
               </div>
             </div>
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
-            <div className="row">
-              <div className="col-4 text-left">
-                <div className="normal-text text-bold">US</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="normal-text text-bold">$5,000</div>
-              </div>
-              <div className="col-1 text-left">
-                <div className="normal-text">
-                  <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="normal-text text-bold">$10,000</div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="normal-text text-bold">+$5,000</div>
-              </div>
-            </div>
-            <div className="row mt-1">
-              <div className="col-4 text-left">
-                <div className="normal-text ">UK</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="gray-normal-text">$5,000</div>
-              </div>
-              <div className="col-1 text-left">
-                <div className="normal-text">
-                  <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="gray-normal-text">$10,000</div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="gray-normal-text">-</div>
-              </div>
-            </div>
-            <div className="row mt-1">
-              <div className="col-4 text-left">
-                <div className="normal-text ">Canada</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="gray-normal-text">$5,000</div>
-              </div>
-              <div className="col-1 text-left">
-                <div className="normal-text">
-                  <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="gray-normal-text">$10,000</div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="gray-normal-text">-</div>
-              </div>
-            </div>
+
+            {adjustmentData &&
+              adjustmentData.length > 0 &&
+              adjustmentData.map((item) => {
+                return (
+                  <div className="row mt-1">
+                    <div className="col-4 text-left">
+                      <div className="normal-text ">{item.marketplace}</div>
+                    </div>
+                    <div className="col-2 text-left">
+                      <div className="gray-normal-text">
+                        ${numberWithCommas(item.old_budget)}
+                      </div>
+                    </div>
+                    <div className="col-1 text-left">
+                      <div className="normal-text">
+                        <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
+                      </div>
+                    </div>
+                    <div className="col-2 text-left">
+                      <div className="gray-normal-text">
+                        ${item.newAmount ? item.newAmount : item.old_budget}
+                      </div>
+                    </div>
+                    <div className="col-3 text-left">
+                      <div className="gray-normal-text">
+                        {item.change
+                          ? item.change === 0
+                            ? '-'
+                            : item.change
+                          : '-'}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
 
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             <div className="row">
@@ -109,7 +93,9 @@ const InvoiceAdjustConfirm = ({ onBackClick }) => {
                 <div className="normal-text text-bold">Total invoice</div>
               </div>
               <div className="col-2 text-left">
-                <div className="normal-text text-bold">$5,000</div>
+                <div className="normal-text text-bold">
+                  ${returnTotalAmount()?.currentBudget}
+                </div>
               </div>
               <div className="col-1 text-left">
                 <div className="normal-text">
@@ -117,43 +103,84 @@ const InvoiceAdjustConfirm = ({ onBackClick }) => {
                 </div>
               </div>
               <div className="col-2 text-left">
-                <div className="normal-text text-bold">$10,000</div>
+                <div className="normal-text text-bold">
+                  ${returnTotalAmount()?.newBudget}
+                </div>
               </div>
               <div className="col-3 text-left">
-                <div className="normal-text text-bold">+$5,000</div>
+                <div className="normal-text text-bold">
+                  {' '}
+                  {returnTotalAmount()?.newBudget -
+                    returnTotalAmount()?.currentBudget >
+                  0
+                    ? `+${Math.abs(
+                        returnTotalAmount()?.currentBudget -
+                          returnTotalAmount()?.newBudget,
+                      )}`
+                    : `-${Math.abs(
+                        returnTotalAmount()?.currentBudget -
+                          returnTotalAmount()?.newBudget,
+                      )}`}
+                </div>
               </div>
             </div>
           </div>
           <div className="d-md-none d-block">
-            <div className="row">
-              <div className="col-12 text-left">
-                <div className="label">Marketplace</div>
-                <div className="normal-text text-bold">US</div>
-              </div>
+            {adjustmentData &&
+              adjustmentData.length > 0 &&
+              adjustmentData.map((item) => {
+                return (
+                  <>
+                    <div className="row">
+                      <div className="col-12 text-left">
+                        <div className="label">Marketplace</div>
+                        <div className="normal-text text-bold">
+                          {item.marketplace}
+                        </div>
+                      </div>
 
-              <div className="col-4 text-left">
-                <div className="label">From</div>
-                <div className="normal-text text-bold">$5,000</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="mt-3">
-                  <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="label">To</div>
-                <div className="normal-text text-bold">$10,000</div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="label">Change</div>
-                <div className="normal-text text-bold">+$5,000</div>
-              </div>
-            </div>
-            <div className=" straight-line horizontal-line mt-2 mb-2 " />
+                      <div className="col-4 text-left">
+                        <div className="label">From</div>
+                        <div className="normal-text text-bold">
+                          ${numberWithCommas(item.old_budget)}
+                        </div>
+                      </div>
+                      <div className="col-2 text-left">
+                        <div className="mt-3">
+                          <img
+                            src={ArrowRightBlackIcon}
+                            width="18px"
+                            alt="arrow"
+                          />{' '}
+                        </div>
+                      </div>
+                      <div className="col-3 text-left">
+                        <div className="label">To</div>
+                        <div className="normal-text text-bold">
+                          ${item.newAmount ? item.newAmount : 0}
+                        </div>
+                      </div>
+                      <div className="col-3 text-left">
+                        <div className="label">Change</div>
+                        <div className="normal-text text-bold">
+                          {' '}
+                          {item.change
+                            ? item.change === 0
+                              ? '-'
+                              : item.change
+                            : '-'}
+                        </div>
+                      </div>
+                    </div>
+                    <div className=" straight-line horizontal-line mt-2 mb-2 " />
+                  </>
+                );
+              })}
+
             <div className="row">
               <div className="col-12 text-left">
-                <div className="label">Marketplace</div>
-                <div className="normal-text ">US</div>
+                <div className="label text-bold"> </div>
+                <div className="normal-text text-bold">Total invoice</div>
               </div>
 
               <div className="col-4 text-left">
@@ -215,8 +242,12 @@ export default InvoiceAdjustConfirm;
 
 InvoiceAdjustConfirm.defaultProps = {
   onBackClick: () => {},
+  adjustmentData: [],
+  returnTotalAmount: () => {},
 };
 
 InvoiceAdjustConfirm.propTypes = {
   onBackClick: func,
+  returnTotalAmount: func,
+  adjustmentData: arrayOf(Array),
 };

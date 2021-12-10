@@ -5,7 +5,13 @@ import Modal from 'react-modal';
 import Select from 'react-select';
 import { bool, func, shape, string } from 'prop-types';
 
+import InvoiceAdjust from './InvoiceAdjust';
+import InvoicePause from './InvoicePause';
+import InvoiceAdjustConfirm from './InvoiceAdjustConfirm';
+import Theme from '../../../../../../theme/Theme';
+import { dspInvoiceSubType } from './dummyData';
 import { CloseIcon } from '../../../../../../theme/images';
+import { getDSPBudgetAdjustData } from '../../../../../../api';
 import {
   ModalBox,
   Button,
@@ -16,11 +22,6 @@ import {
   PageLoader,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
-import InvoiceAdjust from './InvoiceAdjust';
-import InvoicePause from './InvoicePause';
-import InvoiceAdjustConfirm from './InvoiceAdjustConfirm';
-import { getDSPBudgetAdjustData } from '../../../../../../api';
-import Theme from '../../../../../../theme/Theme';
 
 const todaysDate = new Date();
 todaysDate.setDate(todaysDate.getDate() - 2);
@@ -66,6 +67,7 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
         if (res && res.status === 200) {
           setLoader(false);
         }
+        setInvoiceInputs(dspInvoiceSubType.results);
         setLoader(false);
       });
     },
@@ -100,23 +102,35 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
     }
   }, [getPauseInvoices, getadjustInvoices, invoiceType, viewComponent]);
 
-  const returnTotalAmount = () => {
+  const parseNumber = (value) => {
+    return isNaN(parseFloat(value.replace(/,/g, '')))
+      ? 0
+      : parseFloat(value.replace(/,/g, ''));
+  };
+
+  const returnTotalAmount = useCallback(() => {
     if (invoiceInputs && invoiceInputs.length > 0) {
-      let temp = 0;
-      for (const i in invoiceInputs) {
-        if ('newAmount' in invoiceInputs[i]) {
-          temp += isNaN(
-            parseFloat(invoiceInputs[i].newAmount.replace(/,/g, '')),
-          )
-            ? 0
-            : parseFloat(invoiceInputs[i].newAmount.replace(/,/g, ''));
+      const temp = { currentBudget: 0, newBudget: 0 };
+      // eslint-disable-next-line guard-for-in
+      for (const key in invoiceInputs) {
+        if (invoiceInputs[key] && invoiceInputs[key].old_budget) {
+          temp.currentBudget += parseNumber(
+            invoiceInputs[key].old_budget.toString(),
+          );
+        }
+        if (invoiceInputs[key] && invoiceInputs[key].newAmount) {
+          temp.newBudget += parseNumber(invoiceInputs[key].newAmount);
+        } else {
+          temp.newBudget += parseNumber(
+            invoiceInputs[key].old_budget.toString(),
+          );
         }
       }
 
       return temp;
     }
     return 0;
-  };
+  }, [invoiceInputs]);
 
   const getMonthYearOptions = () => {
     const monthsYears = [];
@@ -221,12 +235,14 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
                 invoiceInputs={invoiceInputs}
                 setInvoiceInputs={setInvoiceInputs}
                 returnTotalAmount={returnTotalAmount}
+                parseNumber={parseNumber}
               />
             ) : (
               <InvoicePause
                 invoiceChoices={invoiceChoices}
                 setInvoiceChoices={setInvoiceChoices}
                 returnTotalAmount={returnTotalAmount}
+                parseNumber={parseNumber}
               />
             )}
             <div className="modal-body pb-1 pt-3">
@@ -268,9 +284,11 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
           </ModalBox>
         ) : (
           <InvoiceAdjustConfirm
+            adjustmentData={invoiceInputs}
             onBackClick={() => {
               setShowConfirmationModal(false);
             }}
+            returnTotalAmount={returnTotalAmount}
           />
         )}
       </Modal>
