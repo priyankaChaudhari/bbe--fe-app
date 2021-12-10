@@ -1,13 +1,11 @@
 import React from 'react';
 
 import ReactTooltip from 'react-tooltip';
-
+import styled from 'styled-components';
 import { number, oneOfType, string } from 'prop-types';
 
-import styled from 'styled-components';
-
 import Theme from '../theme/Theme';
-import { numberWithCommas } from '../hooks/numberWithComas';
+import numberWithCommas from '../hooks/numberWithComas';
 
 const rendeTootipData = (retainer, dsp, revShare) => {
   return `

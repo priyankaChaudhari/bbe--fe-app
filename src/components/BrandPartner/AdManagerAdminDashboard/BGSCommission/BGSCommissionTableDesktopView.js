@@ -3,7 +3,7 @@ import React from 'react';
 import { arrayOf, bool, func } from 'prop-types';
 
 import { NoData, PageLoader, TableGap, WhiteCard } from '../../../../common';
-import { numberWithCommas } from '../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../hooks/numberWithComas';
 
 export default function BGSCommissionTableDesktopView({
   commissionData,

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import Theme from '../theme/Theme';
 
 const TableGap = styled.div`
@@ -7,8 +8,6 @@ const TableGap = styled.div`
   border-spacing: 0 10px;
   border-collapse: collapse;
   table {
-    /* display: flex;
-    flex-flow: column; */
     height: 100%;
     width: 100%;
     tr {
