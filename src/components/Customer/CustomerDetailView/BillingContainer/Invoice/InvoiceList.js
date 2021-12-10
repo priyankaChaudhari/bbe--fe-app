@@ -22,7 +22,7 @@ import {
 import { BellNotification } from '../../../../../theme/images';
 
 const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
-  const isMobile = useMediaQuery({ maxWidth: 767 });
+  const isMobile = useMediaQuery({ maxWidth: 768 });
   const [selectedComponent, setSelectedComponent] = useState('past');
   const [invoicesData, setInvoicesData] = useState();
   const [pastInvoiceLoader, setPastInvoiceLoader] = useState(false);
@@ -98,7 +98,7 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
             </ul>
           </Tabs>
         ) : (
-          <div className="straight-line horizontal-line spacing " />
+          <div className="straight-line horizontal-line spacing d-md-block d-none " />
         )}
       </>
     );
@@ -205,13 +205,11 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
             <div className="company-name">{item.invoice_type}</div>
             <div className="status">#{item.next_invoiced_id}</div>
           </td>
-          <td className="product-body dsp-invoice pl-2">
+          <td className="product-table-body text-medium pl-2">
             <div className="notification-bell pl-2">
               ${addThousandComma(item.monthly_budget, 0)}
               <img
-                width="16px"
-                className="ml-1"
-                style={{ verticalAlign: 'middle' }}
+                className="notification-bell-icon"
                 src={BellNotification}
                 alt="bell"
                 data-tip="Pending BP Sign-off"

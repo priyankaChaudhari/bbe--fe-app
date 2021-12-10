@@ -4,13 +4,13 @@ import Modal from 'react-modal';
 import { useMediaQuery } from 'react-responsive';
 import { bool, func, shape, string } from 'prop-types';
 
-import { ModalBox, Button } from '../../../../../../common';
+import { ModalBox, Button, Status } from '../../../../../../common';
 import {
   ArrowRightBlackIcon,
   ArrowRightIcon,
   CloseIcon,
   LeftArrowIcon,
-  BellNotification,
+  ReminderBell,
 } from '../../../../../../theme/images';
 
 const customStyles = {
@@ -226,7 +226,7 @@ const InvoiceViewAndReminderModal = ({
         </div>
         <div className=" straight-line horizontal-line mt-2 mb-2 " />
         <div className="row">
-          <div className="col-12 text-left">
+          <div className="col-12 mb-2 text-left">
             <div className="label">Marketplace</div>
             <div className="normal-text ">US</div>
           </div>
@@ -270,18 +270,23 @@ const InvoiceViewAndReminderModal = ({
         />
         <ModalBox>
           <div className="modal-body pb-0 ">
-            <h4>
-              {' '}
-              <img
-                className="modal-back-arrow"
-                src={LeftArrowIcon}
-                role="presentation"
-                alt="back arrow"
-                onClick={() => onApply()}
-              />
-              Invoice Adjustment
-            </h4>
-            <div className=" straight-line horizontal-line pt-1 mb-2 " />
+            <div style={{ display: 'flex' }}>
+              <h4>
+                {' '}
+                <img
+                  className="modal-back-arrow"
+                  src={LeftArrowIcon}
+                  role="presentation"
+                  alt="back arrow"
+                  onClick={() => onApply()}
+                />
+                Invoice Adjustment
+              </h4>
+              <div style={{ marginTop: '-7px ', marginLeft: '10px' }}>
+                <Status label="Pending" />
+              </div>
+            </div>
+            <div className=" straight-line horizontal-line pt-3 mb-2 " />
             {isMobile ? renderMobileView() : renderDesktopView()}
 
             <div className=" straight-line horizontal-line mt-2 mb-2 " />
@@ -298,14 +303,8 @@ const InvoiceViewAndReminderModal = ({
                 onApply();
               }}
               type="button"
-              className="btn-primary on-boarding   w-100">
-              <img
-                width="16px"
-                className="ml-1"
-                style={{ verticalAlign: 'middle' }}
-                src={BellNotification}
-                alt="bell"
-              />
+              className="light-orange on-boarding   w-100">
+              <img src={ReminderBell} alt="bell" />
               Send Reminder
             </Button>
           </div>

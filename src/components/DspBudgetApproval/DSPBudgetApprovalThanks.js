@@ -19,12 +19,13 @@ export default function DSPBudgetApprovalThanks() {
         {params && params.step === 'completed' ? (
           <>
             {' '}
-            <h5>Information already provided</h5>
+            <h5>Thanks!</h5>
             <p className="info">
-              Looks like someone has provided the requested information already.
-              <br />
-              <br /> You can close this tab when you’re ready.
+              We’ve let Jacob know that you’ve provided the information we
+              needed. They will get in touch with you if necessary.
             </p>
+            <br />
+            <p className="info">You can close this tab when you’re ready.</p>
           </>
         ) : (
           <>

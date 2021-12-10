@@ -17,7 +17,6 @@ import {
   PageLoader,
   Status,
   Table,
-  WhiteCard,
   NoData,
   TableMobileView,
 } from '../../../../../common';
@@ -168,6 +167,7 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
           invoicesAdjustmentData.map((item) => {
             return (
               <>
+                {/* <WhiteCard className="mb-3"> */}
                 <TableMobileView
                   key={item.id}
                   className="mb-3"
@@ -192,8 +192,7 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
                   isColumnOnClick
                   onColumnClick={() => setShowViewAndReminderModal(true)}
                 />
-
-                <div className="straight-line horizontal-line spacing " />
+                {/* </WhiteCard> */}
               </>
             );
           })
@@ -206,9 +205,8 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
 
   return (
     <Wrapper>
-      <WhiteCard className="mb-3">
-        {!isMobile ? renderDesktopView() : renderMobileView()}
-      </WhiteCard>
+      {!isMobile ? renderDesktopView() : renderMobileView()}
+
       <InvoicePastAdjustmentModal
         id="BT-allPastInvoiceModal"
         isOpen={showAllPastInvoicesModal}

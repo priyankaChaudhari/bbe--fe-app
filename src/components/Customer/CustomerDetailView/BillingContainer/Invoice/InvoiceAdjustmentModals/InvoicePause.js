@@ -24,14 +24,14 @@ const InvoicePause = () => {
           {adjustInvoiceInputs.map((item) => {
             return (
               <>
-                <div className="col-4 text-left mt-3">
+                <div className="col-4 text-left mt-2">
                   <div className="normal-text ">{item.label}</div>
                 </div>
-                <div className="col-4 text-left mt-3">
-                  <div className="normal-text ">$5,000</div>
+                <div className="col-4 text-left mt-2">
+                  <div className="normal-text line-throught">$5,000</div>
                 </div>
                 <div className="col-4 text-left">
-                  <ul className="invoice-adj-radio mt-4">
+                  <ul className="invoice-adj-radio mt-2">
                     <li>
                       <ModalRadioCheck className="mb-3">
                         <label

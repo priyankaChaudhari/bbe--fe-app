@@ -21,15 +21,15 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
   return (
     <Wrapper>
       <WhiteCard className="mb-3">
-        <div className="row">
+        <div className="row mb-3">
           <div className="col-5">
             <p
               style={{ marginTop: '0px' }}
-              className="black-heading-title mb-4 mt-3">
+              className="black-heading-title mb-0 mt-3">
               Invoices Adjustments
             </p>
           </div>
-          <div className="col-7 mb-3 text-right">
+          <div className="col-7  text-right">
             <Button
               onClick={() => setShowInvoiceAdjustmentModal(true)}
               type="button"
@@ -38,6 +38,7 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
             </Button>
           </div>
         </div>
+
         <InvoiceAdjustmentList
           id={id}
           invoiceType={invoiceType}
@@ -45,33 +46,34 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
         />
         <div className="straight-line horizontal-line spacing " />
         <p
-          className="orange-text-label cursor"
+          className="orange-text-label cursor mb-1"
           onClick={() => setShowAllPastInvoicesModal(true)}
           role="presentation">
           {' '}
           View all past adjustments
         </p>
+
+        <InvoiceAdjustPauseModal
+          id="BT-invoiceAdjustmentModal"
+          isOpen={showInvoiceAdjustmentModal}
+          onModalClose={() => {
+            setShowInvoiceAdjustmentModal(false);
+          }}
+          onApply={() => {
+            setShowInvoiceAdjustmentModal(false);
+          }}
+        />
+        <InvoicePastAdjustmentModal
+          id="BT-allPastInvoiceModal"
+          isOpen={showAllPastInvoicesModal}
+          onClick={() => {
+            setShowAllPastInvoicesModal(false);
+          }}
+          onApply={() => {
+            setShowAllPastInvoicesModal(false);
+          }}
+        />
       </WhiteCard>
-      <InvoiceAdjustPauseModal
-        id="BT-invoiceAdjustmentModal"
-        isOpen={showInvoiceAdjustmentModal}
-        onModalClose={() => {
-          setShowInvoiceAdjustmentModal(false);
-        }}
-        onApply={() => {
-          setShowInvoiceAdjustmentModal(false);
-        }}
-      />
-      <InvoicePastAdjustmentModal
-        id="BT-allPastInvoiceModal"
-        isOpen={showAllPastInvoicesModal}
-        onClick={() => {
-          setShowAllPastInvoicesModal(false);
-        }}
-        onApply={() => {
-          setShowAllPastInvoicesModal(false);
-        }}
-      />
     </Wrapper>
   );
 };
