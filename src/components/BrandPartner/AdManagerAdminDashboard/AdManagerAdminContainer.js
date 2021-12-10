@@ -8,9 +8,10 @@ import SalesDashboard from './SalesDashboard/SalesDashboard';
 import { Tabs } from '../../../common';
 import { DashboardCard } from '../../../theme/Global';
 import { getMarketPlaceList } from '../../../api';
+import BGSComissionContainer from './BGSComission/BGSComissionContainer';
 
 export default function AdManagerAdminContainer({ userInfo }) {
-  const [viewComponent, setViewComponent] = useState('sales');
+  const [viewComponent, setViewComponent] = useState('comissions');
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const getMarketPlace = useCallback(() => {
     getMarketPlaceList().then((res) => {
@@ -61,6 +62,9 @@ export default function AdManagerAdminContainer({ userInfo }) {
           />
         );
 
+      case 'comissions':
+        return <BGSComissionContainer userInfo={userInfo} />;
+
       default:
         return '';
     }
@@ -89,6 +93,15 @@ export default function AdManagerAdminContainer({ userInfo }) {
               role="presentation">
               DSP Advertising
             </li>
+
+            {userInfo && userInfo.role === 'BGS Admin' ? (
+              <li
+                className={viewComponent === 'comissions' ? 'active' : ''}
+                onClick={() => setViewComponent('comissions')}
+                role="presentation">
+                Comissions
+              </li>
+            ) : null}
           </ul>
         </Tabs>
         {renderComponent(viewComponent)}

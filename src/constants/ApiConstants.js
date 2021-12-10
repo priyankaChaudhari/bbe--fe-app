@@ -50,7 +50,7 @@ export const API_ADDITIONAL_SERVICES = '/additional-services/';
 export const API_ADDITIONAL_SERVICE_BULK_UPDATE = `${API_ADDITIONAL_SERVICES}bulk-update/`;
 export const API_SEND_REMINDER = `${API_CUSTOMER_CONTRACT}send-reminder/`;
 export const API_SIGNATURE_STATUS = `${API_CUSTOMER_CONTRACT}check-signature-status/`;
-export const API_SERVICE_TYPE = '/type-of-services/';
+export const API_SERVICE_TYPE = `${API_SERVICES_FEE}service/`;
 export const API_CONTRACT_DOCUMENT = `${API_CONTACT}contract-pdf/`;
 export const API_CREATE_ADDENDUM = '/contract-data/';
 export const API_TRANSACTION_DATA = '/transactional-data/';
@@ -60,6 +60,9 @@ export const API_CONTRACT_ACTIVITY_LOG = `/contract_history/`;
 export const API_THRESHOLD_TYPE = `threshold-type`;
 export const API_YOY_PERCENTAGE = `yoy-percentage`;
 export const API_PAUSE_AGREEMENT = '/pause-contract/';
+export const API_DISCOUNT = '/discount/';
+export const API_FEE_STRUCTURE = '/contract-fee-structure/fee-data/';
+export const API_SAVE_FEE_STRUCTURE = '/contract-fee-structure/';
 
 // Knowledge Base
 export const API_KNOWLEDGE_BASE = '/knowledge/';

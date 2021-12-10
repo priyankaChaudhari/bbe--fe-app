@@ -20,6 +20,14 @@ const InputFormField = styled.div`
     font-size: ${Theme.verySmall};
     text-transform: uppercase;
     font-family: ${Theme.titleFontFamily};
+
+    &.quartely-threshold {
+      font-size: ${Theme.extraNormal};
+      color: ${Theme.gray85};
+      text-transform: capitalize;
+      font-weight: 300;
+      font-family: ${Theme.baseFontFamily};
+    }
   }
 
   .deleteSocial {

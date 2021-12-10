@@ -17,6 +17,10 @@ const HeaderDownloadFuntionality = styled.div`
     font-size: 13px;
     letter-spacing: 1.21px;
     text-transform: uppercase;
+    &.large-header-title {
+      font-size: 20px;
+      font-weight: 600;
+    }
   }
 
   .contract-download-nav {

@@ -15,6 +15,19 @@ const ContractInputSelect = styled.div`
  
   .css-2b097c-container {
      margin-top: 7px;
+
+     .css-6595ef-control  {
+      border: 1px solid ${Theme.gray45};
+      border-radius: 2px;
+      background-color: ${Theme.gray8};
+      margin-top: 7px;
+      min-height: 40px !important;  
+      height: 40px;
+     }
+
+     .css-ih0vwr-control {
+        height: 40px;
+     }
     .css-yk16xz-control {
       color: ${Theme.gray85};
       border: 1px solid ${Theme.gray45};

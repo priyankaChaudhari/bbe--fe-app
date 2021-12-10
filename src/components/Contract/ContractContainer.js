@@ -39,6 +39,10 @@ import {
   getcontract,
   getServicesFee,
   getAmendment,
+  getServiceTypes,
+  getDiscount,
+  saveFeeStructure,
+  getFeeStructure,
 } from '../../api/AgreementApi';
 import {
   updateAccountDetails,
@@ -54,14 +58,14 @@ import {
   getDocumentList,
   createContractDesign,
   updateCustomerDetails,
-  getMonthlyService,
   getOneTimeService,
   getThresholdType,
   getYoyPercentage,
+  saveDiscount,
 } from '../../api';
 import {
   AgreementDetails,
-  StatementDetails,
+  feeStructureContainerDetails,
   DSPAddendumDetails,
   additionaMarketplaceAmount,
   AgreementSign,
@@ -136,13 +140,17 @@ export default function ContractContainer() {
   const [additionalMonthlyServices, setMonthlyAdditionalServices] = useState(
     [],
   );
+
   const [additionalMarketplacesData, setAdditionalMarketplace] = useState({});
   const [additionalOnetimeServices, setAdditionalOnetimeServices] = useState(
     [],
   );
 
   const [apiError, setApiError] = useState({});
-  const [sectionError, setSectionError] = useState({});
+  const [sectionError, setSectionError] = useState({
+    vendor: { feeType: 0 },
+    seller: { feeType: 0 },
+  });
   const [additionalMarketplaceError, setAdditionalMarketplaceError] = useState(
     {},
   );
@@ -155,13 +163,15 @@ export default function ContractContainer() {
   const [customerError, setCustomerErrors] = useState({});
 
   const [contractError, setContractError] = useState({});
-  const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState(
-    false,
-  );
+  const [feeStructureErrors, setFeeStructureErrors] = useState({});
 
+  const [showAdditionalMarketplace, setShowAdditionalMarketplace] = useState({
+    Seller: { showDropdown: false },
+    Vendor: { showDropdown: false },
+  });
   const [downloadApiCall, setDownloadApiCall] = useState(false);
   const [isDocRendered, setIsDocRendered] = useState(false);
-
+  const [discountData, setDiscountData] = useState([]);
   const [showPageNotFound, setPageNotFoundFlag] = useState(false);
   const [showSection, setShowCollpase] = useState({
     addendum: false,
@@ -175,6 +185,7 @@ export default function ContractContainer() {
     dspAddendum: false,
     amendment: false,
   });
+
   const [loaderFlag, setLoaderFlag] = useState(true);
   const [contractDesignLoader, setContractDesignLoader] = useState(null);
   const [calculatedDate, setCalculatedDate] = useState(null);
@@ -183,7 +194,9 @@ export default function ContractContainer() {
   const [thirdMonthDate, setThirdMonthDate] = useState(null);
   const [endMonthDate, setEndDate] = useState(null);
   const [tabInResponsive, setShowtabInResponsive] = useState('view-contract');
-  const [discountFlag, setDiscountFlag] = useState('');
+  const [discountFlag, setDiscountFlag] = useState({});
+  const [selectedDiscount, setSelectedDiscount] = useState({});
+
   const [marketPlaces, setMarketPlaces] = useState([]);
   const [additionalMarketplaces, setAdditionalMarketplaces] = useState([]);
   const [activityData, setActivityData] = useState([]);
@@ -219,17 +232,18 @@ export default function ContractContainer() {
   const contractTypeOne = formData?.contract_type
     ?.toLowerCase()
     .includes('one');
-  const additionalMonthlyServicesLength =
-    details?.additional_monthly_services?.length;
+  const accountType = details?.seller_type?.value;
+
   const primaryMarketplaceName = details?.primary_marketplace?.name;
   const customerCompanyName = formData?.customer_id?.company_name;
   const customerAddress = formData?.customer_id?.address;
   const customerState = formData?.customer_id?.state;
   const customerCity = formData?.customer_id?.city;
   const customerZipCode = formData?.customer_id?.zip_code;
+  const additionalMonthlyServicesLength = formData?.additional_monthly_services;
 
   const displayNumber = (num) => {
-    const res = num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    const res = num?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return res;
   };
 
@@ -253,54 +267,136 @@ export default function ContractContainer() {
 
   const fetchUncommonOptions = (options, alreadySelected, type) => {
     let result = [];
-    if (alreadySelected?.length) {
-      for (const option of options) {
-        let isFound = true;
-        for (const service of alreadySelected) {
-          if (
-            service?.service?.id
-              ? service.service.id !== option.value
-              : service.service_id !== option.value
-          ) {
-            isFound = false;
-          } else {
-            isFound = true;
-            break;
+    let resultDataForMonthly = [];
+    if (alreadySelected?.length && options && options.length) {
+      if (type === 'monthly_service') {
+        const SellerSelectedServices = alreadySelected.filter(
+          (item) => item.account_type === 'Seller',
+        );
+
+        const VendorSelectedServices = alreadySelected.filter(
+          (item) => item.account_type === 'Vendor',
+        );
+
+        let notFoundSeller = [];
+        let notfoundVendor = [];
+
+        if (options?.length && SellerSelectedServices?.length) {
+          for (const option of options) {
+            let isFound = true;
+
+            for (const service of SellerSelectedServices) {
+              if (
+                service?.service?.name
+                  ? service.service.name !== option.name
+                  : service.name !== option.name
+              ) {
+                isFound = false;
+              } else {
+                isFound = true;
+                break;
+              }
+            }
+
+            if (isFound === false) {
+              notFoundSeller.push(option);
+            }
           }
+        } else {
+          notFoundSeller = options;
         }
 
-        if (isFound === false) {
-          if (type === 'monthly_service') {
-            result.push(option);
-          } else if (
-            alreadySelected.find((item) =>
-              item.name
-                ? item.name.includes('Amazon Store Package')
-                : item.service.name.includes('Amazon Store Package'),
-            )
-          ) {
-            if (!option.label.includes('Amazon Store Package')) {
-              result.push(option);
+        if (options?.length && VendorSelectedServices?.length) {
+          for (const option of options) {
+            let isFound = true;
+
+            for (const service of VendorSelectedServices) {
+              if (
+                service?.service?.name
+                  ? service.service.name !== option.name
+                  : service.name !== option.name
+              ) {
+                isFound = false;
+              } else {
+                isFound = true;
+                break;
+              }
             }
-          } else if (!option.label.includes('Amazon Store Package')) {
-            result.push(option);
-          } else if (
-            result.find((item) => item.label.includes('Amazon Store Package'))
-          ) {
-            // dfgdfgh
-          } else {
-            result.push({
-              value: 'Amazon Store Package',
-              label: 'Amazon Store Package',
+
+            if (isFound === false) {
+              notfoundVendor.push(option);
+            }
+          }
+        } else {
+          notfoundVendor = options;
+        }
+
+        if (details?.seller_type?.value === 'Seller') {
+          resultDataForMonthly = notFoundSeller;
+        }
+        if (details?.seller_type?.value === 'Vendor') {
+          resultDataForMonthly = notfoundVendor;
+        }
+        if (details?.seller_type?.value === 'Hybrid') {
+          resultDataForMonthly = notFoundSeller.filter((o1) => {
+            // filter out (!) items in result2
+            return notfoundVendor.some((o2) => {
+              return o1.name === o2.name;
+              // assumes unique id
             });
+          });
+        }
+      }
+
+      if (type === 'one_time_service') {
+        for (const option of options) {
+          let isFound = true;
+          for (const service of alreadySelected) {
+            if (
+              service?.service?.id
+                ? service.service.id !== option.value
+                : service.service_id !== option.value
+            ) {
+              isFound = false;
+            } else {
+              isFound = true;
+              break;
+            }
+          }
+
+          if (isFound === false) {
+            if (type === 'monthly_service') {
+              result.push(option);
+            } else if (
+              alreadySelected.find((item) =>
+                item.name
+                  ? item.name.includes('Amazon Store Package')
+                  : item.service.name.includes('Amazon Store Package'),
+              )
+            ) {
+              if (!option.label.includes('Amazon Store Package')) {
+                result.push(option);
+              }
+            } else if (!option.label.includes('Amazon Store Package')) {
+              result.push(option);
+            } else if (
+              result.find((item) => item.label.includes('Amazon Store Package'))
+            ) {
+              // dfgdfgh
+            } else {
+              result.push({
+                value: 'Amazon Store Package',
+                label: 'Amazon Store Package',
+              });
+            }
           }
         }
       }
     } else if (type === 'monthly_service') {
       result = options;
     } else {
-      result = options.filter(
-        (item) => !item.label.includes('Amazon Store Package'),
+      result = options?.filter(
+        (item) => !item?.label?.includes('Amazon Store Package'),
       );
       result.push({
         value: 'Amazon Store Package',
@@ -314,7 +410,9 @@ export default function ContractContainer() {
     }
     if (type === 'monthly_service') {
       if (setNotIncludedMonthlyServices) {
-        setNotIncludedMonthlyServices(result);
+        setNotIncludedMonthlyServices(
+          resultDataForMonthly?.length ? resultDataForMonthly : result,
+        );
       }
     }
   };
@@ -404,7 +502,8 @@ export default function ContractContainer() {
 
   const setMandatoryFieldsErrors = (contract) => {
     let agreementErrors = 0;
-    let statementErrors = 0;
+    let feeStructureErrorCount = 0;
+    const statementErrors = 0;
     let dspErrors = 0;
 
     if (
@@ -458,13 +557,9 @@ export default function ContractContainer() {
       return null;
     });
 
-    StatementDetails.forEach((item) => {
-      if (
-        item.isMandatory &&
-        !(contract && contract[item.key]) &&
-        !contract?.contract_type?.toLowerCase().includes('one')
-      ) {
-        statementErrors += 1;
+    feeStructureContainerDetails.forEach((item) => {
+      if (item.isMandatory && !(contract && contract[item.key])) {
+        feeStructureErrorCount += 1;
         item.error = true;
       }
     });
@@ -495,6 +590,7 @@ export default function ContractContainer() {
     setSectionError({
       ...sectionError,
       agreement: agreementErrors,
+      feeStructure: feeStructureErrorCount,
       statement: statementErrors,
       dsp: dspErrors,
     });
@@ -506,15 +602,207 @@ export default function ContractContainer() {
     setSidebarSection('edit');
   };
 
+  const getMonthlyServices = (type) => {
+    getServiceTypes({ account_type: type }).then((res) => {
+      setMonthlyService(res?.data);
+    });
+  };
+
+  const getDiscountData = (contractId) => {
+    getDiscount(contractId).then((res) => {
+      if (res && res?.status === 200) {
+        if (res?.data?.results?.length) {
+          const result = res?.data?.results.map(
+            (item) => Object.values(item)[0],
+          );
+          setDiscountData(result);
+        }
+      }
+    });
+  };
+  const checkMandatoryFieldsOfFeeType = (contractData, section) => {
+    let errorCount = sectionError?.[section]?.feeType;
+    if (
+      contractData &&
+      contractData?.fee_structure?.[section]?.fee_type === 'Retainer Only' &&
+      !contractData?.fee_structure?.[section]?.monthly_retainer
+    ) {
+      errorCount = 1;
+    }
+
+    if (
+      contractData &&
+      contractData?.fee_structure?.[section]?.fee_type ===
+        'Revenue Share Only' &&
+      !contractData?.fee_structure?.[section]?.rev_share
+    ) {
+      errorCount = 1;
+    }
+
+    if (
+      contractData &&
+      contractData?.fee_structure?.[section]?.fee_type ===
+        'Retainer + % Rev Share'
+    ) {
+      if (!contractData?.fee_structure?.[section]?.rev_share) {
+        errorCount = 1;
+      }
+      if (!contractData?.fee_structure?.[section]?.monthly_retainer) {
+        errorCount = 1;
+      }
+      if (
+        !contractData?.fee_structure?.[section]?.rev_share &&
+        !contractData?.fee_structure?.[section]?.monthly_retainer
+      ) {
+        errorCount = 2;
+      }
+    }
+
+    if (section === 'seller') {
+      setSectionError((prevErrors) => ({
+        ...prevErrors,
+        seller: { feeType: errorCount },
+      }));
+    }
+
+    if (section === 'vendor') {
+      setSectionError((prevErrors) => ({
+        ...prevErrors,
+        vendor: { feeType: errorCount },
+      }));
+    }
+  };
+
+  const manageErrorCount = (type, contractData) => {
+    if (type === 'Seller') {
+      if (!(contractData && contractData?.fee_structure?.seller?.fee_type)) {
+        setSectionError((prevErrors) => ({
+          ...prevErrors,
+          seller: { feeType: 1 },
+          vendor: { feeType: 0 },
+        }));
+      } else {
+        checkMandatoryFieldsOfFeeType(contractData, 'seller');
+      }
+    }
+
+    if (type === 'Vendor') {
+      if (
+        !(
+          contractData &&
+          contractData?.fee_structure?.vendor?.vendor_billing_report
+        )
+      ) {
+        setSectionError((prevErrors) => ({
+          ...prevErrors,
+          vendor: { feeType: 1 },
+          seller: { feeType: 0 },
+        }));
+      }
+
+      if (!(contractData && contractData?.fee_structure?.vendor?.fee_type)) {
+        setSectionError((prevErrors) => ({
+          ...prevErrors,
+          vendor: {
+            feeType:
+              (prevErrors?.vendor?.feeType ? prevErrors?.vendor?.feeType : 0) +
+              1,
+          },
+          seller: { feeType: 0 },
+        }));
+      } else {
+        checkMandatoryFieldsOfFeeType(contractData, 'vendor');
+      }
+    }
+    if (type === 'Hybrid') {
+      let sellerErrorcount = 0;
+      let vendorErrorcount = 0;
+
+      if (!(contractData && contractData?.fee_structure?.seller?.fee_type)) {
+        sellerErrorcount += 1;
+        setSectionError((prevErrors) => ({
+          ...prevErrors,
+          seller: { feeType: sellerErrorcount },
+        }));
+      } else {
+        checkMandatoryFieldsOfFeeType(contractData, 'seller');
+      }
+
+      if (!(contractData && contractData?.fee_structure?.vendor?.fee_type)) {
+        vendorErrorcount += 1;
+
+        setSectionError((prevErrors) => ({
+          ...prevErrors,
+          vendor: { feeType: vendorErrorcount },
+        }));
+      } else {
+        checkMandatoryFieldsOfFeeType(contractData, 'vendor');
+      }
+
+      if (
+        !(
+          contractData &&
+          contractData?.fee_structure?.vendor?.vendor_billing_report
+        )
+      ) {
+        setSectionError((prevErrors) => ({
+          ...prevErrors,
+          vendor: { feeType: prevErrors?.vendor?.feeType + 1 },
+          seller: { feeType: prevErrors?.seller?.feeType },
+        }));
+      }
+    }
+  };
+
+  const getFeeStructureDetails = (contract) => {
+    getFeeStructure(contract?.id).then((res) => {
+      if (res?.status === 500) {
+        setFormData({
+          ...contract,
+          fee_structure: {
+            seller: {},
+            vendor: {},
+          },
+        });
+        manageErrorCount(contract?.seller_type?.value, {
+          ...contract,
+          fee_structure: {
+            seller: {},
+            vendor: {},
+          },
+        });
+      } else {
+        setFormData({
+          ...contract,
+          fee_structure: {
+            seller: res?.data?.seller || {},
+            vendor: res?.data?.vendor || {},
+          },
+        });
+        manageErrorCount(contract?.seller_type?.value, {
+          ...contract,
+          fee_structure: {
+            seller: res?.data?.seller || {},
+            vendor: res?.data?.vendor || {},
+          },
+        });
+      }
+    });
+  };
+
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
 
     if (splittedPath) {
       getcontract(splittedPath[4]).then((res) => {
         if (res && res.status === 200) {
+          getMonthlyServices(res?.data?.seller_type?.value);
+
           setDetails(res.data);
           setFormData(res.data);
           setOriginalData(res.data);
+          getFeeStructureDetails(res?.data);
+
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
           }
@@ -536,6 +824,8 @@ export default function ContractContainer() {
           if (history?.location?.showEditView) {
             showEditView(res?.data);
           }
+
+          getDiscountData(res?.data?.id);
         } else {
           setIsLoading({ loader: false, type: 'page' });
           setLoaderFlag(false);
@@ -581,10 +871,6 @@ export default function ContractContainer() {
       setMarketPlaces(market.data);
       setAdditionalMarketplaces(market.data);
       setMarketplacesResult(market.data);
-    });
-
-    getMonthlyService().then((res) => {
-      setMonthlyService(res?.data);
     });
 
     getServicesFee().then((res) => {
@@ -643,6 +929,57 @@ export default function ContractContainer() {
     setContractError({});
   };
 
+  const getServicesAccordingToAccType = (services, option) => {
+    const result =
+      services && services.filter((item) => item.account_type === option);
+    return result;
+  };
+
+  const setMarketplaceDropdownData = (flag) => {
+    if (accountType === 'Seller' || accountType === 'Vendor') {
+      setShowAdditionalMarketplace({
+        ...showAdditionalMarketplace,
+        [accountType]: { showDropdown: flag },
+      });
+    }
+    if (accountType === 'Hybrid') {
+      const sellerMarketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Seller',
+      );
+
+      const vendorMarketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Vendor',
+      );
+
+      if (
+        sellerMarketplaceResult &&
+        sellerMarketplaceResult.length &&
+        vendorMarketplaceResult &&
+        vendorMarketplaceResult.length
+      ) {
+        setShowAdditionalMarketplace({
+          ...showAdditionalMarketplace,
+          Seller: { showDropdown: flag },
+          Vendor: { showDropdown: flag },
+        });
+      } else if (sellerMarketplaceResult && sellerMarketplaceResult.length) {
+        setShowAdditionalMarketplace({
+          ...showAdditionalMarketplace,
+          Seller: { showDropdown: flag },
+          Vendor: { showDropdown: false },
+        });
+      } else if (vendorMarketplaceResult && vendorMarketplaceResult.length) {
+        setShowAdditionalMarketplace({
+          ...showAdditionalMarketplace,
+          Vendor: { showDropdown: flag },
+          Seller: { showDropdown: false },
+        });
+      }
+    }
+  };
+
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
@@ -671,9 +1008,9 @@ export default function ContractContainer() {
       setEndDate(null);
 
       if (originalData?.additional_marketplaces?.length) {
-        setShowAdditionalMarketplace(true);
+        setMarketplaceDropdownData(true);
       } else {
-        setShowAdditionalMarketplace(false);
+        setMarketplaceDropdownData(false);
       }
       getContractDetails();
     }
@@ -742,6 +1079,12 @@ export default function ContractContainer() {
   };
 
   const mapDefaultValues = (key, label, type) => {
+    if (
+      type === 'amazon' &&
+      key === 'seller_type' &&
+      formData?.seller_type?.label === 'Hybrid'
+    )
+      return 'Seller';
     if (key === 'company_name') {
       return details && details.customer_id && details.customer_id[key]
         ? details && details.customer_id && details.customer_id[key]
@@ -861,40 +1204,255 @@ export default function ContractContainer() {
     return result;
   };
 
-  const showRevTable = () => {
-    if (details?.threshold_type && details.threshold_type !== 'None') {
-      return `<table class="contact-list " style="width: 100%;
-    border-collapse: collapse;"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Type</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Description</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;"> Rev Share %</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;"> Sales Threshold Type</th>
-      </tr><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td style="border: 1px solid black;
-    padding: 13px;">% Of Incremental Sales</td>
-      <td style="border: 1px solid black;
-    padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales over the sales 
-      threshold each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.</td><td style="border: 1px solid black;
-    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;"> REVENUE_SHARE</span> </td><td style="border: 1px solid black;
-    padding: 13px; "> <span >REV_THRESHOLD </span></td></tr></table>`;
+  const feeStructure = (type) => {
+    if (formData?.fee_structure?.[type]?.fee_type === 'Retainer Only') {
+      return `<div class="table-responsive">
+          <table class="contact-list mb-3 ">
+            <tr>
+              <td> <span style=" font-weight: bold";>Fee Type</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer Only </span> </td>
+              <td>You will only be billed for the monthly retainer amount displayed below. </td>
+            </tr>
+             <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Monthly Retainer</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.monthly_retainer,
+               )} </span> </td>
+              <td>Monthly fee for the main Amazon marketplace as a retainer for services.
+              This retainer is billed in advance for the month in which services are to be rendered. </td>
+              </tr>
+          </table>
+        </div>`;
     }
-    return `<table class="contact-list"  style="width: 100%;
-    border-collapse: collapse;"><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Type</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Description</th>
-    <th style="text-align: left;border: 1px solid black;
-    padding: 13px;"> Rev Share %</th></tr><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><td style="border: 1px solid black;
-    padding: 13px;">% Of Sales</td><td style="border: 1px solid black;
-    padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) for all sales each month 
-    through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client. </td><td style="border: 1px solid black;
-    padding: 13px;"> <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold;"> REVENUE_SHARE</span></td></tr></table>`;
+    if (formData?.fee_structure?.[type]?.fee_type === 'Revenue Share Only') {
+      return `<div class="table-responsive">
+          <table class="contact-list mb-3 ">
+            <tr>
+              <td> <span style=" font-weight: bold";>Fee Type</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Revenue Share Only  </span> </td>
+              <td>You will only be billed for the monthly retainer and revenue share % based on threshold(s) displayed below.</td>
+            </tr>
+             <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Revenue Share %</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.rev_share || 0,
+               )} </span> </td>
+              <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
+              for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
+               <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Billing Minimum</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.billing_minimum || 0,
+               )} </span> </td>
+              <td>We will charge the greater of the value shown here or the % of revenue listed above. </td></tr>
+              <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Billing Cap</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.billing_cap || 0,
+               )} </span> </td>
+              <td>We will charge no more than the amount listed here. </td></tr>
+          </table>
+        </div>`;
+    }
+    if (
+      formData?.fee_structure?.[type]?.fee_type === 'Retainer + % Rev Share'
+    ) {
+      return `<div class="table-responsive">
+          <table class="contact-list mb-3 ">
+            <tr>
+              <td> <span style=" font-weight: bold";>Fee Type</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer + % Rev Share 
+               (${
+                 formData?.fee_structure?.[type]?.threshold_type
+               } Threshold)  </span> </td>
+              <td>You will only be billed for the monthly retainer and revenue share % displayed below.  </td>
+            </tr>
+            <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Monthly Retainer</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.monthly_retainer || 0,
+               )} </span> </td>
+              <td>Monthly fee for the main Amazon marketplace as a retainer for services. 
+              This retainer is billed in advance for the month in which services are to be rendered. </td>
+              </tr>
+
+             <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Revenue Share %</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.rev_share || 0,
+               )} </span> </td>
+              <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
+              for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
+              ${
+                formData?.fee_structure?.[type]?.threshold_type === 'Fixed'
+                  ? ` <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Fixed Threshold </span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.sales_threshold || 0,
+               )} </span> </td>
+              <td>We will bill our revenue share % on any value above this threshold for Amazon Channel Sales (
+                retail dollars, net customer returns) each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>`
+                  : formData?.fee_structure?.[type]?.threshold_type ===
+                    'quarterly'
+                  ? ` <tr  style="vertical-align: text-top;">
+             <td> <span style=" font-weight: bold";>Quarterly Threshold </span></td>
+             <td>
+                 1st Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                   displayNumber(
+                     formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                       '1st quarterly'
+                     ],
+                   ) || 0
+                 } </span><br>
+                  2nd Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                        '2nd quarterly'
+                      ],
+                    ) || 0
+                  } </span><br>
+                  3rd Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                        '3rd quarterly'
+                      ],
+                    ) || 0
+                  }</span><br>
+                  4th Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                        '4th quarterly'
+                      ],
+                    ) || 0
+                  }</span><br>
+               </td>
+            <td>We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
+            (retail dollars, net customer returns) each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.
+             </td>
+          </tr>`
+                  : formData?.fee_structure?.[type]?.threshold_type ===
+                    'monthly'
+                  ? ` <tr  style="vertical-align: text-top;">
+             <td> <span style=" font-weight: bold";>Monthly Threshold </span></td>
+             <td>
+                 January:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                   displayNumber(
+                     formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                       'january month'
+                     ],
+                   ) || 0
+                 } </span><br>
+                  February:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'february month'
+                      ],
+                    ) || 0
+                  } </span><br>
+                  March:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'march month'
+                      ],
+                    ) || 0
+                  }</span><br>
+                  April:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'april month'
+                      ],
+                    ) || 0
+                  }</span><br>
+                   May:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                     displayNumber(
+                       formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                         'may month'
+                       ],
+                     ) || 0
+                   } </span><br>
+                  June:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'june month'
+                      ],
+                    ) || 0
+                  } </span><br>
+                  July:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'july month'
+                      ],
+                    ) || 0
+                  }</span><br>
+                  August:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'august month'
+                      ],
+                    ) || 0
+                  }</span><br>
+                   September:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                     displayNumber(
+                       formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                         'september month'
+                       ],
+                     ) || 0
+                   } </span><br>
+                  October:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'october month'
+                      ],
+                    ) || 0
+                  } </span><br>
+                  November:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'november month'
+                      ],
+                    ) || 0
+                  }</span><br>
+                  December:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
+                    displayNumber(
+                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                        'december month'
+                      ],
+                    ) || 0
+                  }</span><br>
+               </td>
+            <td>We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
+            (retail dollars, net customer returns) each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.
+             </td>
+          </tr>`
+                  : ''
+              }
+              <tr  style="vertical-align: text-top;">
+              <td> <span style=" font-weight: bold";> Billing Cap</span></td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+                 formData?.fee_structure?.[type]?.billing_cap || 0,
+               )} </span> </td>
+              <td>We will charge no more than the amount listed here. </td></tr>
+          </table>
+        </div>`;
+    }
+    return '';
+  };
+
+  const showRevTable = () => {
+    if (formData?.seller_type?.label === 'Seller')
+      return feeStructure('seller');
+    if (formData?.seller_type?.label === 'Vendor')
+      return feeStructure('vendor');
+    if (formData?.seller_type?.label === 'Hybrid') {
+      return `${feeStructure('seller')} 
+         <div class=" text-center BT-SOW-sales-commission mt-5 mb-4 " style="text-align: center; margin-top: 3rem!important;margin-bottom: 1.5rem!important;">
+      <span style="font-weight: 800;
+        font-family: Helvetica-bold;" >Fees & Sales Commissions for Amazon Vendor Account
+       </span>
+        <br> Sales billed in arrears for the prior month in which sales were made on the account and calculated as follows:
+    </div></br>${feeStructure('vendor')} `;
+    }
+    return '';
   };
 
   const mapThadSignImg = () => {
@@ -1135,20 +1693,116 @@ export default function ContractContainer() {
          `;
   };
 
-  const showMonthlyServiceTable = () => {
-    if (additionalMonthlyServicesLength) {
-      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center"><span style="font-weight: 800;
-    font-family: Helvetica-bold;">Additional Monthly Services </span><br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br><table class="contact-list " style="width: 100%;
-    border-collapse: collapse;><tr style="display: table-row;
-    vertical-align: inherit;
-    border-color: inherit;"><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service</th><th style="text-align: left;border: 1px solid black;
-    padding: 13px;">Service Fee</th></tr>${mapMonthlyServices(
-      'additional_monthly_services',
-      'Monthly Services',
-    )} ${mapAdditionalMarketPlaces()}${mapMonthlyServiceTotal()}
-          ${mapVariableMonthlyService()}
-        </table>`;
+  const showMonthlyServiceTable = (
+    accntTYpe,
+    monthlyServicesData,
+    marketplaceData,
+  ) => {
+    if (
+      monthlyServicesData?.length ||
+      formData?.additional_marketplaces?.length
+    ) {
+      return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center">
+      <span style="font-weight: 800; font-family: Helvetica-bold;">Additional Monthly Services for Amazon ${accntTYpe} Account </span>
+      <br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br>
+      <div class="table-responsive">
+        <table class="contact-list ">
+          <tr>
+            <th>Service</th>
+            <th>Service Fee</th>
+          </tr>
+            ${mapMonthlyServices(
+              'additional_monthly_services',
+              monthlyServicesData,
+            )}
+          ${mapAdditionalMarketPlaces(marketplaceData)}
+          ${mapMonthlyServiceTotal(monthlyServicesData, marketplaceData)}
+          ${mapVariableMonthlyService(monthlyServicesData)}   
+        </table>
+      </div>`;
+    }
+    return '';
+  };
+
+  const showMonthlyServiceTablesAccordingToAccType = () => {
+    if (accountType === 'Seller') {
+      const sellerResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Seller',
+      );
+      const marketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Seller',
+      );
+      return showMonthlyServiceTable('Seller', sellerResult, marketplaceResult);
+    }
+    if (accountType === 'Vendor') {
+      const vendorResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Vendor',
+      );
+      const marketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Vendor',
+      );
+      return showMonthlyServiceTable('Vendor', vendorResult, marketplaceResult);
+    }
+    if (accountType === 'Hybrid') {
+      const sellerResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Seller',
+      );
+
+      const vendorResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Vendor',
+      );
+
+      const sellerMarketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Seller',
+      );
+
+      const vendorMarketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Vendor',
+      );
+
+      if (
+        (sellerResult && sellerResult.length) ||
+        (vendorResult && vendorResult.length) ||
+        (sellerMarketplaceResult && sellerMarketplaceResult.length) ||
+        (vendorMarketplaceResult && vendorMarketplaceResult.length)
+      ) {
+        const sellerTable = showMonthlyServiceTable(
+          'Seller',
+          sellerResult,
+          sellerMarketplaceResult,
+        );
+        const venderTable = showMonthlyServiceTable(
+          'Vendor',
+          vendorResult,
+          vendorMarketplaceResult,
+        );
+
+        return sellerTable + venderTable;
+      }
+
+      if (sellerResult && sellerResult.length) {
+        return showMonthlyServiceTable(
+          'Seller',
+          sellerResult,
+          sellerMarketplaceResult,
+        );
+      }
+
+      if (vendorResult && vendorResult.length) {
+        return showMonthlyServiceTable(
+          'Vendor',
+          vendorResult,
+          vendorMarketplaceResult,
+        );
+      }
     }
     return '';
   };
@@ -1200,33 +1854,37 @@ export default function ContractContainer() {
 
   const displayNotIncludedServices = () => {
     const fields = [];
-    for (const item of notIncludedMonthlyServices) {
-      fields.push(
-        `<tr>
+    if (notIncludedMonthlyServices?.length) {
+      for (const item of notIncludedMonthlyServices) {
+        fields.push(
+          `<tr>
           <td style="border: 1px solid black;padding: 13px;"> ${
-            item.label ? item.label : 'N/A'
+            item.name ? item.name : 'N/A'
           }</td>
           <td style="border: 1px solid black;padding: 13px;"> ${' Monthly'}</td>
          </tr>`,
-      );
+        );
+      }
     }
-    for (const item of notIncludedOneTimeServices) {
-      fields.push(
-        `<tr>
+    if (notIncludedOneTimeServices?.length) {
+      for (const item of notIncludedOneTimeServices) {
+        fields.push(
+          `<tr>
           <td style="border: 1px solid black;padding: 13px;"> ${
             item.label ? item.label : 'N/A'
           }</td>
           <td style="border: 1px solid black;padding: 13px;"> ${'One Time'}</td>
          </tr>`,
-      );
+        );
+      }
     }
     return fields.length ? fields.toString().replaceAll(',', '') : '';
   };
 
   const showNotIncludedServicesTable = () => {
     if (
-      notIncludedMonthlyServices.length ||
-      notIncludedOneTimeServices.length
+      notIncludedMonthlyServices?.length ||
+      notIncludedOneTimeServices?.length
     ) {
       return `<div class=" text-center mt-4 " style="margin-top: 1.5rem!important; text-align: center;">
       <span style="font-weight: 800; font-family: Helvetica-bold;">Additional Services Not Included</span>
@@ -1358,16 +2016,28 @@ export default function ContractContainer() {
       }
     }
 
-    if (section === 'statement') {
+    if (section === 'feeStructure') {
+      if (contractTypeOne || contractTypeDsp) {
+        return true;
+      }
       if (!contractTypeOne && !contractTypeDsp) {
         if (
-          formData?.monthly_retainer &&
           formData.primary_marketplace &&
-          formData.rev_share
+          formData.seller_type &&
+          !sectionError?.seller?.feeType &&
+          !sectionError?.vendor?.feeType &&
+          !sectionError?.feeStructure
         ) {
           return true;
         }
-      } else return true;
+      }
+    }
+
+    if (section === 'statement') {
+      if (!contractTypeOne && !contractTypeDsp) {
+        return true;
+      }
+      return true;
     }
 
     if (section === 'dspAddendum') {
@@ -1443,7 +2113,7 @@ export default function ContractContainer() {
     return RecurringLanguage;
   };
 
-  const calculateTotalFee = (type) => {
+  const calculateTotalFee = (type, serviceData, marketplaceData, accntType) => {
     let oneTimeSubTotal = 0;
     let monthlySubTotal = 0;
     let oneTimeDiscount = 0;
@@ -1453,9 +2123,9 @@ export default function ContractContainer() {
     if (formData) {
       if (type === 'monthly') {
         // caculate the total of additional monthly serviece
-        if (formData.additional_monthly_services !== null) {
-          formData.additional_monthly_services.forEach((item) => {
-            if (item?.service) {
+        if (serviceData !== null) {
+          serviceData.forEach((item) => {
+            if (item && item.service) {
               monthlySubTotal += item.service.fee;
             } else {
               const fixedFee = servicesFees.filter(
@@ -1465,10 +2135,10 @@ export default function ContractContainer() {
             }
           });
         }
-        if (formData.additional_marketplaces !== null) {
+        if (marketplaceData !== null) {
           // calculate the total of additional marketplaces
-          formData.additional_marketplaces.forEach((item) => {
-            if (item?.fee) {
+          marketplaceData.forEach((item) => {
+            if (item && item.fee) {
               additionalMarketplacesTotal += item.fee;
             } else {
               additionalMarketplacesTotal += additionaMarketplaceAmount;
@@ -1477,16 +2147,23 @@ export default function ContractContainer() {
 
           monthlySubTotal += additionalMarketplacesTotal;
         }
-        if (formData.monthly_discount_type !== null) {
-          const discountType = formData.monthly_discount_type;
+
+        const monthlyDiscountData = discountData.find(
+          (item) =>
+            item.service_type === 'monthly service' &&
+            item?.account_type === accntType,
+        );
+
+        if (monthlyDiscountData !== null) {
+          const discountType = monthlyDiscountData?.type;
           if (discountType === 'percentage') {
             monthlyDiscount =
-              (monthlySubTotal * formData.monthly_discount_amount) / 100;
+              (monthlySubTotal * monthlyDiscountData?.amount) / 100;
           } else if (discountType === 'fixed amount') {
-            monthlyDiscount = formData.monthly_discount_amount;
+            monthlyDiscount = monthlyDiscountData?.amount;
           }
         } else {
-          monthlyDiscount = formData.monthly_discount_amount;
+          monthlyDiscount = monthlyDiscountData?.amount;
         }
         return {
           monthlySubTotal,
@@ -1505,7 +2182,7 @@ export default function ContractContainer() {
 
           if (item.custom_amazon_store_price) {
             oneTimeSubTotal += item.custom_amazon_store_price * quantity;
-          } else if (item && item.service) {
+          } else if (item?.service) {
             oneTimeSubTotal += item.service.fee * quantity;
           } else {
             let fixedFee = servicesFees.filter((n) => n.id === item.service_id);
@@ -1515,16 +2192,20 @@ export default function ContractContainer() {
           }
         });
 
-        if (formData.one_time_discount_type !== null) {
-          const discountType = formData.one_time_discount_type;
+        const oneTimeDiscountData = discountData.find(
+          (item) => item.service_type === 'one time service',
+        );
+
+        if (oneTimeDiscountData !== null) {
+          const discountType = oneTimeDiscountData?.type;
           if (discountType === 'percentage') {
             oneTimeDiscount =
-              (oneTimeSubTotal * formData.one_time_discount_amount) / 100;
+              (oneTimeSubTotal * oneTimeDiscountData?.amount) / 100;
           } else if (discountType === 'fixed amount') {
-            oneTimeDiscount = formData.one_time_discount_amount;
+            oneTimeDiscount = oneTimeDiscountData?.amount;
           }
         } else {
-          oneTimeDiscount = formData.one_time_discount_amount;
+          oneTimeDiscount = oneTimeDiscountData?.amount;
         }
         return {
           oneTimeSubTotal,
@@ -1537,7 +2218,6 @@ export default function ContractContainer() {
     }
     return 0;
   };
-
   const createAgreementDoc = () => {
     setContractDesignLoader(true);
 
@@ -1571,20 +2251,20 @@ export default function ContractContainer() {
       .replace('THAD_SIGN', mapThadSignImg());
 
     const statmentData =
-      data.statement_of_work &&
-      data.statement_of_work[0]
+      data?.statement_of_work &&
+      data?.statement_of_work[0]
         .replace(
           'CUSTOMER_NAME',
           mapDefaultValues('company_name', 'Customer Name'),
         )
         .replaceAll('START_DATE', mapDefaultValues('start_date', 'Start Date'))
         .replace(
-          'MONTHLY_RETAINER_AMOUNT',
-          mapDefaultValues(
-            'monthly_retainer',
-            'Monthly Retainer',
-            'number-currency',
-          ),
+          'SELLER_TYPE',
+          mapDefaultValues('seller_type', 'Amazon Account Type'),
+        )
+        .replace(
+          'ACCOUNT_TYPE',
+          mapDefaultValues('seller_type', 'Amazon Account Type'),
         )
         .replace('BILLING_CAP_AMOUNT', showBillingCap())
         .replace('REV_SHARE_TABLE', showRevTable())
@@ -1595,10 +2275,17 @@ export default function ContractContainer() {
         )
         .replace('SELLER_TYPE', mapDefaultValues('seller_type', 'Seller Type'))
         .replace(
+          'AMAZON_ACCOUNT_TYPE',
+          mapDefaultValues('seller_type', 'Seller Type'),
+        )
+        .replace(
           'PRIMARY_MARKETPLACE',
           mapDefaultValues('primary_marketplace', 'Primary Marketplace'),
         )
-        .replace('MAP_MONTHLY_SERVICES', showMonthlyServiceTable())
+        .replace(
+          'MAP_MONTHLY_SERVICES',
+          showMonthlyServiceTablesAccordingToAccType(),
+        )
         .replace('ONE_TIME_SERVICES', showOneTimeServiceTable())
         .replace('MAP_STANDARD_SERVICE_TABLE', showStandardServicesTable())
         .replace(
@@ -1611,8 +2298,8 @@ export default function ContractContainer() {
         );
 
     const dspAddendum = showSection?.dspAddendum
-      ? data.dsp_addendum &&
-        data.dsp_addendum[0]
+      ? data?.dsp_addendum &&
+        data?.dsp_addendum[0]
           .replace(
             'CUSTOMER_NAME',
             mapDefaultValues('company_name', 'Customer Name'),
@@ -1657,8 +2344,8 @@ export default function ContractContainer() {
       : '';
 
     const addendumData =
-      data.addendum &&
-      data.addendum[0]
+      data?.addendum &&
+      data?.addendum[0]
         .replace(
           'CUSTOMER_NAME',
           mapDefaultValues('company_name', 'Customer Name'),
@@ -1722,7 +2409,7 @@ export default function ContractContainer() {
   useEffect(() => {
     const sectionFlag = { ...showSection };
 
-    if (additionalMonthlyServicesLength) {
+    if (details?.additional_monthly_services?.length) {
       setMonthlyAdditionalServices({
         create: [...details.additional_monthly_services],
         delete: [],
@@ -1778,7 +2465,6 @@ export default function ContractContainer() {
     } else {
       setMarketPlaces(marketplacesResult);
     }
-
     if (details?.additional_one_time_services) {
       fetchUncommonOptions(
         oneTimeService,
@@ -1786,10 +2472,30 @@ export default function ContractContainer() {
         'one_time_service',
       );
     }
-
     if (details?.additional_monthly_services) {
       fetchUncommonOptions(
-        monthlyService,
+        details?.seller_type?.value === 'Hybrid'
+          ? monthlyService?.Seller
+          : monthlyService?.[details?.seller_type?.value],
+        details.additional_monthly_services,
+        'monthly_service',
+      );
+    }
+
+    if (
+      !details?.additional_one_time_services ||
+      !details?.additional_monthly_services
+    ) {
+      fetchUncommonOptions(
+        oneTimeService,
+        details.additional_one_time_services,
+        'one_time_service',
+      );
+
+      fetchUncommonOptions(
+        details?.seller_type?.value === 'Hybrid'
+          ? monthlyService?.Seller
+          : monthlyService?.[details?.seller_type?.value],
         details.additional_monthly_services,
         'monthly_service',
       );
@@ -1807,7 +2513,7 @@ export default function ContractContainer() {
       !contractTypeOne &&
       !contractTypeDsp &&
       additionalMonthlyServicesLength &&
-      details.additional_monthly_services.find(
+      details.additional_monthly_services?.find(
         (item) =>
           item?.service?.name &&
           item.service.name.toLowerCase().includes('dsp'),
@@ -1824,7 +2530,7 @@ export default function ContractContainer() {
 
     setIsDocRendered(true);
     setShowCollpase(sectionFlag);
-  }, [details, newAddendumData]);
+  }, [details, newAddendumData, monthlyService]);
 
   const createPrimaryMarketplace = () => {
     const statementData = {
@@ -1905,9 +2611,9 @@ export default function ContractContainer() {
         setUpdatedFormData({ ...updatedFormData });
       }
       if (!formData?.additional_marketplaces?.length) {
-        setShowAdditionalMarketplace(false);
+        setMarketplaceDropdownData(false);
       } else {
-        setShowAdditionalMarketplace(true);
+        setMarketplaceDropdownData(true);
       }
 
       if (updatedFormData?.primary_marketplace) {
@@ -1927,16 +2633,24 @@ export default function ContractContainer() {
           const contractRes = responses[2];
           const addendumRes = responses[3];
           const updateCustomerRes = responses[4];
+          const sellerFeeStructureRes = responses[5];
+          const vendorFeeStructureRes = responses[6];
 
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
-          getAmendmentData(detailsId);
+          if (formData?.draft_from) {
+            getAmendmentData(detailsId);
+          }
           if (
             additionalMonthlySerRes?.status === 200 &&
             additionalOneTimeServRes?.status === 200 &&
             contractRes?.status === 200 &&
             addendumRes?.status === 200 &&
-            updateCustomerRes?.status === 200
+            updateCustomerRes?.status === 200 &&
+            (sellerFeeStructureRes?.status === 200 ||
+              sellerFeeStructureRes?.status === 201) &&
+            (vendorFeeStructureRes?.status === 200 ||
+              vendorFeeStructureRes?.status === 201)
           ) {
             showFooter(false);
             setUpdatedFormData({});
@@ -1998,7 +2712,7 @@ export default function ContractContainer() {
 
           if (updateCustomerRes?.status === 200) {
             const customerData = updateCustomerRes.data;
-            setFormData({ ...formData, ...customerData });
+            setFormData({ ...formData, customer_id: { ...customerData } });
             delete updatedFormData.company_name;
             delete updatedFormData.address;
             delete updatedFormData.city;
@@ -2006,8 +2720,34 @@ export default function ContractContainer() {
             delete updatedFormData.zip_code;
           }
 
+          if (
+            accountType === 'Seller' &&
+            (sellerFeeStructureRes?.status === 200 ||
+              sellerFeeStructureRes?.status === 201)
+          ) {
+            delete updatedFormData.fee_structure;
+          }
+
+          if (
+            accountType === 'Vendor' &&
+            (vendorFeeStructureRes?.status === 200 ||
+              vendorFeeStructureRes?.status === 201)
+          ) {
+            delete updatedFormData.fee_structure;
+          }
+
+          if (accountType === 'Hybrid') {
+            if (
+              (sellerFeeStructureRes?.status === 200 ||
+                sellerFeeStructureRes?.status === 201) &&
+              (vendorFeeStructureRes?.status === 200 ||
+                vendorFeeStructureRes?.status === 201)
+            ) {
+              delete updatedFormData.fee_structure;
+            }
+          }
+
           if (contractRes && contractRes.status === 200) {
-            setFormData({ ...formData, ...contractRes.data });
             const updatedKeys = Object.keys(updatedFormData);
             if (updatedKeys && updatedKeys.length) {
               const fieldsToDeleteList = updatedKeys
@@ -2020,7 +2760,8 @@ export default function ContractContainer() {
                 .filter((item) => item !== 'address')
                 .filter((item) => item !== 'city')
                 .filter((item) => item !== 'state')
-                .filter((item) => item !== 'zip_code');
+                .filter((item) => item !== 'zip_code')
+                .filter((item) => item !== 'fee_structure');
 
               for (const item of fieldsToDeleteList) {
                 delete updatedFormData[item];
@@ -2045,7 +2786,11 @@ export default function ContractContainer() {
             additionalMonthlySerRes?.status === 400 ||
             additionalOneTimeServRes?.status === 400 ||
             contractRes?.status === 400 ||
-            updateCustomerRes?.status === 400
+            updateCustomerRes?.status === 400 ||
+            sellerFeeStructureRes?.status === 400 ||
+            sellerFeeStructureRes?.status === 500 ||
+            vendorFeeStructureRes?.status === 400 ||
+            vendorFeeStructureRes?.status === 500
           ) {
             toast.error(
               'Changes have not been saved. Please fix errors and try again',
@@ -2141,8 +2886,76 @@ export default function ContractContainer() {
               }
             }
           }
+          const feeErrors = {
+            feeStructure: sectionError?.feeStructure,
+            ...sectionError,
+          };
+
+          const feeBEErros = {
+            ...feeStructureErrors,
+          };
+
+          if (sellerFeeStructureRes?.status === 400) {
+            const errorKeys = Object.keys(sellerFeeStructureRes.data);
+
+            feeBEErros.seller = {
+              ...sellerFeeStructureRes.data?.seller,
+            };
+
+            if (errorKeys.length) {
+              if (errorKeys.includes('seller')) {
+                feeErrors.seller = {
+                  feeType:
+                    (sectionError?.seller?.feeType
+                      ? sectionError?.seller?.feeType
+                      : 0) +
+                    Object.keys(sellerFeeStructureRes.data?.seller).length,
+                };
+              }
+            }
+          }
+
+          if (vendorFeeStructureRes?.status === 400) {
+            const errorKeys = Object.keys(vendorFeeStructureRes.data);
+
+            feeBEErros.vendor = {
+              ...vendorFeeStructureRes.data?.vendor,
+            };
+
+            if (errorKeys.length) {
+              if (errorKeys.includes('vendor')) {
+                if (
+                  Object.keys(vendorFeeStructureRes.data?.vendor).includes(
+                    'vendor_billing_report',
+                  )
+                ) {
+                  feeErrors.vendor = {
+                    feeType:
+                      (sectionError?.vendor?.feeType
+                        ? sectionError?.vendor?.feeType
+                        : 0) +
+                      Object.keys(vendorFeeStructureRes.data?.vendor).length -
+                      1,
+                  };
+                } else {
+                  feeErrors.vendor = {
+                    feeType:
+                      (sectionError?.vendor?.feeType
+                        ? sectionError?.vendor?.feeType
+                        : 0) +
+                      Object.keys(vendorFeeStructureRes.data?.vendor).length,
+                  };
+                }
+              }
+            }
+          }
+
+          setFeeStructureErrors({
+            ...feeBEErros,
+          });
 
           setSectionError({
+            ...feeErrors,
             agreement: agreementErrCount + sectionError.agreement,
             statement: statementErrCount + sectionError.statement,
             dsp: dspErrCount + sectionError.dsp,
@@ -2152,12 +2965,176 @@ export default function ContractContainer() {
       .catch(() => {});
   };
 
+  const updateDiscount = (totalFees, type) => {
+    if (
+      Math.sign(totalFees.monthlyTotal) === -1 ||
+      totalFees.monthlyTotal === 0
+    ) {
+      const postData = {
+        contract: details?.id,
+        account_type: type,
+        service_type: 'monthly service',
+        type: null,
+        amount: null,
+      };
+
+      const result =
+        discountData?.length &&
+        discountData.filter(
+          (item) =>
+            item.service_type === 'monthly service' &&
+            item.account_type === type,
+        );
+
+      saveDiscount(result?.[0]?.id, postData);
+    }
+  };
+
+  const handleDiscount = () => {
+    if (accountType === 'Seller') {
+      const sellerResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Seller',
+      );
+      const marketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Seller',
+      );
+      const totalFees = calculateTotalFee(
+        'monthly',
+        sellerResult,
+        marketplaceResult,
+        accountType,
+      );
+
+      updateDiscount(totalFees, accountType);
+    }
+
+    if (accountType === 'Vendor') {
+      const vendorResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Vendor',
+      );
+      const marketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Vendor',
+      );
+      const totalFees = calculateTotalFee(
+        'monthly',
+        vendorResult,
+        marketplaceResult,
+        accountType,
+      );
+      updateDiscount(totalFees, accountType);
+    }
+
+    if (accountType === 'Hybrid') {
+      const sellerResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Seller',
+      );
+
+      const vendorResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        'Vendor',
+      );
+
+      const sellerMarketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Seller',
+      );
+
+      const vendorMarketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        'Vendor',
+      );
+
+      const sellerTotalFees = calculateTotalFee(
+        'monthly',
+        sellerResult,
+        sellerMarketplaceResult,
+        'Seller',
+      );
+      updateDiscount(sellerTotalFees, 'Seller');
+
+      const vendorTotalFees = calculateTotalFee(
+        'monthly',
+        vendorResult,
+        vendorMarketplaceResult,
+        'Vendor',
+      );
+
+      updateDiscount(vendorTotalFees, 'Vendor');
+    }
+  };
+
+  const getUpdatedFeeStructure = (type) => {
+    const updatedFields = Object.keys(formData?.fee_structure?.[type]);
+    const result = {};
+    if (formData?.fee_structure?.[type].vendor_billing_report) {
+      result.vendor_billing_report =
+        formData?.fee_structure?.[type].vendor_billing_report;
+    }
+    if (formData?.fee_structure?.[type]?.vendor_same_as_seller) {
+      result.vendor_same_as_seller =
+        formData?.fee_structure?.[type].vendor_same_as_seller;
+    }
+    if (!formData?.fee_structure?.[type]?.vendor_same_as_seller) {
+      result.vendor_same_as_seller =
+        formData?.fee_structure?.[type].vendor_same_as_seller;
+    }
+    if (updatedFields.includes('fee_type')) {
+      const selectedFeeType = formData?.fee_structure?.[type].fee_type;
+      if (selectedFeeType === 'Retainer Only') {
+        result.fee_type = selectedFeeType;
+        result.monthly_retainer =
+          formData?.fee_structure?.[type].monthly_retainer;
+      }
+      if (selectedFeeType === 'Revenue Share Only') {
+        result.fee_type = selectedFeeType;
+        result.rev_share = formData?.fee_structure?.[type].rev_share;
+        result.billing_cap = formData?.fee_structure?.[type].billing_cap;
+        result.billing_minimum =
+          formData?.fee_structure?.[type].billing_minimum;
+      }
+      if (selectedFeeType === 'Retainer + % Rev Share') {
+        const selectedThresholdType =
+          formData?.fee_structure?.[type].threshold_type;
+        result.fee_type = selectedFeeType;
+        result.monthly_retainer =
+          formData?.fee_structure?.[type].monthly_retainer;
+        result.rev_share = formData?.fee_structure?.[type].rev_share;
+        result.billing_cap = formData?.fee_structure?.[type].billing_cap;
+
+        result.threshold_type = selectedThresholdType;
+        if (selectedThresholdType === 'Fixed') {
+          result.sales_threshold =
+            formData?.fee_structure?.[type].sales_threshold;
+        }
+
+        if (selectedThresholdType === 'quarterly') {
+          result.quarterly_rev_share = {
+            ...formData?.fee_structure?.[type].quarterly_rev_share,
+          };
+        }
+        if (selectedThresholdType === 'monthly') {
+          result.monthly_rev_share = {
+            ...formData?.fee_structure?.[type].monthly_rev_share,
+          };
+        }
+      }
+    }
+    return result;
+  };
+
   const nextStep = async () => {
     let additionalMonthlyApi = null;
     let additionalOneTimeApi = null;
     let AccountApi = null;
     let AddendumApi = null;
     let updateCustomerApi = null;
+    let sellerFeeStructureApi = null;
+    let vendorFeeStructureApi = null;
 
     if (updatedFormData && Object.keys(updatedFormData).length) {
       // for start date
@@ -2179,6 +3156,50 @@ export default function ContractContainer() {
         additionalOneTimeApi = createAdditionalServiceBulk(
           updatedFormData.additional_one_time_services,
         );
+      }
+
+      if (updatedFormData?.fee_structure) {
+        const type = formData?.seller_type?.label?.toLowerCase();
+        if (type === 'hybrid') {
+          sellerFeeStructureApi = saveFeeStructure(
+            formData?.fee_structure?.seller?.id,
+            {
+              ...getUpdatedFeeStructure('seller'),
+              account_type: 'Seller',
+              contract: formData.id,
+            },
+          );
+          vendorFeeStructureApi = saveFeeStructure(
+            formData?.fee_structure?.vendor?.id,
+            {
+              ...getUpdatedFeeStructure('vendor'),
+              account_type: 'Vendor',
+              contract: formData.id,
+            },
+          );
+        } else {
+          if (type === 'seller') {
+            sellerFeeStructureApi = saveFeeStructure(
+              formData?.fee_structure?.[type]?.id,
+              {
+                ...getUpdatedFeeStructure('seller'),
+
+                account_type: type === 'seller' ? 'Seller' : 'Vendor',
+                contract: formData.id,
+              },
+            );
+          }
+          if (type === 'vendor') {
+            vendorFeeStructureApi = saveFeeStructure(
+              formData?.fee_structure?.[type]?.id,
+              {
+                ...getUpdatedFeeStructure('vendor'),
+                account_type: type === 'seller' ? 'Seller' : 'Vendor',
+                contract: formData.id,
+              },
+            );
+          }
+        }
       }
 
       if (
@@ -2221,46 +3242,37 @@ export default function ContractContainer() {
       delete updatedContractFields.city;
       delete updatedContractFields.state;
       delete updatedContractFields.zip_code;
-
-      if (updatedContractFields?.threshold_type === 'Fixed') {
-        updatedContractFields.yoy_percentage = null;
-        if (!updatedContractFields.sales_threshold) {
-          updatedContractFields.sales_threshold = formData.sales_threshold;
-        }
-      }
-
-      if (updatedContractFields?.threshold_type === 'YoY + %') {
-        updatedContractFields.sales_threshold = null;
-        if (!updatedContractFields.yoy_percentage) {
-          updatedContractFields.yoy_percentage = formData.yoy_percentage;
-        }
-      }
-
-      if (
-        updatedContractFields?.threshold_type === 'YoY' ||
-        updatedContractFields?.threshold_type === 'None'
-      ) {
-        updatedContractFields.sales_threshold = null;
-        updatedContractFields.yoy_percentage = null;
-      }
+      delete updatedContractFields.fee_structure;
 
       // for set discount back to null if discount less than subtotal
       if (
         updatedFormData.additional_monthly_services ||
         updatedFormData.additional_marketplaces
       ) {
-        const totalFees = calculateTotalFee('monthly');
-        if (Math.sign(totalFees.monthlyTotal) === -1) {
-          updatedContractFields.monthly_discount_amount = null;
-          updatedContractFields.monthly_discount_type = null;
-        }
+        handleDiscount();
       }
 
       if (updatedFormData.additional_one_time_services) {
         const totalFees = calculateTotalFee('onetime');
-        if (Math.sign(totalFees.oneTimeTotal) === -1) {
-          updatedContractFields.one_time_discount_amount = null;
-          updatedContractFields.one_time_discount_type = null;
+        if (
+          Math.sign(totalFees.oneTimeTotal) === -1 ||
+          totalFees.oneTimeTotal === 0
+        ) {
+          const postData = {
+            contract: details?.id,
+            account_type: '',
+            service_type: 'one time service',
+            type: null,
+            amount: null,
+          };
+
+          const result =
+            discountData?.length &&
+            discountData.filter(
+              (item) => item.service_type === 'one time service',
+            );
+
+          saveDiscount(result?.[0]?.id, postData);
         }
       }
 
@@ -2291,6 +3303,8 @@ export default function ContractContainer() {
         AccountApi,
         AddendumApi,
         updateCustomerApi,
+        sellerFeeStructureApi,
+        vendorFeeStructureApi,
       ];
 
       if (
@@ -2310,18 +3324,68 @@ export default function ContractContainer() {
       saveChanges(apis);
     }
   };
+  const isBillingCapExists = () => {
+    if (
+      (formData?.fee_structure?.seller?.fee_type === 'Revenue Share Only' &&
+        formData?.fee_structure?.seller?.billing_cap) ||
+      (formData?.fee_structure?.vendor?.fee_type === 'Revenue Share Only' &&
+        formData?.fee_structure?.vendor?.billing_cap)
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const checkRevShareApprovalCondition = () => {
+    if (
+      formData?.seller_type?.value === 'Seller' ||
+      formData?.seller_type?.value === 'Vendor'
+    ) {
+      const type = formData?.seller_type?.value?.toLowerCase();
+      if (
+        formData?.fee_structure?.[type]?.fee_type === 'Revenue Share Only' ||
+        formData?.fee_structure?.[type]?.fee_type === 'Retainer + % Rev Share'
+      ) {
+        if (formData?.fee_structure?.[type]?.rev_share < 3) {
+          return true;
+        }
+      }
+    }
+
+    if (formData?.seller_type?.value === 'Hybrid') {
+      if (
+        formData?.fee_structure?.seller?.fee_type === 'Revenue Share Only' ||
+        formData?.fee_structure?.seller?.fee_type ===
+          'Retainer + % Rev Share' ||
+        formData?.fee_structure?.vendor?.fee_type === 'Revenue Share Only' ||
+        formData?.fee_structure?.vendor?.fee_type === 'Retainer + % Rev Share'
+      ) {
+        if (
+          formData?.fee_structure?.seller?.rev_share < 3 ||
+          formData?.fee_structure?.vendor?.rev_share < 3
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   const checkApprovalCondition = () => {
-    const rev = Number(details?.rev_share?.value);
     const dspFee = Number(details?.dsp_fee);
     const contractTermLength = parseInt(details?.length?.value, 10);
     if (details?.contract_type?.toLowerCase().includes('recurring')) {
+      const revShare = Number(details?.rev_share?.value);
+
       if (details && (details.draft_from || !details.hs_deal_id)) {
         return true;
       }
       if (
         (showSection.dspAddendum && dspFee < 10000) ||
-        rev < 3 ||
-        contractTermLength < 12
+        checkRevShareApprovalCondition() ||
+        revShare < 3 ||
+        contractTermLength < 12 ||
+        isBillingCapExists()
       ) {
         return true;
       }
@@ -2339,6 +3403,7 @@ export default function ContractContainer() {
     ) {
       return true;
     }
+
     if (newAddendumData?.addendum?.length > 7) {
       return true;
     }
@@ -2369,6 +3434,7 @@ export default function ContractContainer() {
             details={details}
             templateData={data}
             servicesFees={servicesFees}
+            discountData={discountData}
           />
         </div>
 
@@ -2382,6 +3448,7 @@ export default function ContractContainer() {
               notIncludedOneTimeServices={notIncludedOneTimeServices}
               notIncludedMonthlyServices={notIncludedMonthlyServices}
               servicesFees={servicesFees}
+              discountData={discountData}
             />
           </div>
         )}
@@ -2424,7 +3491,6 @@ export default function ContractContainer() {
               onEditAddendum={onEditAddendum}
               setUpdatedFormData={setUpdatedFormData}
               updatedFormData={updatedFormData}
-              // originalAddendumData={originalAddendumData}
             />
           </div>
         ) : (
@@ -2538,6 +3604,13 @@ export default function ContractContainer() {
         sidebarSection={sidebarSection}
         setSidebarSection={setSidebarSection}
         checkContractStatus={checkContractStatus}
+        setMarketplaceDropdownData={setMarketplaceDropdownData}
+        discountData={discountData}
+        setSelectedDiscount={setSelectedDiscount}
+        feeStructureErrors={feeStructureErrors}
+        setFeeStructureErrors={setFeeStructureErrors}
+        getMonthlyServices={getMonthlyServices}
+        showRightTick={showRightTick}
       />
     );
   };
@@ -2850,6 +3923,9 @@ export default function ContractContainer() {
             discountFlag={discountFlag}
             setIsEditContract={setIsEditContract}
             setDetails={setDetails}
+            discountData={discountData}
+            selectedDiscount={selectedDiscount}
+            getDiscountData={getDiscountData}
           />
 
           <ContractEditConfirmation

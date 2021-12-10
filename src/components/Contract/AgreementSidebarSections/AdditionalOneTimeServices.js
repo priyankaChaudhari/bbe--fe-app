@@ -42,6 +42,7 @@ function AdditionalOneTimeServices({
   additionalOnetimeServices,
   clearOneTimeQntyError,
   updateAdditionalOnetimeServicesSelectedData,
+  discountData,
 }) {
   const additionalOneTimeServicesLength =
     formData?.additional_one_time_services?.length;
@@ -168,6 +169,16 @@ function AdditionalOneTimeServices({
     );
   };
 
+  const showDiscountLabel = () => {
+    const discount =
+      discountData?.length &&
+      discountData.filter((item) => item.service_type === 'one time service');
+    if (discount?.length && discount[0]?.type) {
+      return 'Edit Discount';
+    }
+    return 'Add Discount';
+  };
+
   const displayOneTimeServices = () => {
     return (
       <li>
@@ -178,12 +189,8 @@ function AdditionalOneTimeServices({
           <div
             className="add-discount"
             role="presentation"
-            onClick={() => onAddDiscount('one-time')}>
-            {formData &&
-            formData.one_time_discount_amount &&
-            formData.one_time_discount_type
-              ? 'Edit Discount'
-              : 'Add Discount'}
+            onClick={() => onAddDiscount('one time service')}>
+            {showDiscountLabel()}
           </div>
           {additionalMonthlySerError.required ? (
             <ErrorMsg>{additionalMonthlySerError.required}</ErrorMsg>
@@ -547,6 +554,7 @@ AdditionalOneTimeServices.defaultProps = {
   additionalOnetimeServices: {},
   clearOneTimeQntyError: () => {},
   updateAdditionalOnetimeServicesSelectedData: () => {},
+  discountData: [],
 };
 
 AdditionalOneTimeServices.propTypes = {
@@ -577,4 +585,5 @@ AdditionalOneTimeServices.propTypes = {
   }),
   clearOneTimeQntyError: func,
   updateAdditionalOnetimeServicesSelectedData: func,
+  discountData: arrayOf(shape()),
 };

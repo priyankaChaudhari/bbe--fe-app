@@ -58,6 +58,7 @@ export default function ContractFooter({
     formData?.additional_one_time_services?.length;
   const rightTickCondition =
     showRightTick('service_agreement') &&
+    showRightTick('feeStructure') &&
     showRightTick('statement') &&
     showRightTick('dspAddendum');
 
@@ -392,6 +393,43 @@ export default function ContractFooter({
     );
   };
 
+  const displayUnsavedChangesCount = () => {
+    if (
+      Object.keys(updatedFormData)?.length &&
+      Object.keys(updatedFormData)?.includes('fee_structure')
+    ) {
+      if (
+        Object.keys(updatedFormData?.fee_structure)?.includes('vendor') &&
+        Object.keys(updatedFormData?.fee_structure)?.includes('seller')
+      ) {
+        return (
+          Object.keys(updatedFormData)?.length +
+          Object.keys(updatedFormData?.fee_structure?.vendor)?.length +
+          Object.keys(updatedFormData?.fee_structure?.seller)?.length -
+          1
+        );
+      }
+      if (
+        Object.keys(updatedFormData?.fee_structure)?.includes('vendor') &&
+        updatedFormData?.fee_structure?.vendor !== undefined
+      ) {
+        return (
+          Object.keys(updatedFormData)?.length +
+          Object.keys(updatedFormData?.fee_structure?.vendor)?.length -
+          1
+        );
+      }
+      if (Object.keys(updatedFormData?.fee_structure)?.includes('seller')) {
+        return (
+          Object.keys(updatedFormData)?.length +
+          Object.keys(updatedFormData?.fee_structure?.seller)?.length -
+          1
+        );
+      }
+    }
+    return Object.keys(updatedFormData).length;
+  };
+
   const displayFooterForSaveChanges = () => {
     return (
       <div className="mt-4 pt-5">
@@ -421,7 +459,7 @@ export default function ContractFooter({
             </Button>
             {updatedFormData && Object.keys(updatedFormData).length ? (
               <span className="unsave-changes">
-                {Object.keys(updatedFormData).length} unsaved changes.
+                {displayUnsavedChangesCount()} unsaved changes.
               </span>
             ) : (
               ''

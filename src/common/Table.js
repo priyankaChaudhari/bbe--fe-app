@@ -45,6 +45,11 @@ const Table = styled.table`
         &.light-font {
           font-weight: 300;
         }
+        &.line-body {
+          text-align: left;
+          padding: 13px 0px;
+          border-bottom: 1px solid #e0e6e8;
+        }
       }
       &.agreement {
         font-size: ${Theme.normal};

@@ -233,6 +233,7 @@ export const SidePanel = styled.div`
       .thershold {
         background-color: ${Theme.gray8};
         border-radius: 2px;
+        margin-top: 7px;
 
         .days-tab {
           list-style-type: none;
@@ -244,7 +245,8 @@ export const SidePanel = styled.div`
             border: 1px solid ${Theme.gray90};
             color: ${Theme.gray90};
             /* width: 100%; */
-            font-family: ${Theme.titleFontFamily};
+            font-family: ${Theme.titleFontFamily} !important;
+            font-weight: 600 !important;
           }
 
           li {
@@ -255,11 +257,15 @@ export const SidePanel = styled.div`
 
             label {
               color: ${Theme.black};
-              padding: 9px 8px;
+              padding: 9px 0px;
               height: 36px;
               font-size: ${Theme.extraNormal};
               display: inline-block;
               cursor: pointer;
+              text-transform: capitalize;
+              font-weight: inherit;
+              /* font-weight: 300; */
+              font-family: ${Theme.baseFontFamily};
 
               &.thresholdLable {
                 text-transform: uppercase;

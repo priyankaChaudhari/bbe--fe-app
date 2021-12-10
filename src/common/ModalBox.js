@@ -48,6 +48,7 @@ const ModalBox = styled.div`
       .email-address {
         color: ${Theme.black};
         font-size: ${Theme.normal};
+        word-break: break-all;
       }
     }
 

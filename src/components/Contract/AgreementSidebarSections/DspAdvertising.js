@@ -23,9 +23,9 @@ function DspAdvertising({
 }) {
   const contractType = formData?.contract_type;
 
-  return loader ? null : contractType.toLowerCase().includes('dsp') ||
+  return loader ? null : contractType?.toLowerCase()?.includes('dsp') ||
     (showSection?.dspAddendum &&
-      !contractType.toLowerCase().includes('one')) ? (
+      !contractType?.toLowerCase()?.includes('one')) ? (
     <>
       <div className="straight-line sidepanel " />
 
@@ -48,7 +48,7 @@ function DspAdvertising({
           {renderCollapseBtnErrorHtml(
             false,
             dspErrCount,
-            'openCollapse.dspAddendum',
+            openCollapse.dspAddendum,
             'dspAddendum',
           )}
         </h4>

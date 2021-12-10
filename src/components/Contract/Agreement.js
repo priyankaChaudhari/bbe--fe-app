@@ -16,6 +16,7 @@ export default function Agreement({
   details,
   templateData,
   servicesFees,
+  discountData,
 }) {
   const customerId = formData?.customer_id;
   const customerAddress = customerId?.address;
@@ -83,7 +84,7 @@ export default function Agreement({
   };
   const getAgreementAccorType = (index) => {
     const OTSA = templateData?.one_time_service_agreement;
-    if (contractType.toLowerCase().includes('one')) {
+    if (contractType?.toLowerCase()?.includes('one')) {
       return OTSA && templateData.one_time_service_agreement[index];
     }
     return OTSA && templateData.recurring_service_agreement[index];
@@ -177,11 +178,15 @@ export default function Agreement({
 
   const mapServiceTotal = (key) => {
     if (key === 'additional_one_time_services') {
-      return `$${
-        details?.total_fee?.onetime_service_after_discount
-          ? displayNumber(details.total_fee.onetime_service_after_discount)
-          : 0
-      }`;
+      const onetimeDiscount = discountData.find(
+        (item) => item.service_type === 'one time service',
+      );
+      const discountAmount = onetimeDiscount?.amount
+        ? onetimeDiscount?.amount
+        : 0;
+      return `$${displayNumber(
+        details?.total_fee?.onetime_service - discountAmount,
+      )}`;
     }
     const market = details.total_fee.additional_marketplaces
       ? details.total_fee.additional_marketplaces
@@ -232,17 +237,22 @@ export default function Agreement({
           }
         });
 
-        if (formData.one_time_discount_type !== null) {
-          const discountType = formData.one_time_discount_type;
+        const oneTimeDiscountData = discountData.find(
+          (item) => item.service_type === 'one time service',
+        );
+
+        if (oneTimeDiscountData !== null) {
+          const discountType = oneTimeDiscountData?.type;
           if (discountType === 'percentage') {
             oneTimeDiscount =
-              (oneTimeSubTotal * formData.one_time_discount_amount) / 100;
+              (oneTimeSubTotal * oneTimeDiscountData?.amount) / 100;
           } else if (discountType === 'fixed amount') {
-            oneTimeDiscount = formData.one_time_discount_amount;
+            oneTimeDiscount = oneTimeDiscountData?.amount;
           }
         } else {
-          oneTimeDiscount = formData.one_time_discount_amount;
+          oneTimeDiscount = oneTimeDiscountData?.amount;
         }
+
         return {
           oneTimeSubTotal,
           oneTimeAmountAfterDiscount: oneTimeDiscount,
@@ -315,7 +325,7 @@ export default function Agreement({
   };
 
   const mapLanguage = () => {
-    if (contractType.toLowerCase().includes('recurring (90 day notice)')) {
+    if (contractType?.toLowerCase()?.includes('recurring (90 day notice)')) {
       return Recurring90DaysLanguage;
     }
     return RecurringLanguage;
@@ -399,6 +409,7 @@ Agreement.defaultProps = {
   details: {},
   templateData: {},
   servicesFees: {},
+  discountData: [],
 };
 
 Agreement.propTypes = {
@@ -484,4 +495,5 @@ Agreement.propTypes = {
       filter: func,
     }),
   ),
+  discountData: arrayOf(shape({})),
 };

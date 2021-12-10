@@ -44,6 +44,7 @@ import CardMetrics from './CardMetrics';
 import DropDownUncontained from './DropDownUncontained';
 import AllocateBar from './AllocateBar';
 import ErrorMsgBox from './ErrorMsgBox';
+import TableGap from './TableGap';
 
 export {
   Button,
@@ -92,4 +93,5 @@ export {
   DropDownUncontained,
   AllocateBar,
   ErrorMsgBox,
+  TableGap,
 };

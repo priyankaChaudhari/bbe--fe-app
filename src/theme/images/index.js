@@ -37,7 +37,7 @@ import TelescopeIcon from './icons/telescope.svg';
 import AlarmBellIcon from './icons/alarm-bell.png';
 import ServiceAgreementIcon from './icons/Service-Agreement.png';
 import CreateAddendum from './icons/Create-Addendum.png';
-import StatementWork from './icons/Statement-Work.png';
+import StatementWork from './icons/sow.svg';
 import AddNewIcons from './icons/add-contact.png';
 import GreenCheck from './icons/right-check.svg';
 import SaveRedCheck from './icons/save-check.svg';
@@ -184,6 +184,7 @@ import PartnersIcon from './icons/icon_partners.svg';
 import DisabledRecurring from './icons/disabled-recurring.svg';
 import InfoRedIcon from './icons/info-red-icon.svg';
 import helpCircleIcon from './icons/help-circle.png';
+import Dollar from './icons/fees.svg';
 
 export {
   BannerBg,
@@ -372,4 +373,5 @@ export {
   DisabledRecurring,
   InfoRedIcon,
   helpCircleIcon,
+  Dollar,
 };
