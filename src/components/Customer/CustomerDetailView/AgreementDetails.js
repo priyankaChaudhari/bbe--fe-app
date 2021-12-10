@@ -293,12 +293,20 @@ export default function AgreementDetails({
       )
         fields.push(
           <>
-            <AgreementSellerVendorDetails
-              agreement={agreement}
-              type="header"
-              setAccountType={setAccountType}
-              accountType={accountType}
-            />
+            <div
+              className={
+                agreement && agreement.draft_from
+                  ? 'mt-3 selected-card'
+                  : 'mt-3'
+              }
+              style={{ color: 'black' }}>
+              <AgreementSellerVendorDetails
+                agreement={agreement}
+                type="header"
+                setAccountType={setAccountType}
+                accountType={accountType}
+              />
+            </div>
             <WhiteCard
               className={
                 agreement && agreement.draft_from
@@ -628,7 +636,7 @@ export default function AgreementDetails({
                     )}
                   </div>
                 </div>
-                {agreement && agreement.contract_type === 'recurring' ? (
+                {agreement?.contract_type?.includes?.('recurring') ? (
                   <>
                     <div className="straight-line horizontal-line pt-1 mb-3" />
                     <div className="label">Marketplaces</div>
@@ -645,10 +653,15 @@ export default function AgreementDetails({
                       )}
                       {agreement && agreement.additional_marketplaces
                         ? agreement.additional_marketplaces.map((item) => (
-                            <li key={item.id}>
-                              {item.name || ''}{' '}
-                              {item.is_primary ? '(Primary)' : ''}
-                            </li>
+                            <>
+                              {item.account_type.toLowerCase() ===
+                              accountType ? (
+                                <li key={item.id}>
+                                  {item.name || ''}{' '}
+                                  {item.is_primary ? '(Primary)' : ''}
+                                </li>
+                              ) : null}
+                            </>
                           ))
                         : ''}
                     </ul>
@@ -656,39 +669,72 @@ export default function AgreementDetails({
                       Additional Monthly Services
                     </div>
                     <ul className="selected-list">
-                      {agreement && agreement.additional_monthly_services
+                      {agreement?.additional_monthly_services
                         ? agreement.additional_monthly_services.map((item) => (
-                            <li key={item.id}>
-                              {(item && item.service && item.service.name) ||
-                                ''}
-                            </li>
+                            <>
+                              {item.account_type.toLowerCase() ===
+                              accountType ? (
+                                <li key={item.id}>
+                                  {(item &&
+                                    item.service &&
+                                    item.service.name) ||
+                                    ''}
+                                </li>
+                              ) : null}
+                            </>
                           ))
                         : 'No Additional Monthly services added.'}
                     </ul>
-                    <div className="straight-line horizontal-line pt-3 mb-3" />
                   </>
                 ) : (
                   ''
                 )}
-
+                <div className="straight-line horizontal-line pt-3 mb-3" />
                 {agreement && agreement.contract_type !== 'dsp only' ? (
                   <>
                     <div className="label">One Time Services</div>
                     <ul className="selected-list">
-                      {agreement && agreement.additional_one_time_services
-                        ? agreement.additional_one_time_services.map((item) => (
-                            <li key={item.id}>
-                              {(item && item.service && item.service.name) ||
-                                ''}{' '}
-                              ({(item && item.quantity) || ''})
-                            </li>
-                          ))
+                      {agreement?.additional_one_time_services
+                        ? agreement?.additional_one_time_services?.map(
+                            (item) => (
+                              <li key={item?.id}>
+                                {item?.service?.name || ''} (
+                                {item?.quantity || ''})
+                              </li>
+                            ),
+                          )
                         : 'No One Time services added.'}
                     </ul>
                   </>
                 ) : (
                   ''
                 )}
+                {agreement.additional_monthly_services.map((item) => (
+                  <>
+                    {item.account_type?.toLowerCase() === accountType &&
+                    item?.service?.name === 'DSP Advertising' ? (
+                      <>
+                        <div className="straight-line horizontal-line pt-3 mb-3" />
+                        <div className="row">
+                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
+                            <div className="label">
+                              DSP Advertising Start Date
+                            </div>
+                            <div className="label">test</div>
+                          </div>
+                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
+                            <div className="label">Monthly Ad Budget</div>
+                            <div className="label">test</div>
+                          </div>
+                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
+                            <div className="label">Initial Period</div>
+                            <div className="label">test </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
+                  </>
+                ))}
               </CustomerDetailCoppase>
             </WhiteCard>
             ,

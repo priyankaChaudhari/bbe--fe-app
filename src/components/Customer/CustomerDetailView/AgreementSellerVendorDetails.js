@@ -23,10 +23,11 @@ export default function AgreementSellerVendorDetails({
   );
 
   if (type === 'header') {
-    return `${agreement?.seller_type?.label} | ${
-      agreement?.fee_structure?.[accountType]?.fee_type ===
-      'Retainer + % Rev Share'
-        ? `${agreement?.fee_structure?.[accountType]?.fee_type}
+    return (
+      `${agreement?.seller_type?.label} | ${
+        agreement?.fee_structure?.[accountType]?.fee_type ===
+        'Retainer + % Rev Share'
+          ? `${agreement?.fee_structure?.[accountType]?.fee_type}
           (${
             agreement?.fee_structure?.[accountType]?.threshold_type === null ||
             agreement?.fee_structure?.[accountType]?.threshold_type === 'None'
@@ -40,14 +41,16 @@ export default function AgreementSellerVendorDetails({
                   ]?.threshold_type?.substring(1)
                 }`
           }),`
-        : agreement?.fee_structure?.[accountType]?.fee_type === undefined
-        ? ''
-        : `${agreement?.fee_structure?.[accountType]?.fee_type},`
-    } ${
-      agreement?.additional_monthly_services
-        ? 'Additional Services'
-        : 'No Additional Services'
-    } `;
+          : agreement?.fee_structure?.[accountType]?.fee_type === undefined
+          ? ''
+          : `${agreement?.fee_structure?.[accountType]?.fee_type},`
+      } ${
+        agreement?.additional_monthly_services
+          ? 'Additional Services'
+          : 'No Additional Services'
+      } ` +
+      `${agreement?.additional_one_time_services ? '+ One Time Services' : ''}`
+    );
   }
 
   const mapDefaultValues = (item, threshold) => {
