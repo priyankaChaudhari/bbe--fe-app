@@ -1,5 +1,6 @@
 // globalStyles.js
 import { createGlobalStyle } from 'styled-components';
+
 import Theme from '../Theme';
 import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
 import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
@@ -10,8 +11,7 @@ import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.wof
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
 import NoahMedium from '../fonts/Noah/Noah/WEB/NoahMedium.otf';
-
-import { CalendarFontBackArrow } from '../images/index';
+import { CalendarFontBackArrow } from '../images';
 
 const bodyStyles = createGlobalStyle`
 
@@ -393,7 +393,6 @@ p {
     display: block;
     position: relative;
     padding-left: 35px;
-    /* margin-bottom: 12px; */
     cursor: pointer;
     font-size: ${Theme.extraMedium};
     -webkit-user-select: none;
@@ -1747,12 +1746,6 @@ text.cust-label-avg {
     border-radius: 20px;
   }
 }
-
-/* .sticky-body {
-   flex: 1 1 auto;
-    display: block;
-    overflow-y: scroll;
-} */
 
 `;
 

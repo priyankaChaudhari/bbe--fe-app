@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import Theme from '../theme/Theme';
 
 const HeaderDownloadFuntionality = styled.div`
@@ -76,12 +77,6 @@ const HeaderDownloadFuntionality = styled.div`
       }
     }
   }
-  /* @media only screen and (max-width: px) {
-      &.border-none {
-        border-bottom: 1px solid ${Theme.gray5};
-    }
-   } */
-  /* .contract-download-nav { */
   @media only screen and (max-width: 767px) {
     .contract-download-nav {
       text-align: center;

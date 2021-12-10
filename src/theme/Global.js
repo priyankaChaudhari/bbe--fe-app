@@ -121,14 +121,9 @@ export const GroupUser = styled.div`
           &.delete {
             cursor: pointer;
             color: ${Theme.black};
-            /* .delete-msg {
-              display: none;
-            } */
             .delete {
               color: ${Theme.black};
             }
-
-            /* &:hover { */
             .delete-msg {
               display: block;
               border-radius: 6px;
@@ -164,7 +159,6 @@ export const GroupUser = styled.div`
                 }
               }
             }
-            /* } */
           }
         }
       }
@@ -188,8 +182,6 @@ export const GroupUser = styled.div`
   }
 `;
 export const BrandPartnerDashboard = styled.div`
-  //padding-left: 62px;
-
   .partner-select {
     list-style-type: none;
     padding: 0;
@@ -271,12 +263,9 @@ export const BrandPartnerDashboard = styled.div`
 
 export const DashboardCard = styled.div`
   background: ${Theme.gray6};
-  /* min-height: 100vh; */
   height: calc(100% - 140px);
   padding-top: 70px;
-  // position: relative;
   .dashboard-container-body {
-    /* height: 95vh; */
     max-width: 1220px;
     width: 100%;
     margin: 0 auto;
