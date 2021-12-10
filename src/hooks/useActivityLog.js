@@ -402,6 +402,25 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
+    // for payment term activity log
+    if (
+      item.history_change_reason.includes('has changed the payment terms for')
+    ) {
+      activityMessage = item.history_change_reason?.split(
+        'has changed the payment terms for',
+      );
+      [logUser, field] = activityMessage;
+      [oldValue, newValue] = field.split('invoices to');
+      return (
+        <>
+          {logUser}
+          <span>has changed the payment terms for</span>
+          {oldValue}
+          <span>invoices to</span>
+          {newValue}
+        </>
+      );
+    }
     return item && item.history_change_reason ? item.history_change_reason : '';
   };
   return activityDetail;

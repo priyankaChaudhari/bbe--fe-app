@@ -523,7 +523,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           height={40}
         />
       ) : (
-        <div className={userInfo && userInfo.role === 'Finance' ? 'mt-4' : ''}>
+        <div
+          className={userInfo && userInfo.role === 'Finance' ? 'mt-4' : 'mt-4'}>
           {formData.expiryMessage && formData.expiryMessage.message ? (
             <div
               className="already-user-msg mt-2 mb-3 p-2 text-center"
