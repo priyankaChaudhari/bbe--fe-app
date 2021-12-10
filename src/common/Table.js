@@ -350,7 +350,8 @@ const Table = styled.table`
         padding: 0;
         margin: 0;
         list-style-type: none;
-        width: max-content;
+        /* width: max-content; */
+        /* width: 99%; */
 
         li {
           display: inline-block;
@@ -366,10 +367,11 @@ const Table = styled.table`
             border: 1px solid ${Theme.gray45};
             border-radius: 5px;
             border: none;
-            padding: 10px 4px 10px 12px;
+            padding: 3px 3px 3px 10px;
             color: #171725;
             font-size: 14px;
-            width: max-content;
+            display: flex;
+            align-items: center;
 
             &.agreement {
               border: 1px solid ${Theme.gray45};
@@ -398,7 +400,6 @@ const Table = styled.table`
               border-radius: 3px;
               margin-left: 10px;
               float: right;
-              margin-top: -9px;
               font-size: 14px;
 
               &.edit-file-icon {
