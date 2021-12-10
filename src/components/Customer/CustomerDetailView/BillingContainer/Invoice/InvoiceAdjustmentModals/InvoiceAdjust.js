@@ -1,9 +1,10 @@
-import { arrayOf, func } from 'prop-types';
 import React from 'react';
 
 import NumberFormat from 'react-number-format';
 import styled from 'styled-components';
-import { ModalRadioCheck, InputFormField } from '../../../../../../common';
+import { arrayOf, func } from 'prop-types';
+
+import { InputFormField } from '../../../../../../common';
 import { adjustInvoiceInputs } from '../../../../../../constants/CustomerConstants';
 
 const InvoiceAdjust = ({
@@ -58,41 +59,7 @@ const InvoiceAdjust = ({
             <div className="label">New amount</div>
           </div>
 
-          <div className=" straight-line horizontal-line pt-1 mb-2 " />
-          <div className="col-4 text-left mt-3">
-            <div className="normal-text ">US</div>
-          </div>
-          <div className="col-4 text-left mt-3">
-            <div className="normal-text ">$5,000</div>
-          </div>
-          <div className="col-4 text-left">
-            <ul className="invoice-adj-radio mt-4">
-              <li>
-                <ModalRadioCheck className="mb-3">
-                  {' '}
-                  <label
-                    className=" checkboxes radio-container customer-list"
-                    htmlFor="yes">
-                    <input type="radio" name="radio" id="yes" />
-                    <span className="checkmark checkmark-customer-list" />
-                    Yes
-                  </label>
-                </ModalRadioCheck>
-              </li>
-              <li>
-                <ModalRadioCheck className="mb-3">
-                  {' '}
-                  <label
-                    className=" checkboxes radio-container customer-list"
-                    htmlFor="no">
-                    <input type="radio" name="radio" id="no" />
-                    <span className="checkmark checkmark-customer-list" />
-                    No
-                  </label>
-                </ModalRadioCheck>
-              </li>
-            </ul>
-          </div>
+          <div className=" straight-line horizontal-line pt-1 mb-2" />
           {adjustInvoiceInputs.map((input) => {
             return (
               <>
