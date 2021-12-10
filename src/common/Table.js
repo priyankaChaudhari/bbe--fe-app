@@ -89,12 +89,19 @@ const Table = styled.table`
         }
       }
 
-      .notification-bell:hover {
-        background-color: ${Theme.gray8};
-        padding: 4px 6px;
-        width: fit-content;
-        border-radius: 5px;
-        cursor: pointer;
+      .notification-bell {
+        .notification-bell-icon {
+          width: 15px;
+          vertical-align: middle;
+          margin-left: 2px;
+        }
+        &:hover {
+          background-color: ${Theme.gray8};
+          padding: 4px;
+          width: fit-content;
+          border-radius: 5px;
+          cursor: pointer;
+        }
       }
       &.product-catalog-body {
         border-top: 1px solid ${Theme.gray11};

@@ -605,6 +605,10 @@ a {
   }
 }
 
+.line-throught {
+  text-decoration: line-through;
+}
+
 .table-responsive {
   width: 100%;
   margin-bottom: 15px;

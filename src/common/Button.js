@@ -151,7 +151,7 @@ const Button = styled.button`
     img {
       vertical-align: bottom;
       width: 18px;
-      margin-right: 10px;
+      margin-right: 7px;
     }
 
     &:focus {
