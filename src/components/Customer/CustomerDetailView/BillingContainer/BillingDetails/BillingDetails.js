@@ -3,9 +3,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
+<<<<<<< HEAD
 import { useDispatch } from 'react-redux';
 import { shape, string } from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
+=======
+// import Select from 'react-select';
+import { useDispatch } from 'react-redux';
+import { shape, string } from 'prop-types';
+>>>>>>> PDV-3013 - paymentTerms - dropdown indicator added
 import Select, { components } from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
@@ -34,6 +40,10 @@ import {
   PageLoader,
   WhiteCard,
   ContractInputSelect,
+<<<<<<< HEAD
+=======
+  // DropDownIndicator,
+>>>>>>> PDV-3013 - paymentTerms - dropdown indicator added
 } from '../../../../../common';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
@@ -374,7 +384,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         }
         defaultValue={paymentTerm}
         options={getOptions()}
+<<<<<<< HEAD
         name={invoiceType}
+=======
+>>>>>>> PDV-3013 - paymentTerms - dropdown indicator added
         components={{ DropdownIndicator }}
         onChange={(event) => handlePaymentTermChange(event, type)}
       />
