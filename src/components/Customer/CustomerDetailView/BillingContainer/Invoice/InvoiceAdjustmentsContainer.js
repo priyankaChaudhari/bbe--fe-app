@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import styled from 'styled-components';
 import { func, string } from 'prop-types';
+import { useMediaQuery } from 'react-responsive';
 
 import InvoiceAdjustmentList from './InvoiceAdjustmentList';
 import { WhiteCard, Button } from '../../../../../common';
@@ -11,6 +12,7 @@ import {
 } from './InvoiceAdjustmentModals';
 
 const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
     false,
   );
@@ -20,60 +22,75 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
 
   return (
     <Wrapper>
-      <WhiteCard className="mb-3">
-        <div className="row mb-3">
-          <div className="col-5">
-            <p
-              style={{ marginTop: '0px' }}
-              className="black-heading-title mb-0 mt-3">
-              Invoices Adjustments
-            </p>
+      {!isMobile ? (
+        <WhiteCard className="mb-3">
+          <div className="row mb-3">
+            <div className="col-5">
+              <p
+                style={{ marginTop: '0px' }}
+                className="black-heading-title mb-0 mt-3">
+                Invoices Adjustments
+              </p>
+            </div>
+            <div className="col-7  text-right">
+              <Button
+                onClick={() => setShowInvoiceAdjustmentModal(true)}
+                type="button"
+                className="btn-primary invoice-adjustment">
+                Create Adjustment
+              </Button>
+            </div>
           </div>
-          <div className="col-7  text-right">
-            <Button
-              onClick={() => setShowInvoiceAdjustmentModal(true)}
-              type="button"
-              className="btn-primary invoice-adjustment">
-              Create Adjustment
-            </Button>
+
+          <InvoiceAdjustmentList
+            id={id}
+            invoiceType={invoiceType}
+            addThousandComma={addThousandComma}
+          />
+          <div className="straight-line horizontal-line spacing " />
+          <p
+            className="orange-text-label cursor mb-1"
+            onClick={() => setShowAllPastInvoicesModal(true)}
+            role="presentation">
+            {' '}
+            View all past adjustments
+          </p>
+        </WhiteCard>
+      ) : (
+        <>
+          <div className="row mb-3">
+            <div className="col-5">
+              <p
+                style={{ marginTop: '0px' }}
+                className="black-heading-title mb-0 mt-3">
+                Invoices Adjustments
+              </p>
+            </div>
+            <div className="col-7  text-right">
+              <Button
+                onClick={() => setShowInvoiceAdjustmentModal(true)}
+                type="button"
+                className="btn-primary invoice-adjustment">
+                Create Adjustment
+              </Button>
+            </div>
           </div>
-        </div>
+          <InvoiceAdjustmentList
+            id={id}
+            invoiceType={invoiceType}
+            addThousandComma={addThousandComma}
+          />
 
-        <InvoiceAdjustmentList
-          id={id}
-          invoiceType={invoiceType}
-          addThousandComma={addThousandComma}
-        />
-        <div className="straight-line horizontal-line spacing " />
-        <p
-          className="orange-text-label cursor mb-1"
-          onClick={() => setShowAllPastInvoicesModal(true)}
-          role="presentation">
-          {' '}
-          View all past adjustments
-        </p>
+          <p
+            className="orange-text-label text-center cursor mb-3"
+            onClick={() => setShowAllPastInvoicesModal(true)}
+            role="presentation">
+            {' '}
+            View all past adjustments
+          </p>
+        </>
+      )}
 
-        <InvoiceAdjustPauseModal
-          id="BT-invoiceAdjustmentModal"
-          isOpen={showInvoiceAdjustmentModal}
-          onModalClose={() => {
-            setShowInvoiceAdjustmentModal(false);
-          }}
-          onApply={() => {
-            setShowInvoiceAdjustmentModal(false);
-          }}
-        />
-        <InvoicePastAdjustmentModal
-          id="BT-allPastInvoiceModal"
-          isOpen={showAllPastInvoicesModal}
-          onClick={() => {
-            setShowAllPastInvoicesModal(false);
-          }}
-          onApply={() => {
-            setShowAllPastInvoicesModal(false);
-          }}
-        />
-      </WhiteCard>
       <InvoiceAdjustPauseModal
         id="BT-invoiceAdjustmentModal"
         isOpen={showInvoiceAdjustmentModal}

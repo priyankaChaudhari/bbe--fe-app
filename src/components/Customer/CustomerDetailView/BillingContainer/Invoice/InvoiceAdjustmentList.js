@@ -8,10 +8,7 @@ import { func, string } from 'prop-types';
 import Theme from '../../../../../theme/Theme';
 import { StatusColorSet } from '../../../../../constants';
 import { getInvoiceData } from '../../../../../api';
-import {
-  InvoiceViewAndReminderModal,
-  // InvoicePastAdjustmentModal,
-} from './InvoiceAdjustmentModals';
+import { InvoiceViewAndReminderModal } from './InvoiceAdjustmentModals';
 
 import {
   PageLoader,
@@ -27,9 +24,6 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
   const [invoicesAdjustmentData, setInvoicesAdjustmentData] = useState();
   const [invoiceAdjustmentLoader, setInvoiceAdjustmentLoader] = useState(false);
   const [isApicall, setIsApiCall] = useState(false);
-  // const [showAllPastInvoicesModal, setShowAllPastInvoicesModal] = useState(
-  //   false,
-  // );
   const [showViewAndReminderModal, setShowViewAndReminderModal] = useState(
     false,
   );
@@ -167,7 +161,6 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
           invoicesAdjustmentData.map((item) => {
             return (
               <>
-                {/* <WhiteCard className="mb-3"> */}
                 <TableMobileView
                   key={item.id}
                   className="mb-3"
@@ -192,7 +185,6 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
                   isColumnOnClick
                   onColumnClick={() => setShowViewAndReminderModal(true)}
                 />
-                {/* </WhiteCard> */}
               </>
             );
           })
@@ -205,21 +197,7 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
 
   return (
     <Wrapper>
-      <WhiteCard className="mb-3">
-        {!isMobile ? renderDesktopView() : renderMobileView()}
-      </WhiteCard>
-      {/* {showAllPastInvoicesModal ? (
-        <InvoicePastAdjustmentModal
-          id="BT-allPastInvoiceModal"
-          isOpen={showAllPastInvoicesModal}
-          onClick={() => {
-            setShowAllPastInvoicesModal(false);
-          }}
-          onApply={() => {
-            setShowAllPastInvoicesModal(false);
-          }}
-        />
-      ) : null} */}
+      {!isMobile ? renderDesktopView() : renderMobileView()}
       <InvoiceViewAndReminderModal
         id="BT-viewAndReminderInvoiceModal"
         isOpen={showViewAndReminderModal}

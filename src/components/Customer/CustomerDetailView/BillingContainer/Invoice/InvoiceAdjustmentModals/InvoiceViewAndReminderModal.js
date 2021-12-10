@@ -91,10 +91,12 @@ const InvoiceViewAndReminderModal = ({
         {marketplaceData.map((item, index) => (
           <div className={index ? 'row mt-1' : 'row'}>
             <div className="col-4 text-left">
-              <div className="normal-text text-bold">{item.name}</div>
+              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
+                {item.name}
+              </div>
             </div>
             <div className="col-2 text-left">
-              <div className="normal-text text-bold">
+              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
                 {generateAmount(item?.from, 'from', '$')}
               </div>
             </div>
@@ -104,74 +106,17 @@ const InvoiceViewAndReminderModal = ({
               </div>
             </div>
             <div className="col-2 text-left">
-              <div className="normal-text text-bold">
+              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
                 {generateAmount(item?.to, 'to', '$')}
               </div>
             </div>
             <div className="col-3 text-left">
-              <div className="normal-text text-bold">
+              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
                 {generateAmount(item?.change, 'change', '$')}
               </div>
             </div>
           </div>
         ))}
-        {/* <div className="row">
-          <div className="col-4 text-left">
-            <div className="normal-text text-bold">US</div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="normal-text text-bold">$5,000</div>
-          </div>
-          <div className="col-1 text-left">
-            <div className="normal-text">
-              <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
-            </div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="normal-text text-bold">$10,000</div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="normal-text text-bold">+$5,000</div>
-          </div>
-        </div>
-        <div className="row mt-1">
-          <div className="col-4 text-left">
-            <div className="normal-text ">UK</div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="gray-normal-text">$5,000</div>
-          </div>
-          <div className="col-1 text-left">
-            <div className="normal-text">
-              <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-            </div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="gray-normal-text">$10,000</div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="gray-normal-text">-</div>
-          </div>
-        </div>
-        <div className="row mt-1">
-          <div className="col-4 text-left">
-            <div className="normal-text ">Canada</div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="gray-normal-text">$5,000</div>
-          </div>
-          <div className="col-1 text-left">
-            <div className="normal-text">
-              <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-            </div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="gray-normal-text">$10,000</div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="gray-normal-text">-</div>
-          </div>
-        </div> */}
 
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         <div className="row">
@@ -200,10 +145,47 @@ const InvoiceViewAndReminderModal = ({
   const renderMobileView = () => {
     return (
       <div className="d-md-none d-block">
+        {marketplaceData.map((item, index) => (
+          <>
+            <div className="row">
+              <div className="col-12 text-left">
+                <div className="label">Marketplace</div>
+                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
+                  {item.name}
+                </div>
+              </div>
+
+              <div className="col-4 text-left">
+                <div className="label">From</div>
+                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
+                  {generateAmount(item?.from, 'from', '$')}
+                </div>
+              </div>
+              <div className="col-2 text-left">
+                <div className="mt-3">
+                  <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+                </div>
+              </div>
+              <div className="col-3 text-left">
+                <div className="label">To</div>
+                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
+                  {generateAmount(item?.to, 'to', '$')}
+                </div>
+              </div>
+              <div className="col-3 text-left">
+                <div className="label">Change</div>
+                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
+                  {generateAmount(item?.change, 'change', '$')}
+                </div>
+              </div>
+            </div>
+            <div className=" straight-line horizontal-line mt-2 mb-2 " />
+          </>
+        ))}
+
         <div className="row">
-          <div className="col-12 text-left">
-            <div className="label">Marketplace</div>
-            <div className="normal-text text-bold">US</div>
+          <div className="col-12 mb-2 text-left">
+            <div className="normal-text text-bold">Total Invoice</div>
           </div>
 
           <div className="col-4 text-left">
@@ -212,7 +194,7 @@ const InvoiceViewAndReminderModal = ({
           </div>
           <div className="col-2 text-left">
             <div className="mt-3">
-              <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+              <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
             </div>
           </div>
           <div className="col-3 text-left">
@@ -222,31 +204,6 @@ const InvoiceViewAndReminderModal = ({
           <div className="col-3 text-left">
             <div className="label">Change</div>
             <div className="normal-text text-bold">+$5,000</div>
-          </div>
-        </div>
-        <div className=" straight-line horizontal-line mt-2 mb-2 " />
-        <div className="row">
-          <div className="col-12 mb-2 text-left">
-            <div className="label">Marketplace</div>
-            <div className="normal-text ">US</div>
-          </div>
-
-          <div className="col-4 text-left">
-            <div className="label">From</div>
-            <div className="gray-normal-text">$5,000</div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="mt-3">
-              <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-            </div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="label">To</div>
-            <div className="gray-normal-text">$10,000</div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="label">Change</div>
-            <div className="gray-normal-text">+$5,000</div>
           </div>
         </div>
       </div>
