@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
@@ -13,11 +13,14 @@ import {
   ModalRadioCheck,
   ContractInputSelect,
   DropDownIndicator,
+  PageLoader,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
 import InvoiceAdjust from './InvoiceAdjust';
 import InvoicePause from './InvoicePause';
 import InvoiceAdjustConfirm from './InvoiceAdjustConfirm';
+import { getDSPBudgetAdjustData } from '../../../../../../api';
+import Theme from '../../../../../../theme/Theme';
 
 const todaysDate = new Date();
 todaysDate.setDate(todaysDate.getDate() - 2);
@@ -39,13 +42,63 @@ const customStyles = {
 
 const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [invoiceChoices, setInvoiceChoices] = useState({});
   const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
   const [selectedMonthYear, setselectedMonthYear] = useState({
-    value: dayjs().add(0, 'M').format('MMMM YYYY'),
-    label: dayjs().add(0, 'M').format('MMMM YYYY'),
+    value: dayjs().add(1, 'M').format('MMMM YYYY'),
+    label: dayjs().add(1, 'M').format('MMMM YYYY'),
   });
+
+  const getadjustInvoices = useCallback(
+    (type) => {
+      setLoader(true);
+      getDSPBudgetAdjustData(type, id).then((res) => {
+        if (res && res.status === 500) {
+          setLoader(false);
+        }
+
+        if (res && res.status === 400) {
+          setLoader(false);
+        }
+        if (res && res.status === 200) {
+          setLoader(false);
+        }
+        setLoader(false);
+      });
+    },
+    [id],
+  );
+
+  const getPauseInvoices = useCallback(
+    (type) => {
+      setLoader(true);
+      getDSPBudgetAdjustData(type, id).then((res) => {
+        if (res && res.status === 500) {
+          setLoader(false);
+        }
+
+        if (res && res.status === 400) {
+          setLoader(false);
+        }
+        if (res && res.status === 200) {
+          setLoader(false);
+        }
+        setLoader(false);
+      });
+    },
+    [id],
+  );
+
+  useEffect(() => {
+    if (viewComponent === 'adjustInvoice') {
+      getadjustInvoices(invoiceType);
+    } else {
+      getPauseInvoices(invoiceType);
+    }
+  }, [getPauseInvoices, getadjustInvoices, invoiceType, viewComponent]);
 
   const returnTotalAmount = () => {
     if (invoiceInputs && invoiceInputs.length > 0) {
@@ -70,8 +123,12 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
 
     for (let i = 0; i <= 5; i += 1) {
       monthsYears.push({
-        value: dayjs().add(i, 'M').format('MMMM YYYY'),
-        label: dayjs().add(i, 'M').format('MMMM YYYY'),
+        value: dayjs()
+          .add(i + 1, 'M')
+          .format('MMMM YYYY'),
+        label: dayjs()
+          .add(i + 1, 'M')
+          .format('MMMM YYYY'),
       });
     }
 
@@ -102,7 +159,11 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
                 <ul className="tabs">
                   <li
                     className={`modal-tab ${
-                      viewComponent === 'adjustInvoice' ? 'active' : ''
+                      viewComponent === 'adjustInvoice'
+                        ? 'active'
+                        : loader
+                        ? 'disabled'
+                        : ''
                     }`}
                     role="presentation"
                     onClick={() => {
@@ -112,7 +173,11 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
                   </li>
                   <li
                     className={`modal-tab ${
-                      viewComponent === 'pauseInvoice' ? 'active' : ''
+                      viewComponent === 'pauseInvoice'
+                        ? 'active'
+                        : loader
+                        ? 'disabled'
+                        : ''
                     }`}
                     role="presentation"
                     onClick={() => {
@@ -150,7 +215,7 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
                 </ul>
               ) : null}
             </div>
-
+            {loader && <PageLoader color={Theme.orange} type="page" />}
             {viewComponent === 'adjustInvoice' ? (
               <InvoiceAdjust
                 invoiceInputs={invoiceInputs}
@@ -158,7 +223,11 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
                 returnTotalAmount={returnTotalAmount}
               />
             ) : (
-              <InvoicePause returnTotalAmount={returnTotalAmount} />
+              <InvoicePause
+                invoiceChoices={invoiceChoices}
+                setInvoiceChoices={setInvoiceChoices}
+                returnTotalAmount={returnTotalAmount}
+              />
             )}
             <div className="modal-body pb-1 pt-3">
               <ContractInputSelect>
@@ -182,12 +251,17 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
             <div className="modal-footer">
               <div className="text-center ">
                 <Button
+                  disabled={loader}
                   onClick={() => {
                     setShowConfirmationModal(true);
                   }}
                   type="button"
                   className="btn-primary on-boarding   w-100">
-                  Continue
+                  {loader ? (
+                    <PageLoader color={Theme.white} type="button" />
+                  ) : (
+                    'Continue'
+                  )}
                 </Button>
               </div>
             </div>

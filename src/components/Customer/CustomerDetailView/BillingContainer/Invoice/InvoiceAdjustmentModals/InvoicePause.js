@@ -6,6 +6,7 @@ import { ModalRadioCheck } from '../../../../../../common';
 import { adjustInvoiceInputs } from '../../../../../../constants/CustomerConstants';
 
 const InvoicePause = () => {
+  // { invoiceChoices, setInvoiceChoices }
   return (
     <GrayTable>
       <div className="modal-body pb-3">

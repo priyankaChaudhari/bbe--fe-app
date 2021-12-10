@@ -42,8 +42,10 @@ export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
 export const API_AD_DASHBOARD = '/ad-dashboard/';
 export const API_SALES_DASHBOARD = 'sales-dashboard/';
 
+// Billing, Invoice & Budget
 export const API_DSP_INVOICES = '/invoice/';
 export const API_DSP_BILLING = '/bill/';
+export const API_DSP_BUDGET_ADJUSTMENT = '/dsp-budget-adjustment/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';
