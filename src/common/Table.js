@@ -350,8 +350,6 @@ const Table = styled.table`
         padding: 0;
         margin: 0;
         list-style-type: none;
-        /* width: max-content; */
-        /* width: 99%; */
 
         li {
           display: inline-block;
