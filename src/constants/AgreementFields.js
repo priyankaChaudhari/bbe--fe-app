@@ -344,6 +344,85 @@ export const revShareAndRetainerDetails = [
   },
 ];
 
+export const revShareAndRetainerQuarterDetails = [
+  {
+    value: 'monthly_retainer',
+    label: 'Monthly Retainer',
+    key: 'monthly_retainer',
+    type: 'number-currency',
+    isMandatory: true,
+    prefix: '$',
+  },
+  {
+    key: 'rev_share',
+    label: 'Revenue Share',
+    type: 'choice',
+    placeholder: 'Select Revenue Share',
+    isMandatory: true,
+    suffix: '%',
+  },
+  {
+    key: 'rev_share_threshold',
+    label: 'Revenue Share Threshold',
+    type: 'threshold',
+    isMandatory: false,
+    prefix: '$',
+  },
+  {
+    key: 'quarter',
+    type: 'threshold',
+    prefix: '$',
+  },
+  {
+    key: 'billing_cap',
+    label: 'BILLING CAP (OPTIONAL)',
+    type: 'number-currency',
+    placeholder: 'Enter Billing Cap',
+    isMandatory: false,
+    subtitle: ' We will charge no more than the amount entered here.',
+    prefix: '$',
+  },
+];
+export const revShareAndRetainerMonthDetails = [
+  {
+    value: 'monthly_retainer',
+    label: 'Monthly Retainer',
+    key: 'monthly_retainer',
+    type: 'number-currency',
+    isMandatory: true,
+    prefix: '$',
+  },
+  {
+    key: 'rev_share',
+    label: 'Revenue Share',
+    type: 'choice',
+    placeholder: 'Select Revenue Share',
+    isMandatory: true,
+    suffix: '%',
+  },
+  {
+    key: 'rev_share_threshold',
+    label: 'Revenue Share Threshold',
+    type: 'threshold',
+    isMandatory: false,
+    prefix: '$',
+  },
+  {
+    key: 'month',
+    type: 'threshold',
+    prefix: '$',
+  },
+  {
+    key: 'billing_cap',
+    label: 'BILLING CAP (OPTIONAL)',
+    type: 'number-currency',
+    placeholder: 'Enter Billing Cap',
+    isMandatory: false,
+    subtitle: ' We will charge no more than the amount entered here.',
+    prefix: '$',
+  },
+];
+
 export const quarterlyThresholdOptions = [
   {
     key: '1st quarterly',
@@ -353,6 +432,7 @@ export const quarterlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share Q1',
   },
   {
     key: '2nd quarterly',
@@ -362,6 +442,7 @@ export const quarterlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share Q2',
   },
   {
     key: '3rd quarterly',
@@ -371,6 +452,7 @@ export const quarterlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share Q3',
   },
   {
     key: '4th quarterly',
@@ -380,6 +462,7 @@ export const quarterlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share Q4',
   },
 ];
 
@@ -392,6 +475,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share January',
   },
   {
     key: 'february month',
@@ -401,6 +485,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share February',
   },
   {
     key: 'march month',
@@ -410,6 +495,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share March',
   },
   {
     key: 'april month',
@@ -419,6 +505,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share April',
   },
   {
     key: 'may month',
@@ -428,6 +515,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share May',
   },
   {
     key: 'june month',
@@ -437,6 +525,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share June',
   },
   {
     key: 'july month',
@@ -446,6 +535,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share July',
   },
   {
     key: 'august month',
@@ -455,6 +545,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share August',
   },
   {
     key: 'september month',
@@ -464,6 +555,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share September',
   },
   {
     key: 'october month',
@@ -473,6 +565,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share October',
   },
   {
     key: 'november month',
@@ -482,6 +575,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share November',
   },
   {
     key: 'december month',
@@ -491,6 +585,7 @@ export const monthlyThresholdOptions = [
     isMandatory: false,
     prefix: '$',
     fieldOf: 'threshold',
+    detail: 'Rev Share December',
   },
 ];
 
