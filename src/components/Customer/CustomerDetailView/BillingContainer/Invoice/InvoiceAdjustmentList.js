@@ -10,7 +10,7 @@ import { StatusColorSet } from '../../../../../constants';
 import { getInvoiceData } from '../../../../../api';
 import {
   InvoiceViewAndReminderModal,
-  InvoicePastAdjustmentModal,
+  // InvoicePastAdjustmentModal,
 } from './InvoiceAdjustmentModals';
 
 import {
@@ -27,9 +27,9 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
   const [invoicesAdjustmentData, setInvoicesAdjustmentData] = useState();
   const [invoiceAdjustmentLoader, setInvoiceAdjustmentLoader] = useState(false);
   const [isApicall, setIsApiCall] = useState(false);
-  const [showAllPastInvoicesModal, setShowAllPastInvoicesModal] = useState(
-    false,
-  );
+  // const [showAllPastInvoicesModal, setShowAllPastInvoicesModal] = useState(
+  //   false,
+  // );
   const [showViewAndReminderModal, setShowViewAndReminderModal] = useState(
     false,
   );
@@ -205,18 +205,21 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
 
   return (
     <Wrapper>
-      {!isMobile ? renderDesktopView() : renderMobileView()}
-
-      <InvoicePastAdjustmentModal
-        id="BT-allPastInvoiceModal"
-        isOpen={showAllPastInvoicesModal}
-        onClick={() => {
-          setShowAllPastInvoicesModal(false);
-        }}
-        onApply={() => {
-          setShowAllPastInvoicesModal(false);
-        }}
-      />
+      <WhiteCard className="mb-3">
+        {!isMobile ? renderDesktopView() : renderMobileView()}
+      </WhiteCard>
+      {/* {showAllPastInvoicesModal ? (
+        <InvoicePastAdjustmentModal
+          id="BT-allPastInvoiceModal"
+          isOpen={showAllPastInvoicesModal}
+          onClick={() => {
+            setShowAllPastInvoicesModal(false);
+          }}
+          onApply={() => {
+            setShowAllPastInvoicesModal(false);
+          }}
+        />
+      ) : null} */}
       <InvoiceViewAndReminderModal
         id="BT-viewAndReminderInvoiceModal"
         isOpen={showViewAndReminderModal}

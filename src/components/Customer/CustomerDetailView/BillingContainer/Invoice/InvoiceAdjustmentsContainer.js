@@ -74,6 +74,29 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
           }}
         />
       </WhiteCard>
+      <InvoiceAdjustPauseModal
+        id="BT-invoiceAdjustmentModal"
+        isOpen={showInvoiceAdjustmentModal}
+        onModalClose={() => {
+          setShowInvoiceAdjustmentModal(false);
+        }}
+        onApply={() => {
+          setShowInvoiceAdjustmentModal(false);
+        }}
+      />
+      {showAllPastInvoicesModal ? (
+        <InvoicePastAdjustmentModal
+          id="BT-allPastInvoiceModal"
+          customerId={id}
+          isOpen={showAllPastInvoicesModal}
+          onClick={() => {
+            setShowAllPastInvoicesModal(false);
+          }}
+          onApply={() => {
+            setShowAllPastInvoicesModal(false);
+          }}
+        />
+      ) : null}
     </Wrapper>
   );
 };

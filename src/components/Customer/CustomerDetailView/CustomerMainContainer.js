@@ -69,7 +69,7 @@ export default function CustomerMainContainer() {
   const [isSaveData, IsSaveDataClicked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [viewComponent, setViewComponent] = useState(
-    customerSelectedTab || 'performance',
+    'billing' || customerSelectedTab || 'performance',
   );
   const [subViewComponent, setSubViewComponent] = useState();
   useEffect(() => {
