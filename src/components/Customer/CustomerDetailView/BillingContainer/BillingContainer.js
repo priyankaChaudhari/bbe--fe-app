@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { oneOfType, shape, string, object } from 'prop-types';
 
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
-import {
-  financeTabsOptions,
-  billingNavigationOptions,
-} from '../../../../constants';
+import { financeTabsOptions } from '../../../../constants';
 
 const BillingContainer = ({
   id,
@@ -19,14 +16,6 @@ const BillingContainer = ({
 }) => {
   const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
-
-  useEffect(() => {
-    if (redirectType in billingNavigationOptions) {
-      setViewComponent(redirectType);
-    } else {
-      setViewComponent('Billing');
-    }
-  }, [redirectType]);
 
   const onLoading = (value) => {
     setLoader(value);
