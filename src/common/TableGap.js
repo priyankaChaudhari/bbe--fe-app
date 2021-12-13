@@ -83,7 +83,7 @@ const TableGap = styled.div`
         font-size: ${Theme.extraMedium};
 
         &.text-bold {
-          font-weight: 600;
+          font-family: ${Theme.titleFontFamily};
         }
         &.text-medium {
           font-family: ${Theme.baseMediumFontFamily};
