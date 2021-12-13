@@ -3346,10 +3346,8 @@ export default function ContractContainer() {
   };
   const isBillingCapExists = () => {
     if (
-      (formData?.fee_structure?.seller?.fee_type === 'Revenue Share Only' &&
-        formData?.fee_structure?.seller?.billing_cap) ||
-      (formData?.fee_structure?.vendor?.fee_type === 'Revenue Share Only' &&
-        formData?.fee_structure?.vendor?.billing_cap)
+      formData?.fee_structure?.seller?.billing_cap ||
+      formData?.fee_structure?.vendor?.billing_cap
     ) {
       return true;
     }
