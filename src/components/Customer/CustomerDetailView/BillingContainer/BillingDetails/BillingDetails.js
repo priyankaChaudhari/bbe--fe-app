@@ -17,7 +17,11 @@ import {
   EditOrangeIcon,
   helpCircleIcon,
 } from '../../../../../theme/images';
-import { billingAddress, creditCardDetails } from '../../../../../constants';
+import {
+  billingAddress,
+  creditCardDetails,
+  paymentTermValueLabel,
+} from '../../../../../constants';
 import {
   getBillingDetails,
   getPaymentTermsDetails,
@@ -123,6 +127,14 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     }
     return '';
   };
+  const renderPaymentTermLabel = (value) => {
+    return paymentTermValueLabel
+      .filter((field) => field.value === value)
+      .map((item) => {
+        return item?.label;
+      });
+  };
+
   const mapPaymentTermsDefaultValues = (type, label) => {
     const value = paymentTermsData.filter((op) => op.invoice_type === type);
     return value?.length ? (
@@ -154,7 +166,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         ) : (
           <div className="label mt-3">{label}</div>
         )}
-        <div className="label-info">{value?.[0]?.payment_term}</div>
+        <div className="label-info">
+          {renderPaymentTermLabel(value?.[0]?.payment_term)}
+        </div>
       </div>
     ) : null;
   };
@@ -183,7 +197,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       ...paymentTermsValue,
       {
         invoice_type: type,
-        payment_term: event.label,
+        payment_term: event.value,
       },
     ]);
   };
@@ -368,7 +382,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       <Select
         classNamePrefix="react-select"
         placeholder={
-          value?.length ? value?.[0]?.payment_term : 'Select the terms'
+          value?.length
+            ? renderPaymentTermLabel(value?.[0]?.payment_term)
+            : 'Select the terms'
         }
         defaultValue={paymentTerm}
         options={getOptions()}
