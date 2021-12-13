@@ -589,15 +589,23 @@ export default function AgreementDetails({
                   <Tabs className="mt-2 ml-3">
                     <ul className="grey-box-tab ">
                       <li
-                        className="active account-type"
+                        className={
+                          accountType === 'seller'
+                            ? 'account-type active'
+                            : 'account-type'
+                        }
                         role="presentation"
                         onClick={() => setAccountType('seller')}>
                         Seller Fee Structure
                       </li>
                       <li
-                        className="account-type"
+                        className={
+                          accountType === 'vendor'
+                            ? 'account-type active'
+                            : 'account-type'
+                        }
                         role="presentation"
-                        onClick={() => setAccountType('seller')}>
+                        onClick={() => setAccountType('vendor')}>
                         Vendor Fee Structure
                       </li>
                     </ul>
