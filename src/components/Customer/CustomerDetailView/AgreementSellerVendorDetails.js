@@ -148,7 +148,7 @@ export default function AgreementSellerVendorDetails({
     return (
       <div className=" col-lg-3 col-md-3 mb-3 col-6 " key={item?.key}>
         <div className="label">{item?.label?.replace('(OPTIONAL)', '')}</div>
-        <div className="label-info text-medium">
+        <div className="label-info text-medium capitalize">
           <NumberFormat
             displayType="text"
             value={mapDefaultValues(item)}

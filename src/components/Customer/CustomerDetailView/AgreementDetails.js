@@ -747,13 +747,13 @@ export default function AgreementDetails({
                             <div className="label">
                               DSP Advertising Start Date
                             </div>
-                            <div className="label">
+                            <div className="label-info text-medium">
                               {calculateFirstMonth(agreement)}
                             </div>
                           </div>
                           <div className="col-lg-3 col-md-3 mb-3 col-6 ">
                             <div className="label">Monthly Ad Budget</div>
-                            <div className="label">
+                            <div className="label-info text-medium">
                               <NumberFormat
                                 displayType="text"
                                 value={agreement.dsp_fee || 0}
@@ -764,7 +764,7 @@ export default function AgreementDetails({
                           </div>
                           <div className="col-lg-3 col-md-3 mb-3 col-6 ">
                             <div className="label">Initial Period</div>
-                            <div className="label">
+                            <div className="label-info text-medium">
                               {agreement?.dsp_length?.value || ''}{' '}
                             </div>
                           </div>
