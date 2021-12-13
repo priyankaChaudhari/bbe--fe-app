@@ -1032,7 +1032,22 @@ export default function AdPerformance({
   const handlePeformancePacingFlag = (value) => {
     setPerformancePacingFlag(value);
     if (value === 'performance') {
-      getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace, sd, ed);
+      } else {
+        getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+      }
     } else {
       getPacingGraphData(selectedMarketplace);
     }
