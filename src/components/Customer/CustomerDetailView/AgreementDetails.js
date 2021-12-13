@@ -324,10 +324,9 @@ export default function AgreementDetails({
             <div
               className={
                 agreement && agreement.draft_from
-                  ? 'mt-3 selected-card'
-                  : 'mt-3'
-              }
-              style={{ color: 'black' }}>
+                  ? 'mt-3 selected-card normal-text text-medium'
+                  : 'mt-3 normal-text text-medium'
+              }>
               <AgreementSellerVendorDetails
                 agreement={agreement}
                 type="header"
@@ -389,7 +388,7 @@ export default function AgreementDetails({
                           backgroundColor={Theme.gray8}
                         />
                       )}
-                      {/* <div className="clear-fix" /> */}
+
                       <p className="black-heading-title mt-0 mb-0">
                         {agreement &&
                         agreement.contract_type &&
@@ -446,23 +445,6 @@ export default function AgreementDetails({
                                   )}
                                 </p>
                               </li>
-                            ) : null}
-                            {agreement?.contract_type?.includes('recurring') &&
-                            agreement?.seller_type?.label === 'Hybrid' ? (
-                              <>
-                                <br />
-                                <br />
-                                <li
-                                  role="presentation"
-                                  onClick={() => setAccountType('seller')}>
-                                  Seller Fee Structure
-                                </li>
-                                <li
-                                  role="presentation"
-                                  onClick={() => setAccountType('vendor')}>
-                                  Vendor Fee Structure
-                                </li>
-                              </>
                             ) : null}
                           </>
                         ) : (
@@ -602,6 +584,25 @@ export default function AgreementDetails({
                     )}
                   </div>
                 )}
+                {agreement?.contract_type?.includes('recurring') &&
+                agreement?.seller_type?.label === 'Hybrid' ? (
+                  <Tabs className="mt-2 ml-3">
+                    <ul className="grey-box-tab ">
+                      <li
+                        className="active account-type"
+                        role="presentation"
+                        onClick={() => setAccountType('seller')}>
+                        Seller Fee Structure
+                      </li>
+                      <li
+                        className="account-type"
+                        role="presentation"
+                        onClick={() => setAccountType('seller')}>
+                        Vendor Fee Structure
+                      </li>
+                    </ul>
+                  </Tabs>
+                ) : null}
                 <div className="straight-line horizontal-line pt-3 mb-3" />
               </div>
               {/* className="disabled" */}
@@ -617,7 +618,7 @@ export default function AgreementDetails({
                         {accountType === 'vendor' ? (
                           <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                             <div className="label">Vendor Billing Report</div>
-                            <div className="label">
+                            <div className="label-info text-medium">
                               {agreement?.fee_structure?.[accountType]
                                 ?.vendor_billing_report || ''}
                             </div>
@@ -625,7 +626,7 @@ export default function AgreementDetails({
                         ) : null}
                         <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                           <div className="label">FEE TYPE</div>
-                          <div className="label">
+                          <div className="label-info text-medium">
                             {agreement?.fee_structure?.[accountType]
                               ?.fee_type || ''}
                           </div>
@@ -638,13 +639,13 @@ export default function AgreementDetails({
                         />
                         <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                           <div className="label">Content Optimization</div>
-                          <div className="label">
+                          <div className="label-info text-medium">
                             {agreement?.content_optimization || 0}
                           </div>
                         </div>
                         <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                           <div className="label">Design Optimization</div>
-                          <div className="label">
+                          <div className="label-info text-medium">
                             {agreement?.design_optimization || 0}
                           </div>
                         </div>
@@ -774,7 +775,6 @@ export default function AgreementDetails({
                 ))}
               </CustomerDetailCoppase>
             </WhiteCard>
-            ,
           </>,
         );
     }
