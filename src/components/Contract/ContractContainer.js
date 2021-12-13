@@ -1208,51 +1208,53 @@ export default function ContractContainer() {
 
   const feeStructure = (type) => {
     if (formData?.fee_structure?.[type]?.fee_type === 'Retainer Only') {
-      return `<div class="table-responsive">
-          <table class="contact-list mb-3 ">
+      return `
+      <div class="table-responsive">
+          <table class="contact-list mb-3" style="width: 100%;overflow: auto;border-collapse: collapse;">
             <tr>
-              <td> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer Only </span> </td>
-              <td>You will only be billed for the monthly retainer amount displayed below. </td>
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Fee Type</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer Only </span> </td>
+              <td style="border: 1px solid black;padding: 13px;">You will only be billed for the monthly retainer amount displayed below. </td>
             </tr>
              <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Monthly Retainer</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Monthly Retainer</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.monthly_retainer,
                )} </span> </td>
-              <td>Monthly fee for the main Amazon marketplace as a retainer for services.
+              <td style="border: 1px solid black;padding: 13px;">Monthly fee for the main Amazon marketplace as a retainer for services.
               This retainer is billed in advance for the month in which services are to be rendered. </td>
               </tr>
           </table>
-        </div>`;
+          </div>
+        `;
     }
     if (formData?.fee_structure?.[type]?.fee_type === 'Revenue Share Only') {
       return `<div class="table-responsive">
-          <table class="contact-list mb-3 ">
+          <table class="contact-list mb-3 " style="width: 100%;overflow: auto;border-collapse: collapse;">
             <tr>
-              <td> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Revenue Share Only  </span> </td>
-              <td>You will only be billed for the monthly retainer and revenue share % based on threshold(s) displayed below.</td>
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Fee Type</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Revenue Share Only  </span> </td>
+              <td style="border: 1px solid black;padding: 13px;">You will only be billed for the monthly retainer and revenue share % based on threshold(s) displayed below.</td>
             </tr>
              <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Revenue Share %</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Revenue Share %</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.rev_share || 0,
                )} </span> </td>
-              <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
+              <td style="border: 1px solid black;padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
               for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
                <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Billing Minimum</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Billing Minimum</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.billing_minimum || 0,
                )} </span> </td>
               <td>We will charge the greater of the value shown here or the % of revenue listed above. </td></tr>
               <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Billing Cap</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Billing Cap</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.billing_cap || 0,
                )} </span> </td>
-              <td>We will charge no more than the amount listed here. </td></tr>
+              <td style="border: 1px solid black;padding: 13px;">We will charge no more than the amount listed here. </td></tr>
           </table>
         </div>`;
     }
@@ -1260,45 +1262,45 @@ export default function ContractContainer() {
       formData?.fee_structure?.[type]?.fee_type === 'Retainer + % Rev Share'
     ) {
       return `<div class="table-responsive">
-          <table class="contact-list mb-3 ">
+          <table class="contact-list mb-3" style="width: 100%;overflow: auto;border-collapse: collapse;">
             <tr>
-              <td> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer + % Rev Share 
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Fee Type</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer + % Rev Share 
                (${
                  formData?.fee_structure?.[type]?.threshold_type
                } Threshold)  </span> </td>
-              <td>You will only be billed for the monthly retainer and revenue share % displayed below.  </td>
+              <td style="border: 1px solid black;padding: 13px;">You will only be billed for the monthly retainer and revenue share % displayed below.  </td>
             </tr>
             <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Monthly Retainer</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Monthly Retainer</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.monthly_retainer || 0,
                )} </span> </td>
-              <td>Monthly fee for the main Amazon marketplace as a retainer for services. 
+              <td style="border: 1px solid black;padding: 13px;">Monthly fee for the main Amazon marketplace as a retainer for services. 
               This retainer is billed in advance for the month in which services are to be rendered. </td>
               </tr>
 
              <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Revenue Share %</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Revenue Share %</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.rev_share || 0,
                )} </span> </td>
-              <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
+              <td style="border: 1px solid black;padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
               for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
               ${
                 formData?.fee_structure?.[type]?.threshold_type === 'Fixed'
                   ? ` <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Fixed Threshold </span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Fixed Threshold </span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.sales_threshold || 0,
                )} </span> </td>
-              <td>We will bill our revenue share % on any value above this threshold for Amazon Channel Sales (
+              <td style="border: 1px solid black;padding: 13px;">We will bill our revenue share % on any value above this threshold for Amazon Channel Sales (
                 retail dollars, net customer returns) each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>`
                   : formData?.fee_structure?.[type]?.threshold_type ===
                     'quarterly'
                   ? ` <tr  style="vertical-align: text-top;">
-             <td> <span style=" font-weight: bold";>Quarterly Threshold </span></td>
-             <td>
+             <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Quarterly Threshold </span></td>
+             <td style="border: 1px solid black;padding: 13px;">
                  1st Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
                    displayNumber(
                      formData?.fee_structure?.[type]?.quarterly_rev_share?.[
@@ -1328,15 +1330,15 @@ export default function ContractContainer() {
                     ) || 0
                   }</span><br>
                </td>
-            <td>We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
+            <td style="border: 1px solid black;padding: 13px;">We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
             (retail dollars, net customer returns) each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.
              </td>
           </tr>`
                   : formData?.fee_structure?.[type]?.threshold_type ===
                     'monthly'
                   ? ` <tr  style="vertical-align: text-top;">
-             <td> <span style=" font-weight: bold";>Monthly Threshold </span></td>
-             <td>
+             <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Monthly Threshold </span></td>
+             <td style="border: 1px solid black;padding: 13px;">
                  January:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
                    displayNumber(
                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
@@ -1422,18 +1424,18 @@ export default function ContractContainer() {
                     ) || 0
                   }</span><br>
                </td>
-            <td>We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
+            <td style="border: 1px solid black;padding: 13px;">We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
             (retail dollars, net customer returns) each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.
              </td>
           </tr>`
                   : ''
               }
               <tr  style="vertical-align: text-top;">
-              <td> <span style=" font-weight: bold";> Billing Cap</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Billing Cap</span></td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.billing_cap || 0,
                )} </span> </td>
-              <td>We will charge no more than the amount listed here. </td></tr>
+              <td style="border: 1px solid black;padding: 13px;">We will charge no more than the amount listed here. </td></tr>
           </table>
         </div>`;
     }
@@ -1688,7 +1690,8 @@ export default function ContractContainer() {
          <tr>
             <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
             <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${displayNumber(
-              details?.total_fee?.onetime_service_after_discount,
+              details?.total_fee?.onetime_service_after_discount ||
+                details?.total_fee?.onetime_service,
             )}
             </td>
          </tr>
@@ -2264,10 +2267,6 @@ export default function ContractContainer() {
           'SELLER_TYPE',
           mapDefaultValues('seller_type', 'Amazon Account Type'),
         )
-        .replace(
-          'ACCOUNT_TYPE',
-          mapDefaultValues('seller_type', 'Amazon Account Type'),
-        )
         .replace('BILLING_CAP_AMOUNT', showBillingCap())
         .replace('REV_SHARE_TABLE', showRevTable())
         .replace('REVENUE_SHARE', mapDefaultValues('rev_share', 'Rev Share'))
@@ -2275,10 +2274,13 @@ export default function ContractContainer() {
           'REV_THRESHOLD',
           mapDefaultValues('threshold_type', 'Rev Threshold'),
         )
-        .replace('SELLER_TYPE', mapDefaultValues('seller_type', 'Seller Type'))
         .replace(
           'AMAZON_ACCOUNT_TYPE',
-          mapDefaultValues('seller_type', 'Seller Type'),
+          mapDefaultValues('seller_type', 'Seller Type', 'amazon'),
+        )
+        .replace(
+          'ACCOUNT_TYPE',
+          mapDefaultValues('seller_type', 'Amazon Account Type'),
         )
         .replace(
           'PRIMARY_MARKETPLACE',

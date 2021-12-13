@@ -25,7 +25,7 @@ export default function AgreementSellerVendorDetails({
   if (type === 'header') {
     return (
       `${
-        agreement?.seller_type?.label
+        agreement?.seller_type !== null || agreement?.seller_type !== undefined
           ? `${agreement?.seller_type?.label} |`
           : ''
       } ${
@@ -56,7 +56,13 @@ export default function AgreementSellerVendorDetails({
       `${
         agreement?.additional_one_time_services ? '+ One Time Services' : ''
       }` +
-      `${agreement?.dsp_fee && agreement?.dsp_length?.value ? ' + DSP' : ''}`
+      `${
+        agreement?.additional_monthly_services?.map((item) =>
+          item.service.name.includes('DSP'),
+        )
+          ? ' + DSP'
+          : ''
+      }`
     );
   }
 
