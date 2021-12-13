@@ -747,7 +747,6 @@ export default function AgreementDetails({
                             <div className="label">
                               DSP Advertising Start Date
                             </div>
-<<<<<<< HEAD
                             <div className="label">
                               {calculateFirstMonth(agreement)}
                             </div>
@@ -768,17 +767,6 @@ export default function AgreementDetails({
                             <div className="label">
                               {agreement?.dsp_length?.value || ''}{' '}
                             </div>
-=======
-                            <div className="label-info text-medium">test</div>
-                          </div>
-                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
-                            <div className="label">Monthly Ad Budget</div>
-                            <div className="label-info text-medium">test</div>
-                          </div>
-                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
-                            <div className="label">Initial Period</div>
-                            <div className="label-info text-medium">test </div>
->>>>>>> pdv-3156 worked on UI styling.
                           </div>
                         </div>
                       </>
