@@ -52,7 +52,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const [paymentTermsOptions, setPaymentTermsOptions] = useState([]);
   const [paymentTermsValue, setPaymentTermsValue] = useState([]);
   const [showBtn, setShowBtn] = useState(false);
-  console.log('paymentTermsDataLength', paymentTermsData?.length);
+
   const customStyles = {
     content: {
       top: '50%',
