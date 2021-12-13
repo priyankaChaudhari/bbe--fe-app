@@ -1713,10 +1713,10 @@ export default function ContractContainer() {
       <span style="font-weight: 800; font-family: Helvetica-bold;">Additional Monthly Services for Amazon ${accntTYpe} Account </span>
       <br> The following additional monthly services will be provided to Client in addition to the Monthly Retainer.</div><br>
       <div class="table-responsive">
-        <table class="contact-list ">
+        <table  style="width: 100%; border-collapse: collapse " class="contact-list ">
           <tr>
-            <th>Service</th>
-            <th>Service Fee</th>
+            <th style=" text-align: left; border: 1px solid black; padding: 13px;">Service</th>
+            <th style=" text-align: left; border: 1px solid black; padding: 13px;">Service Fee</th>
           </tr>
             ${mapMonthlyServices(
               'additional_monthly_services',
