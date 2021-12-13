@@ -283,6 +283,34 @@ export default function AgreementDetails({
     return false;
   };
 
+  function addDays(theDate, days) {
+    return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
+  }
+
+  const calculateFirstMonth = (agreement) => {
+    if (agreement?.start_date) {
+      const calculateDate = addDays(new Date(agreement?.start_date), 10);
+
+      let startDate = '';
+      const d = new Date(calculateDate);
+
+      if (calculateDate.getDate() > 16) {
+        startDate = d.setMonth(d.getMonth() + 1, 1);
+        const first = new Date(startDate);
+        return dayjs(first).format('MMM DD, YYYY');
+      }
+      if (calculateDate.getDate() === 1) {
+        startDate = d.setMonth(d.getMonth(), 1);
+        const first = new Date(startDate);
+        return dayjs(first).format('MMM DD, YYYY');
+      }
+      startDate = d.setMonth(d.getMonth(), 16);
+      const first = new Date(startDate);
+      return dayjs(first).format('MMM DD, YYYY');
+    }
+    return null;
+  };
+
   const generateHTML = () => {
     const fields = [];
     for (const agreement of multipleAgreement) {
@@ -670,7 +698,7 @@ export default function AgreementDetails({
                     </div>
                     <ul className="selected-list">
                       {agreement?.additional_monthly_services
-                        ? agreement.additional_monthly_services.map((item) => (
+                        ? agreement.additional_monthly_services?.map((item) => (
                             <>
                               {item.account_type.toLowerCase() ===
                               accountType ? (
@@ -690,26 +718,24 @@ export default function AgreementDetails({
                   ''
                 )}
                 <div className="straight-line horizontal-line pt-3 mb-3" />
-                {agreement && agreement.contract_type !== 'dsp only' ? (
+                {agreement?.contract_type !== 'dsp only' ? (
                   <>
                     <div className="label">One Time Services</div>
                     <ul className="selected-list">
                       {agreement?.additional_one_time_services
-                        ? agreement?.additional_one_time_services?.map(
-                            (item) => (
-                              <li key={item?.id}>
-                                {item?.service?.name || ''} (
-                                {item?.quantity || ''})
-                              </li>
-                            ),
-                          )
+                        ? agreement.additional_one_time_services.map((item) => (
+                            <li key={item?.id}>
+                              {item?.service?.name || ''} (
+                              {item?.quantity || ''})
+                            </li>
+                          ))
                         : 'No One Time services added.'}
                     </ul>
                   </>
                 ) : (
                   ''
                 )}
-                {agreement.additional_monthly_services.map((item) => (
+                {agreement?.additional_monthly_services?.map((item) => (
                   <>
                     {item.account_type?.toLowerCase() === accountType &&
                     item?.service?.name === 'DSP Advertising' ? (
@@ -720,15 +746,26 @@ export default function AgreementDetails({
                             <div className="label">
                               DSP Advertising Start Date
                             </div>
-                            <div className="label">test</div>
+                            <div className="label">
+                              {calculateFirstMonth(agreement)}
+                            </div>
                           </div>
                           <div className="col-lg-3 col-md-3 mb-3 col-6 ">
                             <div className="label">Monthly Ad Budget</div>
-                            <div className="label">test</div>
+                            <div className="label">
+                              <NumberFormat
+                                displayType="text"
+                                value={agreement.dsp_fee || 0}
+                                thousandSeparator
+                                prefix="$"
+                              />
+                            </div>
                           </div>
                           <div className="col-lg-3 col-md-3 mb-3 col-6 ">
                             <div className="label">Initial Period</div>
-                            <div className="label">test </div>
+                            <div className="label">
+                              {agreement?.dsp_length?.value || ''}{' '}
+                            </div>
                           </div>
                         </div>
                       </>
