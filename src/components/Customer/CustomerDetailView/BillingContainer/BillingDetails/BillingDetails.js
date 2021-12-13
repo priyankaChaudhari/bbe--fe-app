@@ -3,19 +3,25 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-import Select from 'react-select';
 import { useDispatch } from 'react-redux';
 import { shape, string } from 'prop-types';
+import { toast, ToastContainer } from 'react-toastify';
+import Select, { components } from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
 import { showProfileLoader } from '../../../../../store/actions/userState';
 import {
+  CaretUp,
   CloseIcon,
   EditOrangeIcon,
   helpCircleIcon,
 } from '../../../../../theme/images';
-import { billingAddress, creditCardDetails } from '../../../../../constants';
+import {
+  billingAddress,
+  creditCardDetails,
+  // paymentTermValueLabel,
+} from '../../../../../constants';
 import {
   getBillingDetails,
   getPaymentTermsDetails,
@@ -32,7 +38,6 @@ import {
   PageLoader,
   WhiteCard,
   ContractInputSelect,
-  DropDownIndicator,
 } from '../../../../../common';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
@@ -74,7 +79,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const billingDetails = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
     getBillingDetails(id).then((response) => {
-      setData(response && response.data);
+      setData(response?.data);
       setIsLoading({ loader: false, type: 'page' });
       setFormData({
         billing_contact: response?.data?.billing_contact?.[0],
@@ -122,9 +127,39 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     }
     return '';
   };
+  const renderPaymentTermLabel = (value) => {
+    // return paymentTermValueLabel
+    //   .filter((field) => field.value === value)
+    //   .map((item) => {
+    //     return item?.label;
+    //   });
+    let valueLabel = '';
+    if (value === 'auto pay') {
+      valueLabel = 'Auto Pay';
+      return valueLabel;
+    }
+    if (value === 'due on receipt') {
+      valueLabel = 'Due on Receipt';
+      return valueLabel;
+    }
+    if (value === 'net 7') {
+      valueLabel = 'NET 7';
+      return valueLabel;
+    }
+    if (value === 'net 14') {
+      valueLabel = 'NET 14';
+      return valueLabel;
+    }
+    if (value === 'net 30') {
+      valueLabel = 'NET 30';
+      return valueLabel;
+    }
+    return <div style={{ textTransform: 'uppercase' }}>{value}</div>;
+  };
+
   const mapPaymentTermsDefaultValues = (type, label) => {
     const value = paymentTermsData.filter((op) => op.invoice_type === type);
-    return value && value.length ? (
+    return value?.length ? (
       <div className="col-6">
         {label === 'Dsp' ? (
           <>
@@ -153,7 +188,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         ) : (
           <div className="label mt-3">{label}</div>
         )}
-        <div className="label-info">{value?.[0]?.payment_term}</div>
+        <div className="label-info">
+          {renderPaymentTermLabel(value?.[0]?.payment_term)}
+        </div>
       </div>
     ) : null;
   };
@@ -182,15 +219,13 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       ...paymentTermsValue,
       {
         invoice_type: type,
-        payment_term: event.label,
+        payment_term: event.value,
       },
     ]);
   };
   const mapPaymentDefaultValues = (item) => {
     if (item === 'card_number')
-      return `************${
-        data.card_details && data.card_details[0] && data.card_details[0][item]
-      }`;
+      return `************${data?.card_details?.[0]?.[item]}`;
     if (item === 'expiration_date') {
       const getDate = data?.card_details?.[0]?.[item]?.split('-') || '';
       return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
@@ -212,7 +247,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             : `Enter ${item.label}`
         }
         defaultValue={
-          type === 'card_details' && data && data.id
+          type === 'card_details' && data?.id
             ? mapPaymentDefaultValues(item.key)
             : item.key === 'expiration_date'
             ? [formData.type][item.key]
@@ -337,21 +372,46 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     );
   };
 
+  const DropdownIndicator = (dataProps) => {
+    return (
+      components.DropdownIndicator && (
+        <components.DropdownIndicator {...dataProps}>
+          <img
+            src={CaretUp}
+            alt="caret"
+            style={{
+              transform: dataProps.selectProps.menuIsOpen
+                ? 'rotate(180deg)'
+                : '',
+              width: '25px',
+              height: '25px',
+            }}
+          />
+        </components.DropdownIndicator>
+      )
+    );
+  };
+
   const getOptions = () => {
     const options = paymentTermsOptions.filter((op) => op.value !== 'standard');
     return options;
   };
   const generateDropdown = (type) => {
     const value = paymentTermsData.filter((op) => op.invoice_type === type);
+    const invoiceType = value?.length ? value[0].invoice_type : null;
+    const paymentTerm = value?.length ? value[0].payment_term : null;
     return (
       <Select
         classNamePrefix="react-select"
         placeholder={
-          value?.length ? value?.[0]?.payment_term : 'Select the terms'
+          value?.length
+            ? renderPaymentTermLabel(value?.[0]?.payment_term)
+            : 'Select the terms'
         }
-        defaultValue={value?.length ? value?.[0]?.payment_term : null}
+        defaultValue={paymentTerm}
         options={getOptions()}
-        components={{ DropDownIndicator }}
+        name={invoiceType}
+        components={{ DropdownIndicator }}
         onChange={(event) => handlePaymentTermChange(event, type)}
       />
     );
@@ -446,7 +506,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
     saveBillingInfo(
       details,
-      formData?.old_billinginfo_id ? null : data && data.id,
+      formData?.old_billinginfo_id ? null : data?.id,
     ).then((res) => {
       if (res?.status === 200 || res?.status === 201) {
         setIsLoading({ loader: false, type: 'button' });
@@ -458,7 +518,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       }
       if (res?.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
-        setApiError(res && res.data);
+        setApiError(res?.data);
       }
     });
   };
@@ -466,15 +526,16 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const savePaymentTermsData = () => {
     setIsLoading({ loader: true, type: 'button' });
     savePaymentTerms(paymentTermsValue, id).then((res) => {
-      if ((res && res.status === 200) || (res && res.status === 201)) {
+      if (res?.status === 200 || res?.status === 201) {
         setIsLoading({ loader: false, type: 'button' });
         getPaymentTerms();
         setShowModal(false);
         setShowBtn(false);
         dispatch(showProfileLoader(true));
         dispatch(showProfileLoader(false));
+        toast.success('You have successfully changed your payment terms');
       }
-      if (res && res.status === 400) {
+      if (res?.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
         setApiError(res && res.data);
       }
@@ -483,6 +544,12 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   return (
     <>
+      {' '}
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+      />
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="performance-graph"
@@ -492,8 +559,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           height={40}
         />
       ) : (
-        <div className={userInfo && userInfo.role === 'Finance' ? 'mt-4' : ''}>
-          {formData.expiryMessage && formData.expiryMessage.message ? (
+        <div className="mt-4">
+          {formData?.expiryMessage?.message ? (
             <div
               className="already-user-msg mt-2 mb-3 p-2 text-center"
               style={{
@@ -556,33 +623,38 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </div>
                 </div>
               </WhiteCard>
-
-              <WhiteCard className="mt-3">
-                <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
-
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowPaymentTermsModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
-
-                <div className="row">
-                  {mapPaymentTermsDefaultValues('retainer', 'Monthly Retainer')}
-                  {mapPaymentTermsDefaultValues('rev share', 'Revenue share')}
-                  {mapPaymentTermsDefaultValues('dsp service', 'Dsp')}
-                  {mapPaymentTermsDefaultValues('upsell', 'Upsells')}
-                </div>
-              </WhiteCard>
+              {paymentTermsData?.length ? (
+                <WhiteCard className="mt-3">
+                  <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
+                  {userInfo?.role === 'BGS' ||
+                  userInfo?.role === 'BGS Manager' ? (
+                    <div
+                      className="edit-details"
+                      role="presentation"
+                      onClick={() => setShowPaymentTermsModal(true)}>
+                      <img src={EditOrangeIcon} alt="" />
+                      Edit
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  <div className="row">
+                    {mapPaymentTermsDefaultValues(
+                      'retainer',
+                      'Monthly Retainer',
+                    )}
+                    {mapPaymentTermsDefaultValues('rev share', 'Revenue share')}
+                    {mapPaymentTermsDefaultValues('dsp service', 'Dsp')}
+                    {mapPaymentTermsDefaultValues('upsell', 'Upsells')}
+                  </div>
+                </WhiteCard>
+              ) : (
+                ''
+              )}
             </div>
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
-                {' '}
-                <p className="black-heading-title mt-0 mb-4">
-                  {' '}
-                  Billing Contact
-                </p>
+                <p className="black-heading-title mt-0 mb-4">Billing Contact</p>
                 <div
                   className="edit-details"
                   role="presentation"
@@ -591,10 +663,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   Edit
                 </div>
                 <GroupUser className="mt-3">
-                  {data && data.id ? (
+                  {data?.id ? (
                     <GetInitialName
                       property="float-left mr-3"
-                      userInfo={data.billing_contact && data.billing_contact[0]}
+                      userInfo={data?.billing_contact?.[0]}
                     />
                   ) : (
                     ''
@@ -714,7 +786,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           )}
         </ModalBox>
       </Modal>
-
       <Modal
         isOpen={showPaymentTermsModal}
         style={customStyles}
@@ -741,9 +812,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                 {mapPaymentTermsModalDetails('dsp service', 'Dsp (Additional)')}
                 {mapPaymentTermsModalDetails('upsell', 'Upsells')}
               </div>
-              <ErrorMsg style={{ textAlign: 'center' }}>
-                {apiError && apiError[0]}
-              </ErrorMsg>
             </div>
           </div>
 

@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { oneOfType, shape, string, object } from 'prop-types';
 
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
-import { financeTabsOptions } from '../../../../constants';
+import {
+  billingNavigationOptions,
+  financeTabsOptions,
+} from '../../../../constants';
 
 const BillingContainer = ({
   id,
@@ -16,12 +19,6 @@ const BillingContainer = ({
 }) => {
   const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
-
-  useEffect(() => {
-    if (redirectType) {
-      setViewComponent(redirectType);
-    }
-  }, [redirectType]);
 
   const onLoading = (value) => {
     setLoader(value);
@@ -61,10 +58,7 @@ const BillingContainer = ({
           ) : null}
         </ul>
       </Tabs>
-      {viewComponent === 'dsp service' ||
-      viewComponent === 'rev share' ||
-      viewComponent === 'upsell' ||
-      viewComponent === 'retainer' ? (
+      {billingNavigationOptions.includes(viewComponent) ? (
         <Invoice
           onLoading={onLoading}
           invoiceType={viewComponent}
@@ -87,7 +81,7 @@ export default BillingContainer;
 BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
-  redirectType: 'retainer',
+  redirectType: 'Billing',
 };
 
 BillingContainer.propTypes = {
@@ -100,6 +94,5 @@ BillingContainer.propTypes = {
     string,
     object,
   }),
-  // customerStatus: string,
   redirectType: string,
 };

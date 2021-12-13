@@ -23,7 +23,11 @@ import { CustomerDetailsBody } from './CustomerDetailStyles';
 import { ProductCatalog } from '../index';
 import { SetupCheckList } from '../../BrandAssetGathering/index';
 import { LeftArrowIcon } from '../../../theme/images';
-import { PATH_BRAND_ASSET, PATH_CUSTOMER_LIST } from '../../../constants';
+import {
+  billingNavigationOptions,
+  PATH_BRAND_ASSET,
+  PATH_CUSTOMER_LIST,
+} from '../../../constants';
 import {
   getCustomerDetails,
   setCustomerSelectedTab,
@@ -459,7 +463,15 @@ export default function CustomerMainContainer() {
                     />
                   ) : viewComponent === 'billing' ? (
                     <BillingContainer
-                      redirectType={history.location.state}
+                      redirectType={
+                        billingNavigationOptions.includes(
+                          history.location.state,
+                        )
+                          ? history.location.state
+                          : customer?.status?.value === 'pending'
+                          ? 'retainer'
+                          : 'Billing'
+                      }
                       id={id}
                       userInfo={userInfo}
                       customerStatus={customer && customer.status}

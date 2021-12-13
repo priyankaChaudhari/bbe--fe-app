@@ -242,3 +242,10 @@ export const financeTabsOptions = [
   { key: 'upsell', value: 'Upsell' },
   { key: 'dsp service', value: 'DSP' },
 ];
+
+export const billingNavigationOptions = [
+  'retainer',
+  'rev share',
+  'upsell',
+  'dsp service',
+];
