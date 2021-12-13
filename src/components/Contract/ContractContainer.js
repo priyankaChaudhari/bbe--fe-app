@@ -1250,7 +1250,7 @@ export default function ContractContainer() {
                <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
                  formData?.fee_structure?.[type]?.billing_minimum || 0,
                )} </span> </td>
-              <td>We will charge the greater of the value shown here or the % of revenue listed above. </td></tr>
+              <td style="border: 1px solid black;padding: 13px;">We will charge the greater of the value shown here or the % of revenue listed above. </td></tr>
               <tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Billing Cap</span></td>
                <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(

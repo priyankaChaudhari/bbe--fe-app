@@ -327,12 +327,16 @@ export default function AgreementDetails({
                   ? 'mt-3 selected-card normal-text text-medium'
                   : 'mt-3 normal-text text-medium'
               }>
-              <AgreementSellerVendorDetails
-                agreement={agreement}
-                type="header"
-                setAccountType={setAccountType}
-                accountType={accountType}
-              />
+              {agreement?.contract_type?.includes('recurring') ? (
+                <AgreementSellerVendorDetails
+                  agreement={agreement}
+                  type="header"
+                  setAccountType={setAccountType}
+                  accountType={accountType}
+                />
+              ) : (
+                ''
+              )}
             </div>
             <WhiteCard
               className={
@@ -726,9 +730,9 @@ export default function AgreementDetails({
                 ) : (
                   ''
                 )}
-                <div className="straight-line horizontal-line pt-3 mb-3" />
                 {agreement?.contract_type !== 'dsp only' ? (
                   <>
+                    <div className="straight-line horizontal-line pt-3 mb-3" />
                     <div className="label">One Time Services</div>
                     <ul className="selected-list">
                       {agreement?.additional_one_time_services

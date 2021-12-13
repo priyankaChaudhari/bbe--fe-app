@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import NumberFormat from 'react-number-format';
 
 import {
   monthlyThresholdOptions,
   quarterlyThresholdOptions,
+  revShareAndRetainerDetails,
   revShareAndRetainerMonthDetails,
   revShareAndRetainerQuarterDetails,
   revShareDetails,
@@ -16,11 +17,19 @@ export default function AgreementSellerVendorDetails({
   setAccountType,
   accountType,
 }) {
+  const [isDSP, setIsDSP] = useState(false);
   setAccountType(
     agreement?.seller_type?.label === 'Hybrid'
       ? accountType
       : agreement?.seller_type?.label?.toLowerCase(),
   );
+
+  useEffect(() => {
+    if (agreement?.additional_monthly_services)
+      for (const item of agreement.additional_monthly_services) {
+        if (item.service.name.includes('DSP')) setIsDSP(true);
+      }
+  }, [agreement.additional_monthly_services]);
 
   if (type === 'header') {
     return (
@@ -56,13 +65,7 @@ export default function AgreementSellerVendorDetails({
       `${
         agreement?.additional_one_time_services ? '+ One Time Services' : ''
       }` +
-      `${
-        agreement?.additional_monthly_services?.map((item) =>
-          item.service.name.includes('DSP'),
-        )
-          ? ' + DSP'
-          : ''
-      }`
+      `${isDSP ? ' + DSP' : ''}`
     );
   }
 
@@ -111,7 +114,7 @@ export default function AgreementSellerVendorDetails({
       agreement?.fee_structure?.[accountType]?.threshold_type === 'monthly'
     ) {
       arr = revShareAndRetainerMonthDetails;
-    } else arr = revShareAndRetainerMonthDetails;
+    } else arr = revShareAndRetainerDetails;
   }
 
   return arr?.map((item) => {
