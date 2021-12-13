@@ -131,6 +131,17 @@ export default function SellerFeeStructure({
                 : 0,
             },
           });
+          setFeeStructureErrors((prevState) => ({
+            ...prevState,
+            seller: {
+              ...feeStructureErrors?.[section],
+              rev_share: '',
+            },
+            vendor: {
+              ...feeStructureErrors?.[section],
+              rev_share: '',
+            },
+          }));
         } else {
           setSectionError({
             ...sectionError,
@@ -140,6 +151,13 @@ export default function SellerFeeStructure({
                 : 0,
             },
           });
+          setFeeStructureErrors((prevState) => ({
+            ...prevState,
+            [section]: {
+              ...feeStructureErrors?.[section],
+              rev_share: '',
+            },
+          }));
         }
       }
     }
@@ -153,13 +171,6 @@ export default function SellerFeeStructure({
         !(formData && formData?.fee_structure?.[section]?.[key])
       ) {
         errorCount -= 1;
-        setFeeStructureErrors((prevState) => ({
-          ...prevState,
-          [section]: {
-            ...feeStructureErrors?.[section],
-            monthly_retainer: '',
-          },
-        }));
       }
     } else if (
       key === 'monthly_retainer' &&
@@ -185,11 +196,30 @@ export default function SellerFeeStructure({
             : errorCount,
         },
       });
+
+      setFeeStructureErrors((prevState) => ({
+        ...prevState,
+        seller: {
+          ...feeStructureErrors?.[section],
+          monthly_retainer: '',
+        },
+        vendor: {
+          ...feeStructureErrors?.[section],
+          monthly_retainer: '',
+        },
+      }));
     } else {
       setSectionError({
         ...sectionError,
         [section]: { feeType: errorCount },
       });
+      setFeeStructureErrors((prevState) => ({
+        ...prevState,
+        [section]: {
+          ...feeStructureErrors?.[section],
+          monthly_retainer: '',
+        },
+      }));
     }
   };
 
@@ -714,6 +744,13 @@ export default function SellerFeeStructure({
                 ) : (
                   ''
                 )}
+                {field.key === 'rev_share' ? (
+                  <ErrorMsg>
+                    {feeStructureErrors?.[section]?.rev_share}
+                  </ErrorMsg>
+                ) : (
+                  ''
+                )}
               </>
             ))}
           </>
@@ -721,40 +758,59 @@ export default function SellerFeeStructure({
           'Retainer + % Rev Share' ? (
           <>
             {revShareAndRetainerDetails.map((field) => (
-              <InputFormField className="mt-3" key={field.key}>
-                <label htmlFor={field.key}>{field.label}</label>
+              <>
+                <InputFormField className="mt-3" key={field.key}>
+                  <label htmlFor={field.key}>{field.label}</label>
 
-                {field.type === 'threshold' ? (
-                  <RevenueThreshold
-                    formData={formData}
-                    handleChange={handleChange}
-                    generateHTML={generateHTML}
-                    setFormData={setFormData}
-                    section={section}
-                    feeStructureErrors={feeStructureErrors}
-                  />
+                  {field.type === 'threshold' ? (
+                    <RevenueThreshold
+                      formData={formData}
+                      handleChange={handleChange}
+                      generateHTML={generateHTML}
+                      setFormData={setFormData}
+                      section={section}
+                      feeStructureErrors={feeStructureErrors}
+                    />
+                  ) : (
+                    <>
+                      <div className="input-container">
+                        {field.prefix ? (
+                          <span className="input-icon ">{field.prefix} </span>
+                        ) : (
+                          ''
+                        )}
+                        {generateHTML(field)}
+                        {field.suffix ? (
+                          <span className="input-icon end">
+                            {field.suffix}{' '}
+                          </span>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    </>
+                  )}
+
+                  <p style={{ color: '#556178' }} className="mt-1 mb-0">
+                    {field.subtitle}
+                  </p>
+                </InputFormField>
+
+                {field.key === 'monthly_retainer' ? (
+                  <ErrorMsg>
+                    {feeStructureErrors?.[section]?.monthly_retainer}
+                  </ErrorMsg>
                 ) : (
-                  <>
-                    <div className="input-container">
-                      {field.prefix ? (
-                        <span className="input-icon ">{field.prefix} </span>
-                      ) : (
-                        ''
-                      )}
-                      {generateHTML(field)}
-                      {field.suffix ? (
-                        <span className="input-icon end">{field.suffix} </span>
-                      ) : (
-                        ''
-                      )}
-                    </div>
-                  </>
+                  ''
                 )}
-
-                <p style={{ color: '#556178' }} className="mt-1 mb-0">
-                  {field.subtitle}
-                </p>
-              </InputFormField>
+                {field.key === 'rev_share' ? (
+                  <ErrorMsg>
+                    {feeStructureErrors?.[section]?.rev_share}
+                  </ErrorMsg>
+                ) : (
+                  ''
+                )}
+              </>
             ))}
           </>
         ) : (
