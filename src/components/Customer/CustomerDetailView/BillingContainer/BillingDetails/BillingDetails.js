@@ -591,15 +591,18 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
               <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
-
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowPaymentTermsModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
-
+                {userInfo?.role === 'BGS' ||
+                userInfo?.role === 'BGS Manager' ? (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowPaymentTermsModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                ) : (
+                  ''
+                )}
                 <div className="row">
                   {mapPaymentTermsDefaultValues('retainer', 'Monthly Retainer')}
                   {mapPaymentTermsDefaultValues('rev share', 'Revenue share')}
