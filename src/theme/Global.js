@@ -36,7 +36,7 @@ export const GroupUser = styled.div`
       margin: 0;
       font-size: 15px;
       display: contents;
-      word-break: break-all;
+      word-break: break-word;
       &.note-text {
         color: ${Theme.black};
 
