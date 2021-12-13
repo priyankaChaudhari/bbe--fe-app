@@ -2986,10 +2986,7 @@ export default function ContractContainer() {
   };
 
   const updateDiscount = (totalFees, type) => {
-    if (
-      Math.sign(totalFees.monthlyTotal) === -1 ||
-      totalFees.monthlyTotal === 0
-    ) {
+    if (Math.sign(totalFees.monthlyTotal) === -1) {
       const postData = {
         contract: details?.id,
         account_type: type,
@@ -3274,10 +3271,7 @@ export default function ContractContainer() {
 
       if (updatedFormData.additional_one_time_services) {
         const totalFees = calculateTotalFee('onetime');
-        if (
-          Math.sign(totalFees.oneTimeTotal) === -1 ||
-          totalFees.oneTimeTotal === 0
-        ) {
+        if (Math.sign(totalFees.oneTimeTotal) === -1) {
           const postData = {
             contract: details?.id,
             account_type: '',
