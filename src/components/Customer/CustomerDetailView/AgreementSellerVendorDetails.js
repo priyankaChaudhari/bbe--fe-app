@@ -116,12 +116,14 @@ export default function AgreementSellerVendorDetails({
       return monthlyThresholdOptions.map((field) => (
         <div className="col-lg-3 col-md-3 mb-3 col-6 " key={field?.key}>
           <div className="label">{field.detail}</div>
-          <NumberFormat
-            displayType="text"
-            value={mapDefaultValues(field, 'month')}
-            thousandSeparator
-            prefix="$"
-          />
+          <div className="label-info text-medium">
+            <NumberFormat
+              displayType="text"
+              value={mapDefaultValues(field, 'month')}
+              thousandSeparator
+              prefix="$"
+            />
+          </div>
         </div>
       ));
     }
@@ -132,33 +134,37 @@ export default function AgreementSellerVendorDetails({
       return quarterlyThresholdOptions.map((field) => (
         <div className="col-lg-3 col-md-3 mb-3 col-6 " key={field?.key}>
           <div className="label">{field.detail}</div>
-          <NumberFormat
-            displayType="text"
-            value={mapDefaultValues(field, 'quarter')}
-            thousandSeparator
-            prefix="$"
-          />
+          <div className="label-info text-medium">
+            <NumberFormat
+              displayType="text"
+              value={mapDefaultValues(field, 'quarter')}
+              thousandSeparator
+              prefix="$"
+            />
+          </div>
         </div>
       ));
     }
     return (
       <div className=" col-lg-3 col-md-3 mb-3 col-6 " key={item?.key}>
         <div className="label">{item?.label?.replace('(OPTIONAL)', '')}</div>
-        <NumberFormat
-          displayType="text"
-          value={mapDefaultValues(item)}
-          thousandSeparator
-          prefix={
-            item.key === 'rev_share' ||
-            item.key === 'content_optimization' ||
-            item.key === 'design_optimization' ||
-            item.key === 'rev_share_threshold'
-              ? ''
-              : '$'
-          }
-          suffix={item.key === 'rev_share' ? '%' : ''}
-          isNumericString
-        />
+        <div className="label-info text-medium">
+          <NumberFormat
+            displayType="text"
+            value={mapDefaultValues(item)}
+            thousandSeparator
+            prefix={
+              item.key === 'rev_share' ||
+              item.key === 'content_optimization' ||
+              item.key === 'design_optimization' ||
+              item.key === 'rev_share_threshold'
+                ? ''
+                : '$'
+            }
+            suffix={item.key === 'rev_share' ? '%' : ''}
+            isNumericString
+          />
+        </div>
       </div>
     );
   });
