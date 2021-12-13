@@ -29,7 +29,6 @@ export default function ContractFooter({
   onEditcontract,
   isLoading,
   isFooter,
-  formData,
   newAddendumData,
   updatedFormData,
   showEditor,
@@ -54,8 +53,7 @@ export default function ContractFooter({
   const [pauseAgreementData, setPauseAgreementData] = useState({});
   const [transactionalData, setTransactionalData] = useState({});
   const contractStatus = details?.contract_status?.value;
-  const AdditionalOneTimeServices =
-    formData?.additional_one_time_services?.length;
+
   const rightTickCondition =
     showRightTick('service_agreement') &&
     showRightTick('feeStructure') &&
@@ -76,33 +74,6 @@ export default function ContractFooter({
   useEffect(() => {
     getTransactionalDataDetails();
   }, [getTransactionalDataDetails]);
-
-  const checkAmazonStorePriceExists = () => {
-    const service =
-      AdditionalOneTimeServices &&
-      formData.additional_one_time_services.find((item) =>
-        item && item.name
-          ? item.name === 'Amazon Store Package'
-          : item?.service?.name === 'Amazon Store Package',
-      );
-    if (service) {
-      return true;
-    }
-    const customService =
-      AdditionalOneTimeServices &&
-      formData.additional_one_time_services.find((item) =>
-        item && item.name
-          ? item.name === 'Amazon Store Package Custom'
-          : item?.service?.name === 'Amazon Store Package Custom',
-      );
-    if (
-      (customService && !customService.custom_amazon_store_price) ||
-      customService?.custom_amazon_store_price === ''
-    ) {
-      return true;
-    }
-    return false;
-  };
 
   const updateContractData = (data) => {
     setIsLoading({ loader: true, type: 'button' });
@@ -437,7 +408,6 @@ export default function ContractFooter({
           <div className="container-fluid">
             <Button
               className="light-orange  on-boarding  mt-3  mr-0 ml-0 w-sm-50"
-              disabled={checkAmazonStorePriceExists()}
               onClick={() => nextStep()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />

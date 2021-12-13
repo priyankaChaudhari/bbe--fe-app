@@ -521,7 +521,9 @@ export default function ContractContainer() {
 
     AgreementDetails.forEach((item) => {
       if (item.key !== 'contract_address') {
-        if (!(item.key === 'length' && details?.contract_type === 'one time')) {
+        if (
+          !(item.key === 'length' && contract?.contract_type === 'one time')
+        ) {
           if (
             item.isMandatory &&
             item.field === 'customer' &&
