@@ -1103,6 +1103,16 @@ export default function AdPerformance({
           customerId={id}
           marketplace={selectedMarketplace}
           onModalClose={() => {
+            if (selectedAdDF.value === 'custom') {
+              DSPYearAndCustomDateFilter(
+                adState[0].startDate,
+                adState[0].endDate,
+                'custom',
+                selectedMarketplace,
+              );
+            } else {
+              getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+            }
             getDSPPacing(selectedMarketplace);
             if (performancePacingFlag !== 'performance')
               getPacingGraphData(selectedMarketplace);
