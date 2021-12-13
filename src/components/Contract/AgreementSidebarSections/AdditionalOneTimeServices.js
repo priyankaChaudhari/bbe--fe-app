@@ -513,6 +513,7 @@ function AdditionalOneTimeServices({
                         return floatValue <= 100000000;
                       }}
                       decimalScale={2}
+                      allowNegative={false}
                     />
                     {displayError('custom_amazon_store_price')}
                   </InputFormField>
