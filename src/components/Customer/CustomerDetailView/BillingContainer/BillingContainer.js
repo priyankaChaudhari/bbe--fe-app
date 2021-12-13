@@ -5,7 +5,10 @@ import { oneOfType, shape, string, object } from 'prop-types';
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
-import { financeTabsOptions } from '../../../../constants';
+import {
+  financeTabsOptions,
+  billingNavigationOptions,
+} from '../../../../constants';
 
 const BillingContainer = ({
   id,
@@ -18,8 +21,10 @@ const BillingContainer = ({
   const [loader, setLoader] = useState(false);
 
   useEffect(() => {
-    if (redirectType) {
+    if (redirectType in billingNavigationOptions) {
       setViewComponent(redirectType);
+    } else {
+      setViewComponent('Billing');
     }
   }, [redirectType]);
 
@@ -100,6 +105,5 @@ BillingContainer.propTypes = {
     string,
     object,
   }),
-  // customerStatus: string,
   redirectType: string,
 };
