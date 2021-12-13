@@ -480,7 +480,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       }
       if (res?.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
-        setApiError(res && res.data);
+        setApiError(res?.data);
       }
     });
   };
@@ -488,7 +488,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const savePaymentTermsData = () => {
     setIsLoading({ loader: true, type: 'button' });
     savePaymentTerms(paymentTermsValue, id).then((res) => {
-      if (res?.status === 200 || (res && res.status === 201)) {
+      if (res?.status === 200 || res?.status === 201) {
         setIsLoading({ loader: false, type: 'button' });
         getPaymentTerms();
         setShowModal(false);
