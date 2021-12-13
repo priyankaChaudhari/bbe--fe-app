@@ -77,16 +77,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       setData(response && response.data);
       setIsLoading({ loader: false, type: 'page' });
       setFormData({
-        billing_contact:
-          response?.data?.billing_contact && response.data.billing_contact[0],
-        billing_address:
-          response?.data?.billing_address && response.data.billing_address[0],
-        card_details:
-          response?.data?.card_details && response.data.card_details[0],
-        expiryMessage:
-          response?.data?.card_details &&
-          response.data.card_details[0] &&
-          response.data.card_details[0].expiry_info,
+        billing_contact: response?.data?.billing_contact?.[0],
+        billing_address: response?.data?.billing_address?.[0],
+        card_details: response?.data?.card_details?.[0],
+        expiryMessage: response?.data?.card_details?.[0]?.expiry_info,
       });
     });
   }, [id]);
@@ -109,17 +103,21 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
   const mapDefaultValues = (type, key) => {
     if (key === 'expiration_date') {
-      const getDate =
-        data.card_details && data.card_details[0] && data.card_details[0][key]
+      const getDate = data?.card_details?.[0]?.[key]
+        ? data.card_details[0][key].includes('-')
           ? data.card_details[0][key].split('-')
-          : '';
+          : data.card_details[0][key].split('/')
+        : '';
+
       return getDate
-        ? `${getDate[1]}/${getDate[0].substring(2)}`
+        ? getDate[0].length > 2
+          ? `${getDate[1]}/${getDate[0].substring(2)}`
+          : `${getDate[1]}/${getDate[0]}`
         : data.id
         ? '**/**'
         : '';
     }
-    if (data && data[type] && data[type][0]) {
+    if (data?.[type]?.[0]) {
       return data[type][0][key];
     }
     return '';
@@ -155,7 +153,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         ) : (
           <div className="label mt-3">{label}</div>
         )}
-        <div className="label-info">{value[0].payment_term}</div>
+        <div className="label-info">{value?.[0]?.payment_term}</div>
       </div>
     ) : null;
   };
@@ -194,10 +192,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         data.card_details && data.card_details[0] && data.card_details[0][item]
       }`;
     if (item === 'expiration_date') {
-      const getDate =
-        data.card_details && data.card_details[0] && data.card_details[0][item]
-          ? data.card_details[0][item].split('-')
-          : '';
+      const getDate = data?.card_details?.[0]?.[item]?.split('-') || '';
       return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
     }
     return '';
@@ -221,7 +216,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             ? mapPaymentDefaultValues(item.key)
             : item.key === 'expiration_date'
             ? [formData.type][item.key]
-            : formData && formData[type] && formData[type][item.key]
+            : formData?.[type]?.[item.key]
         }
         onValueChange={(values) =>
           item.key === 'card_number'
@@ -239,12 +234,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         className="form-control"
         placeholder={`Enter ${item.label}`}
         type={item.type}
-        defaultValue={
-          data && data[type] && data[type][0] && data[type][0][item.key]
-        }
+        defaultValue={data?.[type]?.[0]?.[item.key]}
         onChange={(event) => handleChange(event, item, type)}
         maxLength={item.key === 'postal_code' ? 10 : ''}
-        readOnly={data && data.id && item.key === 'email'}
+        readOnly={data?.id && item.key === 'email'}
       />
     );
   };
@@ -260,7 +253,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                 className="col-md-6"
                 key={item.key}
                 style={{
-                  opacity: data && data.id && item.key === 'email' ? 0.5 : '',
+                  opacity: data?.id && item.key === 'email' ? 0.5 : '',
                 }}>
                 <InputFormField className="mt-3">
                   <label htmlFor={item.label}>
@@ -274,10 +267,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </label>
                 </InputFormField>
                 <ErrorMsg>
-                  {apiError &&
-                    apiError.billing_contact &&
-                    apiError.billing_contact[item.key] &&
-                    apiError.billing_contact[item.key][0]}
+                  {apiError?.billing_contact?.[item.key]?.[0]}
                 </ErrorMsg>
               </div>
             );
@@ -309,10 +299,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </label>
                 </InputFormField>
                 <ErrorMsg>
-                  {apiError &&
-                    apiError.billing_address &&
-                    apiError.billing_address[item.key] &&
-                    apiError.billing_address[item.key][0]}
+                  {apiError?.billing_address?.[item.key]?.[0]}
                 </ErrorMsg>
               </div>
             );
@@ -340,12 +327,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                       )}
                     </label>
                   </InputFormField>
-                  <ErrorMsg>
-                    {apiError &&
-                      apiError.card_details &&
-                      apiError.card_details[item.key] &&
-                      apiError.card_details[item.key][0]}
-                  </ErrorMsg>
+                  <ErrorMsg>{apiError?.card_details?.[item.key]?.[0]}</ErrorMsg>
                 </div>
               );
             })}
@@ -365,9 +347,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       <Select
         classNamePrefix="react-select"
         placeholder={
-          value && value.length ? value[0].payment_term : 'Select the terms'
+          value?.length ? value?.[0]?.payment_term : 'Select the terms'
         }
-        defaultValue={value && value.length ? value[0].payment_term : null}
+        defaultValue={value?.length ? value?.[0]?.payment_term : null}
         options={getOptions()}
         components={{ DropDownIndicator }}
         onChange={(event) => handlePaymentTermChange(event, type)}
@@ -378,7 +360,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     const paymentTerm = paymentTermsData.filter(
       (item) => item.invoice_type === type,
     );
-    return paymentTerm && paymentTerm.length ? (
+    return paymentTerm?.length ? (
       <div className="col-12" key={paymentTerm[0].invoice_type}>
         <div className="label mt-3">
           {label}
@@ -415,46 +397,35 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
     const getYear = new Date().getFullYear().toString().substring(0, 2);
     let format = '';
-    if (
-      formData &&
-      formData.card_details &&
-      formData.card_details.expiration_date &&
-      !formData.card_details.expiration_date.includes(getYear)
-    ) {
+    if (!formData?.card_details?.expiration_date?.includes(getYear)) {
       format = formData.card_details.expiration_date.split('/');
       formData.card_details.expiration_date = `${getYear + format[1]}-${
         format[0]
       }`;
     }
     if (
-      (formData &&
-        formData.billing_contact &&
-        formData.billing_contact.phone_number === '') ||
-      (formData &&
-        formData.billing_contact &&
-        formData.billing_contact.phone_number === null)
+      formData?.billing_contact?.phone_number === '' ||
+      formData?.billing_contact?.phone_number === null
     )
       delete formData.billing_contact.phone_number;
     if (
-      JSON.stringify(
-        data && data.id && data.card_details && data.card_details[0],
-      ) === JSON.stringify(formData.card_details)
+      JSON.stringify(data?.card_details?.[0]) ===
+      JSON.stringify(formData.card_details)
     ) {
       delete formData.card_details;
       delete formData.old_billinginfo_id;
     } else {
-      formData.old_billinginfo_id = data && data.id;
+      formData.old_billinginfo_id = data?.id;
     }
 
-    if (formData && formData.old_billinginfo_id === '')
-      delete formData.old_billinginfo_id;
-    if (formData.billing_contact && formData.billing_contact.expiry_info)
+    if (formData?.old_billinginfo_id === '') delete formData.old_billinginfo_id;
+    if (formData?.billing_contact?.expiry_info)
       delete formData.billing_contact.expiry_info;
     delete formData.expiryMessage;
 
     let details = {};
 
-    if ((data && data.id === undefined) || data.id === '') {
+    if (data?.id === undefined || data?.id === '') {
       details = {
         ...formData,
         billing_address: formData.billing_address || {},
@@ -475,9 +446,9 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
     saveBillingInfo(
       details,
-      formData && formData.old_billinginfo_id ? null : data && data.id,
+      formData?.old_billinginfo_id ? null : data && data.id,
     ).then((res) => {
-      if ((res && res.status === 200) || (res && res.status === 201)) {
+      if (res?.status === 200 || res?.status === 201) {
         setIsLoading({ loader: false, type: 'button' });
         billingDetails();
         setShowModal(false);
@@ -485,7 +456,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         dispatch(showProfileLoader(true));
         dispatch(showProfileLoader(false));
       }
-      if (res && res.status === 400) {
+      if (res?.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
         setApiError(res && res.data);
       }
