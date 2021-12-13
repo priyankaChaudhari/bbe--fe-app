@@ -19,6 +19,8 @@ function Discount({
   setShowDiscountModal,
   selectedDiscount,
   getDiscountData,
+  updatedFormData,
+  setIsEditContract,
 }) {
   const [showAmountInput, setShowAmountInput] = useState(false);
   const [selectedDiscountType, setSelectedDiscountType] = useState('none');
@@ -54,6 +56,9 @@ function Discount({
           if (res?.status === 200 || res?.status === 201) {
             getDiscountData(agreementData.id);
             setShowDiscountModal(false);
+            if (!Object.keys(updatedFormData).length) {
+              setIsEditContract(false);
+            }
           }
           if (res?.status === 400) {
             setApiError(res?.data);
@@ -66,6 +71,9 @@ function Discount({
           if (res?.status === 200 || res?.status === 201) {
             getDiscountData(agreementData.id);
             setShowDiscountModal(false);
+            if (!Object.keys(updatedFormData).length) {
+              setIsEditContract(false);
+            }
           }
           if (res?.status === 400) {
             setApiError(res?.data);
@@ -88,6 +96,9 @@ function Discount({
           if (res?.status === 200 || res?.status === 201) {
             getDiscountData(agreementData.id);
             setShowDiscountModal(false);
+            if (!Object.keys(updatedFormData).length) {
+              setIsEditContract(false);
+            }
           }
           if (res?.status === 400) {
             setApiError(res?.data);
@@ -99,6 +110,9 @@ function Discount({
           if (res?.status === 200 || res?.status === 201) {
             getDiscountData(agreementData.id);
             setShowDiscountModal(false);
+            if (!Object.keys(updatedFormData).length) {
+              setIsEditContract(false);
+            }
           }
           if (res?.status === 400) {
             setApiError(res?.data);
@@ -271,6 +285,8 @@ Discount.defaultProps = {
   setShowDiscountModal: () => {},
   selectedDiscount: [],
   getDiscountData: () => {},
+  updatedFormData: {},
+  setIsEditContract: () => {},
 };
 Discount.propTypes = {
   discountFlag: string,
@@ -284,5 +300,7 @@ Discount.propTypes = {
   setShowDiscountModal: func,
   selectedDiscount: arrayOf(shape({})),
   getDiscountData: func,
+  updatedFormData: shape({}),
+  setIsEditContract: func,
 };
 export default Discount;

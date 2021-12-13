@@ -3945,6 +3945,7 @@ export default function ContractContainer() {
             discountData={discountData}
             selectedDiscount={selectedDiscount}
             getDiscountData={getDiscountData}
+            updatedFormData={updatedFormData}
           />
 
           <ContractEditConfirmation

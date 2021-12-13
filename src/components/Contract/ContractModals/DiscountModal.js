@@ -41,6 +41,8 @@ function DiscountModal({
   setDetails,
   selectedDiscount,
   getDiscountData,
+  updatedFormData,
+  setIsEditContract,
 }) {
   return (
     <Modal
@@ -65,6 +67,8 @@ function DiscountModal({
           setDetails={setDetails}
           selectedDiscount={selectedDiscount}
           getDiscountData={getDiscountData}
+          updatedFormData={updatedFormData}
+          setIsEditContract={setIsEditContract}
         />
       </ModalBox>
     </Modal>
@@ -84,6 +88,8 @@ DiscountModal.defaultProps = {
   setDetails: () => {},
   selectedDiscount: [],
   getDiscountData: () => {},
+  updatedFormData: {},
+  setIsEditContract: () => {},
 };
 
 DiscountModal.propTypes = {
@@ -109,4 +115,6 @@ DiscountModal.propTypes = {
   setDetails: func,
   selectedDiscount: arrayOf(shape({})),
   getDiscountData: func,
+  updatedFormData: shape({}),
+  setIsEditContract: func,
 };
