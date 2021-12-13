@@ -514,6 +514,7 @@ export default function SellerFeeStructure({
         },
       }));
       setUpdatedFormData((prevState) => ({
+        ...prevState,
         fee_structure: {
           ...prevState.fee_structure,
           vendor: prevState?.fee_structure?.seller,
