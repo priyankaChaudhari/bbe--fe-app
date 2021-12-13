@@ -3,15 +3,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-<<<<<<< HEAD
 import { useDispatch } from 'react-redux';
 import { shape, string } from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
-=======
-// import Select from 'react-select';
-import { useDispatch } from 'react-redux';
-import { shape, string } from 'prop-types';
->>>>>>> PDV-3013 - paymentTerms - dropdown indicator added
 import Select, { components } from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
@@ -40,10 +34,6 @@ import {
   PageLoader,
   WhiteCard,
   ContractInputSelect,
-<<<<<<< HEAD
-=======
-  // DropDownIndicator,
->>>>>>> PDV-3013 - paymentTerms - dropdown indicator added
 } from '../../../../../common';
 
 export default function BillingDetails({ id, userInfo, onBoardingId }) {
@@ -85,7 +75,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const billingDetails = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
     getBillingDetails(id).then((response) => {
-      setData(response && response.data);
+      setData(response?.data);
       setIsLoading({ loader: false, type: 'page' });
       setFormData({
         billing_contact: response?.data?.billing_contact?.[0],
@@ -135,7 +125,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   };
   const mapPaymentTermsDefaultValues = (type, label) => {
     const value = paymentTermsData.filter((op) => op.invoice_type === type);
-    return value && value.length ? (
+    return value?.length ? (
       <div className="col-6">
         {label === 'Dsp' ? (
           <>
@@ -199,9 +189,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   };
   const mapPaymentDefaultValues = (item) => {
     if (item === 'card_number')
-      return `************${
-        data.card_details && data.card_details[0] && data.card_details[0][item]
-      }`;
+      return `************${data?.card_details?.[0]?.[item]}`;
     if (item === 'expiration_date') {
       const getDate = data?.card_details?.[0]?.[item]?.split('-') || '';
       return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
@@ -223,7 +211,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             : `Enter ${item.label}`
         }
         defaultValue={
-          type === 'card_details' && data && data.id
+          type === 'card_details' && data?.id
             ? mapPaymentDefaultValues(item.key)
             : item.key === 'expiration_date'
             ? [formData.type][item.key]
@@ -374,8 +362,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   };
   const generateDropdown = (type) => {
     const value = paymentTermsData.filter((op) => op.invoice_type === type);
-    const invoiceType = value && value.length ? value[0].invoice_type : null;
-    const paymentTerm = value && value.length ? value[0].payment_term : null;
+    const invoiceType = value?.length ? value[0].invoice_type : null;
+    const paymentTerm = value?.length ? value[0].payment_term : null;
     return (
       <Select
         classNamePrefix="react-select"
@@ -384,10 +372,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         }
         defaultValue={paymentTerm}
         options={getOptions()}
-<<<<<<< HEAD
         name={invoiceType}
-=======
->>>>>>> PDV-3013 - paymentTerms - dropdown indicator added
         components={{ DropdownIndicator }}
         onChange={(event) => handlePaymentTermChange(event, type)}
       />
@@ -483,7 +468,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
     saveBillingInfo(
       details,
-      formData?.old_billinginfo_id ? null : data && data.id,
+      formData?.old_billinginfo_id ? null : data?.id,
     ).then((res) => {
       if (res?.status === 200 || res?.status === 201) {
         setIsLoading({ loader: false, type: 'button' });
@@ -503,7 +488,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const savePaymentTermsData = () => {
     setIsLoading({ loader: true, type: 'button' });
     savePaymentTerms(paymentTermsValue, id).then((res) => {
-      if ((res && res.status === 200) || (res && res.status === 201)) {
+      if (res?.status === 200 || (res && res.status === 201)) {
         setIsLoading({ loader: false, type: 'button' });
         getPaymentTerms();
         setShowModal(false);
@@ -512,7 +497,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         dispatch(showProfileLoader(false));
         toast.success('You have successfully changed your payment terms');
       }
-      if (res && res.status === 400) {
+      if (res?.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
         setApiError(res && res.data);
       }
@@ -536,9 +521,8 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           height={40}
         />
       ) : (
-        <div
-          className={userInfo && userInfo.role === 'Finance' ? 'mt-4' : 'mt-4'}>
-          {formData.expiryMessage && formData.expiryMessage.message ? (
+        <div className="mt-4">
+          {formData?.expiryMessage?.message ? (
             <div
               className="already-user-msg mt-2 mb-3 p-2 text-center"
               style={{
@@ -632,11 +616,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             </div>
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
-                {' '}
-                <p className="black-heading-title mt-0 mb-4">
-                  {' '}
-                  Billing Contact
-                </p>
+                <p className="black-heading-title mt-0 mb-4">Billing Contact</p>
                 <div
                   className="edit-details"
                   role="presentation"
@@ -645,10 +625,10 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   Edit
                 </div>
                 <GroupUser className="mt-3">
-                  {data && data.id ? (
+                  {data?.id ? (
                     <GetInitialName
                       property="float-left mr-3"
-                      userInfo={data.billing_contact && data.billing_contact[0]}
+                      userInfo={data?.billing_contact?.[0]}
                     />
                   ) : (
                     ''
