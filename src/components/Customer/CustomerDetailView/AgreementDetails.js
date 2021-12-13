@@ -683,7 +683,7 @@ export default function AgreementDetails({
                       {agreement && agreement.additional_marketplaces
                         ? agreement.additional_marketplaces.map((item) => (
                             <>
-                              {item.account_type.toLowerCase() ===
+                              {item?.account_type?.toLowerCase() ===
                               accountType ? (
                                 <li key={item.id}>
                                   {item.name || ''}{' '}
@@ -701,7 +701,7 @@ export default function AgreementDetails({
                       {agreement?.additional_monthly_services
                         ? agreement.additional_monthly_services?.map((item) => (
                             <>
-                              {item.account_type.toLowerCase() ===
+                              {item?.account_type?.toLowerCase() ===
                               accountType ? (
                                 <li key={item.id}>
                                   {(item &&
