@@ -148,6 +148,7 @@ function StatementOfWork({
                     onChange={(event) =>
                       handleChange(event, 'listing_optimization')
                     }
+                    allowNegative={false}
                     isAllowed={(values) => {
                       const { formattedValue, floatValue } = values;
                       if (floatValue == null) {
