@@ -20,7 +20,7 @@ import {
 import {
   billingAddress,
   creditCardDetails,
-  paymentTermValueLabel,
+  // paymentTermValueLabel,
 } from '../../../../../constants';
 import {
   getBillingDetails,
@@ -128,11 +128,34 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return '';
   };
   const renderPaymentTermLabel = (value) => {
-    return paymentTermValueLabel
-      .filter((field) => field.value === value)
-      .map((item) => {
-        return item?.label;
-      });
+    // return paymentTermValueLabel
+    //   .filter((field) => field.value === value)
+    //   .map((item) => {
+    //     return item?.label;
+    //   });
+    let valueLabel = '';
+    if (value === 'auto pay') {
+      valueLabel = 'Auto Pay';
+      return valueLabel;
+    }
+    if (value === 'due on receipt') {
+      valueLabel = 'Due on Receipt';
+      return valueLabel;
+    }
+    if (value === 'net 7') {
+      valueLabel = 'NET 7';
+      return valueLabel;
+    }
+    if (value === 'net 14') {
+      valueLabel = 'NET 14';
+      return valueLabel;
+    }
+    if (value === 'net 30') {
+      valueLabel = 'NET 30';
+      return valueLabel;
+    }
+    valueLabel = 'NET 10';
+    return valueLabel;
   };
 
   const mapPaymentTermsDefaultValues = (type, label) => {
