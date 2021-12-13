@@ -464,7 +464,9 @@ export default function CustomerMainContainer() {
                   ) : viewComponent === 'billing' ? (
                     <BillingContainer
                       redirectType={
-                        history.location.state in billingNavigationOptions
+                        billingNavigationOptions.includes(
+                          history.location.state,
+                        )
                           ? history.location.state
                           : customer?.status?.value === 'pending'
                           ? 'retainer'

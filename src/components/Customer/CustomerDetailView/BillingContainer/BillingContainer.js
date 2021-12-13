@@ -5,7 +5,10 @@ import { oneOfType, shape, string, object } from 'prop-types';
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
-import { financeTabsOptions } from '../../../../constants';
+import {
+  billingNavigationOptions,
+  financeTabsOptions,
+} from '../../../../constants';
 
 const BillingContainer = ({
   id,
@@ -55,10 +58,7 @@ const BillingContainer = ({
           ) : null}
         </ul>
       </Tabs>
-      {viewComponent === 'dsp service' ||
-      viewComponent === 'rev share' ||
-      viewComponent === 'upsell' ||
-      viewComponent === 'retainer' ? (
+      {billingNavigationOptions.includes(viewComponent) ? (
         <Invoice
           onLoading={onLoading}
           invoiceType={viewComponent}
