@@ -124,6 +124,9 @@ export default function AgreementSidePanel({
   setFeeStructureErrors,
   getMonthlyServices,
   showRightTick,
+  getFeeStructureDetails,
+  manageErrorCount,
+  checkMandatoryFieldsOfFeeType,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [revShare, setRevShare] = useState([]);
@@ -1784,6 +1787,9 @@ export default function AgreementSidePanel({
                   setFeeStructureErrors={setFeeStructureErrors}
                   getMonthlyServices={getMonthlyServices}
                   showRightTick={showRightTick}
+                  getFeeStructureDetails={getFeeStructureDetails}
+                  manageErrorCount={manageErrorCount}
+                  checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
                 />
               ) : (
                 ''

@@ -57,6 +57,32 @@ export default function VendorFeeStructure({
           },
         },
       });
+
+      setSectionError({
+        ...sectionError,
+        vendor: {
+          feeType: !(
+            formData && formData?.fee_structure?.vendor?.vendor_billing_report
+          )
+            ? sectionError?.seller?.feeType
+              ? sectionError?.seller?.feeType + 1
+              : 0
+            : sectionError?.seller?.feeType
+            ? sectionError?.seller?.feeType
+            : 0,
+        },
+        seller: {
+          feeType: sectionError?.seller?.feeType
+            ? sectionError?.seller?.feeType
+            : 0,
+        },
+      });
+      setFeeStructureErrors({
+        ...feeStructureErrors,
+        vendor: {
+          ...feeStructureErrors.seller,
+        },
+      });
     }
     if (!event.target.checked) {
       setVendorSameAsSeller(false);

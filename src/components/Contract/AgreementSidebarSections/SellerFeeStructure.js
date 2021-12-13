@@ -153,6 +153,13 @@ export default function SellerFeeStructure({
         !(formData && formData?.fee_structure?.[section]?.[key])
       ) {
         errorCount -= 1;
+        setFeeStructureErrors((prevState) => ({
+          ...prevState,
+          [section]: {
+            ...feeStructureErrors?.[section],
+            monthly_retainer: '',
+          },
+        }));
       }
     } else if (
       key === 'monthly_retainer' &&
@@ -304,9 +311,9 @@ export default function SellerFeeStructure({
         fee_structure: {
           ...formData.fee_structure,
           [section]: {
-            ...formData.fee_structure[section],
+            ...formData.fee_structure?.[section],
             quarterly_rev_share: {
-              ...formData.fee_structure[section].quarterly_rev_share,
+              ...formData.fee_structure?.[section].quarterly_rev_share,
               [key]: event.value,
             },
           },
@@ -331,7 +338,7 @@ export default function SellerFeeStructure({
         fee_structure: {
           ...formData.fee_structure,
           [section]: {
-            ...formData.fee_structure[section],
+            ...formData.fee_structure?.[section],
             monthly_rev_share: {
               ...formData.fee_structure?.[section]?.monthly_rev_share,
               [key]: event.value,
@@ -403,43 +410,41 @@ export default function SellerFeeStructure({
           feeStructureErrors?.[section]?.sales_threshold)) ||
       (formData?.fee_structure?.[section]?.quarterly_rev_share &&
         Object.keys(formData?.fee_structure?.[section]?.quarterly_rev_share)
-          .length === 4 &&
+          .length === 3 &&
+        event.value &&
         feeStructureErrors?.[section]?.quarterly_rev_share) ||
       (formData?.fee_structure?.[section]?.monthly_rev_share &&
         Object.keys(formData?.fee_structure?.[section]?.monthly_rev_share)
-          .length === 12 &&
+          .length === 11 &&
+        event.value &&
         feeStructureErrors?.[section]?.monthly_rev_share) ||
       (feeStructureErrors?.[section]?.sales_threshold &&
-        formData?.fee_structure?.[section]?.sales_threshold)
+        (formData?.fee_structure?.[section]?.sales_threshold || event.value))
     ) {
-      if (
-        formData &&
-        formData?.fee_structure?.vendor?.vendor_same_as_seller &&
-        section === 'seller'
-      ) {
+      if (formData && formData?.fee_structure?.vendor?.vendor_same_as_seller) {
         setSectionError({
           ...sectionError,
-          [section]: { feeType: sectionError?.[section]?.feeType - 1 },
+          seller: { feeType: sectionError?.seller?.feeType - 1 },
           vendor: {
             feeType: !(
               formData && formData?.fee_structure?.vendor?.vendor_billing_report
             )
-              ? sectionError?.[section]?.feeType - 1 + 1
-              : sectionError?.[section]?.feeType - 1,
+              ? sectionError?.seller?.feeType - 1 + 1
+              : sectionError?.seller?.feeType - 1,
           },
         });
 
         setFeeStructureErrors((prevState) => ({
           ...prevState,
           seller: {
-            ...feeStructureErrors?.[section],
+            ...feeStructureErrors?.seller,
             quarterly_rev_share: '',
             billing_cap: '',
             monthly_rev_share: '',
             sales_threshold: '',
           },
           vendor: {
-            ...feeStructureErrors?.[section],
+            ...feeStructureErrors?.vendor,
             quarterly_rev_share: '',
             billing_cap: '',
             monthly_rev_share: '',
@@ -667,6 +672,9 @@ export default function SellerFeeStructure({
                 prefix: '$',
               })}
             </div>
+            <ErrorMsg>
+              {feeStructureErrors?.[section]?.monthly_retainer}
+            </ErrorMsg>
           </InputFormField>
         ) : formData?.fee_structure?.[section]?.fee_type ===
           'Revenue Share Only' ? (

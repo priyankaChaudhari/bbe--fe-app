@@ -586,7 +586,6 @@ export default function ContractContainer() {
         }
       }
     });
-
     setSectionError({
       ...sectionError,
       agreement: agreementErrors,
@@ -621,7 +620,8 @@ export default function ContractContainer() {
     });
   };
   const checkMandatoryFieldsOfFeeType = (contractData, section) => {
-    let errorCount = sectionError?.[section]?.feeType;
+    let errorCount = 0;
+    // sectionError?.[section]?.feeType;
     if (
       contractData &&
       contractData?.fee_structure?.[section]?.fee_type === 'Retainer Only' &&
@@ -730,7 +730,6 @@ export default function ContractContainer() {
 
       if (!(contractData && contractData?.fee_structure?.vendor?.fee_type)) {
         vendorErrorcount += 1;
-
         setSectionError((prevErrors) => ({
           ...prevErrors,
           vendor: { feeType: vendorErrorcount },
@@ -754,8 +753,11 @@ export default function ContractContainer() {
     }
   };
 
-  const getFeeStructureDetails = (contract) => {
-    getFeeStructure(contract?.id).then((res) => {
+  const getFeeStructureDetails = (type, contract) => {
+    getFeeStructure(
+      contract?.id,
+      type === 'Hybrid' ? ['Seller', 'Vendor'] : type,
+    ).then((res) => {
       if (res?.status === 500) {
         setFormData({
           ...contract,
@@ -801,7 +803,7 @@ export default function ContractContainer() {
           setDetails(res.data);
           setFormData(res.data);
           setOriginalData(res.data);
-          getFeeStructureDetails(res?.data);
+          getFeeStructureDetails(res?.data?.seller_type?.value, res?.data);
 
           if (showSuccessToastr) {
             setShowSignSuccessMsg(showSuccessToastr);
@@ -2623,6 +2625,42 @@ export default function ContractContainer() {
     return result;
   };
 
+  const handleErrorCount = (type, responseData) => {
+    let errorCount = 0;
+
+    if (
+      responseData?.data?.[type]?.billing_cap &&
+      !(
+        feeStructureErrors?.[type]?.billing_cap ||
+        feeStructureErrors?.[type]?.billing_minimum
+      )
+    ) {
+      errorCount += 1;
+    }
+
+    if (
+      responseData?.data?.[type]?.quarterly_rev_share &&
+      !feeStructureErrors?.[type]?.quarterly_rev_share
+    ) {
+      errorCount += 1;
+    }
+
+    if (
+      responseData?.data?.[type]?.monthly_rev_share &&
+      !feeStructureErrors?.[type]?.monthly_rev_share
+    ) {
+      errorCount += 1;
+    }
+    if (
+      responseData?.data?.[type]?.sales_threshold &&
+      !feeStructureErrors?.[type]?.sales_threshold
+    ) {
+      errorCount += 1;
+    }
+
+    return errorCount;
+  };
+
   const saveChanges = (apis) => {
     axios
       .all(apis)
@@ -2908,8 +2946,7 @@ export default function ContractContainer() {
                   feeType:
                     (sectionError?.seller?.feeType
                       ? sectionError?.seller?.feeType
-                      : 0) +
-                    Object.keys(sellerFeeStructureRes.data?.seller).length,
+                      : 0) + handleErrorCount('seller', sellerFeeStructureRes),
                 };
               }
             }
@@ -2924,28 +2961,12 @@ export default function ContractContainer() {
 
             if (errorKeys.length) {
               if (errorKeys.includes('vendor')) {
-                if (
-                  Object.keys(vendorFeeStructureRes.data?.vendor).includes(
-                    'vendor_billing_report',
-                  )
-                ) {
-                  feeErrors.vendor = {
-                    feeType:
-                      (sectionError?.vendor?.feeType
-                        ? sectionError?.vendor?.feeType
-                        : 0) +
-                      Object.keys(vendorFeeStructureRes.data?.vendor).length -
-                      1,
-                  };
-                } else {
-                  feeErrors.vendor = {
-                    feeType:
-                      (sectionError?.vendor?.feeType
-                        ? sectionError?.vendor?.feeType
-                        : 0) +
-                      Object.keys(vendorFeeStructureRes.data?.vendor).length,
-                  };
-                }
+                feeErrors.vendor = {
+                  feeType:
+                    (sectionError?.vendor?.feeType
+                      ? sectionError?.vendor?.feeType
+                      : 0) + handleErrorCount('vendor', vendorFeeStructureRes),
+                };
               }
             }
           }
@@ -2953,7 +2974,6 @@ export default function ContractContainer() {
           setFeeStructureErrors({
             ...feeBEErros,
           });
-
           setSectionError({
             ...feeErrors,
             agreement: agreementErrCount + sectionError.agreement,
@@ -3611,6 +3631,9 @@ export default function ContractContainer() {
         setFeeStructureErrors={setFeeStructureErrors}
         getMonthlyServices={getMonthlyServices}
         showRightTick={showRightTick}
+        getFeeStructureDetails={getFeeStructureDetails}
+        manageErrorCount={manageErrorCount}
+        checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
       />
     );
   };

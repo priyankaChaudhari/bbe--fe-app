@@ -9,7 +9,7 @@ import { shape, func, bool, string } from 'prop-types';
 import SellerFeeStructure from './SellerFeeStructure';
 import VendorFeeStructure from './VendorFeeStructure';
 import { Dollar } from '../../../theme/images';
-import { getFeeStructure } from '../../../api';
+// import { getFeeStructure } from '../../../api';
 import { Button, ContractInputSelect } from '../../../common';
 import {
   accountTypeOptions,
@@ -38,189 +38,12 @@ export default function FeeStructureContainer({
   setFeeStructureErrors,
   getMonthlyServices,
   showRightTick,
+  getFeeStructureDetails,
+  manageErrorCount,
 }) {
   const [vendorSameAsSeller, setVendorSameAsSeller] = useState(
     formData?.fee_structure?.vendor?.vendor_same_as_seller || false,
   );
-
-  const checkMandatoryFieldsOfFeeType = (data, section) => {
-    let errorCount = sectionError?.[section]?.feeType
-      ? sectionError?.[section]?.feeType
-      : 0;
-
-    if (
-      data &&
-      data?.fee_structure?.[section]?.fee_type === 'Retainer Only' &&
-      !data?.fee_structure?.[section]?.monthly_retainer
-    ) {
-      errorCount = 1;
-    }
-
-    if (
-      data &&
-      data?.fee_structure?.[section]?.fee_type === 'Revenue Share Only' &&
-      !data?.fee_structure?.[section]?.rev_share
-    ) {
-      errorCount = 1;
-    }
-
-    if (
-      data &&
-      data?.fee_structure?.[section]?.fee_type === 'Retainer + % Rev Share'
-    ) {
-      if (!data?.fee_structure?.[section]?.rev_share) {
-        errorCount = 1;
-      }
-      if (!data?.fee_structure?.[section]?.monthly_retainer) {
-        errorCount = 1;
-      }
-      if (
-        !data?.fee_structure?.[section]?.rev_share &&
-        !data?.fee_structure?.[section]?.monthly_retainer
-      ) {
-        errorCount = 2;
-      }
-    }
-
-    if (section === 'seller') {
-      setSectionError((prevErrors) => ({
-        ...prevErrors,
-        seller: { feeType: errorCount },
-      }));
-    }
-
-    if (section === 'vendor') {
-      setSectionError((prevErrors) => ({
-        ...prevErrors,
-        vendor: { feeType: errorCount },
-      }));
-    }
-  };
-
-  const manageErrorCount = (type, data) => {
-    if (type === 'Seller') {
-      if (!(data && data?.fee_structure?.seller?.fee_type)) {
-        setSectionError((prevErrors) => ({
-          ...prevErrors,
-          seller: { feeType: 1 },
-          vendor: { feeType: 0 },
-        }));
-      } else {
-        checkMandatoryFieldsOfFeeType(data, 'seller');
-      }
-    }
-
-    if (type === 'Vendor') {
-      let errorCountOfVBillingReport = 0;
-      if (!(data && data?.fee_structure?.vendor?.vendor_billing_report)) {
-        errorCountOfVBillingReport = 1;
-      }
-      let errorCountOfFeeType = 0;
-
-      if (!(data && data?.fee_structure?.vendor?.fee_type)) {
-        errorCountOfFeeType = 1;
-      } else {
-        checkMandatoryFieldsOfFeeType(data, 'vendor');
-      }
-
-      setSectionError((prevErrors) => ({
-        ...prevErrors,
-        vendor: {
-          feeType: errorCountOfFeeType + errorCountOfVBillingReport,
-        },
-        seller: { feeType: 0 },
-      }));
-    }
-
-    if (type === 'Hybrid') {
-      let sellerErrorcount = 0;
-      let vendorErrorcount = 0;
-
-      if (!(data && data?.fee_structure?.seller?.fee_type)) {
-        sellerErrorcount += 1;
-        setSectionError((prevErrors) => ({
-          ...prevErrors,
-          seller: { feeType: sellerErrorcount },
-        }));
-      } else {
-        checkMandatoryFieldsOfFeeType(data, 'seller');
-      }
-
-      if (!(data && data?.fee_structure?.vendor?.fee_type)) {
-        vendorErrorcount += 1;
-
-        setSectionError((prevErrors) => ({
-          ...prevErrors,
-          vendor: { feeType: vendorErrorcount },
-        }));
-      } else {
-        checkMandatoryFieldsOfFeeType(data, 'vendor');
-      }
-
-      if (!(data && data?.fee_structure?.vendor?.vendor_billing_report)) {
-        setSectionError((prevErrors) => ({
-          ...prevErrors,
-          vendor: {
-            feeType:
-              (prevErrors?.vendor?.feeType ? prevErrors?.vendor?.feeType : 0) +
-              1,
-          },
-          seller: {
-            feeType: prevErrors?.seller?.feeType
-              ? prevErrors?.seller?.feeType
-              : 0,
-          },
-        }));
-      }
-    }
-  };
-
-  const getFeeStructureDetails = (type) => {
-    getFeeStructure(
-      formData.id,
-      type === 'Hybrid' ? ['Seller', 'Vendor'] : type,
-    ).then((res) => {
-      if (res?.status === 500) {
-        const updatedData = {
-          ...formData,
-          seller_type: { value: type, label: type },
-          fee_structure: {
-            seller: {},
-            vendor: {},
-          },
-        };
-        setFormData({
-          ...formData,
-          seller_type: { value: type, label: type },
-          fee_structure: {
-            seller: {},
-            vendor: {},
-          },
-        });
-
-        manageErrorCount(type, updatedData);
-      } else {
-        const updatedData = {
-          ...formData,
-          seller_type: { value: type, label: type },
-          fee_structure: {
-            seller: res?.data?.seller || {},
-            vendor: res?.data?.vendor || {},
-          },
-        };
-        setFormData({
-          ...formData,
-          seller_type: { value: type, label: type },
-          fee_structure: {
-            seller: res?.data?.seller || {},
-            vendor: res?.data?.vendor || {},
-          },
-        });
-
-        manageErrorCount(type, updatedData);
-      }
-    });
-  };
 
   const clearError = (event, key) => {
     if (event && event.value) {
@@ -260,10 +83,14 @@ export default function FeeStructureContainer({
 
       setFormData({
         ...formData,
-        seller_type: event?.value,
+        seller_type: { value: event?.value, label: event?.value },
         vendor_same_as_seller: false,
       });
-      getFeeStructureDetails(event.label);
+      getFeeStructureDetails(event.label, {
+        ...formData,
+        seller_type: { value: event?.value, label: event?.value },
+        vendor_same_as_seller: false,
+      });
       setUpdatedFormData({
         ...updatedFormData,
         seller_type: event?.value,
@@ -362,6 +189,7 @@ export default function FeeStructureContainer({
     }
     return sectionError.feeStructure;
   };
+
   return (
     <>
       <div className="straight-line sidepanel " />
@@ -438,6 +266,7 @@ export default function FeeStructureContainer({
                   setFeeStructureErrors={setFeeStructureErrors}
                   vendorSameAsSeller={vendorSameAsSeller}
                   setVendorSameAsSeller={setVendorSameAsSeller}
+                  manageErrorCount={manageErrorCount}
                 />
               ) : formData?.seller_type?.label === 'Hybrid' ? (
                 <>
@@ -471,6 +300,7 @@ export default function FeeStructureContainer({
                     setFeeStructureErrors={setFeeStructureErrors}
                     vendorSameAsSeller={vendorSameAsSeller}
                     setVendorSameAsSeller={setVendorSameAsSeller}
+                    manageErrorCount={manageErrorCount}
                   />
                 </>
               ) : null}
@@ -513,6 +343,9 @@ FeeStructureContainer.defaultProps = {
   setFeeStructureErrors: () => {},
   getMonthlyServices: () => {},
   showRightTick: () => {},
+  getFeeStructureDetails: () => {},
+  manageErrorCount: () => {},
+  // checkMandatoryFieldsOfFeeType: () => {},
 };
 
 FeeStructureContainer.propTypes = {
@@ -544,4 +377,7 @@ FeeStructureContainer.propTypes = {
   setFeeStructureErrors: func,
   getMonthlyServices: func,
   showRightTick: func,
+  getFeeStructureDetails: func,
+  manageErrorCount: func,
+  // checkMandatoryFieldsOfFeeType: func,
 };
