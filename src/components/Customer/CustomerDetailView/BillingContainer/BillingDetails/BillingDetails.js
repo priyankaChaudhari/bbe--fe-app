@@ -52,7 +52,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   const [paymentTermsOptions, setPaymentTermsOptions] = useState([]);
   const [paymentTermsValue, setPaymentTermsValue] = useState([]);
   const [showBtn, setShowBtn] = useState(false);
-
+  console.log('paymentTermsDataLength', paymentTermsData?.length);
   const customStyles = {
     content: {
       top: '50%',
@@ -588,28 +588,34 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
                   </div>
                 </div>
               </WhiteCard>
-
-              <WhiteCard className="mt-3">
-                <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
-                {userInfo?.role === 'BGS' ||
-                userInfo?.role === 'BGS Manager' ? (
-                  <div
-                    className="edit-details"
-                    role="presentation"
-                    onClick={() => setShowPaymentTermsModal(true)}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
+              {paymentTermsData?.length ? (
+                <WhiteCard className="mt-3">
+                  <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
+                  {userInfo?.role === 'BGS' ||
+                  userInfo?.role === 'BGS Manager' ? (
+                    <div
+                      className="edit-details"
+                      role="presentation"
+                      onClick={() => setShowPaymentTermsModal(true)}>
+                      <img src={EditOrangeIcon} alt="" />
+                      Edit
+                    </div>
+                  ) : (
+                    ''
+                  )}
+                  <div className="row">
+                    {mapPaymentTermsDefaultValues(
+                      'retainer',
+                      'Monthly Retainer',
+                    )}
+                    {mapPaymentTermsDefaultValues('rev share', 'Revenue share')}
+                    {mapPaymentTermsDefaultValues('dsp service', 'Dsp')}
+                    {mapPaymentTermsDefaultValues('upsell', 'Upsells')}
                   </div>
-                ) : (
-                  ''
-                )}
-                <div className="row">
-                  {mapPaymentTermsDefaultValues('retainer', 'Monthly Retainer')}
-                  {mapPaymentTermsDefaultValues('rev share', 'Revenue share')}
-                  {mapPaymentTermsDefaultValues('dsp service', 'Dsp')}
-                  {mapPaymentTermsDefaultValues('upsell', 'Upsells')}
-                </div>
-              </WhiteCard>
+                </WhiteCard>
+              ) : (
+                ''
+              )}
             </div>
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
