@@ -154,8 +154,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
       valueLabel = 'NET 30';
       return valueLabel;
     }
-    valueLabel = 'NET 10';
-    return valueLabel;
+    return <div style={{ textTransform: 'uppercase' }}>{value}</div>;
   };
 
   const mapPaymentTermsDefaultValues = (type, label) => {
