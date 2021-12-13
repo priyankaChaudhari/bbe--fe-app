@@ -24,7 +24,11 @@ export default function AgreementSellerVendorDetails({
 
   if (type === 'header') {
     return (
-      `${agreement?.seller_type?.label} | ${
+      `${
+        agreement?.seller_type?.label
+          ? `${agreement?.seller_type?.label} |`
+          : ''
+      } ${
         agreement?.fee_structure?.[accountType]?.fee_type ===
         'Retainer + % Rev Share'
           ? `${agreement?.fee_structure?.[accountType]?.fee_type}
@@ -49,7 +53,10 @@ export default function AgreementSellerVendorDetails({
           ? 'Additional Services'
           : 'No Additional Services'
       } ` +
-      `${agreement?.additional_one_time_services ? '+ One Time Services' : ''}`
+      `${
+        agreement?.additional_one_time_services ? '+ One Time Services' : ''
+      }` +
+      `${agreement?.dsp_fee && agreement?.dsp_length?.value ? ' + DSP' : ''}`
     );
   }
 

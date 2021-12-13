@@ -253,10 +253,11 @@ export default function FeeStructureContainer({
     if (key === 'seller_type') {
       if (
         formData?.fee_structure?.vendor?.vendor_same_as_seller &&
-        event.value === 'Hybrid'
-      ) {
-        setVendorSameAsSeller(true);
-      } else setVendorSameAsSeller(false);
+        formData.seller_type?.value !== 'Hybrid' &&
+        event.value !== 'Hybrid'
+      )
+        setVendorSameAsSeller(false);
+
       setFormData({
         ...formData,
         seller_type: event?.value,
