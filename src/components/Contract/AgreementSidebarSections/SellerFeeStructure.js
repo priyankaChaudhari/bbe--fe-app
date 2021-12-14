@@ -339,11 +339,11 @@ export default function SellerFeeStructure({
       setFormData({
         ...formData,
         fee_structure: {
-          ...formData.fee_structure,
+          ...formData?.fee_structure,
           [section]: {
-            ...formData.fee_structure?.[section],
+            ...formData?.fee_structure?.[section],
             quarterly_rev_share: {
-              ...formData.fee_structure?.[section].quarterly_rev_share,
+              ...formData?.fee_structure?.[section].quarterly_rev_share,
               [key]: event.value,
             },
           },
@@ -352,7 +352,7 @@ export default function SellerFeeStructure({
       setUpdatedFormData({
         ...updatedFormData,
         fee_structure: {
-          ...updatedFormData.fee_structure,
+          ...updatedFormData?.fee_structure,
           [section]: {
             ...updatedFormData?.fee_structure?.[section],
             quarterly_rev_share: {
@@ -366,12 +366,12 @@ export default function SellerFeeStructure({
       setFormData({
         ...formData,
         fee_structure: {
-          ...formData.fee_structure,
+          ...formData?.fee_structure,
           [section]: {
-            ...formData.fee_structure?.[section],
+            ...formData?.fee_structure?.[section],
             monthly_rev_share: {
-              ...formData.fee_structure?.[section]?.monthly_rev_share,
-              [key]: event.value,
+              ...formData?.fee_structure?.[section]?.monthly_rev_share,
+              [key]: event?.value,
             },
           },
         },
@@ -379,12 +379,12 @@ export default function SellerFeeStructure({
       setUpdatedFormData({
         ...updatedFormData,
         fee_structure: {
-          ...updatedFormData.fee_structure,
+          ...updatedFormData?.fee_structure,
           [section]: {
             ...updatedFormData?.fee_structure?.[section],
             monthly_rev_share: {
-              ...updatedFormData?.fee_structure?.[section].monthly_rev_share,
-              [key]: event.value,
+              ...updatedFormData?.fee_structure?.[section]?.monthly_rev_share,
+              [key]: event?.value,
             },
           },
         },
@@ -393,16 +393,16 @@ export default function SellerFeeStructure({
       setFormData({
         ...formData,
         fee_structure: {
-          ...formData.fee_structure,
+          ...formData?.fee_structure,
           [section]: {
-            ...formData.fee_structure[section],
+            ...formData?.fee_structure?.[section],
             [key]:
               type === 'choices' || type === 'numberformat'
-                ? event.value
-                  ? event.value
+                ? event?.value
+                  ? event?.value
                   : null
-                : event.target.value
-                ? event.target.value
+                : event?.target?.value
+                ? event?.target?.value
                 : null,
           },
         },
@@ -411,13 +411,13 @@ export default function SellerFeeStructure({
       setUpdatedFormData({
         ...updatedFormData,
         fee_structure: {
-          ...updatedFormData.fee_structure,
+          ...updatedFormData?.fee_structure,
           [section]: {
-            ...updatedFormData.fee_structure?.[section],
+            ...updatedFormData?.fee_structure?.[section],
             [key]:
               type === 'choices' || type === 'numberformat'
-                ? event.value
-                  ? event.value
+                ? event?.value
+                  ? event?.value
                   : null
                 : event?.target?.value
                 ? event.target.value
@@ -425,6 +425,7 @@ export default function SellerFeeStructure({
           },
         },
       });
+
       if (type === 'choices') {
         clearErrorCount(event, key, type);
       }
@@ -499,24 +500,24 @@ export default function SellerFeeStructure({
         }));
       }
     }
-    if (vendorSameAsSeller) {
+    if (vendorSameAsSeller && formData?.seller_type?.value === 'Hybrid') {
       const vendorId = formData?.fee_structure?.vendor?.id;
       setFormData((prevState) => ({
         ...prevState,
         fee_structure: {
-          ...prevState.fee_structure,
+          ...prevState?.fee_structure,
           vendor: {
-            ...prevState.fee_structure.seller,
+            ...prevState?.fee_structure?.seller,
             id: vendorId,
             vendor_billing_report:
-              prevState.fee_structure.vendor.vendor_billing_report,
+              prevState?.fee_structure?.vendor?.vendor_billing_report,
           },
         },
       }));
       setUpdatedFormData((prevState) => ({
         ...prevState,
         fee_structure: {
-          ...prevState.fee_structure,
+          ...prevState?.fee_structure,
           vendor: prevState?.fee_structure?.seller,
         },
       }));
