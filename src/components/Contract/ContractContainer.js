@@ -782,6 +782,10 @@ export default function ContractContainer() {
         setShowAdditionalMarketplace({
           [sellerType]: { showDropdown: true },
         });
+      } else {
+        setShowAdditionalMarketplace({
+          [sellerType]: { showDropdown: false },
+        });
       }
     }
     if (sellerType === 'Hybrid') {
