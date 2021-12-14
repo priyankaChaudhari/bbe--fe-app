@@ -255,8 +255,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         className="form-control"
         placeholder={`Enter ${item.label}`}
         type={item.type}
-        maxMenuHeight={150}
-        menuPlacement="auto"
         defaultValue={data?.[type]?.[0]?.[item.key]}
         onChange={(event) => handleChange(event, item, type)}
         maxLength={item.key === 'postal_code' ? 10 : ''}
@@ -398,6 +396,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
         }
         defaultValue={paymentTerm}
         options={getOptions()}
+        maxMenuHeight={150}
         name={invoiceType}
         components={{ DropdownIndicator }}
         onChange={(event) => handlePaymentTermChange(event, type)}
