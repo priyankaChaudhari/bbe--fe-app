@@ -1577,14 +1577,14 @@ export default function ContractContainer() {
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
-  const mapVariableMonthlyService = () => {
+  const mapVariableMonthlyService = (monthlyServicesData) => {
     const fields = [
       `<tr ><td colspan="2" style ="text-align: center; border: 1px solid black;padding: 13px; font-weight: 800">
                   Variable Monthly Services</td>
                   </tr>`,
     ];
-    if (details?.additional_monthly_services) {
-      for (const item of details.additional_monthly_services) {
+    if (monthlyServicesData) {
+      for (const item of monthlyServicesData) {
         if (item?.service?.name === 'Inventory Reconciliation') {
           fields.push(
             `<tr>
