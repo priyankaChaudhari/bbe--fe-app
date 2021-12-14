@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
+import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { shape, string } from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
@@ -790,18 +791,22 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
           role="presentation"
         />
         <ModalBox>
-          <div className="modal-body">
-            <h4>Payment Terms</h4>
-            <div className="body-content mt-3 ">
-              <div className="row">
-                {mapPaymentTermsModalDetails('retainer', 'Monthly Retainer')}
-                {mapPaymentTermsModalDetails('rev share', 'Revenue share')}
-                {mapPaymentTermsModalDetails('dsp service', 'Dsp (Additional)')}
-                {mapPaymentTermsModalDetails('upsell', 'Upsells')}
+          <ModalSelect>
+            <div className="modal-body">
+              <h4>Payment Terms</h4>
+              <div className="body-content mt-3 ">
+                <div className="row">
+                  {mapPaymentTermsModalDetails('retainer', 'Monthly Retainer')}
+                  {mapPaymentTermsModalDetails('rev share', 'Revenue share')}
+                  {mapPaymentTermsModalDetails(
+                    'dsp service',
+                    'Dsp (Additional)',
+                  )}
+                  {mapPaymentTermsModalDetails('upsell', 'Upsells')}
+                </div>
               </div>
             </div>
-          </div>
-
+          </ModalSelect>
           <div className="footer-line " />
           <div className="modal-footer">
             <Button
@@ -831,3 +836,11 @@ BillingDetails.propTypes = {
   }).isRequired,
   onBoardingId: string,
 };
+
+const ModalSelect = styled.div`
+  .modal-body .body-content {
+    max-height: 100% !important;
+    overflow-y: revert !important;
+    overflow-x: revert !important;
+  }
+`;
