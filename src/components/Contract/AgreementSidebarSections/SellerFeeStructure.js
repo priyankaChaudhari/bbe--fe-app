@@ -452,10 +452,18 @@ export default function SellerFeeStructure({
       (feeStructureErrors?.[section]?.sales_threshold &&
         (formData?.fee_structure?.[section]?.sales_threshold || event.value))
     ) {
-      if (formData && formData?.fee_structure?.vendor?.vendor_same_as_seller) {
+      if (
+        formData &&
+        formData?.fee_structure?.vendor?.vendor_same_as_seller &&
+        formData?.seller_type?.value === 'Hybrid'
+      ) {
         setSectionError({
           ...sectionError,
-          seller: { feeType: sectionError?.seller?.feeType - 1 },
+          seller: {
+            feeType: sectionError?.seller?.feeType
+              ? sectionError?.seller?.feeType - 1
+              : 0,
+          },
           vendor: {
             feeType: !(
               formData && formData?.fee_structure?.vendor?.vendor_billing_report
