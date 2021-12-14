@@ -867,6 +867,7 @@ export default function ContractContainer() {
       getcontract(splittedPath[4]).then((res) => {
         if (res && res.status === 200) {
           getMonthlyServices(res?.data?.seller_type?.value);
+          getDiscountData(res?.data?.id);
 
           setDetails(res.data);
           setFormData(res.data);
@@ -894,8 +895,6 @@ export default function ContractContainer() {
           if (history?.location?.showEditView) {
             showEditView(res?.data);
           }
-
-          getDiscountData(res?.data?.id);
         } else {
           setIsLoading({ loader: false, type: 'page' });
           setLoaderFlag(false);
@@ -1624,86 +1623,195 @@ export default function ContractContainer() {
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
-  const mapMonthlyServiceTotal = () => {
+  const calculateTotalFee = (type, serviceData, marketplaceData, accntType) => {
+    let oneTimeSubTotal = 0;
+    let monthlySubTotal = 0;
+    let oneTimeDiscount = 0;
+    let monthlyDiscount = 0;
+    let additionalMarketplacesTotal = 0;
+
+    if (formData) {
+      if (type === 'monthly') {
+        // caculate the total of additional monthly serviece
+        if (serviceData !== null) {
+          serviceData.forEach((item) => {
+            if (item && item.service) {
+              monthlySubTotal += item.service.fee;
+            } else {
+              const fixedFee = servicesFees.filter(
+                (n) => n.id === item.service_id,
+              );
+              monthlySubTotal += fixedFee[0].fee;
+            }
+          });
+        }
+        if (marketplaceData !== null) {
+          // calculate the total of additional marketplaces
+          marketplaceData.forEach((item) => {
+            if (item && item.fee) {
+              additionalMarketplacesTotal += item.fee;
+            } else {
+              additionalMarketplacesTotal += additionaMarketplaceAmount;
+            }
+          });
+
+          monthlySubTotal += additionalMarketplacesTotal;
+        }
+
+        const monthlyDiscountData = discountData.find(
+          (item) =>
+            item.service_type === 'monthly service' &&
+            item?.account_type === accntType,
+        );
+        if (monthlyDiscountData !== null) {
+          const discountType = monthlyDiscountData?.type;
+          if (discountType === 'percentage') {
+            monthlyDiscount =
+              (monthlySubTotal * monthlyDiscountData?.amount) / 100;
+          } else if (discountType === 'fixed amount') {
+            monthlyDiscount = monthlyDiscountData?.amount;
+          }
+        } else {
+          monthlyDiscount = monthlyDiscountData?.amount;
+        }
+        return {
+          monthlySubTotal,
+          monthlyAmountAfterDiscount: monthlyDiscount,
+          monthlyTotal: monthlySubTotal - monthlyDiscount,
+          monthlyDiscountType: formData.monthly_discount_type,
+          monthlyDiscount: formData.monthly_discount_amount,
+        };
+      }
+      if (
+        type === 'onetime' &&
+        formData.additional_one_time_services !== null
+      ) {
+        formData.additional_one_time_services.forEach((item) => {
+          const { quantity } = item;
+
+          if (item.custom_amazon_store_price) {
+            oneTimeSubTotal += item.custom_amazon_store_price * quantity;
+          } else if (item?.service) {
+            oneTimeSubTotal += item.service.fee * quantity;
+          } else {
+            let fixedFee = servicesFees.filter((n) => n.id === item.service_id);
+            fixedFee =
+              fixedFee && fixedFee[0] && fixedFee[0].fee ? fixedFee[0].fee : 0;
+            oneTimeSubTotal += fixedFee * quantity;
+          }
+        });
+
+        const oneTimeDiscountData = discountData.find(
+          (item) => item.service_type === 'one time service',
+        );
+
+        if (oneTimeDiscountData !== null) {
+          const discountType = oneTimeDiscountData?.type;
+          if (discountType === 'percentage') {
+            oneTimeDiscount =
+              (oneTimeSubTotal * oneTimeDiscountData?.amount) / 100;
+          } else if (discountType === 'fixed amount') {
+            oneTimeDiscount = oneTimeDiscountData?.amount;
+          }
+        } else {
+          oneTimeDiscount = oneTimeDiscountData?.amount;
+        }
+        return {
+          oneTimeSubTotal,
+          oneTimeAmountAfterDiscount: oneTimeDiscount,
+          oneTimeTotal: oneTimeSubTotal - oneTimeDiscount,
+          oneTimeDiscountType: formData.one_time_discount_type,
+          oneTimeDiscount: formData.one_time_discount_amount,
+        };
+      }
+    }
+    return 0;
+  };
+
+  const mapMonthlyServiceTotal = (
+    monthlyServicesData,
+    marketplaceData,
+    accntType,
+  ) => {
+    const totalFees = calculateTotalFee(
+      'monthly',
+      monthlyServicesData,
+      marketplaceData,
+      accntType,
+    );
     return `
     ${
-      details?.total_fee?.monthly_service_discount
-        ? `<tr style=" border: 1px solid black;">
-            <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Sub-total</td>
-            <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">${mapServiceTotal(
-              'additional_monthly_services',
-            )}
+      totalFees.monthlyAmountAfterDiscount
+        ? `<tr>
+            <td style="border: 1px solid black;padding: 13px;"> Sub-total</td>
+            <td style="border: 1px solid black;padding: 13px; text-align:right;">
+            $${displayNumber(totalFees.monthlySubTotal)}
             </td>
          </tr>`
         : ''
     }
     ${
-      details?.total_fee?.monthly_service_discount
-        ? `<tr style=" border: 1px solid black;">
-            <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Discount ${
-              details?.monthly_discount_amount &&
-              details?.monthly_discount_type === 'percentage'
-                ? `(${details?.monthly_discount_amount}%)`
+      totalFees.monthlyAmountAfterDiscount
+        ? `<tr>
+            <td style="border: 1px solid black;padding: 13px;"> Discount ${
+              totalFees?.monthlyAmountAfterDiscount &&
+              totalFees?.monthlyDiscountType === 'percentage'
+                ? `(${totalFees?.monthlyDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right"style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${
-              details?.total_fee?.monthly_service_discount
-                ? displayNumber(details?.total_fee?.monthly_service_discount)
+            <td style="border: 1px solid black;padding: 13px; text-align:right;"> -$${
+              totalFees?.monthlyAmountAfterDiscount
+                ? displayNumber(totalFees?.monthlyAmountAfterDiscount)
                 : 0
             }
             </td>
          </tr>`
         : ''
     }
-         <tr>
-            <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${
-              details?.total_fee?.monthly_service_after_discount
-                ? displayNumber(
-                    details.total_fee.monthly_service_after_discount,
-                  )
-                : 0
-            }
-            </td>
-         </tr>
-         `;
+      <tr>
+        <td style="border: 1px solid black;padding: 13px; "> Total</td>
+        <td style="border: 1px solid black;padding: 13px; text-align:right;"> 
+          $${
+            totalFees?.monthlyTotal ? displayNumber(totalFees.monthlyTotal) : 0
+          }
+        </td>
+      </tr>`;
   };
 
   const mapOnetimeServiceTotal = () => {
+    const totalFees = calculateTotalFee('onetime');
     return `
     ${
-      details?.total_fee?.onetime_service_discount
-        ? `<tr style=" border: 1px solid black;">
-            <td class="total-service" colspan="3" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px;"> Sub-total</td>
-            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">$${displayNumber(
-              details?.total_fee?.onetime_service,
+      totalFees?.oneTimeAmountAfterDiscount
+        ? `<tr>
+            <td class="total-service-borderless" style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Sub-total</td>
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${displayNumber(
+              totalFees?.oneTimeSubTotal,
             )}
             </td>
          </tr>`
         : ''
     }
-       ${
-         details?.total_fee?.onetime_service_discount
-           ? `<tr style=" border: 1px solid black;">
-            <td class="total-service" colspan="3" style="border-bottom: hidden; border-left: 1px solid black;padding: 5px 13px;"> Discount ${
-              details?.one_time_discount_amount &&
-              details?.one_time_discount_type === 'percentage'
-                ? `(${details?.one_time_discount_amount}%)`
+    ${
+      totalFees?.oneTimeAmountAfterDiscount
+        ? `<tr>
+            <td class="total-service-borderless"style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Discount ${
+              totalFees?.oneTimeAmountAfterDiscount &&
+              totalFees?.oneTimeDiscountType === 'percentage'
+                ? `(${totalFees?.oneTimeDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${displayNumber(
-              details?.total_fee?.onetime_service_discount,
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px"> -$${displayNumber(
+              totalFees?.oneTimeAmountAfterDiscount,
             )}
             </td>
          </tr>`
-           : ''
-       }
-         
+        : ''
+    }        
          <tr>
-            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
-            <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${displayNumber(
-              details?.total_fee?.onetime_service_after_discount ||
-                details?.total_fee?.onetime_service,
+            <td class="total-service" colspan="3" style=" padding-top: 5px "> Total</td>
+            <td class="total-service text-right"style="padding-top: 5px "> $${displayNumber(
+              totalFees?.oneTimeTotal,
             )}
             </td>
          </tr>
@@ -1733,7 +1841,11 @@ export default function ContractContainer() {
               monthlyServicesData,
             )}
           ${mapAdditionalMarketPlaces(marketplaceData)}
-          ${mapMonthlyServiceTotal(monthlyServicesData, marketplaceData)}
+            ${mapMonthlyServiceTotal(
+              monthlyServicesData,
+              marketplaceData,
+              accntTYpe,
+            )}
           ${mapVariableMonthlyService(monthlyServicesData)}   
         </table>
       </div>`;
@@ -2130,111 +2242,6 @@ export default function ContractContainer() {
     return RecurringLanguage;
   };
 
-  const calculateTotalFee = (type, serviceData, marketplaceData, accntType) => {
-    let oneTimeSubTotal = 0;
-    let monthlySubTotal = 0;
-    let oneTimeDiscount = 0;
-    let monthlyDiscount = 0;
-    let additionalMarketplacesTotal = 0;
-
-    if (formData) {
-      if (type === 'monthly') {
-        // caculate the total of additional monthly serviece
-        if (serviceData !== null) {
-          serviceData.forEach((item) => {
-            if (item && item.service) {
-              monthlySubTotal += item.service.fee;
-            } else {
-              const fixedFee = servicesFees.filter(
-                (n) => n.id === item.service_id,
-              );
-              monthlySubTotal += fixedFee[0].fee;
-            }
-          });
-        }
-        if (marketplaceData !== null) {
-          // calculate the total of additional marketplaces
-          marketplaceData.forEach((item) => {
-            if (item && item.fee) {
-              additionalMarketplacesTotal += item.fee;
-            } else {
-              additionalMarketplacesTotal += additionaMarketplaceAmount;
-            }
-          });
-
-          monthlySubTotal += additionalMarketplacesTotal;
-        }
-
-        const monthlyDiscountData = discountData.find(
-          (item) =>
-            item.service_type === 'monthly service' &&
-            item?.account_type === accntType,
-        );
-
-        if (monthlyDiscountData !== null) {
-          const discountType = monthlyDiscountData?.type;
-          if (discountType === 'percentage') {
-            monthlyDiscount =
-              (monthlySubTotal * monthlyDiscountData?.amount) / 100;
-          } else if (discountType === 'fixed amount') {
-            monthlyDiscount = monthlyDiscountData?.amount;
-          }
-        } else {
-          monthlyDiscount = monthlyDiscountData?.amount;
-        }
-        return {
-          monthlySubTotal,
-          monthlyAmountAfterDiscount: monthlyDiscount,
-          monthlyTotal: monthlySubTotal - monthlyDiscount,
-          monthlyDiscountType: formData.monthly_discount_type,
-          monthlyDiscount: formData.monthly_discount_amount,
-        };
-      }
-      if (
-        type === 'onetime' &&
-        formData.additional_one_time_services !== null
-      ) {
-        formData.additional_one_time_services.forEach((item) => {
-          const { quantity } = item;
-
-          if (item.custom_amazon_store_price) {
-            oneTimeSubTotal += item.custom_amazon_store_price * quantity;
-          } else if (item?.service) {
-            oneTimeSubTotal += item.service.fee * quantity;
-          } else {
-            let fixedFee = servicesFees.filter((n) => n.id === item.service_id);
-            fixedFee =
-              fixedFee && fixedFee[0] && fixedFee[0].fee ? fixedFee[0].fee : 0;
-            oneTimeSubTotal += fixedFee * quantity;
-          }
-        });
-
-        const oneTimeDiscountData = discountData.find(
-          (item) => item.service_type === 'one time service',
-        );
-
-        if (oneTimeDiscountData !== null) {
-          const discountType = oneTimeDiscountData?.type;
-          if (discountType === 'percentage') {
-            oneTimeDiscount =
-              (oneTimeSubTotal * oneTimeDiscountData?.amount) / 100;
-          } else if (discountType === 'fixed amount') {
-            oneTimeDiscount = oneTimeDiscountData?.amount;
-          }
-        } else {
-          oneTimeDiscount = oneTimeDiscountData?.amount;
-        }
-        return {
-          oneTimeSubTotal,
-          oneTimeAmountAfterDiscount: oneTimeDiscount,
-          oneTimeTotal: oneTimeSubTotal - oneTimeDiscount,
-          oneTimeDiscountType: formData.one_time_discount_type,
-          oneTimeDiscount: formData.one_time_discount_amount,
-        };
-      }
-    }
-    return 0;
-  };
   const createAgreementDoc = () => {
     setContractDesignLoader(true);
 
