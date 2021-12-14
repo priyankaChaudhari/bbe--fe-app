@@ -95,6 +95,7 @@ export default function FeeStructureContainer({
         ...updatedFormData,
         seller_type: event?.value,
       });
+      setFeeStructureErrors({});
       getMonthlyServices(event?.value);
     }
     clearError(event, key);
