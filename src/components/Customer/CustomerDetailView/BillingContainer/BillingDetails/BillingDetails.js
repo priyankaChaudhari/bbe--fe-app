@@ -128,11 +128,6 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     return '';
   };
   const renderPaymentTermLabel = (value) => {
-    // return paymentTermValueLabel
-    //   .filter((field) => field.value === value)
-    //   .map((item) => {
-    //     return item?.label;
-    //   });
     let valueLabel = '';
     if (value === 'auto pay') {
       valueLabel = 'Auto Pay';
@@ -227,8 +222,15 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
     if (item === 'card_number')
       return `************${data?.card_details?.[0]?.[item]}`;
     if (item === 'expiration_date') {
-      const getDate = data?.card_details?.[0]?.[item]?.split('-') || '';
-      return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
+      const getDate = data?.card_details?.[0]?.[item]
+        ? data.card_details[0][item].includes('-')
+          ? data.card_details[0][item].split('-')
+          : data.card_details[0][item].split('/')
+        : '';
+
+      return getDate[0].length > 2
+        ? `${getDate[1]}${getDate[0].substring(2)}`
+        : `${getDate[1]}${getDate[0]}`;
     }
     return '';
   };
