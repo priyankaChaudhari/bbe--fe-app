@@ -232,7 +232,7 @@ export default function ContractContainer() {
   const contractTypeOne = formData?.contract_type
     ?.toLowerCase()
     .includes('one');
-  const accountType = details?.seller_type?.value;
+  const accountType = formData?.seller_type?.value;
 
   const primaryMarketplaceName = details?.primary_marketplace?.name;
   const customerCompanyName = formData?.customer_id?.company_name;
@@ -755,6 +755,70 @@ export default function ContractContainer() {
     }
   };
 
+  const getServicesAccordingToAccType = (services, option) => {
+    const result =
+      services && services.filter((item) => item.account_type === option);
+    return result;
+  };
+
+  const getData = (mrktplaceData, option) => {
+    const result = getServicesAccordingToAccType(mrktplaceData, option);
+    const multi = [];
+    if (result && result.length) {
+      for (const month of result) {
+        multi.push({
+          label: month.name,
+          value: month.name,
+        });
+      }
+    }
+    return { [option]: multi };
+  };
+
+  const setMarketplaceDropdownData = () => {
+    if (accountType === 'Seller' || accountType === 'Vendor') {
+      const filterData = getData(
+        formData?.additional_marketplaces,
+        accountType,
+      );
+      if (filterData?.[accountType]?.length) {
+        setShowAdditionalMarketplace({
+          [accountType]: { showDropdown: true },
+        });
+      }
+    }
+    if (accountType === 'Hybrid') {
+      const sellerMarketplaceResult = getData(
+        formData?.additional_marketplaces,
+        'Seller',
+      );
+
+      const vendorMarketplaceResult = getData(
+        formData?.additional_marketplaces,
+        'Vendor',
+      );
+
+      if (
+        sellerMarketplaceResult?.Seller?.length &&
+        vendorMarketplaceResult?.Vendor?.length
+      ) {
+        setShowAdditionalMarketplace({
+          Seller: { showDropdown: true },
+          Vendor: { showDropdown: true },
+        });
+      } else if (sellerMarketplaceResult?.Seller?.length) {
+        setShowAdditionalMarketplace({
+          Seller: { showDropdown: true },
+          Vendor: { showDropdown: false },
+        });
+      } else if (vendorMarketplaceResult?.Vendor?.length) {
+        setShowAdditionalMarketplace({
+          Vendor: { showDropdown: true },
+          Seller: { showDropdown: false },
+        });
+      }
+    }
+  };
   const getFeeStructureDetails = (type, contract) => {
     getFeeStructure(
       contract?.id,
@@ -790,6 +854,7 @@ export default function ContractContainer() {
             vendor: res?.data?.vendor || {},
           },
         });
+        setMarketplaceDropdownData();
       }
     });
   };
@@ -933,57 +998,6 @@ export default function ContractContainer() {
     setContractError({});
   };
 
-  const getServicesAccordingToAccType = (services, option) => {
-    const result =
-      services && services.filter((item) => item.account_type === option);
-    return result;
-  };
-
-  const setMarketplaceDropdownData = (flag) => {
-    if (accountType === 'Seller' || accountType === 'Vendor') {
-      setShowAdditionalMarketplace({
-        ...showAdditionalMarketplace,
-        [accountType]: { showDropdown: flag },
-      });
-    }
-    if (accountType === 'Hybrid') {
-      const sellerMarketplaceResult = getServicesAccordingToAccType(
-        formData?.additional_marketplaces,
-        'Seller',
-      );
-
-      const vendorMarketplaceResult = getServicesAccordingToAccType(
-        formData?.additional_marketplaces,
-        'Vendor',
-      );
-
-      if (
-        sellerMarketplaceResult &&
-        sellerMarketplaceResult.length &&
-        vendorMarketplaceResult &&
-        vendorMarketplaceResult.length
-      ) {
-        setShowAdditionalMarketplace({
-          ...showAdditionalMarketplace,
-          Seller: { showDropdown: flag },
-          Vendor: { showDropdown: flag },
-        });
-      } else if (sellerMarketplaceResult && sellerMarketplaceResult.length) {
-        setShowAdditionalMarketplace({
-          ...showAdditionalMarketplace,
-          Seller: { showDropdown: flag },
-          Vendor: { showDropdown: false },
-        });
-      } else if (vendorMarketplaceResult && vendorMarketplaceResult.length) {
-        setShowAdditionalMarketplace({
-          ...showAdditionalMarketplace,
-          Vendor: { showDropdown: flag },
-          Seller: { showDropdown: false },
-        });
-      }
-    }
-  };
-
   const discardAgreementChanges = (flag) => {
     if (flag === 'No') {
       setShowDiscardModal({ ...showDiscardModal, show: false, clickedBtn: '' });
@@ -1010,12 +1024,7 @@ export default function ContractContainer() {
       setSecondMonthDate(null);
       setThirdMonthDate(null);
       setEndDate(null);
-
-      if (originalData?.additional_marketplaces?.length) {
-        setMarketplaceDropdownData(true);
-      } else {
-        setMarketplaceDropdownData(false);
-      }
+      setMarketplaceDropdownData();
       getContractDetails();
     }
   };
@@ -2616,12 +2625,7 @@ export default function ContractContainer() {
         delete updatedFormData.additional_marketplaces;
         setUpdatedFormData({ ...updatedFormData });
       }
-      if (!formData?.additional_marketplaces?.length) {
-        setMarketplaceDropdownData(false);
-      } else {
-        setMarketplaceDropdownData(true);
-      }
-
+      setMarketplaceDropdownData();
       if (updatedFormData?.primary_marketplace) {
         createPrimaryMarketplace();
       }
