@@ -775,19 +775,23 @@ export default function ContractContainer() {
     return { [option]: multi };
   };
 
-  const setMarketplaceDropdownData = () => {
-    if (accountType === 'Seller' || accountType === 'Vendor') {
-      const filterData = getData(
-        formData?.additional_marketplaces,
-        accountType,
-      );
-      if (filterData?.[accountType]?.length) {
+  const setMarketplaceDropdownData = (sellerType = accountType) => {
+    console.log(
+      '!!!!!!!!accountType',
+      accountType,
+      formData?.seller_type?.value,
+      details?.seller_type?.value,
+      sellerType,
+    );
+    if (sellerType === 'Seller' || sellerType === 'Vendor') {
+      const filterData = getData(formData?.additional_marketplaces, sellerType);
+      if (filterData?.[sellerType]?.length) {
         setShowAdditionalMarketplace({
-          [accountType]: { showDropdown: true },
+          [sellerType]: { showDropdown: true },
         });
       }
     }
-    if (accountType === 'Hybrid') {
+    if (sellerType === 'Hybrid') {
       const sellerMarketplaceResult = getData(
         formData?.additional_marketplaces,
         'Seller',
@@ -854,7 +858,7 @@ export default function ContractContainer() {
             vendor: res?.data?.vendor || {},
           },
         });
-        setMarketplaceDropdownData();
+        setMarketplaceDropdownData(type);
       }
     });
   };

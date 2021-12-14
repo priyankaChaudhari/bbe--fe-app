@@ -25,6 +25,7 @@ function AdditionalMarketplaces({
   setShowAdditionalMarketplace,
   showAdditionalMarketplace,
 }) {
+  console.log(defaultData, showAdditionalMarketplace);
   const originalDataAdditionalMarketplacesLength =
     originalData?.additional_marketplaces?.length;
 
