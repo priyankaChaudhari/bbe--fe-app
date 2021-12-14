@@ -3371,15 +3371,17 @@ export default function ContractContainer() {
     if (formData?.seller_type?.value === 'Hybrid') {
       if (
         formData?.fee_structure?.seller?.fee_type === 'Revenue Share Only' ||
-        formData?.fee_structure?.seller?.fee_type ===
-          'Retainer + % Rev Share' ||
+        formData?.fee_structure?.seller?.fee_type === 'Retainer + % Rev Share'
+      ) {
+        if (formData?.fee_structure?.seller?.rev_share < 3) {
+          return true;
+        }
+      }
+      if (
         formData?.fee_structure?.vendor?.fee_type === 'Revenue Share Only' ||
         formData?.fee_structure?.vendor?.fee_type === 'Retainer + % Rev Share'
       ) {
-        if (
-          formData?.fee_structure?.seller?.rev_share < 3 ||
-          formData?.fee_structure?.vendor?.rev_share < 3
-        ) {
+        if (formData?.fee_structure?.vendor?.rev_share < 3) {
           return true;
         }
       }
@@ -3391,15 +3393,15 @@ export default function ContractContainer() {
     const dspFee = Number(details?.dsp_fee);
     const contractTermLength = parseInt(details?.length?.value, 10);
     if (details?.contract_type?.toLowerCase().includes('recurring')) {
-      const revShare = Number(details?.rev_share?.value);
+      console.log(checkRevShareApprovalCondition(), isBillingCapExists());
 
       if (details && (details.draft_from || !details.hs_deal_id)) {
         return true;
       }
+
       if (
         (showSection.dspAddendum && dspFee < 10000) ||
         checkRevShareApprovalCondition() ||
-        revShare < 3 ||
         contractTermLength < 12 ||
         isBillingCapExists()
       ) {
