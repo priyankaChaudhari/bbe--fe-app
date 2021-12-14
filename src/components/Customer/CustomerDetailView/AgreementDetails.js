@@ -86,7 +86,7 @@ export default function AgreementDetails({
   const [replaceExisting, setReplaceExisting] = useState('alongside');
   const [replacedContract, setReplacedContract] = useState('');
   const [contractLoader, setContractLoader] = useState(false);
-  const [accountType, setAccountType] = useState('seller');
+  const [accountType, setAccountType] = useState({});
 
   const customStyles = {
     content: {
@@ -333,6 +333,7 @@ export default function AgreementDetails({
                   type="header"
                   setAccountType={setAccountType}
                   accountType={accountType}
+                  multipleAgreement={multipleAgreement}
                 />
               ) : (
                 ''
@@ -594,22 +595,32 @@ export default function AgreementDetails({
                     <ul className="grey-box-tab ">
                       <li
                         className={
-                          accountType === 'seller'
+                          accountType[agreement.id] === 'seller'
                             ? 'account-type active'
                             : 'account-type'
                         }
                         role="presentation"
-                        onClick={() => setAccountType('seller')}>
+                        onClick={() =>
+                          setAccountType({
+                            ...accountType,
+                            [agreement.id]: 'seller',
+                          })
+                        }>
                         Seller Fee Structure
                       </li>
                       <li
                         className={
-                          accountType === 'vendor'
+                          accountType[agreement.id] === 'vendor'
                             ? 'account-type active'
                             : 'account-type'
                         }
                         role="presentation"
-                        onClick={() => setAccountType('vendor')}>
+                        onClick={() =>
+                          setAccountType({
+                            ...accountType,
+                            [agreement.id]: 'vendor',
+                          })
+                        }>
                         Vendor Fee Structure
                       </li>
                     </ul>
@@ -631,16 +642,18 @@ export default function AgreementDetails({
                           <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                             <div className="label">Vendor Billing Report</div>
                             <div className="label-info text-medium">
-                              {agreement?.fee_structure?.[accountType]
-                                ?.vendor_billing_report || ''}
+                              {agreement?.fee_structure?.[
+                                accountType[agreement.id]
+                              ]?.vendor_billing_report || ''}
                             </div>
                           </div>
                         ) : null}
                         <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                           <div className="label">FEE TYPE</div>
                           <div className="label-info text-medium">
-                            {agreement?.fee_structure?.[accountType]
-                              ?.fee_type || ''}
+                            {agreement?.fee_structure?.[
+                              accountType[agreement.id]
+                            ]?.fee_type || ''}
                           </div>
                         </div>
                         <AgreementSellerVendorDetails
@@ -648,6 +661,7 @@ export default function AgreementDetails({
                           type="html"
                           setAccountType={setAccountType}
                           accountType={accountType}
+                          multipleAgreement={multipleAgreement}
                         />
                         <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                           <div className="label">Content Optimization</div>
@@ -696,7 +710,7 @@ export default function AgreementDetails({
                         ? agreement.additional_marketplaces.map((item) => (
                             <>
                               {item?.account_type?.toLowerCase() ===
-                              accountType ? (
+                              accountType[agreement.id] ? (
                                 <li key={item.id}>
                                   {item.name || ''}{' '}
                                   {item.is_primary ? '(Primary)' : ''}
@@ -714,7 +728,7 @@ export default function AgreementDetails({
                         ? agreement.additional_monthly_services?.map((item) => (
                             <>
                               {item?.account_type?.toLowerCase() ===
-                              accountType ? (
+                              accountType[agreement.id] ? (
                                 <li key={item.id}>
                                   {(item &&
                                     item.service &&
@@ -750,7 +764,8 @@ export default function AgreementDetails({
                 )}
                 {agreement?.additional_monthly_services?.map((item) => (
                   <>
-                    {item.account_type?.toLowerCase() === accountType &&
+                    {item.account_type?.toLowerCase() ===
+                      accountType[agreement.id] &&
                     item?.service?.name === 'DSP Advertising' ? (
                       <>
                         <div className="straight-line horizontal-line pt-3 mb-3" />
