@@ -112,19 +112,19 @@ export const paymentTermValueLabel = [
   },
   {
     value: 'due on receipt',
-    label: 'Due on Receipt',
+    label: 'Due on receipt',
   },
   {
     value: 'net 7',
-    label: 'NET 7',
+    label: 'NET-7',
   },
   {
     value: 'net 14',
-    label: 'NET 14',
+    label: 'NET-14',
   },
   {
     value: 'net 30',
-    label: 'NET 30',
+    label: 'NET-30',
   },
 ];
 export const paymentType = [
