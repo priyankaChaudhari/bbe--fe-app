@@ -1474,109 +1474,166 @@ export default function ContractContainer() {
     return THAD_SIGN_IMG;
   };
 
-  const mapMonthlyServices = (key) => {
-    if (details && details[key]) {
-      const fields = [];
-      for (const item of details[key]) {
-        if (key !== 'additional_one_time_services') {
+  const customAmazonStorePrice = (fee) => {
+    return `<td style="border: 1px solid black;padding: 13px;">
+        ${fee ? `$${displayNumber(fee)}` : '$0'}
+      </td>`;
+  };
+  const tdService = (service, fee) => {
+    return `<td style="border: 1px solid black; padding: 13px;">
+          ${
+            service.quantity && fee
+              ? `$${displayNumber(service.quantity * fee)}`
+              : '$0'
+          }
+        </td>
+        `;
+  };
+  const mapMonthlyServices = (key, monthlyServicesData) => {
+    const fields = [];
+    if (key !== 'additional_one_time_services') {
+      if (monthlyServicesData) {
+        for (const item of monthlyServicesData) {
+          const fixedFee = servicesFees.filter((n) => n.id === item.service_id);
           if (
             (item.service && item.service.name !== undefined) ||
             item.name !== undefined
           ) {
-            if (item?.service?.name !== 'Inventory Reconciliation') {
+            if (
+              item.name
+                ? item.name !== 'Inventory Reconciliation'
+                : item.service.name !== 'Inventory Reconciliation'
+            ) {
               fields.push(
                 `<tr>
                 <td style="border: 1px solid black;padding: 13px;">${
                   item.service ? item.service.name : item?.name
                 }</td>
                 ${
-                  item.name
-                    ? item.name === 'DSP Advertising'
-                    : item.service.name === 'DSP Advertising'
-                    ? `<td style="border: 1px solid black;padding: 13px;">N/A</td>`
-                    : `<td style="border: 1px solid black;padding: 13px;">$${
+                  item.service?.fee
+                    ? `<td style="border: 1px solid black;padding: 13px;">$${
                         item.service
-                          ? displayNumber(item.service.fee)
+                          ? `${displayNumber(item.service.fee)}`
                           : item.fee
                           ? displayNumber(item.fee)
                           : ''
                       } /month
-                </td>`
+                  </td>`
+                    : (
+                        item.name
+                          ? item.name === 'DSP Advertising'
+                          : item.service.name === 'DSP Advertising'
+                      )
+                    ? `<td style="border: 1px solid black;padding: 13px;">N/A</td>`
+                    : `<td>
+                    ${
+                      fixedFee && fixedFee[0] && fixedFee[0].fee
+                        ? `$${displayNumber(fixedFee[0].fee)} /month`
+                        : '$0'
+                    }
+                    </td>`
                 }
                 </tr>`,
               );
             }
           }
-        } else {
-          fields.push(
-            `<tr>
-                <td style="border: 1px solid black;padding: 13px;">${
-                  item?.quantity ? displayNumber(item.quantity) : 0
-                }</td>
-            <td style="border: 1px solid black;padding: 13px;">${
-              item.service ? item.service.name : item && item.name
-            }</td>
-               ${
-                 (
-                   item.name
-                     ? item.name.includes('Amazon Store Package Custom')
-                     : item.service.name.includes('Amazon Store Package Custom')
-                 )
-                   ? item.custom_amazon_store_price
-                     ? `<td style="border: 1px solid black;padding: 13px;">
-                                $${displayNumber(
-                                  item.custom_amazon_store_price,
-                                )}
-                               </td>`
-                     : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
-                   : item?.service?.fee
-                   ? `<td style="border: 1px solid black;padding: 13px;">
-                           $${(item?.service?.fee ? item.service.fee : '')
-                             .toString()
-                             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} </td>`
-                   : `<td style="border: 1px solid black;padding: 13px;">Yet to save</td>`
-               }  
-            <td style="border: 1px solid black;padding: 13px;">$${(item.service
-              .name !== 'Amazon Store Package Custom'
-              ? item.quantity * item.service.fee
-              : item.quantity * item.custom_amazon_store_price
-            )
-              .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              </td>
-            </tr>`,
-          );
         }
       }
-      return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
+    } else if (formData && formData.additional_one_time_services) {
+      formData.additional_one_time_services.forEach((service) => {
+        const fixedFee = servicesFees.filter(
+          (n) => n.id === service.service_id,
+        );
+        return fields.push(
+          `<tr>
+            <td style="border: 1px solid black;padding: 13px;">
+              ${service.quantity ? displayNumber(service.quantity) : 0}
+            </td>                 
+            <td style="border: 1px solid black;padding: 13px;">
+              ${
+                service.name
+                  ? service.name
+                  : service.service?.name
+                  ? service.service.name
+                  : ''
+              }
+            </td>            
+            ${
+              (
+                service && service.name
+                  ? service.name.includes('Amazon Store Package Custom')
+                  : service?.service?.name.includes(
+                      'Amazon Store Package Custom',
+                    )
+              )
+                ? service.custom_amazon_store_price
+                  ? `<td>$${displayNumber(
+                      service.custom_amazon_store_price,
+                    )}</td>`
+                  : customAmazonStorePrice(
+                      fixedFee && fixedFee[0] && fixedFee[0].fee,
+                    )
+                : service?.service?.fee
+                ? customAmazonStorePrice(service?.service?.fee)
+                : customAmazonStorePrice(
+                    fixedFee && fixedFee[0] && fixedFee[0].fee,
+                  )
+            }
+            ${
+              (
+                service && service.name
+                  ? service.name !== 'Amazon Store Package Custom'
+                  : service &&
+                    service.service?.name !== 'Amazon Store Package Custom'
+              )
+                ? service.quantity && service.service?.fee
+                  ? tdService(service, service.service?.fee)
+                  : tdService(
+                      service,
+                      fixedFee && fixedFee[0] && fixedFee[0].fee,
+                    )
+                : service.quantity && service.custom_amazon_store_price
+                ? tdService(service, service.custom_amazon_store_price)
+                : tdService(service, fixedFee && fixedFee[0] && fixedFee[0].fee)
+            }                
+          </tr>`,
+        );
+      });
     }
-    return '';
+    return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
 
-  const mapAdditionalMarketPlaces = () => {
+  const mapAdditionalMarketPlaces = (marketplaceData) => {
     const fields = [];
-    if (details?.additional_marketplaces) {
-      for (const item of details.additional_marketplaces) {
+    if (marketplaceData) {
+      for (const item of marketplaceData) {
         fields.push(
-          `<tr>
-      <td style="border: 1px solid black;padding: 13px;">${
-        item.service ? item.service.name : item && item.name
-      }</td>
-                    <td style="border: 1px solid black;padding: 13px;">$${
-                      item.service
-                        ? displayNumber(item.service.fee)
-                        : item.fee
-                        ? displayNumber(item.fee)
-                        : ''
-                    } /month
-                    </td>
-      </tr>`,
+          `<tr> 
+            <td style="border: 1px solid black;padding: 13px;">${
+              item.service ? item.service.name : item?.name
+            }</td>
+            ${
+              item?.fee
+                ? `<td style="border: 1px solid black;padding: 13px;">
+                $${
+                  item.service
+                    ? displayNumber(item.service.fee)
+                    : item.fee
+                    ? displayNumber(item.fee)
+                    : ''
+                }
+                /month
+              </td>`
+                : `<td>$${displayNumber(
+                    additionaMarketplaceAmount,
+                  )} /month</td>`
+            }
+          </tr>`,
         );
       }
     }
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
   };
-
   const mapVariableMonthlyService = (monthlyServicesData) => {
     const fields = [
       `<tr ><td colspan="2" style ="text-align: center; border: 1px solid black;padding: 13px; font-weight: 800">
@@ -1742,9 +1799,9 @@ export default function ContractContainer() {
     return `
     ${
       totalFees.monthlyAmountAfterDiscount
-        ? `<tr>
-            <td style="border: 1px solid black;padding: 13px;"> Sub-total</td>
-            <td style="border: 1px solid black;padding: 13px; text-align:right;">
+        ? `<tr style=" border: 1px solid black;">
+            <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Sub-total</td>
+            <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">
             $${displayNumber(totalFees.monthlySubTotal)}
             </td>
          </tr>`
@@ -1752,14 +1809,14 @@ export default function ContractContainer() {
     }
     ${
       totalFees.monthlyAmountAfterDiscount
-        ? `<tr>
-            <td style="border: 1px solid black;padding: 13px;"> Discount ${
+        ? `<tr style=" border: 1px solid black;">
+            <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Discount ${
               totalFees?.monthlyAmountAfterDiscount &&
               totalFees?.monthlyDiscountType === 'percentage'
                 ? `(${totalFees?.monthlyDiscount}%)`
                 : ''
             }</td>
-            <td style="border: 1px solid black;padding: 13px; text-align:right;"> -$${
+            <td class="total-service text-right"style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${
               totalFees?.monthlyAmountAfterDiscount
                 ? displayNumber(totalFees?.monthlyAmountAfterDiscount)
                 : 0
@@ -1769,8 +1826,8 @@ export default function ContractContainer() {
         : ''
     }
       <tr>
-        <td style="border: 1px solid black;padding: 13px; "> Total</td>
-        <td style="border: 1px solid black;padding: 13px; text-align:right;"> 
+        <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
+        <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> 
           $${
             totalFees?.monthlyTotal ? displayNumber(totalFees.monthlyTotal) : 0
           }
@@ -1783,9 +1840,9 @@ export default function ContractContainer() {
     return `
     ${
       totalFees?.oneTimeAmountAfterDiscount
-        ? `<tr>
-            <td class="total-service-borderless" style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Sub-total</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${displayNumber(
+        ? `<tr style=" border: 1px solid black;">
+            <td  class="total-service" colspan="3" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px;"> Sub-total</td>
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">$${displayNumber(
               totalFees?.oneTimeSubTotal,
             )}
             </td>
@@ -1794,14 +1851,14 @@ export default function ContractContainer() {
     }
     ${
       totalFees?.oneTimeAmountAfterDiscount
-        ? `<tr>
-            <td class="total-service-borderless"style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Discount ${
+        ? `<tr style=" border: 1px solid black;">
+            <td class="total-service" colspan="3" style="border-bottom: hidden; border-left: 1px solid black;padding: 5px 13px;"> Discount ${
               totalFees?.oneTimeAmountAfterDiscount &&
               totalFees?.oneTimeDiscountType === 'percentage'
                 ? `(${totalFees?.oneTimeDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px"> -$${displayNumber(
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${displayNumber(
               totalFees?.oneTimeAmountAfterDiscount,
             )}
             </td>
@@ -1809,8 +1866,8 @@ export default function ContractContainer() {
         : ''
     }        
          <tr>
-            <td class="total-service" colspan="3" style=" padding-top: 5px "> Total</td>
-            <td class="total-service text-right"style="padding-top: 5px "> $${displayNumber(
+            <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
+            <td  class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${displayNumber(
               totalFees?.oneTimeTotal,
             )}
             </td>
