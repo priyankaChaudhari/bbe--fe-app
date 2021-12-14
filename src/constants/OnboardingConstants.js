@@ -108,7 +108,7 @@ export const billingAddress = [
 export const paymentTermValueLabel = [
   {
     value: 'auto pay',
-    label: 'Autopay',
+    label: 'AutoPay',
   },
   {
     value: 'due on receipt',
