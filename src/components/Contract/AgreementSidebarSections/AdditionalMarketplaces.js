@@ -291,9 +291,7 @@ function AdditionalMarketplaces({
                 accountType,
               );
             }}
-            defaultChecked={
-              showAdditionalMarketplace[accountType]?.showDropdown
-            }
+            checked={showAdditionalMarketplace[accountType]?.showDropdown}
           />
           <span className="checkmark" />
         </label>
