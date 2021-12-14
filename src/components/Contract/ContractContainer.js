@@ -2672,11 +2672,11 @@ export default function ContractContainer() {
         axios.spread((...responses) => {
           const additionalMonthlySerRes = responses[0];
           const additionalOneTimeServRes = responses[1];
-          const contractRes = responses[2];
-          const addendumRes = responses[3];
-          const updateCustomerRes = responses[4];
-          const sellerFeeStructureRes = responses[5];
-          const vendorFeeStructureRes = responses[6];
+          const addendumRes = responses[2];
+          const updateCustomerRes = responses[3];
+          const sellerFeeStructureRes = responses[4];
+          const vendorFeeStructureRes = responses[5];
+          const contractRes = responses[6];
 
           setIsLoading({ loader: false, type: 'button' });
           setIsLoading({ loader: false, type: 'page' });
@@ -3318,11 +3318,11 @@ export default function ContractContainer() {
       const apis = [
         additionalMonthlyApi,
         additionalOneTimeApi,
-        AccountApi,
         AddendumApi,
         updateCustomerApi,
         sellerFeeStructureApi,
         vendorFeeStructureApi,
+        AccountApi,
       ];
 
       if (
@@ -3393,8 +3393,6 @@ export default function ContractContainer() {
     const dspFee = Number(details?.dsp_fee);
     const contractTermLength = parseInt(details?.length?.value, 10);
     if (details?.contract_type?.toLowerCase().includes('recurring')) {
-      console.log(checkRevShareApprovalCondition(), isBillingCapExists());
-
       if (details && (details.draft_from || !details.hs_deal_id)) {
         return true;
       }
