@@ -232,9 +232,8 @@ function StatementOfWork({
           value: month.name,
         });
       }
-      return { [option]: multi };
     }
-    return data;
+    return { [option]: multi };
   };
 
   return contractType?.toLowerCase()?.includes('one') ||

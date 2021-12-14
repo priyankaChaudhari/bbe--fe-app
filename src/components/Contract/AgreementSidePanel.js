@@ -311,7 +311,7 @@ export default function AgreementSidePanel({
     setSelectedAmazonStorePackService(serviceData);
 
     if (formDataAdditionalMarketplacesLength) {
-      setMarketplaceDropdownData(true);
+      setMarketplaceDropdownData();
     }
   }, [agreementData, isDocRendered]);
 
