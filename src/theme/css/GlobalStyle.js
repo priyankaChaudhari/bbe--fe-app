@@ -1173,6 +1173,9 @@ fieldset {
 .react-pdf__Page__textContent {
   box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
   margin-bottom: 20px;
+  span {
+    transform: none !important;
+  }
 }
 .react-pdf__message .react-pdf__message--error {
   text-align: center !important;
