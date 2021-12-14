@@ -776,13 +776,6 @@ export default function ContractContainer() {
   };
 
   const setMarketplaceDropdownData = (sellerType = accountType) => {
-    console.log(
-      '!!!!!!!!accountType',
-      accountType,
-      formData?.seller_type?.value,
-      details?.seller_type?.value,
-      sellerType,
-    );
     if (sellerType === 'Seller' || sellerType === 'Vendor') {
       const filterData = getData(formData?.additional_marketplaces, sellerType);
       if (filterData?.[sellerType]?.length) {
