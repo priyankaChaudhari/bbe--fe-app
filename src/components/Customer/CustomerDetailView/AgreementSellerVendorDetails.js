@@ -51,8 +51,10 @@ export default function AgreementSellerVendorDetails({
           ? `${agreement?.seller_type?.label} |`
           : ''
       } ${
-        agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type ===
-        'Retainer + % Rev Share'
+        !agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
+          ? ''
+          : agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type ===
+            'Retainer + % Rev Share'
           ? `${agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type}
           (${
             agreement?.fee_structure?.[accountType[agreement.id]]
