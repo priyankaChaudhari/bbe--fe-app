@@ -73,7 +73,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
   };
   const renderDspToolTipInfo = `The payment terms you select here will only apply to one-time and
           permanent additional DSP invoices. <br />
-          Standard monthly DSP invoices have default payment terms which cannot
+          (Standard monthly DSP invoices have default payment terms which cannot
           be changed)`;
 
   const billingDetails = useCallback(() => {
