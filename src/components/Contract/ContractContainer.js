@@ -949,7 +949,7 @@ export default function ContractContainer() {
     getOneTimeService().then((r) => {
       setOneTimeService(r?.data);
 
-      if (r?.data) {
+      if (r?.data?.length) {
         const result = [];
         r.data.forEach((item) => {
           if (item.label.includes('Amazon Store Package')) {
