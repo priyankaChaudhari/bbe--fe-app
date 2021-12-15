@@ -126,6 +126,18 @@ export const paymentTermValueLabel = [
     value: 'net 30',
     label: 'NET-30',
   },
+  {
+    value: 'net 10',
+    label: 'NET-10',
+  },
+  {
+    value: 'net 15',
+    label: 'NET-15',
+  },
+  {
+    value: 'net 60',
+    label: 'NET-60',
+  },
 ];
 export const paymentType = [
   { key: 'ach', label: 'ACH', type: 'radio' },
