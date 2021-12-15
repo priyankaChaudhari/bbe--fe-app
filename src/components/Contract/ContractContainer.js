@@ -996,6 +996,8 @@ export default function ContractContainer() {
     setAdditionalMonthlySerError({});
     setAdditionalOnetimeSerError({});
     setContractError({});
+    setCustomerErrors({});
+    setFeeStructureErrors({});
   };
 
   const discardAgreementChanges = (flag) => {
@@ -1567,7 +1569,7 @@ export default function ContractContainer() {
                     )
               )
                 ? service.custom_amazon_store_price
-                  ? `<td>$${displayNumber(
+                  ? `<td style="border: 1px solid black;padding: 13px;">$${displayNumber(
                       service.custom_amazon_store_price,
                     )}</td>`
                   : customAmazonStorePrice(
