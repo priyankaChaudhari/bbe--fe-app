@@ -13,9 +13,7 @@ const InvoiceAdjust = ({
   returnTotalAmount,
   parseNumber,
 }) => {
-  // useEffect(() => {
-  //   console.log('----=====', invoiceInputs);
-  // }, [invoiceInputs]);
+  const { currentBudget, newBudget } = returnTotalAmount();
   const onChangeInput = (input, { target }) => {
     if (invoiceInputs && invoiceInputs.length > 0) {
       let flag = 0;
@@ -109,14 +107,10 @@ const InvoiceAdjust = ({
             <div className="normal-text text-bold ">Total</div>
           </div>
           <div className="col-4 text-left mt-3">
-            <div className="normal-text text-bold">
-              ${returnTotalAmount()?.currentBudget}
-            </div>
+            <div className="normal-text text-bold">${currentBudget}</div>
           </div>
           <div className="col-4 text-left mt-3">
-            <div className="normal-text text-bold">
-              ${returnTotalAmount()?.newBudget}
-            </div>
+            <div className="normal-text text-bold">${newBudget}</div>
           </div>
         </div>
       </div>

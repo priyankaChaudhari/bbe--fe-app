@@ -15,6 +15,7 @@ const InvoiceAdjustConfirm = ({
   adjustmentData,
   returnTotalAmount,
 }) => {
+  const { currentBudget, newBudget } = returnTotalAmount();
   return (
     <>
       <ModalBox>
@@ -93,9 +94,7 @@ const InvoiceAdjustConfirm = ({
                 <div className="normal-text text-bold">Total invoice</div>
               </div>
               <div className="col-2 text-left">
-                <div className="normal-text text-bold">
-                  ${returnTotalAmount()?.currentBudget}
-                </div>
+                <div className="normal-text text-bold">${currentBudget}</div>
               </div>
               <div className="col-1 text-left">
                 <div className="normal-text">
@@ -103,24 +102,14 @@ const InvoiceAdjustConfirm = ({
                 </div>
               </div>
               <div className="col-2 text-left">
-                <div className="normal-text text-bold">
-                  ${returnTotalAmount()?.newBudget}
-                </div>
+                <div className="normal-text text-bold">${newBudget}</div>
               </div>
               <div className="col-3 text-left">
                 <div className="normal-text text-bold">
                   {' '}
-                  {returnTotalAmount()?.newBudget -
-                    returnTotalAmount()?.currentBudget >
-                  0
-                    ? `+${Math.abs(
-                        returnTotalAmount()?.currentBudget -
-                          returnTotalAmount()?.newBudget,
-                      )}`
-                    : `-${Math.abs(
-                        returnTotalAmount()?.currentBudget -
-                          returnTotalAmount()?.newBudget,
-                      )}`}
+                  {newBudget - currentBudget > 0
+                    ? `+${Math.abs(currentBudget - newBudget)}`
+                    : `-${Math.abs(currentBudget - newBudget)}`}
                 </div>
               </div>
             </div>

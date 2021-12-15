@@ -96,4 +96,5 @@ export {
   TableGap,
   DropDownIndicator as DropdownIndicator,
   TableMobileView,
+  DropDownIndicator as DropdownIndicator,
 };
