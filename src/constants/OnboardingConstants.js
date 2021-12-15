@@ -127,6 +127,10 @@ export const paymentTermValueLabel = [
     label: 'NET-30',
   },
   {
+    value: 'net 9',
+    label: 'NET-9',
+  },
+  {
     value: 'net 10',
     label: 'NET-10',
   },
