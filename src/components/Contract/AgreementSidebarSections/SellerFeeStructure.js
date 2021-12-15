@@ -820,6 +820,13 @@ export default function SellerFeeStructure({
                 ) : (
                   ''
                 )}
+                {field.key === 'billing_cap' ? (
+                  <ErrorMsg>
+                    {feeStructureErrors?.[section]?.billing_cap}
+                  </ErrorMsg>
+                ) : (
+                  ''
+                )}
               </>
             ))}
           </>
