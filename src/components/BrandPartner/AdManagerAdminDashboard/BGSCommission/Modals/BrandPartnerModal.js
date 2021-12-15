@@ -124,7 +124,9 @@ const BrandPartnerModal = ({
                               width={header.width}
                               className=" text-left"
                               key={header.key}>
-                              {header.label}
+                              {header.label === 'TEAM MEMBER'
+                                ? 'PARTNERS'
+                                : header.label}
                             </th>
                           ))}
                         </tr>
@@ -318,7 +320,7 @@ export default BrandPartnerModal;
 BrandPartnerModal.propTypes = {
   showModal: bool.isRequired,
   setShowModal: func.isRequired,
-  Bgs: shape.isRequired,
+  Bgs: shape({}).isRequired,
   startDate: string.isRequired,
   endDate: string.isRequired,
 };
