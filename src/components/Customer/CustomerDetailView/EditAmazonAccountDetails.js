@@ -27,43 +27,31 @@ export default function EditAmazonAccountDetails({
     setIsLoading({ loader: false, type: 'button' });
     setShowModal(false);
     sellerVendorCall(
-      selectedMarketplace && selectedMarketplace.account_type,
-      selectedMarketplace && selectedMarketplace.value,
+      selectedMarketplace?.account_type,
+      selectedMarketplace?.value,
       selectedMarketplace,
     );
     getActivityLogInfo();
   };
 
   const vendorAccount = (vendor) => {
-    saveAmazonVendorAccount(
-      vendor,
-      amazonDetails && amazonDetails.Vendor && amazonDetails.Vendor.id,
-    ).then((re) => {
-      if ((re && re.status === 201) || (re && re.status === 200))
-        afterSuccessAPI();
-
-      if (re && re.status === 400) {
-        setApiError(re && re.data);
+    saveAmazonVendorAccount(vendor, amazonDetails?.Vendor?.id).then((res) => {
+      if (res?.status === 201 || res?.status === 200) afterSuccessAPI();
+      if (res?.status === 400) {
+        setApiError(res?.data);
         setIsLoading({ loader: false, type: 'button' });
       }
     });
   };
 
   const sellerAccount = (seller) => {
-    saveAmazonSellerAccount(
-      seller,
-      amazonDetails && amazonDetails.Seller && amazonDetails.Seller.id,
-    ).then((res) => {
-      if ((res && res.status === 201) || (res && res.status === 200))
-        afterSuccessAPI();
+    saveAmazonSellerAccount(seller, amazonDetails?.Seller?.id).then((res) => {
+      if (res?.status === 201 || res?.status === 200) afterSuccessAPI();
 
-      if (res && res.status === 400) {
+      if (res?.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
-        setApiError(res && res.data);
-        if (
-          selectedMarketplace &&
-          selectedMarketplace.account_type === 'Hybrid'
-        ) {
+        setApiError(res?.data);
+        if (selectedMarketplace?.account_type === 'Hybrid') {
           const div = document.getElementById('scroll');
           $('#scroll').animate(
             {
@@ -79,42 +67,28 @@ export default function EditAmazonAccountDetails({
   const hybridAccount = (seller, vendor) => {
     axios
       .all([
-        saveAmazonSellerAccount(
-          seller,
-          amazonDetails && amazonDetails.Seller && amazonDetails.Seller.id,
-        ),
-        saveAmazonVendorAccount(
-          vendor,
-          amazonDetails && amazonDetails.Vendor && amazonDetails.Vendor.id,
-        ),
+        saveAmazonSellerAccount(seller, amazonDetails?.Seller?.id),
+        saveAmazonVendorAccount(vendor, amazonDetails?.Vendor?.id),
       ])
       .then(
         axios.spread((...res) => {
           if (
-            ((res[0] && res[0].status === 201) ||
-              (res[0] && res[0].status === 200)) &&
-            ((res[1] && res[1].status === 201) ||
-              (res[1] && res[1].status === 200))
+            (res?.[0]?.status === 201 || res?.[0]?.status === 200) &&
+            (res?.[1]?.status === 201 || res?.[1]?.status === 200)
           )
             afterSuccessAPI();
-          if (
-            (res[0] && res[0].status === 400) ||
-            (res[1] && res[1].status === 400)
-          ) {
+          if (res?.[0]?.status === 400 || res?.[1]?.status === 400) {
             let sel = {};
             let ven = {};
-            if (res[0] && res[0].status === 400) {
-              sel = res[0] && res[0].data;
+            if (res?.[0]?.status === 400) {
+              sel = res?.[0]?.data;
             }
-            if (res[1] && res[1].status === 400) {
-              ven = res[1] && res[1].data;
+            if (res?.[1]?.status === 400) {
+              ven = res?.[1]?.data;
             }
             setApiError({ Seller: sel, Vendor: ven });
             setIsLoading({ loader: false, type: 'button' });
-            if (
-              selectedMarketplace &&
-              selectedMarketplace.account_type === 'Hybrid'
-            ) {
+            if (selectedMarketplace?.account_type === 'Hybrid') {
               const div = document.getElementById('scroll');
               $('#scroll').animate(
                 {
@@ -132,17 +106,15 @@ export default function EditAmazonAccountDetails({
     setIsLoading({ loader: true, type: 'button' });
     const seller = {
       ...formData.Seller,
-      marketplace: selectedMarketplace && selectedMarketplace.value,
+      marketplace: selectedMarketplace?.value,
     };
     const vendor = {
       ...formData.Vendor,
-      marketplace: selectedMarketplace && selectedMarketplace.value,
+      marketplace: selectedMarketplace?.value,
     };
-    if (selectedMarketplace && selectedMarketplace.account_type === 'Seller')
-      sellerAccount(seller);
-    if (selectedMarketplace && selectedMarketplace.account_type === 'Vendor')
-      vendorAccount(vendor);
-    if (selectedMarketplace && selectedMarketplace.account_type === 'Hybrid')
+    if (selectedMarketplace?.account_type === 'Seller') sellerAccount(seller);
+    if (selectedMarketplace?.account_type === 'Vendor') vendorAccount(vendor);
+    if (selectedMarketplace?.account_type === 'Hybrid')
       hybridAccount(seller, vendor);
   };
 
