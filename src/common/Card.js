@@ -7,7 +7,7 @@ import { number, oneOfType, string } from 'prop-types';
 import Theme from '../theme/Theme';
 import numberWithCommas from '../hooks/numberWithComas';
 
-const rendeTootipData = (retainer, dsp, revShare) => {
+const rendeTootipData = (retainer, revshare, dsp) => {
   return `
     <div style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
       <div style="display: "> 
@@ -49,7 +49,7 @@ const rendeTootipData = (retainer, dsp, revShare) => {
               text-align: right;
               margin-top: 4px;
              ">
-             $${numberWithCommas(revShare)}
+             $${numberWithCommas(revshare)}
            </div>
            </div>
            <div class="col-6">
@@ -90,8 +90,8 @@ const Card = ({
   type,
   breakDown,
   retainer,
-  dsp,
   revShare,
+  dsp,
 }) => (
   <CardWrapper className={[className]}>
     <p className="heading mt-0">{heading}</p>
