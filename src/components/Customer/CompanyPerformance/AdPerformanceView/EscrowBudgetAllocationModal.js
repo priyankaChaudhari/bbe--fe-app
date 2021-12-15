@@ -22,7 +22,7 @@ const customStyles = {
     left: '50%',
     right: 'auto',
     bottom: 'auto',
-    maxWidth: '518px ',
+    maxWidth: '600px ',
     width: '100% ',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
@@ -128,7 +128,7 @@ export default function EscrowBudgetAllocationModal({
 
                 <NumberFormat
                   className={
-                    !index ? 'mt-2 disabled form-control' : 'mt-2 form-control'
+                    !index ? ' disabled form-control' : ' form-control'
                   }
                   name={item.month_year}
                   defaultValue={item.escrow_allocated_converted_usd}
@@ -180,7 +180,7 @@ export default function EscrowBudgetAllocationModal({
       />
 
       <ModalBox>
-        <div className="modal-body escrow pb-0">
+        <div className="modal-body  pb-0">
           <h4>Allocate Balance</h4>
           <div className="body-content">
             <div className="row">
