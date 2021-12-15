@@ -18,13 +18,13 @@ import {
   Tabs,
   ModalRadioCheck,
   ContractInputSelect,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
 
 const todaysDate = new Date();
-todaysDate.setDate(todaysDate.getDate() - 2);
+const day = todaysDate.getDate();
 
 const customStyles = {
   content: {
@@ -48,14 +48,36 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
   const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
-  const [selectedMonthYear, setselectedMonthYear] = useState({
-    value: dayjs().add(1, 'M').format('MMMM YYYY'),
-    label: dayjs().add(1, 'M').format('MMMM YYYY'),
-  });
+  const [selectedMonthYear, setselectedMonthYear] = useState(
+    day >= 10
+      ? {
+          value: dayjs().add(2, 'M').format('MMMM YYYY'),
+          label: dayjs().add(2, 'M').format('MMMM YYYY'),
+        }
+      : {
+          value: dayjs().add(1, 'M').format('MMMM YYYY'),
+          label: dayjs().add(1, 'M').format('MMMM YYYY'),
+        },
+  );
+
+  useEffect(() => {
+    if (day >= 10 && ['standard', 'permanent'].includes(invoiceType)) {
+      setselectedMonthYear({
+        value: dayjs().add(2, 'M').format('MMMM YYYY'),
+        label: dayjs().add(2, 'M').format('MMMM YYYY'),
+      });
+    } else {
+      setselectedMonthYear({
+        value: dayjs().add(1, 'M').format('MMMM YYYY'),
+        label: dayjs().add(1, 'M').format('MMMM YYYY'),
+      });
+    }
+  }, [invoiceType]);
 
   const getadjustInvoices = useCallback(
     (type) => {
       setLoader(true);
+      setInvoiceInputs({});
       getDSPBudgetAdjustData(type, id).then((res) => {
         if (res && res.status === 500) {
           setLoader(false);
@@ -135,17 +157,29 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
   const getMonthYearOptions = () => {
     const monthsYears = [];
 
-    for (let i = 0; i <= 5; i += 1) {
-      monthsYears.push({
-        value: dayjs()
-          .add(i + 1, 'M')
-          .format('MMMM YYYY'),
-        label: dayjs()
-          .add(i + 1, 'M')
-          .format('MMMM YYYY'),
-      });
+    if (day >= 10 && ['standard', 'permanent'].includes(invoiceType)) {
+      for (let i = 0; i <= 5; i += 1) {
+        monthsYears.push({
+          value: dayjs()
+            .add(i + 2, 'M')
+            .format('MMMM YYYY'),
+          label: dayjs()
+            .add(i + 2, 'M')
+            .format('MMMM YYYY'),
+        });
+      }
+    } else {
+      for (let i = 0; i <= 5; i += 1) {
+        monthsYears.push({
+          value: dayjs()
+            .add(i + 1, 'M')
+            .format('MMMM YYYY'),
+          label: dayjs()
+            .add(i + 1, 'M')
+            .format('MMMM YYYY'),
+        });
+      }
     }
-
     return monthsYears;
   };
 
@@ -255,7 +289,7 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
                   value={selectedMonthYear}
                   options={getMonthYearOptions()}
                   name="applies_month_year"
-                  components={{ DropDownIndicator }}
+                  components={{ DropdownIndicator }}
                   onChange={(event) => {
                     setselectedMonthYear(event);
                   }}
@@ -267,7 +301,11 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
             <div className="modal-footer">
               <div className="text-center ">
                 <Button
-                  disabled={loader}
+                  disabled={
+                    loader ||
+                    returnTotalAmount().currentBudget ===
+                      returnTotalAmount().newBudget
+                  }
                   onClick={() => {
                     setShowConfirmationModal(true);
                   }}
