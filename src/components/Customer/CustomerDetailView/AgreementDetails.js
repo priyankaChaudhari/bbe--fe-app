@@ -600,12 +600,13 @@ export default function AgreementDetails({
                             : 'account-type'
                         }
                         role="presentation"
-                        onClick={() =>
+                        onClick={() => {
                           setAccountType({
                             ...accountType,
                             [agreement.id]: 'seller',
-                          })
-                        }>
+                          });
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}>
                         Seller Fee Structure
                       </li>
                       <li
@@ -615,12 +616,13 @@ export default function AgreementDetails({
                             : 'account-type'
                         }
                         role="presentation"
-                        onClick={() =>
+                        onClick={() => {
                           setAccountType({
                             ...accountType,
                             [agreement.id]: 'vendor',
-                          })
-                        }>
+                          });
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}>
                         Vendor Fee Structure
                       </li>
                     </ul>
