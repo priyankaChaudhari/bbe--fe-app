@@ -1251,9 +1251,9 @@ export default function ContractContainer() {
             </tr>
              <tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Revenue Share %</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${displayNumber(
                  formData?.fee_structure?.[type]?.rev_share || 0,
-               )} </span> </td>
+               )}% </span> </td>
               <td style="border: 1px solid black;padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
               for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
                <tr  style="vertical-align: text-top;">
@@ -1295,9 +1295,9 @@ export default function ContractContainer() {
 
              <tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Revenue Share %</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${displayNumber(
                  formData?.fee_structure?.[type]?.rev_share || 0,
-               )} </span> </td>
+               )}% </span> </td>
               <td style="border: 1px solid black;padding: 13px;">A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
               for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
               ${
@@ -1462,7 +1462,7 @@ export default function ContractContainer() {
       return feeStructure('vendor');
     if (formData?.seller_type?.label === 'Hybrid') {
       return `${feeStructure('seller')} 
-         <div class=" text-center BT-SOW-sales-commission mt-5 mb-4 " style="text-align: center; margin-top: 3rem!important;margin-bottom: 1.5rem!important;">
+         <div class=" text-center BT-SOW-sales-commission mt-5" style="text-align: center; margin-top: 3rem!important;">
       <span style="font-weight: 800;
         font-family: Helvetica-bold;" >Fees & Sales Commissions for Amazon Vendor Account
        </span>
