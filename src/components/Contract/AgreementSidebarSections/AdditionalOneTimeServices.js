@@ -189,9 +189,8 @@ function AdditionalOneTimeServices({
   const getAmazonStoreFee = () => {
     const basic = servicesFees.find((op) => op.name.includes('Basic'));
     const plus = servicesFees.find((op) => op.name.includes('Plus'));
-    return `Basic - 1 page ($ ${displayNumber(
-      basic?.fee || 1500,
-    )}), Plus - 1 home page + up to 5 pages/sub-pages ($ ${displayNumber(
+    return `Basic - 1 page ($ ${displayNumber(basic?.fee || 1500)}),
+    Plus - 1 home page + up to 5 pages/sub-pages ($ ${displayNumber(
       plus?.fee || 2400,
     )}), Custom - Will vary`;
   };
@@ -365,6 +364,7 @@ function AdditionalOneTimeServices({
                     data-tip={getAmazonStoreFee()}
                     data-for="info"
                     className="info-icon ml-2"
+                    style={{ verticalAlign: 'middle' }}
                   />
                   <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
                   <input
