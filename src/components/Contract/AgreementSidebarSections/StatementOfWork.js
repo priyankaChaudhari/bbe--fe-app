@@ -72,6 +72,7 @@ function StatementOfWork({
   setMarketPlaces,
   marketplacesResult,
   discountData,
+  servicesFees,
 }) {
   const contractType = formData?.contract_type;
   const additionalOneTimeServicesLength =
@@ -322,6 +323,7 @@ function StatementOfWork({
                     updateAdditionalOnetimeServicesSelectedData
                   }
                   discountData={discountData}
+                  servicesFees={servicesFees}
                 />
               ) : (
                 // displayOneTimeServices()
@@ -483,6 +485,7 @@ StatementOfWork.defaultProps = {
   setMarketPlaces: () => {},
   marketplacesResult: [],
   discountData: [],
+  servicesFees: {},
 };
 
 StatementOfWork.propTypes = {
@@ -562,4 +565,5 @@ StatementOfWork.propTypes = {
   setMarketPlaces: func,
   marketplacesResult: arrayOf(shape({})),
   discountData: [],
+  servicesFees: shape({}),
 };

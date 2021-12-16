@@ -114,7 +114,7 @@ export default function Statement({
           <table class="contact-list mb-3 ">
             <tr>
               <td> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Revenue Share Only  </span> </td>
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;white-space: nowrap;"> Revenue Share Only  </span> </td>
               <td>You will only be billed for the monthly retainer and revenue share % based on threshold(s) displayed below.</td>
             </tr>
              <tr  style="vertical-align: text-top;">
@@ -154,7 +154,7 @@ export default function Statement({
           <table class="contact-list mb-3 ">
             <tr>
               <td> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;text-transform: capitalize;"  > Retainer + % Rev Share 
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;text-transform: capitalize;white-space: nowrap;"> Retainer + % Rev Share 
                (${
                  formData?.fee_structure?.[type]?.threshold_type ===
                    undefined ||

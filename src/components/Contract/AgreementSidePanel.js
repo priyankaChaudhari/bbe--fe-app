@@ -127,6 +127,7 @@ export default function AgreementSidePanel({
   getFeeStructureDetails,
   manageErrorCount,
   checkMandatoryFieldsOfFeeType,
+  servicesFees,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [revShare, setRevShare] = useState([]);
@@ -1858,6 +1859,7 @@ export default function AgreementSidePanel({
                 setMarketPlaces={setMarketPlaces}
                 marketplacesResult={marketplacesResult}
                 discountData={discountData}
+                servicesFees={servicesFees}
               />
               <DspAdvertising
                 executeScroll={executeScroll}

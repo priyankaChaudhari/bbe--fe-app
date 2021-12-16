@@ -1226,7 +1226,7 @@ export default function ContractContainer() {
           <table class="contact-list mb-3" style="width: 100%;overflow: auto;border-collapse: collapse;">
             <tr>
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer Only </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;white-space: nowrap;"> Retainer Only </span> </td>
               <td style="border: 1px solid black;padding: 13px;">You will only be billed for the monthly retainer amount displayed below. </td>
             </tr>
              <tr  style="vertical-align: text-top;">
@@ -1246,7 +1246,7 @@ export default function ContractContainer() {
           <table class="contact-list mb-3 " style="width: 100%;overflow: auto;border-collapse: collapse;">
             <tr>
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Revenue Share Only  </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;white-space: nowrap;"> Revenue Share Only  </span> </td>
               <td style="border: 1px solid black;padding: 13px;">You will only be billed for the monthly retainer and revenue share % based on threshold(s) displayed below.</td>
             </tr>
              <tr  style="vertical-align: text-top;">
@@ -1286,7 +1286,7 @@ export default function ContractContainer() {
           <table class="contact-list mb-3" style="width: 100%;overflow: auto;border-collapse: collapse;">
             <tr>
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Fee Type</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> Retainer + % Rev Share 
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold;white-space: nowrap;"> Retainer + % Rev Share 
                (${
                  formData?.fee_structure?.[type]?.threshold_type
                } Threshold)  </span> </td>
@@ -3713,6 +3713,9 @@ export default function ContractContainer() {
         getFeeStructureDetails={getFeeStructureDetails}
         manageErrorCount={manageErrorCount}
         checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
+        servicesFees={servicesFees.filter((op) =>
+          op?.name?.includes('Amazon Store Package'),
+        )}
       />
     );
   };

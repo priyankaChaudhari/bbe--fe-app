@@ -3,6 +3,7 @@
 import React from 'react';
 
 import NumberFormat from 'react-number-format';
+import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
 import {
   string,
@@ -15,7 +16,7 @@ import {
   object,
 } from 'prop-types';
 
-import { PlusIcon, MinusIcon, CaretUp } from '../../../theme/images';
+import { PlusIcon, MinusIcon, CaretUp, InfoIcon } from '../../../theme/images';
 import {
   ErrorMsg,
   InputFormField,
@@ -43,6 +44,7 @@ function AdditionalOneTimeServices({
   clearOneTimeQntyError,
   updateAdditionalOnetimeServicesSelectedData,
   discountData,
+  servicesFees,
 }) {
   const additionalOneTimeServicesLength =
     formData?.additional_one_time_services?.length;
@@ -177,6 +179,21 @@ function AdditionalOneTimeServices({
       return 'Edit Discount';
     }
     return 'Add Discount';
+  };
+
+  const displayNumber = (num) => {
+    const res = num?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
+
+  const getAmazonStoreFee = () => {
+    const basic = servicesFees.find((op) => op.name.includes('Basic'));
+    const plus = servicesFees.find((op) => op.name.includes('Plus'));
+    return `Basic - 1 page ($ ${displayNumber(
+      basic?.fee || 1500,
+    )}), Plus - 1 home page + up to 5 pages/sub-pages ($ ${displayNumber(
+      plus?.fee || 2400,
+    )}), Custom - Will vary`;
   };
 
   const displayOneTimeServices = () => {
@@ -342,6 +359,14 @@ function AdditionalOneTimeServices({
                   className="check-container customer-pannel"
                   htmlFor="contract-copy-check">
                   Amazon Store
+                  <img
+                    src={InfoIcon}
+                    alt="search cursor"
+                    data-tip={getAmazonStoreFee()}
+                    data-for="info"
+                    className="info-icon ml-2"
+                  />
+                  <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
                   <input
                     type="checkbox"
                     id="contract-copy-check"
@@ -556,6 +581,7 @@ AdditionalOneTimeServices.defaultProps = {
   clearOneTimeQntyError: () => {},
   updateAdditionalOnetimeServicesSelectedData: () => {},
   discountData: [],
+  servicesFees: {},
 };
 
 AdditionalOneTimeServices.propTypes = {
@@ -587,4 +613,5 @@ AdditionalOneTimeServices.propTypes = {
   clearOneTimeQntyError: func,
   updateAdditionalOnetimeServicesSelectedData: func,
   discountData: arrayOf(shape()),
+  servicesFees: shape({}),
 };
