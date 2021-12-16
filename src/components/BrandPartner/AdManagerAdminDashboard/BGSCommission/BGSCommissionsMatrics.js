@@ -31,7 +31,7 @@ const BGSCommissionsMatrics = ({ commissionMatrics }) => {
     <>
       <div className="white-card-container mb-4">
         {BGSCommissionMatrics.map((item) => (
-          <div className="col-md-3 col-6 mb-3" key={item.value}>
+          <div className="col-md-3 col-6 mb-3" key={item.key}>
             <Card
               className="fix-height"
               heading={item.label}

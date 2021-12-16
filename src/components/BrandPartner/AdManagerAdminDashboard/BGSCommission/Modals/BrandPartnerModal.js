@@ -15,6 +15,7 @@ import {
   PageLoader,
   TableGap,
 } from '../../../../../common';
+import numberWithCommas from '../../../../../hooks/numberWithComas';
 
 const BrandPartnerModal = ({
   showModal,
@@ -135,25 +136,39 @@ const BrandPartnerModal = ({
                         {brandPartners?.records.map((partner) => (
                           <tr className="partners" key={partner.id}>
                             <td width="10%">{partner.company_name}</td>
-                            <td width="10%">{partner.retainer}</td>
-                            <td width="10%">{partner.rev_share}</td>
-                            <td width="5%">{partner.dsp}</td>
-                            <td width="12%">{partner.total_book_size}</td>
+                            <td width="10%">{`$${numberWithCommas(
+                              partner.retainer,
+                            )}`}</td>
+                            <td width="10%">{`$${numberWithCommas(
+                              partner.rev_share,
+                            )}`}</td>
+                            <td width="5%">{`$${numberWithCommas(
+                              partner.dsp,
+                            )}`}</td>
+                            <td width="12%">{`$${numberWithCommas(
+                              partner.total_book_size,
+                            )}`}</td>
                             <td width="15%" className="text-bold">
                               {partner.total_book_size_commission === null
                                 ? '-'
-                                : partner.total_book_size_commission}
+                                : `$${numberWithCommas(
+                                    partner.total_book_size_commission,
+                                  )}`}
                             </td>
                             <td width="8%">
-                              {partner.upsell === null ? '-' : partner.upsell}
+                              {partner.upsell === null
+                                ? '-'
+                                : `$${numberWithCommas(partner.upsell)}`}
                             </td>
                             <td width="12%" className="text-bold">
                               {partner.upsell_commission === null
                                 ? '-'
-                                : partner.upsell_commission}
+                                : `$${numberWithCommas(
+                                    partner.upsell_commission,
+                                  )}`}
                             </td>
                             <td width="10%" className="text-bold">
-                              {partner.total_commission}
+                              {`$${numberWithCommas(partner.total_commission)}`}
                             </td>
                           </tr>
                         ))}
@@ -162,21 +177,37 @@ const BrandPartnerModal = ({
 
                         <tr className="all-partners">
                           <td width="10%">All Partners</td>
-                          <td width="10%">{brandPartners.total.retainer}</td>
-                          <td width="10%">{brandPartners.total.rev_share}</td>
-                          <td width="5%">{brandPartners.total.dsp}</td>
+                          <td width="10%">{`$${numberWithCommas(
+                            brandPartners.total.retainer,
+                          )}`}</td>
+                          <td width="10%">{`$${numberWithCommas(
+                            brandPartners.total.rev_share,
+                          )}`}</td>
+                          <td width="5%">{`$${numberWithCommas(
+                            brandPartners.total.dsp,
+                          )}`}</td>
                           <td width="12%">
-                            {brandPartners.total.total_book_size}
+                            {`$${numberWithCommas(
+                              brandPartners.total.total_book_size,
+                            )}`}
                           </td>
                           <td width="15%" className="text-bold">
-                            {brandPartners.total.total_book_size_commission}
+                            {`$${numberWithCommas(
+                              brandPartners.total.total_book_size_commission,
+                            )}`}
                           </td>
-                          <td width="8%">{brandPartners.total.upsell}</td>
+                          <td width="8%">{`$${numberWithCommas(
+                            brandPartners.total.upsell,
+                          )}`}</td>
                           <td width="12%" className="text-bold">
-                            {brandPartners.total.upsell_commission}
+                            {`$${numberWithCommas(
+                              brandPartners.total.upsell_commission,
+                            )}`}
                           </td>
                           <td width="10%" className="text-bold">
-                            {brandPartners.total.total_commission}
+                            {`$${numberWithCommas(
+                              brandPartners.total.total_commission,
+                            )}`}
                           </td>
                         </tr>
                       </tbody>
@@ -201,20 +232,26 @@ const BrandPartnerModal = ({
                         </li>
                         <li>
                           <div className="label">retainer</div>
-                          <div className="label-info">{partner.retainer}</div>
+                          <div className="label-info">{`$${numberWithCommas(
+                            partner.retainer,
+                          )}`}</div>
                         </li>
                         <li>
                           <div className="label">rev share</div>
-                          <div className="label-info">{partner.rev_share}</div>
+                          <div className="label-info">{`$${numberWithCommas(
+                            partner.rev_share,
+                          )}`}</div>
                         </li>
                         <li>
                           <div className="label">DSP</div>
-                          <div className="label-info">{partner.dsp}</div>
+                          <div className="label-info">
+                            {`$${numberWithCommas(partner.dsp)}`}
+                          </div>
                         </li>
                         <li>
                           <div className="label">total Book Size</div>
                           <div className="label-info ">
-                            {partner.total_book_size}
+                            {`$${numberWithCommas(partner.total_book_size)}`}
                           </div>
                         </li>
                         <li>
@@ -222,13 +259,19 @@ const BrandPartnerModal = ({
                           <div className="label-info label-info-dark">
                             {partner.total_book_size_commission === null
                               ? '-'
-                              : partner.total_book_size_commission}
+                              : `$${numberWithCommas(
+                                  partner.total_book_size_commission,
+                                )}`}
+                            `
                           </div>
                         </li>
                         <li>
                           <div className="label">upsells </div>
                           <div className="label-info label-info-dark">
-                            {partner.upsell === null ? '-' : partner.upsell}
+                            {partner.upsell === null
+                              ? '-'
+                              : numberWithCommas(partner.upsell)}
+                            `
                           </div>
                         </li>
                         <li>
@@ -236,13 +279,15 @@ const BrandPartnerModal = ({
                           <div className="label-info label-info-dark ">
                             {partner.upsell_commission === null
                               ? '-'
-                              : partner.upsell_commission}
+                              : `$${numberWithCommas(
+                                  partner.upsell_commission,
+                                )}`}
                           </div>
                         </li>
                         <li>
                           <div className="label">total commission</div>
                           <div className="label-info label-info-dark ">
-                            {partner.total_commission}
+                            {`$${numberWithCommas(partner.total_commission)}`}
                           </div>
                         </li>
                       </ul>
@@ -258,49 +303,57 @@ const BrandPartnerModal = ({
                     <li>
                       <div className="label">retainer</div>
                       <div className="label-info">
-                        {brandPartners.total.retainer}
+                        {`$${numberWithCommas(brandPartners.total.retainer)}`}
                       </div>
                     </li>
                     <li>
                       <div className="label">rev share</div>
                       <div className="label-info">
-                        {brandPartners.total.rev_share}
+                        {`$${numberWithCommas(brandPartners.total.rev_share)}`}
                       </div>
                     </li>
                     <li>
                       <div className="label">DSP</div>
                       <div className="label-info">
-                        {brandPartners.total.dsp}
+                        {`$${numberWithCommas(brandPartners.total.dsp)}`}
                       </div>
                     </li>
                     <li>
                       <div className="label">total Book Size</div>
                       <div className="label-info ">
-                        {brandPartners.total.total_book_size}
+                        {`$${numberWithCommas(
+                          brandPartners.total.total_book_size,
+                        )}`}
                       </div>
                     </li>
                     <li>
                       <div className="label">BOOK Size Comm.</div>
                       <div className="label-info label-info-dark">
-                        {brandPartners.total.book_size_commission}
+                        {`$${numberWithCommas(
+                          brandPartners.total.total_book_size_commission,
+                        )}`}
                       </div>
                     </li>
                     <li>
                       <div className="label">upsells </div>
                       <div className="label-info label-info-dark">
-                        {brandPartners.total.upsell}
+                        {`$${numberWithCommas(brandPartners.total.upsell)}`}
                       </div>
                     </li>
                     <li>
                       <div className="label">Upsells comm.</div>
                       <div className="label-info label-info-dark ">
-                        {brandPartners.total.upsell_commission}
+                        {`$${numberWithCommas(
+                          brandPartners.total.upsell_commission,
+                        )}`}
                       </div>
                     </li>
                     <li>
                       <div className="label">total commission</div>
                       <div className="label-info label-info-dark ">
-                        {brandPartners.total.total_commission}
+                        {`$${numberWithCommas(
+                          brandPartners.total.total_commission,
+                        )}`}
                       </div>
                     </li>
                   </ul>
