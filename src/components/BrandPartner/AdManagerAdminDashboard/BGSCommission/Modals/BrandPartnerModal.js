@@ -115,249 +115,267 @@ const BrandPartnerModal = ({
             </HeaderDownloadFuntionality>
             {isDesktop ? (
               <div className="modal-body pt-0">
-                <div className="body-content ">
-                  <TableGap>
-                    <table>
-                      <thead style={{ width: '100%', display: 'table' }}>
-                        <tr className="overlay-modal-header">
-                          {commissionsTableheader.map((header) => (
-                            <th
-                              width={header.width}
-                              className=" text-left"
-                              key={header.key}>
-                              {header.label === 'TEAM MEMBER'
-                                ? 'PARTNERS'
-                                : header.label}
-                            </th>
+                {brandPartners?.records.length > 0 ? (
+                  <div className="body-content ">
+                    <TableGap>
+                      <table>
+                        <thead style={{ width: '100%', display: 'table' }}>
+                          <tr className="overlay-modal-header">
+                            {commissionsTableheader.map((header) => (
+                              <th
+                                width={header.width}
+                                className=" text-left"
+                                key={header.key}>
+                                {header.label === 'TEAM MEMBER'
+                                  ? 'BRAND PARTNER'
+                                  : header.label}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody style={{ width: '100%', display: 'table' }}>
+                          {brandPartners?.records.map((partner) => (
+                            <tr className="partners" key={partner.id}>
+                              <td width="10%">{partner.company_name}</td>
+                              <td width="10%">{`$${numberWithCommas(
+                                partner.retainer,
+                              )}`}</td>
+                              <td width="10%">{`$${numberWithCommas(
+                                partner.rev_share,
+                              )}`}</td>
+                              <td width="5%">{`$${numberWithCommas(
+                                partner.dsp,
+                              )}`}</td>
+                              <td width="12%">{`$${numberWithCommas(
+                                partner.total_book_size,
+                              )}`}</td>
+                              <td width="15%" className="text-bold">
+                                {partner.total_book_size_commission === null &&
+                                Bgs.isBgsManager
+                                  ? '-'
+                                  : partner.total_book_size_commission === null
+                                  ? '$0.0'
+                                  : `$${numberWithCommas(
+                                      partner.total_book_size_commission,
+                                    )}`}
+                              </td>
+                              <td width="8%">
+                                {partner.upsell === null && Bgs.isBgsManager
+                                  ? '-'
+                                  : partner.upsell === null
+                                  ? '$0.0'
+                                  : `$${numberWithCommas(partner.upsell)}`}
+                              </td>
+                              <td width="12%" className="text-bold">
+                                {partner.upsell_commission === null &&
+                                Bgs.isBgsManager
+                                  ? '-'
+                                  : partner.upsell_commission === null
+                                  ? '$0.0'
+                                  : `$${numberWithCommas(
+                                      partner.upsell_commission,
+                                    )}`}
+                              </td>
+                              <td width="10%" className="text-bold">
+                                {`$${numberWithCommas(
+                                  partner.total_commission,
+                                )}`}
+                              </td>
+                            </tr>
                           ))}
-                        </tr>
-                      </thead>
-                      <tbody style={{ width: '100%', display: 'table' }}>
-                        {brandPartners?.records.map((partner) => (
-                          <tr className="partners" key={partner.id}>
-                            <td width="10%">{partner.company_name}</td>
+
+                          {/* Brand Partners Total */}
+
+                          <tr className="all-partners">
+                            <td width="10%">All Partners</td>
                             <td width="10%">{`$${numberWithCommas(
-                              partner.retainer,
+                              brandPartners.total.retainer,
                             )}`}</td>
                             <td width="10%">{`$${numberWithCommas(
-                              partner.rev_share,
+                              brandPartners.total.rev_share,
                             )}`}</td>
                             <td width="5%">{`$${numberWithCommas(
-                              partner.dsp,
+                              brandPartners.total.dsp,
                             )}`}</td>
-                            <td width="12%">{`$${numberWithCommas(
-                              partner.total_book_size,
-                            )}`}</td>
+                            <td width="12%">
+                              {`$${numberWithCommas(
+                                brandPartners.total.total_book_size,
+                              )}`}
+                            </td>
                             <td width="15%" className="text-bold">
-                              {partner.total_book_size_commission === null
-                                ? '-'
-                                : `$${numberWithCommas(
-                                    partner.total_book_size_commission,
-                                  )}`}
+                              {`$${numberWithCommas(
+                                brandPartners.total.total_book_size_commission,
+                              )}`}
                             </td>
-                            <td width="8%">
-                              {partner.upsell === null
-                                ? '-'
-                                : `$${numberWithCommas(partner.upsell)}`}
-                            </td>
+                            <td width="8%">{`$${numberWithCommas(
+                              brandPartners.total.upsell,
+                            )}`}</td>
                             <td width="12%" className="text-bold">
-                              {partner.upsell_commission === null
-                                ? '-'
-                                : `$${numberWithCommas(
-                                    partner.upsell_commission,
-                                  )}`}
+                              {`$${numberWithCommas(
+                                brandPartners.total.upsell_commission,
+                              )}`}
                             </td>
                             <td width="10%" className="text-bold">
-                              {`$${numberWithCommas(partner.total_commission)}`}
+                              {`$${numberWithCommas(
+                                brandPartners.total.total_commission,
+                              )}`}
                             </td>
                           </tr>
-                        ))}
-
-                        {/* Brand Partners Total */}
-
-                        <tr className="all-partners">
-                          <td width="10%">All Partners</td>
-                          <td width="10%">{`$${numberWithCommas(
-                            brandPartners.total.retainer,
-                          )}`}</td>
-                          <td width="10%">{`$${numberWithCommas(
-                            brandPartners.total.rev_share,
-                          )}`}</td>
-                          <td width="5%">{`$${numberWithCommas(
-                            brandPartners.total.dsp,
-                          )}`}</td>
-                          <td width="12%">
-                            {`$${numberWithCommas(
-                              brandPartners.total.total_book_size,
-                            )}`}
-                          </td>
-                          <td width="15%" className="text-bold">
-                            {`$${numberWithCommas(
-                              brandPartners.total.total_book_size_commission,
-                            )}`}
-                          </td>
-                          <td width="8%">{`$${numberWithCommas(
-                            brandPartners.total.upsell,
-                          )}`}</td>
-                          <td width="12%" className="text-bold">
-                            {`$${numberWithCommas(
-                              brandPartners.total.upsell_commission,
-                            )}`}
-                          </td>
-                          <td width="10%" className="text-bold">
-                            {`$${numberWithCommas(
-                              brandPartners.total.total_commission,
-                            )}`}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </TableGap>
-                </div>
+                        </tbody>
+                      </table>
+                    </TableGap>
+                  </div>
+                ) : (
+                  <h3 className="text-center">No Brand Partners available!</h3>
+                )}
               </div>
             ) : (
               // Tablet & Mobile View
 
               <div className="modal-body pt-0">
-                <div className="body-content ">
-                  {brandPartners?.records.map((partner) => (
-                    <Fragment key={partner.id}>
-                      <div className="straight-line horizontal-line mt-2 " />
-                      <ul className="commission-Resseque mt-3">
-                        <li>
-                          <div className="label">Brand Partner</div>
-                          <div className="label-info">
-                            {partner.team_member}
-                          </div>
-                        </li>
-                        <li>
-                          <div className="label">retainer</div>
-                          <div className="label-info">{`$${numberWithCommas(
-                            partner.retainer,
-                          )}`}</div>
-                        </li>
-                        <li>
-                          <div className="label">rev share</div>
-                          <div className="label-info">{`$${numberWithCommas(
-                            partner.rev_share,
-                          )}`}</div>
-                        </li>
-                        <li>
-                          <div className="label">DSP</div>
-                          <div className="label-info">
-                            {`$${numberWithCommas(partner.dsp)}`}
-                          </div>
-                        </li>
-                        <li>
-                          <div className="label">total Book Size</div>
-                          <div className="label-info ">
-                            {`$${numberWithCommas(partner.total_book_size)}`}
-                          </div>
-                        </li>
-                        <li>
-                          <div className="label">BOOK Size Comm.</div>
-                          <div className="label-info label-info-dark">
-                            {partner.total_book_size_commission === null
-                              ? '-'
-                              : `$${numberWithCommas(
-                                  partner.total_book_size_commission,
-                                )}`}
-                            `
-                          </div>
-                        </li>
-                        <li>
-                          <div className="label">upsells </div>
-                          <div className="label-info label-info-dark">
-                            {partner.upsell === null
-                              ? '-'
-                              : numberWithCommas(partner.upsell)}
-                            `
-                          </div>
-                        </li>
-                        <li>
-                          <div className="label">Upsells comm.</div>
-                          <div className="label-info label-info-dark ">
-                            {partner.upsell_commission === null
-                              ? '-'
-                              : `$${numberWithCommas(
-                                  partner.upsell_commission,
-                                )}`}
-                          </div>
-                        </li>
-                        <li>
-                          <div className="label">total commission</div>
-                          <div className="label-info label-info-dark ">
-                            {`$${numberWithCommas(partner.total_commission)}`}
-                          </div>
-                        </li>
-                      </ul>
-                    </Fragment>
-                  ))}
-                  <ul className="commission-Resseque  active pt-3">
-                    <li>
-                      <div className="label">Brand Partner</div>
-                      <div className="label-info">
-                        {brandPartners.total.team_member}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">retainer</div>
-                      <div className="label-info">
-                        {`$${numberWithCommas(brandPartners.total.retainer)}`}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">rev share</div>
-                      <div className="label-info">
-                        {`$${numberWithCommas(brandPartners.total.rev_share)}`}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">DSP</div>
-                      <div className="label-info">
-                        {`$${numberWithCommas(brandPartners.total.dsp)}`}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">total Book Size</div>
-                      <div className="label-info ">
-                        {`$${numberWithCommas(
-                          brandPartners.total.total_book_size,
-                        )}`}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">BOOK Size Comm.</div>
-                      <div className="label-info label-info-dark">
-                        {`$${numberWithCommas(
-                          brandPartners.total.total_book_size_commission,
-                        )}`}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">upsells </div>
-                      <div className="label-info label-info-dark">
-                        {`$${numberWithCommas(brandPartners.total.upsell)}`}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">Upsells comm.</div>
-                      <div className="label-info label-info-dark ">
-                        {`$${numberWithCommas(
-                          brandPartners.total.upsell_commission,
-                        )}`}
-                      </div>
-                    </li>
-                    <li>
-                      <div className="label">total commission</div>
-                      <div className="label-info label-info-dark ">
-                        {`$${numberWithCommas(
-                          brandPartners.total.total_commission,
-                        )}`}
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+                {brandPartners?.records.length > 0 ? (
+                  <div className="body-content ">
+                    {brandPartners?.records.map((partner) => (
+                      <Fragment key={partner.id}>
+                        <div className="straight-line horizontal-line mt-2 " />
+                        <ul className="commission-Resseque mt-3">
+                          <li>
+                            <div className="label">Brand Partner</div>
+                            <div className="label-info">
+                              {partner.team_member}
+                            </div>
+                          </li>
+                          <li>
+                            <div className="label">retainer</div>
+                            <div className="label-info">{`$${numberWithCommas(
+                              partner.retainer,
+                            )}`}</div>
+                          </li>
+                          <li>
+                            <div className="label">rev share</div>
+                            <div className="label-info">{`$${numberWithCommas(
+                              partner.rev_share,
+                            )}`}</div>
+                          </li>
+                          <li>
+                            <div className="label">DSP</div>
+                            <div className="label-info">
+                              {`$${numberWithCommas(partner.dsp)}`}
+                            </div>
+                          </li>
+                          <li>
+                            <div className="label">total Book Size</div>
+                            <div className="label-info ">
+                              {`$${numberWithCommas(partner.total_book_size)}`}
+                            </div>
+                          </li>
+                          <li>
+                            <div className="label">BOOK Size Comm.</div>
+                            <div className="label-info label-info-dark">
+                              {partner.total_book_size_commission === null
+                                ? '-'
+                                : `$${numberWithCommas(
+                                    partner.total_book_size_commission,
+                                  )}`}
+                            </div>
+                          </li>
+                          <li>
+                            <div className="label">upsells </div>
+                            <div className="label-info label-info-dark">
+                              {partner.upsell === null
+                                ? '-'
+                                : numberWithCommas(partner.upsell)}
+                            </div>
+                          </li>
+                          <li>
+                            <div className="label">Upsells comm.</div>
+                            <div className="label-info label-info-dark ">
+                              {partner.upsell_commission === null
+                                ? '-'
+                                : `$${numberWithCommas(
+                                    partner.upsell_commission,
+                                  )}`}
+                            </div>
+                          </li>
+                          <li>
+                            <div className="label">total commission</div>
+                            <div className="label-info label-info-dark ">
+                              {`$${numberWithCommas(partner.total_commission)}`}
+                            </div>
+                          </li>
+                        </ul>
+                      </Fragment>
+                    ))}
+                    <ul className="commission-Resseque  active pt-3">
+                      <li>
+                        <div className="label">Brand Partner</div>
+                        <div className="label-info">
+                          {brandPartners.total.team_member}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">retainer</div>
+                        <div className="label-info">
+                          {`$${numberWithCommas(brandPartners.total.retainer)}`}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">rev share</div>
+                        <div className="label-info">
+                          {`$${numberWithCommas(
+                            brandPartners.total.rev_share,
+                          )}`}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">DSP</div>
+                        <div className="label-info">
+                          {`$${numberWithCommas(brandPartners.total.dsp)}`}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">total Book Size</div>
+                        <div className="label-info ">
+                          {`$${numberWithCommas(
+                            brandPartners.total.total_book_size,
+                          )}`}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">BOOK Size Comm.</div>
+                        <div className="label-info label-info-dark">
+                          {`$${numberWithCommas(
+                            brandPartners.total.total_book_size_commission,
+                          )}`}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">upsells </div>
+                        <div className="label-info label-info-dark">
+                          {`$${numberWithCommas(brandPartners.total.upsell)}`}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">Upsells comm.</div>
+                        <div className="label-info label-info-dark ">
+                          {`$${numberWithCommas(
+                            brandPartners.total.upsell_commission,
+                          )}`}
+                        </div>
+                      </li>
+                      <li>
+                        <div className="label">total commission</div>
+                        <div className="label-info label-info-dark ">
+                          {`$${numberWithCommas(
+                            brandPartners.total.total_commission,
+                          )}`}
+                        </div>
+                      </li>
+                    </ul>
+                  </div>
+                ) : (
+                  <h3 className="text-center">No Brand Partners available!</h3>
+                )}
               </div>
               // </div>
             )}
