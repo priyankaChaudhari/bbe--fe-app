@@ -147,6 +147,7 @@ export default function BGSCommissionTableDesktopView({
                             OnSetShowModal(
                               item.bgs_manager.id,
                               item.bgs_manager.full_name,
+                              true,
                             )
                           }>
                           <td width="10%" className="text-bold">
