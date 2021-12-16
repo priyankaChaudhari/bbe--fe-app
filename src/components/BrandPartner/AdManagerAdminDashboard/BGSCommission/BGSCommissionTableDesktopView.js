@@ -194,6 +194,7 @@ export default function BGSCommissionTableDesktopView({
                         item.members.map((memberItem) => {
                           return (
                             <tr
+                              className="cursor"
                               key={memberItem.id}
                               onClick={() =>
                                 OnSetShowModal(
