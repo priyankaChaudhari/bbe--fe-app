@@ -485,11 +485,8 @@ export default function AgreementDetails({
                 </div>
 
                 <div className="clear-fix" />
-                {agreement &&
-                agreement.contract_status &&
-                (agreement.contract_status.value === 'pending account setup' ||
-                  agreement.contract_status.value === 'active') &&
-                agreement.contract_url === null ? null : (
+                {agreement?.contract_status?.value === 'active' ||
+                agreement.draft_from ? (
                   <div
                     className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
                     role="presentation"
@@ -587,6 +584,35 @@ export default function AgreementDetails({
                         />
                       </ActionDropDown>
                     )}
+                  </div>
+                ) : (
+                  <div
+                    className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
+                    role="presentation"
+                    onClick={() =>
+                      localStorage.setItem('agreementID', agreement.id)
+                    }>
+                    <Link
+                      to={{
+                        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                          ':contract_id',
+                          agreement.id,
+                        ),
+                        state:
+                          history &&
+                          history.location &&
+                          history.location.pathname,
+                      }}>
+                      <Button className="btn-transparent w-100 view-contract">
+                        {' '}
+                        <img
+                          className="file-contract-icon"
+                          src={FileContract}
+                          alt=""
+                        />
+                        View Agreement
+                      </Button>
+                    </Link>
                   </div>
                 )}
                 {agreement?.contract_type?.includes('recurring') &&
@@ -1051,12 +1077,16 @@ export default function AgreementDetails({
             <>
               {viewComponent === 'current' ? (
                 <>
-                  <DropDownUncontained
-                    options={newAgreementTypes}
-                    setSelectedOption={setTypeOfNewAgreement}
-                    extraAction={checkExistingAgreements}
-                    DropdownIndicator={DropdownIndicator}
-                  />
+                  {userRole !== 'Customer' ? (
+                    <DropDownUncontained
+                      options={newAgreementTypes}
+                      setSelectedOption={setTypeOfNewAgreement}
+                      extraAction={checkExistingAgreements}
+                      DropdownIndicator={DropdownIndicator}
+                    />
+                  ) : (
+                    ''
+                  )}
                   {generateHTML()}
                   <div
                     className="looking-past-agre"
@@ -1097,17 +1127,20 @@ export default function AgreementDetails({
                   </div>
                 </>
               ) : (
-                <OneTimeAgreement
-                  agreements={multipleAgreement.filter((op) =>
-                    op.contract_type.toLowerCase().includes('one'),
-                  )}
-                  id={id}
-                  history={history}
-                  setViewComponent={setViewComponent}
-                  DropdownIndicator={DropdownIndicator}
-                  IconOption={IconOption}
-                  setShowModal={setShowModal}
-                />
+                <>
+                  <OneTimeAgreement
+                    agreements={multipleAgreement.filter((op) =>
+                      op.contract_type.toLowerCase().includes('one'),
+                    )}
+                    id={id}
+                    history={history}
+                    setViewComponent={setViewComponent}
+                    DropdownIndicator={DropdownIndicator}
+                    IconOption={IconOption}
+                    setShowModal={setShowModal}
+                    userRole={userRole}
+                  />
+                </>
               )}
             </>
           )}

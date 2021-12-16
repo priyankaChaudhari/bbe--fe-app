@@ -17,6 +17,7 @@ export default function OneTimeAgreement({
   DropdownIndicator,
   IconOption,
   setShowModal,
+  userRole,
 }) {
   const loader = useSelector((state) => state.accountState.isLoading);
 
@@ -75,20 +76,24 @@ export default function OneTimeAgreement({
     />
   ) : (
     <>
-      <div
-        className=" mt-4  mb-3 cursor "
-        style={{ color: '#171725', fontSize: '14px' }}
-        onClick={() => addNewOneTime()}
-        role="presentation">
-        <img
-          width="16px"
-          style={{ verticalAlign: 'middle' }}
-          src={AddIcons}
-          className="mr-2"
-          alt="add"
-        />
-        New One Time Service Contract
-      </div>{' '}
+      {userRole !== 'Customer' ? (
+        <div
+          className=" mt-4  mb-3 cursor "
+          style={{ color: '#171725', fontSize: '14px' }}
+          onClick={() => addNewOneTime()}
+          role="presentation">
+          <img
+            width="16px"
+            style={{ verticalAlign: 'middle' }}
+            src={AddIcons}
+            className="mr-2"
+            alt="add"
+          />
+          New One Time Service Agreement
+        </div>
+      ) : (
+        ''
+      )}
       {agreements && agreements.length === 0 ? (
         <WhiteCard className="mt-3 mb-3 selected-card">
           No One Time Service Agreement found.
@@ -114,9 +119,8 @@ export default function OneTimeAgreement({
                   </div>
 
                   <div className="clear-fix" />
-                  {agreement &&
-                  agreement?.contract_status &&
-                  agreement?.contract_status?.value === 'active' ? (
+                  {agreement?.contract_status?.value === 'active' ||
+                  userRole === 'Customer' ? (
                     <div
                       className="col-lg-3  pl-lg-0 pr-lg-2 col-md-4 col-12 text-right"
                       role="presentation"
@@ -211,4 +215,5 @@ OneTimeAgreement.propTypes = {
     }),
     push: () => {},
   }).isRequired,
+  userRole: string.isRequired,
 };
