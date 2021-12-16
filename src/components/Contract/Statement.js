@@ -119,23 +119,31 @@ export default function Statement({
             </tr>
              <tr  style="vertical-align: text-top;">
               <td> <span style=" font-weight: bold";> Revenue Share %</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$${displayNumber(
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${displayNumber(
                  formData?.fee_structure?.[type]?.rev_share || 0,
-               )} </span> </td>
+               )}% </span> </td>
               <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
               for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
-               <tr  style="vertical-align: text-top;">
+               ${
+                 formData?.fee_structure?.[type]?.billing_minimum
+                   ? `<tr  style="vertical-align: text-top;">
               <td> <span style=" font-weight: bold";> Billing Minimum</span></td>
                <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$${displayNumber(
                  formData?.fee_structure?.[type]?.billing_minimum || 0,
                )} </span> </td>
-              <td>We will charge the greater of the value shown here or the % of revenue listed above. </td></tr>
-              <tr  style="vertical-align: text-top;">
+              <td>We will charge the greater of the value shown here or the % of revenue listed above. </td></tr>`
+                   : ''
+               }
+              ${
+                formData?.fee_structure?.[type]?.billing_cap
+                  ? `<tr  style="vertical-align: text-top;">
               <td> <span style=" font-weight: bold";> Billing Cap</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$${displayNumber(
-                 formData?.fee_structure?.[type]?.billing_cap || 0,
-               )} </span> </td>
-              <td>We will charge no more than the amount listed here. </td></tr>
+              <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$${displayNumber(
+                formData?.fee_structure?.[type]?.billing_cap || 0,
+              )} </span> </td>
+              <td>We will charge no more than the amount listed here. </td></tr>`
+                  : ''
+              }
           </table>
         </div>`;
     }
@@ -168,9 +176,9 @@ export default function Statement({
 
              <tr  style="vertical-align: text-top;">
               <td> <span style=" font-weight: bold";> Revenue Share %</span></td>
-               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$${displayNumber(
+               <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${displayNumber(
                  formData?.fee_structure?.[type]?.rev_share || 0,
-               )} </span> </td>
+               )}% </span> </td>
               <td>A percentage of all Managed Channel Sales (retail dollars, net customer returns) 
               for all sales each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>
               ${
@@ -316,12 +324,16 @@ export default function Statement({
           </tr>`
                   : ''
               }
-              <tr  style="vertical-align: text-top;">
+              ${
+                formData?.fee_structure?.[type]?.billing_cap
+                  ? `<tr  style="vertical-align: text-top;">
               <td> <span style=" font-weight: bold";> Billing Cap</span></td>
                <td><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$${displayNumber(
                  formData?.fee_structure?.[type]?.billing_cap || 0,
                )} </span> </td>
-              <td>We will charge no more than the amount listed here. </td></tr>
+              <td>We will charge no more than the amount listed here. </td></tr>`
+                  : ''
+              }
           </table>
         </div>`;
     }
@@ -335,7 +347,7 @@ export default function Statement({
       return feeStructure('vendor');
     if (formData?.seller_type?.label === 'Hybrid') {
       return `${feeStructure('seller')} 
-         <div class=" text-center BT-SOW-sales-commission mt-5 mb-4 " style="text-align: center; margin-top: 3rem!important;margin-bottom: 1.5rem!important;">
+         <div class=" text-center BT-SOW-sales-commission mt-5" style="text-align: center; margin-top: 3rem!important;">
       <span style="font-weight: 800;
         font-family: Helvetica-bold;" >Fees & Sales Commissions for Amazon Vendor Account
        </span>
