@@ -225,19 +225,27 @@ export default function ContractFooter({
   const displayFooterForManagers = () => {
     return rightTickCondition ? (
       <>
-        <Button
-          className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
-            isEditContract ? 'w-sm-100' : 'w-sm-50'
-          }`}
-          disabled={!rightTickCondition}
-          onClick={() => {
-            createAgreementDoc();
-            setParams('select-contact');
-            setShowModal(true);
-            setIsEditContract(false);
-          }}>
-          Approve and Request Signature
-        </Button>
+        {!isEditContract ? (
+          <Button
+            className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
+              isEditContract ? 'w-sm-100' : 'w-sm-50'
+            }`}
+            disabled={!rightTickCondition}
+            onClick={() => {
+              createAgreementDoc();
+              setParams('select-contact');
+              setShowModal(true);
+              setIsEditContract(false);
+            }}>
+            Approve and Request Signature
+          </Button>
+        ) : (
+          renderRequestButtonHtml(
+            'Approve and Request Signature',
+            'w-320 ml-0',
+            'true',
+          )
+        )}
         {!isEditContract
           ? renderEditContractBtn('light-orange w-sm-50 ml-5')
           : null}
@@ -273,7 +281,7 @@ export default function ContractFooter({
   };
 
   const displayApprovalBtn = () => {
-    return (
+    return !isEditContract ? (
       <Button
         className={`btn-primary on-boarding mt-3  ${
           isEditContract ? 'w-sm-100' : 'w-sm-50 ml-0'
@@ -290,6 +298,8 @@ export default function ContractFooter({
         }}>
         Request Approval
       </Button>
+    ) : (
+      renderRequestButtonHtml('Request Approval', 'mr-4 w-sm-100', 'false')
     );
   };
   const displayApprovalFooterForInternalUsers = () => {
@@ -337,18 +347,22 @@ export default function ContractFooter({
   const displayRequestSignatureFooter = () => {
     return rightTickCondition ? (
       <>
-        <Button
-          className={`btn-primary on-boarding mt-3 ml-0 ${
-            isEditContract ? 'w-sm-100 ' : 'w-sm-50 '
-          }`}
-          onClick={() => {
-            createAgreementDoc();
-            setParams('select-contact');
-            setShowModal(true);
-            setIsEditContract(false);
-          }}>
-          Request Signature
-        </Button>
+        {!isEditContract ? (
+          <Button
+            className={`btn-primary on-boarding mt-3 ml-0 ${
+              isEditContract ? 'w-sm-100 ' : 'w-sm-50 '
+            }`}
+            onClick={() => {
+              createAgreementDoc();
+              setParams('select-contact');
+              setShowModal(true);
+              setIsEditContract(false);
+            }}>
+            Request Signature
+          </Button>
+        ) : (
+          renderRequestButtonHtml('Request Signature', 'mr-5 w-sm-100', 'false')
+        )}
         {!isEditContract
           ? renderEditContractBtn('light-orange w-sm-50 ml-5')
           : null}
