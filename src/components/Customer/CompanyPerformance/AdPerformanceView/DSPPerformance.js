@@ -164,39 +164,40 @@ export default function DSPPerformance({
             </ToggleButton>
           </div>
         </div>
-        {dspData && dspData.dsp_pacing && isAllowToSplitBalance ? (
-          <AllocateBar className="mb-4">
-            <div className="row">
-              <div className="col-8">
-                {' '}
-                <div className="remaing-label">
+
+        <AllocateBar className="mb-4">
+          <div className="row">
+            <div className="col-8">
+              {' '}
+              <div className="remaing-label">
+                {performancePacingFlag === 'performance'
+                  ? `Remaining Budget (${displayMonth()}):`
+                  : `Escrow Balance :`}
+                <span style={{ fontWeight: 'bold' }}>
+                  {' '}
                   {performancePacingFlag === 'performance'
-                    ? `Remaining Budget (${displayMonth()}):`
-                    : `Escrow Balance :`}
-                  <span style={{ fontWeight: 'bold' }}>
-                    {' '}
-                    {performancePacingFlag === 'performance'
-                      ? dspData?.dsp_pacing?.remaining_budget
-                        ? `${
-                            dspData?.dsp_pacing?.remaining_budget < 0 ? '-' : ''
-                          }${currencySymbol}${dspData?.dsp_pacing?.remaining_budget
-                            .toFixed(2)
-                            .toString()
-                            .replace('-', '')
-                            .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                        : `${currencySymbol}0`
-                      : dspData?.dsp_pacing?.escrow
+                    ? dspData?.dsp_pacing?.remaining_budget
                       ? `${
-                          dspData?.dsp_pacing?.escrow < 0 ? '-' : ''
-                        }${currencySymbol}${dspData?.dsp_pacing?.escrow
+                          dspData?.dsp_pacing?.remaining_budget < 0 ? '-' : ''
+                        }${currencySymbol}${dspData?.dsp_pacing?.remaining_budget
                           .toFixed(2)
                           .toString()
                           .replace('-', '')
                           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
-                      : `${currencySymbol}0`}
-                  </span>
-                </div>{' '}
-              </div>
+                      : `${currencySymbol}0`
+                    : dspData?.dsp_pacing?.escrow
+                    ? `${
+                        dspData?.dsp_pacing?.escrow < 0 ? '-' : ''
+                      }${currencySymbol}${dspData?.dsp_pacing?.escrow
+                        .toFixed(2)
+                        .toString()
+                        .replace('-', '')
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
+                    : `${currencySymbol}0`}
+                </span>
+              </div>{' '}
+            </div>
+            {isAllowToSplitBalance ? (
               <div className="col-4">
                 <div
                   className="allocate-balance cursor"
@@ -207,16 +208,16 @@ export default function DSPPerformance({
                   }}>
                   Allocate Balance{' '}
                   <img
-                    className="orange-left-arrow"
+                    className="orange-left-arrow mb-1"
                     src={LeftArrowIcon}
                     alt=""
                   />
                 </div>
                 <div className="clear-fix" />
               </div>
-            </div>
-          </AllocateBar>
-        ) : null}
+            ) : null}
+          </div>
+        </AllocateBar>
       </>
     );
   };
