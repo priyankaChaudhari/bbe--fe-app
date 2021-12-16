@@ -48,6 +48,7 @@ function ServiceAgreement({
   clearOneTimeQntyError,
   updateAdditionalOnetimeServicesSelectedData,
   discountData,
+  servicesFees,
 }) {
   const contractType = formData?.contract_type;
   const additionalOneTimeServicesLength =
@@ -154,6 +155,7 @@ function ServiceAgreement({
                           updateAdditionalOnetimeServicesSelectedData
                         }
                         discountData={discountData}
+                        servicesFees={servicesFees}
                       />
                     </>
                   ) : (
@@ -227,6 +229,7 @@ ServiceAgreement.defaultProps = {
   clearOneTimeQntyError: () => {},
   updateAdditionalOnetimeServicesSelectedData: () => {},
   discountData: [],
+  servicesFees: [],
 };
 
 ServiceAgreement.propTypes = {
@@ -274,4 +277,5 @@ ServiceAgreement.propTypes = {
   clearOneTimeQntyError: func,
   updateAdditionalOnetimeServicesSelectedData: func,
   discountData: arrayOf(shape({})),
+  servicesFees: arrayOf(shape({})),
 };

@@ -187,10 +187,11 @@ function AdditionalOneTimeServices({
   };
 
   const getAmazonStoreFee = () => {
-    const basic = servicesFees.find((op) => op.name.includes('Basic'));
-    const plus = servicesFees.find((op) => op.name.includes('Plus'));
-    return `Basic - 1 page ($ ${displayNumber(basic?.fee || 1500)}),
-    Plus - 1 home page + up to 5 pages/sub-pages ($ ${displayNumber(
+    const basic = servicesFees?.find((op) => op?.name?.includes('Basic'));
+    const plus = servicesFees?.find((op) => op?.name?.includes('Plus'));
+    return `Basic - 1 page ($ ${displayNumber(
+      basic?.fee || 1500,
+    )}), Plus - 1 home page + up to 5 pages/sub-pages ($ ${displayNumber(
       plus?.fee || 2400,
     )}), Custom - Will vary`;
   };
@@ -581,7 +582,7 @@ AdditionalOneTimeServices.defaultProps = {
   clearOneTimeQntyError: () => {},
   updateAdditionalOnetimeServicesSelectedData: () => {},
   discountData: [],
-  servicesFees: {},
+  servicesFees: [],
 };
 
 AdditionalOneTimeServices.propTypes = {
@@ -613,5 +614,5 @@ AdditionalOneTimeServices.propTypes = {
   clearOneTimeQntyError: func,
   updateAdditionalOnetimeServicesSelectedData: func,
   discountData: arrayOf(shape()),
-  servicesFees: shape({}),
+  servicesFees: arrayOf(shape({})),
 };

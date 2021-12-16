@@ -775,9 +775,12 @@ export default function ContractContainer() {
     return { [option]: multi };
   };
 
-  const setMarketplaceDropdownData = (sellerType = accountType) => {
+  const setMarketplaceDropdownData = (
+    sellerType = accountType,
+    contract = formData,
+  ) => {
     if (sellerType === 'Seller' || sellerType === 'Vendor') {
-      const filterData = getData(formData?.additional_marketplaces, sellerType);
+      const filterData = getData(contract?.additional_marketplaces, sellerType);
       if (filterData?.[sellerType]?.length) {
         setShowAdditionalMarketplace({
           [sellerType]: { showDropdown: true },
@@ -790,12 +793,12 @@ export default function ContractContainer() {
     }
     if (sellerType === 'Hybrid') {
       const sellerMarketplaceResult = getData(
-        formData?.additional_marketplaces,
+        contract?.additional_marketplaces,
         'Seller',
       );
 
       const vendorMarketplaceResult = getData(
-        formData?.additional_marketplaces,
+        contract?.additional_marketplaces,
         'Vendor',
       );
 
@@ -855,7 +858,7 @@ export default function ContractContainer() {
             vendor: res?.data?.vendor || {},
           },
         });
-        setMarketplaceDropdownData(type);
+        setMarketplaceDropdownData(type, contract);
       }
     });
   };
@@ -3713,9 +3716,7 @@ export default function ContractContainer() {
         getFeeStructureDetails={getFeeStructureDetails}
         manageErrorCount={manageErrorCount}
         checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
-        servicesFees={servicesFees.filter((op) =>
-          op?.name?.includes('Amazon Store Package'),
-        )}
+        servicesFees={servicesFees}
       />
     );
   };

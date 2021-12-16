@@ -1760,6 +1760,7 @@ export default function AgreementSidePanel({
                   updateAdditionalOnetimeServicesSelectedData
                 }
                 discountData={discountData}
+                servicesFees={servicesFees}
               />
 
               {agreementData &&
