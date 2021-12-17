@@ -77,9 +77,11 @@ function ServicesAmendment({ amendmentData }) {
                     ? originalField.label
                     : item.label}{' '}
                   <span className="label">
-                    {item?.account_type && item?.account_type === 'vendor'
-                      ? '(Vendor)'
-                      : '(Seller)'}
+                    {item?.account_type
+                      ? item?.account_type === 'vendor'
+                        ? '(Vendor)'
+                        : '(Seller)'
+                      : null}
                   </span>
                 </div>
               </div>
@@ -135,9 +137,11 @@ function ServicesAmendment({ amendmentData }) {
                   {item.label}
                 </span>
                 <span className="ml-1 basic-text">
-                  {item?.account_type && item?.account_type === 'vendor'
-                    ? '(Vendor)'
-                    : '(Seller)'}
+                  {item?.account_type
+                    ? item?.account_type === 'vendor'
+                      ? '(Vendor)'
+                      : '(Seller)'
+                    : null}
                 </span>
               </p>
             </div>
