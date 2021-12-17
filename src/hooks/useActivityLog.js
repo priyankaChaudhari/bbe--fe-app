@@ -371,6 +371,56 @@ export default function useActivityLog({ viewComponent }) {
         </>
       );
     }
+    // for  reallocated escrow balance activity
+    if (item.history_change_reason.includes('reallocated')) {
+      activityMessage = item.history_change_reason?.split('reallocated');
+      [logUser, field] = activityMessage;
+      if (field.includes('worth of escrow from')) {
+        [oldValue, newValue] = field.split('worth of escrow from');
+        const splittedNewValue = newValue.split('to');
+        const [oldMonth, newMonth] = splittedNewValue;
+        return (
+          <>
+            {logUser}
+            <span>reallocated</span>
+            {oldValue}
+            <span>worth of escrow from</span>
+            {oldMonth}
+            <span>to</span>
+            {newMonth}
+          </>
+        );
+      }
+      [oldValue, newValue] = field.split('worth of escrow to');
+      return (
+        <>
+          {logUser}
+          <span>reallocated</span>
+          {oldValue}
+          <span>worth of escrow to</span>
+          {newValue}
+        </>
+      );
+    }
+    // for payment term activity log
+    if (
+      item.history_change_reason.includes('has changed the payment terms for')
+    ) {
+      activityMessage = item.history_change_reason?.split(
+        'has changed the payment terms for',
+      );
+      [logUser, field] = activityMessage;
+      [oldValue, newValue] = field.split('invoices to');
+      return (
+        <>
+          {logUser}
+          <span>has changed the payment terms for</span>
+          {oldValue}
+          <span>invoices to</span>
+          {newValue}
+        </>
+      );
+    }
     return item && item.history_change_reason ? item.history_change_reason : '';
   };
   return activityDetail;

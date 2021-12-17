@@ -7,6 +7,8 @@ import {
   API_BILLING_INFO,
   API_EDIT_EMAIL,
   API_ONBOARD_CUSTOMER,
+  API_PAYMENT_TERMS,
+  API_SAVE_PAYMENT_TERMS,
   API_STEPS_ASSIGNED,
   API_VERIFY_TOKEN,
   API_VERIFY_USER,
@@ -139,7 +141,21 @@ export async function getBillingDetails(customer) {
   }
   return '';
 }
-
+export async function getPaymentTermsDetails(customer) {
+  const params = { customer };
+  if (customer !== undefined) {
+    const result = await axiosInstance
+      .get(API_PAYMENT_TERMS, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  return '';
+}
 export async function saveBillingInfo(data, id) {
   if (id) {
     const result = await axiosInstance
@@ -162,7 +178,21 @@ export async function saveBillingInfo(data, id) {
     });
   return result;
 }
-
+export async function savePaymentTerms(data, customer) {
+  const params = { customer };
+  if (customer !== undefined) {
+    const result = await axiosInstance
+      .post(`${API_SAVE_PAYMENT_TERMS}`, data, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  return '';
+}
 export async function getAmazonAccountDetails(step, id) {
   const params = { step };
   const result = await axiosInstance

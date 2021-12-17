@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-import { shape, string } from 'prop-types';
+import { oneOfType, shape, string, object } from 'prop-types';
 
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
 import { Tabs } from '../../../../common';
-import { financeTabsOptions } from '../../../../constants';
+import {
+  billingNavigationOptions,
+  financeTabsOptions,
+} from '../../../../constants';
 
 const BillingContainer = ({
   id,
@@ -16,12 +19,6 @@ const BillingContainer = ({
 }) => {
   const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
-
-  useEffect(() => {
-    if (redirectType) {
-      setViewComponent(redirectType);
-    }
-  }, [redirectType]);
 
   const onLoading = (value) => {
     setLoader(value);
@@ -41,6 +38,7 @@ const BillingContainer = ({
                     ? 'disabled'
                     : ''
                 }
+                key={item.key}
                 onClick={() => {
                   setViewComponent(item.key);
                 }}
@@ -50,20 +48,15 @@ const BillingContainer = ({
             );
           })}
 
-          {customerStatus && customerStatus.value !== 'pending' ? (
-            <li
-              className={viewComponent === 'Billing' ? 'active' : ''}
-              onClick={() => setViewComponent('Billing')}
-              role="presentation">
-              Billing Details
-            </li>
-          ) : null}
+          <li
+            className={viewComponent === 'Billing' ? 'active' : ''}
+            onClick={() => setViewComponent('Billing')}
+            role="presentation">
+            Billing Details
+          </li>
         </ul>
       </Tabs>
-      {viewComponent === 'dsp service' ||
-      viewComponent === 'rev share' ||
-      viewComponent === 'upsell' ||
-      viewComponent === 'retainer' ? (
+      {billingNavigationOptions.includes(viewComponent) ? (
         <Invoice
           onLoading={onLoading}
           invoiceType={viewComponent}
@@ -75,6 +68,7 @@ const BillingContainer = ({
           id={id}
           userInfo={userInfo}
           onBoardingId={onBoardingId}
+          customerStatus={customerStatus}
         />
       )}
     </div>
@@ -86,7 +80,7 @@ export default BillingContainer;
 BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
-  redirectType: 'retainer',
+  redirectType: 'Billing',
 };
 
 BillingContainer.propTypes = {
@@ -95,6 +89,9 @@ BillingContainer.propTypes = {
     customer_onboarding: string,
   }).isRequired,
   onBoardingId: string,
-  customerStatus: string,
+  customerStatus: oneOfType({
+    string,
+    object,
+  }),
   redirectType: string,
 };

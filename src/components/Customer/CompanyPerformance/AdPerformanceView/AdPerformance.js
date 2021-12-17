@@ -1,12 +1,11 @@
-/* eslint-disable react/prop-types */
 import React, { useEffect, useState, useCallback } from 'react';
 
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
-import { instanceOf, string } from 'prop-types';
-
+import { arrayOf, func, instanceOf, shape, string } from 'prop-types';
 import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
 import AdPerformanceFilters from './AdPerformanceFilters';
@@ -18,6 +17,7 @@ import {
   getAdPerformance,
   getDSPPerformance,
   getDspPacingData,
+  getDSPPacingGraphData,
 } from '../../../../api';
 
 import 'react-date-range/dist/styles.css'; // main style file
@@ -26,11 +26,17 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 const _ = require('lodash');
 
-export default function AdPerformance({ marketplaceChoices, id, accountType }) {
+export default function AdPerformance({
+  marketplaceChoices,
+  id,
+  accountType,
+  memberData,
+  getActivityLogInfo,
+}) {
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
-  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState();
+  const [marketplaceDefaultValue, setMarketplaceDefaultValue] = useState([]);
   const [responseId, setResponseId] = useState(null);
   const [currency, setCurrency] = useState(null);
   const [currencySymbol, setCurrencySymbol] = useState(null);
@@ -50,7 +56,11 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
   const [showDspAdPacingModal, setShowDspAdPacingModal] = useState({
     show: false,
   });
+  const [showDspBudgetModal, setShowDspBudgetModal] = useState(false);
   const [adGroupBy, setAdGroupBy] = useState('daily');
+  const [performancePacingFlag, setPerformancePacingFlag] = useState(
+    'performance',
+  );
   const [adChartData, setAdChartData] = useState([]);
   const [adCurrentTotal, setAdCurrentTotal] = useState([]);
   const [adPreviousTotal, setAdPreviousTotal] = useState([]);
@@ -58,16 +68,18 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
   const [isApiCall, setIsApiCall] = useState(false);
   const [adGraphLoader, setAdGraphLoader] = useState(false);
   const [dspGraphLoader, setDspGraphLoader] = useState(false);
+  const [isDspPacingLoading, setIsDspPacingLoading] = useState(false);
 
   const [dspGroupBy, setDSPGroupBy] = useState('daily');
   const [dspChartData, setDSPChartData] = useState([]);
+  const [dspPacingChartData, setDSPPacingChartData] = useState([]);
   const [dspData, setDspData] = useState({});
   const [dspCurrentTotal, setDspCurrentTotal] = useState([]);
   const [dspPreviousTotal, setDspPreviousTotal] = useState([]);
   const [dspDifference, setDspDifference] = useState([]);
   const [isCustomDateApply, setIsCustomDateApply] = useState(false);
   const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 2);
+  currentDate.setDate(currentDate.getDate() - 1);
   const [adState, setAdState] = useState([
     {
       startDate: currentDate,
@@ -104,6 +116,25 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
       borderRadius: '1px !important',
     },
   };
+
+  const userInfo = useSelector((state) => state.userState.userInfo);
+  const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
+  useEffect(() => {
+    if (userInfo.role === 'Ad Manager Admin') {
+      setIsAllowToSplitBalance(true);
+    } else if (
+      userInfo.role === 'Hybrid Ad Manager' ||
+      userInfo.role === 'DSP Ad Manager' ||
+      userInfo.role === 'BGS'
+    ) {
+      for (const user of memberData) {
+        if (user.user === userInfo.id) {
+          setIsAllowToSplitBalance(true);
+          break;
+        }
+      }
+    }
+  }, [isAllowToSplitBalance, memberData, userInfo]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
@@ -431,6 +462,41 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     return tempData;
   };
 
+  const bindDSPPacingResponseData = (response) => {
+    const tempData = [];
+
+    // filterout previous data in one temporary object.
+    if (response && response.length) {
+      response.forEach((item) => {
+        const monthYear = dayjs(item.month_year).format('MMM YY');
+        tempData.push({
+          monthYear,
+          invoiceAmount: item.invoice_amount !== null ? item.invoice_amount : 0,
+          invoiceAmountUsd:
+            item.invoice_amount_converted_usd !== null
+              ? item.invoice_amount_converted_usd
+              : 0,
+          carryOver: item.carry_over !== null ? item.carry_over : 0,
+          carryOverUsd:
+            item.carry_over_converted_usd !== null
+              ? item.carry_over_converted_usd
+              : 0,
+          totalInitialBudget:
+            item.total_budget !== null ? item.total_budget : 0,
+          totalInitialbudgetUsd:
+            item.total_budget_converted_usd !== null
+              ? item.total_budget_converted_usd
+              : 0,
+          actualSpent: item.total_spend,
+          actualSpentUsd: item.total_spend_converted_usd,
+          dspPacingFlag: item.dsp_pacing_flag,
+          colorCode: item.dsp_pacing_flag === '0' ? '#d6a307' : '#d63649',
+        });
+      });
+    }
+    return tempData;
+  };
+
   const getAdData = useCallback(
     (
       adType,
@@ -497,10 +563,8 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           setDspGraphLoader(false);
         }
         if (res && res.status === 200) {
-          // setDspData(res.data);
           if (res.data && res.data.dsp_spend) {
             const dspGraphData = bindDSPResponseData(res.data);
-
             setDSPChartData(dspGraphData);
           } else {
             setDSPChartData([]);
@@ -518,9 +582,38 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
 
   const getDSPPacing = useCallback(
     (marketplace) => {
+      setIsDspPacingLoading(true);
       getDspPacingData(id, marketplace).then((res) => {
         if (res && res.status === 200) {
           setDspData(res.data);
+        }
+        setIsDspPacingLoading(false);
+      });
+    },
+    [id],
+  );
+
+  const getPacingGraphData = useCallback(
+    (marketplace) => {
+      setIsApiCall(true);
+      setDspGraphLoader(true);
+      getDSPPacingGraphData(id, marketplace).then((res) => {
+        if (res && res.status === 400) {
+          setIsApiCall(false);
+          setDspGraphLoader(false);
+        }
+        if (res && res.status === 200) {
+          // setDspData(res.data);
+          if (res.data && res.data.dsp_pacing_graph) {
+            const dspPacingGraphData = bindDSPPacingResponseData(
+              res.data && res.data.dsp_pacing_graph,
+            );
+            setDSPPacingChartData(dspPacingGraphData);
+          } else {
+            setDSPPacingChartData([]);
+          }
+          setIsApiCall(false);
+          setDspGraphLoader(false);
         }
       });
     },
@@ -554,6 +647,7 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
         adGroupBy,
         marketplace[0].value,
       );
+
       if (accountType !== 'vendor') {
         getDSPData(selectedAdDF.value, dspGroupBy, marketplace[0].value);
         getDSPPacing(marketplace[0].value);
@@ -819,6 +913,9 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
       );
       getDSPData(selectedAdDF.value, dspGroupBy, event.value);
     }
+    if (performancePacingFlag === 'pacing') {
+      getPacingGraphData(event.value);
+    }
   };
 
   const handleAdGroupBy = (value) => {
@@ -932,6 +1029,30 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
     }
   };
 
+  const handlePeformancePacingFlag = (value) => {
+    setPerformancePacingFlag(value);
+    if (value === 'performance') {
+      if (selectedAdDF.value === 'custom') {
+        const { startDate } = adState[0];
+        const { endDate } = adState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace, sd, ed);
+      } else {
+        getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+      }
+    } else {
+      getPacingGraphData(selectedMarketplace);
+    }
+  };
+
   const setBoxToggle = (name, GraphType) => {
     if (GraphType === 'ad') {
       if (
@@ -982,7 +1103,6 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
         isOpen={showDspAdPacingModal.show}
         style={customDspAdPacingStyles}
         ariaHideApp={false}
-        // onRequestClose={() => setShowDspAdPacingModal({ show: false })}
         contentLabel="Add team modal">
         <img
           src={CloseIcon}
@@ -991,7 +1111,32 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           onClick={() => setShowDspAdPacingModal({ show: false })}
           role="presentation"
         />
-        <DspAdPacing dspData={dspData} currencySymbol={currencySymbol} />
+        <DspAdPacing
+          dspData={dspData}
+          isDspPacingLoading={isDspPacingLoading}
+          currencySymbol={currencySymbol}
+          customerId={id}
+          marketplace={selectedMarketplace}
+          onModalClose={() => {
+            if (selectedAdDF.value === 'custom') {
+              DSPYearAndCustomDateFilter(
+                adState[0].startDate,
+                adState[0].endDate,
+                'custom',
+                selectedMarketplace,
+              );
+            } else {
+              getDSPData(selectedAdDF.value, dspGroupBy, selectedMarketplace);
+            }
+            getDSPPacing(selectedMarketplace);
+            if (performancePacingFlag !== 'performance')
+              getPacingGraphData(selectedMarketplace);
+          }}
+          isAllowToSplitBalance={isAllowToSplitBalance}
+          showDspBudgetModal={showDspBudgetModal}
+          setShowDspBudgetModal={setShowDspBudgetModal}
+          getActivityLogInfo={getActivityLogInfo}
+        />
       </Modal>
     );
   };
@@ -1049,8 +1194,13 @@ export default function AdPerformance({ marketplaceChoices, id, accountType }) {
           setBoxToggle={setBoxToggle}
           setBoxClasses={setBoxClasses}
           dspChartData={dspChartData}
+          dspPacingChartData={dspPacingChartData}
           dspGraphLoader={dspGraphLoader}
           noGraphDataMessage={noGraphDataMessage}
+          performancePacingFlag={performancePacingFlag}
+          handlePeformancePacing={handlePeformancePacingFlag}
+          isAllowToSplitBalance={isAllowToSplitBalance}
+          setShowDspBudgetModal={setShowDspBudgetModal}
         />
       ) : null}
 
@@ -1081,12 +1231,21 @@ AdPerformance.defaultProps = {
   marketplaceChoices: {},
   id: '',
   accountType: 'seller',
+  memberData: [],
+  data: {},
+  getActivityLogInfo: () => {},
 };
 
 AdPerformance.propTypes = {
   marketplaceChoices: instanceOf(Object),
   id: string,
   accountType: string,
+  memberData: arrayOf(shape({})),
+  data: shape({
+    label: string,
+    sub: string,
+  }),
+  getActivityLogInfo: func,
 };
 
 const AddPerformance = styled.div`

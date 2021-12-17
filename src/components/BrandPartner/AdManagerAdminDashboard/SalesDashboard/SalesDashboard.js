@@ -150,6 +150,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
               brand.documents[0] &&
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
+            bgsManager: brand.bgs_manager,
           });
         }
         setBgsList(list);
@@ -180,7 +181,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           trafficPreviousLabel:
             item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
           conversionPreviousLabel:
-            item.conversion !== null ? item.conversion : '0',
+            item.conversion !== null ? item.conversion.toFixed(2) : '0',
         });
       });
     }
@@ -189,7 +190,6 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     if (response.current && response.current.length) {
       response.current.forEach((item, index) => {
         const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
-        let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
         if (response.previous && index < response.previous.length) {
           tempData[index].date = currentReportDate;
@@ -205,22 +205,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           tempData[index].trafficCurrentLabel =
             item.traffic !== null ? item.traffic.toFixed(2) : '0.00';
           tempData[index].conversionCurrentLabel =
-            item.conversion !== null ? item.conversion : '0';
-
-          // to add the dotted line. we have to check null matrix and add the dummy number like 8
-          if (index > 0) {
-            indexNumber = index - 1;
-          } else {
-            indexNumber = index;
-          }
-          tempData[indexNumber].revenueDashLength =
-            item.revenue === null ? 8 : null;
-          tempData[indexNumber].unitsSoldDashLength =
-            item.units_sold === null ? 8 : null;
-          tempData[indexNumber].trafficDashLength =
-            item.traffic === null ? 8 : null;
-          tempData[indexNumber].conversionDashLength =
-            item.conversion === null ? 8 : null;
+            item.conversion !== null ? item.conversion.toFixed(2) : '0';
         } else {
           // if current data count is larger than previous count then
           // generate separate key for current data and defien previous value null and previous label 0
@@ -243,7 +228,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
             trafficCurrentLabel:
               item.traffic !== null ? item.traffic.toFixed(2) : '0.00',
             conversionCurrentLabel:
-              item.conversion !== null ? item.conversion : '0',
+              item.conversion !== null ? item.conversion.toFixed(2) : '0',
 
             revenuePreviousLabel: '0.00',
             unitsSoldPreviousLabel: '0.00',
@@ -533,11 +518,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
     if (diffDays <= 30) {
       temp = 'daily';
-      setGroupByFilters({ daily: true, weekly: true, month: false });
+      setGroupByFilters({ daily: true, weekly: false, month: false });
       setSalesGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setGroupByFilters({ daily: true, weekly: true, month: true });
+      setGroupByFilters({ daily: true, weekly: true, month: false });
       setSalesGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';
@@ -732,9 +717,32 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
   const handleBGSList = (event) => {
     const { value } = event;
+    let manager = selectedManager.value;
 
     if (event.value !== selectedBgs.value) {
       setSelectedBgs(event);
+
+      if (isBGSAdmin && selectedManager.value === 'all') {
+        const found = bgsList.find(
+          (bgsUser) => bgsUser.value === value && bgsUser.bgsManager !== null,
+        );
+
+        if (found !== undefined) {
+          setSelectedManager({
+            value: found?.bgsManager?.id,
+            label: `${found.bgsManager.first_name} ${found.bgsManager.last_name}`,
+          });
+          manager = found?.bgsManager?.id;
+          getBGSList(manager);
+        } else {
+          setSelectedManager({
+            value: 'all',
+            label: 'All',
+          });
+          manager = 'all';
+          getBGSList(null);
+        }
+      }
 
       if (selectedSalesDF.value === 'custom') {
         salesYearAndCustomDateFilter(
@@ -742,7 +750,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           customDateState[0].endDate,
           'custom',
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
         );
       } else {
@@ -750,13 +758,13 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedSalesDF.value,
           salesGroupBy,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
         );
         getContributionData(
           selectedSalesDF.value,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
           selectedContributionOption,
           selectedTabMetrics,

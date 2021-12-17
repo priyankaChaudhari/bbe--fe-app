@@ -1,4 +1,4 @@
 import DashboardContainer from './DashboardContainer';
-import DspAdPacing from './DspAdPacing';
+import DspAdPacing from '../Customer/CompanyPerformance/AdPerformanceView/DspAdPacing';
 
 export { DashboardContainer, DspAdPacing };

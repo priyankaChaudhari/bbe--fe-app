@@ -65,7 +65,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const [pageNumber, setPageNumber] = useState();
   const [contributionCount, setContributionCount] = useState(null);
   const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 2);
+  currentDate.setDate(currentDate.getDate() - 1);
   const [showAdCustomDateModal, setShowAdCustomDateModal] = useState(false);
   const tab = isAdManagerAdmin || isBGSAdmin ? 'positive' : 'contribution';
   const [selectedContributionOption, setSelectedContributionOption] = useState(
@@ -155,6 +155,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
               brand.documents[0] &&
               Object.values(brand.documents[0]) &&
               Object.values(brand.documents[0])[0],
+            bgsManager: brand.bgs_manager,
           });
         }
         setBgsList(list);
@@ -592,11 +593,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     const diffDays = getDays(startDate, endDate);
     if (diffDays <= 30) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: true });
+      setAdFilters({ daily: true, weekly: false, month: false });
       setAdGroupBy('daily');
     } else if (diffDays > 30 && diffDays <= 60) {
       temp = 'daily';
-      setAdFilters({ daily: true, weekly: true, month: true });
+      setAdFilters({ daily: true, weekly: true, month: false });
       setAdGroupBy('daily');
     } else if (diffDays > 60) {
       temp = 'weekly';
@@ -705,9 +706,32 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
 
   const handleBGSList = (event) => {
     const { value } = event;
+    let manager = selectedManager.value;
 
     if (event.value !== selectedBgs.value) {
       setSelectedBgs(event);
+
+      if (isBGSAdmin && selectedManager.value === 'all') {
+        const found = bgsList.find(
+          (bgsUser) => bgsUser.value === value && bgsUser.bgsManager !== null,
+        );
+
+        if (found !== undefined) {
+          setSelectedManager({
+            value: found?.bgsManager?.id,
+            label: `${found.bgsManager.first_name} ${found.bgsManager.last_name}`,
+          });
+          manager = found?.bgsManager?.id;
+          getBGSList(manager);
+        } else {
+          setSelectedManager({
+            value: 'all',
+            label: 'All',
+          });
+          manager = 'all';
+          getBGSList(null);
+        }
+      }
 
       if (selectedAdDF.value === 'custom') {
         ADYearAndCustomDateFilter(
@@ -716,7 +740,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           'custom',
           selectedMarketplace.value,
           selectedAdType,
-          selectedManager.value,
+          manager,
           value,
         );
       } else {
@@ -725,14 +749,14 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           selectedAdDF.value,
           adGroupBy,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
         );
         getContributionData(
           selectedAdType,
           selectedAdDF.value,
           selectedMarketplace.value,
-          selectedManager.value,
+          manager,
           value,
           selectedContributionOption,
           selectedTabMetrics,

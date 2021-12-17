@@ -1,5 +1,3 @@
-/* eslint-disable guard-for-in */
-
 import queryString from 'query-string';
 
 import axiosInstance from '../axios';
@@ -683,6 +681,20 @@ export async function getDSPPerformance(
   return result;
 }
 
+export async function getDSPPacingGraphData(customer, marketplace) {
+  const params = { dsp_marketplace: marketplace, dsp_pacing_graph: true };
+
+  const result = await axiosInstance
+    .get(`${API_AD_PERFORMANCE + customer}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function getCustomers(
   pageNumber,
   dashboard,
@@ -733,6 +745,34 @@ export async function getDspPacingData(id, marketplace) {
   const params = { dsp_pacing: 'month', dsp_marketplace: marketplace };
   const result = await axiosInstance
     .get(`${API_AD_PERFORMANCE + id}/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function storeAllocatedBudget(data, customerId, marketplace) {
+  const allocateMonths = [];
+  for (const option of data) {
+    allocateMonths.push({
+      escrow_allocated_converted_usd: Number(
+        option.escrow_allocated_converted_usd,
+      ),
+      month_year: option.month_year,
+    });
+  }
+
+  const params = {
+    customer_id: customerId,
+    marketplace,
+    allocate_balance: allocateMonths,
+  };
+
+  const result = await axiosInstance
+    .post(`${API_AD_PERFORMANCE}allocate-balance/`, params)
     .then((response) => {
       return response;
     })

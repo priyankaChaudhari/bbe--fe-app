@@ -45,6 +45,11 @@ const Table = styled.table`
         &.light-font {
           font-weight: 300;
         }
+        &.line-body {
+          text-align: left;
+          padding: 13px 0px;
+          border-bottom: 1px solid #e0e6e8;
+        }
       }
       &.agreement {
         font-size: ${Theme.normal};
@@ -365,9 +370,11 @@ const Table = styled.table`
             border: 1px solid ${Theme.gray45};
             border-radius: 5px;
             border: none;
-            padding: 10px 4px 10px 12px;
+            padding: 3px 3px 3px 10px;
             color: #171725;
             font-size: 14px;
+            display: flex;
+            align-items: center;
 
             &.agreement {
               border: 1px solid ${Theme.gray45};
@@ -396,7 +403,6 @@ const Table = styled.table`
               border-radius: 3px;
               margin-left: 10px;
               float: right;
-              margin-top: -9px;
               font-size: 14px;
 
               &.edit-file-icon {

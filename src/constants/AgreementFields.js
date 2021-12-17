@@ -1,14 +1,14 @@
 export const AgreementDetails = [
   {
-    key: 'company_name',
-    label: 'Customer Name',
+    key: 'contract_type',
+    label: 'Contract Type',
     type: 'text',
-    placeholder: 'Enter Customer Name',
+    placeholder: 'Enter Contract Type',
     isMandatory: true,
     part: 'agreement',
     error: false,
-    field: 'customer',
   },
+
   {
     key: 'start_date',
     label: 'Contract Start Date',
@@ -28,8 +28,18 @@ export const AgreementDetails = [
     error: false,
   },
   {
+    key: 'company_name',
+    label: 'Customer Name',
+    type: 'text',
+    placeholder: 'Enter Customer Name',
+    isMandatory: true,
+    part: 'agreement',
+    error: false,
+    field: 'customer',
+  },
+  {
     key: 'contract_address',
-    label: 'Contract Address',
+    label: 'Customer Address',
     sections: [
       {
         key: 'address',
@@ -88,46 +98,11 @@ export const remainingFieldsOfContract = [
   {
     key: 'contract_status',
     label: 'Contract Status',
-    type: 'object',
-  },
-  {
-    key: 'contract_type',
-    label: 'Contract Type',
     type: 'text',
   },
   {
-    key: 'monthly_discount_amount',
-    label: 'Monthly discount amount',
-    type: 'number-currency',
-  },
-  {
-    key: 'monthly_discount_type',
-    label: 'Monthly discount type',
-    type: 'text',
-  },
-  {
-    key: 'one_time_deal_amount',
-    label: 'One time deal amount',
-    type: 'number-currency',
-  },
-  {
-    key: 'one_time_discount_amount',
-    label: 'One time discount amount',
-    type: 'number-currency',
-  },
-  {
-    key: 'one_time_discount_type',
-    label: 'One time discount type',
-    type: 'text',
-  },
-  {
-    key: 'sales_threshold',
-    label: 'Sales Threshold',
-    type: 'text',
-  },
-  {
-    key: 'seller_type',
-    label: 'Seller Type',
+    key: 'fee_type',
+    label: 'Fee Type',
     type: 'text',
   },
   {
@@ -136,9 +111,39 @@ export const remainingFieldsOfContract = [
     type: 'text',
   },
   {
-    key: 'yoy_percentage',
-    label: 'YOY Percentage',
+    key: 'vendor_billing_report',
+    label: 'Vendor Billing Report',
     type: 'text',
+  },
+  {
+    key: 'discount_type',
+    label: 'Discount Type',
+    type: 'text',
+  },
+  {
+    key: 'discount_amount',
+    label: 'Discount Amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'sales_threshold',
+    label: 'Sales Threshold',
+    type: 'number-currency',
+  },
+  {
+    key: 'monthly_rev_share',
+    label: 'monthly Rev Share',
+    type: 'object',
+  },
+  {
+    key: 'quarterly_rev_share',
+    label: 'Quarterly Rev Share',
+    type: 'object',
+  },
+  {
+    key: 'billing_minimum',
+    label: 'BILLING MINIMUM ',
+    type: 'number-currency',
   },
 ];
 
@@ -222,3 +227,366 @@ export const newAgreementTypes = [
 ];
 
 export const additionaMarketplaceAmount = 1500;
+
+export const accountTypeOptions = [
+  { value: 'Seller', label: 'Seller' },
+  { value: 'Vendor', label: 'Vendor' },
+  { value: 'Hybrid', label: 'Hybrid' },
+];
+
+export const feeTypeOptions = [
+  {
+    value: 'Retainer Only',
+    label: 'Retainer Only',
+    key: 'monthly_retainer',
+    type: 'number-currency',
+  },
+  {
+    value: 'Revenue Share Only',
+    label: 'Revenue Share Only',
+    key: 'rev_share',
+    type: 'choice',
+  },
+  {
+    value: 'Retainer + % Rev Share',
+    label: 'Retainer + % Rev Share',
+    key: 'retinaer_rev_share',
+    type: 'choice',
+  },
+];
+
+// Fee structure
+
+export const feeStructureContainerDetails = [
+  {
+    key: 'primary_marketplace',
+    label: 'Primary MarketPlace',
+    type: 'choice',
+    placeholder: 'Select Primary Marketplace',
+    isMandatory: true,
+    part: 'fee structure',
+  },
+  {
+    key: 'seller_type',
+    label: 'Account Type',
+    type: 'choice',
+    placeholder: 'Select Account Type',
+    isMandatory: true,
+    part: 'fee structure',
+  },
+];
+
+export const revShareDetails = [
+  {
+    key: 'rev_share',
+    label: 'Revenue Share',
+    type: 'choice',
+    placeholder: 'Select Revenue Share',
+    isMandatory: true,
+    suffix: '%',
+  },
+  {
+    key: 'billing_minimum',
+    label: 'BILLING MINIMUM (OPTIONAL)',
+    type: 'number-currency',
+    placeholder: 'Enter Billing Minimum',
+    isMandatory: false,
+    subtitle:
+      'We will charge the greater of the value entered here or the % of revenue',
+    prefix: '$',
+  },
+  {
+    key: 'billing_cap',
+    label: 'BILLING CAP (OPTIONAL)',
+    type: 'number-currency',
+    placeholder: 'Enter Billing Cap',
+    isMandatory: false,
+    subtitle: ' We will charge no more than the amount entered here.',
+    prefix: '$',
+  },
+];
+
+export const revShareAndRetainerDetails = [
+  {
+    value: 'monthly_retainer',
+    label: 'Monthly Retainer',
+    key: 'monthly_retainer',
+    type: 'number-currency',
+    isMandatory: true,
+    prefix: '$',
+  },
+  {
+    key: 'rev_share',
+    label: 'Revenue Share',
+    type: 'choice',
+    placeholder: 'Select Revenue Share',
+    isMandatory: true,
+    suffix: '%',
+  },
+  {
+    key: 'rev_share_threshold',
+    label: 'Revenue Share Threshold',
+    type: 'threshold',
+    isMandatory: false,
+    prefix: '$',
+  },
+  {
+    key: 'billing_cap',
+    label: 'BILLING CAP (OPTIONAL)',
+    type: 'number-currency',
+    placeholder: 'Enter Billing Cap',
+    isMandatory: false,
+    subtitle: ' We will charge no more than the amount entered here.',
+    prefix: '$',
+  },
+];
+
+export const revShareAndRetainerQuarterDetails = [
+  {
+    value: 'monthly_retainer',
+    label: 'Monthly Retainer',
+    key: 'monthly_retainer',
+    type: 'number-currency',
+    isMandatory: true,
+    prefix: '$',
+  },
+  {
+    key: 'rev_share',
+    label: 'Revenue Share',
+    type: 'choice',
+    placeholder: 'Select Revenue Share',
+    isMandatory: true,
+    suffix: '%',
+  },
+  {
+    key: 'rev_share_threshold',
+    label: 'Revenue Share Threshold',
+    type: 'threshold',
+    isMandatory: false,
+    prefix: '$',
+  },
+  {
+    key: 'quarter',
+    type: 'threshold',
+    prefix: '$',
+  },
+  {
+    key: 'billing_cap',
+    label: 'BILLING CAP (OPTIONAL)',
+    type: 'number-currency',
+    placeholder: 'Enter Billing Cap',
+    isMandatory: false,
+    subtitle: ' We will charge no more than the amount entered here.',
+    prefix: '$',
+  },
+];
+export const revShareAndRetainerMonthDetails = [
+  {
+    value: 'monthly_retainer',
+    label: 'Monthly Retainer',
+    key: 'monthly_retainer',
+    type: 'number-currency',
+    isMandatory: true,
+    prefix: '$',
+  },
+  {
+    key: 'rev_share',
+    label: 'Revenue Share',
+    type: 'choice',
+    placeholder: 'Select Revenue Share',
+    isMandatory: true,
+    suffix: '%',
+  },
+  {
+    key: 'rev_share_threshold',
+    label: 'Revenue Share Threshold',
+    type: 'threshold',
+    isMandatory: false,
+    prefix: '$',
+  },
+  {
+    key: 'month',
+    type: 'threshold',
+    prefix: '$',
+  },
+  {
+    key: 'billing_cap',
+    label: 'BILLING CAP (OPTIONAL)',
+    type: 'number-currency',
+    placeholder: 'Enter Billing Cap',
+    isMandatory: false,
+    subtitle: ' We will charge no more than the amount entered here.',
+    prefix: '$',
+  },
+];
+
+export const quarterlyThresholdOptions = [
+  {
+    key: '1st quarterly',
+    label: '1st Quarter',
+    type: 'number-currency',
+    placeholder: 'Enter 1st Quarter',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share Q1',
+  },
+  {
+    key: '2nd quarterly',
+    label: '2nd Quarter',
+    type: 'number-currency',
+    placeholder: 'Enter 2nd Quarter',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share Q2',
+  },
+  {
+    key: '3rd quarterly',
+    label: '3rd Quarter',
+    type: 'number-currency',
+    placeholder: 'Enter 3rd Quarter',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share Q3',
+  },
+  {
+    key: '4th quarterly',
+    label: '4th Quarter',
+    type: 'number-currency',
+    placeholder: 'Enter 4th Quarter',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share Q4',
+  },
+];
+
+export const monthlyThresholdOptions = [
+  {
+    key: 'january month',
+    label: 'January',
+    type: 'number-currency',
+    placeholder: 'Enter January',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share January',
+  },
+  {
+    key: 'february month',
+    label: 'February',
+    type: 'number-currency',
+    placeholder: 'Enter February',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share February',
+  },
+  {
+    key: 'march month',
+    label: 'March',
+    type: 'number-currency',
+    placeholder: 'Enter March',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share March',
+  },
+  {
+    key: 'april month',
+    label: 'April',
+    type: 'number-currency',
+    placeholder: 'Enter April',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share April',
+  },
+  {
+    key: 'may month',
+    label: 'May',
+    type: 'number-currency',
+    placeholder: 'Enter May',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share May',
+  },
+  {
+    key: 'june month',
+    label: 'June',
+    type: 'number-currency',
+    placeholder: 'Enter June',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share June',
+  },
+  {
+    key: 'july month',
+    label: 'July',
+    type: 'number-currency',
+    placeholder: 'Enter July',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share July',
+  },
+  {
+    key: 'august month',
+    label: 'August',
+    type: 'number-currency',
+    placeholder: 'Enter August',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share August',
+  },
+  {
+    key: 'september month',
+    label: 'September',
+    type: 'number-currency',
+    placeholder: 'Enter September',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share September',
+  },
+  {
+    key: 'october month',
+    label: 'October',
+    type: 'number-currency',
+    placeholder: 'Enter October',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share October',
+  },
+  {
+    key: 'november month',
+    label: 'November',
+    type: 'number-currency',
+    placeholder: 'Enter November',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share November',
+  },
+  {
+    key: 'december month',
+    label: 'December',
+    type: 'number-currency',
+    placeholder: 'Enter December',
+    isMandatory: false,
+    prefix: '$',
+    fieldOf: 'threshold',
+    detail: 'Rev Share December',
+  },
+];
+
+export const vendorReportOptions = [
+  { value: 'Shipped COGS', label: 'Shipped COGS' },
+  { value: 'Ordered Revenue', label: 'Ordered Revenue' },
+];

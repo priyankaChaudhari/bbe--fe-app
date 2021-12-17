@@ -66,5 +66,4 @@ export const PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY = `${PATH_CUSTOMER_DETAILS}/a
 
 // Product Assets
 export const PATH_UPLOAD_PRODUCT_ASSET = `${PATH_CUSTOMER_DETAILS}/product-assets-requested/:productId`;
-
 export const PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE = `${PATH_CUSTOMER_DETAILS}/assigned-product-delegate/:productId`;

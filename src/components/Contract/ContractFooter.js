@@ -29,7 +29,6 @@ export default function ContractFooter({
   onEditcontract,
   isLoading,
   isFooter,
-  formData,
   newAddendumData,
   updatedFormData,
   showEditor,
@@ -54,10 +53,10 @@ export default function ContractFooter({
   const [pauseAgreementData, setPauseAgreementData] = useState({});
   const [transactionalData, setTransactionalData] = useState({});
   const contractStatus = details?.contract_status?.value;
-  const AdditionalOneTimeServices =
-    formData?.additional_one_time_services?.length;
+
   const rightTickCondition =
     showRightTick('service_agreement') &&
+    showRightTick('feeStructure') &&
     showRightTick('statement') &&
     showRightTick('dspAddendum');
 
@@ -75,33 +74,6 @@ export default function ContractFooter({
   useEffect(() => {
     getTransactionalDataDetails();
   }, [getTransactionalDataDetails]);
-
-  const checkAmazonStorePriceExists = () => {
-    const service =
-      AdditionalOneTimeServices &&
-      formData.additional_one_time_services.find((item) =>
-        item && item.name
-          ? item.name === 'Amazon Store Package'
-          : item?.service?.name === 'Amazon Store Package',
-      );
-    if (service) {
-      return true;
-    }
-    const customService =
-      AdditionalOneTimeServices &&
-      formData.additional_one_time_services.find((item) =>
-        item && item.name
-          ? item.name === 'Amazon Store Package Custom'
-          : item?.service?.name === 'Amazon Store Package Custom',
-      );
-    if (
-      (customService && !customService.custom_amazon_store_price) ||
-      customService?.custom_amazon_store_price === ''
-    ) {
-      return true;
-    }
-    return false;
-  };
 
   const updateContractData = (data) => {
     setIsLoading({ loader: true, type: 'button' });
@@ -253,19 +225,27 @@ export default function ContractFooter({
   const displayFooterForManagers = () => {
     return rightTickCondition ? (
       <>
-        <Button
-          className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
-            isEditContract ? 'w-sm-100' : 'w-sm-50'
-          }`}
-          disabled={!rightTickCondition}
-          onClick={() => {
-            createAgreementDoc();
-            setParams('select-contact');
-            setShowModal(true);
-            setIsEditContract(false);
-          }}>
-          Approve and Request Signature
-        </Button>
+        {!isEditContract ? (
+          <Button
+            className={`btn-primary on-boarding  w-320 mt-3 ml-0 ${
+              isEditContract ? 'w-sm-100' : 'w-sm-50'
+            }`}
+            disabled={!rightTickCondition}
+            onClick={() => {
+              createAgreementDoc();
+              setParams('select-contact');
+              setShowModal(true);
+              setIsEditContract(false);
+            }}>
+            Approve and Request Signature
+          </Button>
+        ) : (
+          renderRequestButtonHtml(
+            'Approve and Request Signature',
+            'w-320 ml-0',
+            'true',
+          )
+        )}
         {!isEditContract
           ? renderEditContractBtn('light-orange w-sm-50 ml-5')
           : null}
@@ -301,7 +281,7 @@ export default function ContractFooter({
   };
 
   const displayApprovalBtn = () => {
-    return (
+    return !isEditContract ? (
       <Button
         className={`btn-primary on-boarding mt-3  ${
           isEditContract ? 'w-sm-100' : 'w-sm-50 ml-0'
@@ -318,6 +298,8 @@ export default function ContractFooter({
         }}>
         Request Approval
       </Button>
+    ) : (
+      renderRequestButtonHtml('Request Approval', 'mr-4 w-sm-100', 'false')
     );
   };
   const displayApprovalFooterForInternalUsers = () => {
@@ -365,18 +347,22 @@ export default function ContractFooter({
   const displayRequestSignatureFooter = () => {
     return rightTickCondition ? (
       <>
-        <Button
-          className={`btn-primary on-boarding mt-3 ml-0 ${
-            isEditContract ? 'w-sm-100 ' : 'w-sm-50 '
-          }`}
-          onClick={() => {
-            createAgreementDoc();
-            setParams('select-contact');
-            setShowModal(true);
-            setIsEditContract(false);
-          }}>
-          Request Signature
-        </Button>
+        {!isEditContract ? (
+          <Button
+            className={`btn-primary on-boarding mt-3 ml-0 ${
+              isEditContract ? 'w-sm-100 ' : 'w-sm-50 '
+            }`}
+            onClick={() => {
+              createAgreementDoc();
+              setParams('select-contact');
+              setShowModal(true);
+              setIsEditContract(false);
+            }}>
+            Request Signature
+          </Button>
+        ) : (
+          renderRequestButtonHtml('Request Signature', 'mr-5 w-sm-100', 'false')
+        )}
         {!isEditContract
           ? renderEditContractBtn('light-orange w-sm-50 ml-5')
           : null}
@@ -392,6 +378,43 @@ export default function ContractFooter({
     );
   };
 
+  const displayUnsavedChangesCount = () => {
+    if (
+      Object.keys(updatedFormData)?.length &&
+      Object.keys(updatedFormData)?.includes('fee_structure')
+    ) {
+      if (
+        Object.keys(updatedFormData?.fee_structure)?.includes('vendor') &&
+        Object.keys(updatedFormData?.fee_structure)?.includes('seller')
+      ) {
+        return (
+          Object.keys(updatedFormData)?.length +
+          Object.keys(updatedFormData?.fee_structure?.vendor)?.length +
+          Object.keys(updatedFormData?.fee_structure?.seller)?.length -
+          1
+        );
+      }
+      if (
+        Object.keys(updatedFormData?.fee_structure)?.includes('vendor') &&
+        updatedFormData?.fee_structure?.vendor !== undefined
+      ) {
+        return (
+          Object.keys(updatedFormData)?.length +
+          Object.keys(updatedFormData?.fee_structure?.vendor)?.length -
+          1
+        );
+      }
+      if (Object.keys(updatedFormData?.fee_structure)?.includes('seller')) {
+        return (
+          Object.keys(updatedFormData)?.length +
+          Object.keys(updatedFormData?.fee_structure?.seller)?.length -
+          1
+        );
+      }
+    }
+    return Object.keys(updatedFormData).length;
+  };
+
   const displayFooterForSaveChanges = () => {
     return (
       <div className="mt-4 pt-5">
@@ -399,7 +422,6 @@ export default function ContractFooter({
           <div className="container-fluid">
             <Button
               className="light-orange  on-boarding  mt-3  mr-0 ml-0 w-sm-50"
-              disabled={checkAmazonStorePriceExists()}
               onClick={() => nextStep()}>
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
@@ -421,7 +443,7 @@ export default function ContractFooter({
             </Button>
             {updatedFormData && Object.keys(updatedFormData).length ? (
               <span className="unsave-changes">
-                {Object.keys(updatedFormData).length} unsaved changes.
+                {displayUnsavedChangesCount()} unsaved changes.
               </span>
             ) : (
               ''

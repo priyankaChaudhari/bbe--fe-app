@@ -187,6 +187,16 @@ const Button = styled.button`
     width: 180px;
     padding: 9px;
 
+    &.gray-btn {
+      background-color: rgba(224, 231, 255, 0.2);
+      border: 1px solid ${Theme.gray2};
+      color: ${Theme.black};
+      width: 155px;
+      a {
+        color: ${Theme.black};
+      }
+    }
+
     &:focus {
       outline: none;
     }

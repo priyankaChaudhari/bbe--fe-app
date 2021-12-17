@@ -5,6 +5,7 @@ import AddendumSection from './AddendumSection';
 import AdditionalOneTimeServices from './AdditionalOneTimeServices';
 import AdditionalMonthlyServices from './AdditionalMonthlyServices';
 import RevenueShareThreshold from './RevenueShareThreshold';
+import FeeStructureContainer from './FeeStructureContainer';
 
 export {
   ServiceAgreementSection,
@@ -14,4 +15,5 @@ export {
   AdditionalOneTimeServices,
   AdditionalMonthlyServices,
   RevenueShareThreshold,
+  FeeStructureContainer,
 };

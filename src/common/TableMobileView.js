@@ -17,15 +17,23 @@ const TableMobileView = ({
   label1,
   label2,
   label3,
+  label4,
+  label5,
+  label6,
+  label7,
   labelInfo1,
   labelInfo2,
   labelInfo3,
+  labelInfo4,
+  labelInfo5,
+  labelInfo6,
+  labelInfo7,
   status,
   statusColor,
   onClick,
   icon,
 }) => {
-  const col = `${label3 ? 'col-6' : 'col-4'}`;
+  const col = `${label3 ? (label7 ? 'col-4' : 'col-6') : 'col-4'}`;
   return (
     <TableMobileViewWrapper className={[className]} onClick={onClick}>
       <WhiteCard>
@@ -48,7 +56,9 @@ const TableMobileView = ({
               </>
             ) : (
               <>
-                <div className="CompanyName">{invoiceType}</div>
+                <div className="CompanyName LargeCompanyName">
+                  {invoiceType}
+                </div>
                 <div className="CompanyId">#{invoiceId}</div>
               </>
             )}
@@ -88,6 +98,30 @@ const TableMobileView = ({
               <div className="label-info "> {labelInfo3}</div>
             </div>
           ) : null}
+          {label7 ? (
+            <>
+              <div className={`${col} mb-3`}>
+                {' '}
+                <div className="label">{label4}</div>
+                <div className="label-info "> {labelInfo4}</div>
+              </div>
+              <div className={`${col} mb-3`}>
+                {' '}
+                <div className="label">{label5}</div>
+                <div className="label-info "> {labelInfo5}</div>
+              </div>
+              <div className={`${col} mb-3`}>
+                {' '}
+                <div className="label">{label6}</div>
+                <div className="label-info "> {labelInfo6}</div>
+              </div>
+              <div className={`${col} mb-3`}>
+                {' '}
+                <div className="label">{label7}</div>
+                <div className="label-info "> {labelInfo7}</div>
+              </div>
+            </>
+          ) : null}
         </div>
       </WhiteCard>
     </TableMobileViewWrapper>
@@ -120,6 +154,10 @@ const TableMobileViewWrapper = styled.div`
     min-height: 20px;
     margin-top: 5px;
     text-transform: capitalize;
+
+    &.LargeCompanyName {
+      font-size: ${Theme.title};
+    }
   }
   .CompanyId {
     font-size: ${Theme.extraNormal};
@@ -146,6 +184,14 @@ TableMobileView.defaultProps = {
   labelInfo2: '',
   label3: '',
   labelInfo3: '',
+  label4: '',
+  labelInfo4: '',
+  label5: '',
+  labelInfo5: '',
+  label6: '',
+  labelInfo6: '',
+  label7: '',
+  labelInfo7: '',
   invoiceType: '',
   invoiceId: '',
   status: '',
@@ -165,6 +211,14 @@ TableMobileView.propTypes = {
   labelInfo2: string,
   label3: string,
   labelInfo3: string,
+  label4: string,
+  labelInfo4: string,
+  label5: string,
+  labelInfo5: string,
+  label6: string,
+  labelInfo6: string,
+  label7: string,
+  labelInfo7: string,
   invoiceType: string,
   invoiceId: string,
   status: string,

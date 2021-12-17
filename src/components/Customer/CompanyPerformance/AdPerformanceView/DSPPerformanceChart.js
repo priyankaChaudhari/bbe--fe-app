@@ -39,6 +39,7 @@ export default function DSPPerformanceChart({
     chart.current.data = chartData;
     chart.current.paddingRight = 20;
     chart.current.logo.disabled = true; // disable amchart logo
+    chart.current.zoomOutButton.disabled = true;
     // render X axis
     const dateAxis = chart.current.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.minGridDistance = 50;
@@ -158,7 +159,7 @@ export default function DSPPerformanceChart({
             currentLabel,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
           if (selectedDF !== 'custom') {
             tooltipValue = `${tooltipValue} ${renderTooltip(
@@ -167,7 +168,7 @@ export default function DSPPerformanceChart({
               previousLabel,
               currencySymbol,
               null,
-              null,
+              '#,###',
             )}`;
           }
         } else if (
@@ -307,53 +308,102 @@ export default function DSPPerformanceChart({
       chart.current.cursor.snapToSeries = snapToSeries;
     } else {
       // else part- for multiple metrics selected
-
-      // create object of 2nd value axis
       let firstAxis = null;
       let secondAxis = null;
       let thirdAxis = null;
+      let valueAxis2 = null;
+      let valueAxis3 = null;
+      let valueAxis4 = null;
 
-      const valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
-      valueAxis2.renderer.grid.template.disabled = true;
-      valueAxis2.cursorTooltipEnabled = false;
-      valueAxis2.numberFormatter = new am4core.NumberFormatter();
-      // valueAxis2.numberFormatter.numberFormat = `#.#a`;
-      valueAxis2.extraMax = 0.009;
-      valueAxis2.numberFormatter.bigNumberPrefixes = [
-        { number: 1e3, suffix: 'K' },
-        { number: 1e6, suffix: 'M' },
-        { number: 1e9, suffix: 'B' },
-      ];
-      valueAxis2.numberFormatter.smallNumberPrefixes = [];
+      let isBindValueAxis2 = true;
+      let isBindValueAxis3 = true;
+      let isBindValueAxis4 = true;
 
-      // create object of 3rd value axis
-      const valueAxis3 = chart.current.yAxes.push(new am4charts.ValueAxis());
-      valueAxis3.renderer.grid.template.disabled = true;
-      valueAxis3.cursorTooltipEnabled = false;
-      valueAxis3.numberFormatter = new am4core.NumberFormatter();
-      valueAxis3.extraMax = 0.009;
-      // valueAxis3.numberFormatter.numberFormat = `#.#a`;
-      valueAxis3.numberFormatter.bigNumberPrefixes = [
-        { number: 1e3, suffix: 'K' },
-        { number: 1e6, suffix: 'M' },
-        { number: 1e9, suffix: 'B' },
-      ];
-      valueAxis3.numberFormatter.smallNumberPrefixes = [];
+      if (isDashboard) {
+        if (_.size(selectedBox) === 3) {
+          if (
+            _.has(selectedBox, 'dspSpend') &&
+            _.has(selectedBox, 'dspProductSales') &&
+            _.has(selectedBox, 'dspTotalProductSales')
+          ) {
+            isBindValueAxis2 = false;
+            isBindValueAxis3 = false;
+            isBindValueAxis4 = false;
+          } else if (
+            (_.has(selectedBox, 'dspSpend') &&
+              _.has(selectedBox, 'dspProductSales')) ||
+            (_.has(selectedBox, 'dspSpend') &&
+              _.has(selectedBox, 'dspTotalProductSales')) ||
+            (_.has(selectedBox, 'dspProductSales') &&
+              _.has(selectedBox, 'dspTotalProductSales'))
+          ) {
+            isBindValueAxis2 = true;
+            isBindValueAxis3 = false;
+            isBindValueAxis4 = false;
+          }
+        } else if (_.size(selectedBox) === 4) {
+          if (
+            _.has(selectedBox, 'dspSpend') &&
+            _.has(selectedBox, 'dspProductSales') &&
+            _.has(selectedBox, 'dspTotalProductSales')
+          ) {
+            isBindValueAxis2 = true;
+            isBindValueAxis3 = false;
+            isBindValueAxis4 = false;
+          }
+        }
+      } else if (
+        _.size(selectedBox) === 3 &&
+        _.has(selectedBox, 'dspSpend') &&
+        _.has(selectedBox, 'dspProductSales')
+      ) {
+        isBindValueAxis2 = true;
+        isBindValueAxis3 = false;
+        isBindValueAxis4 = false;
+      }
 
-      // create object of 4th value axis
-      const valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
-      valueAxis4.renderer.grid.template.disabled = true;
-      valueAxis4.cursorTooltipEnabled = false;
-      valueAxis4.numberFormatter = new am4core.NumberFormatter();
-      valueAxis4.extraMax = 0.009;
-      // valueAxis4.numberFormatter.numberFormat = `#.#a`;
-      valueAxis4.numberFormatter.bigNumberPrefixes = [
-        { number: 1e3, suffix: 'K' },
-        { number: 1e6, suffix: 'M' },
-        { number: 1e9, suffix: 'B' },
-      ];
-      valueAxis4.numberFormatter.smallNumberPrefixes = [];
+      if (isBindValueAxis2) {
+        // create object of 2nd value axis
+        valueAxis2 = chart.current.yAxes.push(new am4charts.ValueAxis());
+        valueAxis2.renderer.grid.template.disabled = true;
+        valueAxis2.cursorTooltipEnabled = false;
+        valueAxis2.numberFormatter = new am4core.NumberFormatter();
 
+        valueAxis2.extraMax = 0.009;
+        valueAxis2.numberFormatter.bigNumberPrefixes = [
+          { number: 1e3, suffix: 'K' },
+          { number: 1e6, suffix: 'M' },
+          { number: 1e9, suffix: 'B' },
+        ];
+        valueAxis2.numberFormatter.smallNumberPrefixes = [];
+      }
+      if (isBindValueAxis3) {
+        valueAxis3 = chart.current.yAxes.push(new am4charts.ValueAxis());
+        valueAxis3.renderer.grid.template.disabled = true;
+        valueAxis3.cursorTooltipEnabled = false;
+        valueAxis3.numberFormatter = new am4core.NumberFormatter();
+        valueAxis3.extraMax = 0.009;
+        valueAxis3.numberFormatter.bigNumberPrefixes = [
+          { number: 1e3, suffix: 'K' },
+          { number: 1e6, suffix: 'M' },
+          { number: 1e9, suffix: 'B' },
+        ];
+        valueAxis3.numberFormatter.smallNumberPrefixes = [];
+      }
+      if (isBindValueAxis4) {
+        // create object of 4th value axis
+        valueAxis4 = chart.current.yAxes.push(new am4charts.ValueAxis());
+        valueAxis4.renderer.grid.template.disabled = true;
+        valueAxis4.cursorTooltipEnabled = false;
+        valueAxis4.numberFormatter = new am4core.NumberFormatter();
+        valueAxis4.extraMax = 0.009;
+        valueAxis4.numberFormatter.bigNumberPrefixes = [
+          { number: 1e3, suffix: 'K' },
+          { number: 1e6, suffix: 'M' },
+          { number: 1e9, suffix: 'B' },
+        ];
+        valueAxis4.numberFormatter.smallNumberPrefixes = [];
+      }
       const snapToSeries = [];
       let tooltipValue = '';
 
@@ -374,7 +424,7 @@ export default function DSPPerformanceChart({
             value,
             currencySymbol,
             null,
-            null,
+            '#,###',
           )}`;
         } else if (
           item === 'dspTtlNewBrandPurchases' ||
@@ -404,7 +454,7 @@ export default function DSPPerformanceChart({
             value,
             null,
             null,
-            null,
+            '#,###',
           )}`;
         }
         return '';
@@ -496,7 +546,14 @@ export default function DSPPerformanceChart({
             thirdAxis = 'others';
           }
         } else if (index === 3) {
-          if (thirdAxis === null) {
+          if (secondAxis === null) {
+            series.yAxis = valueAxis2;
+            valueAxis2.renderer.opposite = true;
+            valueAxis2.numberFormatter.numberFormat = bindValueAxisFormatter(
+              item,
+            );
+            secondAxis = 'other';
+          } else if (thirdAxis === null) {
             series.yAxis = valueAxis3;
             valueAxis3.renderer.opposite = true;
             valueAxis3.numberFormatter.numberFormat = bindValueAxisFormatter(
@@ -515,7 +572,6 @@ export default function DSPPerformanceChart({
             valueAxis4.numberFormatter.numberFormat = bindValueAxisFormatter(
               item,
             );
-
             valueAxis.renderer.line.strokeOpacity = 0;
             valueAxis2.renderer.line.strokeOpacity = 0;
             valueAxis3.renderer.line.strokeOpacity = 0;

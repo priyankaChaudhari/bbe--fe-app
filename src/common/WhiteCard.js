@@ -14,6 +14,16 @@ export const WhiteCard = styled.div`
   .green {
     color: ${Theme.lighterGreen};
   }
+  &.header-table {
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    padding-bottom: 0;
+  }
+  &.table-card {
+    padding: 0 20px;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+  }
 
   &.fix-height {
     flex-wrap: wrap;
@@ -487,7 +497,7 @@ export const WhiteCard = styled.div`
     span {
       color: ${Theme.black};
       font-size: ${Theme.normal};
-      font-weight: 600;
+      /* font-weight: 600; */
     }
   }
 

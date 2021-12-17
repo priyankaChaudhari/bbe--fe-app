@@ -130,6 +130,7 @@ export default function RecentActivityNotes({
                                     __html: item?.note.slice(0, 80),
                                   }}
                                 />
+                                {item?.note?.length > 80 ? '...' : ''}
                                 <div className="time-date  mt-1">
                                   {item?.created_at}
                                 </div>

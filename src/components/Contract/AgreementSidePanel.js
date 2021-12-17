@@ -30,6 +30,7 @@ import {
   StatementOfWork,
   DspAdvertising,
   AddendumSection,
+  FeeStructureContainer,
 } from './AgreementSidebarSections';
 
 export default function AgreementSidePanel({
@@ -116,6 +117,17 @@ export default function AgreementSidePanel({
   sidebarSection,
   setSidebarSection,
   checkContractStatus,
+  setMarketplaceDropdownData,
+  discountData,
+  setSelectedDiscount,
+  feeStructureErrors,
+  setFeeStructureErrors,
+  getMonthlyServices,
+  showRightTick,
+  getFeeStructureDetails,
+  manageErrorCount,
+  checkMandatoryFieldsOfFeeType,
+  servicesFees,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [revShare, setRevShare] = useState([]);
@@ -128,8 +140,7 @@ export default function AgreementSidePanel({
 
   const formDataAdditionalMarketplacesLength =
     formData?.additional_marketplaces?.length;
-  const originalDataAdditionalMarketplacesLength =
-    originalData?.additional_marketplaces?.length;
+
   const originalDataAdditionalOneTimeServicesLength =
     originalData?.additional_one_time_services?.length;
   const additionalOneTimeServicesCreateLength =
@@ -250,13 +261,12 @@ export default function AgreementSidePanel({
     });
   };
 
-  // console.log('formData', formData);
   useEffect(() => {
     getLength().then((len) => {
-      setAccountLength(len.data);
+      setAccountLength(len?.data);
     });
     getRevenueShare().then((rev) => {
-      setRevShare(rev.data);
+      setRevShare(rev?.data);
     });
   }, []);
 
@@ -278,6 +288,9 @@ export default function AgreementSidePanel({
     if (openCollapse.addendum) {
       executeScroll('addendum');
     }
+    if (openCollapse.feeStructure) {
+      executeScroll('statement');
+    }
   };
 
   useEffect(() => {
@@ -298,20 +311,8 @@ export default function AgreementSidePanel({
 
     setSelectedAmazonStorePackService(serviceData);
 
-    fetchUncommonOptions(
-      oneTimeService,
-      formData.additional_one_time_services,
-      'one_time_service',
-    );
-
-    fetchUncommonOptions(
-      monthlyService,
-      formData.additional_monthly_services,
-      'monthly_service',
-    );
-
     if (formDataAdditionalMarketplacesLength) {
-      setShowAdditionalMarketplace(true);
+      setMarketplaceDropdownData();
     }
   }, [agreementData, isDocRendered]);
 
@@ -570,7 +571,7 @@ export default function AgreementSidePanel({
     }
 
     if (type === 'quantity') {
-      if (contractType.toLowerCase().includes('one')) {
+      if (contractType?.toLowerCase()?.includes('one')) {
         //
       }
       clearOneTimeQntyError(val);
@@ -604,287 +605,6 @@ export default function AgreementSidePanel({
         ...updatedFormData,
         quantity: event.target.value,
       });
-    } else if (key === 'additional_marketplaces_checkbox') {
-      if (event.target.checked) {
-        setFormData({
-          ...formData,
-          additional_marketplaces: [],
-        });
-
-        if (
-          agreementData?.primary_marketplace?.name ||
-          formData?.primary_marketplace
-        ) {
-          setAdditionalMarketplaces(
-            marketplacesResult.filter(
-              (op) =>
-                op.value !==
-                (formData.primary_marketplace.name
-                  ? formData.primary_marketplace.name
-                  : formData.primary_marketplace),
-            ),
-          );
-        } else {
-          setAdditionalMarketplaces(marketplacesResult);
-        }
-      } else {
-        const itemsToBeDelete =
-          originalDataAdditionalMarketplacesLength &&
-          originalData.additional_marketplaces.filter((item) => {
-            if (item.id) {
-              return item;
-            }
-            return null;
-          });
-
-        if (itemsToBeDelete?.length) {
-          const list = itemsToBeDelete.map((item) => item.id);
-          additionalMarketplacesData.delete = list;
-          additionalMarketplacesData.create = [];
-        }
-
-        setFormData({
-          ...formData,
-          additional_marketplaces: [],
-        });
-      }
-      updateAdditionalMarketplaces();
-      setAdditionalMarketplace({
-        ...additionalMarketplacesData,
-      });
-
-      setMarketPlaces(marketplacesResult);
-    } else if (type === 'multichoice') {
-      if (val.action === 'select-option') {
-        const itemInFormData =
-          originalDataAdditionalMarketplacesLength &&
-          originalData.additional_marketplaces.find(
-            (item) => item && item.name === val.option.value,
-          );
-        // checked whether checked item present in newly created list
-        if (
-          additionalMarketplacesData?.create &&
-          additionalMarketplacesData.create.find((item) =>
-            item.name
-              ? item.name === val.option.value
-              : item.value === val.option.value,
-          )
-        ) {
-          // if checked item is already present in newly created list then don't do anything
-        } else {
-          // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
-          // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
-          if (itemInFormData) {
-            additionalMarketplacesData.create.push(itemInFormData);
-            const list = formData.additional_marketplaces;
-            list.push(itemInFormData);
-            setFormData({
-              ...formData,
-              additional_marketplaces: list,
-            });
-            updateAdditionalMarketplaces();
-          }
-          // else we create dict as BE required for new item and we push that in newly created list
-          else {
-            additionalMarketplacesData.create.push({
-              name: val.option.value,
-              contract_id: originalData && originalData.id,
-            });
-            setFormData({
-              ...formData,
-              additional_marketplaces: additionalMarketplacesData.create,
-            });
-            updateAdditionalMarketplaces();
-          }
-          // here we fnally update state variable
-          setAdditionalMarketplace({
-            ...additionalMarketplacesData,
-          });
-        }
-        // suppose checked item present in original formData then we have to remove its id from newly created delete list.
-        if (itemInFormData) {
-          const updatedDeleteList = additionalMarketplacesData.delete.filter(
-            (item) => item !== itemInFormData.id,
-          );
-          additionalMarketplacesData.delete = updatedDeleteList;
-        }
-        setAdditionalMarketplace({
-          ...additionalMarketplacesData,
-        });
-        if (additionalMarketplacesData.create) {
-          setMarketPlaces(
-            marketplacesResult.filter(
-              (choice) =>
-                !additionalMarketplacesData.create.some(
-                  (item) => item.name === choice.value,
-                ),
-            ),
-          );
-        }
-      }
-      if (val.action === 'remove-value') {
-        const itemInFormData =
-          originalDataAdditionalMarketplacesLength &&
-          originalData.additional_marketplaces.find(
-            (item) => item && item.name === val.removedValue.value,
-          );
-        // if unchecked item found in original list then add its id to newly created delte list
-        if (itemInFormData?.id) {
-          additionalMarketplacesData.delete.push(itemInFormData.id);
-        }
-        // now we filter newly created list with removed unchecked item from it
-        const updatedCreateList = additionalMarketplacesData.create.filter(
-          (item) =>
-            item.name
-              ? item.name !== val.removedValue.value
-              : item.value !== val.removedValue.value,
-        );
-
-        additionalMarketplacesData.create = updatedCreateList;
-
-        const list = formData.additional_marketplaces;
-        const deletedUncheckedItemList = list.filter((item) =>
-          item.name
-            ? item.name !== val.removedValue.value
-            : item.value !== val.removedValue.value,
-        );
-        setFormData({
-          ...formData,
-          additional_marketplaces: deletedUncheckedItemList,
-        });
-        updateAdditionalMarketplaces();
-        setAdditionalMarketplace({
-          ...additionalMarketplacesData,
-        });
-        if (updatedCreateList) {
-          setMarketPlaces(
-            marketplacesResult.filter(
-              (choice) =>
-                !updatedCreateList.some((item) => item.name === choice.value),
-            ),
-          );
-        }
-      }
-    } else if (key === 'additional_monthly_services') {
-      const itemInFormData =
-        originalData?.additional_monthly_services?.length &&
-        originalData.additional_monthly_services.find(
-          (item) =>
-            item && item.service && item.service.name === event.target.name,
-        );
-      // if item checked
-      if (event.target.checked) {
-        if (event.target.name === 'DSP Advertising') {
-          setShowCollpase({ ...showSection, dspAddendum: true });
-        }
-        // checked whether checked item present in newly created list
-        if (
-          additionalMonthlyServices?.create?.length &&
-          additionalMonthlyServices.create.find((item) =>
-            item.name
-              ? item.name === event.target.name
-              : item.service.name === event.target.name,
-          )
-        ) {
-          // if checked item is already present in newly created list then don't do anything
-        } else {
-          // if checked item not found in newly created list then  again check whether it is present in original formData variable because if it is found in formData then we need to add that found item in newly created list bcoz we need id and all of that item to push in newly created list.
-          // here we check whether checked item present in orginal formDAta list then add that found item in newly created list
-          if (itemInFormData) {
-            additionalMonthlyServices.create.push(itemInFormData);
-            const list = formData.additional_monthly_services;
-            list.push(itemInFormData);
-            setFormData({
-              ...formData,
-              additional_monthly_services: list,
-            });
-            updateAdditionalMonthlyServices();
-          }
-          // else we create dict as BE required for new item and we push that in newly created list
-          else {
-            additionalMonthlyServices.create.push({
-              name: event.target.name,
-              service_id: val.value,
-              contract_id: originalData?.id,
-            });
-
-            let list = formData.additional_monthly_services;
-            if (!list) {
-              list = [];
-            }
-            list.push({
-              name: event.target.name,
-              service_id: val.value,
-              contract_id: originalData?.id,
-            });
-            setFormData({
-              ...formData,
-              additional_monthly_services: list,
-            });
-            updateAdditionalMonthlyServices();
-          }
-          // here we fnally update state variable
-          setMonthlyAdditionalServices({
-            ...additionalMonthlyServices,
-          });
-        }
-        // suppose checked item present in original formData then we have to remove its id from newly created delete list.
-        if (itemInFormData) {
-          const updatedDeleteList = additionalMonthlyServices.delete.filter(
-            (item) => item !== itemInFormData.id,
-          );
-          additionalMonthlyServices.delete = updatedDeleteList;
-        }
-
-        setMonthlyAdditionalServices({
-          ...additionalMonthlyServices,
-        });
-        fetchUncommonOptions(
-          monthlyService,
-          additionalMonthlyServices.create,
-          'monthly_service',
-        );
-      }
-      // if item unchecked or removed
-      else {
-        if (event.target.name === 'DSP Advertising') {
-          setShowCollpase({ ...showSection, dspAddendum: false });
-        }
-        // if unchecked item found in original list then add its id to newly created delte list
-        if (itemInFormData) {
-          additionalMonthlyServices.delete.push(itemInFormData.id);
-        }
-        // now we filter newly created list with removed unchecked item from it
-        const updatedCreateList = additionalMonthlyServices.create.filter(
-          (item) =>
-            item.name
-              ? item.name !== event.target.name
-              : item.service.name !== event.target.name,
-        );
-
-        additionalMonthlyServices.create = updatedCreateList;
-
-        const list = formData.additional_monthly_services;
-        const deletedUncheckedItemList = list.filter((item) =>
-          item.name
-            ? item.name !== event.target.name
-            : item.service.name !== event.target.name,
-        );
-
-        setFormData({
-          ...formData,
-          additional_monthly_services: deletedUncheckedItemList,
-        });
-        updateAdditionalMonthlyServices();
-        setMonthlyAdditionalServices({
-          ...additionalMonthlyServices,
-        });
-        fetchUncommonOptions(
-          monthlyService,
-          additionalMonthlyServices.create,
-          'monthly_service',
-        );
-      }
     } else if (key === 'amazon_store_package') {
       if (type === 'quantity') {
         const selectedData =
@@ -1076,7 +796,7 @@ export default function AgreementSidePanel({
           setNotIncludedOneTimeServices(listWithoutAmazonStorePack);
 
           if (
-            contractType.toLowerCase().includes('one') &&
+            contractType?.toLowerCase()?.includes('one') &&
             (additionalOnetimeServices.create !== null ||
               additionalOneTimeServicesCreateLength)
           ) {
@@ -1150,7 +870,7 @@ export default function AgreementSidePanel({
           }
 
           if (
-            contractType.toLowerCase().includes('one') &&
+            contractType?.toLowerCase()?.includes('one') &&
             (additionalOnetimeServices.create === null ||
               !additionalOneTimeServicesCreateLength)
           ) {
@@ -1269,7 +989,7 @@ export default function AgreementSidePanel({
         );
 
         if (
-          contractType.toLowerCase().includes('one') &&
+          contractType?.toLowerCase()?.includes('one') &&
           (additionalOnetimeServices.create !== null ||
             additionalOneTimeServicesCreateLength)
         ) {
@@ -1313,7 +1033,7 @@ export default function AgreementSidePanel({
         });
 
         if (
-          contractType.toLowerCase().includes('one') &&
+          contractType?.toLowerCase()?.includes('one') &&
           (deletedUncheckedItemList === null ||
             !deletedUncheckedItemList?.length)
         ) {
@@ -1365,6 +1085,18 @@ export default function AgreementSidePanel({
           event.target.name,
           event.target.value,
         );
+      } else if (
+        event?.target?.name === 'content_optimization' ||
+        event?.target?.name === 'design_optimization'
+      ) {
+        setFormData({
+          ...formData,
+          [event.target.name]: event.target.value ? event.target.value : null,
+        });
+        setUpdatedFormData({
+          ...updatedFormData,
+          [event.target.name]: event.target.value ? event.target.value : null,
+        });
       } else {
         setFormData({ ...formData, [event.target.name]: event.target.value });
         setUpdatedFormData({
@@ -1469,26 +1201,6 @@ export default function AgreementSidePanel({
     }
   };
 
-  const mapSelectValues = (item) => {
-    const multi = [];
-    if (formData && formData[item.key] && formData[item.key].length) {
-      for (const month of formData[item.key]) {
-        multi.push({
-          label:
-            item.key === 'additional_marketplaces'
-              ? month.name
-              : month.service.name,
-          value:
-            item.key === 'additional_marketplaces'
-              ? month.name
-              : month.service.id,
-        });
-      }
-      return multi;
-    }
-    return formData && formData[item.key];
-  };
-
   const getOptions = (key, type) => {
     if (type === 'multi') {
       if (key === 'additional_marketplaces') return additionalMarketplaces;
@@ -1517,23 +1229,6 @@ export default function AgreementSidePanel({
           />
         </components.DropdownIndicator>
       )
-    );
-  };
-
-  const generateMultiChoice = (item) => {
-    return (
-      <Select
-        classNamePrefix="react-select"
-        options={getOptions(item.key, 'multi')}
-        isMulti
-        name={item.key}
-        onChange={(event, value) =>
-          handleChange(event, item.key, 'multichoice', value)
-        }
-        defaultValue={mapSelectValues(item)}
-        components={{ DropdownIndicator }}
-        isClearable={false}
-      />
     );
   };
 
@@ -1627,6 +1322,26 @@ export default function AgreementSidePanel({
     return false;
   };
 
+  const displayContractType = () => {
+    switch (formData && formData.contract_type) {
+      case 'recurring':
+        return 'Recurring Service Agreement';
+
+      case 'recurring (90 day notice)':
+        return 'Recurring (90 day notice) Service Agreement';
+
+      case 'one time':
+        return 'One Time Service Agreement';
+
+      case 'dsp only':
+        return 'DSP Only Service Agreement';
+
+      default:
+        break;
+    }
+    return '';
+  };
+
   const generateHTML = (item) => {
     if (item.type.includes('number')) {
       return (
@@ -1647,6 +1362,13 @@ export default function AgreementSidePanel({
           thousandSeparator={item.key !== 'zip_code'}
           decimalScale={2}
           allowNegative={false}
+          isAllowed={(values) => {
+            const { formattedValue, floatValue } = values;
+            if (floatValue == null) {
+              return formattedValue === '';
+            }
+            return floatValue <= 100000000;
+          }}
         />
       );
     }
@@ -1698,7 +1420,6 @@ export default function AgreementSidePanel({
           yearPlaceholder="YYYY"
           placeholderText="Select Date"
           tileDisabled={(date) => tileDisabled(date, agreementData?.start_date)}
-          // disabled={formData && formData.draft_from}
         />
       );
     }
@@ -1707,17 +1428,13 @@ export default function AgreementSidePanel({
         <ContractInputSelect>{generateDropdown(item)}</ContractInputSelect>
       );
     }
-    if (item && item.type === 'multichoice') {
-      return (
-        <ContractInputSelect>{generateMultiChoice(item)}</ContractInputSelect>
-      );
-    }
+
     if (item && item.field === 'customer') {
       return (
         <input
           className={
-            (customerError && customerError[item.key]) ||
-            (!customer[item.key] && item.isMandatory)
+            (customerError && customerError[item?.key]) ||
+            (!customer?.[item?.key] && item.isMandatory)
               ? 'form-control form-control-error'
               : 'form-control '
           }
@@ -1725,82 +1442,29 @@ export default function AgreementSidePanel({
           placeholder={item.placeholder ? item.placeholder : item.label}
           onChange={(event) => handleChange(event, item.key)}
           name={item.key}
-          defaultValue={customer[item.key]}
+          defaultValue={customer?.[item.key]}
         />
       );
     }
     return (
       <input
-        className={
+        className={`form-control ${
           formData && formData[item.key] && item.isMandatory
-            ? 'form-control'
-            : 'form-control form-control-error'
-        }
+            ? ''
+            : 'form-control-error'
+        } ${item.key === 'contract_type' ? 'disabled' : ''}`}
+        disabled={item.key === 'contract_type'}
         type="text"
         placeholder={item.placeholder ? item.placeholder : item.label}
         onChange={(event) => handleChange(event, item.key)}
         name={item.key}
-        defaultValue={formData[item.key]}
+        defaultValue={
+          item.key === 'contract_type'
+            ? displayContractType()
+            : formData[item.key]
+        }
       />
     );
-  };
-
-  const showRightTick = (section) => {
-    if (section === 'service_agreement') {
-      if (contractType.toLowerCase().includes('one')) {
-        if (
-          customer.company_name &&
-          formData.start_date &&
-          customer.address &&
-          customer.state &&
-          customer.city &&
-          customer.zip_code
-        ) {
-          return true;
-        }
-      } else if (
-        customer.company_name &&
-        formData.start_date &&
-        formData.length &&
-        customer.address &&
-        customer.state &&
-        customer.city &&
-        customer.zip_code
-      ) {
-        return true;
-      }
-    }
-
-    if (section === 'statement') {
-      if (!contractType.toLowerCase().includes('one')) {
-        if (
-          formData?.monthly_retainer &&
-          formData.primary_marketplace &&
-          formData.rev_share
-        ) {
-          return true;
-        }
-      } else return true;
-    }
-
-    if (section === 'dspAddendum') {
-      if (
-        showSection?.dspAddendum &&
-        !contractType.toLowerCase().includes('one')
-      ) {
-        if (contractType.toLowerCase().includes('dsp')) {
-          if (formData?.start_date && formData.dsp_fee) {
-            return true;
-          }
-        }
-        if (formData?.start_date && formData.dsp_fee && formData.dsp_length) {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    }
-    return false;
   };
 
   const nextStep = (key) => {
@@ -1832,6 +1496,17 @@ export default function AgreementSidePanel({
         addendum: true,
       });
       executeScroll('addendum');
+    }
+    if (key === 'feeStructure') {
+      setOpenCollapse({
+        ...openCollapse,
+        agreement: false,
+        statement: false,
+        dspAddendum: false,
+        addendum: false,
+        feeStructure: true,
+      });
+      executeScroll('feeStructure');
     }
     if (key === 'final') {
       if (newAddendumData) {
@@ -1969,8 +1644,17 @@ export default function AgreementSidePanel({
     );
   };
 
-  const onAddDiscount = (flag) => {
-    setDiscountFlag(flag);
+  const onAddDiscount = (flag, accntType = '') => {
+    setDiscountFlag({ serviceType: flag, accountType: accntType });
+    const result =
+      discountData?.length &&
+      discountData.filter(
+        (item) => item.service_type === flag && item.account_type === accntType,
+      );
+    if (result) {
+      setSelectedDiscount(result);
+    }
+
     setShowDiscountModal(true);
   };
 
@@ -2075,7 +1759,43 @@ export default function AgreementSidePanel({
                 updateAdditionalOnetimeServicesSelectedData={
                   updateAdditionalOnetimeServicesSelectedData
                 }
+                discountData={discountData}
+                servicesFees={servicesFees}
               />
+
+              {agreementData &&
+              agreementData.contract_type.includes('recurring') ? (
+                <FeeStructureContainer
+                  setOpenCollapse={setOpenCollapse}
+                  openCollapse={openCollapse}
+                  executeScroll={executeScroll}
+                  formData={formData}
+                  setFormData={setFormData}
+                  setUpdatedFormData={setUpdatedFormData}
+                  updatedFormData={updatedFormData}
+                  loader={loader}
+                  nextStep={nextStep}
+                  DropdownIndicator={DropdownIndicator}
+                  renderCollapseBtnErrorHtml={renderCollapseBtnErrorHtml}
+                  revShareOptions={revShare}
+                  marketPlacesOptions={marketPlaces}
+                  setAdditionalMarketplaces={setAdditionalMarketplaces}
+                  thresholdTypeOptions={thresholdTypeOptions}
+                  selectedThreshold={selectedThreshold}
+                  showFooter={showFooter}
+                  sectionError={sectionError}
+                  setSectionError={setSectionError}
+                  feeStructureErrors={feeStructureErrors}
+                  setFeeStructureErrors={setFeeStructureErrors}
+                  getMonthlyServices={getMonthlyServices}
+                  showRightTick={showRightTick}
+                  getFeeStructureDetails={getFeeStructureDetails}
+                  manageErrorCount={manageErrorCount}
+                  checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
+                />
+              ) : (
+                ''
+              )}
 
               <StatementOfWork
                 executeScroll={executeScroll}
@@ -2123,6 +1843,24 @@ export default function AgreementSidePanel({
                   updateAdditionalOnetimeServicesSelectedData
                 }
                 DropdownIndicator={DropdownIndicator}
+                setShowCollpase={setShowCollpase}
+                originalData={originalData}
+                additionalMonthlyServices={additionalMonthlyServices}
+                updateAdditionalMonthlyServices={
+                  updateAdditionalMonthlyServices
+                }
+                setMonthlyAdditionalServices={setMonthlyAdditionalServices}
+                fetchUncommonOptions={fetchUncommonOptions}
+                getOptions={getOptions}
+                additionalMarketplacesData={additionalMarketplacesData}
+                agreementData={agreementData}
+                setAdditionalMarketplaces={setAdditionalMarketplaces}
+                updateAdditionalMarketplaces={updateAdditionalMarketplaces}
+                setAdditionalMarketplace={setAdditionalMarketplace}
+                setMarketPlaces={setMarketPlaces}
+                marketplacesResult={marketplacesResult}
+                discountData={discountData}
+                servicesFees={servicesFees}
               />
               <DspAdvertising
                 executeScroll={executeScroll}

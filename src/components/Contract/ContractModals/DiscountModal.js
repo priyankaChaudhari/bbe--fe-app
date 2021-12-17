@@ -1,7 +1,15 @@
 import React from 'react';
 
 import Modal from 'react-modal';
-import { string, bool, func, shape, oneOfType, number } from 'prop-types';
+import {
+  string,
+  bool,
+  func,
+  shape,
+  oneOfType,
+  number,
+  arrayOf,
+} from 'prop-types';
 
 import Discount from '../Discount';
 import { ModalBox } from '../../../common';
@@ -31,6 +39,11 @@ function DiscountModal({
   setFormData,
   discountFlag,
   setDetails,
+  selectedDiscount,
+  getDiscountData,
+  updatedFormData,
+  setIsEditContract,
+  getAmendmentData,
 }) {
   return (
     <Modal
@@ -53,6 +66,11 @@ function DiscountModal({
           setFormData={setFormData}
           discountFlag={discountFlag}
           setDetails={setDetails}
+          selectedDiscount={selectedDiscount}
+          getDiscountData={getDiscountData}
+          updatedFormData={updatedFormData}
+          setIsEditContract={setIsEditContract}
+          getAmendmentData={getAmendmentData}
         />
       </ModalBox>
     </Modal>
@@ -70,6 +88,11 @@ DiscountModal.defaultProps = {
   setFormData: () => {},
   discountFlag: '',
   setDetails: () => {},
+  selectedDiscount: [],
+  getDiscountData: () => {},
+  updatedFormData: {},
+  setIsEditContract: () => {},
+  getAmendmentData: () => {},
 };
 
 DiscountModal.propTypes = {
@@ -93,4 +116,9 @@ DiscountModal.propTypes = {
   setFormData: func,
   discountFlag: string,
   setDetails: func,
+  selectedDiscount: arrayOf(shape({})),
+  getDiscountData: func,
+  updatedFormData: shape({}),
+  setIsEditContract: func,
+  getAmendmentData: func,
 };

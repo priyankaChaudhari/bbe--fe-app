@@ -32,6 +32,8 @@ const ToggleButton = styled.div`
       #dspMonthlyCheck:checked + label,
       #positive:checked + label,
       #negative:checked + label,
+      #peformanceCheck:checked + label,
+      #pacingCheck:checked + label,
       #contribution:checked + label,
       #keyMetrics:checked + label,
       #overspending:checked + label,

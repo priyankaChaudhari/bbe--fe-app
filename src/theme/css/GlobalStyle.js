@@ -722,6 +722,9 @@ button:disabled {
 
   .modal-body {
     padding: 25px 32px 30px 32px;
+    &.escrow {
+       padding: 25px 20px 30px 20px;
+    }
   }
 
   .edit-profiles {
@@ -737,6 +740,9 @@ button:disabled {
 
     .modal-body {
       padding: 20px 15px;
+    }
+    .escrow {
+       padding: 25px 32px 30px 32px;
     }
   }
 
@@ -871,13 +877,12 @@ fieldset {
       background: ${Theme.orange};
       border-radius: 50%;
       width: 30px;
-      height: 45px;
+    
     }
     .react-calendar__tile--now {
       background-color: #e6e6e6;
       border-radius: 50%;
       width: 30px;
-      height: 45px;
     }
 
     .react-calendar__tile:enabled:hover,
@@ -885,12 +890,12 @@ fieldset {
       background-color: #e6e6e6;
       border-radius: 50%;
 
-      height: 45px;
+    
     }
     .react-calendar__tile {
       max-width: 100%;
       text-align: center;
-      padding: 1.2em 0.85em;
+      padding: 0.85em 0.85em;
     }
   }
 }
@@ -1167,6 +1172,9 @@ fieldset {
 .react-pdf__Page__textContent {
   box-shadow: 0 5px 15px 0 rgba(68, 68, 79, 0.1);
   margin-bottom: 20px;
+  span {
+    transform: none !important;
+  }
 }
 .react-pdf__message .react-pdf__message--error {
   text-align: center !important;
@@ -1200,7 +1208,6 @@ fieldset {
   @media only screen and (max-width: 991px) {
     padding-left: 0px !important;
     padding-right: 0;
-     /* margin-top: 50px; */
      .react-pdf__Page {
         &:first-child {
           top: 110px !important;
@@ -1692,19 +1699,18 @@ text.cust-label-avg {
 
 .react-calendar__tile--now {
   background: ${Theme.white}; 
-  border: 1px solid ${Theme.orange} !important;
 }
 .react-calendar {  
-  border: none;
+  border: none !important;
   background-color: ${Theme.white}; 
   border-radius: 8px;
-  max-width: 400px;
+  max-width: 320px;
   width: 100%;
   position: absolute;
-  right: 15px;
+  right: 0px;
   z-index: 22;
   box-shadow: 0 3px 8px 0 rgb(0 0 0 / 10%);
-  padding: 15px;
+  padding: 10px;
 }
 .react-calendar__tile--now:enabled:hover, .react-calendar__tile--now:enabled:focus {
     background: ${Theme.lighterOrange};

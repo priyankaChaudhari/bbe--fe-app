@@ -68,7 +68,7 @@ function RevenueShareThreshold({
                 className={
                   contractErrorSalesThreshold
                     ? 'input-icon error-msg'
-                    : 'input-icon'
+                    : 'input-icon '
                 }>
                 ${' '}
               </span>

@@ -105,7 +105,44 @@ export const billingAddress = [
     section: 'contact',
   },
 ];
-
+export const paymentTermValueLabel = [
+  {
+    value: 'auto pay',
+    label: 'Autopay',
+  },
+  {
+    value: 'due on receipt',
+    label: 'Due on receipt',
+  },
+  {
+    value: 'net 7',
+    label: 'NET-7',
+  },
+  {
+    value: 'net 14',
+    label: 'NET-14',
+  },
+  {
+    value: 'net 30',
+    label: 'NET-30',
+  },
+  {
+    value: 'net 9',
+    label: 'NET-9',
+  },
+  {
+    value: 'net 10',
+    label: 'NET-10',
+  },
+  {
+    value: 'net 15',
+    label: 'NET-15',
+  },
+  {
+    value: 'net 60',
+    label: 'NET-60',
+  },
+];
 export const paymentType = [
   { key: 'ach', label: 'ACH', type: 'radio' },
   { key: 'credit_card', label: 'Credit Card', type: 'radio' },

@@ -42,6 +42,9 @@ import PdfAnnotator from './PdfAnnotator';
 import ToggleButton from './ToggleButton';
 import CardMetrics from './CardMetrics';
 import DropDownUncontained from './DropDownUncontained';
+import AllocateBar from './AllocateBar';
+import ErrorMsgBox from './ErrorMsgBox';
+import TableGap from './TableGap';
 
 export {
   Button,
@@ -88,4 +91,7 @@ export {
   ToggleButton,
   CardMetrics,
   DropDownUncontained,
+  AllocateBar,
+  ErrorMsgBox,
+  TableGap,
 };

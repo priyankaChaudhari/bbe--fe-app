@@ -11486,6 +11486,11 @@ react-cropper@^2.1.4:
   dependencies:
     cropperjs "^1.5.9"
 
+react-csv@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-2.0.3.tgz#f5d17a3c71107d9bcbe580049350200debdc042a"
+  integrity sha512-exyAdFLAxtuM4wNwLYrlKyPYLiJ7e0mv9tqPAd3kq+k1CiJFtznevR3yP0icv5q/y200w+lzNgi7TQn1Wrhu0w==
+
 react-date-picker@^8.0.3:
   version "8.0.6"
   resolved "https://registry.yarnpkg.com/react-date-picker/-/react-date-picker-8.0.6.tgz#e5f0cf515c7e0a9381ae45094f141a8d934c4358"

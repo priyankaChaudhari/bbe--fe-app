@@ -1,3 +1,5 @@
+import queryString from 'query-string';
+
 import axiosInstance from '../axios';
 import {
   API_ADDITIONAL_SERVICES,
@@ -19,6 +21,9 @@ import {
   API_SERVICES_FEE,
   API_CUSTOMER,
   API_PAUSE_AGREEMENT,
+  API_DISCOUNT,
+  API_FEE_STRUCTURE,
+  API_SAVE_FEE_STRUCTURE,
 } from '../constants/ApiConstants';
 
 export async function agreementTemplate() {
@@ -152,9 +157,9 @@ export async function updateAdditionalServices(id, data) {
   return result;
 }
 
-export async function getServiceTypes() {
+export async function getServiceTypes(params) {
   const result = await axiosInstance
-    .get(API_SERVICE_TYPE)
+    .get(`${API_SERVICE_TYPE}`, { params })
     .then((response) => {
       return response;
     })
@@ -415,6 +420,83 @@ export async function updatePauseAgreement(pauseId, data) {
 export async function getAmendment(contractId) {
   const result = await axiosInstance
     .get(`${API_CUSTOMER_CONTRACT + contractId}/amendments/`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getDiscount(contractId) {
+  const params = { contract: contractId };
+  const result = await axiosInstance
+    .get(`${API_DISCOUNT}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function saveDiscount(id, data) {
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_DISCOUNT + id}/`, data)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(`${API_DISCOUNT}`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getFeeStructure(contractId, type) {
+  const accountType = queryString.stringify({
+    account_type: type,
+  });
+  const params = {
+    contract: contractId,
+  };
+  const result = await axiosInstance
+    .get(`${API_FEE_STRUCTURE}?${accountType}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function saveFeeStructure(id, data) {
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_SAVE_FEE_STRUCTURE + id}/`, data)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(`${API_SAVE_FEE_STRUCTURE}`, data)
     .then((response) => {
       return response;
     })

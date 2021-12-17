@@ -16,6 +16,7 @@ import { func, string, bool, shape, oneOfType } from 'prop-types';
 import Theme from '../../../theme/Theme';
 import PastAgreement from './PastAgreement';
 import OneTimeAgreement from './OneTimeAgreement';
+import AgreementSellerVendorDetails from './AgreementSellerVendorDetails';
 import { getAccountDetails } from '../../../store/actions/accountState';
 import { AddNewContractModal } from './Modals';
 import {
@@ -43,7 +44,6 @@ import {
   PATH_AGREEMENT,
   contractOptions,
   draftContractOptions,
-  agreementOptions,
   pauseAgreementOptions,
   newAgreementTypes,
 } from '../../../constants';
@@ -86,6 +86,7 @@ export default function AgreementDetails({
   const [replaceExisting, setReplaceExisting] = useState('alongside');
   const [replacedContract, setReplacedContract] = useState('');
   const [contractLoader, setContractLoader] = useState(false);
+  const [accountType, setAccountType] = useState({});
 
   const customStyles = {
     content: {
@@ -282,207 +283,323 @@ export default function AgreementDetails({
     return false;
   };
 
+  function addDays(theDate, days) {
+    return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
+  }
+
+  const calculateFirstMonth = (agreement) => {
+    if (agreement?.start_date) {
+      const calculateDate = addDays(new Date(agreement?.start_date), 10);
+
+      let startDate = '';
+      const d = new Date(calculateDate);
+
+      if (calculateDate.getDate() > 16) {
+        startDate = d.setMonth(d.getMonth() + 1, 1);
+        const first = new Date(startDate);
+        return dayjs(first).format('MMM DD, YYYY');
+      }
+      if (calculateDate.getDate() === 1) {
+        startDate = d.setMonth(d.getMonth(), 1);
+        const first = new Date(startDate);
+        return dayjs(first).format('MMM DD, YYYY');
+      }
+      startDate = d.setMonth(d.getMonth(), 16);
+      const first = new Date(startDate);
+      return dayjs(first).format('MMM DD, YYYY');
+    }
+    return null;
+  };
+
   const generateHTML = () => {
     const fields = [];
-    for (const agreement of multipleAgreement) {
+    const agreements =
+      userRole === 'Customer'
+        ? multipleAgreement.filter(
+            (op) =>
+              op?.contract_status?.value === 'active' ||
+              op?.contract_status?.value === 'renewed',
+          )
+        : multipleAgreement;
+    for (const agreement of agreements) {
       if (
         agreement?.contract_status?.value !== 'inactive' &&
         agreement?.contract_status?.value !== 'cancel' &&
         !agreement?.contract_type?.toLowerCase().includes('one')
       )
         fields.push(
-          <WhiteCard
-            className={
-              agreement && agreement.draft_from
-                ? 'mt-3 mb-3 selected-card'
-                : 'mt-3 mb-3'
-            }
-            key={agreement.id}>
-            <div className="row">
-              <div className="col-lg-9 col-md-9 col-12">
-                <div className="solid-icon">
-                  <img
-                    width="48px"
-                    className=" mb-2"
-                    src={
-                      agreement &&
-                      agreement.contract_status &&
-                      (agreement.contract_status.value === 'pause' ||
-                        agreement.contract_status.value === 'draft')
-                        ? DisabledRecurring
-                        : agreement &&
-                          agreement.contract_type &&
-                          agreement.contract_type.toLowerCase().includes('dsp')
-                        ? DspOnlyIcon
-                        : RecurringIcon
-                    }
-                    alt=""
-                  />
-                </div>
-                <div
-                  className="contract-status mb-2"
-                  role="presentation"
-                  onClick={() => {
-                    setShowModal(true);
-                  }}>
-                  <div style={{ display: 'flow-root' }} className="">
-                    {agreement &&
-                    agreement.contract_status &&
-                    agreement.contract_status.value === 'active' ? (
-                      ''
-                    ) : (
-                      <Status
-                        className="mr-2 mb-1"
-                        label={
-                          isDraftContract(agreement)
-                            ? 'Draft'
-                            : agreement &&
-                              agreement.contract_status &&
-                              agreement.contract_status.label
-                        }
-                        backgroundColor={Theme.gray8}
-                      />
-                    )}
-                    {/* <div className="clear-fix" /> */}
-                    <p className="black-heading-title mt-0 mb-0">
-                      {agreement &&
-                      agreement.contract_type &&
-                      agreement.contract_type.toLowerCase().includes('notice')
-                        ? 'Recurring (90 day notice) Service Agreement'
-                        : agreement &&
-                          agreement.contract_type &&
-                          agreement.contract_type.toLowerCase().includes('dsp')
-                        ? 'DSP Service Agreement'
-                        : 'Recurring Service Agreement'}
-                    </p>
+          <>
+            <div
+              className={
+                agreement && agreement.draft_from
+                  ? 'mt-3 selected-card normal-text text-medium'
+                  : 'mt-3 normal-text text-medium'
+              }>
+              {agreement?.contract_type?.includes('recurring') ? (
+                <AgreementSellerVendorDetails
+                  agreement={agreement}
+                  type="header"
+                  setAccountType={setAccountType}
+                  accountType={accountType}
+                  multipleAgreement={multipleAgreement}
+                />
+              ) : (
+                ''
+              )}
+            </div>
+            <WhiteCard
+              className={
+                agreement && agreement.draft_from
+                  ? 'mt-3 mb-3 selected-card'
+                  : 'mt-3 mb-3'
+              }
+              key={agreement.id}>
+              <div className="row">
+                <div className="col-lg-9 col-md-9 col-12">
+                  <div className="solid-icon">
+                    <img
+                      width="48px"
+                      className=" mb-2"
+                      src={
+                        agreement &&
+                        agreement.contract_status &&
+                        (agreement.contract_status.value === 'pause' ||
+                          agreement.contract_status.value === 'draft')
+                          ? DisabledRecurring
+                          : agreement &&
+                            agreement.contract_type &&
+                            agreement.contract_type
+                              .toLowerCase()
+                              .includes('dsp')
+                          ? DspOnlyIcon
+                          : RecurringIcon
+                      }
+                      alt=""
+                    />
                   </div>
-
-                  {agreement && agreement.contract_type !== 'one time' ? (
-                    <ul className="recurring-contact">
+                  <div
+                    className="contract-status mb-2"
+                    role="presentation"
+                    onClick={() => {
+                      setShowModal(true);
+                    }}>
+                    <div style={{ display: 'flow-root' }} className="">
                       {agreement &&
                       agreement.contract_status &&
-                      agreement.contract_status.value !== 'pause' ? (
-                        <>
-                          <li>
-                            <p className="basic-text ">
-                              {agreement &&
-                                agreement.length &&
-                                agreement.length.label &&
-                                agreement.length.label.slice(0, -1)}{' '}
-                            </p>
-                          </li>
-                          {agreement && agreement.start_date ? (
-                            <li>
-                              <span className="dot" />
-                              <p className="basic-text ">
-                                {agreement.contract_status &&
-                                agreement.contract_status.value === 'renewed'
-                                  ? 'Renewed'
-                                  : 'Started'}
-                                &nbsp;
-                                {dayjs(agreement.start_date).format(
-                                  'MMM DD, YYYY',
-                                )}
-                              </p>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-                          {agreement && agreement.end_date ? (
-                            <li>
-                              <span className="dot" />
-                              <p className="basic-text ">
-                                Expires:{' '}
-                                {dayjs(agreement.end_date).format(
-                                  'MMM DD, YYYY',
-                                )}
-                              </p>
-                            </li>
-                          ) : (
-                            ''
-                          )}
-                        </>
-                      ) : (
-                        <>
-                          {getPauseHTML(agreement && agreement.pause_contract)}
-                        </>
-                      )}
-
-                      {agreement &&
-                      agreement.end_date &&
-                      countDays(agreement && agreement.end_date) <= 90 ? (
-                        <li>
-                          <div className="days-block">
-                            {' '}
-                            <img
-                              className="clock-icon"
-                              src={ClockIcon}
-                              alt="clock"
-                            />{' '}
-                            {countDays(agreement && agreement.end_date)} days
-                          </div>
-                        </li>
-                      ) : (
+                      agreement.contract_status.value === 'active' ? (
                         ''
+                      ) : (
+                        <Status
+                          className="mr-2 mb-1"
+                          label={
+                            isDraftContract(agreement)
+                              ? 'Draft'
+                              : agreement &&
+                                agreement.contract_status &&
+                                agreement.contract_status.label
+                          }
+                          backgroundColor={Theme.gray8}
+                        />
                       )}
-                    </ul>
-                  ) : (
-                    ''
-                  )}
-                </div>
-              </div>
 
-              <div className="clear-fix" />
-              {agreement &&
-              agreement.contract_status &&
-              (agreement.contract_status.value === 'pending account setup' ||
-                agreement.contract_status.value === 'active') &&
-              agreement.contract_url === null ? null : (
-                <div
-                  className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
-                  role="presentation"
-                  onClick={() =>
-                    localStorage.setItem('agreementID', agreement.id)
-                  }>
-                  {agreement.draft_from && userRole !== 'Customer' ? (
-                    <ActionDropDown>
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        placeholder="View Actions"
-                        className="active"
-                        options={
-                          isDraftContract(agreement)
-                            ? draftContractOptions
-                            : (agreement &&
-                                agreement.pause_contract &&
-                                agreement.pause_contract.end_date >
-                                  dayjs(new Date()).format('YYYY-MM-DD') &&
-                                agreement.pause_contract &&
-                                agreement.pause_contract.is_approved) ||
-                              agreement.contract_status.value === 'pause' ||
-                              agreement.contract_status.value ===
-                                'active pending for pause'
-                            ? pauseAgreementOptions
-                            : contractOptions
-                        }
-                        onChange={(event) =>
-                          handleContractOptions(event, agreement.id)
-                        }
-                        components={{
-                          DropdownIndicator,
-                          Option: IconOption,
-                        }}
-                        value=""
-                      />
-                    </ActionDropDown>
-                  ) : userRole === 'Customer' ||
-                    agreement.contract_status.value === 'pending contract' ||
-                    agreement.contract_status.value ===
-                      'pending contract approval' ||
-                    agreement.contract_status.value ===
-                      'pending contract signature' ||
-                    customerStatus === 'pending account setup' ? (
+                      <p className="black-heading-title mt-0 mb-0">
+                        {agreement &&
+                        agreement.contract_type &&
+                        agreement.contract_type.toLowerCase().includes('notice')
+                          ? 'Recurring (90 day notice) Service Agreement'
+                          : agreement &&
+                            agreement.contract_type &&
+                            agreement.contract_type
+                              .toLowerCase()
+                              .includes('dsp')
+                          ? 'DSP Service Agreement'
+                          : 'Recurring Service Agreement'}
+                      </p>
+                    </div>
+
+                    {agreement && agreement.contract_type !== 'one time' ? (
+                      <ul className="recurring-contact">
+                        {agreement &&
+                        agreement.contract_status &&
+                        agreement.contract_status.value !== 'pause' ? (
+                          <>
+                            <li>
+                              <p className="basic-text ">
+                                {agreement &&
+                                  agreement.length &&
+                                  agreement.length.label &&
+                                  agreement.length.label.slice(0, -1)}{' '}
+                              </p>
+                            </li>
+                            {agreement && agreement.start_date ? (
+                              <li>
+                                <span className="dot" />
+                                <p className="basic-text ">
+                                  {agreement.contract_status &&
+                                  agreement.contract_status.value === 'renewed'
+                                    ? 'Renewed'
+                                    : 'Started'}
+                                  &nbsp;
+                                  {dayjs(agreement.start_date).format(
+                                    'MMM DD, YYYY',
+                                  )}
+                                </p>
+                              </li>
+                            ) : (
+                              ''
+                            )}
+                            {agreement && agreement.end_date ? (
+                              <li>
+                                <span className="dot" />
+                                <p className="basic-text">
+                                  Expires:{' '}
+                                  {dayjs(agreement.end_date).format(
+                                    'MMM DD, YYYY',
+                                  )}
+                                </p>
+                              </li>
+                            ) : null}
+                          </>
+                        ) : (
+                          <>
+                            {getPauseHTML(
+                              agreement && agreement.pause_contract,
+                            )}
+                          </>
+                        )}
+
+                        {agreement &&
+                        agreement.end_date &&
+                        countDays(agreement && agreement.end_date) <= 90 ? (
+                          <li>
+                            <div className="days-block">
+                              {' '}
+                              <img
+                                className="clock-icon"
+                                src={ClockIcon}
+                                alt="clock"
+                              />{' '}
+                              {countDays(agreement && agreement.end_date)} days
+                            </div>
+                          </li>
+                        ) : (
+                          ''
+                        )}
+                      </ul>
+                    ) : (
+                      ''
+                    )}
+                  </div>
+                </div>
+
+                <div className="clear-fix" />
+                {agreement?.contract_status?.value === 'active' ||
+                agreement.draft_from ? (
+                  <div
+                    className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
+                    role="presentation"
+                    onClick={() =>
+                      localStorage.setItem('agreementID', agreement.id)
+                    }>
+                    {agreement.draft_from && userRole !== 'Customer' ? (
+                      <ActionDropDown>
+                        {' '}
+                        <Select
+                          classNamePrefix="react-select"
+                          placeholder="View Actions"
+                          className="active"
+                          options={
+                            isDraftContract(agreement)
+                              ? draftContractOptions
+                              : (agreement &&
+                                  agreement.pause_contract &&
+                                  agreement.pause_contract.end_date >
+                                    dayjs(new Date()).format('YYYY-MM-DD') &&
+                                  agreement.pause_contract &&
+                                  agreement.pause_contract.is_approved) ||
+                                agreement.contract_status.value === 'pause' ||
+                                agreement.contract_status.value ===
+                                  'active pending for pause'
+                              ? pauseAgreementOptions
+                              : contractOptions
+                          }
+                          onChange={(event) =>
+                            handleContractOptions(event, agreement.id)
+                          }
+                          components={{
+                            DropdownIndicator,
+                            Option: IconOption,
+                          }}
+                          value=""
+                        />
+                      </ActionDropDown>
+                    ) : userRole === 'Customer' ||
+                      agreement.contract_status.value === 'pending contract' ||
+                      agreement.contract_status.value ===
+                        'pending contract approval' ||
+                      agreement.contract_status.value ===
+                        'pending contract signature' ||
+                      customerStatus === 'pending account setup' ? (
+                      <Link
+                        to={{
+                          pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                            ':contract_id',
+                            agreement.id,
+                          ),
+                          state:
+                            history &&
+                            history.location &&
+                            history.location.pathname,
+                        }}>
+                        <Button className="btn-transparent w-100 view-contract">
+                          {' '}
+                          <img
+                            className="file-contract-icon"
+                            src={FileContract}
+                            alt=""
+                          />
+                          View Agreement
+                        </Button>
+                      </Link>
+                    ) : (
+                      <ActionDropDown>
+                        {' '}
+                        <Select
+                          classNamePrefix="react-select"
+                          placeholder="View Actions"
+                          className="active"
+                          options={
+                            (agreement &&
+                              agreement.pause_contract &&
+                              agreement.pause_contract.end_date >
+                                dayjs(new Date()).format('YYYY-MM-DD') &&
+                              agreement.pause_contract &&
+                              agreement.pause_contract.is_approved) ||
+                            agreement.contract_status.value === 'pause' ||
+                            agreement.contract_status.value ===
+                              'active pending for pause'
+                              ? pauseAgreementOptions
+                              : contractOptions
+                          }
+                          onChange={(event) =>
+                            handleContractOptions(event, agreement.id)
+                          }
+                          components={{
+                            DropdownIndicator,
+                            Option: IconOption,
+                          }}
+                          value=""
+                        />
+                      </ActionDropDown>
+                    )}
+                  </div>
+                ) : (
+                  <div
+                    className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
+                    role="presentation"
+                    onClick={() =>
+                      localStorage.setItem('agreementID', agreement.id)
+                    }>
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
@@ -504,151 +621,224 @@ export default function AgreementDetails({
                         View Agreement
                       </Button>
                     </Link>
-                  ) : (
-                    <ActionDropDown>
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        placeholder="View Actions"
-                        className="active"
-                        options={
-                          (agreement &&
-                            agreement.pause_contract &&
-                            agreement.pause_contract.end_date >
-                              dayjs(new Date()).format('YYYY-MM-DD') &&
-                            agreement.pause_contract &&
-                            agreement.pause_contract.is_approved) ||
-                          agreement.contract_status.value === 'pause' ||
-                          agreement.contract_status.value ===
-                            'active pending for pause'
-                            ? pauseAgreementOptions
-                            : contractOptions
+                  </div>
+                )}
+                {agreement?.contract_type?.includes('recurring') &&
+                agreement?.seller_type?.label === 'Hybrid' ? (
+                  <Tabs className="mt-2 ml-3">
+                    <ul className="grey-box-tab ">
+                      <li
+                        className={
+                          accountType[agreement.id] === 'seller'
+                            ? 'account-type active'
+                            : 'account-type'
                         }
-                        onChange={(event) =>
-                          handleContractOptions(event, agreement.id)
+                        role="presentation"
+                        onClick={() => {
+                          setAccountType({
+                            ...accountType,
+                            [agreement.id]: 'seller',
+                          });
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}>
+                        Seller Fee Structure
+                      </li>
+                      <li
+                        className={
+                          accountType[agreement.id] === 'vendor'
+                            ? 'account-type active'
+                            : 'account-type'
                         }
-                        components={{
-                          DropdownIndicator,
-                          Option: IconOption,
-                        }}
-                        value=""
-                      />
-                    </ActionDropDown>
-                  )}
-                </div>
-              )}
-              <div className="straight-line horizontal-line pt-3 mb-3" />
-            </div>
-            {/* className="disabled" */}
-            <CustomerDetailCoppase
-              className={
-                agreement.contract_status.value === 'pause' ? 'disabled' : ''
-              }>
-              <div className="DSP-contract-retainer">
-                <div className="row ">
-                  {agreement && agreement.contract_type === 'recurring' ? (
-                    <>
-                      {agreementOptions.map((item) => (
-                        <div
-                          className=" col-lg-3 col-md-3 mb-3 col-6 "
-                          key={item.key}>
-                          <div className="label">{item.label}</div>
-                          {agreement && agreement[item.key] ? (
-                            <NumberFormat
-                              displayType="text"
-                              value={
-                                agreement[item.key].label || agreement[item.key]
-                              }
-                              thousandSeparator
-                              prefix={
-                                item.key === 'rev_share' ||
-                                item.key === 'content_optimization' ||
-                                item.key === 'design_optimization'
-                                  ? ''
-                                  : '$'
-                              }
-                              suffix={item.key === 'rev_share' ? '%' : ''}
-                            />
-                          ) : (
-                            '0'
-                          )}
-                        </div>
-                      ))}
-                    </>
-                  ) : agreement && agreement.contract_type === 'dsp only' ? (
-                    <div className=" col-lg-3 col-md-3 col-6">
-                      <div className="label">Monthly Ad Budget</div>
-                      <NumberFormat
-                        displayType="text"
-                        value={agreement.dsp_fee || 0}
-                        thousandSeparator
-                        prefix="$"
-                      />
-                    </div>
-                  ) : (
-                    ''
-                  )}
-                </div>
+                        role="presentation"
+                        onClick={() => {
+                          setAccountType({
+                            ...accountType,
+                            [agreement.id]: 'vendor',
+                          });
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}>
+                        Vendor Fee Structure
+                      </li>
+                    </ul>
+                  </Tabs>
+                ) : null}
+                <div className="straight-line horizontal-line pt-3 mb-3" />
               </div>
-              {agreement && agreement.contract_type === 'recurring' ? (
-                <>
-                  <div className="straight-line horizontal-line pt-1 mb-3" />
-                  <div className="label">Marketplaces</div>
-                  <ul className="selected-list">
+              {/* className="disabled" */}
+              <CustomerDetailCoppase
+                className={
+                  agreement.contract_status.value === 'pause' ? 'disabled' : ''
+                }>
+                <div className="DSP-contract-retainer">
+                  <div className="row ">
                     {agreement &&
-                    agreement.primary_marketplace === null &&
-                    agreement.additional_marketplaces === null
-                      ? 'No Marketplaces added.'
-                      : ''}
-                    {agreement && agreement.primary_marketplace ? (
-                      <li>{agreement.primary_marketplace.name} (Primary)</li>
+                    agreement.contract_type?.includes('recurring') ? (
+                      <>
+                        {accountType === 'vendor' ? (
+                          <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
+                            <div className="label">Vendor Billing Report</div>
+                            <div className="label-info text-medium">
+                              {agreement?.fee_structure?.[
+                                accountType[agreement.id]
+                              ]?.vendor_billing_report || ''}
+                            </div>
+                          </div>
+                        ) : null}
+                        <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
+                          <div className="label">FEE TYPE</div>
+                          <div className="label-info text-medium">
+                            {agreement?.fee_structure?.[
+                              accountType[agreement.id]
+                            ]?.fee_type || ''}
+                          </div>
+                        </div>
+                        <AgreementSellerVendorDetails
+                          agreement={agreement}
+                          type="html"
+                          setAccountType={setAccountType}
+                          accountType={accountType}
+                          multipleAgreement={multipleAgreement}
+                        />
+                        <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
+                          <div className="label">Content Optimization</div>
+                          <div className="label-info text-medium">
+                            {agreement?.content_optimization || 0}
+                          </div>
+                        </div>
+                        <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
+                          <div className="label">Design Optimization</div>
+                          <div className="label-info text-medium">
+                            {agreement?.design_optimization || 0}
+                          </div>
+                        </div>
+                      </>
+                    ) : agreement && agreement.contract_type === 'dsp only' ? (
+                      <div className=" col-lg-3 col-md-3 col-6">
+                        <div className="label">Monthly Ad Budget</div>
+                        <NumberFormat
+                          displayType="text"
+                          value={agreement.dsp_fee || 0}
+                          thousandSeparator
+                          prefix="$"
+                        />
+                      </div>
                     ) : (
                       ''
                     )}
-                    {agreement && agreement.additional_marketplaces
-                      ? agreement.additional_marketplaces.map((item) => (
-                          <li key={item.id}>
-                            {item.name || ''}{' '}
-                            {item.is_primary ? '(Primary)' : ''}
-                          </li>
-                        ))
-                      : ''}
-                  </ul>
-                  <div className="label mt-3">Additional Monthly Services</div>
-                  <ul className="selected-list">
-                    {agreement && agreement.additional_monthly_services
-                      ? agreement.additional_monthly_services.map((item) => (
-                          <li key={item.id}>
-                            {(item && item.service && item.service.name) || ''}
-                          </li>
-                        ))
-                      : 'No Additional Monthly services added.'}
-                  </ul>
-                  <div className="straight-line horizontal-line pt-3 mb-3" />
-                </>
-              ) : (
-                ''
-              )}
-
-              {agreement && agreement.contract_type !== 'dsp only' ? (
-                <>
-                  <div className="label">One Time Services</div>
-                  <ul className="selected-list">
-                    {agreement && agreement.additional_one_time_services
-                      ? agreement.additional_one_time_services.map((item) => (
-                          <li key={item.id}>
-                            {(item && item.service && item.service.name) || ''}{' '}
-                            ({(item && item.quantity) || ''})
-                          </li>
-                        ))
-                      : 'No One Time services added.'}
-                  </ul>
-                </>
-              ) : (
-                ''
-              )}
-            </CustomerDetailCoppase>
-          </WhiteCard>,
+                  </div>
+                </div>
+                {agreement?.contract_type?.includes?.('recurring') ? (
+                  <>
+                    <div className="straight-line horizontal-line pt-1 mb-3" />
+                    <div className="label">Marketplaces</div>
+                    <ul className="selected-list">
+                      {agreement &&
+                      agreement.primary_marketplace === null &&
+                      agreement.additional_marketplaces === null
+                        ? 'No Marketplaces added.'
+                        : ''}
+                      {agreement && agreement.primary_marketplace ? (
+                        <li>{agreement.primary_marketplace.name} (Primary)</li>
+                      ) : (
+                        ''
+                      )}
+                      {agreement && agreement.additional_marketplaces
+                        ? agreement.additional_marketplaces.map((item) => (
+                            <>
+                              {item?.account_type?.toLowerCase() ===
+                              accountType[agreement.id] ? (
+                                <li key={item.id}>
+                                  {item.name || ''}{' '}
+                                  {item.is_primary ? '(Primary)' : ''}
+                                </li>
+                              ) : null}
+                            </>
+                          ))
+                        : ''}
+                    </ul>
+                    <div className="label mt-3">
+                      Additional Monthly Services
+                    </div>
+                    <ul className="selected-list">
+                      {agreement?.additional_monthly_services
+                        ? agreement.additional_monthly_services?.map((item) => (
+                            <>
+                              {item?.account_type?.toLowerCase() ===
+                              accountType[agreement.id] ? (
+                                <li key={item.id}>
+                                  {(item &&
+                                    item.service &&
+                                    item.service.name) ||
+                                    ''}
+                                </li>
+                              ) : null}
+                            </>
+                          ))
+                        : 'No Additional Monthly services added.'}
+                    </ul>
+                  </>
+                ) : (
+                  ''
+                )}
+                {agreement?.contract_type !== 'dsp only' ? (
+                  <>
+                    <div className="straight-line horizontal-line pt-3 mb-3" />
+                    <div className="label">One Time Services</div>
+                    <ul className="selected-list">
+                      {agreement?.additional_one_time_services
+                        ? agreement.additional_one_time_services.map((item) => (
+                            <li key={item?.id}>
+                              {item?.service?.name || ''} (
+                              {item?.quantity || ''})
+                            </li>
+                          ))
+                        : 'No One Time services added.'}
+                    </ul>
+                  </>
+                ) : (
+                  ''
+                )}
+                {agreement?.additional_monthly_services?.map((item) => (
+                  <>
+                    {item.account_type?.toLowerCase() ===
+                      accountType[agreement.id] &&
+                    item?.service?.name === 'DSP Advertising' ? (
+                      <>
+                        <div className="straight-line horizontal-line pt-3 mb-3" />
+                        <div className="row">
+                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
+                            <div className="label">
+                              DSP Advertising Start Date
+                            </div>
+                            <div className="label-info text-medium">
+                              {calculateFirstMonth(agreement)}
+                            </div>
+                          </div>
+                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
+                            <div className="label">Monthly Ad Budget</div>
+                            <div className="label-info text-medium">
+                              <NumberFormat
+                                displayType="text"
+                                value={agreement.dsp_fee || 0}
+                                thousandSeparator
+                                prefix="$"
+                              />
+                            </div>
+                          </div>
+                          <div className="col-lg-3 col-md-3 mb-3 col-6 ">
+                            <div className="label">Initial Period</div>
+                            <div className="label-info text-medium">
+                              {agreement?.dsp_length?.value || ''}{' '}
+                            </div>
+                          </div>
+                        </div>
+                      </>
+                    ) : null}
+                  </>
+                ))}
+              </CustomerDetailCoppase>
+            </WhiteCard>
+          </>,
         );
     }
 
@@ -895,12 +1085,16 @@ export default function AgreementDetails({
             <>
               {viewComponent === 'current' ? (
                 <>
-                  <DropDownUncontained
-                    options={newAgreementTypes}
-                    setSelectedOption={setTypeOfNewAgreement}
-                    extraAction={checkExistingAgreements}
-                    DropdownIndicator={DropdownIndicator}
-                  />
+                  {userRole !== 'Customer' ? (
+                    <DropDownUncontained
+                      options={newAgreementTypes}
+                      setSelectedOption={setTypeOfNewAgreement}
+                      extraAction={checkExistingAgreements}
+                      DropdownIndicator={DropdownIndicator}
+                    />
+                  ) : (
+                    ''
+                  )}
                   {generateHTML()}
                   <div
                     className="looking-past-agre"
@@ -941,14 +1135,20 @@ export default function AgreementDetails({
                   </div>
                 </>
               ) : (
-                <OneTimeAgreement
-                  agreements={multipleAgreement.filter((op) =>
-                    op.contract_type.toLowerCase().includes('one'),
-                  )}
-                  id={id}
-                  history={history}
-                  setViewComponent={setViewComponent}
-                />
+                <>
+                  <OneTimeAgreement
+                    agreements={multipleAgreement.filter((op) =>
+                      op.contract_type.toLowerCase().includes('one'),
+                    )}
+                    id={id}
+                    history={history}
+                    setViewComponent={setViewComponent}
+                    DropdownIndicator={DropdownIndicator}
+                    IconOption={IconOption}
+                    setShowModal={setShowModal}
+                    userRole={userRole}
+                  />
+                </>
               )}
             </>
           )}

@@ -35,14 +35,46 @@ const Tabs = styled.div`
       }
     }
   }
-   @media only screen and (max-width: 768px) { 
-     .tabs {
-    li {
-      margin-right: 5px;
-      padding: 10px 10px 10px 10px;
-      font-size: ${Theme.normal};
+  .grey-box-tab {
+    list-style-type: none;
+    position: relative;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    border-bottom: none;
+
+    .account-type {
+      background-color: #f4f6fc;
+      border: 1px solid #d5d8e1;
+      border-radius: 2px;
+      padding: 6px 14px;
+      color: #2e384d;
+      font-size: 14px;
+      margin-right: 0;
+      font-family: ${Theme.baseFontFamily};
+      display: inline-block;
+      cursor: pointer;
+
+      &.active {
+        background-color: #ffffff;
+        border: 1px solid #2e384d;
+      }
     }
-   }
+  }
+  @media only screen and (max-width: 768px) {
+    .tabs {
+      li {
+        margin-right: 5px;
+        padding: 10px 10px 10px 10px;
+        font-size: ${Theme.normal};
+      }
+    }
+    .grey-box-tab {
+      .account-type {
+        padding: 6px 10px;
+      }
+    }
+  }
 `;
 
 export default Tabs;

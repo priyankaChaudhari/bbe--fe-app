@@ -614,8 +614,8 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             <div className="col-md-4  col-sm-12 ">
               <div className="view-data-for mt-2 pt-1 ">View data for:</div>{' '}
             </div>
-            <div className="col-md-4 col-sm-6 mt-2 pt-1 pl-0"> </div>
-            <div className="col-md-4 col-sm-6  1 pl-0">
+            <div className="col-md-4  mt-2 pt-1 pl-0"> </div>
+            <div className="col-md-4 col-12 pl-0">
               {' '}
               <DropDownSelect
                 id="BT-salesperformancedata-countryfilter"

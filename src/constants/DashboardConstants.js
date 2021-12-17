@@ -133,6 +133,41 @@ export const DSPFinanceMetrics = [
   },
 ];
 
+export const BGSComissionMetrics = [
+  {
+    value: 'openInvoices',
+    key: 'total_book_size',
+    label: 'TOTAL BOOK SIZE',
+    titleColor: '#333333',
+    prefix: '$',
+    postfix: '',
+  },
+  {
+    value: 'totalOverdue',
+    key: 'total_book_size_comission',
+    label: 'TOTAL BOOK SIZE COMMISSION',
+    titleColor: '#333333',
+    prefix: '$',
+    postfix: '',
+  },
+  {
+    value: 'expectedByEOM',
+    key: 'total_upsells',
+    label: 'TOTAL UPSELLS',
+    titleColor: '#333333',
+    prefix: '$',
+    postfix: '',
+  },
+  {
+    value: '%pastDue',
+    key: 'total_upsells_comission',
+    label: 'TOTAL UPSELL COMMISSION',
+    titleColor: '#333333',
+    prefix: '$',
+    postfix: '',
+  },
+];
+
 export const DSPBillingMetrics = [
   {
     value: 'amazonAdvertisingLLC',

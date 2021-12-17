@@ -15,8 +15,8 @@ import {
 
 import AdditionalOneTimeServices from './AdditionalOneTimeServices';
 import AdditionalMonthlyServices from './AdditionalMonthlyServices';
-import RevenueShareThreshold from './RevenueShareThreshold';
-import { StatementDetails, ListingOptimization } from '../../../constants';
+import AdditionalMarketplaces from './AdditionalMarketplaces';
+import { ListingOptimization } from '../../../constants';
 import { StatementWork, PlusIcon, MinusIcon } from '../../../theme/images';
 import { Button, InputFormField, ErrorMsg } from '../../../common';
 
@@ -29,12 +29,7 @@ function StatementOfWork({
   loader,
   generateHTML,
   displayError,
-  apiError,
-  thresholdTypeOptions,
-  onThresholdTypeChange,
-  selectedThreshold,
   formData,
-  contractErrorSalesThreshold,
   contractError,
   handleChange,
   onAddDiscount,
@@ -44,7 +39,6 @@ function StatementOfWork({
   showAdditionalMarketplace,
   setShowAdditionalMarketplace,
   showSection,
-  yoyPercentageOptions,
   additionalMonthlySerError,
   oneTimeService,
   changeQuantity,
@@ -63,11 +57,27 @@ function StatementOfWork({
   additionalOnetimeServices,
   clearOneTimeQntyError,
   updateAdditionalOnetimeServicesSelectedData,
-  DropdownIndicator,
+  setShowCollpase,
+  originalData,
+  additionalMonthlyServices,
+  updateAdditionalMonthlyServices,
+  setMonthlyAdditionalServices,
+  fetchUncommonOptions,
+  getOptions,
+  additionalMarketplacesData,
+  agreementData,
+  setAdditionalMarketplaces,
+  updateAdditionalMarketplaces,
+  setAdditionalMarketplace,
+  setMarketPlaces,
+  marketplacesResult,
+  discountData,
+  servicesFees,
 }) {
   const contractType = formData?.contract_type;
   const additionalOneTimeServicesLength =
     formData?.additional_one_time_services?.length;
+  const accountType = formData?.seller_type?.value;
 
   const changeListOptimization = (key, flag) => {
     showFooter(true);
@@ -139,6 +149,7 @@ function StatementOfWork({
                     onChange={(event) =>
                       handleChange(event, 'listing_optimization')
                     }
+                    allowNegative={false}
                     isAllowed={(values) => {
                       const { formattedValue, floatValue } = values;
                       if (floatValue == null) {
@@ -181,8 +192,53 @@ function StatementOfWork({
     );
   };
 
-  return contractType.toLowerCase().includes('one') ||
-    contractType.toLowerCase().includes('dsp') ? null : (
+  const displayAdditionalMonthlyServices = (type) => {
+    return (
+      <AdditionalMonthlyServices
+        onAddDiscount={onAddDiscount}
+        formData={formData}
+        monthlyService={monthlyService[type]}
+        handleChange={handleChange}
+        setShowAdditionalMarketplace={setShowAdditionalMarketplace}
+        showAdditionalMarketplace={showAdditionalMarketplace}
+        generateHTML={generateHTML}
+        accountType={type}
+        showFooter={showFooter}
+        setShowCollpase={setShowCollpase}
+        showSection={showSection}
+        originalData={originalData}
+        additionalMonthlyServices={additionalMonthlyServices}
+        setFormData={setFormData}
+        updateAdditionalMonthlyServices={updateAdditionalMonthlyServices}
+        setMonthlyAdditionalServices={setMonthlyAdditionalServices}
+        fetchUncommonOptions={fetchUncommonOptions}
+        getOptions={getOptions}
+        discountData={discountData}
+      />
+    );
+  };
+
+  const getServicesAccordingToAccType = (data, option) => {
+    const result = data && data.filter((item) => item.account_type === option);
+    return result;
+  };
+
+  const getData = (data, option) => {
+    const result = getServicesAccordingToAccType(data, option);
+    const multi = [];
+    if (result && result.length) {
+      for (const month of result) {
+        multi.push({
+          label: month.name,
+          value: month.name,
+        });
+      }
+    }
+    return { [option]: multi };
+  };
+
+  return contractType?.toLowerCase()?.includes('one') ||
+    contractType?.toLowerCase()?.includes('dsp') ? null : (
     <>
       <div className="straight-line sidepanel " />
       <div
@@ -205,7 +261,7 @@ function StatementOfWork({
           {renderCollapseBtnErrorHtml(
             false,
             statementErrCount,
-            'openCollapse.statement',
+            openCollapse.statement,
             'statement',
           )}
         </h4>
@@ -215,48 +271,35 @@ function StatementOfWork({
         {loader ? null : (
           <>
             <ul className="collapse-inner">
-              {StatementDetails.map((item) => (
-                <React.Fragment key={item.key}>
-                  <>
-                    <li>
-                      <InputFormField>
-                        <label htmlFor={item.key}>{item.label}</label>
-                        {generateHTML(item)}
-                        {displayError(item)}
-                        {item.key === 'primary_marketplace' &&
-                        apiError?.non_field_errors &&
-                        apiError.non_field_errors[0]
-                          ? displayError('non_field_errors')
-                          : ''}
-                      </InputFormField>
-                    </li>
-                  </>
-                </React.Fragment>
-              ))}
-              <RevenueShareThreshold
-                thresholdTypeOptions={thresholdTypeOptions}
-                selectedThreshold={selectedThreshold}
-                formData={formData}
-                onThresholdTypeChange={onThresholdTypeChange}
-                contractErrorSalesThreshold={contractErrorSalesThreshold}
-                handleChange={handleChange}
-                displayError={displayError}
-                contractError={contractError}
-                yoyPercentageOptions={yoyPercentageOptions}
-                DropdownIndicator={DropdownIndicator}
-              />
-
               <li>{displayListingOptimizations()}</li>
-              <AdditionalMonthlyServices
-                onAddDiscount={onAddDiscount}
-                formData={formData}
-                monthlyService={monthlyService}
-                handleChange={handleChange}
-                setShowAdditionalMarketplace={setShowAdditionalMarketplace}
-                showAdditionalMarketplace={showAdditionalMarketplace}
-                generateHTML={generateHTML}
-              />
-
+              {accountType === 'Seller' || accountType === 'Vendor' ? (
+                <li>
+                  {displayAdditionalMonthlyServices(accountType)}{' '}
+                  <AdditionalMarketplaces
+                    formData={formData}
+                    getOptions={getOptions}
+                    accountType={accountType}
+                    showFooter={showFooter}
+                    additionalMarketplacesData={additionalMarketplacesData}
+                    setFormData={setFormData}
+                    agreementData={agreementData}
+                    setAdditionalMarketplaces={setAdditionalMarketplaces}
+                    originalData={originalData}
+                    updateAdditionalMarketplaces={updateAdditionalMarketplaces}
+                    setAdditionalMarketplace={setAdditionalMarketplace}
+                    setMarketPlaces={setMarketPlaces}
+                    marketplacesResult={marketplacesResult}
+                    defaultData={getData(
+                      formData?.additional_marketplaces,
+                      accountType,
+                    )}
+                    setShowAdditionalMarketplace={setShowAdditionalMarketplace}
+                    showAdditionalMarketplace={showAdditionalMarketplace}
+                  />
+                </li>
+              ) : (
+                ''
+              )}
               {!formData?.draft_from ? (
                 <AdditionalOneTimeServices
                   onAddDiscount={onAddDiscount}
@@ -279,11 +322,81 @@ function StatementOfWork({
                   updateAdditionalOnetimeServicesSelectedData={
                     updateAdditionalOnetimeServicesSelectedData
                   }
+                  discountData={discountData}
+                  servicesFees={servicesFees}
                 />
               ) : (
                 // displayOneTimeServices()
                 ''
               )}
+
+              {accountType === 'Hybrid' ? (
+                <>
+                  <li className=" liner-titles spacing "> Seller Services</li>
+                  <li>
+                    {displayAdditionalMonthlyServices('Seller')}
+
+                    <AdditionalMarketplaces
+                      formData={formData}
+                      getOptions={getOptions}
+                      accountType="Seller"
+                      showFooter={showFooter}
+                      additionalMarketplacesData={additionalMarketplacesData}
+                      setFormData={setFormData}
+                      agreementData={agreementData}
+                      setAdditionalMarketplaces={setAdditionalMarketplaces}
+                      originalData={originalData}
+                      updateAdditionalMarketplaces={
+                        updateAdditionalMarketplaces
+                      }
+                      setAdditionalMarketplace={setAdditionalMarketplace}
+                      setMarketPlaces={setMarketPlaces}
+                      marketplacesResult={marketplacesResult}
+                      defaultData={getData(
+                        formData?.additional_marketplaces,
+                        'Seller',
+                      )}
+                      setShowAdditionalMarketplace={
+                        setShowAdditionalMarketplace
+                      }
+                      showAdditionalMarketplace={showAdditionalMarketplace}
+                    />
+                  </li>
+
+                  <li className=" liner-titles spacing "> Vendor Services</li>
+                  <li>
+                    {displayAdditionalMonthlyServices('Vendor')}
+                    <AdditionalMarketplaces
+                      formData={formData}
+                      getOptions={getOptions}
+                      accountType="Vendor"
+                      showFooter={showFooter}
+                      additionalMarketplacesData={additionalMarketplacesData}
+                      setFormData={setFormData}
+                      agreementData={agreementData}
+                      setAdditionalMarketplaces={setAdditionalMarketplaces}
+                      originalData={originalData}
+                      updateAdditionalMarketplaces={
+                        updateAdditionalMarketplaces
+                      }
+                      setAdditionalMarketplace={setAdditionalMarketplace}
+                      setMarketPlaces={setMarketPlaces}
+                      marketplacesResult={marketplacesResult}
+                      defaultData={getData(
+                        formData?.additional_marketplaces,
+                        'Vendor',
+                      )}
+                      setShowAdditionalMarketplace={
+                        setShowAdditionalMarketplace
+                      }
+                      showAdditionalMarketplace={showAdditionalMarketplace}
+                    />
+                  </li>
+                </>
+              ) : (
+                ''
+              )}
+
               <li>
                 <Button
                   className={
@@ -328,12 +441,8 @@ StatementOfWork.defaultProps = {
   loader: false,
   generateHTML: () => {},
   displayError: () => {},
-  apiError: {},
-  thresholdTypeOptions: [],
-  onThresholdTypeChange: () => {},
-  selectedThreshold: '',
+
   formData: {},
-  contractErrorSalesThreshold: false,
   contractError: {},
   handleChange: () => {},
   onAddDiscount: () => {},
@@ -343,7 +452,6 @@ StatementOfWork.defaultProps = {
   showAdditionalMarketplace: false,
   setShowAdditionalMarketplace: () => {},
   showSection: {},
-  yoyPercentageOptions: [],
   additionalMonthlySerError: {},
   oneTimeService: [],
   changeQuantity: () => {},
@@ -362,7 +470,22 @@ StatementOfWork.defaultProps = {
   additionalOnetimeServices: {},
   clearOneTimeQntyError: () => {},
   updateAdditionalOnetimeServicesSelectedData: () => {},
-  DropdownIndicator: () => {},
+  setShowCollpase: () => {},
+  originalData: {},
+  additionalMonthlyServices: {},
+  updateAdditionalMonthlyServices: () => {},
+  setMonthlyAdditionalServices: () => {},
+  fetchUncommonOptions: () => {},
+  getOptions: () => {},
+  additionalMarketplacesData: {},
+  agreementData: {},
+  setAdditionalMarketplaces: () => {},
+  updateAdditionalMarketplaces: () => {},
+  setAdditionalMarketplace: () => {},
+  setMarketPlaces: () => {},
+  marketplacesResult: [],
+  discountData: [],
+  servicesFees: {},
 };
 
 StatementOfWork.propTypes = {
@@ -380,12 +503,7 @@ StatementOfWork.propTypes = {
   loader: bool,
   generateHTML: func,
   displayError: func,
-  apiError: shape({
-    non_field_errors: arrayOf(string),
-  }),
-  thresholdTypeOptions: arrayOf(shape({})),
-  onThresholdTypeChange: func,
-  selectedThreshold: string,
+
   formData: shape({
     threshold_type: string,
     additional_one_time_services: arrayOf(shape({})),
@@ -393,7 +511,6 @@ StatementOfWork.propTypes = {
     monthly_discount_amount: oneOfType([string, number]),
     monthly_discount_type: oneOfType([string, number]),
   }),
-  contractErrorSalesThreshold: bool,
   contractError: shape({
     yoy_percentage: string,
   }),
@@ -409,7 +526,6 @@ StatementOfWork.propTypes = {
     dspAddendum: bool,
     amendment: bool,
   }),
-  yoyPercentageOptions: arrayOf(shape({})),
   additionalMonthlySerError: oneOfType([string, object]),
   oneTimeService: arrayOf(shape({})),
   changeQuantity: func,
@@ -434,5 +550,20 @@ StatementOfWork.propTypes = {
   }),
   clearOneTimeQntyError: func,
   updateAdditionalOnetimeServicesSelectedData: func,
-  DropdownIndicator: func,
+  setShowCollpase: func,
+  originalData: {},
+  additionalMonthlyServices: shape({}),
+  updateAdditionalMonthlyServices: func,
+  setMonthlyAdditionalServices: func,
+  fetchUncommonOptions: func,
+  getOptions: func,
+  additionalMarketplacesData: shape({}),
+  agreementData: {},
+  setAdditionalMarketplaces: func,
+  updateAdditionalMarketplaces: func,
+  setAdditionalMarketplace: func,
+  setMarketPlaces: func,
+  marketplacesResult: arrayOf(shape({})),
+  discountData: [],
+  servicesFees: shape({}),
 };

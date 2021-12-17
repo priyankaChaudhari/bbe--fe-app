@@ -3,6 +3,7 @@
 import React from 'react';
 
 import NumberFormat from 'react-number-format';
+import ReactTooltip from 'react-tooltip';
 import Select, { components } from 'react-select';
 import {
   string,
@@ -15,7 +16,7 @@ import {
   object,
 } from 'prop-types';
 
-import { PlusIcon, MinusIcon, CaretUp } from '../../../theme/images';
+import { PlusIcon, MinusIcon, CaretUp, InfoIcon } from '../../../theme/images';
 import {
   ErrorMsg,
   InputFormField,
@@ -42,6 +43,8 @@ function AdditionalOneTimeServices({
   additionalOnetimeServices,
   clearOneTimeQntyError,
   updateAdditionalOnetimeServicesSelectedData,
+  discountData,
+  servicesFees,
 }) {
   const additionalOneTimeServicesLength =
     formData?.additional_one_time_services?.length;
@@ -168,6 +171,31 @@ function AdditionalOneTimeServices({
     );
   };
 
+  const showDiscountLabel = () => {
+    const discount =
+      discountData?.length &&
+      discountData.filter((item) => item.service_type === 'one time service');
+    if (discount?.length && discount[0]?.type) {
+      return 'Edit Discount';
+    }
+    return 'Add Discount';
+  };
+
+  const displayNumber = (num) => {
+    const res = num?.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return res;
+  };
+
+  const getAmazonStoreFee = () => {
+    const basic = servicesFees?.find((op) => op?.name?.includes('Basic'));
+    const plus = servicesFees?.find((op) => op?.name?.includes('Plus'));
+    return `Basic - 1 page ($ ${displayNumber(
+      basic?.fee || 1500,
+    )}), Plus - 1 home page + up to 5 pages/sub-pages ($ ${displayNumber(
+      plus?.fee || 2400,
+    )}), Custom - Will vary`;
+  };
+
   const displayOneTimeServices = () => {
     return (
       <li>
@@ -178,12 +206,8 @@ function AdditionalOneTimeServices({
           <div
             className="add-discount"
             role="presentation"
-            onClick={() => onAddDiscount('one-time')}>
-            {formData &&
-            formData.one_time_discount_amount &&
-            formData.one_time_discount_type
-              ? 'Edit Discount'
-              : 'Add Discount'}
+            onClick={() => onAddDiscount('one time service')}>
+            {showDiscountLabel()}
           </div>
           {additionalMonthlySerError.required ? (
             <ErrorMsg>{additionalMonthlySerError.required}</ErrorMsg>
@@ -335,6 +359,15 @@ function AdditionalOneTimeServices({
                   className="check-container customer-pannel"
                   htmlFor="contract-copy-check">
                   Amazon Store
+                  <img
+                    src={InfoIcon}
+                    alt="search cursor"
+                    data-tip={getAmazonStoreFee()}
+                    data-for="info"
+                    className="info-icon ml-2"
+                    style={{ verticalAlign: 'middle' }}
+                  />
+                  <ReactTooltip id="info" aria-haspopup="true" place="bottom" />
                   <input
                     type="checkbox"
                     id="contract-copy-check"
@@ -506,6 +539,7 @@ function AdditionalOneTimeServices({
                         return floatValue <= 100000000;
                       }}
                       decimalScale={2}
+                      allowNegative={false}
                     />
                     {displayError('custom_amazon_store_price')}
                   </InputFormField>
@@ -547,6 +581,8 @@ AdditionalOneTimeServices.defaultProps = {
   additionalOnetimeServices: {},
   clearOneTimeQntyError: () => {},
   updateAdditionalOnetimeServicesSelectedData: () => {},
+  discountData: [],
+  servicesFees: [],
 };
 
 AdditionalOneTimeServices.propTypes = {
@@ -577,4 +613,6 @@ AdditionalOneTimeServices.propTypes = {
   }),
   clearOneTimeQntyError: func,
   updateAdditionalOnetimeServicesSelectedData: func,
+  discountData: arrayOf(shape()),
+  servicesFees: arrayOf(shape({})),
 };

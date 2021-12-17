@@ -47,6 +47,8 @@ function ServiceAgreement({
   additionalOnetimeServices,
   clearOneTimeQntyError,
   updateAdditionalOnetimeServicesSelectedData,
+  discountData,
+  servicesFees,
 }) {
   const contractType = formData?.contract_type;
   const additionalOneTimeServicesLength =
@@ -67,17 +69,17 @@ function ServiceAgreement({
         <h4
           className={
             agreementErrCount ||
-            (statementErrCount && contractType.toLowerCase().includes('one'))
+            (statementErrCount && contractType?.toLowerCase()?.includes('one'))
               ? 'sendar-details error-container'
               : 'sendar-details'
           }>
-          {contractType.toLowerCase().includes('one') ? (
+          {contractType?.toLowerCase()?.includes('one') ? (
             <>
               One Time Service Agreement
               {renderCollapseBtnErrorHtml(
                 'isOneTimeService',
                 agreementErrCount || statementErrCount,
-                'openCollapse.agreement',
+                openCollapse.agreement,
                 'service_agreement',
               )}
             </>
@@ -87,7 +89,7 @@ function ServiceAgreement({
               {renderCollapseBtnErrorHtml(
                 false,
                 agreementErrCount,
-                'openCollapse.agreement',
+                openCollapse.agreement,
                 'service_agreement',
               )}
             </>
@@ -128,7 +130,7 @@ function ServiceAgreement({
                       ))}
                     </InputFormField>
                   </li>
-                  {contractType.toLowerCase().includes('one') &&
+                  {contractType?.toLowerCase()?.includes('one') &&
                   !formData?.draft_from ? (
                     <>
                       <AdditionalOneTimeServices
@@ -152,6 +154,8 @@ function ServiceAgreement({
                         updateAdditionalOnetimeServicesSelectedData={
                           updateAdditionalOnetimeServicesSelectedData
                         }
+                        discountData={discountData}
+                        servicesFees={servicesFees}
                       />
                     </>
                   ) : (
@@ -170,14 +174,16 @@ function ServiceAgreement({
                     formData.additional_one_time_services.find(
                       (item) => item.name === 'Amazon Store Package',
                     ) &&
-                    contractType.toLowerCase().includes('one'))
+                    contractType?.toLowerCase()?.includes('one'))
                 }
                 onClick={() =>
                   nextStep(
-                    contractType.toLowerCase().includes('one')
+                    contractType?.toLowerCase()?.includes('one')
                       ? 'addendum'
-                      : contractType.toLowerCase().includes('dsp')
+                      : contractType?.toLowerCase()?.includes('dsp')
                       ? 'dspAddendum'
+                      : contractType?.toLowerCase()?.includes('recurring')
+                      ? 'feeStructure'
                       : 'statement',
                   )
                 }>
@@ -222,6 +228,8 @@ ServiceAgreement.defaultProps = {
   additionalOnetimeServices: {},
   clearOneTimeQntyError: () => {},
   updateAdditionalOnetimeServicesSelectedData: () => {},
+  discountData: [],
+  servicesFees: [],
 };
 
 ServiceAgreement.propTypes = {
@@ -268,4 +276,6 @@ ServiceAgreement.propTypes = {
   }),
   clearOneTimeQntyError: func,
   updateAdditionalOnetimeServicesSelectedData: func,
+  discountData: arrayOf(shape({})),
+  servicesFees: arrayOf(shape({})),
 };
