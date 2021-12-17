@@ -32,14 +32,14 @@ export default function BGSCommissionTableDesktopView({
               <th width="10%" className=" text-left">
                 rev share
               </th>
-              <th width="5%" className=" text-left">
+              <th width="8%" className=" text-left">
                 dsp
               </th>
               <th width="12%" className=" text-left">
                 {' '}
                 total book size
               </th>
-              <th width="15%" className=" text-left">
+              <th width="12%" className=" text-left">
                 {' '}
                 BOOK Size commission
               </th>
@@ -93,13 +93,13 @@ export default function BGSCommissionTableDesktopView({
                         <td width="10%" className="text-medium">
                           {`$${numberWithCommas(item.rev_share)}`}
                         </td>
-                        <td width="5%" className="text-medium">
+                        <td width="8%" className="text-medium">
                           {`$${numberWithCommas(item.dsp)}`}
                         </td>
                         <td width="12%" className="text-medium">
                           {`$${numberWithCommas(item.total_book_size)}`}
                         </td>
-                        <td width="15%" className="text-bold">
+                        <td width="12%" className="text-bold">
                           {`$${numberWithCommas(
                             item.total_book_size_commission,
                           )}`}
@@ -126,12 +126,7 @@ export default function BGSCommissionTableDesktopView({
           <NoData>No Commission Data Found</NoData>
         ) : null}
       </WhiteCard>
-      <div
-        style={{
-          overflow: 'auto',
-          marginTop: '20px',
-          height: 'calc(100vh - 40vh)',
-        }}>
+      <div className="commission-section">
         {isGroupBy && commissionData && commissionData.length > 0
           ? commissionData.map((item) => {
               return (
@@ -162,7 +157,7 @@ export default function BGSCommissionTableDesktopView({
                           <td width="10%" className="text-medium">
                             {`$${numberWithCommas(item.bgs_manager.rev_share)}`}
                           </td>
-                          <td width="5%" className="text-medium">
+                          <td width="8%" className="text-medium">
                             {`$${numberWithCommas(item.bgs_manager.dsp)}`}
                           </td>
                           <td width="12%" className="text-medium">
@@ -170,7 +165,7 @@ export default function BGSCommissionTableDesktopView({
                               item.bgs_manager.total_book_size,
                             )}`}
                           </td>
-                          <td width="15%" className="text-bold">
+                          <td width="12%" className="text-bold">
                             {`$${numberWithCommas(
                               item.bgs_manager.total_book_size_commission,
                             )}`}
@@ -214,7 +209,7 @@ export default function BGSCommissionTableDesktopView({
                               <td width="10%" className="text-medium">
                                 {`$${numberWithCommas(memberItem.rev_share)}`}
                               </td>
-                              <td width="5%" className="text-medium">
+                              <td width="8%" className="text-medium">
                                 {`$${numberWithCommas(memberItem.dsp)}`}
                               </td>
                               <td width="12%" className="text-medium">
@@ -222,7 +217,7 @@ export default function BGSCommissionTableDesktopView({
                                   memberItem.total_book_size,
                                 )}`}
                               </td>
-                              <td width="15%" className="text-bold">
+                              <td width="12%" className="text-bold">
                                 {`$${numberWithCommas(
                                   memberItem.total_book_size_commission,
                                 )}`}

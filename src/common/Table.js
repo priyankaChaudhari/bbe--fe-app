@@ -338,7 +338,6 @@ const Table = styled.table`
         .green-arrow {
           width: 14px;
           vertical-align: bottom;
-          /* transform: rotate(180deg); */
           vertical-align: middle;
           margin-left: -2px;
           margin-right: 3px;

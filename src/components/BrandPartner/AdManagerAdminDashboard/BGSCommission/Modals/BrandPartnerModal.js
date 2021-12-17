@@ -143,13 +143,13 @@ const BrandPartnerModal = ({
                               <td width="10%">{`$${numberWithCommas(
                                 partner.rev_share,
                               )}`}</td>
-                              <td width="5%">{`$${numberWithCommas(
+                              <td width="8%">{`$${numberWithCommas(
                                 partner.dsp,
                               )}`}</td>
                               <td width="12%">{`$${numberWithCommas(
                                 partner.total_book_size,
                               )}`}</td>
-                              <td width="15%" className="text-bold">
+                              <td width="12%" className="text-bold">
                                 {partner.total_book_size_commission === null &&
                                 Bgs.isBgsManager
                                   ? '-'
@@ -194,7 +194,7 @@ const BrandPartnerModal = ({
                             <td width="10%">{`$${numberWithCommas(
                               brandPartners.total.rev_share,
                             )}`}</td>
-                            <td width="5%">{`$${numberWithCommas(
+                            <td width="8%">{`$${numberWithCommas(
                               brandPartners.total.dsp,
                             )}`}</td>
                             <td width="12%">
@@ -202,7 +202,7 @@ const BrandPartnerModal = ({
                                 brandPartners.total.total_book_size,
                               )}`}
                             </td>
-                            <td width="15%" className="text-bold">
+                            <td width="12%" className="text-bold">
                               {`$${numberWithCommas(
                                 brandPartners.total.total_book_size_commission,
                               )}`}
