@@ -44,7 +44,9 @@ export default function EscrowBudgetAllocationModal({
   currentDate.setDate(1);
 
   const dspPacing = dspData?.dsp_pacing;
-  const escrowBalance = dspPacing?.escrow_converted_usd;
+  const escrowBalance = dspPacing?.escrow_converted_usd
+    ? dspPacing?.escrow_converted_usd
+    : 0;
   const actualAllocatedMonths = dspPacing?.allocated_balance.length
     ? dspPacing?.allocated_balance
     : [
