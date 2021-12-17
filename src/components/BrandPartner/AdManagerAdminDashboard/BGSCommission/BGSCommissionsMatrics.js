@@ -29,7 +29,7 @@ const BGSCommissionsMatrics = ({ commissionMatrics }) => {
 
   return (
     <>
-      <div className="white-card-container mb-4">
+      <div className="white-card-container sticky-metrics mb-4">
         {BGSCommissionMatrics.map((item) => (
           <div className="col-md-3 col-6 mb-3" key={item.key}>
             <Card
