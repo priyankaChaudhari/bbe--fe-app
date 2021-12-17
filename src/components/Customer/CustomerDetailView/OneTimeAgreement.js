@@ -104,7 +104,7 @@ export default function OneTimeAgreement({
             agreements.map((agreement) => (
               <WhiteCard className="mt-3 mb-3 selected-card" key={agreement.id}>
                 <div className="row">
-                  <div className="col-lg-8 col-md-7 col-12">
+                  <div className="col-lg-9 col-md-8 col-12">
                     <img
                       width="48px"
                       className="solid-icon"
