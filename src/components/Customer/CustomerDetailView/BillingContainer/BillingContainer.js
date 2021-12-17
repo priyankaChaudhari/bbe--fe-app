@@ -48,14 +48,12 @@ const BillingContainer = ({
             );
           })}
 
-          {customerStatus && customerStatus.value !== 'pending' ? (
-            <li
-              className={viewComponent === 'Billing' ? 'active' : ''}
-              onClick={() => setViewComponent('Billing')}
-              role="presentation">
-              Billing Details
-            </li>
-          ) : null}
+          <li
+            className={viewComponent === 'Billing' ? 'active' : ''}
+            onClick={() => setViewComponent('Billing')}
+            role="presentation">
+            Billing Details
+          </li>
         </ul>
       </Tabs>
       {billingNavigationOptions.includes(viewComponent) ? (
@@ -70,6 +68,7 @@ const BillingContainer = ({
           id={id}
           userInfo={userInfo}
           onBoardingId={onBoardingId}
+          customerStatus={customerStatus}
         />
       )}
     </div>
