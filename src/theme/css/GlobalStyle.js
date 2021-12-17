@@ -877,7 +877,7 @@ fieldset {
       background: ${Theme.orange};
       border-radius: 50%;
       width: 30px;
-      /* height: 45px; */
+    
     }
     .react-calendar__tile--now {
       background-color: #e6e6e6;
@@ -890,7 +890,7 @@ fieldset {
       background-color: #e6e6e6;
       border-radius: 50%;
 
-      /* height: 45px; */
+    
     }
     .react-calendar__tile {
       max-width: 100%;
