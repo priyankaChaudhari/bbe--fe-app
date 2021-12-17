@@ -94,7 +94,7 @@ const TableGap = styled.div`
 
   .commission-section {
     overflow: auto;
-    height: calc(100vh - 80vh);
+    height: calc(100vh - 70vh);
     margin-top: 20px;
     padding-bottom: 50px;
     @media only screen and (min-width: 1920px) {
