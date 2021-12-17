@@ -4,7 +4,7 @@ import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
-import { shape, string } from 'prop-types';
+import { shape, string, object, oneOfType } from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
 import Select, { components } from 'react-select';
 
@@ -40,7 +40,12 @@ import {
   ContractInputSelect,
 } from '../../../../../common';
 
-export default function BillingDetails({ id, userInfo, onBoardingId }) {
+export default function BillingDetails({
+  id,
+  userInfo,
+  onBoardingId,
+  customerStatus,
+}) {
   const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -569,13 +574,15 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
                 <p className="black-heading-title mt-0 mb-3">Payment Type</p>
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
+                {customerStatus?.value !== 'pending' ? (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                ) : null}
                 <div className="row">
                   <div className="col-6">
                     <div className="label">Payment Type</div>
@@ -643,13 +650,15 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
                 <p className="black-heading-title mt-0 mb-4">Billing Contact</p>
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
+                {customerStatus?.value !== 'pending' ? (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                ) : null}
                 <GroupUser className="mt-3">
                   {data?.id ? (
                     <GetInitialName
@@ -678,13 +687,15 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
               <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
 
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => setShowModal(true)}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
-                </div>
+                {customerStatus?.value !== 'pending' ? (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                ) : null}
                 <div className="label mt-3">Address </div>
                 <div className="label-info">
                   {mapDefaultValues('billing_address', 'address')}
@@ -823,6 +834,7 @@ export default function BillingDetails({ id, userInfo, onBoardingId }) {
 
 BillingDetails.defaultProps = {
   onBoardingId: null,
+  customerStatus: null,
 };
 
 BillingDetails.propTypes = {
@@ -831,4 +843,8 @@ BillingDetails.propTypes = {
     customer_onboarding: string,
   }).isRequired,
   onBoardingId: string,
+  customerStatus: oneOfType({
+    string,
+    object,
+  }),
 };

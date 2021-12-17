@@ -313,7 +313,15 @@ export default function AgreementDetails({
 
   const generateHTML = () => {
     const fields = [];
-    for (const agreement of multipleAgreement) {
+    const agreements =
+      userRole === 'Customer'
+        ? multipleAgreement.filter(
+            (op) =>
+              op?.contract_status?.value === 'active' ||
+              op?.contract_status?.value === 'renewed',
+          )
+        : multipleAgreement;
+    for (const agreement of agreements) {
       if (
         agreement?.contract_status?.value !== 'inactive' &&
         agreement?.contract_status?.value !== 'cancel' &&
