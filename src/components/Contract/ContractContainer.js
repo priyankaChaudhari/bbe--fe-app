@@ -4033,6 +4033,7 @@ export default function ContractContainer() {
             selectedDiscount={selectedDiscount}
             getDiscountData={getDiscountData}
             updatedFormData={updatedFormData}
+            getAmendmentData={getAmendmentData}
           />
 
           <ContractEditConfirmation
