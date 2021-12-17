@@ -126,6 +126,11 @@ export const remainingFieldsOfContract = [
     type: 'number-currency',
   },
   {
+    key: 'sales_threshold',
+    label: 'Sales Threshold',
+    type: 'number-currency',
+  },
+  {
     key: 'monthly_rev_share',
     label: 'monthly Rev Share',
     type: 'object',
@@ -134,6 +139,11 @@ export const remainingFieldsOfContract = [
     key: 'quarterly_rev_share',
     label: 'Quarterly Rev Share',
     type: 'object',
+  },
+  {
+    key: 'billing_minimum',
+    label: 'BILLING MINIMUM ',
+    type: 'number-currency',
   },
 ];
 
