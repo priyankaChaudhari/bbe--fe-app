@@ -250,6 +250,13 @@ export default function BillingDetails({
             : ''
         }
         isNumericString
+        isAllowed={(values) => {
+          const { formattedValue } = values;
+          if (item.key === 'expiration_date') {
+            return formattedValue?.split('/')?.[0] <= 12;
+          }
+          return formattedValue;
+        }}
       />
     );
   };
