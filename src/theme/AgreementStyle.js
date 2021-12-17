@@ -425,6 +425,11 @@ export const SidePanel = styled.div`
     .text-delete {
       text-decoration: line-through;
     }
+    .basic-text {
+      color: ${Theme.gray85};
+      font-size: ${Theme.extraNormal};
+      margin: 0;
+    }
     .added-remove-text {
       font-size: ${Theme.extraSmall};
       color: ${Theme.gray40};

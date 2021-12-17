@@ -9,6 +9,15 @@ import {
   DSPAddendumDetails,
   ListingOptimization,
   remainingFieldsOfContract,
+  accountTypeOptions,
+  feeStructureContainerDetails,
+  revShareDetails,
+  revShareAndRetainerDetails,
+  revShareAndRetainerQuarterDetails,
+  revShareAndRetainerMonthDetails,
+  quarterlyThresholdOptions,
+  monthlyThresholdOptions,
+  vendorReportOptions,
 } from '../../constants';
 
 function ServicesAmendment({ amendmentData }) {
@@ -18,6 +27,15 @@ function ServicesAmendment({ amendmentData }) {
     ...DSPAddendumDetails,
     ...ListingOptimization,
     ...remainingFieldsOfContract,
+    ...accountTypeOptions,
+    ...feeStructureContainerDetails,
+    ...revShareDetails,
+    ...revShareAndRetainerDetails,
+    ...revShareAndRetainerQuarterDetails,
+    ...revShareAndRetainerMonthDetails,
+    ...quarterlyThresholdOptions,
+    ...monthlyThresholdOptions,
+    ...vendorReportOptions,
   ];
   const amendmentDataUpdatedLength = amendmentData?.updated?.length;
   const amendmentDataAddendumStatus = amendmentData?.addendum?.status;
@@ -35,13 +53,21 @@ function ServicesAmendment({ amendmentData }) {
         value && value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       }`;
     }
+    if (type === 'object') {
+      if (value === null) {
+        return 'None';
+      }
+      return JSON.stringify(value);
+    }
     return value === null ? 'None' : value;
   };
 
   const displayUpdatedFields = () => {
     if (amendmentDataUpdatedLength) {
       return amendmentData.updated.map((item) => {
-        const originalField = allFields.find((data) => data.key === item.label);
+        const originalField = allFields.find(
+          (data) => data?.key === item?.label,
+        );
         return (
           <li>
             <div className="row w-100">
@@ -49,12 +75,21 @@ function ServicesAmendment({ amendmentData }) {
                 <div className="label">
                   {originalField && originalField.label
                     ? originalField.label
-                    : item.label}
+                    : item.label}{' '}
+                  <span className="label">
+                    {item?.account_type && item?.account_type === 'vendor'
+                      ? '(Vendor)'
+                      : '(Seller)'}
+                  </span>
                 </div>
               </div>
+
               <div className="col-8 text-left mb-3">
                 <span className=" new-basic-text text-delete ">
-                  {displayValue(item.old, originalField && originalField.type)}
+                  {displayValue(
+                    item?.old,
+                    originalField && originalField?.type,
+                  )}
                 </span>
                 <span>
                   <img
@@ -64,7 +99,10 @@ function ServicesAmendment({ amendmentData }) {
                   />
                 </span>
                 <span className=" new-basic-text">
-                  {displayValue(item.new, originalField && originalField.type)}
+                  {displayValue(
+                    item?.new,
+                    originalField && originalField?.type,
+                  )}
                 </span>
               </div>
               <div className="col-4 mb-3">
@@ -87,13 +125,20 @@ function ServicesAmendment({ amendmentData }) {
         return (
           <>
             <div className="col-8 text-left mb-3">
-              <p
-                className={
-                  item.status === 'removed'
-                    ? '  basic-text text-delete  '
-                    : ' basic-text '
-                }>
-                {item.label}
+              <p className="m-0">
+                <span
+                  className={
+                    item.status === 'removed'
+                      ? '  basic-text text-delete  '
+                      : ' basic-text '
+                  }>
+                  {item.label}
+                </span>
+                <span className="ml-1 basic-text">
+                  {item?.account_type && item?.account_type === 'vendor'
+                    ? '(Vendor)'
+                    : '(Seller)'}
+                </span>
               </p>
             </div>
             <div className="col-4 mb-3">
