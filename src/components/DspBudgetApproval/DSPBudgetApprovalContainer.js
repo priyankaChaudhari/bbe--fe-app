@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+import { useHistory } from 'react-router-dom';
+
 import { ArrowRightBlackIcon, ArrowRightIcon } from '../../theme/images';
 import {
   InvoiceApprovalHeader,
@@ -8,6 +10,7 @@ import {
   invoiceApprovalFlag,
   TotalInvoiceHeader,
   InvoiceNewMonthHeader,
+  PATH_THANKS,
 } from '../../constants';
 import {
   UnauthorizedHeader,
@@ -19,6 +22,7 @@ import {
 } from '../../common';
 
 export default function DSPBudgetApprovalContainer() {
+  const history = useHistory();
   const [invoiceType, setInvoiceType] = useState('additional');
   const [invoiceApprovalCondition, setInvoiceApprovalCondition] = useState(
     'yes',
@@ -49,7 +53,13 @@ export default function DSPBudgetApprovalContainer() {
     setInvoiceType('oneTime');
   }, []);
 
-  const storeInvoiceProposal = () => {};
+  const storeInvoiceProposal = () => {
+    history.push({
+      pathname: PATH_THANKS,
+      type: 'dspSignOff',
+    });
+  };
+
   const renderHeaderMessage = () => {
     return (
       <GreyCard className="yellow-card ">
@@ -102,7 +112,10 @@ export default function DSPBudgetApprovalContainer() {
         <p className="normal-text text-bold m-0">
           Additional DSP invoice (November only)
         </p>
-        <p className="normal-text text-bold mb-0 mt-1"> $5,000</p>
+        <p className="normal-text text-bold mb-0 mt-1">
+          {' '}
+          {generateAmount(5000, '', '$')}
+        </p>
         <p className="normal-text mb-0 mt-1">
           The will be a one-off invoice, providing additional budget to spend in
           the current month. This invoice will be sent as soon as brand partner
@@ -255,7 +268,9 @@ export default function DSPBudgetApprovalContainer() {
           </div>
           <div className="col-2 text-left">
             {invoiceType === 'standard' || invoiceType === 'additional' ? (
-              <div className="normal-text text-bold">$5,000</div>
+              <div className="normal-text text-bold">
+                {generateAmount(5000, '', '$')}
+              </div>
             ) : null}
           </div>
 
@@ -268,7 +283,9 @@ export default function DSPBudgetApprovalContainer() {
           </div>
 
           <div className="col-3 text-left">
-            <div className="normal-text text-bold">$10,000</div>
+            <div className="normal-text text-bold">
+              {generateAmount(5000, '', '$')}
+            </div>
           </div>
         </div>
       </>
@@ -284,7 +301,9 @@ export default function DSPBudgetApprovalContainer() {
           <p className="normal-text text-medium mb-2">
             {InvoiceCurrentMonthHeader[invoiceType]}
           </p>
-          <h5 className="sub-title-text mt-2">$10,000</h5>
+          <h5 className="sub-title-text mt-2">
+            {generateAmount(10000, '', '$')}
+          </h5>
           {invoiceType !== 'oneTime' ? (
             <>
               <div className="straight-line horizontal-line mt-3" />
@@ -292,7 +311,9 @@ export default function DSPBudgetApprovalContainer() {
                 {InvoiceNewMonthHeader[invoiceType]}
                 {invoiceType === 'pause' ? 'December' : null}
               </p>
-              <h5 className="sub-title-text mt-2">$15,000</h5>{' '}
+              <h5 className="sub-title-text mt-2">
+                {generateAmount(15000, '', '$')}
+              </h5>{' '}
             </>
           ) : null}
 
@@ -300,84 +321,7 @@ export default function DSPBudgetApprovalContainer() {
             <div className="row">{renderTableHeaders()}</div>
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {renderTableData()}
-
-            {/* <div className="row">
-              <div className="col-5 text-left">
-                <div className="normal-text text-bold">US</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="normal-text text-bold">$5,000</div>
-              </div>
-              <div className="col-2 text-center">
-                <div className="normal-text">
-                  <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="normal-text text-bold">$10,000</div>
-              </div>
-            </div>
-
-            <div className="row mt-1">
-              <div className="col-5 text-left">
-                <div className="normal-text ">UK</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="gray-normal-text">$5,000</div>
-              </div>
-              <div className="col-2 text-center">
-                <div className="normal-text">
-                  <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="gray-normal-text">$10,000</div>
-              </div>
-            </div>
-            <div className="row mt-1">
-              <div className="col-5 text-left">
-                <div className="normal-text ">Canada</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="gray-normal-text">$5,000</div>
-              </div>
-              <div className="col-2 text-center">
-                <div className="normal-text">
-                  <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="gray-normal-text">$10,000</div>
-              </div>
-            </div> */}
             {renderTotalInvoiceSection()}
-
-            {/* <div className=" straight-line horizontal-line pt-1 mb-2 " />
-            <div className="row">
-              <div className="col-4 text-left">
-                <div className="normal-text text-bold">US</div>
-              </div>
-              <div className="col-4 text-left">
-                <div className="normal-text text-bold">$5,000</div>
-              </div>
-              <div className="col-2 text-center">
-                <div className="col-4 text-left">
-                  <div className="normal-text text-bold">$10,000</div>
-                </div>
-              </div>
-            </div>
-            <div className=" straight-line horizontal-line pt-1 mb-2 " />
-            <div className="row">
-              <div className="col-8 text-left">
-                <div className="normal-text text-bold">Total invoice</div>
-              </div>
-
-              <div className="col-2 text-center">
-                <div className="col-4 text-left">
-                  <div className="normal-text text-bold">$10,000</div>
-                </div>
-              </div>
-            </div> */}
           </fieldset>
 
           <p className="normal-text">
