@@ -98,46 +98,11 @@ export const remainingFieldsOfContract = [
   {
     key: 'contract_status',
     label: 'Contract Status',
-    type: 'object',
-  },
-  {
-    key: 'contract_type',
-    label: 'Contract Type',
     type: 'text',
   },
   {
-    key: 'monthly_discount_amount',
-    label: 'Monthly discount amount',
-    type: 'number-currency',
-  },
-  {
-    key: 'monthly_discount_type',
-    label: 'Monthly discount type',
-    type: 'text',
-  },
-  {
-    key: 'one_time_deal_amount',
-    label: 'One time deal amount',
-    type: 'number-currency',
-  },
-  {
-    key: 'one_time_discount_amount',
-    label: 'One time discount amount',
-    type: 'number-currency',
-  },
-  {
-    key: 'one_time_discount_type',
-    label: 'One time discount type',
-    type: 'text',
-  },
-  {
-    key: 'sales_threshold',
-    label: 'Sales Threshold',
-    type: 'text',
-  },
-  {
-    key: 'seller_type',
-    label: 'Seller Type',
+    key: 'fee_type',
+    label: 'Fee Type',
     type: 'text',
   },
   {
@@ -146,9 +111,39 @@ export const remainingFieldsOfContract = [
     type: 'text',
   },
   {
-    key: 'yoy_percentage',
-    label: 'YOY Percentage',
+    key: 'vendor_billing_report',
+    label: 'Vendor Billing Report',
     type: 'text',
+  },
+  {
+    key: 'discount_type',
+    label: 'Discount Type',
+    type: 'text',
+  },
+  {
+    key: 'discount_amount',
+    label: 'Discount Amount',
+    type: 'number-currency',
+  },
+  {
+    key: 'sales_threshold',
+    label: 'Sales Threshold',
+    type: 'number-currency',
+  },
+  {
+    key: 'monthly_rev_share',
+    label: 'monthly Rev Share',
+    type: 'object',
+  },
+  {
+    key: 'quarterly_rev_share',
+    label: 'Quarterly Rev Share',
+    type: 'object',
+  },
+  {
+    key: 'billing_minimum',
+    label: 'BILLING MINIMUM ',
+    type: 'number-currency',
   },
 ];
 
@@ -255,6 +250,8 @@ export const feeTypeOptions = [
   {
     value: 'Retainer + % Rev Share',
     label: 'Retainer + % Rev Share',
+    key: 'retinaer_rev_share',
+    type: 'choice',
   },
 ];
 
