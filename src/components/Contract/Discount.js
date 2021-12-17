@@ -21,6 +21,7 @@ function Discount({
   getDiscountData,
   updatedFormData,
   setIsEditContract,
+  getAmendmentData,
 }) {
   const [showAmountInput, setShowAmountInput] = useState(false);
   const [selectedDiscountType, setSelectedDiscountType] = useState('none');
@@ -59,6 +60,9 @@ function Discount({
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
             }
+            if (agreementData?.draft_from) {
+              getAmendmentData(agreementData?.id);
+            }
           }
           if (res?.status === 400) {
             setApiError(res?.data);
@@ -73,6 +77,9 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+            }
+            if (agreementData?.draft_from) {
+              getAmendmentData(agreementData?.id);
             }
           }
           if (res?.status === 400) {
@@ -99,6 +106,9 @@ function Discount({
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
             }
+            if (agreementData?.draft_from) {
+              getAmendmentData(agreementData?.id);
+            }
           }
           if (res?.status === 400) {
             setApiError(res?.data);
@@ -112,6 +122,9 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+            }
+            if (agreementData?.draft_from) {
+              getAmendmentData(agreementData?.id);
             }
           }
           if (res?.status === 400) {
@@ -287,6 +300,7 @@ Discount.defaultProps = {
   getDiscountData: () => {},
   updatedFormData: {},
   setIsEditContract: () => {},
+  getAmendmentData: () => {},
 };
 Discount.propTypes = {
   discountFlag: string,
@@ -302,5 +316,6 @@ Discount.propTypes = {
   getDiscountData: func,
   updatedFormData: shape({}),
   setIsEditContract: func,
+  getAmendmentData: func,
 };
 export default Discount;
