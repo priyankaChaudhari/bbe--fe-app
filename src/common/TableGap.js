@@ -94,12 +94,19 @@ const TableGap = styled.div`
 
   .commission-section {
     overflow: auto;
-    height: calc(100vh - 70vh);
+    height: calc(100vh - 75vh);
     margin-top: 20px;
     padding-bottom: 50px;
+
     @media only screen and (min-width: 1920px) {
-      height: calc(100vh - 40vh);
+      height: calc(100vh - 45vh);
+      padding-bottom: 50px;
     }
+  }
+  .comission-overlay-table-body {
+    overflow-y: auto;
+    height: 85vh;
+    padding-bottom: 50px;
   }
 `;
 

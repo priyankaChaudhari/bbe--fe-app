@@ -263,9 +263,7 @@ export const BrandPartnerDashboard = styled.div`
 
 export const DashboardCard = styled.div`
   background: ${Theme.gray6};
-  /* height: calc(100% - 140px); */
-  /* min-height: 100vh; */
-  height: 90vh;
+  /* height: 90vh; */
   padding-top: 70px;
 
   .dashboard-container-body {
@@ -417,7 +415,7 @@ export const DashboardCard = styled.div`
   }
 
   @media only screen and (min-width: 1700px) and (min-width: 1920px) {
-    height: 95vh;
+    /* height: 95vh; */
     .dashboard-body {
       max-width: 85%;
     }

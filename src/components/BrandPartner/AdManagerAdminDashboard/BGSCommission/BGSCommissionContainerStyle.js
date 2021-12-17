@@ -178,4 +178,9 @@ export const CommissionResseque = styled.div`
       }
     }
   }
+  .comission-overlay-content {
+    height: 95vh;
+    overflow-y: auto;
+    padding-bottom: 30px;
+  }
 `;
