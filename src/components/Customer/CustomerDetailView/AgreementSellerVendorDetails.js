@@ -45,17 +45,21 @@ export default function AgreementSellerVendorDetails({
   ]);
 
   if (type === 'header') {
-    return (
-      `${
-        agreement?.seller_type !== null || agreement?.seller_type !== undefined
-          ? `${agreement?.seller_type?.label} |`
-          : ''
-      } ${
-        !agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
-          ? ''
-          : agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type ===
-            'Retainer + % Rev Share'
-          ? `${agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type}
+    if (agreement?.fee_structure) {
+      return (
+        `${
+          agreement?.seller_type !== null ||
+          agreement?.seller_type !== undefined
+            ? `${agreement?.seller_type?.label} |`
+            : ''
+        } ${
+          !agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
+            ? ''
+            : agreement?.fee_structure?.[accountType[agreement.id]]
+                ?.fee_type === 'Retainer + % Rev Share'
+            ? `${
+                agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
+              }
           (${
             agreement?.fee_structure?.[accountType[agreement.id]]
               ?.threshold_type === null ||
@@ -71,13 +75,25 @@ export default function AgreementSellerVendorDetails({
                   ]?.threshold_type?.substring(1)
                 }`
           }),`
-          : agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type ===
-            undefined
-          ? ''
-          : `${
-              agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
-            },`
-      } ${
+            : agreement?.fee_structure?.[accountType[agreement.id]]
+                ?.fee_type === undefined
+            ? ''
+            : `${
+                agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
+              },`
+        } ${
+          agreement?.additional_monthly_services
+            ? 'Additional Services'
+            : 'No Additional Services'
+        } ` +
+        `${
+          agreement?.additional_one_time_services ? '+ One Time Services' : ''
+        }` +
+        `${isDSP ? ' + DSP' : ''}`
+      );
+    }
+    return (
+      `${
         agreement?.additional_monthly_services
           ? 'Additional Services'
           : 'No Additional Services'
