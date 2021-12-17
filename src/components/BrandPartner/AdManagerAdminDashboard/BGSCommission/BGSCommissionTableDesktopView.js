@@ -13,7 +13,7 @@ export default function BGSCommissionTableDesktopView({
 }) {
   return (
     <TableGap className="d-md-block d-none">
-      <WhiteCard className="table-card">
+      <WhiteCard className="table-card ">
         <table>
           <thead
             style={{
@@ -68,12 +68,7 @@ export default function BGSCommissionTableDesktopView({
           />
         ) : null}
         {!isGroupBy && commissionData && commissionData.length > 0 ? (
-          <div
-            style={{
-              overflow: 'auto',
-              // marginTop: '20px',
-              height: 'calc(100vh - 40vh)',
-            }}>
+          <div className="commission-section">
             <table>
               <tbody>
                 {commissionData.map((item) => {
@@ -126,6 +121,7 @@ export default function BGSCommissionTableDesktopView({
           <NoData>No Commission Data Found</NoData>
         ) : null}
       </WhiteCard>
+
       <div className="commission-section">
         {isGroupBy && commissionData && commissionData.length > 0
           ? commissionData.map((item) => {

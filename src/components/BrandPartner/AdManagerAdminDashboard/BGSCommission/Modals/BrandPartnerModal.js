@@ -116,23 +116,26 @@ const BrandPartnerModal = ({
             {isDesktop ? (
               <div className="modal-body pt-0">
                 {brandPartners?.records.length > 0 ? (
-                  <div className="body-content ">
-                    <TableGap>
+                  // <div className="body-content ">
+                  <TableGap>
+                    <table>
+                      <thead style={{ width: '100%', display: 'table' }}>
+                        <tr className="overlay-modal-header">
+                          {commissionsTableheader.map((header) => (
+                            <th
+                              width={header.width}
+                              className=" text-left"
+                              key={header.key}>
+                              {header.label === 'TEAM MEMBER'
+                                ? 'BRAND PARTNER'
+                                : header.label}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                    </table>
+                    <div className="comission-overlay-table-body">
                       <table>
-                        <thead style={{ width: '100%', display: 'table' }}>
-                          <tr className="overlay-modal-header">
-                            {commissionsTableheader.map((header) => (
-                              <th
-                                width={header.width}
-                                className=" text-left"
-                                key={header.key}>
-                                {header.label === 'TEAM MEMBER'
-                                  ? 'BRAND PARTNER'
-                                  : header.label}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
                         <tbody style={{ width: '100%', display: 'table' }}>
                           {brandPartners?.records.map((partner) => (
                             <tr className="partners" key={partner.id}>
@@ -223,9 +226,10 @@ const BrandPartnerModal = ({
                           </tr>
                         </tbody>
                       </table>
-                    </TableGap>
-                  </div>
+                    </div>
+                  </TableGap>
                 ) : (
+                  // </div>
                   <h3 className="text-center">No Brand Partners available!</h3>
                 )}
               </div>
@@ -234,7 +238,7 @@ const BrandPartnerModal = ({
 
               <div className="modal-body pt-0">
                 {brandPartners?.records.length > 0 ? (
-                  <div className="body-content ">
+                  <div className="comission-overlay-content">
                     {brandPartners?.records.map((partner) => (
                       <Fragment key={partner.id}>
                         <div className="straight-line horizontal-line mt-2 " />

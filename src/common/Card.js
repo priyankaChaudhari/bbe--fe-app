@@ -181,7 +181,7 @@ const CardWrapper = styled.div`
   p.title {
     margin-bottom: 2px !important;
     margin-top: 0px !important;
-    word-break: keep-all;
+    word-break: break-all;
   }
 
   .title {
