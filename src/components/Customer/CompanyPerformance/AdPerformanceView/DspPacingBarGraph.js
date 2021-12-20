@@ -67,7 +67,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
       )}</li>
       <li style="clear:both"></li>
     </ul>
-
     <ul style="padding:5px 0; margin:0; list-style-type:none;">
       <li style="display:inline;">
         <div style="display:inline-block; background-color:#2E384D; border: 0px; border-radius:50%;
