@@ -35,9 +35,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
           .replace('-', '')
           .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
       }
-      if (amount === 0) {
-        return amount;
-      }
       return `${currencySymbol}${amount}`;
     };
     const renderToolTip = (
@@ -114,9 +111,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
       if (text !== undefined) {
         if (text.includes('-')) {
           return `-${currencySymbol}${text.replace('-', '')}`;
-        }
-        if (text === '0') {
-          return `${text}`;
         }
       }
       return `${currencySymbol}${text}`;
