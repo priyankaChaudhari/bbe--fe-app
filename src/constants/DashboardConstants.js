@@ -256,35 +256,35 @@ export const bgsCommissionsFilterOptions = [
     label: 'Team Member',
   },
   {
-    value: 'retainer',
+    value: '-retainer',
     label: 'Retainer',
   },
   {
-    value: 'rev_share',
+    value: '-rev_share',
     label: 'Rev Share',
   },
   {
-    value: 'dsp',
+    value: '-dsp',
     label: 'DSP',
   },
   {
-    value: 'total_book_size',
+    value: '-total_book_size',
     label: 'Total Book Size',
   },
   {
-    value: 'total_book_size_commission',
+    value: '-total_book_size_commission',
     label: 'Book Size Commission',
   },
   {
-    value: 'upsell',
+    value: '-upsell',
     label: 'Upsells',
   },
   {
-    value: 'upsell_commission',
+    value: '-upsell_commission',
     label: 'Upsell Commission',
   },
   {
-    value: 'total_commission',
+    value: '-total_commission',
     label: 'Total Commission',
   },
 ];
