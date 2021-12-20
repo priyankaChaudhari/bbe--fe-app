@@ -135,14 +135,18 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
       const temp = { currentBudget: 0, newBudget: 0 };
       // eslint-disable-next-line guard-for-in
       for (const key in invoiceInputs) {
-        if (invoiceInputs[key] && invoiceInputs[key].old_budget) {
+        if (
+          invoiceInputs[key] &&
+          invoiceInputs[key].old_budget &&
+          ['standard', 'permanent'].includes(invoiceType)
+        ) {
           temp.currentBudget += parseNumber(
             invoiceInputs[key].old_budget.toString(),
           );
         }
         if (invoiceInputs[key] && invoiceInputs[key].newAmount) {
           temp.newBudget += parseNumber(invoiceInputs[key].newAmount);
-        } else {
+        } else if (['standard', 'permanent'].includes(invoiceType)) {
           temp.newBudget += parseNumber(
             invoiceInputs[key].old_budget.toString(),
           );
@@ -152,7 +156,7 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
       return temp;
     }
     return 0;
-  }, [invoiceInputs]);
+  }, [invoiceInputs, invoiceType]);
 
   const getMonthYearOptions = () => {
     const monthsYears = [];
@@ -270,6 +274,7 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
                 setInvoiceInputs={setInvoiceInputs}
                 returnTotalAmount={returnTotalAmount}
                 parseNumber={parseNumber}
+                invoiceType={invoiceType}
               />
             ) : (
               <InvoicePause
@@ -327,6 +332,8 @@ const InvoiceAdjustPauseModal = ({ id, isOpen, style, onModalClose }) => {
               setShowConfirmationModal(false);
             }}
             returnTotalAmount={returnTotalAmount}
+            selectedMonthYear={selectedMonthYear}
+            invoiceType={invoiceType}
           />
         )}
       </Modal>
