@@ -2,7 +2,7 @@ import React from 'react';
 
 import NumberFormat from 'react-number-format';
 import styled from 'styled-components';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, func, string } from 'prop-types';
 
 import { InputFormField } from '../../../../../../common';
 import numberWithCommas from '../../../../../../hooks/numberWithComas';
@@ -12,6 +12,7 @@ const InvoiceAdjust = ({
   setInvoiceInputs,
   returnTotalAmount,
   parseNumber,
+  invoiceType,
 }) => {
   const { currentBudget, newBudget } = returnTotalAmount();
   const onChangeInput = (input, { target }) => {
@@ -26,7 +27,10 @@ const InvoiceAdjust = ({
             newAmount: target.value,
             marketplace: input.marketplace,
             change:
-              parseNumber(target.value) - input.old_budget > 0
+              parseNumber(target.value) === input.old_budget ||
+              parseNumber(target.value) < 0
+                ? 0
+                : parseNumber(target.value) - input.old_budget > 0
                 ? `+${Math.abs(input.old_budget - parseNumber(target.value))}`
                 : `-${Math.abs(input.old_budget - parseNumber(target.value))}`,
           };
@@ -63,7 +67,9 @@ const InvoiceAdjust = ({
             <div className="label">Current</div>
           </div>
           <div className="col-4 text-left">
-            <div className="label">New amount</div>
+            <div className="label">
+              {invoiceType === 'onetime' ? 'Additional amount' : 'New amount'}
+            </div>
           </div>
 
           <div className=" straight-line horizontal-line pt-1 mb-2" />
@@ -87,7 +93,9 @@ const InvoiceAdjust = ({
                         <NumberFormat
                           className="mt-2 form-control"
                           name={input.marketplace}
-                          placeholder={input.old_budget}
+                          placeholder={
+                            invoiceType === 'onetime' ? 0 : input.old_budget
+                          }
                           onChange={(e) => {
                             onChangeInput(input, e);
                           }}
@@ -107,10 +115,16 @@ const InvoiceAdjust = ({
             <div className="normal-text text-bold ">Total</div>
           </div>
           <div className="col-4 text-left mt-3">
-            <div className="normal-text text-bold">${currentBudget}</div>
+            {invoiceType !== 'onetime' ? (
+              <div className="normal-text text-bold">
+                ${currentBudget ? numberWithCommas(currentBudget) : 0}
+              </div>
+            ) : null}
           </div>
           <div className="col-4 text-left mt-3">
-            <div className="normal-text text-bold">${newBudget}</div>
+            <div className="normal-text text-bold">
+              ${newBudget ? numberWithCommas(newBudget) : 0}
+            </div>
           </div>
         </div>
       </div>
@@ -132,6 +146,7 @@ InvoiceAdjust.propTypes = {
   setInvoiceInputs: func,
   returnTotalAmount: func,
   parseNumber: func,
+  invoiceType: string.isRequired,
 };
 
 const GrayTable = styled.div`
