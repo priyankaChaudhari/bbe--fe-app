@@ -122,125 +122,125 @@ export default function BGSCommissionTableDesktopView({
         ) : null}
       </WhiteCard>
 
-      <div className="commission-section">
-        {isGroupBy && commissionData && commissionData.length > 0
-          ? commissionData.map((item) => {
-              return (
-                <WhiteCard
-                  key={item && item.bgs_manager && item.bgs_manager.id}
-                  className="mb-3 pt-1 pb-2">
-                  <table>
-                    <tbody style={{ width: '100%', display: 'table' }}>
-                      {item && item.bgs_manager ? (
-                        <tr
-                          className="cursor"
-                          onClick={() =>
-                            OnSetShowModal(
-                              item.bgs_manager.id,
-                              item.bgs_manager.full_name,
-                              true,
-                            )
-                          }>
-                          <td width="10%" className="text-bold">
-                            {item.bgs_manager.full_name.replace(
-                              /\b(\w)/g,
-                              (s) => s.toUpperCase(),
-                            )}
-                          </td>
-                          <td width="10%" className="text-medium">
-                            {`$${numberWithCommas(item.bgs_manager.retainer)}`}
-                          </td>
-                          <td width="10%" className="text-medium">
-                            {`$${numberWithCommas(item.bgs_manager.rev_share)}`}
-                          </td>
-                          <td width="8%" className="text-medium">
-                            {`$${numberWithCommas(item.bgs_manager.dsp)}`}
-                          </td>
-                          <td width="12%" className="text-medium">
-                            {`$${numberWithCommas(
-                              item.bgs_manager.total_book_size,
-                            )}`}
-                          </td>
-                          <td width="12%" className="text-bold">
-                            {`$${numberWithCommas(
-                              item.bgs_manager.total_book_size_commission,
-                            )}`}
-                          </td>
-                          <td width="8%" className="text-medium">
-                            {`$${numberWithCommas(item.bgs_manager.upsell)}`}
-                          </td>
-                          <td width="12%" className="text-bold">
-                            {`$${numberWithCommas(
-                              item.bgs_manager.upsell_commission,
-                            )}`}
-                          </td>
-                          <td width="10%" className="text-bold">
-                            {`$${numberWithCommas(
-                              item.bgs_manager.total_commission,
-                            )}`}
-                          </td>
-                        </tr>
-                      ) : null}
-                      {item &&
-                        item.members &&
-                        item.members.map((memberItem) => {
-                          return (
-                            <tr
-                              className="cursor"
-                              key={memberItem.id}
-                              onClick={() =>
-                                OnSetShowModal(
-                                  memberItem.id,
-                                  memberItem.full_name,
-                                )
-                              }>
-                              <td width="10%">
-                                {memberItem.full_name.replace(/\b(\w)/g, (s) =>
-                                  s.toUpperCase(),
-                                )}
-                              </td>
-                              <td width="10%" className="text-medium">
-                                {`$${numberWithCommas(memberItem.retainer)}`}
-                              </td>
-                              <td width="10%" className="text-medium">
-                                {`$${numberWithCommas(memberItem.rev_share)}`}
-                              </td>
-                              <td width="8%" className="text-medium">
-                                {`$${numberWithCommas(memberItem.dsp)}`}
-                              </td>
-                              <td width="12%" className="text-medium">
-                                {`$${numberWithCommas(
-                                  memberItem.total_book_size,
-                                )}`}
-                              </td>
-                              <td width="12%" className="text-bold">
-                                {`$${numberWithCommas(
-                                  memberItem.total_book_size_commission,
-                                )}`}
-                              </td>
-                              <td width="8%" className="text-medium">
-                                {`$${numberWithCommas(memberItem.upsell)}`}
-                              </td>
-                              <td width="12%" className="text-bold">
-                                {`$${numberWithCommas(
-                                  memberItem.upsell_commission,
-                                )}`}
-                              </td>
-                              <td width="10%" className="text-bold">
-                                {`$${numberWithCommas(
-                                  memberItem.total_commission,
-                                )}`}
-                              </td>
-                            </tr>
-                          );
-                        })}
-                    </tbody>
-                  </table>
-                </WhiteCard>
-              );
-            })
-          : null}
-      </div>
+      {isGroupBy && commissionData && commissionData.length > 0 ? (
+        <div className="commission-section">
+          {' '}
+          {commissionData.map((item) => {
+            return (
+              <WhiteCard
+                key={item && item.bgs_manager && item.bgs_manager.id}
+                className="mb-3 pt-1 pb-2">
+                <table>
+                  <tbody style={{ width: '100%', display: 'table' }}>
+                    {item && item.bgs_manager ? (
+                      <tr
+                        className="cursor"
+                        onClick={() =>
+                          OnSetShowModal(
+                            item.bgs_manager.id,
+                            item.bgs_manager.full_name,
+                            true,
+                          )
+                        }>
+                        <td width="10%" className="text-bold">
+                          {item.bgs_manager.full_name.replace(/\b(\w)/g, (s) =>
+                            s.toUpperCase(),
+                          )}
+                        </td>
+                        <td width="10%" className="text-medium">
+                          {`$${numberWithCommas(item.bgs_manager.retainer)}`}
+                        </td>
+                        <td width="10%" className="text-medium">
+                          {`$${numberWithCommas(item.bgs_manager.rev_share)}`}
+                        </td>
+                        <td width="8%" className="text-medium">
+                          {`$${numberWithCommas(item.bgs_manager.dsp)}`}
+                        </td>
+                        <td width="12%" className="text-medium">
+                          {`$${numberWithCommas(
+                            item.bgs_manager.total_book_size,
+                          )}`}
+                        </td>
+                        <td width="12%" className="text-bold">
+                          {`$${numberWithCommas(
+                            item.bgs_manager.total_book_size_commission,
+                          )}`}
+                        </td>
+                        <td width="8%" className="text-medium">
+                          {`$${numberWithCommas(item.bgs_manager.upsell)}`}
+                        </td>
+                        <td width="12%" className="text-bold">
+                          {`$${numberWithCommas(
+                            item.bgs_manager.upsell_commission,
+                          )}`}
+                        </td>
+                        <td width="10%" className="text-bold">
+                          {`$${numberWithCommas(
+                            item.bgs_manager.total_commission,
+                          )}`}
+                        </td>
+                      </tr>
+                    ) : null}
+                    {item &&
+                      item.members &&
+                      item.members.map((memberItem) => {
+                        return (
+                          <tr
+                            className="cursor"
+                            key={memberItem.id}
+                            onClick={() =>
+                              OnSetShowModal(
+                                memberItem.id,
+                                memberItem.full_name,
+                              )
+                            }>
+                            <td width="10%">
+                              {memberItem.full_name.replace(/\b(\w)/g, (s) =>
+                                s.toUpperCase(),
+                              )}
+                            </td>
+                            <td width="10%" className="text-medium">
+                              {`$${numberWithCommas(memberItem.retainer)}`}
+                            </td>
+                            <td width="10%" className="text-medium">
+                              {`$${numberWithCommas(memberItem.rev_share)}`}
+                            </td>
+                            <td width="8%" className="text-medium">
+                              {`$${numberWithCommas(memberItem.dsp)}`}
+                            </td>
+                            <td width="12%" className="text-medium">
+                              {`$${numberWithCommas(
+                                memberItem.total_book_size,
+                              )}`}
+                            </td>
+                            <td width="12%" className="text-bold">
+                              {`$${numberWithCommas(
+                                memberItem.total_book_size_commission,
+                              )}`}
+                            </td>
+                            <td width="8%" className="text-medium">
+                              {`$${numberWithCommas(memberItem.upsell)}`}
+                            </td>
+                            <td width="12%" className="text-bold">
+                              {`$${numberWithCommas(
+                                memberItem.upsell_commission,
+                              )}`}
+                            </td>
+                            <td width="10%" className="text-bold">
+                              {`$${numberWithCommas(
+                                memberItem.total_commission,
+                              )}`}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                  </tbody>
+                </table>
+              </WhiteCard>
+            );
+          })}
+        </div>
+      ) : null}
     </TableGap>
   );
 }
