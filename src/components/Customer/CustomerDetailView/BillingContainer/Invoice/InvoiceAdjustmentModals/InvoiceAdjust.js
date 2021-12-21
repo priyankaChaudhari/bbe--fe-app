@@ -14,7 +14,7 @@ const InvoiceAdjust = ({
   parseNumber,
   invoiceType,
 }) => {
-  const { currentBudget, newBudget } = returnTotalAmount();
+  const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
   const onChangeInput = (input, { target }) => {
     if (invoiceInputs && invoiceInputs.length > 0) {
       let flag = 0;
@@ -24,11 +24,11 @@ const InvoiceAdjust = ({
           flag = 1;
           resultArray[index] = {
             ...invoiceInputs[index],
-            newAmount: target.value,
+            new_budget: target.value,
             marketplace: input.marketplace,
             change:
               parseNumber(target.value) === input.old_budget ||
-              parseNumber(target.value) < 0
+              parseNumber(target.value) <= 0
                 ? 0
                 : parseNumber(target.value) - input.old_budget > 0
                 ? `+${Math.abs(input.old_budget - parseNumber(target.value))}`
@@ -41,7 +41,7 @@ const InvoiceAdjust = ({
         setInvoiceInputs((state) => [
           ...state,
           {
-            newAmount: target.value,
+            new_budget: target.value,
             marketplace: input.marketplace,
           },
         ]);
@@ -50,7 +50,7 @@ const InvoiceAdjust = ({
       setInvoiceInputs((state) => [
         ...state,
         {
-          newAmount: target.value,
+          new_budget: target.value,
           marketplace: input.marketplace,
         },
       ]);
@@ -102,7 +102,7 @@ const InvoiceAdjust = ({
                           thousandSeparator
                           decimalScale={2}
                           allowNegative={false}
-                          value={input?.newAmount}
+                          value={input?.new_budget}
                         />
                       </div>
                     </InputFormField>
@@ -117,13 +117,13 @@ const InvoiceAdjust = ({
           <div className="col-4 text-left mt-3">
             {invoiceType !== 'onetime' ? (
               <div className="normal-text text-bold">
-                ${currentBudget ? numberWithCommas(currentBudget) : 0}
+                ${totalCurrentBudget ? numberWithCommas(totalCurrentBudget) : 0}
               </div>
             ) : null}
           </div>
           <div className="col-4 text-left mt-3">
             <div className="normal-text text-bold">
-              ${newBudget ? numberWithCommas(newBudget) : 0}
+              ${totalNewBudget ? numberWithCommas(totalNewBudget) : 0}
             </div>
           </div>
         </div>

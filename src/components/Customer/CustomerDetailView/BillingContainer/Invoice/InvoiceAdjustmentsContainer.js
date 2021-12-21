@@ -94,6 +94,7 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
       {showInvoiceAdjustmentModal && (
         <InvoiceAdjustPauseModal
           id="BT-invoiceAdjustmentModal"
+          customerId={id}
           isOpen={showInvoiceAdjustmentModal}
           onModalClose={() => {
             setShowInvoiceAdjustmentModal(false);
