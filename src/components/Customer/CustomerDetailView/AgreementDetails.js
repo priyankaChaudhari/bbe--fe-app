@@ -329,24 +329,6 @@ export default function AgreementDetails({
       )
         fields.push(
           <>
-            <div
-              className={
-                agreement && agreement.draft_from
-                  ? 'mt-3 selected-card normal-text text-medium'
-                  : 'mt-3 normal-text text-medium'
-              }>
-              {agreement?.contract_type?.includes('recurring') ? (
-                <AgreementSellerVendorDetails
-                  agreement={agreement}
-                  type="header"
-                  setAccountType={setAccountType}
-                  accountType={accountType}
-                  multipleAgreement={multipleAgreement}
-                />
-              ) : (
-                ''
-              )}
-            </div>
             <WhiteCard
               className={
                 agreement && agreement.draft_from
@@ -694,7 +676,6 @@ export default function AgreementDetails({
                         </div>
                         <AgreementSellerVendorDetails
                           agreement={agreement}
-                          type="html"
                           setAccountType={setAccountType}
                           accountType={accountType}
                           multipleAgreement={multipleAgreement}
