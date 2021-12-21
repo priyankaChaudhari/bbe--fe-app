@@ -63,7 +63,6 @@ export default function AgreementDetails({
   showModal,
   setShowModal,
   userRole,
-  customerStatus,
   getActivityLogInfo,
 }) {
   const history = useHistory();
@@ -473,138 +472,89 @@ export default function AgreementDetails({
                     )}
                   </div>
                 </div>
-
                 <div className="clear-fix" />
-                {agreement?.contract_status?.value === 'active' ||
-                agreement.draft_from ? (
-                  <div
-                    className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
-                    role="presentation"
-                    onClick={() =>
-                      localStorage.setItem('agreementID', agreement.id)
-                    }>
-                    {agreement.draft_from && userRole !== 'Customer' ? (
-                      <ActionDropDown>
-                        {' '}
-                        <Select
-                          classNamePrefix="react-select"
-                          placeholder="View Actions"
-                          className="active"
-                          options={
-                            isDraftContract(agreement)
-                              ? draftContractOptions
-                              : (agreement &&
-                                  agreement.pause_contract &&
-                                  agreement.pause_contract.end_date >
-                                    dayjs(new Date()).format('YYYY-MM-DD') &&
-                                  agreement.pause_contract &&
-                                  agreement.pause_contract.is_approved) ||
-                                agreement.contract_status.value === 'pause' ||
-                                agreement.contract_status.value ===
-                                  'active pending for pause'
-                              ? pauseAgreementOptions
-                              : contractOptions
-                          }
-                          onChange={(event) =>
-                            handleContractOptions(event, agreement.id)
-                          }
-                          components={{
-                            DropdownIndicator,
-                            Option: IconOption,
-                          }}
-                          value=""
-                        />
-                      </ActionDropDown>
-                    ) : userRole === 'Customer' ||
-                      agreement.contract_status.value === 'pending contract' ||
-                      agreement.contract_status.value ===
-                        'pending contract approval' ||
-                      agreement.contract_status.value ===
-                        'pending contract signature' ||
-                      customerStatus === 'pending account setup' ? (
-                      <Link
-                        to={{
-                          pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                            ':contract_id',
-                            agreement.id,
-                          ),
-                          state:
-                            history &&
-                            history.location &&
-                            history.location.pathname,
-                        }}>
-                        <Button className="btn-transparent w-100 view-contract">
-                          {' '}
-                          <img
-                            className="file-contract-icon"
-                            src={FileContract}
-                            alt=""
-                          />
-                          View Agreement
-                        </Button>
-                      </Link>
-                    ) : (
-                      <ActionDropDown>
-                        {' '}
-                        <Select
-                          classNamePrefix="react-select"
-                          placeholder="View Actions"
-                          className="active"
-                          options={
-                            (agreement &&
-                              agreement.pause_contract &&
-                              agreement.pause_contract.end_date >
-                                dayjs(new Date()).format('YYYY-MM-DD') &&
-                              agreement.pause_contract &&
-                              agreement.pause_contract.is_approved) ||
-                            agreement.contract_status.value === 'pause' ||
-                            agreement.contract_status.value ===
-                              'active pending for pause'
-                              ? pauseAgreementOptions
-                              : contractOptions
-                          }
-                          onChange={(event) =>
-                            handleContractOptions(event, agreement.id)
-                          }
-                          components={{
-                            DropdownIndicator,
-                            Option: IconOption,
-                          }}
-                          value=""
-                        />
-                      </ActionDropDown>
-                    )}
-                  </div>
-                ) : (
-                  <div
-                    className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
-                    role="presentation"
-                    onClick={() =>
-                      localStorage.setItem('agreementID', agreement.id)
-                    }>
-                    <Link
-                      to={{
-                        pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                          ':contract_id',
-                          agreement.id,
-                        ),
-                        state:
-                          history &&
-                          history.location &&
-                          history.location.pathname,
-                      }}>
-                      <Button className="btn-transparent w-100 view-contract">
-                        {' '}
-                        <img
-                          className="file-contract-icon"
-                          src={FileContract}
-                          alt=""
-                        />
-                        View Agreement
-                      </Button>
-                    </Link>
-                  </div>
-                )}
+                {userRole === 'Customer' ? (
+                  <Link
+                    to={{
+                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                        ':contract_id',
+                        agreement.id,
+                      ),
+                      state:
+                        history &&
+                        history.location &&
+                        history.location.pathname,
+                    }}>
+                    <Button className="btn-transparent w-100 view-contract">
+                      {' '}
+                      <img
+                        className="file-contract-icon"
+                        src={FileContract}
+                        alt=""
+                      />
+                      View Agreement
+                    </Button>
+                  </Link>
+                ) : null}
+                <div
+                  className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
+                  role="presentation"
+                  onClick={() =>
+                    localStorage.setItem('agreementID', agreement.id)
+                  }>
+                  {agreement?.contract_status?.value === 'active' ? (
+                    <ActionDropDown>
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        placeholder="View Actions"
+                        className="active"
+                        options={
+                          isDraftContract(agreement)
+                            ? draftContractOptions
+                            : (agreement &&
+                                agreement.pause_contract &&
+                                agreement.pause_contract.end_date >
+                                  dayjs(new Date()).format('YYYY-MM-DD') &&
+                                agreement.pause_contract &&
+                                agreement.pause_contract.is_approved) ||
+                              agreement.contract_status.value === 'pause' ||
+                              agreement.contract_status.value ===
+                                'active pending for pause'
+                            ? pauseAgreementOptions
+                            : contractOptions
+                        }
+                        onChange={(event) =>
+                          handleContractOptions(event, agreement.id)
+                        }
+                        components={{
+                          DropdownIndicator,
+                          Option: IconOption,
+                        }}
+                        value=""
+                      />
+                    </ActionDropDown>
+                  ) : (
+                    <ActionDropDown>
+                      {' '}
+                      <Select
+                        classNamePrefix="react-select"
+                        placeholder="View Actions"
+                        className="active"
+                        options={draftContractOptions}
+                        onChange={(event) =>
+                          handleContractOptions(event, agreement.id)
+                        }
+                        components={{
+                          DropdownIndicator,
+                          Option: IconOption,
+                        }}
+                        value=""
+                      />
+                    </ActionDropDown>
+                  )}
+                </div>
+                )
                 {agreement?.contract_type?.includes('recurring') &&
                 agreement?.seller_type?.label === 'Hybrid' ? (
                   <Tabs className="mt-2 ml-3">
@@ -1264,7 +1214,6 @@ AgreementDetails.propTypes = {
   setShowModal: func.isRequired,
   showModal: oneOfType([bool, shape({})]).isRequired,
   userRole: string.isRequired,
-  customerStatus: string.isRequired,
   getActivityLogInfo: func.isRequired,
 };
 
