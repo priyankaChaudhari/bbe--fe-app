@@ -17,13 +17,14 @@ const InvoiceAdjustConfirm = ({
   returnTotalAmount,
   selectedMonthYear,
   invoiceType,
+  onApply,
 }) => {
-  const { currentBudget, newBudget } = returnTotalAmount();
+  const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
 
   const totalChangeAmount =
-    newBudget - currentBudget > 0
-      ? `+$${numberWithCommas(Math.abs(currentBudget - newBudget))}`
-      : `-$${numberWithCommas(Math.abs(currentBudget - newBudget))}`;
+    totalNewBudget - totalCurrentBudget > 0
+      ? `+$${numberWithCommas(Math.abs(totalCurrentBudget - totalNewBudget))}`
+      : `-$${numberWithCommas(Math.abs(totalCurrentBudget - totalNewBudget))}`;
 
   const renderResponsiveView = () => {
     return (
@@ -58,8 +59,8 @@ const InvoiceAdjustConfirm = ({
                     <div className="label">To</div>
                     <div className={textClass}>
                       $
-                      {item.newAmount
-                        ? item.newAmount
+                      {item.new_budget
+                        ? item.new_budget
                         : numberWithCommas(item.old_budget)}
                     </div>
                   </div>
@@ -88,7 +89,7 @@ const InvoiceAdjustConfirm = ({
           <div className="col-4 text-left">
             <div className="label">From</div>
             <div className="gray-normal-text">
-              ${numberWithCommas(currentBudget)}
+              ${numberWithCommas(totalCurrentBudget)}
             </div>
           </div>
           <div className="col-2 text-left">
@@ -99,7 +100,7 @@ const InvoiceAdjustConfirm = ({
           <div className="col-3 text-left">
             <div className="label">To</div>
             <div className="gray-normal-text">
-              ${numberWithCommas(newBudget)}
+              ${numberWithCommas(totalNewBudget)}
             </div>
           </div>
           <div className="col-3 text-left">
@@ -172,8 +173,8 @@ const InvoiceAdjustConfirm = ({
                     <div className="col-2 text-left">
                       <div className={textClass}>
                         $
-                        {item.newAmount
-                          ? item.newAmount
+                        {item.new_budget
+                          ? item.new_budget
                           : numberWithCommas(item.old_budget)}
                       </div>
                     </div>
@@ -199,7 +200,7 @@ const InvoiceAdjustConfirm = ({
               </div>
               <div className="col-2 text-left">
                 <div className="normal-text text-bold">
-                  ${numberWithCommas(currentBudget)}
+                  ${numberWithCommas(totalCurrentBudget)}
                 </div>
               </div>
               <div className="col-1 text-left">
@@ -209,7 +210,7 @@ const InvoiceAdjustConfirm = ({
               </div>
               <div className="col-2 text-left">
                 <div className="normal-text text-bold">
-                  ${numberWithCommas(newBudget)}
+                  ${numberWithCommas(totalNewBudget)}
                 </div>
               </div>
               <div className="col-3 text-left">
@@ -277,10 +278,7 @@ const InvoiceAdjustConfirm = ({
         <div className="footer-line" />
         <div className="modal-footer">
           <Button
-            //   onClick={() => {
-            //     setShowInvoiceConfirmModal(true);
-            //     onApply();
-            //   }}
+            onClick={onApply}
             type="button"
             className="btn-primary on-boarding   w-100">
             Confirm and send for approval
@@ -298,6 +296,7 @@ InvoiceAdjustConfirm.defaultProps = {
   adjustmentData: [],
   returnTotalAmount: () => {},
   selectedMonthYear: {},
+  onApply: () => {},
 };
 
 InvoiceAdjustConfirm.propTypes = {
@@ -306,4 +305,5 @@ InvoiceAdjustConfirm.propTypes = {
   adjustmentData: arrayOf(Array),
   selectedMonthYear: shape({}),
   invoiceType: string.isRequired,
+  onApply: func,
 };
