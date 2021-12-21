@@ -197,7 +197,7 @@ function Discount({
         Object.keys(updatedFormData).includes('additional_one_time_services')
       ) {
         return apiErrorDiscountType
-          ? `${apiErrorDiscountType} (if additional services are newly added/removed, Please save the changes)`
+          ? `If additional services are newly added/removed, Please save the changes`
           : '';
       }
     }
@@ -220,7 +220,7 @@ function Discount({
           updatedFormData?.additional_monthly_services?.delete?.length)
       ) {
         return apiErrorDiscountType
-          ? `${apiErrorDiscountType} (if additional services are newly added/removed, Please save the changes)`
+          ? `If additional services are newly added/removed, Please save the changes`
           : '';
       }
     }
