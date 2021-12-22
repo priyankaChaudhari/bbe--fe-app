@@ -1,10 +1,12 @@
+/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 
 import Modal from 'react-modal';
 import { string, func, shape, bool } from 'prop-types';
 
-import { AddTeamMember, EditTeamMember } from '../../../Team';
+import { AddTeamMember, EditTeamMember, TeamMembers } from '../../../Team';
 
+// ?      Remove  the eslint disables-once work is done
 export default function TeamMemberModal({
   id,
   getCustomerMemberList,
@@ -36,7 +38,8 @@ export default function TeamMemberModal({
       style={teamDeleteModal ? alertCustomStyles : customStyles}
       ariaHideApp={false}
       contentLabel="Add team modal">
-      {showMemberList.add ? (
+      <TeamMembers />
+      {/* {showMemberList.add ? (
         <AddTeamMember
           id={id}
           getCustomerMemberList={getCustomerMemberList}
@@ -55,7 +58,7 @@ export default function TeamMemberModal({
           userInfo={userInfo}
           getActivityLogInfo={getActivityLogInfo}
         />
-      )}
+      )} */}
     </Modal>
   );
 }
