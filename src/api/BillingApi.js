@@ -50,7 +50,7 @@ export async function getDSPBudgetAdjustData(invoiceType, customerId) {
   return result;
 }
 
-export async function postDSPBudgetAdjustData(
+export async function postDSPBudgetAdjustInvoiceData(
   invoiceData,
   appliedDate,
   invoiceType,
@@ -62,13 +62,33 @@ export async function postDSPBudgetAdjustData(
       dsp_invoice_subtype: invoiceType,
       applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
       new_budget: item.newAmount
-        ? isNaN(parseFloat(item.newAmount.replace(/,/g, '')))
-          ? 0
-          : parseFloat(item.newAmount.replace(/,/g, ''))
-        : 0,
+        ? parseFloat(item.newAmount.replace(/,/g, ''))
+        : item.old_budget,
       old_budget: item.old_budget,
       marketplace: item.marketplace,
-      is_sent_for_pause: false,
+    });
+  });
+
+  const result = await axiosInstance
+    .post(`${API_DSP_BUDGET_ADJUSTMENT}`, finalInvoiceAdjust)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function postDSPBudgetPauseInvoiceData(invoiceData, appliedDate) {
+  const finalInvoiceAdjust = [];
+  invoiceData.forEach((item) => {
+    finalInvoiceAdjust.push({
+      customer: item.customer,
+      dsp_invoice_subtype: 'standard',
+      applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
+      marketplace: item.marketplace,
+      is_sent_for_pause: item.is_sent_for_pause,
     });
   });
 

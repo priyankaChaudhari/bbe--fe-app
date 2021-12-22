@@ -7,9 +7,10 @@ import {
   ArrowRightBlackIcon,
   ArrowRightIcon,
   LeftArrowIcon,
-} from '../../../../../../theme/images';
-import { ModalBox, Button, GreyCard } from '../../../../../../common';
-import numberWithCommas from '../../../../../../hooks/numberWithComas';
+} from '../../../../../../../theme/images';
+import { ModalBox, Button, GreyCard } from '../../../../../../../common';
+import numberWithCommas from '../../../../../../../hooks/numberWithComas';
+import OneTimeInvoiceAdjustConfirm from './OneTimeInvoiceAdjustConfirm';
 
 const InvoiceAdjustConfirm = ({
   onBackClick,
@@ -112,6 +113,96 @@ const InvoiceAdjustConfirm = ({
     );
   };
 
+  const renderDesktopView = () => {
+    return (
+      <div className="d-md-block d-none">
+        <div className="row">
+          <div className="col-4 text-left">
+            <div className="label">Marketplace</div>
+          </div>
+          <div className="col-3 text-left">
+            <div className="label">From</div>
+          </div>
+          <div className="col-2 text-left">
+            <div className="label">To</div>
+          </div>
+          <div className="col-3 text-left">
+            <div className="label">Change</div>
+          </div>
+        </div>
+        <div className=" straight-line horizontal-line pt-1 mb-2 " />
+
+        {adjustmentData &&
+          adjustmentData.length > 0 &&
+          adjustmentData.map((item) => {
+            const textClass =
+              item.change && item.change !== 0
+                ? 'normal-text text-bold'
+                : 'gray-normal-text';
+            return (
+              <div className="row mt-1">
+                <div className="col-4 text-left">
+                  <div className={textClass}>{item.marketplace}</div>
+                </div>
+                <div className="col-2 text-left">
+                  <div className={textClass}>
+                    ${numberWithCommas(item.old_budget)}
+                  </div>
+                </div>
+                <div className="col-1 text-left">
+                  <div className={textClass}>
+                    <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
+                  </div>
+                </div>
+                <div className="col-2 text-left">
+                  <div className={textClass}>
+                    $
+                    {item.newAmount
+                      ? item.newAmount
+                      : numberWithCommas(item.old_budget)}
+                  </div>
+                </div>
+                <div className="col-3 text-left">
+                  <div className={textClass}>
+                    {item.change
+                      ? item.change === 0
+                        ? '-'
+                        : `$${numberWithCommas(item.change)}`
+                      : '-'}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+
+        <div className=" straight-line horizontal-line pt-1 mb-2 " />
+        <div className="row">
+          <div className="col-4 text-left">
+            <div className="normal-text text-bold">Total invoice</div>
+          </div>
+          <div className="col-2 text-left">
+            <div className="normal-text text-bold">
+              ${numberWithCommas(totalCurrentBudget)}
+            </div>
+          </div>
+          <div className="col-1 text-left">
+            <div className="normal-text">
+              <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+            </div>
+          </div>
+          <div className="col-2 text-left">
+            <div className="normal-text text-bold">
+              ${numberWithCommas(totalNewBudget)}
+            </div>
+          </div>
+          <div className="col-3 text-left">
+            <div className="normal-text text-bold"> {totalChangeAmount}</div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <ModalBox>
@@ -131,122 +222,29 @@ const InvoiceAdjustConfirm = ({
             approval:
           </p>
           <div className=" straight-line horizontal-line pt-1 mb-2 " />
-          <div className="d-md-block d-none">
-            <div className="row">
-              <div className="col-4 text-left">
-                <div className="label">Marketplace</div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="label">From</div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="label">To</div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="label">Change</div>
-              </div>
-            </div>
-            <div className=" straight-line horizontal-line pt-1 mb-2 " />
-
-            {adjustmentData &&
-              adjustmentData.length > 0 &&
-              adjustmentData.map((item) => {
-                const textClass =
-                  item.change && item.change !== 0
-                    ? 'normal-text text-bold'
-                    : 'gray-normal-text';
-                return (
-                  <div className="row mt-1">
-                    <div className="col-4 text-left">
-                      <div className={textClass}>{item.marketplace}</div>
-                    </div>
-                    <div className="col-2 text-left">
-                      <div className={textClass}>
-                        ${numberWithCommas(item.old_budget)}
-                      </div>
-                    </div>
-                    <div className="col-1 text-left">
-                      <div className={textClass}>
-                        <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
-                      </div>
-                    </div>
-                    <div className="col-2 text-left">
-                      <div className={textClass}>
-                        $
-                        {item.newAmount
-                          ? item.newAmount
-                          : numberWithCommas(item.old_budget)}
-                      </div>
-                    </div>
-                    <div className="col-3 text-left">
-                      <div className={textClass}>
-                        {item.change
-                          ? item.change === 0
-                            ? '-'
-                            : `$${numberWithCommas(item.change)}`
-                          : '-'}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-
-            <div className=" straight-line horizontal-line pt-1 mb-2 " />
-            <div className="row">
-              <div className="col-4 text-left">
-                <div className="normal-text text-bold">
-                  {invoiceType === 'onetime' ? 'One-time' : 'Total'} invoice
-                </div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="normal-text text-bold">
-                  ${numberWithCommas(totalCurrentBudget)}
-                </div>
-              </div>
-              <div className="col-1 text-left">
-                <div className="normal-text">
-                  <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
-                </div>
-              </div>
-              <div className="col-2 text-left">
-                <div className="normal-text text-bold">
-                  ${numberWithCommas(totalNewBudget)}
-                </div>
-              </div>
-              <div className="col-3 text-left">
-                <div className="normal-text text-bold">
-                  {' '}
-                  {totalChangeAmount}
-                </div>
-              </div>
-            </div>
-          </div>
-          {renderResponsiveView()}
-          <div className=" straight-line horizontal-line mt-2 mb-2 " />
-          {['standard', 'permanent'].includes(invoiceType) ? (
-            <p className="normal-text">
-              The new invoice amount willbe available to spend from{' '}
-              <b>{selectedMonthYear?.value.split(' ')[0]} onwards.</b>
-              <br /> The first bill for this amount will be sent{' '}
-              {dayjs(selectedMonthYear?.value)
-                .subtract(1, 'M')
-                .format('MMMM')}{' '}
-              13.
-            </p>
+          {invoiceType !== 'one time' ? (
+            <>
+              {renderDesktopView()}
+              {renderResponsiveView()}
+            </>
           ) : (
-            <p>
-              The will be a one-off invoice, providing additional budget to
-              spend in the{' '}
-              <b>
-                {dayjs(selectedMonthYear?.value)
-                  .subtract(1, 'M')
-                  .format('MMMM')}{' '}
-                month.
-              </b>{' '}
-              This invoice will be sent as soon as brand partner approves the
-              proposal.
-            </p>
+            <OneTimeInvoiceAdjustConfirm
+              adjustmentData={adjustmentData}
+              totalCurrentBudget={totalCurrentBudget}
+              totalNewBudget={totalNewBudget}
+              totalChangeAmount={totalChangeAmount}
+            />
           )}
+          <div className=" straight-line horizontal-line mt-2 mb-2 " />
+          <p className="normal-text">
+            The new invoice amount willbe available to spend from{' '}
+            <b>{selectedMonthYear?.value.split(' ')[0]} onwards.</b>
+            <br /> The first bill for this amount will be sent{' '}
+            {dayjs(selectedMonthYear?.value)
+              .subtract(1, 'M')
+              .format('MMMM')}{' '}
+            13.
+          </p>
           {invoiceType === 'permanent' && (
             <GreyCard className="yellow-card">
               <p className="normal-text text-bold m-0">

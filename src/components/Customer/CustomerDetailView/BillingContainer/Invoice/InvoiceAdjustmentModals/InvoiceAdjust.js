@@ -27,8 +27,7 @@ const InvoiceAdjust = ({
             newAmount: target.value,
             marketplace: input.marketplace,
             change:
-              parseNumber(target.value) === input.old_budget ||
-              parseNumber(target.value) <= 0
+              parseNumber(target.value) === input.old_budget
                 ? 0
                 : parseNumber(target.value) - input.old_budget > 0
                 ? `+${Math.abs(input.old_budget - parseNumber(target.value))}`
