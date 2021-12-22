@@ -21,7 +21,7 @@ import {
 import {
   WhiteCard,
   PageLoader,
-  DropDownIndicator,
+  DropdownIndicator,
   CustomDateModal,
   NoData,
   ToggleButton,
@@ -1004,7 +1004,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -1022,7 +1022,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     return {
       Option: filterOption,
       SingleValue: singleMarketplaceFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 

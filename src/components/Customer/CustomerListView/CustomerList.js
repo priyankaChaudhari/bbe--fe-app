@@ -22,6 +22,7 @@ import {
   ModalBox,
   Button,
   GetInitialName,
+  DropdownIndicator,
 } from '../../../common';
 import {
   PATH_AGREEMENT,
@@ -45,7 +46,6 @@ import {
   ArrowDownIcon,
   UpDowGrayArrow,
   SortUp,
-  CaretUp,
 } from '../../../theme/images';
 import {
   getCustomerList,
@@ -1079,25 +1079,6 @@ export default function CustomerList() {
       return 'Highest to Lowest';
     }
     return '';
-  };
-  const DropdownIndicator = (dataProps) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...dataProps}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: dataProps.selectProps.menuIsOpen
-                ? 'rotate(180deg)'
-                : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
   };
 
   const renderCustomDateSubLabel = (dataProps) => {

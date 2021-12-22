@@ -21,7 +21,7 @@ import {
 import {
   WhiteCard,
   PageLoader,
-  DropDownIndicator,
+  DropdownIndicator,
   CustomDateModal,
   ToggleButton,
 } from '../../../../common';
@@ -1117,7 +1117,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -1125,7 +1125,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     return {
       Option: filterOption,
       SingleValue: adMnagerFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -1255,7 +1255,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           isBGSManager={isBGSManager}
           isBGSAdmin={isBGSAdmin}
           isApiCall={adGraphLoader}
-          DropdownIndicator={DropDownIndicator}
+          DropdownIndicator={{ DropdownIndicator }}
           marketplaceOptions={marketplaceOptions}
           managerList={managerList}
           selectedManager={selectedManager}

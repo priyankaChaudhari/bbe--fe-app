@@ -19,7 +19,7 @@ import {
   DropDownSelect,
   WhiteCard,
   CustomDateModal,
-  DropDownIndicator,
+  DropdownIndicator,
 } from '../../../../common';
 
 const _ = require('lodash');
@@ -623,7 +623,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                 <Select
                   classNamePrefix="react-select"
                   className="active"
-                  components={DropDownIndicator}
+                  components={{ DropdownIndicator }}
                   options={amazonOptions}
                   defaultValue={
                     // amazonOptions && amazonOptions[0]

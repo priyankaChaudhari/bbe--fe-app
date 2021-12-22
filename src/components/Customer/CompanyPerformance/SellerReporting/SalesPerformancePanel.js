@@ -16,7 +16,7 @@ import {
   PageLoader,
   CustomDateModal,
   NoData,
-  DropDownIndicator,
+  DropdownIndicator,
   ToggleButton,
   CardMetrics,
 } from '../../../../common';
@@ -85,7 +85,7 @@ export default function SalesPerformancePanel({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 

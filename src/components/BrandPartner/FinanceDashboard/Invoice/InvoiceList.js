@@ -25,7 +25,7 @@ import {
   WhiteCard,
   Table,
   Status,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
   CommonPagination,
   NoData,
@@ -179,7 +179,7 @@ export default function InvoicesList({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 

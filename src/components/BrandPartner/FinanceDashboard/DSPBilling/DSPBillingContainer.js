@@ -32,7 +32,7 @@ import {
   ModalRadioCheck,
   Button,
   WhiteCard,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
   CommonPagination,
   Status,
@@ -295,7 +295,7 @@ export default function DSPBillingContainer() {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 

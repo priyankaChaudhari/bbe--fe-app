@@ -17,7 +17,7 @@ import {
   PageLoader,
   CustomDateModal,
   NoData,
-  DropDownIndicator,
+  DropdownIndicator,
 } from '../../../../common';
 
 export default function BuyBoxPercentPanel({
@@ -68,7 +68,7 @@ export default function BuyBoxPercentPanel({
     return {
       Option: bbFilterOption,
       SingleValue: bbSingleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
