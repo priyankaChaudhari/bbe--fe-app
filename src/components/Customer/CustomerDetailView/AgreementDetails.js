@@ -554,7 +554,7 @@ export default function AgreementDetails({
                     </ActionDropDown>
                   )}
                 </div>
-                )
+
                 {agreement?.contract_type?.includes('recurring') &&
                 agreement?.seller_type?.label === 'Hybrid' ? (
                   <Tabs className="mt-2 ml-3">
