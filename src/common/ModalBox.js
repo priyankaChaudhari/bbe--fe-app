@@ -202,12 +202,14 @@ const ModalBox = styled.div`
       position: relative;
 
       .name-email {
-        color: ${Theme.gray36};
-        font-size: ${Theme.small};
+        color: ${Theme.black};
+        font-size: ${Theme.extraNormal};
 
         .team-member-name {
-          color: ${Theme.gray90};
-          font-size: ${Theme.medium};
+          color: ${Theme.black};
+          font-size: ${Theme.extraMedium};
+          font-family: ${Theme.titleFontFamily};
+          line-height: 22px;
         }
       }
       .brand-pratner {
@@ -263,7 +265,10 @@ const ModalBox = styled.div`
         top: 10px;
         padding-left: 0px;
         color: ${Theme.gray90};
-        font-weight: bold;
+
+        &.add-team-member {
+          color: ${Theme.orange};
+        }
       }
 
       .no-result-found {
