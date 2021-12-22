@@ -26,7 +26,6 @@ const InvoicePause = ({
       }
     });
   };
-  // const { totalNewBudget } = returnTotalAmount();
 
   return (
     <GrayTable>
