@@ -473,7 +473,7 @@ export default function AgreementDetails({
                   </div>
                 </div>
                 <div className="clear-fix" />
-                {userRole === 'Customer' ? (
+                {userRole === 'Customer' || multipleAgreement?.length < 1 ? (
                   <Link
                     to={{
                       pathname: PATH_AGREEMENT.replace(':id', id).replace(
@@ -502,59 +502,87 @@ export default function AgreementDetails({
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {agreement?.contract_status?.value === 'active' ? (
-                    <ActionDropDown>
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        placeholder="View Actions"
-                        className="active"
-                        options={
-                          isDraftContract(agreement)
-                            ? draftContractOptions
-                            : (agreement &&
-                                agreement.pause_contract &&
-                                agreement.pause_contract.end_date >
-                                  dayjs(new Date()).format('YYYY-MM-DD') &&
-                                agreement.pause_contract &&
-                                agreement.pause_contract.is_approved) ||
-                              agreement.contract_status.value === 'pause' ||
-                              agreement.contract_status.value ===
-                                'active pending for pause'
-                            ? pauseAgreementOptions
-                            : contractOptions
-                        }
-                        onChange={(event) =>
-                          handleContractOptions(event, agreement.id)
-                        }
-                        components={{
-                          DropdownIndicator,
-                          Option: IconOption,
-                        }}
-                        value=""
-                      />
-                    </ActionDropDown>
+                  {multipleAgreement?.length === 1 ? (
+                    <Link
+                      to={{
+                        pathname: PATH_AGREEMENT.replace(':id', id).replace(
+                          ':contract_id',
+                          agreement.id,
+                        ),
+                        state:
+                          history &&
+                          history.location &&
+                          history.location.pathname,
+                      }}>
+                      <Button className="btn-transparent w-100 view-contract">
+                        {' '}
+                        <img
+                          className="file-contract-icon"
+                          src={FileContract}
+                          alt=""
+                        />
+                        View Agreement
+                      </Button>
+                    </Link>
                   ) : (
-                    <ActionDropDown>
-                      {' '}
-                      <Select
-                        classNamePrefix="react-select"
-                        placeholder="View Actions"
-                        className="active"
-                        options={draftContractOptions}
-                        onChange={(event) =>
-                          handleContractOptions(event, agreement.id)
-                        }
-                        components={{
-                          DropdownIndicator,
-                          Option: IconOption,
-                        }}
-                        value=""
-                      />
-                    </ActionDropDown>
+                    <>
+                      {userRole !== 'Customer' &&
+                      !agreement?.draft_from &&
+                      agreement?.contract_status?.value === 'active' ? (
+                        <ActionDropDown>
+                          {' '}
+                          <Select
+                            classNamePrefix="react-select"
+                            placeholder="View Actions"
+                            className="active"
+                            options={
+                              isDraftContract(agreement)
+                                ? draftContractOptions
+                                : (agreement &&
+                                    agreement.pause_contract &&
+                                    agreement.pause_contract.end_date >
+                                      dayjs(new Date()).format('YYYY-MM-DD') &&
+                                    agreement.pause_contract &&
+                                    agreement.pause_contract.is_approved) ||
+                                  agreement.contract_status.value === 'pause' ||
+                                  agreement.contract_status.value ===
+                                    'active pending for pause'
+                                ? pauseAgreementOptions
+                                : contractOptions
+                            }
+                            onChange={(event) =>
+                              handleContractOptions(event, agreement.id)
+                            }
+                            components={{
+                              DropdownIndicator,
+                              Option: IconOption,
+                            }}
+                            value=""
+                          />
+                        </ActionDropDown>
+                      ) : (
+                        <ActionDropDown>
+                          {' '}
+                          <Select
+                            classNamePrefix="react-select"
+                            placeholder="View Actions"
+                            className="active"
+                            options={draftContractOptions}
+                            onChange={(event) =>
+                              handleContractOptions(event, agreement.id)
+                            }
+                            components={{
+                              DropdownIndicator,
+                              Option: IconOption,
+                            }}
+                            value=""
+                          />
+                        </ActionDropDown>
+                      )}
+                    </>
                   )}
                 </div>
-                )
+
                 {agreement?.contract_type?.includes('recurring') &&
                 agreement?.seller_type?.label === 'Hybrid' ? (
                   <Tabs className="mt-2 ml-3">
