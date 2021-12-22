@@ -996,6 +996,10 @@ fieldset {
       margin-left: 0;
     }
   }
+
+  &.unassigned {
+    background: ${Theme.gray3};
+  }
 }
 
 .annotation {
