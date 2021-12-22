@@ -24,7 +24,7 @@ const InvoiceAdjust = ({
           flag = 1;
           resultArray[index] = {
             ...invoiceInputs[index],
-            new_budget: target.value,
+            newAmount: target.value,
             marketplace: input.marketplace,
             change:
               parseNumber(target.value) === input.old_budget ||
@@ -41,7 +41,7 @@ const InvoiceAdjust = ({
         setInvoiceInputs((state) => [
           ...state,
           {
-            new_budget: target.value,
+            newAmount: target.value,
             marketplace: input.marketplace,
           },
         ]);
@@ -50,7 +50,7 @@ const InvoiceAdjust = ({
       setInvoiceInputs((state) => [
         ...state,
         {
-          new_budget: target.value,
+          newAmount: target.value,
           marketplace: input.marketplace,
         },
       ]);
@@ -68,7 +68,7 @@ const InvoiceAdjust = ({
           </div>
           <div className="col-4 text-left">
             <div className="label">
-              {invoiceType === 'onetime' ? 'Additional amount' : 'New amount'}
+              {invoiceType === 'one time' ? 'Additional amount' : 'New amount'}
             </div>
           </div>
 
@@ -94,7 +94,7 @@ const InvoiceAdjust = ({
                           className="mt-2 form-control"
                           name={input.marketplace}
                           placeholder={
-                            invoiceType === 'onetime' ? 0 : input.old_budget
+                            invoiceType === 'one time' ? 0 : input.old_budget
                           }
                           onChange={(e) => {
                             onChangeInput(input, e);
@@ -102,7 +102,7 @@ const InvoiceAdjust = ({
                           thousandSeparator
                           decimalScale={2}
                           allowNegative={false}
-                          value={input?.new_budget}
+                          value={input?.newAmount}
                         />
                       </div>
                     </InputFormField>
@@ -115,7 +115,7 @@ const InvoiceAdjust = ({
             <div className="normal-text text-bold ">Total</div>
           </div>
           <div className="col-4 text-left mt-3">
-            {invoiceType !== 'onetime' ? (
+            {invoiceType !== 'one time' ? (
               <div className="normal-text text-bold">
                 ${totalCurrentBudget ? numberWithCommas(totalCurrentBudget) : 0}
               </div>

@@ -61,10 +61,10 @@ export async function postDSPBudgetAdjustData(
       customer: item.customer,
       dsp_invoice_subtype: invoiceType,
       applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
-      new_budget: item.new_budget
-        ? isNaN(parseFloat(item.new_budget.replace(/,/g, '')))
+      new_budget: item.newAmount
+        ? isNaN(parseFloat(item.newAmount.replace(/,/g, '')))
           ? 0
-          : parseFloat(item.new_budget.replace(/,/g, ''))
+          : parseFloat(item.newAmount.replace(/,/g, ''))
         : 0,
       old_budget: item.old_budget,
       marketplace: item.marketplace,

@@ -55,7 +55,6 @@ const InvoiceAdjustPauseModal = ({
   const history = useHistory();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [invoiceChoices, setInvoiceChoices] = useState({});
   const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
@@ -72,7 +71,10 @@ const InvoiceAdjustPauseModal = ({
   );
 
   useEffect(() => {
-    if (day >= 10 && ['standard', 'permanent'].includes(invoiceType)) {
+    if (
+      day >= 10 &&
+      ['standard', 'permanent additional'].includes(invoiceType)
+    ) {
       setselectedMonthYear({
         value: dayjs().add(2, 'M').format('MMMM YYYY'),
         label: dayjs().add(2, 'M').format('MMMM YYYY'),
@@ -119,27 +121,6 @@ const InvoiceAdjustPauseModal = ({
         if (res && res.status === 400) {
           setLoader(false);
         }
-        if (res && res.status === 200) {
-          // setInvoiceInputs(res.data.results);
-          setLoader(false);
-        }
-        // setInvoiceInputs(dspInvoiceSubType.results);
-        setLoader(false);
-      },
-    );
-  }, [invoiceInputs, invoiceType, selectedMonthYear]);
-
-  const getPauseInvoices = useCallback(
-    (type) => {
-      setLoader(true);
-      getDSPBudgetAdjustData(type, customerId).then((res) => {
-        if (res && res.status === 500) {
-          setLoader(false);
-        }
-
-        if (res && res.status === 400) {
-          setLoader(false);
-        }
         if (res && res.status === 201) {
           history.push(
             PATH_CUSTOMER_DETAILS.replace(':id', customerId),
@@ -147,11 +128,31 @@ const InvoiceAdjustPauseModal = ({
           );
           setLoader(false);
         }
+        // setInvoiceInputs(dspInvoiceSubType.results);
         setLoader(false);
-      });
-    },
-    [customerId, history],
-  );
+      },
+    );
+  }, [customerId, history, invoiceInputs, invoiceType, selectedMonthYear]);
+
+  const getPauseInvoices = useCallback(() => {
+    setLoader(true);
+    setInvoiceInputs({});
+    getDSPBudgetAdjustData('standard', customerId).then((res) => {
+      if (res && res.status === 500) {
+        setLoader(false);
+      }
+
+      if (res && res.status === 400) {
+        setLoader(false);
+      }
+      if (res && res.status === 200) {
+        setInvoiceInputs(res.data.results);
+        setLoader(false);
+      }
+      // setInvoiceInputs(dspInvoiceSubType.results);
+      setLoader(false);
+    });
+  }, [customerId]);
 
   useEffect(() => {
     if (viewComponent === 'adjustInvoice') {
@@ -172,25 +173,20 @@ const InvoiceAdjustPauseModal = ({
   const returnTotalAmount = useCallback(() => {
     if (invoiceInputs && invoiceInputs.length > 0) {
       const temp = { totalCurrentBudget: 0, totalNewBudget: 0 };
-      // eslint-disable-next-line guard-for-in
-      for (const key in invoiceInputs) {
+      invoiceInputs.forEach((item) => {
         if (
-          invoiceInputs[key] &&
-          invoiceInputs[key].old_budget &&
-          ['standard', 'permanent'].includes(invoiceType)
+          item &&
+          item.old_budget &&
+          ['standard', 'permanent additional'].includes(invoiceType)
         ) {
-          temp.totalCurrentBudget += parseNumber(
-            invoiceInputs[key].old_budget.toString(),
-          );
+          temp.totalCurrentBudget += parseNumber(item.old_budget.toString());
         }
-        if (invoiceInputs[key] && invoiceInputs[key].new_budget) {
-          temp.totalNewBudget += parseNumber(invoiceInputs[key].new_budget);
-        } else if (['standard', 'permanent'].includes(invoiceType)) {
-          temp.totalNewBudget += parseNumber(
-            invoiceInputs[key].old_budget.toString(),
-          );
+        if (Object.prototype.hasOwnProperty.call(item, 'newAmount')) {
+          temp.totalNewBudget += parseNumber(item.newAmount);
+        } else if (['standard', 'permanent additional'].includes(invoiceType)) {
+          temp.totalNewBudget += parseNumber(item.old_budget.toString());
         }
-      }
+      });
 
       return temp;
     }
@@ -200,7 +196,10 @@ const InvoiceAdjustPauseModal = ({
   const getMonthYearOptions = () => {
     const monthsYears = [];
 
-    if (day >= 10 && ['standard', 'permanent'].includes(invoiceType)) {
+    if (
+      day >= 10 &&
+      ['standard', 'permanent additional'].includes(invoiceType)
+    ) {
       for (let i = 0; i <= 5; i += 1) {
         monthsYears.push({
           value: dayjs()
@@ -318,8 +317,8 @@ const InvoiceAdjustPauseModal = ({
               />
             ) : (
               <InvoicePause
-                invoiceChoices={invoiceChoices}
-                setInvoiceChoices={setInvoiceChoices}
+                invoiceChoices={invoiceInputs}
+                setInvoiceChoices={setInvoiceInputs}
                 returnTotalAmount={returnTotalAmount}
                 parseNumber={parseNumber}
               />

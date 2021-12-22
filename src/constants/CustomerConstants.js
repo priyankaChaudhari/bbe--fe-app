@@ -297,12 +297,12 @@ export const adjustInvoiceChoices = [
     key: 2,
     id: 'BT-adjustInvoice-permanent',
     label: 'Permanent Additional',
-    name: 'permanent',
+    name: 'permanent additional',
   },
   {
     key: 3,
     id: 'BT-adjustInvoice-onetime',
     label: 'One Time',
-    name: 'onetime',
+    name: 'one time',
   },
 ];
