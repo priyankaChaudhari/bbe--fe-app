@@ -21,7 +21,8 @@ import {
 } from '../../../../../common';
 import { BellNotification } from '../../../../../theme/images';
 
-const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
+const InvoiceList = ({ loader, invoiceType, id }) => {
+  const isDSPService = invoiceType === 'dsp service';
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [selectedComponent, setSelectedComponent] = useState('past');
   const [invoicesData, setInvoicesData] = useState();
@@ -81,7 +82,7 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
   const renderPastUpcomingTab = () => {
     return (
       <>
-        {invoiceType === 'dsp service' ? (
+        {isDSPService ? (
           <Tabs className="mb-3">
             <ul className="tabs">
               <li
@@ -130,7 +131,7 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
           </div>
         </WhiteCard>
         {renderPastUpcomingTab()}
-        {pastInvoiceLoader && invoiceType === 'dsp service' ? (
+        {pastInvoiceLoader && isDSPService ? (
           <PageLoader
             component="performance-graph"
             type="detail"
@@ -142,26 +143,34 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
           invoicesData.map((item) => {
             return (
               <TableMobileView
-                key={item.id}
+                key={item?.id}
                 className="mb-3"
-                invoiceType={item.invoice_type}
-                invoiceId={item.next_next_invoiced_id}
+                invoiceType={
+                  isDSPService
+                    ? `${item?.description?.budget_type} (${item?.month})`
+                    : item?.invoice_type
+                }
+                invoiceId={item?.next_invoiced_id}
+                marketplaces={
+                  isDSPService ? ` | ${item?.description?.marketplaces}` : null
+                }
                 status={item.invoice_status}
                 statusColor={
                   StatusColorSet[
-                    item.invoice_status.split(' ')[0].toLowerCase()
+                    item?.invoice_status.split(' ')[0].toLowerCase()
                   ]
                     ? StatusColorSet[
-                        item.invoice_status.split(' ')[0].toLowerCase()
+                        item?.invoice_status.split(' ')[0].toLowerCase()
                       ]
                     : '#E3F2D2'
                 }
                 label="Amount"
-                labelInfo={addThousandComma(item.monthly_budget, 0)}
+                labelInfo={addThousandComma(item?.monthly_budget, 0)}
                 label1="Created on"
                 labelInfo1={dayjs(item.generated_at).format('MM/DD/YYYY')}
                 label2="Due"
                 labelInfo2={dayjs(item.due_date).format('MM/DD/YYYY')}
+                isShowBellIcon={isDSPService}
               />
             );
           })
@@ -209,19 +218,28 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
       <>
         <tr key={item.id}>
           <td className="product-body">
-            <div className="company-name">{item.invoice_type}</div>
-            <div className="status">#{item.next_invoiced_id}</div>
+            <div className="company-name">
+              {isDSPService
+                ? `${item?.description?.budget_type} (${item?.month})`
+                : item.invoice_type}
+            </div>
+            <div className="status">
+              #{item.next_invoiced_id}{' '}
+              {isDSPService ? `| ${item?.description?.marketplaces}` : null}
+            </div>
           </td>
           <td className="product-table-body text-medium pl-2">
             <div className="notification-bell pl-2">
               ${addThousandComma(item.monthly_budget, 0)}
-              <img
-                className="notification-bell-icon"
-                src={BellNotification}
-                alt="bell"
-                data-tip="Pending BP Sign-off"
-                data-for="Pending-BP-Sign-off"
-              />
+              {isDSPService ? (
+                <img
+                  className="notification-bell-icon"
+                  src={BellNotification}
+                  alt="bell"
+                  data-tip="Pending BP Sign-off"
+                  data-for="Pending-BP-Sign-off"
+                />
+              ) : null}
             </div>
           </td>
           <td className="product-table-body light-font">
@@ -269,7 +287,7 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
           </p>
           {renderPastUpcomingTab()}
 
-          {pastInvoiceLoader && invoiceType === 'dsp service' ? (
+          {pastInvoiceLoader && isDSPService ? (
             <PageLoader
               component="performance-graph"
               type="detail"
@@ -322,7 +340,7 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
       ) : (
         renderMobileDSPInvoices()
       )}
-      {invoiceType === 'dsp service' ? (
+      {isDSPService ? (
         <InvoiceAdjustmentsContainer
           id={id}
           invoiceType={invoiceType}
@@ -333,14 +351,14 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
   );
 };
 
-export default DSPInvoiceDetails;
+export default InvoiceList;
 
-DSPInvoiceDetails.defaultProps = {
+InvoiceList.defaultProps = {
   invoiceType: 'rev share',
   id: '',
 };
 
-DSPInvoiceDetails.propTypes = {
+InvoiceList.propTypes = {
   loader: bool.isRequired,
   invoiceType: string,
   id: string,

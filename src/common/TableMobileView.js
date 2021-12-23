@@ -2,7 +2,7 @@ import { bool, func, string } from 'prop-types';
 import React from 'react';
 
 import styled from 'styled-components';
-import { CompanyDefaultUser } from '../theme/images';
+import { CompanyDefaultUser, BellNotification } from '../theme/images';
 import { WhiteCard } from './WhiteCard';
 import Theme from '../theme/Theme';
 import Status from './Status';
@@ -32,7 +32,9 @@ const TableMobileView = ({
   statusColor,
   onClick,
   icon,
+  marketplaces,
   isColumnOnClick = false,
+  isShowBellIcon = false,
   onColumnClick,
 }) => {
   const col = `${label3 ? (label7 ? 'col-4' : 'col-6') : 'col-4'}`;
@@ -58,10 +60,11 @@ const TableMobileView = ({
               </>
             ) : (
               <>
-                <div className="CompanyName LargeCompanyName">
-                  {invoiceType}
+                <div className="CompanyName">{invoiceType}</div>
+                <div className="CompanyId">
+                  {invoiceId ? `#${invoiceId}` : null}
+                  {marketplaces}
                 </div>
-                <div className="CompanyId">#{invoiceId}</div>
               </>
             )}
           </div>
@@ -81,7 +84,19 @@ const TableMobileView = ({
           <div className={`${col} mb-3`}>
             {' '}
             <div className="label">{label}</div>
-            <div className="label-info label-bold"> {labelInfo}</div>
+            <div className="label-info label-bold">
+              {' '}
+              {labelInfo}
+              {isShowBellIcon ? (
+                <img
+                  className="notification-bell-icon"
+                  src={BellNotification}
+                  alt="bell"
+                  data-tip="Pending BP Sign-off"
+                  data-for="Pending-BP-Sign-off"
+                />
+              ) : null}
+            </div>
           </div>
           <div className={`${col} mb-3`}>
             {' '}
@@ -183,6 +198,7 @@ const TableMobileViewWrapper = styled.div`
 
 TableMobileView.defaultProps = {
   isColumnOnClick: false,
+  isShowBellIcon: false,
   className: '',
   CompanyName: '',
   label: '',
@@ -206,11 +222,14 @@ TableMobileView.defaultProps = {
   status: '',
   statusColor: '',
   icon: '',
+  marketplaces: '',
   onClick: () => {},
   onColumnClick: () => {},
 };
 
 TableMobileView.propTypes = {
+  isColumnOnClick: bool,
+  isShowBellIcon: bool,
   className: string,
   CompanyName: string,
   label: string,
@@ -234,7 +253,7 @@ TableMobileView.propTypes = {
   status: string,
   statusColor: string,
   icon: string,
+  marketplaces: string,
   onClick: func,
-  isColumnOnClick: bool,
   onColumnClick: func,
 };
