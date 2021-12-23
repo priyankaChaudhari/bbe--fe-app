@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable func-names */
 /* eslint-disable camelcase */
 import React, { useCallback, useEffect, useRef } from 'react';
@@ -27,8 +28,21 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     chart.current.cursor.lineY.disabled = true;
     chart.current.cursor.lineX.disabled = true;
     chart.current.cursor.behavior = 'none';
-
-    const htmlTooptip = `<div style="padding:5px 0 10px 0;"><strong>{categoryY}</strong></div>
+    const bindAmountAndCurrency = (amount) => {
+      if (amount < 0) {
+        return `-${currencySymbol}${amount
+          .toFixed(2)
+          .replace('-', '')
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      }
+      return `${currencySymbol}${amount}`;
+    };
+    const renderToolTip = (
+      invoiceAmount,
+      carrOverAmount,
+      totalInitialBudget,
+    ) => {
+      const htmlTooptip = `<div style="padding:5px 0 10px 0;"><strong>{categoryY}</strong></div>
     <ul style="padding:5px 0; margin:0; list-style-type:none;">
       <li style="display:inline;">
         <div style="display:inline-block; background-color:#8798ad; border: 1px solid white; border-radius:50%;
@@ -36,7 +50,9 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
       </li>
       <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:400; text-transform: uppercase;
         padding:0 0 0 5px">INVOICE AMOUNT</li>
-      <li style="display:inline; float: right; font-size:14px;">${currencySymbol}{invoiceAmount}</li>
+      <li style="display:inline; float: right; font-size:14px;">${bindAmountAndCurrency(
+        invoiceAmount,
+      )}</li>
       <li style="clear:both"></li>
     </ul>
     <ul style="padding:5px 0; margin:0; list-style-type:none;">
@@ -46,10 +62,11 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
       </li>
       <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:400; text-transform: uppercase;
         padding:0 0 0 5px">CARRY-OVER</li>
-      <li style="display:inline; float: right; font-size:14px;">${currencySymbol}{carryOver}</li>
+      <li style="display:inline; float: right; font-size:14px;">${bindAmountAndCurrency(
+        carrOverAmount,
+      )}</li>
       <li style="clear:both"></li>
     </ul>
-
     <ul style="padding:5px 0; margin:0; list-style-type:none;">
       <li style="display:inline;">
         <div style="display:inline-block; background-color:#2E384D; border: 0px; border-radius:50%;
@@ -57,9 +74,13 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
       </li>
       <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:bold; text-transform: uppercase;
         padding:0 0 0 5px">INITIAL TOTAL BUDGET</li>
-      <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${currencySymbol}{totalInitialBudget}</li>
+      <li style="display:inline; float: right; font-size:14px; font-weight:bold;">${bindAmountAndCurrency(
+        totalInitialBudget,
+      )}</li>
       <li style="clear:both"></li>
     </ul>`;
+      return htmlTooptip;
+    };
 
     // create category axis
     const categoryAxis = chart.current.yAxes.push(new am4charts.CategoryAxis());
@@ -84,7 +105,15 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     valueAxis.renderer.labels.template.dy = -5;
     valueAxis.renderer.labels.template.fill = am4core.color('#556178');
     valueAxis.numberFormatter = new am4core.NumberFormatter();
-    valueAxis.numberFormatter.numberFormat = `${currencySymbol}#.#a`;
+    valueAxis.numberFormatter.numberFormat = `#.#a`;
+    valueAxis.renderer.labels.template.adapter.add('text', function (text) {
+      if (text !== undefined) {
+        if (text.includes('-')) {
+          return `-${currencySymbol}${text.replace('-', '')}`;
+        }
+      }
+      return `${currencySymbol}${text}`;
+    });
     // create series for invoice amount
     const series1 = chart.current.series.push(new am4charts.ColumnSeries());
     series1.columns.template.height = am4core.percent(20);
@@ -131,7 +160,11 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
         if (target.dataItem) {
           if (target.dataItem.valueX > 0) {
             return `<div style="width:250px; padding:5px 5px 10px 5px">
-            ${htmlTooptip}
+            ${renderToolTip(
+              target.dataItem._dataContext.invoiceAmount,
+              target.dataItem._dataContext.carryOver,
+              target.dataItem._dataContext.totalInitialBudget,
+            )}
             <hr style="height:1px !important; background-color:#ffffff; font-weight:400; opacity:0.5" />
             <ul style="padding:5px 0; margin:0; list-style-type:none; width:100%;">
               <li style="display:inline; color:#ffffff !important;  border-left:2px solid #ffffff; font-size:11px;
@@ -143,7 +176,11 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
           }
         }
         return `<div style="width:250px; padding:5px 5px 10px 5px">
-            ${htmlTooptip}
+            ${renderToolTip(
+              target.dataItem._dataContext.invoiceAmount,
+              target.dataItem._dataContext.carryOver,
+              target.dataItem._dataContext.totalInitialBudget,
+            )}
           </div>`;
       },
     );
@@ -164,6 +201,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     dateRange.label.fontWeight = 'bold';
     dateRange.label.horizontalCenter = 'center';
     dateRange.label.verticalCenter = 'middle';
+    dateRange.label.padding(15, 40, 15, 19);
     dateRange.label.isMeasured = true;
     dateRange.label.background.fill = am4core.color('#f4f6fc');
     dateRange.axisFill.fill = am4core.color('#f4f6fc');
