@@ -1214,25 +1214,6 @@ export default function AgreementSidePanel({
     return accountLength;
   };
 
-  // const DropdownIndicator = (props) => {
-  //   const { selectProps } = props;
-  //   return (
-  //     components.DropdownIndicator && (
-  //       <components.DropdownIndicator {...props}>
-  //         <img
-  //           src={CaretUp}
-  //           alt="caret"
-  //           style={{
-  //             transform: selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-  //             width: '25px',
-  //             height: '25px',
-  //           }}
-  //         />
-  //       </components.DropdownIndicator>
-  //     )
-  //   );
-  // };
-
   const generateDropdown = (item) => {
     if (contractType !== 'one time')
       return (
