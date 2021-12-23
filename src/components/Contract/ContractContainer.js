@@ -865,7 +865,6 @@ export default function ContractContainer() {
 
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
-
     if (splittedPath) {
       getcontract(splittedPath[4]).then((res) => {
         if (res && res.status === 200) {
@@ -897,6 +896,10 @@ export default function ContractContainer() {
           });
           if (history?.location?.showEditView) {
             showEditView(res?.data);
+
+            const historyState = { ...history.location };
+            delete historyState.showEditView;
+            history.replace({ ...historyState });
           }
         } else {
           setIsLoading({ loader: false, type: 'page' });
@@ -3778,6 +3781,7 @@ export default function ContractContainer() {
         manageErrorCount={manageErrorCount}
         checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
         servicesFees={servicesFees}
+        getData={getData}
       />
     );
   };
