@@ -14,7 +14,7 @@ import {
 const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
-    true,
+    false,
   );
   const [showAllPastInvoicesModal, setShowAllPastInvoicesModal] = useState(
     false,
