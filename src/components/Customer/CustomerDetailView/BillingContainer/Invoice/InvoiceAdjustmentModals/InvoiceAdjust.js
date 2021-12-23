@@ -2,7 +2,7 @@ import React from 'react';
 
 import NumberFormat from 'react-number-format';
 import styled from 'styled-components';
-import { arrayOf, func, string } from 'prop-types';
+import { arrayOf, bool, func, string } from 'prop-types';
 
 import { InputFormField } from '../../../../../../common';
 import numberWithCommas from '../../../../../../hooks/numberWithComas';
@@ -13,6 +13,7 @@ const InvoiceAdjust = ({
   returnTotalAmount,
   parseNumber,
   invoiceType,
+  loading,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
   const onChangeInput = (input, { target }) => {
@@ -109,6 +110,10 @@ const InvoiceAdjust = ({
                 </>
               );
             })}
+
+          {invoiceInputs && invoiceInputs.length === 0 && !loading ? (
+            <NoData className="col-12">No Invoice Adjust Data Found</NoData>
+          ) : null}
           <div className=" straight-line horizontal-line pt-2 " />
           <div className="col-4 text-left mt-3">
             <div className="normal-text text-bold ">Total</div>
@@ -135,6 +140,7 @@ export default InvoiceAdjust;
 
 InvoiceAdjust.defaultProps = {
   invoiceInputs: [],
+  loading: false,
   setInvoiceInputs: () => {},
   returnTotalAmount: () => {},
   parseNumber: () => {},
@@ -142,12 +148,18 @@ InvoiceAdjust.defaultProps = {
 
 InvoiceAdjust.propTypes = {
   invoiceInputs: arrayOf(Array),
+  invoiceType: string.isRequired,
+  loading: bool,
   setInvoiceInputs: func,
   returnTotalAmount: func,
   parseNumber: func,
-  invoiceType: string.isRequired,
 };
 
 const GrayTable = styled.div`
   background-color: #f4f6fc;
+`;
+
+const NoData = styled.div`
+  margin: 3em 0em;
+  text-align: center;
 `;

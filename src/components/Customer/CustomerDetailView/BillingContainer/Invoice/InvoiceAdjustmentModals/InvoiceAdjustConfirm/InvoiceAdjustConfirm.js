@@ -140,7 +140,7 @@ const InvoiceAdjustConfirm = ({
                 ? 'normal-text text-bold'
                 : 'gray-normal-text';
             return (
-              <div className="row mt-1">
+              <div key={item.id} className="row mt-1">
                 <div className="col-4 text-left">
                   <div className={textClass}>{item.marketplace}</div>
                 </div>

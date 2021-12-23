@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
@@ -71,42 +71,52 @@ const InvoiceAdjustPauseModal = ({
           label: dayjs().add(1, 'M').format('MMMM YYYY'),
         },
   );
+  const mounted = useRef(false);
 
   useEffect(() => {
-    if (
-      day >= 10 &&
-      ['standard', 'permanent additional'].includes(invoiceType)
-    ) {
-      setselectedMonthYear({
-        value: dayjs().add(2, 'M').format('MMMM YYYY'),
-        label: dayjs().add(2, 'M').format('MMMM YYYY'),
-      });
-    } else {
-      setselectedMonthYear({
-        value: dayjs().add(1, 'M').format('MMMM YYYY'),
-        label: dayjs().add(1, 'M').format('MMMM YYYY'),
-      });
+    mounted.current = true;
+    if (mounted.current) {
+      if (
+        day >= 10 &&
+        ['standard', 'permanent additional'].includes(invoiceType)
+      ) {
+        setselectedMonthYear({
+          value: dayjs().add(2, 'M').format('MMMM YYYY'),
+          label: dayjs().add(2, 'M').format('MMMM YYYY'),
+        });
+      } else {
+        setselectedMonthYear({
+          value: dayjs().add(1, 'M').format('MMMM YYYY'),
+          label: dayjs().add(1, 'M').format('MMMM YYYY'),
+        });
+      }
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [invoiceType]);
 
   const getAdjustInvoices = useCallback(
     (type) => {
       setLoader(true);
-      setInvoiceInputs({});
-      getDSPBudgetAdjustData(type, customerId).then((res) => {
-        if (res && res.status === 500) {
-          setLoader(false);
-        }
+      setInvoiceInputs([]);
 
-        if (res && res.status === 400) {
+      getDSPBudgetAdjustData(type, customerId).then((res) => {
+        if (mounted.current) {
+          if (res && res.status === 500) {
+            setLoader(false);
+          }
+
+          if (res && res.status === 400) {
+            setLoader(false);
+          }
+          if (res && res.status === 200) {
+            setInvoiceInputs(res.data.results);
+            setLoader(false);
+          }
+          // setInvoiceInputs(dspInvoiceSubType.results);
           setLoader(false);
         }
-        if (res && res.status === 200) {
-          setInvoiceInputs(res.data.results);
-          setLoader(false);
-        }
-        // setInvoiceInputs(dspInvoiceSubType.results);
-        setLoader(false);
       });
     },
     [customerId],
@@ -172,7 +182,7 @@ const InvoiceAdjustPauseModal = ({
 
   const getPauseInvoices = useCallback(() => {
     setLoader(true);
-    setInvoiceInputs({});
+    setInvoiceInputs([]);
     getDSPBudgetAdjustData('standard', customerId).then((res) => {
       if (res && res.status === 500) {
         setLoader(false);
@@ -191,11 +201,16 @@ const InvoiceAdjustPauseModal = ({
   }, [customerId]);
 
   useEffect(() => {
+    mounted.current = true;
+
     if (viewComponent === 'adjustInvoice') {
       getAdjustInvoices(invoiceType);
     } else {
       getPauseInvoices(invoiceType);
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [getPauseInvoices, getAdjustInvoices, invoiceType, viewComponent]);
 
   const parseNumber = (value) => {
@@ -350,6 +365,7 @@ const InvoiceAdjustPauseModal = ({
                 parseNumber={parseNumber}
                 invoiceType={invoiceType}
                 selectedMonthYear={selectedMonthYear}
+                loading={loader}
               />
             ) : (
               <InvoicePause
@@ -357,6 +373,7 @@ const InvoiceAdjustPauseModal = ({
                 setInvoiceChoices={setInvoiceInputs}
                 returnTotalAmount={returnTotalAmount}
                 parseNumber={parseNumber}
+                loading={loader}
               />
             )}
             <div className="modal-body pb-1 pt-3">
@@ -379,7 +396,7 @@ const InvoiceAdjustPauseModal = ({
             </div>
             <div className="footer-line" />
             <div className="modal-footer">
-              <div className="text-center ">
+              <div className="text-center">
                 <Button
                   disabled={
                     loader ||
