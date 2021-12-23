@@ -1,9 +1,15 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 
-// import { DebounceInput } from 'react-debounce-input';
+import { DebounceInput } from 'react-debounce-input';
 
-import { CloseIcon } from '../../theme/images';
-import { ModalBox, GetInitialName, Button } from '../../common';
+import { CloseIcon, SearchIcon } from '../../theme/images';
+import {
+  ModalBox,
+  GetInitialName,
+  Button,
+  InputSearchWithRadius,
+} from '../../common';
 
 const TeamMembers = () => {
   return (
@@ -28,7 +34,7 @@ const TeamMembers = () => {
           Back To Team Members
         </h4> */}
 
-        <div className="body-content ">
+        {/* <div className="body-content ">
           <div className="row">
             <div className="col-12 mb-3">
               <div className="edit-profile-text float-left" role="presentation">
@@ -117,9 +123,9 @@ const TeamMembers = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
-        {/* <div className="body-content ">
+        <div className="body-content ">
           <div className="horizontal-line straight-line mt-3 mb-3" />
           <InputSearchWithRadius
             id="BT-order-customerlist-search-input"
@@ -171,8 +177,34 @@ const TeamMembers = () => {
               </div>
               <div className="clear-fix" />
             </div>
+            <div className="col-12 mb-3">
+              <div className="edit-profile-text float-left" role="presentation">
+                <GetInitialName property="mr-3" />
+                <div className="name-email">
+                  <div className="team-member-name">DSP Ad Manager</div>
+                  Creative
+                </div>
+              </div>
+              <div className="float-right roleName add-team-member mt-3">
+                Add
+              </div>
+              <div className="clear-fix" />
+            </div>
+            <div className="col-12 mb-3">
+              <div className="edit-profile-text float-left" role="presentation">
+                <GetInitialName property="mr-3" />
+                <div className="name-email">
+                  <div className="team-member-name">DSP Ad Manager</div>
+                  Creative
+                </div>
+              </div>
+              <div className="float-right roleName add-team-member mt-3">
+                Add
+              </div>
+              <div className="clear-fix" />
+            </div>
           </div>
-        </div> */}
+        </div>
       </div>
     </ModalBox>
   );
