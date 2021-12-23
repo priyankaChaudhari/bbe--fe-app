@@ -7,8 +7,8 @@ import { CloseIcon, SearchIcon } from '../../theme/images';
 import {
   ModalBox,
   GetInitialName,
-  Button,
   InputSearchWithRadius,
+  CommonPagination,
 } from '../../common';
 
 const TeamMembers = () => {
@@ -126,7 +126,6 @@ const TeamMembers = () => {
         </div> */}
 
         <div className="body-content ">
-          <div className="horizontal-line straight-line mt-3 mb-3" />
           <InputSearchWithRadius
             id="BT-order-customerlist-search-input"
             className="customer-list-header w-80">
@@ -203,7 +202,67 @@ const TeamMembers = () => {
               </div>
               <div className="clear-fix" />
             </div>
+            <div className="col-12 mb-3">
+              <div className="edit-profile-text float-left" role="presentation">
+                <GetInitialName property="mr-3" />
+                <div className="name-email">
+                  <div className="team-member-name">DSP Ad Manager</div>
+                  Creative
+                </div>
+              </div>
+              <div className="float-right roleName add-team-member mt-3">
+                Add
+              </div>
+              <div className="clear-fix" />
+            </div>
+            <div className="col-12 mb-3">
+              <div className="edit-profile-text float-left" role="presentation">
+                <GetInitialName property="mr-3" />
+                <div className="name-email">
+                  <div className="team-member-name">DSP Ad Manager</div>
+                  Creative
+                </div>
+              </div>
+              <div className="float-right roleName add-team-member mt-3">
+                Add
+              </div>
+              <div className="clear-fix" />
+            </div>
+            <div className="col-12 mb-3">
+              <div className="edit-profile-text float-left" role="presentation">
+                <GetInitialName property="mr-3" />
+                <div className="name-email">
+                  <div className="team-member-name">DSP Ad Manager</div>
+                  Creative
+                </div>
+              </div>
+              <div className="float-right roleName add-team-member mt-3">
+                Add
+              </div>
+              <div className="clear-fix" />
+            </div>
+            <div className="col-12 mb-3">
+              <div className="edit-profile-text float-left" role="presentation">
+                <GetInitialName property="mr-3" />
+                <div className="name-email">
+                  <div className="team-member-name">DSP Ad Manager</div>
+                  Creative
+                </div>
+              </div>
+              <div className="float-right roleName add-team-member mt-3">
+                Add
+              </div>
+              <div className="clear-fix" />
+            </div>
           </div>
+        </div>
+        <div className="footer-sticky">
+          <div className="straight-line horizontal-line" />
+          <CommonPagination
+            count={40}
+            pageNumber={1}
+            // handlePageChange={handlePageChange}
+          />
         </div>
       </div>
     </ModalBox>
