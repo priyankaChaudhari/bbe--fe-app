@@ -473,36 +473,16 @@ export default function AgreementDetails({
                   </div>
                 </div>
                 <div className="clear-fix" />
-                {userRole === 'Customer' || multipleAgreement?.length < 1 ? (
-                  <Link
-                    to={{
-                      pathname: PATH_AGREEMENT.replace(':id', id).replace(
-                        ':contract_id',
-                        agreement.id,
-                      ),
-                      state:
-                        history &&
-                        history.location &&
-                        history.location.pathname,
-                    }}>
-                    <Button className="btn-transparent w-100 view-contract">
-                      {' '}
-                      <img
-                        className="file-contract-icon"
-                        src={FileContract}
-                        alt=""
-                      />
-                      View Agreement
-                    </Button>
-                  </Link>
-                ) : null}
                 <div
                   className="col-lg-3 pl-lg-0   col-md-3 col-12 text-right"
                   role="presentation"
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {multipleAgreement?.length === 1 ? (
+                  {(agreement?.contract_status?.value !== 'active' &&
+                    agreement?.contract_status?.value !== 'renewed' &&
+                    multipleAgreement?.length === 1) ||
+                  userRole === 'Customer' ? (
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
