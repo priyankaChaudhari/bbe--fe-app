@@ -22,24 +22,23 @@ const OneTimeInvoiceAdjustConfirm = ({
             return (
               <>
                 <div className="row">
-                  <div className="col-12 text-left">
+                  <div className="col-12 text-left mb-2">
                     <div className="label">Marketplace</div>
                     <div className={textClass}>{item.marketplace}</div>
                   </div>
 
-                  <div className="col-4 text-left">
+                  <div className="col-6 text-left">
                     <div className="label">Existing Budget</div>
                     <div className={textClass}>
                       ${numberWithCommas(item.old_budget)}
                     </div>
                   </div>
-                  <div className="col-4 text-left">
-                    <div className="label">To</div>
+                  <div className="col-6 text-left">
+                    <div className="label">Additional Budget</div>
                     <div className={textClass}>
-                      $
-                      {item.newAmount
-                        ? item.newAmount
-                        : numberWithCommas(item.old_budget)}
+                      {!item.newAmount || item.newAmount === 0
+                        ? '-'
+                        : `$${item.newAmount}`}
                     </div>
                   </div>
                 </div>
@@ -49,18 +48,18 @@ const OneTimeInvoiceAdjustConfirm = ({
           })}
 
         <div className="row">
-          <div className="col-12 text-left">
+          <div className="col-12 text-left mb-2">
             <div className="label text-bold"> </div>
             <div className="normal-text text-bold">One-time invoice</div>
           </div>
 
-          <div className="col-4 text-left">
+          <div className="col-6 text-left">
             <div className="label">Existing budget</div>
             <div className="gray-normal-text">
               ${numberWithCommas(totalCurrentBudget)}
             </div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-6 text-left">
             <div className="label">Additional Budget</div>
             <div className="gray-normal-text">{totalChangeAmount}</div>
           </div>
