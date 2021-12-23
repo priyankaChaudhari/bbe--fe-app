@@ -1,7 +1,7 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import { arrayOf, func } from 'prop-types';
+import { arrayOf, bool, func } from 'prop-types';
 
 import { ModalRadioCheck } from '../../../../../../common';
 
@@ -9,6 +9,7 @@ const InvoicePause = ({
   invoiceChoices,
   setInvoiceChoices,
   returnTotalAmount,
+  loading,
 }) => {
   const { totalNewBudget } = returnTotalAmount();
 
@@ -107,6 +108,9 @@ const InvoicePause = ({
                 </>
               );
             })}
+          {invoiceChoices && invoiceChoices.length === 0 && !loading ? (
+            <NoData className="col-12">No Invoice Adjust Data Found</NoData>
+          ) : null}
           <div className=" straight-line horizontal-line pt-2 " />
           <div className="col-4 text-left mt-3">
             <div className="normal-text text-bold ">Total</div>
@@ -129,14 +133,21 @@ InvoicePause.defaultProps = {
   invoiceChoices: [],
   setInvoiceChoices: () => {},
   returnTotalAmount: () => {},
+  loading: false,
 };
 
 InvoicePause.propTypes = {
   invoiceChoices: arrayOf(Array),
   setInvoiceChoices: func,
   returnTotalAmount: func,
+  loading: bool,
 };
 
 const GrayTable = styled.div`
   background-color: #f4f6fc;
+`;
+
+const NoData = styled.div`
+  margin: 3em 0em;
+  text-align: center;
 `;

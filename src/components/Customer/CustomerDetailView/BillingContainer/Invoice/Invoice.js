@@ -14,6 +14,7 @@ const Invoice = ({ id, invoiceType, onLoading }) => {
   const getDSPMetricsData = useCallback(
     (type) => {
       setLoader(true);
+
       getMetricsInvoiceData(type, id).then((res) => {
         if (res && res.status === 500) {
           setLoader(false);
@@ -37,7 +38,13 @@ const Invoice = ({ id, invoiceType, onLoading }) => {
   );
 
   useEffect(() => {
-    getDSPMetricsData(invoiceType);
+    let isMounted = true;
+    if (isMounted) {
+      getDSPMetricsData(invoiceType);
+    }
+    return () => {
+      isMounted = false;
+    };
   }, [getDSPMetricsData, invoiceType]);
 
   useEffect(() => {

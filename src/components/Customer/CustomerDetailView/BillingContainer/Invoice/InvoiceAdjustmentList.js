@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import styled from 'styled-components';
 import dayjs from 'dayjs';
@@ -20,6 +20,7 @@ import {
 
 const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
+  const mounted = useRef(true);
 
   const [invoicesAdjustmentData, setInvoicesAdjustmentData] = useState();
   const [invoiceAdjustmentLoader, setInvoiceAdjustmentLoader] = useState(false);
@@ -32,21 +33,23 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
     (type) => {
       setInvoiceAdjustmentLoader(true);
       getInvoiceData(type, id).then((res) => {
-        if (res && res.status === 500) {
-          setInvoiceAdjustmentLoader(false);
-          setInvoicesAdjustmentData(null);
-        }
-
-        if (res && res.status === 400) {
-          setInvoiceAdjustmentLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.results) {
-            setInvoicesAdjustmentData(res.data.results);
-          } else {
+        if (mounted.current) {
+          if (res && res.status === 500) {
+            setInvoiceAdjustmentLoader(false);
             setInvoicesAdjustmentData(null);
           }
-          setInvoiceAdjustmentLoader(false);
+
+          if (res && res.status === 400) {
+            setInvoiceAdjustmentLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.results) {
+              setInvoicesAdjustmentData(res.data.results);
+            } else {
+              setInvoicesAdjustmentData(null);
+            }
+            setInvoiceAdjustmentLoader(false);
+          }
         }
       });
     },
@@ -54,11 +57,15 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
   );
 
   useEffect(() => {
+    mounted.current = true;
     if (!isApicall) {
       getDSPInvoicesData(invoiceType);
       setIsApiCall(true);
     }
-  }, [getDSPInvoicesData, invoiceType, isApicall, setIsApiCall]);
+    return () => {
+      mounted.current = false;
+    };
+  }, [getDSPInvoicesData, id, invoiceType, isApicall, setIsApiCall]);
 
   const renderTableHeader = () => {
     return (

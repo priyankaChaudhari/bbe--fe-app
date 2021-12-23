@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 
 import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
@@ -27,26 +27,29 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
   const [invoicesData, setInvoicesData] = useState();
   const [pastInvoiceLoader, setPastInvoiceLoader] = useState(false);
   const [isApicall, setIsApiCall] = useState(false);
+  const mounted = useRef(false);
 
   const getDSPInvoicesData = useCallback(
     (type) => {
       setPastInvoiceLoader(true);
       getInvoiceData(type, id).then((res) => {
-        if (res && res.status === 500) {
-          setPastInvoiceLoader(false);
-          setInvoicesData(null);
-        }
-
-        if (res && res.status === 400) {
-          setPastInvoiceLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.results) {
-            setInvoicesData(res.data.results);
-          } else {
+        if (mounted.current) {
+          if (res && res.status === 500) {
+            setPastInvoiceLoader(false);
             setInvoicesData(null);
           }
-          setPastInvoiceLoader(false);
+
+          if (res && res.status === 400) {
+            setPastInvoiceLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.results) {
+              setInvoicesData(res.data.results);
+            } else {
+              setInvoicesData(null);
+            }
+            setPastInvoiceLoader(false);
+          }
         }
       });
     },
@@ -54,10 +57,14 @@ const DSPInvoiceDetails = ({ loader, invoiceType, id }) => {
   );
 
   useEffect(() => {
+    mounted.current = true;
     if (!isApicall) {
       getDSPInvoicesData(invoiceType);
       setIsApiCall(true);
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [getDSPInvoicesData, invoiceType, isApicall, setIsApiCall]);
 
   const addThousandComma = useCallback((number, decimalDigits = 2) => {
