@@ -73,6 +73,7 @@ function StatementOfWork({
   marketplacesResult,
   discountData,
   servicesFees,
+  getData,
 }) {
   const contractType = formData?.contract_type;
   const additionalOneTimeServicesLength =
@@ -216,25 +217,6 @@ function StatementOfWork({
         discountData={discountData}
       />
     );
-  };
-
-  const getServicesAccordingToAccType = (data, option) => {
-    const result = data && data.filter((item) => item.account_type === option);
-    return result;
-  };
-
-  const getData = (data, option) => {
-    const result = getServicesAccordingToAccType(data, option);
-    const multi = [];
-    if (result && result.length) {
-      for (const month of result) {
-        multi.push({
-          label: month.name,
-          value: month.name,
-        });
-      }
-    }
-    return { [option]: multi };
   };
 
   return contractType?.toLowerCase()?.includes('one') ||
@@ -486,6 +468,7 @@ StatementOfWork.defaultProps = {
   marketplacesResult: [],
   discountData: [],
   servicesFees: {},
+  getData: () => {},
 };
 
 StatementOfWork.propTypes = {
@@ -566,4 +549,5 @@ StatementOfWork.propTypes = {
   marketplacesResult: arrayOf(shape({})),
   discountData: [],
   servicesFees: shape({}),
+  getData: func,
 };
