@@ -5,10 +5,11 @@ import { DebounceInput } from 'react-debounce-input';
 
 import { CloseIcon, SearchIcon } from '../../theme/images';
 import {
+  Button,
   ModalBox,
   GetInitialName,
-  InputSearchWithRadius,
   CommonPagination,
+  InputSearchWithRadius,
 } from '../../common';
 
 const TeamMembers = () => {
@@ -21,20 +22,9 @@ const TeamMembers = () => {
         role="presentation"
       />
       <div className="modal-body pb-0">
-        <h4 className="mb-4">Team Members</h4>
-        {/* <h4>
-          {' '}
-          <img
-            width="16px"
-            style={{ verticalAlign: 'bottom' }}
-            className="left-arrow mr-1"
-            src={LeftArrowIcon}
-            alt="arrow"
-          />
-          Back To Team Members
-        </h4> */}
-
-        {/* <div className="body-content ">
+        {/* List of current Team members */}
+        <div className="body-content ">
+          <h4 className="mb-4">Team Members</h4>
           <div className="row">
             <div className="col-12 mb-3">
               <div className="edit-profile-text float-left" role="presentation">
@@ -123,9 +113,23 @@ const TeamMembers = () => {
               </div>
             </div>
           </div>
-        </div> */}
+        </div>
 
-        <div className="body-content ">
+        {/* Add or Search Team members  */}
+
+        {/* <div className="body-content ">
+
+        <h4>
+          {' '}
+          <img
+            width="16px"
+            style={{ verticalAlign: 'bottom' }}
+            className="left-arrow mr-1"
+            src={LeftArrowIcon}
+            alt="arrow"
+          />
+          Back To Team Members
+        </h4>
           <InputSearchWithRadius
             id="BT-order-customerlist-search-input"
             className="customer-list-header w-80">
@@ -263,7 +267,7 @@ const TeamMembers = () => {
             pageNumber={1}
             // handlePageChange={handlePageChange}
           />
-        </div>
+        </div> */}
       </div>
     </ModalBox>
   );
