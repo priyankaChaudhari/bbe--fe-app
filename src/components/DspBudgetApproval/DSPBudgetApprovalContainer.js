@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 
+import { getDSPBudgetAdjustDetail, updateDSPBudgetAdjustment } from '../../api';
 import { ArrowRightBlackIcon, ArrowRightIcon } from '../../theme/images';
 import {
   InvoiceApprovalHeader,
@@ -23,40 +25,57 @@ import {
 
 export default function DSPBudgetApprovalContainer() {
   const history = useHistory();
-  const [invoiceType, setInvoiceType] = useState('additional');
+  const { adjustmentId } = useParams();
+
+  const [invoiceType, setInvoiceType] = useState('');
   const [invoiceApprovalCondition, setInvoiceApprovalCondition] = useState(
     'yes',
   );
   const [invoiceRejectMessage, setInvoiceRejectMessage] = useState('');
-  const marketplaceData = [
-    {
-      name: 'UK',
-      from: 1000,
-      to: 5000,
-      change: 4000,
-    },
-    {
-      name: 'Canada',
-      from: 10000,
-      to: 6000,
-      change: 4000,
-    },
-    {
-      name: 'US',
-      from: 10000,
-      to: 15000,
-      change: 5000,
-    },
-  ];
+  const [marketplaceData, setMarketplaceData] = useState(null);
+  const [total, setTotal] = useState({});
+
+  const calculateTotal = (res) => {
+    let oldResult = 0;
+    let newResult = 0;
+    if (res?.adjustments?.length) {
+      for (const item of res?.adjustments) {
+        oldResult += item?.old_budget;
+        newResult += item?.new_budget;
+      }
+    }
+    setTotal({ old_budget: oldResult, new_budget: newResult });
+  };
 
   useEffect(() => {
-    setInvoiceType('oneTime');
-  }, []);
+    getDSPBudgetAdjustDetail(adjustmentId).then((res) => {
+      setMarketplaceData(res);
+      if (res?.is_sent_for_pause) {
+        setInvoiceType('pause');
+      } else {
+        setInvoiceType(res?.dsp_invoice_subtype);
+      }
+      calculateTotal(res);
+    });
+  }, [adjustmentId]);
 
   const storeInvoiceProposal = () => {
-    history.push({
-      pathname: PATH_THANKS,
-      type: 'dspSignOff',
+    const data = {};
+    if (invoiceApprovalCondition === 'yes') {
+      data.budget_approved = true;
+    }
+    if (invoiceApprovalCondition === 'no') {
+      data.budget_approved = false;
+      data.rejection_note = invoiceRejectMessage;
+    }
+
+    updateDSPBudgetAdjustment(adjustmentId, data).then((res) => {
+      if (res.status === 200) {
+        history.push({
+          pathname: PATH_THANKS,
+          type: 'dspSignOff',
+        });
+      }
     });
   };
 
@@ -110,11 +129,13 @@ export default function DSPBudgetApprovalContainer() {
     return (
       <GreyCard className="mb-3 mt-1">
         <p className="normal-text text-bold m-0">
-          Additional DSP invoice (November only)
+          Additional DSP invoice (
+          {dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')}{' '}
+          only)
         </p>
         <p className="normal-text text-bold mb-0 mt-1">
           {' '}
-          {generateAmount(5000, '', '$')}
+          {generateAmount(total?.new_budget - total?.old_budget, '', '$')}
         </p>
         <p className="normal-text mb-0 mt-1">
           The will be a one-off invoice, providing additional budget to spend in
@@ -171,7 +192,7 @@ export default function DSPBudgetApprovalContainer() {
   };
 
   const renderTableHeaders = () => {
-    if (invoiceType === 'standard' || invoiceType === 'additional') {
+    if (invoiceType === 'standard' || invoiceType === 'permanent additional') {
       return (
         <>
           <div className="col-5 text-left">
@@ -186,7 +207,7 @@ export default function DSPBudgetApprovalContainer() {
         </>
       );
     }
-    if (invoiceType === 'oneTime') {
+    if (invoiceType === 'one time') {
       return (
         <>
           <div className="col-3 text-left">
@@ -220,20 +241,25 @@ export default function DSPBudgetApprovalContainer() {
   const renderTableData = () => {
     return (
       <>
-        {marketplaceData.map((item, index) => (
+        {marketplaceData?.adjustments?.map((item, index) => (
           <div className={index ? 'row mt-1' : 'row'} key={item.name}>
             <div className="col-5 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
-                {item.name}
+                {item.marketplace}
               </div>
             </div>
             <div className="col-2 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
-                {generateAmount(item?.from, 'from', '$')}
+                {invoiceType === 'pause'
+                  ? item?.is_sent_for_pause
+                    ? 'Yes'
+                    : 'No'
+                  : generateAmount(item?.old_budget, 'from', '$')}
               </div>
             </div>
             <div className="col-2 text-center">
-              {invoiceType === 'standard' || invoiceType === 'additional' ? (
+              {invoiceType === 'standard' ||
+              invoiceType === 'permanent additional' ? (
                 !index ? (
                   <div className="normal-text">
                     <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
@@ -247,7 +273,11 @@ export default function DSPBudgetApprovalContainer() {
             </div>
             <div className="col-3 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
-                {generateAmount(item?.to, 'from', '$')}
+                {invoiceType === 'pause'
+                  ? item?.is_sent_for_pause
+                    ? '$0'
+                    : generateAmount(item?.new_budget, 'from', '$')
+                  : generateAmount(item?.new_budget, 'from', '$')}
               </div>
             </div>
           </div>
@@ -267,15 +297,17 @@ export default function DSPBudgetApprovalContainer() {
             </div>
           </div>
           <div className="col-2 text-left">
-            {invoiceType === 'standard' || invoiceType === 'additional' ? (
+            {invoiceType === 'standard' ||
+            invoiceType === 'permanent additional' ? (
               <div className="normal-text text-bold">
-                {generateAmount(5000, '', '$')}
+                {generateAmount(total?.old_budget, '', '$')}
               </div>
             ) : null}
           </div>
 
           <div className="col-2 text-center">
-            {invoiceType === 'standard' || invoiceType === 'additional' ? (
+            {invoiceType === 'standard' ||
+            invoiceType === 'permanent additional' ? (
               <div className="normal-text">
                 <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
               </div>
@@ -284,7 +316,7 @@ export default function DSPBudgetApprovalContainer() {
 
           <div className="col-3 text-left">
             <div className="normal-text text-bold">
-              {generateAmount(5000, '', '$')}
+              {generateAmount(total?.new_budget, '', '$')}
             </div>
           </div>
         </div>
@@ -298,43 +330,55 @@ export default function DSPBudgetApprovalContainer() {
         <div className="white-card-base panel pb-4">
           {renderHeaderMessage()}
           {renderHeading()}
-          <p className="normal-text text-medium mb-2">
-            {InvoiceCurrentMonthHeader[invoiceType]}
-          </p>
-          <h5 className="sub-title-text mt-2">
-            {generateAmount(10000, '', '$')}
-          </h5>
-          {invoiceType !== 'oneTime' ? (
+          {invoiceType !== 'one time' ? (
             <>
-              <div className="straight-line horizontal-line mt-3" />
               <p className="normal-text text-medium mb-2">
-                {InvoiceNewMonthHeader[invoiceType]}
-                {invoiceType === 'pause' ? 'December' : null}
+                {InvoiceCurrentMonthHeader[invoiceType]}
               </p>
               <h5 className="sub-title-text mt-2">
-                {generateAmount(15000, '', '$')}
-              </h5>{' '}
+                {generateAmount(total?.old_budget, '', '$')}
+              </h5>
             </>
           ) : null}
-
+          <div className="straight-line horizontal-line mt-3" />
+          <p className="normal-text text-medium mb-2">
+            {InvoiceNewMonthHeader[invoiceType]}
+            {invoiceType === 'pause'
+              ? dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')
+              : null}
+          </p>
+          <h5 className="sub-title-text mt-2">
+            {generateAmount(total?.new_budget, '', '$')}
+          </h5>{' '}
           <fieldset className="shape-without-border mt-3 p-2">
             <div className="row">{renderTableHeaders()}</div>
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {renderTableData()}
             {renderTotalInvoiceSection()}
           </fieldset>
-
           <p className="normal-text">
             {InvoiceInfo[invoiceType]?.mainHeading}
             <span className="text-bold">
-              {InvoiceInfo[invoiceType]?.boldHeading}
+              {InvoiceInfo[invoiceType]?.boldHeading
+                .replace(
+                  'APPLICABLE_MONTH',
+                  dayjs(new Date(marketplaceData?.applicable_from)).format(
+                    'MMMM',
+                  ),
+                )
+                .replace(
+                  'APPLICABLE_DATE',
+                  new Date(marketplaceData?.applicable_from).getDate(),
+                )}
             </span>
             {InvoiceInfo[invoiceType]?.mainHeading2}
           </p>
           {invoiceType === 'pause' ? (
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
           ) : null}
-          {invoiceType === 'additional' ? renderAdditionalDSPInvoice() : null}
+          {invoiceType === 'permanent additional'
+            ? renderAdditionalDSPInvoice()
+            : null}
           {renderInvoiceApproveReject()}
         </div>
       </OnBoardingBody>

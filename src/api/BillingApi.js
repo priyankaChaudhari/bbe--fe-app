@@ -83,6 +83,30 @@ export async function getDSPBudgetAdjustData(invoiceType, customerId) {
   return result;
 }
 
+export async function getDSPBudgetAdjustDetail(dspAdjustmentID) {
+  const result = await axiosInstance
+    .get(`${API_DSP_BUDGET_ADJUSTMENT + dspAdjustmentID}/`)
+    .then((response) => {
+      return response?.data;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function updateDSPBudgetAdjustment(dspAdjustmentID, data) {
+  const result = await axiosInstance
+    .patch(`${API_DSP_BUDGET_ADJUSTMENT + dspAdjustmentID}/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function postDSPBudgetAdjustInvoiceData(
   invoiceData,
   appliedDate,
