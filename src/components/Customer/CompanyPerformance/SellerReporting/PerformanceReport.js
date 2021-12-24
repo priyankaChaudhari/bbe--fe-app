@@ -191,17 +191,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     }
 
     // filterout the dsp current total, previous total, and diffrence
-    if (response.daily_facts && response.daily_facts.current_sum) {
+    if (response?.daily_facts?.current_sum) {
       setSalesCurrentTotal(response.daily_facts.current_sum);
     } else {
       setSalesCurrentTotal({});
     }
-    if (response.daily_facts && response.daily_facts.previous_sum) {
+    if (response?.daily_facts?.previous_sum) {
       setSalesPreviousTotal(response.daily_facts.previous_sum);
     } else {
       setSalesPreviousTotal({});
     }
-    if (response.daily_facts && response.daily_facts.difference_data) {
+    if (response?.daily_facts?.difference_data) {
       setSalesDifference(response.daily_facts.difference_data);
     } else {
       setSalesDifference({});
@@ -221,11 +221,11 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
+        if (res?.status === 400) {
           setIsApiCall(false);
           setBbGraphLoader(false);
         }
-        if (res && res.status === 200 && res.data && res.data.bbep) {
+        if (res?.status === 200 && res.data?.bbep) {
           const avg =
             res.data.bbep
               .filter((record) => record.bbep)
@@ -239,7 +239,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
               avg: avg.toFixed(2),
             };
           });
-          const total = tempBBData && tempBBData.length ? tempBBData.length : 0;
+          const total = tempBBData?.length ? tempBBData.length : 0;
           for (let i = 0; i <= Math.floor((total * 10) / 100); i += 1) {
             tempBBData.push({ avg: avg.toFixed(2) });
           }
@@ -270,24 +270,24 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
+        if (res?.status === 400) {
           setIsApiCall(false);
           setSalesGraphLoader(false);
         }
-        if (res && res.status === 200) {
-          if (res.data && res.data.daily_facts) {
+        if (res?.status === 200) {
+          if (res.data?.daily_facts) {
             const salesGraphData = bindSalesResponseData(res.data);
             setSalesChartData(salesGraphData);
 
             // brekdown tooltip values
-            if (res.data.daily_facts && res.data.daily_facts.inorganic_sale) {
+            if (res.data.daily_facts?.inorganic_sale) {
               setInorganicSale(res.data.daily_facts.inorganic_sale);
             }
 
-            if (res.data.daily_facts && res.data.daily_facts.organic_sale) {
+            if (res.data.daily_facts?.organic_sale) {
               setOrganicSale(res.data.daily_facts.organic_sale);
             }
-            if (res.data.pf_oi_is && res.data.pf_oi_is.length) {
+            if (res.data.pf_oi_is?.length) {
               const lastUpdated = res.data.pf_oi_is[0].latest_date;
               res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
                 'MMM DD YYYY',
@@ -339,7 +339,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
 
   useEffect(() => {
     const list = [];
-    if (marketplaceChoices && marketplaceChoices.length > 0)
+    if (marketplaceChoices?.length > 0)
       for (const option of marketplaceChoices) {
         list.push({
           value: option.name,
@@ -630,11 +630,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
                     marketplaceDefaultValue && marketplaceDefaultValue[0]
                   }
                   onChange={(event) => handleAmazonOptions(event)}
-                  placeholder={
-                    marketplaceDefaultValue &&
-                    marketplaceDefaultValue[0] &&
-                    marketplaceDefaultValue[0].label
-                  }
+                  placeholder={marketplaceDefaultValue?.[0]?.label}
                   theme={(theme) => ({
                     ...theme,
                     colors: {
@@ -657,19 +653,23 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         <WhiteCard className="fix-height">
           <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
           <div className="seller-health positive">
-            {dspData && dspData.feedback_30
-              ? `${dspData && dspData.feedback_30}%`
+            {dspData?.feedback_30
+              ? dspData.feedback_30 === 'nan'
+                ? 'N/A'
+                : `${dspData?.feedback_30}%`
               : 'N/A'}
           </div>
           <div className="seller-update mb-3">Last 30 days</div>
           <div className="seller-health positive ">
-            {dspData && dspData.feedback_365
-              ? `${dspData && dspData.feedback_365}%`
+            {dspData?.feedback_365
+              ? dspData.feedback_365 === 'nan'
+                ? 'N/A'
+                : `${dspData?.feedback_365}%`
               : 'N/A'}
           </div>
           <div className="seller-update mb-5">Last 12 months</div>
           <div className="last-update ">
-            Last updated: {dspData && dspData.latest_date}
+            Last updated: {dspData?.latest_date}
           </div>
         </WhiteCard>
       </div>
@@ -683,17 +683,23 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           {' '}
           <p className="black-heading-title mt-0 mb-4">Order Issues</p>
           <div className="seller-health">
-            {dspData && dspData.order_defect_fba
-              ? `${dspData && dspData.order_defect_fba}%`
+            {dspData?.order_defect_fba
+              ? dspData.order_defect_fba === 'nan'
+                ? 'N/A'
+                : `${dspData.order_defect_fba}%`
               : 'N/A'}
           </div>
           <div className="seller-update mb-3">Order Defect Rate</div>
           <div className="seller-health  ">
-            {dspData && dspData.policy_issues ? dspData.policy_issues : 'N/A'}
+            {dspData?.policy_issues
+              ? dspData.policy_issues === 'nan'
+                ? 'N/A'
+                : dspData.policy_issues
+              : 'N/A'}
           </div>
           <div className="seller-update mb-5">Policy Violations</div>
           <div className="last-update ">
-            Last updated: {dspData && dspData.latest_date}
+            Last updated: {dspData?.latest_date}
           </div>
         </WhiteCard>
       </div>
@@ -711,13 +717,13 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
             dspData={dspData}
           />
           <div className="average">
-            {pieData && pieData.length && !Number.isNaN(pieData[0].value)
+            {pieData?.length && !Number.isNaN(pieData[0].value)
               ? pieData[0].value
               : 'N/A'}
             <div className="out-off">Out of 1000</div>
           </div>
           <div className="last-update mt-3 ">
-            Last updated: {dspData && dspData.latest_date}
+            Last updated: {dspData?.latest_date}
           </div>
         </WhiteCard>
       </div>
