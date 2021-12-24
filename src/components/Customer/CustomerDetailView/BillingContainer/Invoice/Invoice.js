@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { func, string } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import MetricsInvoices from './MetricsInvoices';
@@ -8,7 +8,7 @@ import InvoiceList from './InvoiceList';
 import { PageLoader } from '../../../../../common';
 import { getMetricsInvoiceData } from '../../../../../api';
 
-const Invoice = ({ id, invoiceType, onLoading }) => {
+const Invoice = ({ id, invoiceType, onLoading, memberData }) => {
   const [loader, setLoader] = useState(false);
   const [invoiceMetricsData, setMetricsData] = useState(null);
   const getDSPMetricsData = useCallback(
@@ -64,7 +64,12 @@ const Invoice = ({ id, invoiceType, onLoading }) => {
       ) : (
         <>
           <MetricsInvoices data={invoiceMetricsData} />
-          <InvoiceList invoiceType={invoiceType} loader={loader} id={id} />
+          <InvoiceList
+            invoiceType={invoiceType}
+            loader={loader}
+            id={id}
+            memberData={memberData}
+          />
         </>
       )}
     </div>
@@ -75,11 +80,13 @@ export default Invoice;
 
 Invoice.defaultProps = {
   invoiceType: 'rev share',
+  memberData: [],
   onLoading: () => {},
 };
 
 Invoice.propTypes = {
   id: string.isRequired,
   invoiceType: string,
+  memberData: arrayOf(shape({})),
   onLoading: func,
 };

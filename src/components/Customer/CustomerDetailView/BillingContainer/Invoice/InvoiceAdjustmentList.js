@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
-import { func, string } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import { getInvoiceAdjustmentData } from '../../../../../api';
@@ -18,7 +18,11 @@ import {
   TableMobileView,
 } from '../../../../../common';
 
-const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
+const InvoiceAdjustmentList = ({
+  id,
+  addThousandComma,
+  isAllowToCreateAdjustment,
+}) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const mounted = useRef(true);
 
@@ -106,7 +110,7 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
         <td width="20%" className="small-label-text">
           ${addThousandComma(item.from_amount, 0)}
           <div className="marketplace">
-            {dayjs(item.applicable_from).format('MM/DD/YY')}
+            {dayjs(item.applicable_from).format('DD/MM/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
@@ -114,12 +118,13 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
           <div className="marketplace">
             {item?.dsp_invoice_subtype !== 'one time'
               ? 'Ongoing'
-              : dayjs(item.to_date).format('MM/DD/YY')}
+              : dayjs(item.to_date).format('DD/MM/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
           <Status
             label={status}
+            labelColor={status === 'rejected' ? '#d60000' : '#000000'}
             backgroundColor={
               StatusColorSet[status].toLowerCase()
                 ? StatusColorSet[status].toLowerCase()
@@ -135,7 +140,9 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
               setAdjustmentDetails(item);
               setShowViewAndReminderModal(true);
             }}>
-            View
+            {status === 'pending' && isAllowToCreateAdjustment
+              ? 'Send Reminder'
+              : 'View'}
           </p>
         </td>
       </tr>
@@ -205,6 +212,9 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
                   invoiceId={null}
                   marketplaces={item?.marketplaces}
                   status={status}
+                  statusLabelColor={
+                    status === 'rejected' ? '#d60000' : '#000000'
+                  }
                   statusColor={
                     StatusColorSet[status].toLowerCase()
                       ? StatusColorSet[status].toLowerCase()
@@ -212,12 +222,14 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
                   }
                   label="From"
                   labelInfo={`$${addThousandComma(item.from_amount, 0)}`}
-                  sublabel="01/02/21"
                   label1="To"
                   labelInfo1={`$${addThousandComma(item.to_amount, 0)}`}
-                  sublabel1="Ongoing"
                   label2="Status"
-                  labelInfo2="View"
+                  labelInfo2={
+                    status === 'pending' && isAllowToCreateAdjustment
+                      ? 'Send Reminder'
+                      : 'View'
+                  }
                   isColumnOnClick
                   onColumnClick={() => {
                     setAdjustmentDetails(item);
@@ -242,14 +254,15 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
         <InvoiceViewAndReminderModal
           id="BT-viewAndReminderInvoiceModal"
           isOpen={showViewAndReminderModal}
+          adjustmentDetails={adjustmentDetails}
+          customerId={id}
+          isAllowToCreateAdjustment={isAllowToCreateAdjustment}
           onClick={() => {
             setShowViewAndReminderModal(false);
           }}
           onApply={() => {
             setShowViewAndReminderModal(false);
           }}
-          adjustmentDetails={adjustmentDetails}
-          customerId={id}
         />
       ) : null}
     </Wrapper>
@@ -260,11 +273,13 @@ export default InvoiceAdjustmentList;
 
 InvoiceAdjustmentList.defaultProps = {
   id: '',
+  isAllowToCreateAdjustment: false,
   addThousandComma: () => {},
 };
 
 InvoiceAdjustmentList.propTypes = {
   id: string,
+  isAllowToCreateAdjustment: bool,
   addThousandComma: func,
 };
 

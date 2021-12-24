@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { func, string } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import InvoiceAdjustmentList from './InvoiceAdjustmentList';
@@ -11,14 +12,34 @@ import {
   InvoicePastAdjustmentModal,
 } from './InvoiceAdjustmentModals';
 
-const InvoiceAdjustmentsContainer = ({ id, addThousandComma }) => {
+const InvoiceAdjustmentsContainer = ({ id, addThousandComma, memberData }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
+  const userInfo = useSelector((state) => state.userState.userInfo);
   const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
     false,
   );
   const [showAllPastInvoicesModal, setShowAllPastInvoicesModal] = useState(
     false,
   );
+  const [isAllowToCreateAdjustment, setIsAllowToCreateAdjustment] = useState(
+    false,
+  );
+
+  useEffect(() => {
+    if (
+      userInfo.role === 'Ad Manager Admin' ||
+      userInfo.role === 'BGS Manager' ||
+      userInfo.role === 'DSP Ad Manager' ||
+      userInfo.role === 'BGS'
+    ) {
+      for (const user of memberData) {
+        if (user.user === userInfo.id) {
+          setIsAllowToCreateAdjustment(true);
+          break;
+        }
+      }
+    }
+  }, [setIsAllowToCreateAdjustment, memberData, userInfo]);
 
   return (
     <Wrapper>
@@ -32,17 +53,23 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma }) => {
                 Invoice Adjustments
               </p>
             </div>
-            <div className="col-7  text-right">
-              <Button
-                onClick={() => setShowInvoiceAdjustmentModal(true)}
-                type="button"
-                className="btn-primary invoice-adjustment">
-                Create Adjustment
-              </Button>
-            </div>
+            {isAllowToCreateAdjustment ? (
+              <div className="col-7  text-right">
+                <Button
+                  onClick={() => setShowInvoiceAdjustmentModal(true)}
+                  type="button"
+                  className="btn-primary invoice-adjustment">
+                  Create Adjustment
+                </Button>
+              </div>
+            ) : null}
           </div>
 
-          <InvoiceAdjustmentList id={id} addThousandComma={addThousandComma} />
+          <InvoiceAdjustmentList
+            id={id}
+            addThousandComma={addThousandComma}
+            isAllowToCreateAdjustment={isAllowToCreateAdjustment}
+          />
           <div className="straight-line horizontal-line spacing " />
           <p
             className="orange-text-label cursor mb-1"
@@ -118,11 +145,13 @@ export default InvoiceAdjustmentsContainer;
 
 InvoiceAdjustmentsContainer.defaultProps = {
   id: '',
+  memberData: [],
   addThousandComma: () => {},
 };
 
 InvoiceAdjustmentsContainer.propTypes = {
   id: string,
+  memberData: arrayOf(shape({})),
   addThousandComma: func,
 };
 

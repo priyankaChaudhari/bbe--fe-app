@@ -4,12 +4,13 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
-import { bool, string } from 'prop-types';
+import { arrayOf, bool, shape, string } from 'prop-types';
 
 import InvoiceAdjustmentsContainer from './InvoiceAdjustmentsContainer';
 import Theme from '../../../../../theme/Theme';
-import { StatusColorSet } from '../../../../../constants';
+import { BellNotification } from '../../../../../theme/images';
 import { getInvoiceData, getUpcomingInvoiceData } from '../../../../../api';
+import { StatusColorSet, InvoiceTypeNames } from '../../../../../constants';
 import {
   PageLoader,
   Status,
@@ -19,9 +20,8 @@ import {
   NoData,
   TableMobileView,
 } from '../../../../../common';
-import { BellNotification } from '../../../../../theme/images';
 
-const InvoiceList = ({ loader, invoiceType, id }) => {
+const InvoiceList = ({ loader, invoiceType, id, memberData }) => {
   const isDSPService = invoiceType === 'dsp service';
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [selectedComponent, setSelectedComponent] = useState('past');
@@ -165,9 +165,9 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
           label="Amount"
           labelInfo={`$${addThousandComma(item?.monthly_budget, 0)}`}
           label1="Created on"
-          labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
+          labelInfo1={dayjs(item.generated_at).format('DD/MM/YY')}
           label2="Due"
-          labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
+          labelInfo2={dayjs(item.due_date).format('DD/MM/YY')}
         />
       );
     });
@@ -199,12 +199,12 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
           label1="Created on"
           labelInfo1={
             item?.created !== null
-              ? dayjs(item?.created).format('MM/DD/YY')
+              ? dayjs(item?.created).format('DD/MM/YY')
               : 'N/A'
           }
           label2="Due"
           labelInfo2={
-            item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'
+            item?.due !== null ? dayjs(item?.due).format('DD/MM/YY') : 'N/A'
           }
           isShowBellIcon={item?.budget_approved === null}
         />
@@ -272,7 +272,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
           Amount
         </th>
         <th width="17%" className="product-header">
-          Created On
+          {isDSPService ? 'Created' : 'Created On'}
         </th>
         <th width="15%" className="product-header">
           Due
@@ -284,14 +284,19 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
     );
   };
 
-  const renderTableData = (item) => {
+  const renderPastInvoiceTableData = (item) => {
+    const pastInvoicetype = item?.description?.budget_type;
     return (
       <>
         <tr key={item.id}>
           <td className="product-body">
             <div className="company-name">
               {isDSPService
-                ? `${item?.description?.budget_type} (${item?.month})`
+                ? `${
+                    pastInvoicetype !== null
+                      ? InvoiceTypeNames[pastInvoicetype]
+                      : ''
+                  } ${item?.month !== null ? `(${item?.month})` : ''}`
                 : item.invoice_type}
             </div>
             <div className="status">
@@ -307,10 +312,10 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
             </div>
           </td>
           <td className="product-table-body light-font">
-            {dayjs(item.generated_at).format('MM/DD/YY')}
+            {dayjs(item.generated_at).format('DD/MM/YY')}
           </td>
           <td className="product-table-body light-font ">
-            {dayjs(item.due_date).format('MM/DD/YY')}
+            {dayjs(item.due_date).format('DD/MM/YY')}
           </td>
           <td className="product-table-body text-right">
             <Status
@@ -336,7 +341,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
         <tr key={item.id}>
           <td className="product-body">
             <div className="company-name">
-              {item?.dsp_invoice_subtype} {item?.applicable_from}
+              {item?.dsp_invoice_subtype} ({item?.applicable_from})
             </div>
             <div className="status">{item?.marketplaces}</div>
           </td>
@@ -356,11 +361,11 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
           </td>
           <td className="product-table-body light-font">
             {item?.created !== null
-              ? dayjs(item?.created).format('MM/DD/YY')
+              ? dayjs(item?.created).format('DD/MM/YY')
               : 'N/A'}
           </td>
           <td className="product-table-body light-font ">
-            {item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'}
+            {item?.due !== null ? dayjs(item?.due).format('DD/MM/YY') : 'N/A'}
           </td>
           <td className="product-table-body text-right">
             <Status
@@ -414,7 +419,9 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
                   <thead>{renderTableHeader()}</thead>
                   {invoicesData && invoicesData.length >= 1 ? (
                     <tbody>
-                      {invoicesData.map((item) => renderTableData(item))}
+                      {invoicesData.map((item) =>
+                        renderPastInvoiceTableData(item),
+                      )}
                     </tbody>
                   ) : null}
                 </Table>
@@ -470,6 +477,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
         <InvoiceAdjustmentsContainer
           id={id}
           addThousandComma={addThousandComma}
+          memberData={memberData}
         />
       ) : null}
     </Wrapper>
@@ -481,12 +489,14 @@ export default InvoiceList;
 InvoiceList.defaultProps = {
   invoiceType: 'rev share',
   id: '',
+  memberData: [],
 };
 
 InvoiceList.propTypes = {
   loader: bool.isRequired,
   invoiceType: string,
   id: string,
+  memberData: arrayOf(shape({})),
 };
 
 const Wrapper = styled.div`
