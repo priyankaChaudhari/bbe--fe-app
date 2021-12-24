@@ -9,7 +9,7 @@ import { bool, string } from 'prop-types';
 import InvoiceAdjustmentsContainer from './InvoiceAdjustmentsContainer';
 import Theme from '../../../../../theme/Theme';
 import { StatusColorSet } from '../../../../../constants';
-import { getInvoiceData } from '../../../../../api';
+import { getInvoiceData, getUpcomingInvoiceData } from '../../../../../api';
 import {
   PageLoader,
   Status,
@@ -34,6 +34,33 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
     (type) => {
       setPastInvoiceLoader(true);
       getInvoiceData(type, id).then((res) => {
+        if (mounted.current) {
+          if (res && res.status === 500) {
+            setPastInvoiceLoader(false);
+            setInvoicesData(null);
+          }
+
+          if (res && res.status === 400) {
+            setPastInvoiceLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.results) {
+              setInvoicesData(res.data.results);
+            } else {
+              setInvoicesData(null);
+            }
+            setPastInvoiceLoader(false);
+          }
+        }
+      });
+    },
+    [id],
+  );
+
+  const getDSPUpcomingInvoicesData = useCallback(
+    (type) => {
+      setPastInvoiceLoader(true);
+      getUpcomingInvoiceData(type, id).then((res) => {
         if (mounted.current) {
           if (res && res.status === 500) {
             setPastInvoiceLoader(false);
@@ -83,7 +110,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
     return (
       <>
         {isDSPService ? (
-          <Tabs className="mb-3">
+          <Tabs className={pastInvoiceLoader ? 'disabled mb-3' : 'mb-3'}>
             <ul className="tabs">
               <li
                 className={selectedComponent === 'past' ? 'active' : ''}
@@ -97,7 +124,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
               <li
                 className={selectedComponent === 'upcoming' ? 'active' : ''}
                 onClick={() => {
-                  getDSPInvoicesData(invoiceType);
+                  getDSPUpcomingInvoicesData();
                   setSelectedComponent('upcoming');
                 }}
                 role="presentation">
@@ -112,7 +139,82 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
     );
   };
 
-  const renderMobileDSPInvoices = () => {
+  const renderMobilePastInvoice = () => {
+    return invoicesData.map((item) => {
+      return (
+        <TableMobileView
+          key={item?.id}
+          className="mb-3"
+          invoiceType={
+            isDSPService
+              ? `${item?.description?.budget_type} (${item?.month})`
+              : item?.invoice_type
+          }
+          invoiceId={item?.next_invoiced_id}
+          marketplaces={
+            isDSPService && item?.description?.marketplaces
+              ? ` | ${item?.description?.marketplaces}`
+              : null
+          }
+          status={item.invoice_status}
+          statusColor={
+            StatusColorSet[item?.invoice_status.split(' ')[0].toLowerCase()]
+              ? StatusColorSet[item?.invoice_status.split(' ')[0].toLowerCase()]
+              : '#E3F2D2'
+          }
+          label="Amount"
+          labelInfo={addThousandComma(item?.monthly_budget, 0)}
+          label1="Created on"
+          labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
+          label2="Due"
+          labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
+        />
+      );
+    });
+  };
+
+  const renderMobileUpcomingInvoice = () => {
+    invoicesData.map((item) => {
+      return (
+        <TableMobileView
+          key={item?.id}
+          className="mb-3"
+          invoiceType={
+            isDSPService
+              ? `${item?.dsp_invoice_subtype} (${item?.applicable_from})`
+              : null
+          }
+          invoiceId={null}
+          marketplaces={
+            isDSPService && item?.marketplaces
+              ? ` | ${item?.marketplaces}`
+              : null
+          }
+          status={item?.status}
+          statusColor={
+            StatusColorSet[item?.status.split(' ')[0].toLowerCase()]
+              ? StatusColorSet[item?.status.split(' ')[0].toLowerCase()]
+              : '#E3F2D2'
+          }
+          label="Amount"
+          labelInfo={addThousandComma(item?.amount, 0)}
+          label1="Created on"
+          labelInfo1={
+            item?.created !== null
+              ? dayjs(item?.created).format('MM/DD/YY')
+              : 'N/A'
+          }
+          label2="Due"
+          labelInfo2={
+            item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'
+          }
+          isShowBellIcon={item?.budget_approved === null}
+        />
+      );
+    });
+  };
+
+  const renderMobileView = () => {
     return (
       <>
         <WhiteCard className="mb-3">
@@ -140,40 +242,11 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
             height={40}
           />
         ) : invoicesData && invoicesData.length >= 1 ? (
-          invoicesData.map((item) => {
-            return (
-              <TableMobileView
-                key={item?.id}
-                className="mb-3"
-                invoiceType={
-                  isDSPService
-                    ? `${item?.description?.budget_type} (${item?.month})`
-                    : item?.invoice_type
-                }
-                invoiceId={item?.next_invoiced_id}
-                marketplaces={
-                  isDSPService ? ` | ${item?.description?.marketplaces}` : null
-                }
-                status={item.invoice_status}
-                statusColor={
-                  StatusColorSet[
-                    item?.invoice_status.split(' ')[0].toLowerCase()
-                  ]
-                    ? StatusColorSet[
-                        item?.invoice_status.split(' ')[0].toLowerCase()
-                      ]
-                    : '#E3F2D2'
-                }
-                label="Amount"
-                labelInfo={addThousandComma(item?.monthly_budget, 0)}
-                label1="Created on"
-                labelInfo1={dayjs(item.generated_at).format('MM/DD/YYYY')}
-                label2="Due"
-                labelInfo2={dayjs(item.due_date).format('MM/DD/YYYY')}
-                isShowBellIcon={isDSPService}
-              />
-            );
-          })
+          selectedComponent === 'past' ? (
+            renderMobilePastInvoice()
+          ) : (
+            renderMobileUpcomingInvoice()
+          )
         ) : (
           <NoData>
             No{' '}
@@ -225,28 +298,21 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
             </div>
             <div className="status">
               #{item.next_invoiced_id}{' '}
-              {isDSPService ? `| ${item?.description?.marketplaces}` : null}
+              {isDSPService && item?.description?.marketplaces
+                ? `| ${item?.description?.marketplaces}`
+                : null}
             </div>
           </td>
           <td className="product-table-body text-medium pl-2">
             <div className="notification-bell pl-2">
               ${addThousandComma(item.monthly_budget, 0)}
-              {isDSPService ? (
-                <img
-                  className="notification-bell-icon"
-                  src={BellNotification}
-                  alt="bell"
-                  data-tip="Pending BP Sign-off"
-                  data-for="Pending-BP-Sign-off"
-                />
-              ) : null}
             </div>
           </td>
           <td className="product-table-body light-font">
-            {dayjs(item.generated_at).format('MM/DD/YYYY')}
+            {dayjs(item.generated_at).format('MM/DD/YY')}
           </td>
           <td className="product-table-body light-font ">
-            {dayjs(item.due_date).format('MM/DD/YYYY')}
+            {dayjs(item.due_date).format('MM/DD/YY')}
           </td>
           <td className="product-table-body text-right">
             <Status
@@ -272,7 +338,61 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
     );
   };
 
-  const renderDesktopDSPInvoices = () => {
+  const renderUpcomingInvoiceTableData = (item) => {
+    return (
+      <>
+        <tr key={item.id}>
+          <td className="product-body">
+            <div className="company-name">
+              {item?.dsp_invoice_subtype} {item?.applicable_from}
+            </div>
+            <div className="status">{item?.marketplaces}</div>
+          </td>
+          <td className="product-table-body text-medium pl-2">
+            <div className="notification-bell pl-2">
+              ${addThousandComma(item.amount, 0)}
+              {item?.budget_approved === null ? (
+                <img
+                  className="notification-bell-icon"
+                  src={BellNotification}
+                  alt="bell"
+                  data-tip="Pending BP Sign-off"
+                  data-for="Pending-BP-Sign-off"
+                />
+              ) : null}
+            </div>
+          </td>
+          <td className="product-table-body light-font">
+            {item?.created !== null
+              ? dayjs(item?.created).format('MM/DD/YY')
+              : 'N/A'}
+          </td>
+          <td className="product-table-body light-font ">
+            {item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'}
+          </td>
+          <td className="product-table-body text-right">
+            <Status
+              className="float-right"
+              label={item?.status}
+              backgroundColor={
+                StatusColorSet[item?.status.split(' ')[0].toLowerCase()]
+                  ? StatusColorSet[item?.status.split(' ')[0].toLowerCase()]
+                  : '#E3F2D2'
+              }
+            />
+          </td>
+        </tr>
+        <ReactTooltip
+          id="Pending-BP-Sign-off"
+          aria-haspopup="true"
+          place="bottom"
+          effect="solid"
+        />
+      </>
+    );
+  };
+
+  const renderDesktopView = () => {
     return (
       <>
         <WhiteCard className="mb-3">
@@ -297,14 +417,28 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
             />
           ) : (
             <>
-              <Table className="mt-0">
-                <thead>{renderTableHeader()}</thead>
-                {invoicesData && invoicesData.length >= 1 ? (
-                  <tbody>
-                    {invoicesData.map((item) => renderTableData(item))}
-                  </tbody>
-                ) : null}
-              </Table>
+              {selectedComponent === 'past' ? (
+                <Table className="mt-0">
+                  <thead>{renderTableHeader()}</thead>
+                  {invoicesData && invoicesData.length >= 1 ? (
+                    <tbody>
+                      {invoicesData.map((item) => renderTableData(item))}
+                    </tbody>
+                  ) : null}
+                </Table>
+              ) : (
+                <Table className="mt-0">
+                  <thead>{renderTableHeader()}</thead>
+                  {invoicesData && invoicesData.length >= 1 ? (
+                    <tbody>
+                      {invoicesData.map((item) =>
+                        renderUpcomingInvoiceTableData(item),
+                      )}
+                    </tbody>
+                  ) : null}
+                </Table>
+              )}
+
               {!invoicesData || (invoicesData && invoicesData.length === 0) ? (
                 <NoData>
                   No{' '}
@@ -336,9 +470,9 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
           height={40}
         />
       ) : !isMobile ? (
-        renderDesktopDSPInvoices()
+        renderDesktopView()
       ) : (
-        renderMobileDSPInvoices()
+        renderMobileView()
       )}
       {isDSPService ? (
         <InvoiceAdjustmentsContainer

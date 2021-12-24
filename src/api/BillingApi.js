@@ -18,6 +18,22 @@ export async function getInvoiceData(invoiceType, id) {
   return result;
 }
 
+export async function getUpcomingInvoiceData(invoiceType, id) {
+  const params = {
+    customer: id,
+    adjustment_data: 'upcoming',
+  };
+  const result = await axiosInstance
+    .get(API_DSP_BUDGET_ADJUSTMENT, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function getMetricsInvoiceData(invoiceType, id) {
   const params = {
     customer: id,
