@@ -13,6 +13,7 @@ const TableMobileView = ({
   invoiceType,
   invoiceId,
   label,
+  statusLabelColor,
   labelInfo,
   label1,
   label2,
@@ -77,6 +78,7 @@ const TableMobileView = ({
               className="card-staus-right"
               label={status}
               backgroundColor={statusColor}
+              labelColor={statusLabelColor}
             />
             <div className="clear-fix" />
           </div>
@@ -210,6 +212,7 @@ TableMobileView.defaultProps = {
   className: '',
   CompanyName: '',
   label: '',
+  statusLabelColor: '',
   labelInfo: '',
   label1: '',
   labelInfo1: '',
@@ -243,6 +246,7 @@ TableMobileView.propTypes = {
   className: string,
   CompanyName: string,
   label: string,
+  statusLabelColor: string,
   labelInfo: string,
   label1: string,
   labelInfo1: string,

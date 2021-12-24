@@ -43,6 +43,7 @@ const InvoicePastAdjustmntModal = ({
   style,
   onClick,
   addThousandComma,
+  isAllowToCreateAdjustment,
 }) => {
   const mounted = useRef(true);
   const isMobile = useMediaQuery({ maxWidth: 767 });
@@ -141,7 +142,7 @@ const InvoicePastAdjustmntModal = ({
         <td width="20%" className="small-label-text">
           ${addThousandComma(item.from_amount, 0)}
           <div className="marketplace">
-            {dayjs(item.applicable_from).format('MM/DD/YY')}
+            {dayjs(item.applicable_from).format('DD/MM/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
@@ -149,12 +150,13 @@ const InvoicePastAdjustmntModal = ({
           <div className="marketplace">
             {item?.dsp_invoice_subtype !== 'one time'
               ? 'Ongoing'
-              : dayjs(item.to_date).format('MM/DD/YY')}
+              : dayjs(item.to_date).format('DD/MM/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
           <Status
             label={status}
+            labelColor={status === 'rejected' ? '#d60000' : '#000000'}
             backgroundColor={
               StatusColorSet[status].toLowerCase()
                 ? StatusColorSet[status].toLowerCase()
@@ -170,7 +172,9 @@ const InvoicePastAdjustmntModal = ({
               setAdjustmentDetails(item);
               setShowViewAndReminderModal(true);
             }}>
-            View
+            {status === 'pending' && isAllowToCreateAdjustment
+              ? 'Send Reminder'
+              : 'View'}
           </p>
         </td>
       </tr>
@@ -244,6 +248,9 @@ const InvoicePastAdjustmntModal = ({
                         <Status
                           className="float-right"
                           label={status}
+                          labelColor={
+                            status === 'rejected' ? '#d60000' : '#000000'
+                          }
                           backgroundColor={
                             StatusColorSet[status].toLowerCase()
                               ? StatusColorSet[status].toLowerCase()
@@ -259,7 +266,7 @@ const InvoicePastAdjustmntModal = ({
                           0,
                         )}`}</div>
                         <div className="marketplace">
-                          {dayjs(item.applicable_from).format('MM/DD/YY')}
+                          {dayjs(item.applicable_from).format('DD/MM/YY')}
                         </div>
                       </div>
                       <div className="col-4 mt-2">
@@ -271,7 +278,7 @@ const InvoicePastAdjustmntModal = ({
                         <div className="marketplace">
                           {item?.dsp_invoice_subtype !== 'one time'
                             ? 'Ongoing'
-                            : dayjs(item.to_date).format('MM/DD/YY')}
+                            : dayjs(item.to_date).format('DD/MM/YY')}
                         </div>
                       </div>
                       <div className="col-4 mt-2 cursor">
@@ -282,7 +289,9 @@ const InvoicePastAdjustmntModal = ({
                             setAdjustmentDetails(item);
                             setShowViewAndReminderModal(true);
                           }}>
-                          View
+                          {status === 'pending' && isAllowToCreateAdjustment
+                            ? 'Send Reminder'
+                            : 'View'}
                         </p>
                       </div>
                     </div>
@@ -352,6 +361,7 @@ export default InvoicePastAdjustmntModal;
 
 InvoicePastAdjustmntModal.defaultProps = {
   isOpen: false,
+  isAllowToCreateAdjustment: false,
   id: '',
   customerId: '',
   style: {},
@@ -361,6 +371,7 @@ InvoicePastAdjustmntModal.defaultProps = {
 
 InvoicePastAdjustmntModal.propTypes = {
   isOpen: bool,
+  isAllowToCreateAdjustment: bool,
   id: string,
   customerId: string,
   style: shape({}),

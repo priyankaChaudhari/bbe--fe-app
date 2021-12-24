@@ -119,6 +119,7 @@ export default function AdPerformance({
 
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
+
   useEffect(() => {
     if (userInfo.role === 'Ad Manager Admin') {
       setIsAllowToSplitBalance(true);
