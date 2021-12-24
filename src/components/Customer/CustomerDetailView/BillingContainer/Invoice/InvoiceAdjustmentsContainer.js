@@ -11,7 +11,7 @@ import {
   InvoicePastAdjustmentModal,
 } from './InvoiceAdjustmentModals';
 
-const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
+const InvoiceAdjustmentsContainer = ({ id, addThousandComma }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
     false,
@@ -42,11 +42,7 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
             </div>
           </div>
 
-          <InvoiceAdjustmentList
-            id={id}
-            invoiceType={invoiceType}
-            addThousandComma={addThousandComma}
-          />
+          <InvoiceAdjustmentList id={id} addThousandComma={addThousandComma} />
           <div className="straight-line horizontal-line spacing " />
           <p
             className="orange-text-label cursor mb-1"
@@ -75,11 +71,7 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
               </Button>
             </div>
           </div>
-          <InvoiceAdjustmentList
-            id={id}
-            invoiceType={invoiceType}
-            addThousandComma={addThousandComma}
-          />
+          <InvoiceAdjustmentList id={id} addThousandComma={addThousandComma} />
 
           <p
             className="orange-text-label text-center cursor mb-3"
@@ -124,13 +116,11 @@ const InvoiceAdjustmentsContainer = ({ id, invoiceType, addThousandComma }) => {
 export default InvoiceAdjustmentsContainer;
 
 InvoiceAdjustmentsContainer.defaultProps = {
-  invoiceType: 'dsp service',
   id: '',
   addThousandComma: () => {},
 };
 
 InvoiceAdjustmentsContainer.propTypes = {
-  invoiceType: string,
   id: string,
   addThousandComma: func,
 };
