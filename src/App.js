@@ -8,7 +8,6 @@ import WarningComponent from './common/WarningComponent';
 import UnauthorizedHeader from './common/UnauthorizedHeader';
 import AuthenticationComponent from './common/AuthenticationComponent';
 import MainContainer from './components/OnBoardingCustomer/MainContainer';
-import DSPBudgetApprovalContainer from './components/DspBudgetApproval/DSPBudgetApprovalContainer';
 import { ProdFavicon } from './theme/images';
 import { ProductDelegation } from './components/Customer';
 import { HelloSignComponent } from './components/Contract';
@@ -47,7 +46,6 @@ import {
   PATH_UNAUTHORIZED_BRAND_ASSET,
   PATH_UNAUTHROIZED_BRAND_ASSET_SUMMARY,
   PATH_UNAUTHORIZED_CHOOSE_PRODUCT_DELEGATE,
-  PATH_DSP_BUDGET_APPROVAL,
 } from './constants';
 
 export default function App() {
@@ -75,12 +73,6 @@ export default function App() {
         {/* Contract */}
         <Route path={PATH_HELLO_SIGN} component={HelloSignComponent} />
         <Route path={PATH_WARNING} component={WarningComponent} />
-
-        {/* DSP budget proposal to BP */}
-        <Route
-          path={PATH_DSP_BUDGET_APPROVAL}
-          component={DSPBudgetApprovalContainer}
-        />
 
         {/* Onboarding Customer */}
         <Route path={PATH_ACCOUNT_SETUP_CHOOSE} exact component={Info} />
