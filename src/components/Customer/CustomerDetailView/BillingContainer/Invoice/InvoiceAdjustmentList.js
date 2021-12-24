@@ -6,9 +6,9 @@ import { useMediaQuery } from 'react-responsive';
 import { func, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
-import { StatusColorSet } from '../../../../../constants';
 import { getInvoiceAdjustmentData } from '../../../../../api';
 import { InvoiceViewAndReminderModal } from './InvoiceAdjustmentModals';
+import { StatusColorSet, InvoiceTypeNames } from '../../../../../constants';
 
 import {
   PageLoader,
@@ -28,6 +28,7 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
   const [showViewAndReminderModal, setShowViewAndReminderModal] = useState(
     false,
   );
+  const [adjustmentDetails, setAdjustmentDetails] = useState();
 
   const getAdjustmentData = useCallback(() => {
     setInvoiceAdjustmentLoader(true);
@@ -97,7 +98,9 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
       <tr className="product-body" key={item.id}>
         <td width="30%" className="small-label-text">
           {' '}
-          <div className="type">{item?.dsp_invoice_subtype}</div>
+          <div className="type">
+            {InvoiceTypeNames[item?.dsp_invoice_subtype.toLowerCase()]}
+          </div>
           <div className="marketplace">{item?.marketplaces}</div>
         </td>
         <td width="20%" className="small-label-text">
@@ -109,7 +112,7 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
         <td width="20%" className="small-label-text">
           ${addThousandComma(item.to_amount, 0)}
           <div className="marketplace">
-            {item?.dsp_invoice_subtype !== 'One-time Additional'
+            {item?.dsp_invoice_subtype !== 'one time'
               ? 'Ongoing'
               : dayjs(item.to_date).format('MM/DD/YY')}
           </div>
@@ -128,7 +131,10 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
           <p
             className="orange-text-label cursor"
             role="presentation"
-            onClick={() => setShowViewAndReminderModal(true)}>
+            onClick={() => {
+              setAdjustmentDetails(item);
+              setShowViewAndReminderModal(true);
+            }}>
             View
           </p>
         </td>
@@ -193,7 +199,9 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
                 <TableMobileView
                   key={item.id}
                   className="mb-3"
-                  invoiceType={item?.dsp_invoice_subtype}
+                  invoiceType={
+                    InvoiceTypeNames[item?.dsp_invoice_subtype.toLowerCase()]
+                  }
                   invoiceId={null}
                   marketplaces={item?.marketplaces}
                   status={status}
@@ -211,7 +219,10 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
                   label2="Status"
                   labelInfo2="View"
                   isColumnOnClick
-                  onColumnClick={() => setShowViewAndReminderModal(true)}
+                  onColumnClick={() => {
+                    setAdjustmentDetails(item);
+                    setShowViewAndReminderModal(true);
+                  }}
                 />
               </>
             );
@@ -226,16 +237,21 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
   return (
     <Wrapper>
       {!isMobile ? renderDesktopView() : renderMobileView()}
-      <InvoiceViewAndReminderModal
-        id="BT-viewAndReminderInvoiceModal"
-        isOpen={showViewAndReminderModal}
-        onClick={() => {
-          setShowViewAndReminderModal(false);
-        }}
-        onApply={() => {
-          setShowViewAndReminderModal(false);
-        }}
-      />
+
+      {showViewAndReminderModal ? (
+        <InvoiceViewAndReminderModal
+          id="BT-viewAndReminderInvoiceModal"
+          isOpen={showViewAndReminderModal}
+          onClick={() => {
+            setShowViewAndReminderModal(false);
+          }}
+          onApply={() => {
+            setShowViewAndReminderModal(false);
+          }}
+          adjustmentDetails={adjustmentDetails}
+          customerId={id}
+        />
+      ) : null}
     </Wrapper>
   );
 };

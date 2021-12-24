@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 
 import Modal from 'react-modal';
+import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
 import { bool, func, shape, string } from 'prop-types';
 
-import { ModalBox, Button, Status } from '../../../../../../common';
+import { StatusColorSet } from '../../../../../../constants';
+import { sendReminderOfAdjustment } from '../../../../../../api';
+import { ModalBox, Button, Status, PageLoader } from '../../../../../../common';
 import {
   ArrowRightBlackIcon,
   ArrowRightIcon,
@@ -33,28 +36,38 @@ const InvoiceViewAndReminderModal = ({
   style,
   onClick,
   onApply,
+  adjustmentDetails,
+  customerId,
 }) => {
-  const marketplaceData = [
-    {
-      name: 'UK',
-      from: 1000,
-      to: 5000,
-      change: 4000,
-    },
-    {
-      name: 'Canada',
-      from: 10000,
-      to: 6000,
-      change: 4000,
-    },
-    {
-      name: 'US',
-      from: 10000,
-      to: 15000,
-      change: 5000,
-    },
-  ];
+  const mounted = useRef(true);
+  const previousMonth = new Date(adjustmentDetails?.applicable_from);
+  previousMonth.setMonth(previousMonth.getMonth() - 1);
+  const [reminderLoader, setReminderLoader] = useState(false);
+  const status =
+    adjustmentDetails?.budget_approved === null
+      ? 'pending'
+      : adjustmentDetails?.budget_approved
+      ? 'approved'
+      : 'rejected';
   const isMobile = useMediaQuery({ maxWidth: 767 });
+
+  const sendReminder = useCallback(() => {
+    setReminderLoader(true);
+    sendReminderOfAdjustment(customerId, adjustmentDetails.id).then((res) => {
+      if (mounted.current) {
+        if (res && res.status === 500) {
+          setReminderLoader(false);
+        }
+        if (res && res.status === 400) {
+          setReminderLoader(false);
+        }
+        if (res && res.status === 200) {
+          setReminderLoader(false);
+          onApply();
+        }
+      }
+    });
+  }, [customerId, onApply, adjustmentDetails.id]);
 
   const generateAmount = (value, valueFor, currencySymbol) => {
     if (value && value !== null && value !== 0) {
@@ -67,7 +80,7 @@ const InvoiceViewAndReminderModal = ({
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
     }
 
-    return valueFor === 'change' ? '-' : 0;
+    return valueFor === 'change' ? '-' : `${currencySymbol}0`;
   };
 
   const renderDesktopView = () => {
@@ -88,35 +101,54 @@ const InvoiceViewAndReminderModal = ({
           </div>
         </div>
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
-        {marketplaceData.map((item, index) => (
-          <div className={index ? 'row mt-1' : 'row'}>
-            <div className="col-4 text-left">
-              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                {item.name}
+        {adjustmentDetails?.adjustments &&
+        adjustmentDetails?.adjustments.length >= 1
+          ? adjustmentDetails?.adjustments.map((item, index) => (
+              <div key={item.id} className={index ? 'row mt-1' : 'row'}>
+                <div className="col-4 text-left">
+                  <div
+                    className={`normal-text ${
+                      item?.new_budget - item?.old_budget ? 'text-bold' : null
+                    } `}>
+                    {item.marketplace}
+                  </div>
+                </div>
+                <div className="col-2 text-left">
+                  <div
+                    className={`normal-text ${
+                      item?.new_budget - item?.old_budget ? 'text-bold' : null
+                    } `}>
+                    {generateAmount(item?.old_budget, 'from', '$')}
+                  </div>
+                </div>
+                <div className="col-1 text-left">
+                  <div className="normal-text">
+                    <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+                  </div>
+                </div>
+                <div className="col-2 text-left">
+                  <div
+                    className={`normal-text ${
+                      item?.new_budget - item?.old_budget ? 'text-bold' : null
+                    } `}>
+                    {generateAmount(item?.new_budget, 'to', '$')}
+                  </div>
+                </div>
+                <div className="col-3 text-left">
+                  <div
+                    className={`normal-text ${
+                      item?.new_budget - item?.old_budget ? 'text-bold' : null
+                    } `}>
+                    {generateAmount(
+                      item?.new_budget - item?.old_budget,
+                      'change',
+                      '$',
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="col-2 text-left">
-              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                {generateAmount(item?.from, 'from', '$')}
-              </div>
-            </div>
-            <div className="col-1 text-left">
-              <div className="normal-text">
-                <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
-              </div>
-            </div>
-            <div className="col-2 text-left">
-              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                {generateAmount(item?.to, 'to', '$')}
-              </div>
-            </div>
-            <div className="col-3 text-left">
-              <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                {generateAmount(item?.change, 'change', '$')}
-              </div>
-            </div>
-          </div>
-        ))}
+            ))
+          : null}
 
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         <div className="row">
@@ -124,7 +156,9 @@ const InvoiceViewAndReminderModal = ({
             <div className="normal-text text-bold">Total invoice</div>
           </div>
           <div className="col-2 text-left">
-            <div className="normal-text text-bold">$5,000</div>
+            <div className="normal-text text-bold">
+              {generateAmount(adjustmentDetails?.from_amount, '', '$')}
+            </div>
           </div>
           <div className="col-1 text-left">
             <div className="normal-text">
@@ -132,10 +166,18 @@ const InvoiceViewAndReminderModal = ({
             </div>
           </div>
           <div className="col-2 text-left">
-            <div className="normal-text text-bold">$10,000</div>
+            <div className="normal-text text-bold">
+              {generateAmount(adjustmentDetails?.to_amount, '', '$')}
+            </div>
           </div>
           <div className="col-3 text-left">
-            <div className="normal-text text-bold">+$5,000</div>
+            <div className="normal-text text-bold">
+              {generateAmount(
+                adjustmentDetails?.to_amount - adjustmentDetails?.from_amount,
+                'change',
+                '$',
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -145,20 +187,26 @@ const InvoiceViewAndReminderModal = ({
   const renderMobileView = () => {
     return (
       <div className="d-md-none d-block">
-        {marketplaceData.map((item, index) => (
+        {adjustmentDetails?.adjustments.map((item) => (
           <>
             <div className="row">
               <div className="col-12 text-left">
                 <div className="label">Marketplace</div>
-                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                  {item.name}
+                <div
+                  className={`normal-text ${
+                    item?.new_budget - item?.old_budget ? 'text-bold' : null
+                  } `}>
+                  {item.marketplaces}
                 </div>
               </div>
 
               <div className="col-4 text-left">
                 <div className="label">From</div>
-                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                  {generateAmount(item?.from, 'from', '$')}
+                <div
+                  className={`normal-text ${
+                    item?.new_budget - item?.old_budget ? 'text-bold' : null
+                  } `}>
+                  {generateAmount(item?.old_budget, 'from', '$')}
                 </div>
               </div>
               <div className="col-2 text-left">
@@ -168,14 +216,24 @@ const InvoiceViewAndReminderModal = ({
               </div>
               <div className="col-3 text-left">
                 <div className="label">To</div>
-                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                  {generateAmount(item?.to, 'to', '$')}
+                <div
+                  className={`normal-text ${
+                    item?.new_budget - item?.old_budget ? 'text-bold' : null
+                  } `}>
+                  {generateAmount(item?.new_budget, 'to', '$')}
                 </div>
               </div>
               <div className="col-3 text-left">
                 <div className="label">Change</div>
-                <div className={`normal-text ${!index ? 'text-bold' : null} `}>
-                  {generateAmount(item?.change, 'change', '$')}
+                <div
+                  className={`normal-text ${
+                    item?.new_budget - item?.old_budget ? 'text-bold' : null
+                  } `}>
+                  {generateAmount(
+                    item?.new_budget - item?.old_budget,
+                    'change',
+                    '$',
+                  )}
                 </div>
               </div>
             </div>
@@ -190,7 +248,10 @@ const InvoiceViewAndReminderModal = ({
 
           <div className="col-4 text-left">
             <div className="label">From</div>
-            <div className="normal-text text-bold">$5,000</div>
+            <div className="normal-text text-bold">
+              {' '}
+              {generateAmount(adjustmentDetails?.from_amount, '', '$')}
+            </div>
           </div>
           <div className="col-2 text-left">
             <div className="mt-3">
@@ -199,11 +260,20 @@ const InvoiceViewAndReminderModal = ({
           </div>
           <div className="col-3 text-left">
             <div className="label">To</div>
-            <div className="normal-text text-bold">$10,000</div>
+            <div className="normal-text text-bold">
+              {' '}
+              {generateAmount(adjustmentDetails?.to_amount, '', '$')}
+            </div>
           </div>
           <div className="col-3 text-left">
             <div className="label">Change</div>
-            <div className="normal-text text-bold">+$5,000</div>
+            <div className="normal-text text-bold">
+              {generateAmount(
+                adjustmentDetails?.to_amount - adjustmentDetails?.from_amount,
+                'change',
+                '$',
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -240,31 +310,62 @@ const InvoiceViewAndReminderModal = ({
                 Invoice Adjustment
               </h4>
               <div style={{ marginTop: '-7px ', marginLeft: '10px' }}>
-                <Status label="Pending" />
+                <Status
+                  label={status}
+                  backgroundColor={
+                    StatusColorSet[status].toLowerCase()
+                      ? StatusColorSet[status].toLowerCase()
+                      : '#E3F2D2'
+                  }
+                />
               </div>
             </div>
             <div className=" straight-line horizontal-line pt-3 mb-2 " />
             {isMobile ? renderMobileView() : renderDesktopView()}
 
             <div className=" straight-line horizontal-line mt-2 mb-2 " />
-            <p className="normal-text">
-              The new invoice amount will be available to spend from December
-              onwards.
-              <br /> The first bill for this amount will be sent November 13.
-            </p>
+            {status === 'rejected' ? (
+              <p className="normal-text">
+                Reason for rejection:{' '}
+                {adjustmentDetails?.rejection_note !== null
+                  ? adjustmentDetails.rejection_note
+                  : 'none provided'}
+              </p>
+            ) : (
+              <p className="normal-text">
+                The new invoice amount will be available to spend from{' '}
+                {dayjs(adjustmentDetails.applicable_from).format('MMMM')}{' '}
+                onwards.
+                <br /> The first bill for this amount willbe sent{' '}
+                {dayjs(previousMonth).format('MMMM')} 13.
+              </p>
+            )}
           </div>
-          <div className="footer-line" />
-          <div className="modal-footer">
-            <Button
-              onClick={() => {
-                onApply();
-              }}
-              type="button"
-              className="light-orange on-boarding   w-100">
-              <img src={ReminderBell} alt="bell" />
-              Send Reminder
-            </Button>
-          </div>
+          {status === 'pending' ? (
+            <>
+              <div className="footer-line" />
+              <div className="modal-footer">
+                <Button
+                  onClick={() => {
+                    sendReminder();
+                  }}
+                  type="button"
+                  className={
+                    reminderLoader
+                      ? 'light-orange on-boarding w-100 disabled'
+                      : 'light-orange on-boarding w-100'
+                  }>
+                  {reminderLoader ? (
+                    <PageLoader color="#FF5933" type="button" />
+                  ) : (
+                    <>
+                      <img src={ReminderBell} alt="bell" /> Send Reminder
+                    </>
+                  )}
+                </Button>
+              </div>
+            </>
+          ) : null}
         </ModalBox>
       </Modal>
     </>
@@ -276,7 +377,9 @@ export default InvoiceViewAndReminderModal;
 InvoiceViewAndReminderModal.defaultProps = {
   isOpen: false,
   id: '',
+  customerId: '',
   style: {},
+  adjustmentDetails: [],
   onClick: () => {},
   onApply: () => {},
 };
@@ -284,6 +387,8 @@ InvoiceViewAndReminderModal.defaultProps = {
 InvoiceViewAndReminderModal.propTypes = {
   isOpen: bool,
   id: string,
+  customerId: string,
+  adjustmentDetails: shape([]),
   style: shape({}),
   onClick: func,
   onApply: func,

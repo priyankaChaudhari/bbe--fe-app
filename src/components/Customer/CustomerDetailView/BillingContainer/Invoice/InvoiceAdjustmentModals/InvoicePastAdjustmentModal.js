@@ -9,8 +9,8 @@ import { bool, func, shape, string } from 'prop-types';
 import Theme from '../../../../../../theme/Theme';
 import InvoiceViewAndReminderModal from './InvoiceViewAndReminderModal';
 import { CloseIcon } from '../../../../../../theme/images';
-import { StatusColorSet } from '../../../../../../constants';
 import { getInvoiceAdjustmentData } from '../../../../../../api';
+import { StatusColorSet, InvoiceTypeNames } from '../../../../../../constants';
 import {
   HeaderDownloadFuntionality,
   ModalBox,
@@ -55,6 +55,7 @@ const InvoicePastAdjustmntModal = ({
   const [invoiceCount, setInvoiceCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
   const [isApicall, setIsApiCall] = useState(false);
+  const [adjustmentDetails, setAdjustmentDetails] = useState();
 
   const getAdjustmentData = useCallback(
     (currentPage) => {
@@ -64,7 +65,7 @@ const InvoicePastAdjustmntModal = ({
         if (mounted.current) {
           if (res && res.status === 500) {
             setInvoiceAdjustmentLoader(false);
-            setInvoicesAdjustmentData(null);
+            setInvoicesAdjustmentData([]);
           }
           if (res && res.status === 400) {
             setInvoiceAdjustmentLoader(false);
@@ -74,7 +75,7 @@ const InvoicePastAdjustmntModal = ({
               setInvoicesAdjustmentData(res.data.results);
               setInvoiceCount(res.data.count);
             } else {
-              setInvoicesAdjustmentData(null);
+              setInvoicesAdjustmentData([]);
             }
             setInvoiceAdjustmentLoader(false);
           }
@@ -132,7 +133,9 @@ const InvoicePastAdjustmntModal = ({
       <tr className="product-body" key={item.id}>
         <td width="30%" className="small-label-text">
           {' '}
-          <div className="type">{item?.dsp_invoice_subtype}</div>
+          <div className="type">
+            {InvoiceTypeNames[item?.dsp_invoice_subtype.toLowerCase()]}
+          </div>
           <div className="marketplace">{item?.marketplaces}</div>
         </td>
         <td width="20%" className="small-label-text">
@@ -144,7 +147,7 @@ const InvoicePastAdjustmntModal = ({
         <td width="20%" className="small-label-text">
           ${addThousandComma(item.to_amount, 0)}
           <div className="marketplace">
-            {item?.dsp_invoice_subtype !== 'One-time Additional'
+            {item?.dsp_invoice_subtype !== 'one time'
               ? 'Ongoing'
               : dayjs(item.to_date).format('MM/DD/YY')}
           </div>
@@ -159,11 +162,14 @@ const InvoicePastAdjustmntModal = ({
             }
           />
         </td>
-        <td width="10%" className="orange-text-label">
+        <td width="10%" className="orange-text-label cursor">
           <p
             className="orange-text-label"
             role="presentation"
-            onClick={() => setShowViewAndReminderModal(true)}>
+            onClick={() => {
+              setAdjustmentDetails(item);
+              setShowViewAndReminderModal(true);
+            }}>
             View
           </p>
         </td>
@@ -198,7 +204,7 @@ const InvoicePastAdjustmntModal = ({
             {invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
               invoicesAdjustmentData.map((item) => renderTableData(item))
             ) : (
-              <NoData>No Invoices Found</NoData>
+              <div>No Invoices Found</div>
             )}
           </tbody>
         </table>
@@ -224,7 +230,13 @@ const InvoicePastAdjustmntModal = ({
                     <div className="row mt-3" key={item.id}>
                       <div className="col-7">
                         <div className="label"> Type/Marketplace</div>
-                        <div className="type">{item?.dsp_invoice_subtype}</div>
+                        <div className="type">
+                          {
+                            InvoiceTypeNames[
+                              item?.dsp_invoice_subtype.toLowerCase()
+                            ]
+                          }
+                        </div>
                         <div className="marketplace">{item?.marketplaces}</div>
                       </div>
                       <div className="col-5 text-right">
@@ -257,7 +269,7 @@ const InvoicePastAdjustmntModal = ({
                           0,
                         )}`}</div>
                         <div className="marketplace">
-                          {item?.dsp_invoice_subtype !== 'One-time Additional'
+                          {item?.dsp_invoice_subtype !== 'one time'
                             ? 'Ongoing'
                             : dayjs(item.to_date).format('MM/DD/YY')}
                         </div>
@@ -266,7 +278,10 @@ const InvoicePastAdjustmntModal = ({
                         <p
                           className="orange-text-label mt-4"
                           role="presentation"
-                          onClick={() => setShowViewAndReminderModal(true)}>
+                          onClick={() => {
+                            setAdjustmentDetails(item);
+                            setShowViewAndReminderModal(true);
+                          }}>
                           View
                         </p>
                       </div>
@@ -324,6 +339,8 @@ const InvoicePastAdjustmntModal = ({
           onApply={() => {
             setShowViewAndReminderModal(false);
           }}
+          adjustmentDetails={adjustmentDetails}
+          customerId={id}
         />
       </ModalBox>
       <PastInvoices />
