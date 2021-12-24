@@ -499,6 +499,9 @@ const ModalBox = styled.div`
   }
   .modal-footer {
     padding: 10px 30px 20px 30px;
+    @media only screen and (max-width: 610px) {
+      padding: 10px 15px 20px 15px;
+    }
   }
   .footer-line {
     border-bottom: 1px solid ${Theme.gray5};
