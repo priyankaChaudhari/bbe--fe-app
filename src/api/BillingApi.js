@@ -34,10 +34,11 @@ export async function getUpcomingInvoiceData(id) {
   return result;
 }
 
-export async function getInvoiceAdjustmentData(id) {
+export async function getInvoiceAdjustmentData(id, page = 1) {
   const params = {
     customer: id,
     adjustment_data: 'past',
+    page,
   };
   const result = await axiosInstance
     .get(API_DSP_BUDGET_ADJUSTMENT, { params })

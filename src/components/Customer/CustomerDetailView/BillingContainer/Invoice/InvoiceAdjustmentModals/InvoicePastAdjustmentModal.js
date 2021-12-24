@@ -1,14 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 
 import Modal from 'react-modal';
 import styled from 'styled-components';
+import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
 import { bool, func, shape, string } from 'prop-types';
 
-import { CloseIcon } from '../../../../../../theme/images';
 import Theme from '../../../../../../theme/Theme';
-import { getInvoiceData } from '../../../../../../api';
 import InvoiceViewAndReminderModal from './InvoiceViewAndReminderModal';
+import { CloseIcon } from '../../../../../../theme/images';
+import { StatusColorSet } from '../../../../../../constants';
+import { getInvoiceAdjustmentData } from '../../../../../../api';
 import {
   HeaderDownloadFuntionality,
   ModalBox,
@@ -40,7 +42,9 @@ const InvoicePastAdjustmntModal = ({
   isOpen,
   style,
   onClick,
+  addThousandComma,
 }) => {
+  const mounted = useRef(true);
   const isMobile = useMediaQuery({ maxWidth: 767 });
 
   const [invoicesAdjustmentData, setInvoicesAdjustmentData] = useState([]);
@@ -52,24 +56,28 @@ const InvoicePastAdjustmntModal = ({
   const [pageNumber, setPageNumber] = useState();
   const [isApicall, setIsApiCall] = useState(false);
 
-  const getDSPInvoicesData = useCallback(
-    (type, currentPageNumber) => {
+  const getAdjustmentData = useCallback(
+    (currentPage) => {
       setInvoiceAdjustmentLoader(true);
-      getInvoiceData(type, customerId, currentPageNumber).then((res) => {
-        if (res && res.status === 500) {
-          setInvoiceAdjustmentLoader(false);
-          setInvoicesAdjustmentData(null);
-        }
 
-        if (res && res.status === 400) {
-          setInvoiceAdjustmentLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.results) {
-            setInvoicesAdjustmentData(res.data.results);
-            setInvoiceCount(res.data.count);
+      getInvoiceAdjustmentData(customerId, currentPage).then((res) => {
+        if (mounted.current) {
+          if (res && res.status === 500) {
+            setInvoiceAdjustmentLoader(false);
+            setInvoicesAdjustmentData(null);
           }
-          setInvoiceAdjustmentLoader(false);
+          if (res && res.status === 400) {
+            setInvoiceAdjustmentLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.results) {
+              setInvoicesAdjustmentData(res.data.results);
+              setInvoiceCount(res.data.count);
+            } else {
+              setInvoicesAdjustmentData(null);
+            }
+            setInvoiceAdjustmentLoader(false);
+          }
         }
       });
     },
@@ -78,14 +86,14 @@ const InvoicePastAdjustmntModal = ({
 
   useEffect(() => {
     if (!isApicall) {
-      getDSPInvoicesData('dsp service', 1);
+      getAdjustmentData(1);
       setIsApiCall(true);
     }
-  }, [getDSPInvoicesData, isApicall, setIsApiCall]);
+  }, [getAdjustmentData, isApicall, setIsApiCall]);
 
   const handlePageChange = (currentPage) => {
     setPageNumber(currentPage);
-    getDSPInvoicesData('dsp service', currentPage);
+    getAdjustmentData(currentPage);
   };
 
   const renderHeader = () => {
@@ -109,6 +117,57 @@ const InvoicePastAdjustmntModal = ({
           </div>
         </div>
       </HeaderDownloadFuntionality>
+    );
+  };
+
+  const renderTableData = (item) => {
+    const status =
+      item?.budget_approved === null
+        ? 'pending'
+        : item?.budget_approved
+        ? 'approved'
+        : 'rejected';
+
+    return (
+      <tr className="product-body" key={item.id}>
+        <td width="30%" className="small-label-text">
+          {' '}
+          <div className="type">{item?.dsp_invoice_subtype}</div>
+          <div className="marketplace">{item?.marketplaces}</div>
+        </td>
+        <td width="20%" className="small-label-text">
+          ${addThousandComma(item.from_amount, 0)}
+          <div className="marketplace">
+            {dayjs(item.applicable_from).format('MM/DD/YY')}
+          </div>
+        </td>
+        <td width="20%" className="small-label-text">
+          ${addThousandComma(item.to_amount, 0)}
+          <div className="marketplace">
+            {item?.dsp_invoice_subtype !== 'One-time Additional'
+              ? 'Ongoing'
+              : dayjs(item.to_date).format('MM/DD/YY')}
+          </div>
+        </td>
+        <td width="20%" className="small-label-text">
+          <Status
+            label={status}
+            backgroundColor={
+              StatusColorSet[status].toLowerCase()
+                ? StatusColorSet[status].toLowerCase()
+                : '#E3F2D2'
+            }
+          />
+        </td>
+        <td width="10%" className="orange-text-label">
+          <p
+            className="orange-text-label"
+            role="presentation"
+            onClick={() => setShowViewAndReminderModal(true)}>
+            View
+          </p>
+        </td>
+      </tr>
     );
   };
 
@@ -137,34 +196,7 @@ const InvoicePastAdjustmntModal = ({
           </thead>
           <tbody>
             {invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
-              invoicesAdjustmentData.map((item) => (
-                <tr className="product-body" key={item.id}>
-                  <td width="30%" className="small-label-text">
-                    {' '}
-                    <div className="type">Permanent Additional</div>
-                    <div className="marketplace">All Marketplaces</div>
-                  </td>
-                  <td width="20%" className="small-label-text">
-                    $5,000
-                    <div className="marketplace">06/02/21</div>
-                  </td>
-                  <td width="20%" className="small-label-text">
-                    $10,000
-                    <div className="marketplace">Ongoing</div>
-                  </td>
-                  <td width="20%" className="small-label-text">
-                    <Status label="Approved" />
-                  </td>
-                  <td width="10%" className="orange-text-label">
-                    <p
-                      className="orange-text-label"
-                      role="presentation"
-                      onClick={() => setShowViewAndReminderModal(true)}>
-                      View
-                    </p>
-                  </td>
-                </tr>
-              ))
+              invoicesAdjustmentData.map((item) => renderTableData(item))
             ) : (
               <NoData>No Invoices Found</NoData>
             )}
@@ -181,28 +213,54 @@ const InvoicePastAdjustmntModal = ({
           <PastAjustmentMobileView className="d-md-none d-block">
             <div className="container-fluid">
               {invoicesAdjustmentData.map((item) => {
+                const status =
+                  item?.budget_approved === null
+                    ? 'pending'
+                    : item?.budget_approved
+                    ? 'approved'
+                    : 'rejected';
                 return (
                   <>
                     <div className="row mt-3" key={item.id}>
                       <div className="col-7">
                         <div className="label"> Type/Marketplace</div>
-                        <div className="type">Permanent Additional</div>
-                        <div className="marketplace">All Marketplaces</div>
+                        <div className="type">{item?.dsp_invoice_subtype}</div>
+                        <div className="marketplace">{item?.marketplaces}</div>
                       </div>
                       <div className="col-5 text-right">
                         <div className="label">BP SIGN-OFF</div>
-                        <Status className="float-right" label="Approved" />
+                        <Status
+                          className="float-right"
+                          label={status}
+                          backgroundColor={
+                            StatusColorSet[status].toLowerCase()
+                              ? StatusColorSet[status].toLowerCase()
+                              : '#E3F2D2'
+                          }
+                        />
                         <div className="clear-fix" />
                       </div>
                       <div className="col-4 mt-2">
                         <div className="label"> From</div>
-                        <div className="type">$5,000</div>
-                        <div className="marketplace">06/02/21</div>
+                        <div className="type">{`$${addThousandComma(
+                          item.from_amount,
+                          0,
+                        )}`}</div>
+                        <div className="marketplace">
+                          {dayjs(item.applicable_from).format('MM/DD/YY')}
+                        </div>
                       </div>
                       <div className="col-4 mt-2">
                         <div className="label"> To</div>
-                        <div className="type">$5,000</div>
-                        <div className="marketplace">Ongoing</div>
+                        <div className="type">{`$${addThousandComma(
+                          item.to_amount,
+                          0,
+                        )}`}</div>
+                        <div className="marketplace">
+                          {item?.dsp_invoice_subtype !== 'One-time Additional'
+                            ? 'Ongoing'
+                            : dayjs(item.to_date).format('MM/DD/YY')}
+                        </div>
                       </div>
                       <div className="col-4 mt-2 cursor">
                         <p
@@ -281,6 +339,7 @@ InvoicePastAdjustmntModal.defaultProps = {
   customerId: '',
   style: {},
   onClick: () => {},
+  addThousandComma: () => {},
 };
 
 InvoicePastAdjustmntModal.propTypes = {
@@ -289,6 +348,7 @@ InvoicePastAdjustmntModal.propTypes = {
   customerId: string,
   style: shape({}),
   onClick: func,
+  addThousandComma: func,
 };
 
 const PastInvoices = styled.div`
