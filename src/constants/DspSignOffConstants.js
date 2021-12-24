@@ -5,6 +5,12 @@ export const InvoiceApprovalHeader = {
   pause: 'Proposed Pause of DSP Invoice',
 };
 
+export const InvoiceTypeNames = {
+  standard: 'Standard',
+  'permanent additional': 'Permanent Additional',
+  'one time': 'One-Time',
+};
+
 export const InvoiceCurrentMonthHeader = {
   standard: 'Current monthly DSP invoice amount',
   'permanent additional': 'Current monthly DSP invoice amount',

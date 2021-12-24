@@ -326,12 +326,6 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
             />
           </td>
         </tr>
-        <ReactTooltip
-          id="Pending-BP-Sign-off"
-          aria-haspopup="true"
-          place="bottom"
-          effect="solid"
-        />
       </>
     );
   };
@@ -401,7 +395,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
               ? 'Upsell Invoices'
               : invoiceType === 'retainer'
               ? 'Monthly Retainer Invoices'
-              : 'DSP Invoices'}
+              : 'Invoices'}
           </p>
           {renderPastUpcomingTab()}
 

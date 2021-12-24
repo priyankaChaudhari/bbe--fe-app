@@ -51,6 +51,22 @@ export async function getInvoiceAdjustmentData(id, page = 1) {
   return result;
 }
 
+export async function sendReminderOfAdjustment(customerId, adjustmentId) {
+  const data = {
+    customer: customerId,
+    dsp_budget: adjustmentId,
+  };
+  const result = await axiosInstance
+    .post(API_DSP_BUDGET_ADJUSTMENT, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function getMetricsInvoiceData(invoiceType, id) {
   const params = {
     customer: id,
