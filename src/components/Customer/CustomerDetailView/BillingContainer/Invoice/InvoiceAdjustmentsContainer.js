@@ -107,6 +107,7 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma }) => {
           onApply={() => {
             setShowAllPastInvoicesModal(false);
           }}
+          addThousandComma={addThousandComma}
         />
       ) : null}
     </Wrapper>
