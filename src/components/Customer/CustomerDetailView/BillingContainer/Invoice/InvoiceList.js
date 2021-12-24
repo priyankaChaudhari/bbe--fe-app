@@ -266,7 +266,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData }) => {
     return (
       <tr>
         <th width="31%" className="product-header">
-          Invoice Type / Number
+          {isDSPService ? 'Invoice Type/ #' : 'Invoice Type / Number'}
         </th>
         <th width="17%" className="product-header pl-2">
           Amount
