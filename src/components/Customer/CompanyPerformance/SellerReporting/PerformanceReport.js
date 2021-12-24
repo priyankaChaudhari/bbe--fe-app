@@ -658,13 +658,17 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           <p className="black-heading-title mt-0 mb-4">Positive Feedback</p>
           <div className="seller-health positive">
             {dspData && dspData.feedback_30
-              ? `${dspData && dspData.feedback_30}%`
+              ? dspData.feedback_30 === 'nan'
+                ? 'N/A'
+                : `${dspData && dspData.feedback_30}%`
               : 'N/A'}
           </div>
           <div className="seller-update mb-3">Last 30 days</div>
           <div className="seller-health positive ">
             {dspData && dspData.feedback_365
-              ? `${dspData && dspData.feedback_365}%`
+              ? dspData.feedback_365 === 'nan'
+                ? 'N/a'
+                : `${dspData && dspData.feedback_365}%`
               : 'N/A'}
           </div>
           <div className="seller-update mb-5">Last 12 months</div>
@@ -684,12 +688,18 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
           <p className="black-heading-title mt-0 mb-4">Order Issues</p>
           <div className="seller-health">
             {dspData && dspData.order_defect_fba
-              ? `${dspData && dspData.order_defect_fba}%`
+              ? dspData.order_defect_fba === 'nan'
+                ? 'N/A'
+                : `${dspData.order_defect_fba}%`
               : 'N/A'}
           </div>
           <div className="seller-update mb-3">Order Defect Rate</div>
           <div className="seller-health  ">
-            {dspData && dspData.policy_issues ? dspData.policy_issues : 'N/A'}
+            {dspData && dspData.policy_issues
+              ? dspData.policy_issues === 'nan'
+                ? 'N/A'
+                : dspData.policy_issues
+              : 'N/A'}
           </div>
           <div className="seller-update mb-5">Policy Violations</div>
           <div className="last-update ">
