@@ -12,6 +12,8 @@ import {
   InputSearchWithRadius,
 } from '../../common';
 
+import dummyData from './dummyData';
+
 const TeamMembers = () => {
   return (
     <ModalBox>
@@ -26,81 +28,37 @@ const TeamMembers = () => {
         <div className="body-content ">
           <h4 className="mb-4">Team Members</h4>
           <div className="row">
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
+            {dummyData.map((member) => {
+              return (
+                <div className="col-12 mb-3" key={Math.random()}>
+                  <div
+                    className="edit-profile-text float-left"
+                    role="presentation">
+                    <GetInitialName property="mr-3" />
 
-                <div className="name-email">
-                  <div className="label m-0"> BGS Manager</div>
-                  <div className="team-member-name text-bold">Troy Dyches</div>
-                </div>
-              </div>
-
-              <div className="float-right roleName mt-3">Remove</div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-
-                <div className="name-email">
-                  <div className="label m-0"> BGS</div>
-                  <div className="team-member-name text-bold">
-                    {' '}
-                    Marcus Tedesco
+                    <div className="name-email">
+                      <div className="label m-0">{member.role_group.name}</div>
+                      {member.id ? (
+                        <div className="team-member-name text-bold">
+                          {member.user.name}
+                        </div>
+                      ) : (
+                        <div className="team-member-name">Unassigned</div>
+                      )}
+                    </div>
                   </div>
+                  {member.id ? (
+                    <div className="float-right roleName mt-3">Remove</div>
+                  ) : (
+                    <div className="float-right roleName add-team-member mt-3">
+                      Add team member
+                    </div>
+                  )}
+
+                  <div className="clear-fix" />
                 </div>
-              </div>
-
-              <div className="float-right roleName mt-3">Remove</div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-
-                <div className="name-email">
-                  <div className="label m-0"> Sponsored Ad Manager</div>
-                  <div className="team-member-name text-bold">
-                    {' '}
-                    Neli Nonkonyana
-                  </div>
-                </div>
-              </div>
-
-              <div className="float-right roleName mt-3">Remove</div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-
-                <div className="name-email">
-                  <div className="label m-0"> DSP Ad Manager</div>
-                  <div className="team-member-name text-bold">Ben Bradley</div>
-                </div>
-              </div>
-
-              <div className="float-right roleName mt-3">Remove</div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div
-                className="edit-profile-text float-left disabled"
-                role="presentation">
-                <GetInitialName property="mr-3" />
-
-                <div className="name-email">
-                  <div className="label m-0">Creative</div>
-                  <div className="team-member-name">Unassigned</div>
-                </div>
-              </div>
-
-              <div className="float-right roleName add-team-member mt-3">
-                Add team member
-              </div>
-              <div className="clear-fix" />
-            </div>
+              );
+            })}
           </div>
           <div className="footer-line " />
           <div className="modal-footer">
