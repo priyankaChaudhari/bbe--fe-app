@@ -163,7 +163,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
               : '#E3F2D2'
           }
           label="Amount"
-          labelInfo={addThousandComma(item?.monthly_budget, 0)}
+          labelInfo={`$${addThousandComma(item?.monthly_budget, 0)}`}
           label1="Created on"
           labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
           label2="Due"
@@ -174,7 +174,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
   };
 
   const renderMobileUpcomingInvoice = () => {
-    invoicesData.map((item) => {
+    return invoicesData.map((item) => {
       return (
         <TableMobileView
           key={item?.id}
@@ -186,9 +186,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
           }
           invoiceId={null}
           marketplaces={
-            isDSPService && item?.marketplaces
-              ? ` | ${item?.marketplaces}`
-              : null
+            isDSPService && item?.marketplaces ? item?.marketplaces : null
           }
           status={item?.status}
           statusColor={
@@ -197,7 +195,7 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
               : '#E3F2D2'
           }
           label="Amount"
-          labelInfo={addThousandComma(item?.amount, 0)}
+          labelInfo={`$${addThousandComma(item?.amount, 0)}`}
           label1="Created on"
           labelInfo1={
             item?.created !== null
@@ -477,7 +475,6 @@ const InvoiceList = ({ loader, invoiceType, id }) => {
       {isDSPService ? (
         <InvoiceAdjustmentsContainer
           id={id}
-          invoiceType={invoiceType}
           addThousandComma={addThousandComma}
         />
       ) : null}

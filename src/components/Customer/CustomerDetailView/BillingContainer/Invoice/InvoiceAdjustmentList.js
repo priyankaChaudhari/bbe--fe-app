@@ -7,7 +7,7 @@ import { func, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import { StatusColorSet } from '../../../../../constants';
-import { getInvoiceData } from '../../../../../api';
+import { getInvoiceAdjustmentData } from '../../../../../api';
 import { InvoiceViewAndReminderModal } from './InvoiceAdjustmentModals';
 
 import {
@@ -18,7 +18,7 @@ import {
   TableMobileView,
 } from '../../../../../common';
 
-const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
+const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const mounted = useRef(true);
 
@@ -29,43 +29,40 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
     false,
   );
 
-  const getDSPInvoicesData = useCallback(
-    (type) => {
-      setInvoiceAdjustmentLoader(true);
-      getInvoiceData(type, id).then((res) => {
-        if (mounted.current) {
-          if (res && res.status === 500) {
-            setInvoiceAdjustmentLoader(false);
+  const getAdjustmentData = useCallback(() => {
+    setInvoiceAdjustmentLoader(true);
+    getInvoiceAdjustmentData(id).then((res) => {
+      if (mounted.current) {
+        if (res && res.status === 500) {
+          setInvoiceAdjustmentLoader(false);
+          setInvoicesAdjustmentData(null);
+        }
+
+        if (res && res.status === 400) {
+          setInvoiceAdjustmentLoader(false);
+        }
+        if (res && res.status === 200) {
+          if (res.data && res.data.results) {
+            setInvoicesAdjustmentData(res.data.results);
+          } else {
             setInvoicesAdjustmentData(null);
           }
-
-          if (res && res.status === 400) {
-            setInvoiceAdjustmentLoader(false);
-          }
-          if (res && res.status === 200) {
-            if (res.data && res.data.results) {
-              setInvoicesAdjustmentData(res.data.results);
-            } else {
-              setInvoicesAdjustmentData(null);
-            }
-            setInvoiceAdjustmentLoader(false);
-          }
+          setInvoiceAdjustmentLoader(false);
         }
-      });
-    },
-    [id],
-  );
+      }
+    });
+  }, [id]);
 
   useEffect(() => {
     mounted.current = true;
     if (!isApicall) {
-      getDSPInvoicesData(invoiceType);
+      getAdjustmentData();
       setIsApiCall(true);
     }
     return () => {
       mounted.current = false;
     };
-  }, [getDSPInvoicesData, id, invoiceType, isApicall, setIsApiCall]);
+  }, [getAdjustmentData, id, isApicall, setIsApiCall]);
 
   const renderTableHeader = () => {
     return (
@@ -90,23 +87,42 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
   };
 
   const renderTableData = (item) => {
+    const status =
+      item?.budget_approved === null
+        ? 'pending'
+        : item?.budget_approved
+        ? 'approved'
+        : 'rejected';
     return (
       <tr className="product-body" key={item.id}>
         <td width="30%" className="small-label-text">
           {' '}
-          <div className="type">Permanent Additional</div>
-          <div className="marketplace">All Marketplaces</div>
+          <div className="type">{item?.dsp_invoice_subtype}</div>
+          <div className="marketplace">{item?.marketplaces}</div>
         </td>
         <td width="20%" className="small-label-text">
-          $5,000
-          <div className="marketplace">06/02/21</div>
+          ${addThousandComma(item.from_amount, 0)}
+          <div className="marketplace">
+            {dayjs(item.applicable_from).format('MM/DD/YY')}
+          </div>
         </td>
         <td width="20%" className="small-label-text">
-          $10,000
-          <div className="marketplace">Ongoing</div>
+          ${addThousandComma(item.to_amount, 0)}
+          <div className="marketplace">
+            {item?.dsp_invoice_subtype !== 'One-time Additional'
+              ? 'Ongoing'
+              : dayjs(item.to_date).format('MM/DD/YY')}
+          </div>
         </td>
         <td width="20%" className="small-label-text">
-          <Status label="Approved" />
+          <Status
+            label={status}
+            backgroundColor={
+              StatusColorSet[status].toLowerCase()
+                ? StatusColorSet[status].toLowerCase()
+                : '#E3F2D2'
+            }
+          />
         </td>
         <td width="10%" className="orange-text-label">
           <p
@@ -166,29 +182,32 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
           />
         ) : invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
           invoicesAdjustmentData.map((item) => {
+            const status =
+              item?.budget_approved === null
+                ? 'pending'
+                : item?.budget_approved
+                ? 'approved'
+                : 'rejected';
             return (
               <>
                 <TableMobileView
                   key={item.id}
                   className="mb-3"
-                  invoiceType={item.invoice_type}
-                  invoiceId={item.next_next_invoiced_id}
-                  status={item.invoice_status}
+                  invoiceType={item?.dsp_invoice_subtype}
+                  invoiceId={null}
+                  marketplaces={item?.marketplaces}
+                  status={status}
                   statusColor={
-                    StatusColorSet[
-                      item.invoice_status.split(' ')[0].toLowerCase()
-                    ]
-                      ? StatusColorSet[
-                          item.invoice_status.split(' ')[0].toLowerCase()
-                        ]
+                    StatusColorSet[status].toLowerCase()
+                      ? StatusColorSet[status].toLowerCase()
                       : '#E3F2D2'
                   }
                   label="From"
-                  labelInfo={addThousandComma(item.monthly_budget, 0)}
+                  labelInfo={`$${addThousandComma(item.from_amount, 0)}`}
                   label1="To"
-                  labelInfo1={dayjs(item.generated_at).format('MM/DD/YYYY')}
+                  labelInfo1={`$${addThousandComma(item.to_amount, 0)}`}
                   label2="Status"
-                  labelInfo2="Send Reminder"
+                  labelInfo2="View"
                   isColumnOnClick
                   onColumnClick={() => setShowViewAndReminderModal(true)}
                 />
@@ -222,13 +241,11 @@ const InvoiceAdjustmentList = ({ id, invoiceType, addThousandComma }) => {
 export default InvoiceAdjustmentList;
 
 InvoiceAdjustmentList.defaultProps = {
-  invoiceType: 'dsp service',
   id: '',
   addThousandComma: () => {},
 };
 
 InvoiceAdjustmentList.propTypes = {
-  invoiceType: string,
   id: string,
   addThousandComma: func,
 };
