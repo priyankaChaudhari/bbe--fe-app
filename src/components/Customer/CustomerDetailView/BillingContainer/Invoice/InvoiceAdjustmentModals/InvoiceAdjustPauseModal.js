@@ -13,8 +13,7 @@ import Theme from '../../../../../../theme/Theme';
 import { CloseIcon } from '../../../../../../theme/images';
 import {
   getDSPBudgetAdjustData,
-  postDSPBudgetAdjustInvoiceData,
-  postDSPBudgetPauseInvoiceData,
+  postDSPBudgetAdjustPauseInvoiceData,
 } from '../../../../../../api';
 import {
   ModalBox,
@@ -101,7 +100,7 @@ const InvoiceAdjustPauseModal = ({
       setLoader(true);
       setInvoiceInputs([]);
 
-      getDSPBudgetAdjustData(type, customerId).then((res) => {
+      getDSPBudgetAdjustData(type, customerId, true).then((res) => {
         if (mounted.current) {
           if (res && res.status === 500) {
             setLoader(false);
@@ -111,7 +110,7 @@ const InvoiceAdjustPauseModal = ({
             setLoader(false);
           }
           if (res && res.status === 200) {
-            setInvoiceInputs(res.data.results);
+            setInvoiceInputs(res.data.results[0]?.adjustments);
             setLoader(false);
           }
           // setInvoiceInputs(dspInvoiceSubType.results);
@@ -124,10 +123,12 @@ const InvoiceAdjustPauseModal = ({
 
   const onSendDSPBudgetAdjustInvoice = useCallback(() => {
     setLoader(true);
-    postDSPBudgetAdjustInvoiceData(
+    postDSPBudgetAdjustPauseInvoiceData(
       invoiceInputs,
       selectedMonthYear,
       invoiceType,
+      customerId,
+      'adjust',
     ).then((res) => {
       if (res && res.status === 500) {
         setLoader(false);
@@ -149,26 +150,30 @@ const InvoiceAdjustPauseModal = ({
 
   const onSendDSPBudgetPauseInvoice = useCallback(() => {
     setLoader(true);
-    postDSPBudgetPauseInvoiceData(invoiceInputs, selectedMonthYear).then(
-      (res) => {
-        if (res && res.status === 500) {
-          setLoader(false);
-        }
-
-        if (res && res.status === 400) {
-          setLoader(false);
-        }
-        if (res && res.status === 201) {
-          history.push(
-            PATH_CUSTOMER_DETAILS.replace(':id', customerId),
-            'dsp service',
-          );
-          setLoader(false);
-        }
+    postDSPBudgetAdjustPauseInvoiceData(
+      invoiceInputs,
+      selectedMonthYear,
+      invoiceType,
+      customerId,
+      'pause',
+    ).then((res) => {
+      if (res && res.status === 500) {
         setLoader(false);
-      },
-    );
-  }, [customerId, history, invoiceInputs, selectedMonthYear]);
+      }
+
+      if (res && res.status === 400) {
+        setLoader(false);
+      }
+      if (res && res.status === 201) {
+        history.push(
+          PATH_CUSTOMER_DETAILS.replace(':id', customerId),
+          'dsp service',
+        );
+        setLoader(false);
+      }
+      setLoader(false);
+    });
+  }, [customerId, history, invoiceInputs, invoiceType, selectedMonthYear]);
 
   const onSendInvoice = () => {
     // onApply();
@@ -183,7 +188,7 @@ const InvoiceAdjustPauseModal = ({
   const getPauseInvoices = useCallback(() => {
     setLoader(true);
     setInvoiceInputs([]);
-    getDSPBudgetAdjustData('standard', customerId).then((res) => {
+    getDSPBudgetAdjustData('standard', customerId, true).then((res) => {
       if (res && res.status === 500) {
         setLoader(false);
       }
@@ -192,7 +197,7 @@ const InvoiceAdjustPauseModal = ({
         setLoader(false);
       }
       if (res && res.status === 200) {
-        setInvoiceInputs(res.data.results);
+        setInvoiceInputs(res.data.results[0]?.adjustments);
         setLoader(false);
       }
       // setInvoiceInputs(dspInvoiceSubType.results);

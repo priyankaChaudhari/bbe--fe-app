@@ -83,11 +83,21 @@ export async function getMetricsInvoiceData(invoiceType, id) {
   return result;
 }
 
-export async function getDSPBudgetAdjustData(invoiceType, customerId) {
-  const params = {
+export async function getDSPBudgetAdjustData(
+  invoiceType,
+  customerId,
+  budgetApproved,
+) {
+  let params = {
     dsp_invoice_subtype: invoiceType,
     customer: customerId,
   };
+  if (budgetApproved) {
+    params = {
+      ...params,
+      budget_approved: true,
+    };
+  }
   const result = await axiosInstance
     .get(`${API_DSP_BUDGET_ADJUSTMENT}`, { params })
     .then((response) => {
@@ -123,46 +133,36 @@ export async function updateDSPBudgetAdjustment(dspAdjustmentID, data) {
   return result;
 }
 
-export async function postDSPBudgetAdjustInvoiceData(
+export async function postDSPBudgetAdjustPauseInvoiceData(
   invoiceData,
   appliedDate,
   invoiceType,
+  customerId,
+  type,
 ) {
-  const finalInvoiceAdjust = [];
+  const finalInvoiceAdjust = {
+    customer: customerId,
+    dsp_invoice_subtype: invoiceType,
+    applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
+    is_sent_for_pause: type === 'pause',
+  };
   invoiceData.forEach((item) => {
-    finalInvoiceAdjust.push({
-      customer: item.customer,
-      dsp_invoice_subtype: invoiceType,
-      applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
-      new_budget: item.newAmount
-        ? parseFloat(item.newAmount.replace(/,/g, ''))
-        : item.old_budget,
-      old_budget: item.old_budget,
+    finalInvoiceAdjust.adjustments.push({
       marketplace: item.marketplace,
+      marketplace_id: item.marketplace_id,
     });
-  });
-
-  const result = await axiosInstance
-    .post(`${API_DSP_BUDGET_ADJUSTMENT}`, finalInvoiceAdjust)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return result;
-}
-
-export async function postDSPBudgetPauseInvoiceData(invoiceData, appliedDate) {
-  const finalInvoiceAdjust = [];
-  invoiceData.forEach((item) => {
-    finalInvoiceAdjust.push({
-      customer: item.customer,
-      dsp_invoice_subtype: 'standard',
-      applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
-      marketplace: item.marketplace,
-      is_sent_for_pause: item.is_sent_for_pause,
-    });
+    if (type === 'pause') {
+      finalInvoiceAdjust.adjustments.push({
+        is_sent_for_pause: item.is_sent_for_pause,
+      });
+    } else {
+      finalInvoiceAdjust.adjustments.push({
+        new_budget: item.newAmount
+          ? parseFloat(item.newAmount.replace(/,/g, ''))
+          : item.old_budget,
+        old_budget: item.old_budget,
+      });
+    }
   });
 
   const result = await axiosInstance
