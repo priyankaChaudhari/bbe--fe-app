@@ -204,8 +204,10 @@ const InvoiceAdjustmentList = ({ id, addThousandComma }) => {
                   }
                   label="From"
                   labelInfo={`$${addThousandComma(item.from_amount, 0)}`}
+                  sublabel="01/02/21"
                   label1="To"
                   labelInfo1={`$${addThousandComma(item.to_amount, 0)}`}
+                  sublabel1="Ongoing"
                   label2="Status"
                   labelInfo2="View"
                   isColumnOnClick

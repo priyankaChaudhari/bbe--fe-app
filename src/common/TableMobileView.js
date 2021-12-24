@@ -22,6 +22,8 @@ const TableMobileView = ({
   label6,
   label7,
   labelInfo1,
+  sublabel,
+  sublabel1,
   labelInfo2,
   labelInfo3,
   labelInfo4,
@@ -97,11 +99,13 @@ const TableMobileView = ({
                 />
               ) : null}
             </div>
+            <div className="sub-label-text">{sublabel}</div>
           </div>
           <div className={`${col} mb-3`}>
             {' '}
             <div className="label">{label1}</div>
             <div className="label-info label-bold"> {labelInfo1}</div>
+            <div className="sub-label-text">{sublabel1}</div>
           </div>
           <div className={`${col} mb-3`}>
             {' '}
@@ -194,6 +198,10 @@ const TableMobileViewWrapper = styled.div`
   .label-bold {
     font-weight: bold;
   }
+  .sub-label-text {
+    font-size: ${Theme.extraNormal};
+    color: ${Theme.black};
+  }
 `;
 
 TableMobileView.defaultProps = {
@@ -205,6 +213,8 @@ TableMobileView.defaultProps = {
   labelInfo: '',
   label1: '',
   labelInfo1: '',
+  sublabel: '',
+  sublabel1: '',
   label2: '',
   labelInfo2: '',
   label3: '',
@@ -236,6 +246,8 @@ TableMobileView.propTypes = {
   labelInfo: string,
   label1: string,
   labelInfo1: string,
+  sublabel: string,
+  sublabel1: string,
   label2: string,
   labelInfo2: string,
   label3: string,
