@@ -11,7 +11,7 @@ import VendorSalesPerformancePanel from './VendorSalesPerformancePanel';
 import VendorSalesPerformanceFilters from './VendorSalesPerformanceFilters';
 import { dateOptionsWithYear } from '../../../../constants';
 import { getVendorReportingData } from '../../../../api';
-import { CustomDateModal, DropDownIndicator } from '../../../../common';
+import { CustomDateModal, DropdownIndicator } from '../../../../common';
 
 import 'react-date-range/dist/styles.css'; // main style file
 import 'react-date-range/dist/theme/default.css'; // theme css file
@@ -478,7 +478,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -598,7 +598,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         handleMarketplaceOptions={handleAmazonOptions}
         dateOptions={dateOptionsWithYear}
         getSelectComponents={getSelectComponents}
-        DropDownIndicator={DropDownIndicator}
+        DropdownIndicator={{ DropdownIndicator }}
         selectedSalesDF={selectedSalesDF}
         handleDailyFact={handleDailyFact}
         isApiCall={isApiCall}

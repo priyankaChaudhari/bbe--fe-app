@@ -16,7 +16,7 @@ import Theme from '../../../../theme/Theme';
 import DSPPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceView/DSPPerformanceChart';
 import {
   CustomDateModal,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
   WhiteCard,
   ToggleButton,
@@ -807,7 +807,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -815,7 +815,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     return {
       Option: filterOption,
       SingleValue: adMnagerFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 

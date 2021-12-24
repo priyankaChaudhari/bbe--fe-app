@@ -29,6 +29,7 @@ import {
   Button,
   InputFormField,
   DropDownUncontained,
+  DropdownIndicator,
 } from '../../../common';
 import {
   ClockIcon,
@@ -37,7 +38,6 @@ import {
   DspOnlyIcon,
   ArrowIcons,
   CloseIcon,
-  CaretUp,
   DisabledRecurring,
 } from '../../../theme/images';
 import {
@@ -102,25 +102,6 @@ export default function AgreementDetails({
   };
 
   const { Option } = components;
-  const DropdownIndicator = (dataProps) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...dataProps}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: dataProps.selectProps.menuIsOpen
-                ? 'rotate(180deg)'
-                : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
 
   const IconOption = (dataProps) => (
     <Option {...dataProps}>

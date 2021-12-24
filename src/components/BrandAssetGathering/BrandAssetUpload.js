@@ -45,7 +45,7 @@ import {
   UnauthorizedHeader,
   ModalBox,
   ActionDropDown,
-  DropDownIndicator,
+  DropdownIndicator,
 } from '../../common';
 import {
   GrayCheckIcon,
@@ -1079,7 +1079,7 @@ export default function BrandAssetUpload() {
                   search: `step=${event.value}`,
                 });
               }}
-              components={DropDownIndicator}
+              components={{ DropdownIndicator }}
             />
           </DropDownBrandAsset>
           <div className="container-fluid">
@@ -1244,7 +1244,7 @@ export default function BrandAssetUpload() {
                           : selectedDropdown.dropdownValue
                       }
                       onChange={(event) => handleDownloadOptions(event)}
-                      components={DropDownIndicator}
+                      components={{ DropdownIndicator }}
                     />
                   ) : (
                     ''

@@ -7,7 +7,7 @@ import React, { useState, useEffect } from 'react';
 import NumberFormat from 'react-number-format';
 import DatePicker from 'react-date-picker';
 import dayjs from 'dayjs';
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 
 import ContractInputSelect from '../../common/ContractInputSelect';
 import ContractActivityLog from './ContractActivityLog';
@@ -23,8 +23,8 @@ import {
   StatementDetails,
   DSPAddendumDetails,
 } from '../../constants';
-import { ErrorMsg, Tabs } from '../../common';
-import { GreenCheck, RedCross, CaretUp } from '../../theme/images';
+import { ErrorMsg, Tabs, DropdownIndicator } from '../../common';
+import { GreenCheck, RedCross } from '../../theme/images';
 import {
   ServiceAgreementSection,
   StatementOfWork,
@@ -1212,25 +1212,6 @@ export default function AgreementSidePanel({
     if (key === 'primary_marketplace') return marketPlaces;
     if (key === 'additional_one_time_services') return oneTimeService;
     return accountLength;
-  };
-
-  const DropdownIndicator = (props) => {
-    const { selectProps } = props;
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
   };
 
   const generateDropdown = (item) => {

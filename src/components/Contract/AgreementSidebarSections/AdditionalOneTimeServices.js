@@ -4,7 +4,7 @@ import React from 'react';
 
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 import {
   string,
   bool,
@@ -16,12 +16,13 @@ import {
   object,
 } from 'prop-types';
 
-import { PlusIcon, MinusIcon, CaretUp, InfoIcon } from '../../../theme/images';
+import { PlusIcon, MinusIcon, InfoIcon } from '../../../theme/images';
 import {
   ErrorMsg,
   InputFormField,
   ContractInputSelect,
   CheckBox,
+  DropdownIndicator,
 } from '../../../common';
 
 function AdditionalOneTimeServices({
@@ -149,26 +150,6 @@ function AdditionalOneTimeServices({
           10,
         ) === 999
       : false;
-  };
-
-  const DropdownIndicator = (props) => {
-    const { selectProps } = props;
-
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
   };
 
   const showDiscountLabel = () => {

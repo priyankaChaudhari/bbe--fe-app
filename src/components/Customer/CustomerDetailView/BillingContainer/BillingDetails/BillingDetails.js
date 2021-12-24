@@ -6,13 +6,12 @@ import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
 import { shape, string, object, oneOfType } from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
 import { showProfileLoader } from '../../../../../store/actions/userState';
 import {
-  CaretUp,
   CloseIcon,
   EditOrangeIcon,
   helpCircleIcon,
@@ -38,6 +37,7 @@ import {
   PageLoader,
   WhiteCard,
   ContractInputSelect,
+  DropdownIndicator,
 } from '../../../../../common';
 
 export default function BillingDetails({
@@ -367,26 +367,6 @@ export default function BillingDetails({
           </div>
         ))}
       </>
-    );
-  };
-
-  const DropdownIndicator = (dataProps) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...dataProps}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: dataProps.selectProps.menuIsOpen
-                ? 'rotate(180deg)'
-                : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
     );
   };
 

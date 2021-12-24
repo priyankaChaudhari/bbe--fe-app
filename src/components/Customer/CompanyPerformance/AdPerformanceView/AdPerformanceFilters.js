@@ -14,7 +14,7 @@ const AdPerformanceFilters = ({
   handleMarketplaceOptions,
   dateOptions,
   getSelectComponents,
-  DropDownIndicator,
+  DropdownIndicator,
   handleAdDailyFact,
   selectedAdDF,
   isApiCall,
@@ -34,7 +34,7 @@ const AdPerformanceFilters = ({
               <Select
                 classNamePrefix="react-select"
                 className="active"
-                components={DropDownIndicator}
+                components={DropdownIndicator}
                 options={marketplaceOptions}
                 defaultValue={
                   marketplaceDefaultValue && marketplaceDefaultValue[0]
@@ -86,7 +86,7 @@ AdPerformanceFilters.defaultProps = {
   dateOptions: {},
   getSelectComponents: () => {},
   isApiCall: false,
-  DropDownIndicator: () => {},
+  DropdownIndicator: () => {},
   handleAdDailyFact: () => {},
   selectedAdDF: {},
 };
@@ -98,7 +98,7 @@ AdPerformanceFilters.propTypes = {
   dateOptions: arrayOf(Array),
   getSelectComponents: func,
   isApiCall: bool,
-  DropDownIndicator: func,
+  DropdownIndicator: func,
   handleAdDailyFact: func,
   selectedAdDF: instanceOf(Object),
 };

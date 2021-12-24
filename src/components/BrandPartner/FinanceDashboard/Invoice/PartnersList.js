@@ -24,7 +24,7 @@ import {
 import {
   WhiteCard,
   Table,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
   CommonPagination,
   NoData,
@@ -147,7 +147,7 @@ export default function PartnersList({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 

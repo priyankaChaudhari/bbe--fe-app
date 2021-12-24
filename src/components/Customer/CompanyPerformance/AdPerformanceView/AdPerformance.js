@@ -11,7 +11,7 @@ import SponsoredPerformance from './SponsoredPerformance';
 import AdPerformanceFilters from './AdPerformanceFilters';
 import { DspAdPacing } from '../../../BrandPartner';
 import { CloseIcon } from '../../../../theme/images';
-import { CustomDateModal, DropDownIndicator } from '../../../../common';
+import { CustomDateModal, DropdownIndicator } from '../../../../common';
 import { dateOptions, noGraphDataMessage } from '../../../../constants';
 import {
   getAdPerformance,
@@ -824,7 +824,7 @@ export default function AdPerformance({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -832,7 +832,7 @@ export default function AdPerformance({
     return {
       Option: filterOption,
       SingleValue: adTypesSingleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -1149,7 +1149,7 @@ export default function AdPerformance({
         handleMarketplaceOptions={handleMarketplaceOptions}
         dateOptions={dateOptions}
         getSelectComponents={getSelectComponents}
-        DropDownIndicator={DropDownIndicator}
+        DropdownIndicator={{ DropdownIndicator }}
         selectedAdDF={selectedAdDF}
         handleAdDailyFact={handleAdDailyFact}
         isApiCall={isApiCall}

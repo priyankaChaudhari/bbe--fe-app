@@ -24,7 +24,7 @@ import {
   WhiteCard,
   Table,
   Status,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
   CommonPagination,
 } from '../../../../common';
@@ -163,7 +163,7 @@ export default function DSPBillsList({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 

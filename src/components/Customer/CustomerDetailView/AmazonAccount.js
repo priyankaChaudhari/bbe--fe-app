@@ -11,13 +11,9 @@ import {
   DropDownSelect,
   ErrorMsg,
   WhiteCard,
+  DropdownIndicator,
 } from '../../../common';
-import {
-  EditOrangeIcon,
-  CopyLinkIcon,
-  CaretUp,
-  CloseIcon,
-} from '../../../theme/images';
+import { EditOrangeIcon, CopyLinkIcon, CloseIcon } from '../../../theme/images';
 import {
   amazonSellerAccountDetails,
   amazonVendorAccountDetails,
@@ -94,26 +90,6 @@ export default function AmazonAccount({
       null,
     );
   }, [marketplaceData]);
-
-  const DropdownIndicator = (dataProps) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...dataProps}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: dataProps.selectProps.menuIsOpen
-                ? 'rotate(180deg)'
-                : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
 
   const singleMarketplaceOption = (dataProps) => (
     <SingleValue {...dataProps}>
