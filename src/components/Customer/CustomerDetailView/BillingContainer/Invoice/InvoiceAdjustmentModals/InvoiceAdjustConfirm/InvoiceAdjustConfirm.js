@@ -237,7 +237,7 @@ const InvoiceAdjustConfirm = ({
           )}
           <div className=" straight-line horizontal-line mt-2 mb-2 " />
           <p className="normal-text">
-            The new invoice amount willbe available to spend from{' '}
+            The new invoice amount will be available to spend from{' '}
             <b>{selectedMonthYear?.value.split(' ')[0]} onwards.</b>
             <br /> The first bill for this amount will be sent{' '}
             {dayjs(selectedMonthYear?.value)

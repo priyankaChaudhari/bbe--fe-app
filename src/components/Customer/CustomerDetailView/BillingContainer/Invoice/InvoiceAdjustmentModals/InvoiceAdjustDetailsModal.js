@@ -203,9 +203,9 @@ const InvoiceAdjustDetailsModal = ({ id, isOpen, style, onClick, onApply }) => {
             </div>
             <div className=" straight-line horizontal-line mt-2 mb-2 " />
             <p className="normal-text">
-              The new invoice amount willbe available to spend from December
+              The new invoice amount will be available to spend from December
               onwards.
-              <br /> The first bill for this amount willbe sent November 13.
+              <br /> The first bill for this amount will be sent November 13.
             </p>
             <GreyCard className="yellow-card">
               <p className="normal-text text-bold m-0">

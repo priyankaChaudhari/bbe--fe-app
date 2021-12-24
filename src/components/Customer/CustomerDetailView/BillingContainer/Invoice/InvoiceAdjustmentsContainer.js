@@ -29,7 +29,7 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma }) => {
               <p
                 style={{ marginTop: '0px' }}
                 className="black-heading-title mb-0 mt-3">
-                Invoices Adjustments
+                Invoice Adjustments
               </p>
             </div>
             <div className="col-7  text-right">
@@ -59,7 +59,7 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma }) => {
               <p
                 style={{ marginTop: '0px' }}
                 className="black-heading-title mb-0 mt-3">
-                Invoices Adjustments
+                Invoice Adjustments
               </p>
             </div>
             <div className="col-7  text-right">
