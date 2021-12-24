@@ -12,7 +12,7 @@ const currentTeamMembers = [
     },
   },
   {
-    id: 'CUxcasd',
+    id: 'CUxcas3',
     role_group: {
       id: 'RGsaio',
       name: 'BGS',
@@ -24,7 +24,7 @@ const currentTeamMembers = [
     },
   },
   {
-    id: 'CUxcasd',
+    id: 'CUxcas2',
     role_group: {
       id: 'RGsaio',
       name: 'SPONSORED AD MANAGER',
@@ -36,7 +36,7 @@ const currentTeamMembers = [
     },
   },
   {
-    id: 'CUxcasd',
+    id: 'CUxc4sd',
     role_group: {
       id: 'RGsaio',
       name: 'DSP AD MANAGER',
@@ -51,6 +51,12 @@ const currentTeamMembers = [
     role_group: {
       id: 'RGsaio',
       name: 'CREATIVE',
+    },
+  },
+  {
+    role_group: {
+      id: 'RGsaio',
+      name: 'Ad Manager',
     },
   },
 ];
