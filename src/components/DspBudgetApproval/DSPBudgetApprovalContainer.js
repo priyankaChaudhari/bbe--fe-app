@@ -125,7 +125,7 @@ export default function DSPBudgetApprovalContainer() {
           changed and I will send over a new proposal.
         </p>{' '}
         <p className="normal-text mb-0">Many thanks,</p>
-        Jacob
+        {marketplaceData?.created_by?.first_name}
       </GreyCard>
     );
   };
