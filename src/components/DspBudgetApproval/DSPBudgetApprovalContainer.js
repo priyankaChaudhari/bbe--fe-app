@@ -59,13 +59,36 @@ export default function DSPBudgetApprovalContainer() {
     });
   }, [adjustmentId]);
 
+  const setAdjustmentsData = (flag) => {
+    const result = [];
+    if (marketplaceData?.adjustments?.length) {
+      for (const item of marketplaceData?.adjustments) {
+        result.push({
+          id: item.id,
+          pause_approved: flag,
+        });
+      }
+    }
+    return result;
+  };
+
   const storeInvoiceProposal = () => {
     const data = {};
     if (invoiceApprovalCondition === 'yes') {
-      data.budget_approved = true;
+      if (invoiceType === 'pause') {
+        data.pause_approved = true;
+        data.adjustments = setAdjustmentsData(true);
+      } else {
+        data.budget_approved = true;
+      }
     }
     if (invoiceApprovalCondition === 'no') {
-      data.budget_approved = false;
+      if (invoiceType === 'pause') {
+        data.pause_approved = false;
+        data.adjustments = setAdjustmentsData(false);
+      } else {
+        data.budget_approved = false;
+      }
       data.rejection_note = invoiceRejectMessage;
     }
 
