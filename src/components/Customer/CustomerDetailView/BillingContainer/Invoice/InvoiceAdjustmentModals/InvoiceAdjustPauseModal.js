@@ -230,20 +230,21 @@ const InvoiceAdjustPauseModal = ({
     if (invoiceInputs && invoiceInputs.length > 0) {
       const temp = { totalCurrentBudget: 0, totalNewBudget: 0 };
       invoiceInputs.forEach((item) => {
+        console.log('item---', item);
         if (
           item &&
-          item.old_budget &&
+          item.new_budget &&
           ['standard', 'permanent additional'].includes(invoiceType)
         ) {
-          temp.totalCurrentBudget += parseNumber(item.old_budget.toString());
+          temp.totalCurrentBudget += parseNumber(item.new_budget.toString());
         }
         if (Object.prototype.hasOwnProperty.call(item, 'newAmount')) {
           temp.totalNewBudget += parseNumber(item.newAmount);
         } else if (
-          Object.prototype.hasOwnProperty.call(item, 'old_budget') &&
+          Object.prototype.hasOwnProperty.call(item, 'new_budget') &&
           ['standard', 'permanent additional'].includes(invoiceType)
         ) {
-          temp.totalNewBudget += parseNumber(item.old_budget.toString());
+          temp.totalNewBudget += parseNumber(item.new_budget.toString());
         }
       });
 

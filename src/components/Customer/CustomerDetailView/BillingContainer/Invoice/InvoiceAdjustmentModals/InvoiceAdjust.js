@@ -28,11 +28,11 @@ const InvoiceAdjust = ({
             newAmount: target.value,
             marketplace: input.marketplace,
             change:
-              parseNumber(target.value) === input.old_budget
+              parseNumber(target.value) === input.new_budget
                 ? 0
-                : parseNumber(target.value) - input.old_budget > 0
-                ? `+${Math.abs(input.old_budget - parseNumber(target.value))}`
-                : `-${Math.abs(input.old_budget - parseNumber(target.value))}`,
+                : parseNumber(target.value) - input.new_budget > 0
+                ? `+${Math.abs(input.new_budget - parseNumber(target.value))}`
+                : `-${Math.abs(input.new_budget - parseNumber(target.value))}`,
           };
           setInvoiceInputs(resultArray);
         }
@@ -83,7 +83,7 @@ const InvoiceAdjust = ({
                   </div>
                   <div className="col-4 text-left mt-3">
                     <div className="normal-text ">
-                      ${numberWithCommas(input.old_budget)}
+                      ${numberWithCommas(input.new_budget)}
                     </div>
                   </div>
                   <div className="col-4 text-left">
@@ -94,7 +94,7 @@ const InvoiceAdjust = ({
                           className="mt-2 form-control"
                           name={input.marketplace}
                           placeholder={
-                            invoiceType === 'one time' ? 0 : input.old_budget
+                            invoiceType === 'one time' ? 0 : input.new_budget
                           }
                           onChange={(e) => {
                             onChangeInput(input, e);
