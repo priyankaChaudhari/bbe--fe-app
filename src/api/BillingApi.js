@@ -145,24 +145,18 @@ export async function postDSPBudgetAdjustPauseInvoiceData(
     dsp_invoice_subtype: invoiceType,
     applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
     is_sent_for_pause: type === 'pause',
+    adjustments: [],
   };
   invoiceData.forEach((item) => {
     finalInvoiceAdjust.adjustments.push({
+      new_budget: item.newAmount
+        ? parseFloat(item.newAmount.replace(/,/g, ''))
+        : item.new_budget,
+      old_budget: item.new_budget,
       marketplace: item.marketplace,
       marketplace_id: item.marketplace_id,
+      is_sent_for_pause: type === 'pause',
     });
-    if (type === 'pause') {
-      finalInvoiceAdjust.adjustments.push({
-        is_sent_for_pause: item.is_sent_for_pause,
-      });
-    } else {
-      finalInvoiceAdjust.adjustments.push({
-        new_budget: item.newAmount
-          ? parseFloat(item.newAmount.replace(/,/g, ''))
-          : item.old_budget,
-        old_budget: item.old_budget,
-      });
-    }
   });
 
   const result = await axiosInstance
