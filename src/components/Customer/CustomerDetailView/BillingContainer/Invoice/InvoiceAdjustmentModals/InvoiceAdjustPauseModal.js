@@ -8,7 +8,7 @@ import { bool, func, shape, string } from 'prop-types';
 
 import InvoiceAdjust from './InvoiceAdjust';
 import InvoicePause from './InvoicePause';
-import InvoiceAdjustConfirm from './InvoiceAdjustConfirm/InvoiceAdjustConfirm';
+import InvoiceAdjustConfirm from './InvoiceAdjustPauseConfirm/InvoiceAdjustConfirm';
 import Theme from '../../../../../../theme/Theme';
 import { CloseIcon } from '../../../../../../theme/images';
 import {
@@ -95,31 +95,28 @@ const InvoiceAdjustPauseModal = ({
     };
   }, [invoiceType]);
 
-  const getAdjustInvoices = useCallback(
-    (type) => {
-      setLoader(true);
-      setInvoiceInputs([]);
+  const getAdjustInvoices = useCallback(() => {
+    setLoader(true);
+    setInvoiceInputs([]);
 
-      getDSPBudgetAdjustData(type, customerId, true).then((res) => {
-        if (mounted.current) {
-          if (res && res.status === 500) {
-            setLoader(false);
-          }
-
-          if (res && res.status === 400) {
-            setLoader(false);
-          }
-          if (res && res.status === 200) {
-            setInvoiceInputs(res.data.results[0]?.adjustments);
-            setLoader(false);
-          }
-          // setInvoiceInputs(dspInvoiceSubType.results);
+    getDSPBudgetAdjustData('standard', customerId, true).then((res) => {
+      if (mounted.current) {
+        if (res && res.status === 500) {
           setLoader(false);
         }
-      });
-    },
-    [customerId],
-  );
+
+        if (res && res.status === 400) {
+          setLoader(false);
+        }
+        if (res && res.status === 200) {
+          setInvoiceInputs(res.data.results[0]?.adjustments);
+          setLoader(false);
+        }
+        // setInvoiceInputs(dspInvoiceSubType.results);
+        setLoader(false);
+      }
+    });
+  }, [customerId]);
 
   const onSendDSPBudgetAdjustInvoice = useCallback(() => {
     setLoader(true);
@@ -185,38 +182,14 @@ const InvoiceAdjustPauseModal = ({
     onApply();
   };
 
-  const getPauseInvoices = useCallback(() => {
-    setLoader(true);
-    setInvoiceInputs([]);
-    getDSPBudgetAdjustData('standard', customerId, true).then((res) => {
-      if (res && res.status === 500) {
-        setLoader(false);
-      }
-
-      if (res && res.status === 400) {
-        setLoader(false);
-      }
-      if (res && res.status === 200) {
-        setInvoiceInputs(res.data.results[0]?.adjustments);
-        setLoader(false);
-      }
-      // setInvoiceInputs(dspInvoiceSubType.results);
-      setLoader(false);
-    });
-  }, [customerId]);
-
   useEffect(() => {
     mounted.current = true;
 
-    if (viewComponent === 'adjustInvoice') {
-      getAdjustInvoices(invoiceType);
-    } else {
-      getPauseInvoices(invoiceType);
-    }
+    getAdjustInvoices(invoiceType);
     return () => {
       mounted.current = false;
     };
-  }, [getPauseInvoices, getAdjustInvoices, invoiceType, viewComponent]);
+  }, [getAdjustInvoices, invoiceType, viewComponent]);
 
   const parseNumber = (value) => {
     return value
@@ -230,7 +203,6 @@ const InvoiceAdjustPauseModal = ({
     if (invoiceInputs && invoiceInputs.length > 0) {
       const temp = { totalCurrentBudget: 0, totalNewBudget: 0 };
       invoiceInputs.forEach((item) => {
-        console.log('item---', item);
         if (
           item &&
           item.new_budget &&

@@ -54,7 +54,7 @@ const InvoicePastAdjustmntModal = ({
     false,
   );
   const [invoiceCount, setInvoiceCount] = useState(null);
-  const [pageNumber, setPageNumber] = useState();
+  const [pageNumber, setPageNumber] = useState(2);
   const [isApicall, setIsApiCall] = useState(false);
   const [adjustmentDetails, setAdjustmentDetails] = useState();
 
@@ -74,7 +74,9 @@ const InvoicePastAdjustmntModal = ({
           if (res && res.status === 200) {
             if (res.data && res.data.results) {
               setInvoicesAdjustmentData(res.data.results);
-              setInvoiceCount(res.data.count);
+              setInvoiceCount(
+                res.data.count > 10 ? res.data.count - 10 : res.data.count,
+              );
             } else {
               setInvoicesAdjustmentData([]);
             }
@@ -88,7 +90,7 @@ const InvoicePastAdjustmntModal = ({
 
   useEffect(() => {
     if (!isApicall) {
-      getAdjustmentData(1);
+      getAdjustmentData(2);
       setIsApiCall(true);
     }
   }, [getAdjustmentData, isApicall, setIsApiCall]);
@@ -318,26 +320,28 @@ const InvoicePastAdjustmntModal = ({
       <ModalBox>
         {renderHeader()}
         <div className="container-fluid">
-          {invoiceAdjustmentLoader ? (
-            <PageLoader
-              component="performance-graph"
-              type="detail"
-              color={Theme.orange}
-              width={40}
-              height={40}
-            />
-          ) : !isMobile ? (
-            renderDesktopView()
-          ) : (
-            renderMobileView()
-          )}
-          {invoicesAdjustmentData.length >= 1 ? (
-            <CommonPagination
-              count={invoiceCount}
-              pageNumber={pageNumber}
-              handlePageChange={handlePageChange}
-            />
-          ) : null}
+          <div className="body-content">
+            {invoiceAdjustmentLoader ? (
+              <PageLoader
+                component="performance-graph"
+                type="detail"
+                color={Theme.orange}
+                width={40}
+                height={40}
+              />
+            ) : !isMobile ? (
+              renderDesktopView()
+            ) : (
+              renderMobileView()
+            )}
+            {invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
+              <CommonPagination
+                count={invoiceCount}
+                pageNumber={pageNumber}
+                handlePageChange={handlePageChange}
+              />
+            ) : null}
+          </div>
         </div>
         <InvoiceViewAndReminderModal
           id="BT-viewAndReminderInvoiceModal"
