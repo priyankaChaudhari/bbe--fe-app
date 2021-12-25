@@ -21,7 +21,7 @@ const InvoicePause = ({
           ...invoiceChoices[index],
           marketplace: item.marketplace,
           is_sent_for_pause: value,
-          newAmount: value ? 0 : element.old_budget,
+          newAmount: value ? 0 : element.new_budget,
         };
         setInvoiceChoices(resultArray);
       }
@@ -59,7 +59,7 @@ const InvoicePause = ({
                           : 'none',
                       }}
                       className="normal-text ">
-                      ${item.old_budget}
+                      ${item.new_budget}
                     </div>
                   </div>
                   <div className="col-4 text-left">
