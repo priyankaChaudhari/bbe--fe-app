@@ -21,11 +21,13 @@ import {
   ModalRadioCheck,
   Button,
   InputText,
+  PageLoader,
 } from '../../common';
 
 export default function DSPBudgetApprovalContainer() {
   const history = useHistory();
   const { adjustmentId } = useParams();
+  const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
 
   const [invoiceType, setInvoiceType] = useState('');
   const [invoiceApprovalCondition, setInvoiceApprovalCondition] = useState(
@@ -49,6 +51,8 @@ export default function DSPBudgetApprovalContainer() {
 
   useEffect(() => {
     getDSPBudgetAdjustDetail(adjustmentId).then((res) => {
+      setIsLoading({ loader: false, type: 'page' });
+
       setMarketplaceData(res);
       if (res?.is_sent_for_pause) {
         setInvoiceType('pause');
@@ -349,62 +353,68 @@ export default function DSPBudgetApprovalContainer() {
   return (
     <>
       <UnauthorizedHeader />
-      <OnBoardingBody className="body-white pt-3">
-        <div className="white-card-base panel pb-4">
-          {renderHeaderMessage()}
-          {renderHeading()}
-          {invoiceType !== 'one time' ? (
-            <>
-              <p className="normal-text text-medium mb-2">
-                {InvoiceCurrentMonthHeader[invoiceType]}
-              </p>
-              <h5 className="sub-title-text mt-2">
-                {generateAmount(total?.old_budget, '', '$')}
-              </h5>
-            </>
-          ) : null}
-          <div className="straight-line horizontal-line mt-3" />
-          <p className="normal-text text-medium mb-2">
-            {InvoiceNewMonthHeader[invoiceType]}
-            {invoiceType === 'pause'
-              ? dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')
-              : null}
-          </p>
-          <h5 className="sub-title-text mt-2">
-            {generateAmount(total?.new_budget, '', '$')}
-          </h5>{' '}
-          <fieldset className="shape-without-border mt-3 p-2">
-            <div className="row">{renderTableHeaders()}</div>
-            <div className=" straight-line horizontal-line pt-1 mb-2 " />
-            {renderTableData()}
-            {renderTotalInvoiceSection()}
-          </fieldset>
-          <p className="normal-text">
-            {InvoiceInfo[invoiceType]?.mainHeading}
-            <span className="text-bold">
-              {InvoiceInfo[invoiceType]?.boldHeading
-                .replace(
-                  'APPLICABLE_MONTH',
-                  dayjs(new Date(marketplaceData?.applicable_from)).format(
+      {isLoading.loader && isLoading.type === 'page' ? (
+        <PageLoader color="#FF5933" type="page" />
+      ) : (
+        <OnBoardingBody className="body-white pt-3">
+          <div className="white-card-base panel pb-4">
+            {renderHeaderMessage()}
+            {renderHeading()}
+            {invoiceType !== 'one time' ? (
+              <>
+                <p className="normal-text text-medium mb-2">
+                  {InvoiceCurrentMonthHeader[invoiceType]}
+                </p>
+                <h5 className="sub-title-text mt-2">
+                  {generateAmount(total?.old_budget, '', '$')}
+                </h5>
+              </>
+            ) : null}
+            <div className="straight-line horizontal-line mt-3" />
+            <p className="normal-text text-medium mb-2">
+              {InvoiceNewMonthHeader[invoiceType]}
+              {invoiceType === 'pause'
+                ? dayjs(new Date(marketplaceData?.applicable_from)).format(
                     'MMMM',
-                  ),
-                )
-                .replace(
-                  'APPLICABLE_DATE',
-                  new Date(marketplaceData?.applicable_from).getDate(),
-                )}
-            </span>
-            {InvoiceInfo[invoiceType]?.mainHeading2}
-          </p>
-          {invoiceType === 'pause' ? (
-            <div className=" straight-line horizontal-line pt-1 mb-2 " />
-          ) : null}
-          {invoiceType === 'permanent additional'
-            ? renderAdditionalDSPInvoice()
-            : null}
-          {renderInvoiceApproveReject()}
-        </div>
-      </OnBoardingBody>
+                  )
+                : null}
+            </p>
+            <h5 className="sub-title-text mt-2">
+              {generateAmount(total?.new_budget, '', '$')}
+            </h5>{' '}
+            <fieldset className="shape-without-border mt-3 p-2">
+              <div className="row">{renderTableHeaders()}</div>
+              <div className=" straight-line horizontal-line pt-1 mb-2 " />
+              {renderTableData()}
+              {renderTotalInvoiceSection()}
+            </fieldset>
+            <p className="normal-text">
+              {InvoiceInfo[invoiceType]?.mainHeading}
+              <span className="text-bold">
+                {InvoiceInfo[invoiceType]?.boldHeading
+                  .replace(
+                    'APPLICABLE_MONTH',
+                    dayjs(new Date(marketplaceData?.applicable_from)).format(
+                      'MMMM',
+                    ),
+                  )
+                  .replace(
+                    'APPLICABLE_DATE',
+                    new Date(marketplaceData?.applicable_from).getDate(),
+                  )}
+              </span>
+              {InvoiceInfo[invoiceType]?.mainHeading2}
+            </p>
+            {invoiceType === 'pause' ? (
+              <div className=" straight-line horizontal-line pt-1 mb-2 " />
+            ) : null}
+            {invoiceType === 'permanent additional'
+              ? renderAdditionalDSPInvoice()
+              : null}
+            {renderInvoiceApproveReject()}
+          </div>
+        </OnBoardingBody>
+      )}
     </>
   );
 }
