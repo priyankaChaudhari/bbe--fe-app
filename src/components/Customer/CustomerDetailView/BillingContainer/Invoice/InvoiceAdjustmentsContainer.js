@@ -24,6 +24,7 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma, memberData }) => {
   const [isAllowToCreateAdjustment, setIsAllowToCreateAdjustment] = useState(
     false,
   );
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     if (
@@ -69,15 +70,20 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma, memberData }) => {
             id={id}
             addThousandComma={addThousandComma}
             isAllowToCreateAdjustment={isAllowToCreateAdjustment}
+            onCount={(value) => {
+              setCount(value);
+            }}
           />
           <div className="straight-line horizontal-line spacing " />
-          <p
-            className="orange-text-label cursor mb-1"
-            onClick={() => setShowAllPastInvoicesModal(true)}
-            role="presentation">
-            {' '}
-            View all past adjustments
-          </p>
+          {count > 10 ? (
+            <p
+              className="orange-text-label cursor mb-1"
+              onClick={() => setShowAllPastInvoicesModal(true)}
+              role="presentation">
+              {' '}
+              View all past adjustments
+            </p>
+          ) : null}
         </WhiteCard>
       ) : (
         <>
@@ -98,15 +104,23 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma, memberData }) => {
               </Button>
             </div>
           </div>
-          <InvoiceAdjustmentList id={id} addThousandComma={addThousandComma} />
+          <InvoiceAdjustmentList
+            id={id}
+            addThousandComma={addThousandComma}
+            onCount={(value) => {
+              setCount(value);
+            }}
+          />
 
-          <p
-            className="orange-text-label text-center cursor mb-3"
-            onClick={() => setShowAllPastInvoicesModal(true)}
-            role="presentation">
-            {' '}
-            View all past adjustments
-          </p>
+          {count > 10 ? (
+            <p
+              className="orange-text-label text-center cursor mb-3"
+              onClick={() => setShowAllPastInvoicesModal(true)}
+              role="presentation">
+              {' '}
+              View all past adjustments
+            </p>
+          ) : null}
         </>
       )}
 
