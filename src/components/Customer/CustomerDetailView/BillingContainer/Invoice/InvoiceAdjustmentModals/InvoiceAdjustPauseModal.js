@@ -365,7 +365,7 @@ const InvoiceAdjustPauseModal = ({
               ) : null}
             </div>
             {loader && <PageLoader color={Theme.orange} type="page" />}
-            <div className="modal-body pb-1 pt-3">
+            <div className="modal-body pb-1 pt-3 mb-2">
               <ContractInputSelect>
                 <label htmlFor="amount">applies from </label>
                 <Select

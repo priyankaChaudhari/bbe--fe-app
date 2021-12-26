@@ -22,6 +22,7 @@ const InvoiceAdjustmentList = ({
   id,
   addThousandComma,
   isAllowToCreateAdjustment,
+  onCount,
 }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const mounted = useRef(true);
@@ -48,6 +49,7 @@ const InvoiceAdjustmentList = ({
         }
         if (res && res.status === 200) {
           if (res.data && res.data.results) {
+            onCount(res.data?.count);
             setInvoicesAdjustmentData(res.data.results);
           } else {
             setInvoicesAdjustmentData(null);
@@ -56,7 +58,7 @@ const InvoiceAdjustmentList = ({
         }
       }
     });
-  }, [id]);
+  }, [id, onCount]);
 
   useEffect(() => {
     mounted.current = true;
@@ -67,7 +69,7 @@ const InvoiceAdjustmentList = ({
     return () => {
       mounted.current = false;
     };
-  }, [getAdjustmentData, id, isApicall, setIsApiCall]);
+  }, [getAdjustmentData, isApicall]);
 
   const renderTableHeader = () => {
     return (
@@ -275,12 +277,14 @@ InvoiceAdjustmentList.defaultProps = {
   id: '',
   isAllowToCreateAdjustment: false,
   addThousandComma: () => {},
+  onCount: () => {},
 };
 
 InvoiceAdjustmentList.propTypes = {
   id: string,
   isAllowToCreateAdjustment: bool,
   addThousandComma: func,
+  onCount: func,
 };
 
 const Wrapper = styled.div`

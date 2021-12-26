@@ -124,7 +124,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData }) => {
               <li
                 className={selectedComponent === 'upcoming' ? 'active' : ''}
                 onClick={() => {
-                  getDSPUpcomingInvoicesData();
+                  getDSPUpcomingInvoicesData(invoiceType);
                   setSelectedComponent('upcoming');
                 }}
                 role="presentation">

@@ -25,7 +25,7 @@ const InvoiceAdjust = ({
           flag = 1;
           resultArray[index] = {
             ...invoiceInputs[index],
-            newAmount: target.value,
+            newAmount: target.value === '' ? item.new_budget : target.value,
             marketplace: input.marketplace,
             change:
               parseNumber(target.value) === input.new_budget
@@ -81,12 +81,12 @@ const InvoiceAdjust = ({
                   <div key={input.id} className="col-4 text-left mt-3">
                     <div className="normal-text ">{input.marketplace}</div>
                   </div>
-                  <div key={input.id} className="col-4 text-left mt-3">
+                  <div className="col-4 text-left mt-3">
                     <div className="normal-text ">
                       ${numberWithCommas(input.new_budget)}
                     </div>
                   </div>
-                  <div key={input.id} className="col-4 text-left">
+                  <div className="col-4 text-left">
                     <InputFormField id={input.marketplace}>
                       <div className="input-container  ">
                         <span className="input-icon ">$</span>
