@@ -78,15 +78,15 @@ const InvoiceAdjust = ({
             invoiceInputs.map((input) => {
               return (
                 <>
-                  <div className="col-4 text-left mt-3">
+                  <div key={input.id} className="col-4 text-left mt-3">
                     <div className="normal-text ">{input.marketplace}</div>
                   </div>
-                  <div className="col-4 text-left mt-3">
+                  <div key={input.id} className="col-4 text-left mt-3">
                     <div className="normal-text ">
                       ${numberWithCommas(input.new_budget)}
                     </div>
                   </div>
-                  <div className="col-4 text-left">
+                  <div key={input.id} className="col-4 text-left">
                     <InputFormField id={input.marketplace}>
                       <div className="input-container  ">
                         <span className="input-icon ">$</span>

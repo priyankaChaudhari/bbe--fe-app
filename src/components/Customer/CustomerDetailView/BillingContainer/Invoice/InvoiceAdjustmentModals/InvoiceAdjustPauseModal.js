@@ -13,6 +13,7 @@ import Theme from '../../../../../../theme/Theme';
 import { CloseIcon } from '../../../../../../theme/images';
 import {
   getDSPBudgetAdjustData,
+  getDSPEmptyBudgetAdjustment,
   postDSPBudgetAdjustPauseInvoiceData,
 } from '../../../../../../api';
 import {
@@ -26,6 +27,7 @@ import {
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
 import { PATH_CUSTOMER_DETAILS } from '../../../../../../constants';
+import InvoicePauseConfirm from './InvoiceAdjustPauseConfirm/InvoicePauseConfirm';
 
 const todaysDate = new Date();
 const day = todaysDate.getDate();
@@ -73,7 +75,6 @@ const InvoiceAdjustPauseModal = ({
   const mounted = useRef(false);
 
   useEffect(() => {
-    mounted.current = true;
     if (mounted.current) {
       if (
         day >= 10 &&
@@ -95,6 +96,25 @@ const InvoiceAdjustPauseModal = ({
     };
   }, [invoiceType]);
 
+  const getDSPEmptyBudget = useCallback(() => {
+    getDSPEmptyBudgetAdjustment(customerId).then((res) => {
+      if (mounted.current) {
+        if (res && res.status === 500) {
+          setLoader(false);
+        }
+
+        if (res && res.status === 400) {
+          setLoader(false);
+        }
+        if (res && res.status === 200) {
+          setInvoiceInputs(res.data[0]?.adjustments);
+          setLoader(false);
+        }
+        setLoader(false);
+      }
+    });
+  }, [customerId]);
+
   const getAdjustInvoices = useCallback(() => {
     setLoader(true);
     setInvoiceInputs([]);
@@ -109,14 +129,22 @@ const InvoiceAdjustPauseModal = ({
           setLoader(false);
         }
         if (res && res.status === 200) {
-          setInvoiceInputs(res.data.results[0]?.adjustments);
-          setLoader(false);
+          const finalData = res?.data.results.filter(
+            (item) =>
+              item.applicable_from <=
+              dayjs(selectedMonthYear.value).format('YYYY-MM-DD'),
+          );
+          if (finalData.length === 0) {
+            getDSPEmptyBudget();
+          } else {
+            setInvoiceInputs(finalData[0]?.adjustments);
+            setLoader(false);
+          }
         }
-        // setInvoiceInputs(dspInvoiceSubType.results);
         setLoader(false);
       }
     });
-  }, [customerId]);
+  }, [customerId, getDSPEmptyBudget, selectedMonthYear.value]);
 
   const onSendDSPBudgetAdjustInvoice = useCallback(() => {
     setLoader(true);
@@ -184,12 +212,11 @@ const InvoiceAdjustPauseModal = ({
 
   useEffect(() => {
     mounted.current = true;
-
     getAdjustInvoices(invoiceType);
     return () => {
       mounted.current = false;
     };
-  }, [getAdjustInvoices, invoiceType, viewComponent]);
+  }, [getAdjustInvoices, invoiceType]);
 
   const parseNumber = (value) => {
     return value
@@ -338,6 +365,24 @@ const InvoiceAdjustPauseModal = ({
               ) : null}
             </div>
             {loader && <PageLoader color={Theme.orange} type="page" />}
+            <div className="modal-body pb-1 pt-3">
+              <ContractInputSelect>
+                <label htmlFor="amount">applies from </label>
+                <Select
+                  classNamePrefix="react-select"
+                  isSearchable={false}
+                  defaultValue={getMonthYearOptions()[0]}
+                  value={selectedMonthYear}
+                  options={getMonthYearOptions()}
+                  name="applies_month_year"
+                  components={{ DropdownIndicator }}
+                  onChange={(event) => {
+                    setselectedMonthYear(event);
+                  }}
+                  placeholder={getMonthYearOptions()[0].label}
+                />
+              </ContractInputSelect>
+            </div>
             {viewComponent === 'adjustInvoice' ? (
               <InvoiceAdjust
                 invoiceInputs={invoiceInputs}
@@ -357,24 +402,7 @@ const InvoiceAdjustPauseModal = ({
                 loading={loader}
               />
             )}
-            <div className="modal-body pb-1 pt-3">
-              <ContractInputSelect>
-                <label htmlFor="amount">applies from </label>
-                <Select
-                  classNamePrefix="react-select"
-                  isSearchable={false}
-                  defaultValue={getMonthYearOptions()[0]}
-                  value={selectedMonthYear}
-                  options={getMonthYearOptions()}
-                  name="applies_month_year"
-                  components={{ DropdownIndicator }}
-                  onChange={(event) => {
-                    setselectedMonthYear(event);
-                  }}
-                  placeholder={getMonthYearOptions()[0].label}
-                />
-              </ContractInputSelect>
-            </div>
+
             <div className="footer-line" />
             <div className="modal-footer">
               <div className="text-center">
@@ -398,6 +426,19 @@ const InvoiceAdjustPauseModal = ({
               </div>
             </div>
           </ModalBox>
+        ) : viewComponent === 'pauseInvoice' ? (
+          <InvoicePauseConfirm
+            adjustmentData={invoiceInputs}
+            onBackClick={() => {
+              setShowConfirmationModal(false);
+            }}
+            returnTotalAmount={returnTotalAmount}
+            selectedMonthYear={selectedMonthYear}
+            invoiceType={invoiceType}
+            onApply={() => {
+              onSendInvoice();
+            }}
+          />
         ) : (
           <InvoiceAdjustConfirm
             adjustmentData={invoiceInputs}
@@ -413,17 +454,6 @@ const InvoiceAdjustPauseModal = ({
           />
         )}
       </Modal>
-
-      {/* <InvoiceAdjustDetailsModal
-        id="BT-invoiceDetailsModal"
-        isOpen={showInvoiceDetailsModal}
-        onClick={() => {
-          setShowInvoiceDetailsModal(false);
-        }}
-        onApply={() => {
-          setShowInvoiceDetailsModal(false);
-        }}
-      /> */}
     </>
   );
 };
