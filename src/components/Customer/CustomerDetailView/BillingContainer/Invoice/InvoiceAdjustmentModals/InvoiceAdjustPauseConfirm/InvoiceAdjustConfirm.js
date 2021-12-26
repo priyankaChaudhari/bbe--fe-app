@@ -48,7 +48,7 @@ const InvoiceAdjustConfirm = ({
                   <div className="col-4 text-left">
                     <div className="label">From</div>
                     <div className={textClass}>
-                      ${numberWithCommas(item.old_budget)}
+                      ${numberWithCommas(item.new_budget)}
                     </div>
                   </div>
                   <div className="col-2 text-left">
@@ -62,7 +62,7 @@ const InvoiceAdjustConfirm = ({
                       $
                       {item.newAmount
                         ? item.newAmount
-                        : numberWithCommas(item.old_budget)}
+                        : numberWithCommas(item.new_budget)}
                     </div>
                   </div>
                   <div className="col-3 text-left">
@@ -146,7 +146,7 @@ const InvoiceAdjustConfirm = ({
                 </div>
                 <div className="col-2 text-left">
                   <div className={textClass}>
-                    ${numberWithCommas(item.old_budget)}
+                    ${numberWithCommas(item.new_budget)}
                   </div>
                 </div>
                 <div className="col-1 text-left">
@@ -159,7 +159,7 @@ const InvoiceAdjustConfirm = ({
                     $
                     {item.newAmount
                       ? item.newAmount
-                      : numberWithCommas(item.old_budget)}
+                      : numberWithCommas(item.new_budget)}
                   </div>
                 </div>
                 <div className="col-3 text-left">
