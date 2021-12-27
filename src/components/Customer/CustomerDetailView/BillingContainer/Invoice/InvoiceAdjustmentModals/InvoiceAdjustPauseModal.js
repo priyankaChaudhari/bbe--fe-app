@@ -7,6 +7,7 @@ import ReactTooltip from 'react-tooltip';
 import { useHistory } from 'react-router-dom';
 import { bool, func, shape, string } from 'prop-types';
 import { toast } from 'react-toastify';
+// import { toast, ToastContainer } from 'react-toastify';
 
 import InvoiceAdjust from './InvoiceAdjust';
 import InvoicePause from './InvoicePause';
@@ -176,7 +177,7 @@ const InvoiceAdjustPauseModal = ({
           PATH_CUSTOMER_DETAILS.replace(':id', customerId),
           'dsp service',
         );
-        history.go(0);
+        // history.go(0);
 
         setLoader(false);
       }
