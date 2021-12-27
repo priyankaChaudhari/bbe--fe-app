@@ -72,7 +72,7 @@ const InvoiceAdjustConfirm = ({
                         ? item.change === 0
                           ? '-'
                           : item.change > 0
-                          ? `$${numberWithCommas(item.change)}`
+                          ? `+$${numberWithCommas(item.change)}`
                           : `-$${numberWithCommas(item.change).replace(
                               '-',
                               '',
@@ -173,7 +173,7 @@ const InvoiceAdjustConfirm = ({
                       ? item.change === 0
                         ? '-'
                         : item.change > 0
-                        ? `$${numberWithCommas(item.change)}`
+                        ? `+$${numberWithCommas(item.change)}`
                         : `-$${numberWithCommas(item.change).replace('-', '')}`
                       : '-'}
                   </div>
@@ -252,7 +252,7 @@ const InvoiceAdjustConfirm = ({
               .format('MMMM')}{' '}
             13.
           </p>
-          {invoiceType === 'permanent' && (
+          {invoiceType === 'permanent additional' && (
             <GreyCard className="yellow-card">
               <p className="normal-text text-bold m-0">
                 Additional DSP invoice (
