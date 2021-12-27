@@ -8,7 +8,7 @@ import InvoiceList from './InvoiceList';
 import { PageLoader } from '../../../../../common';
 import { getMetricsInvoiceData } from '../../../../../api';
 
-const Invoice = ({ id, invoiceType, onLoading, memberData }) => {
+const Invoice = ({ id, invoiceType, onLoading, memberData, bpName }) => {
   const [loader, setLoader] = useState(false);
   const [invoiceMetricsData, setMetricsData] = useState(null);
   const getDSPMetricsData = useCallback(
@@ -69,6 +69,7 @@ const Invoice = ({ id, invoiceType, onLoading, memberData }) => {
             loader={loader}
             id={id}
             memberData={memberData}
+            bpName={bpName}
           />
         </>
       )}
@@ -82,6 +83,7 @@ Invoice.defaultProps = {
   invoiceType: 'rev share',
   memberData: [],
   onLoading: () => {},
+  bpName: '',
 };
 
 Invoice.propTypes = {
@@ -89,4 +91,5 @@ Invoice.propTypes = {
   invoiceType: string,
   memberData: arrayOf(shape({})),
   onLoading: func,
+  bpName: string,
 };

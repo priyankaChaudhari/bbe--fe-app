@@ -21,7 +21,7 @@ import {
   TableMobileView,
 } from '../../../../../common';
 
-const InvoiceList = ({ loader, invoiceType, id, memberData }) => {
+const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
   const isDSPService = invoiceType === 'dsp service';
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [selectedComponent, setSelectedComponent] = useState('past');
@@ -478,6 +478,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData }) => {
           id={id}
           addThousandComma={addThousandComma}
           memberData={memberData}
+          bpName={bpName}
         />
       ) : null}
     </Wrapper>
@@ -490,6 +491,7 @@ InvoiceList.defaultProps = {
   invoiceType: 'rev share',
   id: '',
   memberData: [],
+  bpName: '',
 };
 
 InvoiceList.propTypes = {
@@ -497,6 +499,7 @@ InvoiceList.propTypes = {
   invoiceType: string,
   id: string,
   memberData: arrayOf(shape({})),
+  bpName: string,
 };
 
 const Wrapper = styled.div`

@@ -12,7 +12,12 @@ import {
   InvoicePastAdjustmentModal,
 } from './InvoiceAdjustmentModals';
 
-const InvoiceAdjustmentsContainer = ({ id, addThousandComma, memberData }) => {
+const InvoiceAdjustmentsContainer = ({
+  id,
+  addThousandComma,
+  memberData,
+  bpName,
+}) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
@@ -135,6 +140,7 @@ const InvoiceAdjustmentsContainer = ({ id, addThousandComma, memberData }) => {
           onApply={() => {
             setShowInvoiceAdjustmentModal(false);
           }}
+          bpName={bpName}
         />
       )}
       {showAllPastInvoicesModal ? (
@@ -161,12 +167,14 @@ InvoiceAdjustmentsContainer.defaultProps = {
   id: '',
   memberData: [],
   addThousandComma: () => {},
+  bpName: '',
 };
 
 InvoiceAdjustmentsContainer.propTypes = {
   id: string,
   memberData: arrayOf(shape({})),
   addThousandComma: func,
+  bpName: string,
 };
 
 const Wrapper = styled.div`
