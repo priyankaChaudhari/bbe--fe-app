@@ -1,7 +1,7 @@
 import React from 'react';
 
 import dayjs from 'dayjs';
-import { arrayOf, func, shape, string } from 'prop-types';
+import { arrayOf, func, number, shape, string } from 'prop-types';
 
 import {
   ArrowRightBlackIcon,
@@ -20,6 +20,7 @@ const InvoiceAdjustConfirm = ({
   invoiceType,
   onApply,
   bpName,
+  today,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
 
@@ -243,22 +244,39 @@ const InvoiceAdjustConfirm = ({
             />
           )}
           <div className=" straight-line horizontal-line mt-2 mb-2 " />
-          <p className="normal-text">
-            The new invoice amount will be available to spend from{' '}
-            <b>{selectedMonthYear?.value.split(' ')[0]} onwards.</b>
-            <br /> The first bill for this amount will be sent{' '}
-            {dayjs(selectedMonthYear?.value)
-              .subtract(1, 'M')
-              .format('MMMM')}{' '}
-            13.
-          </p>
+          {invoiceType !== 'one time' ? (
+            <p className="normal-text">
+              The new invoice amount will be available to spend from{' '}
+              <b>
+                {invoiceType === 'standard'
+                  ? selectedMonthYear?.value.split(' ')[0]
+                  : dayjs(selectedMonthYear?.value)
+                      .add(1, 'M')
+                      .format('MMMM')}{' '}
+                onwards.
+              </b>
+              <br /> The first bill for this amount will be sent{' '}
+              {today > 10
+                ? invoiceType === 'standard'
+                  ? dayjs(selectedMonthYear?.value)
+                      .subtract(1, 'M')
+                      .format('MMMM')
+                  : dayjs(selectedMonthYear?.value).format('MMMM')
+                : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
+              13.
+            </p>
+          ) : null}
           {invoiceType === 'permanent additional' && (
             <GreyCard className="yellow-card">
               <p className="normal-text text-bold m-0">
                 Additional DSP invoice (
-                {dayjs(selectedMonthYear?.value)
-                  .subtract(1, 'M')
-                  .format('MMMM')}{' '}
+                {today > 10
+                  ? invoiceType === 'standard'
+                    ? dayjs(selectedMonthYear?.value)
+                        .subtract(1, 'M')
+                        .format('MMMM')
+                    : dayjs(selectedMonthYear?.value).format('MMMM')
+                  : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
                 only)
               </p>
               <p className="normal-text text-bold mb-0 mt-1">
@@ -267,17 +285,20 @@ const InvoiceAdjustConfirm = ({
               </p>
               <p className="normal-text mb-0 mt-1">
                 The will be a one-off invoice, providing additional budget to
-                spend in{' '}
-                <b>
-                  {dayjs(selectedMonthYear?.value)
-                    .subtract(1, 'M')
-                    .format('MMMM')}
-                </b>
-                . This invoice will be sent as soon as brand partner approves
-                the proposal.
+                spend in the current month. This invoice will be sent as soon as
+                brand partner approves the proposal.
               </p>
             </GreyCard>
           )}
+          {invoiceType === 'one time' ? (
+            <p className="normal-text mb-0 mt-1">
+              The will be a one-off invoice, providing additional budget to
+              spend in the{' '}
+              <b>{dayjs(selectedMonthYear?.value).format('MMMM')} only.</b> This
+              invoice will be sent as soon as brand partner approves the
+              proposal.
+            </p>
+          ) : null}
         </div>
 
         <div className="footer-line" />
@@ -313,4 +334,5 @@ InvoiceAdjustConfirm.propTypes = {
   invoiceType: string.isRequired,
   onApply: func,
   bpName: string,
+  today: number.isRequired,
 };
