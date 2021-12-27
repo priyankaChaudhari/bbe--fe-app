@@ -75,11 +75,13 @@ const InvoiceAdjust = ({
           <div className=" straight-line horizontal-line pt-1 mb-2" />
           {invoiceInputs &&
             invoiceInputs.length > 0 &&
-            invoiceInputs.map((input) => {
+            invoiceInputs.map((input, index) => {
               return (
                 <>
-                  <div key={input.id} className="col-4 text-left mt-3">
-                    <div className="normal-text ">{input.marketplace}</div>
+                  <div
+                    key={input.id ? input.id : Math.random()}
+                    className="col-4 text-left mt-3">
+                    <div className="normal-text ">{input?.marketplace}</div>
                   </div>
                   <div className="col-4 text-left mt-3">
                     <div className="normal-text ">
@@ -87,12 +89,12 @@ const InvoiceAdjust = ({
                     </div>
                   </div>
                   <div className="col-4 text-left">
-                    <InputFormField id={input.marketplace}>
+                    <InputFormField id={index + input?.marketplace}>
                       <div className="input-container  ">
                         <span className="input-icon ">$</span>
                         <NumberFormat
                           className="form-control"
-                          name={input.marketplace}
+                          name={index + input?.marketplace}
                           placeholder={
                             invoiceType === 'one time' ? 0 : input.new_budget
                           }
