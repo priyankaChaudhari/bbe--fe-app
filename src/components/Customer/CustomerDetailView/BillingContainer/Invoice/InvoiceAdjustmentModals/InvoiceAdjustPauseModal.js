@@ -62,7 +62,7 @@ const InvoiceAdjustPauseModal = ({
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
   const [selectedMonthYear, setselectedMonthYear] = useState(
-    day >= 10
+    day >= 10 && invoiceType === 'standard'
       ? {
           value: dayjs().add(2, 'M').format('MMMM YYYY'),
           label: dayjs().add(2, 'M').format('MMMM YYYY'),
@@ -80,14 +80,21 @@ const InvoiceAdjustPauseModal = ({
         day >= 10 &&
         ['standard', 'permanent additional'].includes(invoiceType)
       ) {
-        setselectedMonthYear({
-          value: dayjs().add(2, 'M').format('MMMM YYYY'),
-          label: dayjs().add(2, 'M').format('MMMM YYYY'),
-        });
+        if (invoiceType === 'standard') {
+          setselectedMonthYear({
+            value: dayjs().add(2, 'M').format('MMMM YYYY'),
+            label: dayjs().add(2, 'M').format('MMMM YYYY'),
+          });
+        } else {
+          setselectedMonthYear({
+            value: dayjs().format('MMMM YYYY'),
+            label: dayjs().format('MMMM YYYY'),
+          });
+        }
       } else {
         setselectedMonthYear({
-          value: dayjs().add(1, 'M').format('MMMM YYYY'),
-          label: dayjs().add(1, 'M').format('MMMM YYYY'),
+          value: dayjs().format('MMMM YYYY'),
+          label: dayjs().format('MMMM YYYY'),
         });
       }
     }
@@ -259,15 +266,28 @@ const InvoiceAdjustPauseModal = ({
       day >= 10 &&
       ['standard', 'permanent additional'].includes(invoiceType)
     ) {
-      for (let i = 0; i <= 5; i += 1) {
-        monthsYears.push({
-          value: dayjs()
-            .add(i + 2, 'M')
-            .format('MMMM YYYY'),
-          label: dayjs()
-            .add(i + 2, 'M')
-            .format('MMMM YYYY'),
-        });
+      if (invoiceType === 'standard') {
+        for (let i = 0; i <= 5; i += 1) {
+          monthsYears.push({
+            value: dayjs()
+              .add(i + 2, 'M')
+              .format('MMMM YYYY'),
+            label: dayjs()
+              .add(i + 2, 'M')
+              .format('MMMM YYYY'),
+          });
+        }
+      } else {
+        for (let i = 0; i <= 5; i += 1) {
+          monthsYears.push({
+            value: dayjs()
+              .add(i + 1, 'M')
+              .format('MMMM YYYY'),
+            label: dayjs()
+              .add(i + 1, 'M')
+              .format('MMMM YYYY'),
+          });
+        }
       }
     } else {
       for (let i = 0; i <= 5; i += 1) {

@@ -145,10 +145,15 @@ export async function postDSPBudgetAdjustPauseInvoiceData(
   customerId,
   type,
 ) {
+  const todaysDate = new Date();
+  const day = todaysDate.getDate();
   const finalInvoiceAdjust = {
     customer: customerId,
     dsp_invoice_subtype: invoiceType,
-    applicable_from: dayjs(appliedDate.value).format('YYYY-MM-DD'),
+    applicable_from:
+      invoiceType === 'standard'
+        ? dayjs(appliedDate.value).format('YYYY-MM-DD')
+        : dayjs(day + appliedDate.value).format('YYYY-MM-DD'),
     is_sent_for_pause: type === 'pause',
     adjustments: [],
   };
