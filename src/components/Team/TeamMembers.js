@@ -12,10 +12,13 @@ import {
   InputSearchWithRadius,
 } from '../../common';
 
-import { currentTeamMembers, allUsers } from './dummyData';
+import { dummyTeamMembers, allUsers } from './dummyData';
+
+// !      Remove  the eslint disables-once work is done
 
 const TeamMembers = () => {
   const [showCureentTeam, setShowCureentTeam] = useState(true);
+  const [currentTeamMembers, setCurretTeamMembers] = useState(dummyTeamMembers);
 
   return (
     <ModalBox>

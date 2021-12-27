@@ -1,4 +1,4 @@
-export const currentTeamMembers = [
+export const dummyTeamMembers = [
   {
     id: 'CUxcasd',
     role_group: {

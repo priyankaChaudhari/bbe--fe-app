@@ -6,7 +6,7 @@ import { string, func, shape, bool } from 'prop-types';
 
 import { AddTeamMember, EditTeamMember, TeamMembers } from '../../../Team';
 
-// ?      Remove  the eslint disables-once work is done
+// !      Remove  the eslint disables-once work is done
 export default function TeamMemberModal({
   id,
   getCustomerMemberList,
