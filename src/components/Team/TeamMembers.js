@@ -3,7 +3,7 @@ import React from 'react';
 
 import { DebounceInput } from 'react-debounce-input';
 
-import { CloseIcon, SearchIcon } from '../../theme/images';
+import { CloseIcon, SearchIcon, LeftArrowIcon } from '../../theme/images';
 import {
   Button,
   ModalBox,
@@ -12,7 +12,7 @@ import {
   InputSearchWithRadius,
 } from '../../common';
 
-import dummyData from './dummyData';
+import { currentTeamMembers, allUsers } from './dummyData';
 
 const TeamMembers = () => {
   return (
@@ -25,10 +25,10 @@ const TeamMembers = () => {
       />
       <div className="modal-body pb-0">
         {/* List of current Team members */}
-        <div className="body-content ">
+        {/* <div className="body-content ">
           <h4 className="mb-4">Team Members</h4>
           <div className="row">
-            {dummyData.map((member) => {
+            {currentTeamMembers.map((member) => {
               return (
                 <div className="col-12 mb-3" key={Math.random()}>
                   <div
@@ -71,23 +71,22 @@ const TeamMembers = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Add or Search Team members  */}
 
-        {/* <div className="body-content ">
-
-        <h4>
-          {' '}
-          <img
-            width="16px"
-            style={{ verticalAlign: 'bottom' }}
-            className="left-arrow mr-1"
-            src={LeftArrowIcon}
-            alt="arrow"
-          />
-          Back To Team Members
-        </h4>
+        <div className="body-content ">
+          <h4>
+            {' '}
+            <img
+              width="16px"
+              style={{ verticalAlign: 'bottom' }}
+              className="left-arrow mr-1"
+              src={LeftArrowIcon}
+              alt="arrow"
+            />
+            Back To Team Members
+          </h4>
           <InputSearchWithRadius
             id="BT-order-customerlist-search-input"
             className="customer-list-header w-80">
@@ -99,123 +98,25 @@ const TeamMembers = () => {
           </InputSearchWithRadius>
           <div className="horizontal-line straight-line mt-3 mb-3" />
           <div className="row">
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
+            {allUsers.map((member) => {
+              return (
+                <div className="col-12 mb-3" key={member.id}>
+                  <div
+                    className="edit-profile-text float-left"
+                    role="presentation">
+                    <GetInitialName property="mr-3" />
+                    <div className="name-email">
+                      <div className="team-member-name">{member.name}</div>
+                      {member.role}
+                    </div>
+                  </div>
+                  <div className="float-right roleName add-team-member mt-3">
+                    Add
+                  </div>
+                  <div className="clear-fix" />
                 </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
-            <div className="col-12 mb-3">
-              <div className="edit-profile-text float-left" role="presentation">
-                <GetInitialName property="mr-3" />
-                <div className="name-email">
-                  <div className="team-member-name">DSP Ad Manager</div>
-                  Creative
-                </div>
-              </div>
-              <div className="float-right roleName add-team-member mt-3">
-                Add
-              </div>
-              <div className="clear-fix" />
-            </div>
+              );
+            })}
           </div>
         </div>
         <div className="footer-sticky">
@@ -225,7 +126,7 @@ const TeamMembers = () => {
             pageNumber={1}
             // handlePageChange={handlePageChange}
           />
-        </div> */}
+        </div>
       </div>
     </ModalBox>
   );

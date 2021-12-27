@@ -1,4 +1,4 @@
-const currentTeamMembers = [
+export const currentTeamMembers = [
   {
     id: 'CUxcasd',
     role_group: {
@@ -61,4 +61,45 @@ const currentTeamMembers = [
   },
 ];
 
-export default currentTeamMembers;
+export const allUsers = [
+  {
+    id: 'USdnasoih',
+    role: 'Creative',
+    name: 'Jeff Allan',
+  },
+  {
+    id: 'USdnash',
+    role: 'Creative',
+    name: 'Bridget Callahan',
+  },
+  {
+    id: 'USdnasoh',
+    role: 'Creative',
+    name: 'Kara Falknor',
+  },
+  {
+    id: 'USdnasoi',
+    role: 'Creative',
+    name: 'Danial George',
+  },
+  {
+    id: 'Sdnasoi',
+    role: 'Creative',
+    name: 'George Martin',
+  },
+  {
+    id: 'USasoi',
+    role: 'Creative',
+    name: 'Danial Kreg',
+  },
+  {
+    id: 'USdnasasoi',
+    role: 'Creative',
+    name: 'Dan abramov',
+  },
+  {
+    id: 'USdni',
+    role: 'Creative',
+    name: 'asd asd',
+  },
+];
