@@ -43,7 +43,11 @@ export default function DSPBudgetApprovalContainer() {
     if (res?.adjustments?.length) {
       for (const item of res?.adjustments) {
         oldResult += item?.old_budget;
-        newResult += item?.new_budget;
+        if (item?.is_sent_for_pause) {
+          newResult += 0;
+        } else {
+          newResult += item?.new_budget;
+        }
       }
     }
     setTotal({ old_budget: oldResult, new_budget: newResult });
@@ -141,7 +145,7 @@ export default function DSPBudgetApprovalContainer() {
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
     }
 
-    return valueFor === 'change' ? '-' : 0;
+    return valueFor === 'change' ? '-' : '$0';
   };
 
   const renderHeading = () => {
