@@ -68,11 +68,11 @@ const InvoicePause = ({
                         <ModalRadioCheck className="mb-3">
                           <label
                             className=" checkboxes radio-container customer-list"
-                            htmlFor={`${item.id}yes`}>
+                            htmlFor={`${item.marketplace_id}yes`}>
                             <input
                               type="radio"
-                              name={item.id}
-                              id={`${item.id}yes`}
+                              name={item.marketplace_id}
+                              id={`${item.marketplace_id}yes`}
                               defaultChecked={item.is_sent_for_pause === true}
                               onChange={() => {}}
                               onClick={() => onClick(item, true)}
@@ -86,11 +86,11 @@ const InvoicePause = ({
                         <ModalRadioCheck className="mb-3">
                           <label
                             className=" checkboxes radio-container customer-list"
-                            htmlFor={`${item.id}no`}>
+                            htmlFor={`${item.marketplace_id}no`}>
                             <input
                               type="radio"
-                              name={item.id}
-                              id={`${item.id}no`}
+                              name={item.marketplace_id}
+                              id={`${item.marketplace_id}no`}
                               defaultChecked={
                                 item.is_sent_for_pause === false ||
                                 item.is_sent_for_pause === null
