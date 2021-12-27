@@ -59,9 +59,11 @@ const InvoiceViewAndReminderModal = ({
       if (mounted.current) {
         if (res && res.status === 500) {
           setReminderLoader(false);
+          toast.error('Something went wrong');
         }
         if (res && res.status === 400) {
           setReminderLoader(false);
+          toast.error('Something went wrong');
         }
         if (res && res.status === 200) {
           setReminderLoader(false);
