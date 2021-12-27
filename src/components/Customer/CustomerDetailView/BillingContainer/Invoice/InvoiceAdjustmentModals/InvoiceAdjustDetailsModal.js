@@ -44,7 +44,7 @@ const InvoiceAdjustDetailsModal = ({ id, isOpen, style, onClick, onApply }) => {
           role="presentation"
         />
         <ModalBox>
-          <div className="modal-body pb-0 ">
+          <div style={{ wordBreak: 'break-all' }} className="modal-body pb-0 ">
             <h4>
               {' '}
               <img className="modal-back-arrow" src={LeftArrowIcon} alt="" />

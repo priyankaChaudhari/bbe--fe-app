@@ -42,7 +42,6 @@ const customStyles = {
     bottom: 'auto',
     maxWidth: '600px ',
     width: '100% ',
-    minHeight: '390px',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',

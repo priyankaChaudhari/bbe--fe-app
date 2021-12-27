@@ -301,7 +301,7 @@ const InvoiceViewAndReminderModal = ({
         />
         <ModalBox>
           <div className="modal-body pb-0 ">
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex', wordBreak: 'break-all' }}>
               <h4>
                 {' '}
                 <img
