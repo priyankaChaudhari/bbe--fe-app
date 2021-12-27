@@ -214,7 +214,7 @@ const InvoiceAdjustConfirm = ({
   return (
     <>
       <ModalBox>
-        <div className="modal-body pb-0 ">
+        <div style={{ wordBreak: 'break-all' }} className="modal-body pb-0 ">
           <h4>
             <img
               role="presentation"

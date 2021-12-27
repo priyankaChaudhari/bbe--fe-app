@@ -90,6 +90,9 @@ const Table = styled.table`
       }
 
       .notification-bell {
+        padding: 4px;
+        width: fit-content;
+        border-radius: 5px;
         .notification-bell-icon {
           width: 15px;
           vertical-align: middle;
@@ -97,9 +100,7 @@ const Table = styled.table`
         }
         &:hover {
           background-color: ${Theme.gray8};
-          padding: 4px;
-          width: fit-content;
-          border-radius: 5px;
+
           cursor: pointer;
         }
       }
