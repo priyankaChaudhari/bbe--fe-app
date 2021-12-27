@@ -74,6 +74,10 @@ const InvoicePastAdjustmntModal = ({
           if (res && res.status === 200) {
             if (res.data && res.data.results) {
               setInvoicesAdjustmentData(res.data.results);
+              console.log(
+                ' res.data.count > 10 ? res.data.count - 10 : res.d',
+                res.data.count > 10 ? res.data.count - 10 : res.data.count,
+              );
               setInvoiceCount(
                 res.data.count > 10 ? res.data.count - 10 : res.data.count,
               );
@@ -96,8 +100,8 @@ const InvoicePastAdjustmntModal = ({
   }, [getAdjustmentData, isApicall, setIsApiCall]);
 
   const handlePageChange = (currentPage) => {
-    setPageNumber(currentPage);
-    getAdjustmentData(currentPage);
+    setPageNumber(currentPage + 1);
+    getAdjustmentData(currentPage + 1);
   };
 
   const renderHeader = () => {
@@ -150,8 +154,8 @@ const InvoicePastAdjustmntModal = ({
         <td width="20%" className="small-label-text">
           ${addThousandComma(item.to_amount, 0)}
           <div className="marketplace">
-            {item?.dsp_invoice_subtype !== 'one time'
-              ? 'Ongoing'
+            {item.to_date === 'Ongoing'
+              ? item.to_date
               : dayjs(item.to_date).format('DD/MM/YY')}
           </div>
         </td>
@@ -278,8 +282,8 @@ const InvoicePastAdjustmntModal = ({
                           0,
                         )}`}</div>
                         <div className="marketplace">
-                          {item?.dsp_invoice_subtype !== 'one time'
-                            ? 'Ongoing'
+                          {item.to_date === 'Ongoing'
+                            ? item.to_date
                             : dayjs(item.to_date).format('DD/MM/YY')}
                         </div>
                       </div>
@@ -337,7 +341,7 @@ const InvoicePastAdjustmntModal = ({
             {invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
               <CommonPagination
                 count={invoiceCount}
-                pageNumber={pageNumber}
+                pageNumber={pageNumber - 1}
                 handlePageChange={handlePageChange}
               />
             ) : null}

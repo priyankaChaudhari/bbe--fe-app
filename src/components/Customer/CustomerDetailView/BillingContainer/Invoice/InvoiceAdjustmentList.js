@@ -118,8 +118,8 @@ const InvoiceAdjustmentList = ({
         <td width="20%" className="small-label-text">
           ${addThousandComma(item.to_amount, 0)}
           <div className="marketplace">
-            {item?.dsp_invoice_subtype !== 'one time'
-              ? 'Ongoing'
+            {item.to_date === 'Ongoing'
+              ? item.to_date
               : dayjs(item.to_date).format('DD/MM/YY')}
           </div>
         </td>
