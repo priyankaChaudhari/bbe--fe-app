@@ -4,6 +4,7 @@ import Modal from 'react-modal';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
 import { bool, func, shape, string } from 'prop-types';
+import { toast, ToastContainer } from 'react-toastify';
 
 import { StatusColorSet } from '../../../../../../constants';
 import { sendReminderOfAdjustment } from '../../../../../../api';
@@ -65,6 +66,7 @@ const InvoiceViewAndReminderModal = ({
         if (res && res.status === 200) {
           setReminderLoader(false);
           onApply();
+          toast.success('Send reminder successfully');
         }
       }
     });
@@ -286,6 +288,11 @@ const InvoiceViewAndReminderModal = ({
 
   return (
     <>
+      <ToastContainer
+        position="top-center"
+        autoClose={5000}
+        pauseOnFocusLoss={false}
+      />
       <Modal
         id={id}
         isOpen={isOpen}
