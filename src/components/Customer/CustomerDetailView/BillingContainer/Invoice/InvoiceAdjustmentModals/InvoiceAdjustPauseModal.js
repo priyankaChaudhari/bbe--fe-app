@@ -3,9 +3,10 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import dayjs from 'dayjs';
 import Modal from 'react-modal';
 import Select from 'react-select';
+import ReactTooltip from 'react-tooltip';
 import { useHistory } from 'react-router-dom';
 import { bool, func, shape, string } from 'prop-types';
-import ReactTooltip from 'react-tooltip';
+import { toast } from 'react-toastify';
 
 import InvoiceAdjust from './InvoiceAdjust';
 import InvoicePause from './InvoicePause';
@@ -140,6 +141,7 @@ const InvoiceAdjustPauseModal = ({
               item.applicable_from <=
               dayjs(selectedMonthYear.value).format('YYYY-MM-DD'),
           );
+
           if (finalData.length === 0) {
             getDSPEmptyBudget();
           } else {
@@ -147,7 +149,6 @@ const InvoiceAdjustPauseModal = ({
             setLoader(false);
           }
         }
-        setLoader(false);
       }
     });
   }, [customerId, getDSPEmptyBudget, selectedMonthYear.value]);
@@ -169,15 +170,27 @@ const InvoiceAdjustPauseModal = ({
         setLoader(false);
       }
       if (res && res.status === 201) {
+        toast.success(
+          `${bpName}Invoice Adjust Created Successfuly for ${selectedMonthYear.value}`,
+        );
         history.push(
           PATH_CUSTOMER_DETAILS.replace(':id', customerId),
           'dsp service',
         );
+        history.go(0);
+
         setLoader(false);
       }
       setLoader(false);
     });
-  }, [customerId, history, invoiceInputs, invoiceType, selectedMonthYear]);
+  }, [
+    bpName,
+    customerId,
+    history,
+    invoiceInputs,
+    invoiceType,
+    selectedMonthYear,
+  ]);
 
   const onSendDSPBudgetPauseInvoice = useCallback(() => {
     setLoader(true);
@@ -196,15 +209,27 @@ const InvoiceAdjustPauseModal = ({
         setLoader(false);
       }
       if (res && res.status === 201) {
+        toast.success(
+          `${bpName}Invoice Pause Successfuly for ${selectedMonthYear.value}`,
+        );
+        history.go(0);
         history.push(
           PATH_CUSTOMER_DETAILS.replace(':id', customerId),
           'dsp service',
         );
+
         setLoader(false);
       }
       setLoader(false);
     });
-  }, [customerId, history, invoiceInputs, invoiceType, selectedMonthYear]);
+  }, [
+    bpName,
+    customerId,
+    history,
+    invoiceInputs,
+    invoiceType,
+    selectedMonthYear,
+  ]);
 
   const onSendInvoice = () => {
     // onApply();
