@@ -64,11 +64,11 @@ const InvoiceAdjust = ({
             <div className="label">Marketplace</div>
           </div>
           <div className="col-4 text-left">
-            <div className="label">Current</div>
+            <div className="label">From</div>
           </div>
           <div className="col-4 text-left">
             <div className="label">
-              {invoiceType === 'one time' ? 'Additional amount' : 'New amount'}
+              {invoiceType === 'one time' ? 'Additional amount' : 'To'}
             </div>
           </div>
 
