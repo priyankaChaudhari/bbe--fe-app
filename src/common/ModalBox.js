@@ -24,7 +24,12 @@ const ModalBox = styled.div`
   .account-setup-complete {
     padding: 34px 33px 33px 30px !important;
   }
-
+  .inner-body-content {
+    max-height: 380px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
   .modal-body {
     .role-selected {
       color: ${Theme.gray90};
