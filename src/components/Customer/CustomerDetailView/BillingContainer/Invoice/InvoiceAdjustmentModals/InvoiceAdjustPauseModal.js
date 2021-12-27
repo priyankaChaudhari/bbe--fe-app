@@ -245,7 +245,9 @@ const InvoiceAdjustPauseModal = ({
           temp.totalCurrentBudget += parseNumber(item.new_budget.toString());
         }
         if (Object.prototype.hasOwnProperty.call(item, 'newAmount')) {
-          temp.totalNewBudget += parseNumber(item.newAmount);
+          temp.totalNewBudget += parseNumber(
+            item.newAmount === '' ? item.new_budget : item.newAmount,
+          );
         } else if (
           Object.prototype.hasOwnProperty.call(item, 'new_budget') &&
           ['standard', 'permanent additional'].includes(invoiceType)

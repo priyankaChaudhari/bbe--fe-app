@@ -25,7 +25,7 @@ const InvoiceAdjust = ({
           flag = 1;
           resultArray[index] = {
             ...invoiceInputs[index],
-            newAmount: target.value === '' ? item.new_budget : target.value,
+            newAmount: target.value,
             marketplace: input.marketplace,
             change:
               parseNumber(target.value) === input.new_budget
