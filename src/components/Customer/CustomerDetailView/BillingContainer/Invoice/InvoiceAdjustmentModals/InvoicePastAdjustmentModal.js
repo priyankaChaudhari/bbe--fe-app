@@ -320,7 +320,7 @@ const InvoicePastAdjustmntModal = ({
       <ModalBox>
         {renderHeader()}
         <div className="container-fluid">
-          <div className="body-content">
+          <div className="past-adjustment-table-container">
             {invoiceAdjustmentLoader ? (
               <PageLoader
                 component="performance-graph"

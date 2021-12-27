@@ -303,6 +303,7 @@ const InvoiceAdjustPauseModal = ({
           <ModalBox>
             <div className="modal-body pb-1">
               <h4>Invoice Adjustment</h4>
+
               <Tabs className="mt-3">
                 {' '}
                 <ul className="tabs">
@@ -336,93 +337,95 @@ const InvoiceAdjustPauseModal = ({
                   </li>
                 </ul>
               </Tabs>
-              {viewComponent === 'adjustInvoice' ? (
-                <ul className="invoice-adj-radio mt-4">
-                  {adjustInvoiceChoices.map((item) => {
-                    return (
-                      <li key={item.id}>
-                        <ModalRadioCheck className="mb-3">
-                          <label
-                            className=" checkboxes radio-container customer-list"
-                            htmlFor={item.id}>
-                            <input
-                              type="radio"
-                              name={item.name}
-                              checked={invoiceType === item.name}
-                              onChange={(e) => {
-                                setInvoiceType(e.target.name);
-                              }}
-                              id={item.id}
-                            />
-                            <span className="checkmark checkmark-customer-list" />
-                            {item.label}
-                          </label>
-                        </ModalRadioCheck>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : null}
-            </div>
-            {loader && <PageLoader color={Theme.orange} type="page" />}
-            <div className="modal-body pb-1 pt-3 mb-2">
-              <ContractInputSelect>
-                <label htmlFor="amount">applies from </label>
-                <Select
-                  classNamePrefix="react-select"
-                  isSearchable={false}
-                  defaultValue={getMonthYearOptions()[0]}
-                  value={selectedMonthYear}
-                  options={getMonthYearOptions()}
-                  name="applies_month_year"
-                  components={{ DropdownIndicator }}
-                  onChange={(event) => {
-                    setselectedMonthYear(event);
-                  }}
-                  placeholder={getMonthYearOptions()[0].label}
-                />
-              </ContractInputSelect>
-            </div>
-            {viewComponent === 'adjustInvoice' ? (
-              <InvoiceAdjust
-                invoiceInputs={invoiceInputs}
-                setInvoiceInputs={setInvoiceInputs}
-                returnTotalAmount={returnTotalAmount}
-                parseNumber={parseNumber}
-                invoiceType={invoiceType}
-                selectedMonthYear={selectedMonthYear}
-                loading={loader}
-              />
-            ) : (
-              <InvoicePause
-                invoiceChoices={invoiceInputs}
-                setInvoiceChoices={setInvoiceInputs}
-                returnTotalAmount={returnTotalAmount}
-                parseNumber={parseNumber}
-                loading={loader}
-              />
-            )}
+              <div className="body-content">
+                {viewComponent === 'adjustInvoice' ? (
+                  <ul className="invoice-adj-radio mt-4">
+                    {adjustInvoiceChoices.map((item) => {
+                      return (
+                        <li key={item.id}>
+                          <ModalRadioCheck className="mb-3">
+                            <label
+                              className=" checkboxes radio-container customer-list"
+                              htmlFor={item.id}>
+                              <input
+                                type="radio"
+                                name={item.name}
+                                checked={invoiceType === item.name}
+                                onChange={(e) => {
+                                  setInvoiceType(e.target.name);
+                                }}
+                                id={item.id}
+                              />
+                              <span className="checkmark checkmark-customer-list" />
+                              {item.label}
+                            </label>
+                          </ModalRadioCheck>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : null}
 
-            <div className="footer-line" />
-            <div className="modal-footer">
-              <div className="text-center">
-                <Button
-                  disabled={
-                    loader ||
-                    returnTotalAmount().totalCurrentBudget ===
-                      returnTotalAmount().totalNewBudget
-                  }
-                  onClick={() => {
-                    setShowConfirmationModal(true);
-                  }}
-                  type="button"
-                  className="btn-primary on-boarding   w-100">
-                  {loader ? (
-                    <PageLoader color={Theme.white} type="button" />
-                  ) : (
-                    'Continue'
-                  )}
-                </Button>
+                {loader && <PageLoader color={Theme.orange} type="page" />}
+                <div className=" pb-1 pt-3 mb-2">
+                  <ContractInputSelect>
+                    <label htmlFor="amount">applies from </label>
+                    <Select
+                      classNamePrefix="react-select"
+                      isSearchable={false}
+                      defaultValue={getMonthYearOptions()[0]}
+                      value={selectedMonthYear}
+                      options={getMonthYearOptions()}
+                      name="applies_month_year"
+                      components={{ DropdownIndicator }}
+                      onChange={(event) => {
+                        setselectedMonthYear(event);
+                      }}
+                      placeholder={getMonthYearOptions()[0].label}
+                    />
+                  </ContractInputSelect>
+                </div>
+                {viewComponent === 'adjustInvoice' ? (
+                  <InvoiceAdjust
+                    invoiceInputs={invoiceInputs}
+                    setInvoiceInputs={setInvoiceInputs}
+                    returnTotalAmount={returnTotalAmount}
+                    parseNumber={parseNumber}
+                    invoiceType={invoiceType}
+                    selectedMonthYear={selectedMonthYear}
+                    loading={loader}
+                  />
+                ) : (
+                  <InvoicePause
+                    invoiceChoices={invoiceInputs}
+                    setInvoiceChoices={setInvoiceInputs}
+                    returnTotalAmount={returnTotalAmount}
+                    parseNumber={parseNumber}
+                    loading={loader}
+                  />
+                )}
+              </div>
+              <div className="footer-line" />
+              <div className="modal-footer">
+                <div className="text-center">
+                  <Button
+                    disabled={
+                      loader ||
+                      returnTotalAmount().totalCurrentBudget ===
+                        returnTotalAmount().totalNewBudget
+                    }
+                    onClick={() => {
+                      setShowConfirmationModal(true);
+                    }}
+                    type="button"
+                    className="btn-primary on-boarding   w-100">
+                    {loader ? (
+                      <PageLoader color={Theme.white} type="button" />
+                    ) : (
+                      'Continue'
+                    )}
+                  </Button>
+                </div>
               </div>
             </div>
           </ModalBox>

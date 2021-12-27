@@ -14,6 +14,13 @@ const ModalBox = styled.div`
     vertical-align: middle;
     cursor: pointer;
   }
+
+  .past-adjustment-table-container {
+    height: 85vh;
+    overflow-y: auto;
+    padding-bottom: 50px;
+  }
+
   .account-setup-complete {
     padding: 34px 33px 33px 30px !important;
   }

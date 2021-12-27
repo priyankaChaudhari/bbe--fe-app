@@ -91,7 +91,7 @@ const InvoiceAdjust = ({
                       <div className="input-container  ">
                         <span className="input-icon ">$</span>
                         <NumberFormat
-                          className="mt-2 form-control"
+                          className="form-control"
                           name={input.marketplace}
                           placeholder={
                             invoiceType === 'one time' ? 0 : input.new_budget
