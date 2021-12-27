@@ -7,7 +7,6 @@ import ReactTooltip from 'react-tooltip';
 import { useHistory } from 'react-router-dom';
 import { bool, func, shape, string } from 'prop-types';
 import { toast } from 'react-toastify';
-// import { toast, ToastContainer } from 'react-toastify';
 
 import InvoiceAdjust from './InvoiceAdjust';
 import InvoicePause from './InvoicePause';
@@ -64,43 +63,62 @@ const InvoiceAdjustPauseModal = ({
   const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
-  const [selectedMonthYear, setselectedMonthYear] = useState(
-    day >= 10 && invoiceType === 'standard'
-      ? {
-          value: dayjs().add(2, 'M').format('MMMM YYYY'),
-          label: dayjs().add(2, 'M').format('MMMM YYYY'),
-        }
-      : {
-          value: dayjs().format('MMMM YYYY'),
-          label: dayjs().format('MMMM YYYY'),
-        },
-  );
+  const [selectedMonthYear, setselectedMonthYear] = useState({
+    value: dayjs().format('MMMM YYYY'),
+    label: dayjs().format('MMMM YYYY'),
+  });
   const mounted = useRef(false);
+  const [monthsYears, setMonthsYears] = useState([
+    {
+      value: dayjs().format('MMMM YYYY'),
+      label: dayjs().format('MMMM YYYY'),
+    },
+  ]);
 
   useEffect(() => {
-    if (mounted.current) {
-      if (day >= 10) {
-        if (invoiceType === 'standard') {
-          setselectedMonthYear({
-            value: dayjs().add(2, 'M').format('MMMM YYYY'),
-            label: dayjs().add(2, 'M').format('MMMM YYYY'),
+    const temp = [];
+
+    if (day > 10) {
+      if (invoiceType === 'standard') {
+        for (let i = 0; i <= 5; i += 1) {
+          temp.push({
+            value: dayjs()
+              .add(i + 2, 'M')
+              .format('MMMM YYYY'),
+            label: dayjs()
+              .add(i + 2, 'M')
+              .format('MMMM YYYY'),
           });
-        } else if (invoiceType === 'permanent additional') {
-          setselectedMonthYear({
-            value: dayjs().add(1, 'M').format('MMMM YYYY'),
-            label: dayjs().add(1, 'M').format('MMMM YYYY'),
+        }
+      } else if (invoiceType === 'permanent additional') {
+        for (let i = 0; i <= 5; i += 1) {
+          temp.push({
+            value: dayjs()
+              .add(i + 1, 'M')
+              .format('MMMM YYYY'),
+            label: dayjs()
+              .add(i + 1, 'M')
+              .format('MMMM YYYY'),
           });
         }
       } else {
-        setselectedMonthYear({
-          value: dayjs().format('MMMM YYYY'),
-          label: dayjs().format('MMMM YYYY'),
+        for (let i = 0; i <= 5; i += 1) {
+          temp.push({
+            value: dayjs().add(i, 'M').format('MMMM YYYY'),
+            label: dayjs().add(i, 'M').format('MMMM YYYY'),
+          });
+        }
+      }
+    } else {
+      for (let i = 0; i <= 5; i += 1) {
+        temp.push({
+          value: dayjs().add(i, 'M').format('MMMM YYYY'),
+          label: dayjs().add(i, 'M').format('MMMM YYYY'),
         });
       }
     }
-    return () => {
-      mounted.current = false;
-    };
+    setMonthsYears(temp);
+    setselectedMonthYear(temp[0]);
   }, [invoiceType]);
 
   const getDSPEmptyBudget = useCallback(() => {
@@ -127,7 +145,7 @@ const InvoiceAdjustPauseModal = ({
     setInvoiceInputs([]);
 
     getDSPBudgetAdjustData('standard', customerId, true).then((res) => {
-      if (mounted.current) {
+      if (mounted.current && viewComponent) {
         if (res && res.status === 500) {
           setLoader(false);
         }
@@ -151,7 +169,7 @@ const InvoiceAdjustPauseModal = ({
         }
       }
     });
-  }, [customerId, getDSPEmptyBudget, selectedMonthYear.value]);
+  }, [customerId, getDSPEmptyBudget, selectedMonthYear.value, viewComponent]);
 
   const onSendDSPBudgetAdjustInvoice = useCallback(() => {
     setLoader(true);
@@ -281,51 +299,6 @@ const InvoiceAdjustPauseModal = ({
     return 0;
   }, [invoiceInputs, invoiceType]);
 
-  const getMonthYearOptions = () => {
-    const monthsYears = [];
-
-    if (day >= 10) {
-      if (invoiceType === 'standard') {
-        for (let i = 0; i <= 5; i += 1) {
-          monthsYears.push({
-            value: dayjs()
-              .add(i + 2, 'M')
-              .format('MMMM YYYY'),
-            label: dayjs()
-              .add(i + 2, 'M')
-              .format('MMMM YYYY'),
-          });
-        }
-      } else if (invoiceType === 'permanent additional') {
-        for (let i = 0; i <= 5; i += 1) {
-          monthsYears.push({
-            value: dayjs()
-              .add(i + 1, 'M')
-              .format('MMMM YYYY'),
-            label: dayjs()
-              .add(i + 1, 'M')
-              .format('MMMM YYYY'),
-          });
-        }
-      } else {
-        for (let i = 0; i <= 5; i += 1) {
-          monthsYears.push({
-            value: dayjs().add(i, 'M').format('MMMM YYYY'),
-            label: dayjs().add(i, 'M').format('MMMM YYYY'),
-          });
-        }
-      }
-    } else {
-      for (let i = 0; i <= 5; i += 1) {
-        monthsYears.push({
-          value: dayjs().add(i, 'M').format('MMMM YYYY'),
-          label: dayjs().add(i, 'M').format('MMMM YYYY'),
-        });
-      }
-    }
-    return monthsYears;
-  };
-
   return (
     <>
       <Modal
@@ -432,19 +405,21 @@ const InvoiceAdjustPauseModal = ({
                       html
                     />
                   </label>
-                  <Select
-                    classNamePrefix="react-select"
-                    isSearchable={false}
-                    defaultValue={getMonthYearOptions()[0]}
-                    value={selectedMonthYear}
-                    options={getMonthYearOptions()}
-                    name="applies_month_year"
-                    components={{ DropdownIndicator }}
-                    onChange={(event) => {
-                      setselectedMonthYear(event);
-                    }}
-                    placeholder={getMonthYearOptions()[0].label}
-                  />
+                  {monthsYears && (
+                    <Select
+                      classNamePrefix="react-select"
+                      isSearchable={false}
+                      defaultValue={monthsYears[0]}
+                      value={selectedMonthYear}
+                      options={monthsYears}
+                      name="applies_month_year"
+                      components={{ DropdownIndicator }}
+                      onChange={(event) => {
+                        setselectedMonthYear(event);
+                      }}
+                      placeholder={monthsYears[0].label}
+                    />
+                  )}
                 </ContractInputSelect>
               </div>
             </div>
@@ -519,6 +494,7 @@ const InvoiceAdjustPauseModal = ({
               onSendInvoice();
             }}
             bpName={bpName}
+            today={day}
           />
         )}
       </Modal>

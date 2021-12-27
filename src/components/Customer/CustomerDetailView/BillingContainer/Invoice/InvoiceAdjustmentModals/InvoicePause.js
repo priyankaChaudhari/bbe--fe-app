@@ -45,7 +45,7 @@ const InvoicePause = ({
           <div className=" straight-line horizontal-line pt-1 mb-2 " />
           {invoiceChoices &&
             invoiceChoices.length > 0 &&
-            invoiceChoices.map((item) => {
+            invoiceChoices.map((item, index) => {
               return (
                 <>
                   <div className="col-4 text-left mt-2">
@@ -68,11 +68,11 @@ const InvoicePause = ({
                         <ModalRadioCheck className="mb-3">
                           <label
                             className=" checkboxes radio-container customer-list"
-                            htmlFor={`${item.id}yes`}>
+                            htmlFor={`${index + item?.marketplace}yes`}>
                             <input
                               type="radio"
-                              name={item.id}
-                              id={`${item.id}yes`}
+                              name={index + item?.marketplace}
+                              id={`${index + item?.marketplace}yes`}
                               defaultChecked={item.is_sent_for_pause === true}
                               onChange={() => {}}
                               onClick={() => onClick(item, true)}
@@ -86,11 +86,11 @@ const InvoicePause = ({
                         <ModalRadioCheck className="mb-3">
                           <label
                             className=" checkboxes radio-container customer-list"
-                            htmlFor={`${item.id}no`}>
+                            htmlFor={`${index + item?.marketplace}no`}>
                             <input
                               type="radio"
-                              name={item.id}
-                              id={`${item.id}no`}
+                              name={index + item?.marketplace}
+                              id={`${index + item?.marketplace}no`}
                               defaultChecked={
                                 item.is_sent_for_pause === false ||
                                 item.is_sent_for_pause === null
