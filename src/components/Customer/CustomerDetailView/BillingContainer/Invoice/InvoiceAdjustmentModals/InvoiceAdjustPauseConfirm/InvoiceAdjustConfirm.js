@@ -71,7 +71,12 @@ const InvoiceAdjustConfirm = ({
                       {item.change
                         ? item.change === 0
                           ? '-'
-                          : `$${numberWithCommas(item.change)}`
+                          : item.change > 0
+                          ? `$${numberWithCommas(item.change)}`
+                          : `-$${numberWithCommas(item.change).replace(
+                              '-',
+                              '',
+                            )}`
                         : '-'}
                     </div>
                   </div>
@@ -167,7 +172,9 @@ const InvoiceAdjustConfirm = ({
                     {item.change
                       ? item.change === 0
                         ? '-'
-                        : `$${numberWithCommas(item.change)}`
+                        : item.change > 0
+                        ? `$${numberWithCommas(item.change)}`
+                        : `-$${numberWithCommas(item.change).replace('-', '')}`
                       : '-'}
                   </div>
                 </div>
