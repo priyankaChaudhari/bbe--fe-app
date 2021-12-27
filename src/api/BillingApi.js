@@ -62,7 +62,7 @@ export async function sendReminderOfAdjustment(customerId, adjustmentId) {
     dsp_budget: adjustmentId,
   };
   const result = await axiosInstance
-    .post(API_DSP_BUDGET_ADJUSTMENT, data)
+    .post(`${API_DSP_BUDGET_ADJUSTMENT}send-reminder/`, data)
     .then((response) => {
       return response;
     })
