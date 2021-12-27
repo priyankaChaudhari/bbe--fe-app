@@ -475,6 +475,7 @@ export default function CustomerMainContainer() {
                       customerStatus={customer && customer.status}
                       onBoardingId={customer && customer.customer_onboarding_id}
                       memberData={memberData}
+                      bpName={customer?.company_name}
                     />
                   ) : (
                     <Activity

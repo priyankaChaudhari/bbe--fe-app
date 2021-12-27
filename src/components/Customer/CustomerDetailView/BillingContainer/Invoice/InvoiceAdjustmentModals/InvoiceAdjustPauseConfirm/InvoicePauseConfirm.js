@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { arrayOf, func, string } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 
 import numberWithCommas from '../../../../../../../hooks/numberWithComas';
 import { Button, ModalBox } from '../../../../../../../common';
@@ -12,6 +12,8 @@ const InvoicePauseConfirm = ({
   returnTotalAmount,
   onApply,
   onBackClick,
+  selectedMonthYear,
+  bpName,
 }) => {
   const { totalNewBudget } = returnTotalAmount();
   const renderResponsiveView = () => {
@@ -121,6 +123,11 @@ const InvoicePauseConfirm = ({
           </div>
           <div className="col-4 text-left" />
         </div>
+        <div className=" straight-line horizontal-line mt-2 mb-2 " />
+        <p className="normal-text">
+          The change will apply to
+          <b>{selectedMonthYear?.value.split(' ')[0]} onwards.</b>
+        </p>
       </div>
     );
   };
@@ -140,8 +147,7 @@ const InvoicePauseConfirm = ({
             Confirm Pause
           </h4>
           <p className="normal-text">
-            The following proposal will be send to &#60;brand partner&#62; for
-            approval:
+            The following proposal will be send to <b>{bpName}</b> for approval:
           </p>
           <div className=" straight-line horizontal-line pt-1 mb-2 " />
           {renderDesktopView()}
@@ -168,6 +174,8 @@ InvoicePauseConfirm.defaultProps = {
   onApply: () => {},
   onBackClick: () => {},
   returnTotalAmount: () => {},
+  selectedMonthYear: {},
+  bpName: '',
 };
 
 InvoicePauseConfirm.propTypes = {
@@ -176,4 +184,6 @@ InvoicePauseConfirm.propTypes = {
   onApply: func,
   onBackClick: func,
   returnTotalAmount: func,
+  selectedMonthYear: shape({}),
+  bpName: string,
 };

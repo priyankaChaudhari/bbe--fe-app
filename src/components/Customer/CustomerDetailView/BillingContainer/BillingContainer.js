@@ -17,6 +17,7 @@ const BillingContainer = ({
   customerStatus,
   redirectType,
   memberData,
+  bpName,
 }) => {
   const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
@@ -63,6 +64,7 @@ const BillingContainer = ({
           invoiceType={viewComponent}
           id={id}
           memberData={memberData}
+          bpName={bpName}
         />
       ) : (
         <BillingDetails
@@ -83,6 +85,7 @@ BillingContainer.defaultProps = {
   customerStatus: {},
   redirectType: 'retainer',
   memberData: [],
+  bpName: '',
 };
 
 BillingContainer.propTypes = {
@@ -94,4 +97,5 @@ BillingContainer.propTypes = {
   customerStatus: shape({}),
   redirectType: string,
   memberData: arrayOf(shape({})),
+  bpName: string,
 };

@@ -55,6 +55,7 @@ const InvoiceAdjustPauseModal = ({
   style,
   onModalClose,
   onApply,
+  bpName,
 }) => {
   const history = useHistory();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
@@ -482,6 +483,7 @@ const InvoiceAdjustPauseModal = ({
             onApply={() => {
               onSendInvoice();
             }}
+            bpName={bpName}
           />
         ) : (
           <InvoiceAdjustConfirm
@@ -495,6 +497,7 @@ const InvoiceAdjustPauseModal = ({
             onApply={() => {
               onSendInvoice();
             }}
+            bpName={bpName}
           />
         )}
       </Modal>
@@ -510,6 +513,7 @@ InvoiceAdjustPauseModal.defaultProps = {
   style: {},
   onModalClose: () => {},
   onApply: () => {},
+  bpName: '',
 };
 
 InvoiceAdjustPauseModal.propTypes = {
@@ -519,4 +523,5 @@ InvoiceAdjustPauseModal.propTypes = {
   style: shape({}),
   onModalClose: func,
   onApply: func,
+  bpName: string,
 };

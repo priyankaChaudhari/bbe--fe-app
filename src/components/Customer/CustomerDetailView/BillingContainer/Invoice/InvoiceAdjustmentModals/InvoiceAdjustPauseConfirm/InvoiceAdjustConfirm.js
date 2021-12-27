@@ -19,6 +19,7 @@ const InvoiceAdjustConfirm = ({
   selectedMonthYear,
   invoiceType,
   onApply,
+  bpName,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
 
@@ -225,8 +226,7 @@ const InvoiceAdjustConfirm = ({
             Invoice Adjustment
           </h4>
           <p className="normal-text">
-            The following proposal will be send to &#60;brand partner&#62; for
-            approval:
+            The following proposal will be send to <b>{bpName}</b> for approval:
           </p>
           <div className=" straight-line horizontal-line pt-1 mb-2 " />
           {invoiceType !== 'one time' ? (
@@ -302,6 +302,7 @@ InvoiceAdjustConfirm.defaultProps = {
   returnTotalAmount: () => {},
   selectedMonthYear: {},
   onApply: () => {},
+  bpName: '',
 };
 
 InvoiceAdjustConfirm.propTypes = {
@@ -311,4 +312,5 @@ InvoiceAdjustConfirm.propTypes = {
   selectedMonthYear: shape({}),
   invoiceType: string.isRequired,
   onApply: func,
+  bpName: string,
 };
