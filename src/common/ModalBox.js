@@ -264,11 +264,16 @@ const ModalBox = styled.div`
         left: 30px;
         top: 10px;
         padding-left: 0px;
+        cursor: pointer;
         color: ${Theme.gray90};
 
         &.add-team-member {
           color: ${Theme.orange};
         }
+      }
+
+      .back-to-members {
+        cursor: pointer;
       }
 
       .no-result-found {
