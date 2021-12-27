@@ -165,20 +165,18 @@ const InvoiceAdjustPauseModal = ({
       if (res && res.status === 500) {
         setLoader(false);
       }
-
       if (res && res.status === 400) {
         setLoader(false);
       }
       if (res && res.status === 201) {
-        toast.success(
-          `${bpName}Invoice Adjust Created Successfuly for ${selectedMonthYear.value}`,
-        );
         history.push(
           PATH_CUSTOMER_DETAILS.replace(':id', customerId),
           'dsp service',
         );
-        // history.go(0);
-
+        history.go(0);
+        toast.success(
+          `${bpName}Invoice Adjust Created Successfuly for ${selectedMonthYear.value}`,
+        );
         setLoader(false);
       }
       setLoader(false);
@@ -204,20 +202,18 @@ const InvoiceAdjustPauseModal = ({
       if (res && res.status === 500) {
         setLoader(false);
       }
-
       if (res && res.status === 400) {
         setLoader(false);
       }
       if (res && res.status === 201) {
-        toast.success(
-          `${bpName}Invoice Pause Successfuly for ${selectedMonthYear.value}`,
-        );
         history.go(0);
         history.push(
           PATH_CUSTOMER_DETAILS.replace(':id', customerId),
           'dsp service',
         );
-
+        toast.success(
+          `${bpName}Invoice Pause Successfuly for ${selectedMonthYear.value}`,
+        );
         setLoader(false);
       }
       setLoader(false);
