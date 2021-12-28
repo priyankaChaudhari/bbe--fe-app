@@ -12,6 +12,7 @@ import { BellNotification } from '../../../../../theme/images';
 import { getInvoiceData, getUpcomingInvoiceData } from '../../../../../api';
 import { StatusColorSet, InvoiceTypeNames } from '../../../../../constants';
 import {
+  CommonPagination,
   PageLoader,
   Status,
   Table,
@@ -28,26 +29,32 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
   const [invoicesData, setInvoicesData] = useState();
   const [pastInvoiceLoader, setPastInvoiceLoader] = useState(false);
   const [isApicall, setIsApiCall] = useState(false);
+  const [count, setCount] = useState();
+  const [pageNumber, setPageNumber] = useState(1);
   const mounted = useRef(false);
+  const invoiceDataLength = invoicesData?.length;
 
   const getDSPInvoicesData = useCallback(
-    (type) => {
+    (type, currentPage) => {
       setPastInvoiceLoader(true);
-      getInvoiceData(type, id).then((res) => {
+      getInvoiceData(type, id, currentPage).then((res) => {
         if (mounted.current) {
-          if (res && res.status === 500) {
+          if (res?.status === 500) {
             setPastInvoiceLoader(false);
             setInvoicesData(null);
           }
-
-          if (res && res.status === 400) {
+          if (res?.status === 400) {
             setPastInvoiceLoader(false);
           }
-          if (res && res.status === 200) {
-            if (res.data && res.data.results) {
+          if (res?.status === 200) {
+            if (res.data?.results) {
               setInvoicesData(res.data.results);
+              setCount(res.data.count);
+              setPageNumber(currentPage);
             } else {
               setInvoicesData(null);
+              setCount(null);
+              setPageNumber(1);
             }
             setPastInvoiceLoader(false);
           }
@@ -58,23 +65,26 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
   );
 
   const getDSPUpcomingInvoicesData = useCallback(
-    (type) => {
+    (type, currentPage) => {
       setPastInvoiceLoader(true);
-      getUpcomingInvoiceData(type, id).then((res) => {
+      getUpcomingInvoiceData(type, id, currentPage).then((res) => {
         if (mounted.current) {
-          if (res && res.status === 500) {
+          if (res?.status === 500) {
             setPastInvoiceLoader(false);
             setInvoicesData(null);
           }
-
-          if (res && res.status === 400) {
+          if (res?.status === 400) {
             setPastInvoiceLoader(false);
           }
-          if (res && res.status === 200) {
-            if (res.data && res.data.results) {
+          if (res?.status === 200) {
+            if (res.data?.results) {
               setInvoicesData(res.data.results);
+              setCount(res.data.count);
+              setPageNumber(currentPage);
             } else {
               setInvoicesData(null);
+              setCount(null);
+              setPageNumber(1);
             }
             setPastInvoiceLoader(false);
           }
@@ -83,6 +93,17 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
     },
     [id],
   );
+
+  const handlePageChange = (currentPage) => {
+    if (selectedComponent === 'past') {
+      setPageNumber(currentPage);
+      getDSPInvoicesData(invoiceType, currentPage);
+    }
+    if (selectedComponent === 'upcoming') {
+      setPageNumber(currentPage);
+      getDSPUpcomingInvoicesData(invoiceType, currentPage);
+    }
+  };
 
   useEffect(() => {
     mounted.current = true;
@@ -102,7 +123,6 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
         .toString()
         .replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
-
     return number;
   }, []);
 
@@ -239,12 +259,26 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
             width={40}
             height={40}
           />
-        ) : invoicesData && invoicesData.length >= 1 ? (
-          selectedComponent === 'past' ? (
-            renderMobilePastInvoice()
-          ) : (
-            renderMobileUpcomingInvoice()
-          )
+        ) : invoiceDataLength >= 1 ? (
+          <>
+            {selectedComponent === 'past'
+              ? renderMobilePastInvoice()
+              : renderMobileUpcomingInvoice()}{' '}
+            <>
+              <div
+                className={
+                  invoiceDataLength < 9 && count < 10
+                    ? ''
+                    : 'straight-line horizontal-line mt-3'
+                }
+              />
+              <CommonPagination
+                count={count}
+                pageNumber={pageNumber}
+                handlePageChange={handlePageChange}
+              />
+            </>
+          </>
         ) : (
           <NoData>
             No{' '}
@@ -417,7 +451,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
               {selectedComponent === 'past' ? (
                 <Table className="mt-0">
                   <thead>{renderTableHeader()}</thead>
-                  {invoicesData && invoicesData.length >= 1 ? (
+                  {invoiceDataLength >= 1 ? (
                     <tbody>
                       {invoicesData.map((item) =>
                         renderPastInvoiceTableData(item),
@@ -428,7 +462,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
               ) : (
                 <Table className="mt-0">
                   <thead>{renderTableHeader()}</thead>
-                  {invoicesData && invoicesData.length >= 1 ? (
+                  {invoiceDataLength >= 1 ? (
                     <tbody>
                       {invoicesData.map((item) =>
                         renderUpcomingInvoiceTableData(item),
@@ -437,8 +471,23 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
                   ) : null}
                 </Table>
               )}
-
-              {!invoicesData || (invoicesData && invoicesData.length === 0) ? (
+              {invoiceDataLength > 0 ? (
+                <>
+                  <div
+                    className={
+                      invoiceDataLength < 9 && count < 10
+                        ? ''
+                        : 'straight-line horizontal-line mt-3'
+                    }
+                  />
+                  <CommonPagination
+                    count={count}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
+              ) : null}
+              {!invoicesData || invoiceDataLength === 0 ? (
                 <NoData>
                   No{' '}
                   {invoiceType === 'rev share'

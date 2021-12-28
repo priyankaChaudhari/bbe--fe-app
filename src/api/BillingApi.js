@@ -6,10 +6,11 @@ import {
   API_DSP_INVOICES,
 } from '../constants';
 
-export async function getInvoiceData(invoiceType, id) {
+export async function getInvoiceData(invoiceType, id, pageNumber) {
   const params = {
     customer: id,
     invoice_type: invoiceType,
+    page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
   };
   const result = await axiosInstance
     .get(API_DSP_INVOICES, { params })
@@ -22,11 +23,12 @@ export async function getInvoiceData(invoiceType, id) {
   return result;
 }
 
-export async function getUpcomingInvoiceData(type, id) {
+export async function getUpcomingInvoiceData(type, id, pageNumber) {
   const params = {
     customer: id,
     adjustment_data: 'upcoming',
     invoice_type: type,
+    page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
   };
   const result = await axiosInstance
     .get(API_DSP_BUDGET_ADJUSTMENT, { params })
