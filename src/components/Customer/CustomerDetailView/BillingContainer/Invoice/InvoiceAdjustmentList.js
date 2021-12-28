@@ -224,8 +224,14 @@ const InvoiceAdjustmentList = ({
                   }
                   label="From"
                   labelInfo={`$${addThousandComma(item.from_amount, 0)}`}
+                  sublabel={dayjs(item.applicable_from).format('DD/MM/YY')}
                   label1="To"
                   labelInfo1={`$${addThousandComma(item.to_amount, 0)}`}
+                  sublabel1={
+                    item.to_date === 'Ongoing'
+                      ? item.to_date
+                      : dayjs(item.to_date).format('DD/MM/YY')
+                  }
                   label2="Status"
                   labelInfo2={
                     status === 'pending' && isAllowToCreateAdjustment
