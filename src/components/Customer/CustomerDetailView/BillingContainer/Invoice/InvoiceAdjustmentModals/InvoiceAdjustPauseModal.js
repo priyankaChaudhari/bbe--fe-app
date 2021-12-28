@@ -15,7 +15,6 @@ import Theme from '../../../../../../theme/Theme';
 import { CloseIcon, helpCircleIcon } from '../../../../../../theme/images';
 import {
   getDSPBudgetAdjustData,
-  getDSPEmptyBudgetAdjustment,
   postDSPBudgetAdjustPauseInvoiceData,
 } from '../../../../../../api';
 import {
@@ -121,25 +120,6 @@ const InvoiceAdjustPauseModal = ({
     setselectedMonthYear(temp[0]);
   }, [invoiceType]);
 
-  const getDSPEmptyBudget = useCallback(() => {
-    getDSPEmptyBudgetAdjustment(customerId).then((res) => {
-      if (mounted.current) {
-        if (res && res.status === 500) {
-          setLoader(false);
-        }
-
-        if (res && res.status === 400) {
-          setLoader(false);
-        }
-        if (res && res.status === 200) {
-          setInvoiceInputs(res.data[0]?.adjustments);
-          setLoader(false);
-        }
-        setLoader(false);
-      }
-    });
-  }, [customerId]);
-
   const getAdjustInvoices = useCallback(() => {
     setLoader(true);
     setInvoiceInputs([]);
@@ -154,22 +134,29 @@ const InvoiceAdjustPauseModal = ({
           setLoader(false);
         }
         if (res && res.status === 200) {
-          const finalData = res?.data.results.filter(
+          const temp = res?.data.results.filter(
             (item) =>
               item.applicable_from <=
               dayjs(selectedMonthYear.value).format('YYYY-MM-DD'),
           );
 
-          if (finalData.length === 0) {
-            getDSPEmptyBudget();
-          } else {
-            setInvoiceInputs(finalData[0]?.adjustments);
-            setLoader(false);
-          }
+          const finalResult =
+            temp.length > 0
+              ? temp[0]?.adjustments
+              : [
+                  ...new Map(
+                    res?.data?.results[0].adjustment.map((item) => [
+                      item.marketplace,
+                      item,
+                    ]),
+                  ).values(),
+                ];
+          setInvoiceInputs(finalResult);
+          setLoader(false);
         }
       }
     });
-  }, [customerId, getDSPEmptyBudget, selectedMonthYear.value, viewComponent]);
+  }, [customerId, selectedMonthYear.value, viewComponent]);
 
   const onSendDSPBudgetAdjustInvoice = useCallback(() => {
     setLoader(true);

@@ -106,7 +106,7 @@ export async function getDSPBudgetAdjustData(
     };
   }
   const result = await axiosInstance
-    .get(`${API_DSP_BUDGET_ADJUSTMENT}`, { params })
+    .get(`${API_DSP_BUDGET_ADJUSTMENT}detailed-adjustments/`, { params })
     .then((response) => {
       return response;
     })
