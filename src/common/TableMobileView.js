@@ -101,13 +101,13 @@ const TableMobileView = ({
                 />
               ) : null}
             </div>
-            <div className="sub-label-text">{sublabel}</div>
+            {sublabel && <div className="sub-label-text">{sublabel}</div>}
           </div>
           <div className={`${col} mb-3`}>
             {' '}
             <div className="label">{label1}</div>
             <div className="label-info label-bold"> {labelInfo1}</div>
-            <div className="sub-label-text">{sublabel1}</div>
+            {sublabel1 && <div className="sub-label-text">{sublabel1}</div>}
           </div>
           <div className={`${col} mb-3`}>
             {' '}
