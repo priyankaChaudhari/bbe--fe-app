@@ -74,9 +74,49 @@ const InvoiceAdjustPauseModal = ({
     },
   ]);
 
-  useEffect(() => {
-    const temp = [];
+  const getAdjustInvoices = useCallback(
+    (date) => {
+      setLoader(true);
+      setInvoiceInputs([]);
 
+      getDSPBudgetAdjustData('standard', customerId, true).then((res) => {
+        if (mounted.current && viewComponent) {
+          if (res && res.status === 500) {
+            setLoader(false);
+          }
+
+          if (res && res.status === 400) {
+            setLoader(false);
+          }
+          if (res && res.status === 200) {
+            const temp = res?.data.results.filter(
+              (item) =>
+                item.applicable_from <= dayjs(date).format('YYYY-MM-DD'),
+            );
+
+            const finalResult =
+              temp.length > 0
+                ? temp[0]?.adjustments
+                : [
+                    ...new Map(
+                      res?.data?.results[0].adjustment.map((item) => [
+                        item.marketplace,
+                        item,
+                      ]),
+                    ).values(),
+                  ];
+            setInvoiceInputs(finalResult);
+            setLoader(false);
+          }
+        }
+      });
+    },
+    [customerId, viewComponent],
+  );
+
+  useEffect(() => {
+    mounted.current = true;
+    const temp = [];
     if (day > 10) {
       if (invoiceType === 'standard') {
         for (let i = 0; i <= 5; i += 1) {
@@ -118,45 +158,11 @@ const InvoiceAdjustPauseModal = ({
     }
     setMonthsYears(temp);
     setselectedMonthYear(temp[0]);
-  }, [invoiceType]);
-
-  const getAdjustInvoices = useCallback(() => {
-    setLoader(true);
-    setInvoiceInputs([]);
-
-    getDSPBudgetAdjustData('standard', customerId, true).then((res) => {
-      if (mounted.current && viewComponent) {
-        if (res && res.status === 500) {
-          setLoader(false);
-        }
-
-        if (res && res.status === 400) {
-          setLoader(false);
-        }
-        if (res && res.status === 200) {
-          const temp = res?.data.results.filter(
-            (item) =>
-              item.applicable_from <=
-              dayjs(selectedMonthYear.value).format('YYYY-MM-DD'),
-          );
-
-          const finalResult =
-            temp.length > 0
-              ? temp[0]?.adjustments
-              : [
-                  ...new Map(
-                    res?.data?.results[0].adjustment.map((item) => [
-                      item.marketplace,
-                      item,
-                    ]),
-                  ).values(),
-                ];
-          setInvoiceInputs(finalResult);
-          setLoader(false);
-        }
-      }
-    });
-  }, [customerId, selectedMonthYear.value, viewComponent]);
+    getAdjustInvoices(temp[0].value);
+    return () => {
+      mounted.current = false;
+    };
+  }, [getAdjustInvoices, invoiceType]);
 
   const onSendDSPBudgetAdjustInvoice = useCallback(() => {
     setLoader(true);
@@ -241,14 +247,6 @@ const InvoiceAdjustPauseModal = ({
     }
     onApply();
   };
-
-  useEffect(() => {
-    mounted.current = true;
-    getAdjustInvoices(invoiceType);
-    return () => {
-      mounted.current = false;
-    };
-  }, [getAdjustInvoices, invoiceType]);
 
   const parseNumber = (value) => {
     return value
@@ -402,6 +400,7 @@ const InvoiceAdjustPauseModal = ({
                       name="applies_month_year"
                       components={{ DropdownIndicator }}
                       onChange={(event) => {
+                        getAdjustInvoices(event.value);
                         setselectedMonthYear(event);
                       }}
                       placeholder={monthsYears[0].label}
