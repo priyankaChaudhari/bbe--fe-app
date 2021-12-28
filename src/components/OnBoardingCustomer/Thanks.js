@@ -11,6 +11,7 @@ export default function Thanks() {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
   const type = history.location?.type;
+
   return (
     <>
       <UnauthorizedHeader />

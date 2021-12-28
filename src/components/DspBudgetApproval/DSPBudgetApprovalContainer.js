@@ -106,6 +106,7 @@ export default function DSPBudgetApprovalContainer() {
         history.push({
           pathname: PATH_THANKS,
           type: 'dspSignOff',
+          search: `name=${marketplaceData?.created_by?.first_name}`,
         });
       }
     });
