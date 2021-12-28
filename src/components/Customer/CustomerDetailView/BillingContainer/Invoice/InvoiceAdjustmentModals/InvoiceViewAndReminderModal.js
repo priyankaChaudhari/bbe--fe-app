@@ -334,26 +334,28 @@ const InvoiceViewAndReminderModal = ({
                 />
               </div>
             </div>
-            <div className=" straight-line horizontal-line pt-3 mb-2 " />
-            {isMobile ? renderMobileView() : renderDesktopView()}
+            <div className="body-content">
+              <div className=" straight-line horizontal-line pt-3 mb-2 " />
+              {isMobile ? renderMobileView() : renderDesktopView()}
 
-            <div className=" straight-line horizontal-line mt-2 mb-2 " />
-            {status === 'rejected' ? (
-              <p className="normal-text">
-                Reason for rejection:{' '}
-                {adjustmentDetails?.rejection_note !== null
-                  ? adjustmentDetails.rejection_note
-                  : 'none provided'}
-              </p>
-            ) : (
-              <p className="normal-text">
-                The new invoice amount will be available to spend from{' '}
-                {dayjs(adjustmentDetails.applicable_from).format('MMMM')}{' '}
-                onwards.
-                <br /> The first bill for this amount willbe sent{' '}
-                {dayjs(previousMonth).format('MMMM')} 13.
-              </p>
-            )}
+              <div className=" straight-line horizontal-line mt-2 mb-2 " />
+              {status === 'rejected' ? (
+                <p className="normal-text">
+                  Reason for rejection:{' '}
+                  {adjustmentDetails?.rejection_note !== null
+                    ? adjustmentDetails.rejection_note
+                    : 'none provided'}
+                </p>
+              ) : (
+                <p className="normal-text">
+                  The new invoice amount will be available to spend from{' '}
+                  {dayjs(adjustmentDetails.applicable_from).format('MMMM')}{' '}
+                  onwards.
+                  <br /> The first bill for this amount willbe sent{' '}
+                  {dayjs(previousMonth).format('MMMM')} 13.
+                </p>
+              )}
+            </div>
           </div>
           {status === 'pending' && isAllowToCreateAdjustment ? (
             <>
