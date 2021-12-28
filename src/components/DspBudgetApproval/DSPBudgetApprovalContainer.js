@@ -26,6 +26,7 @@ import {
   PageLoader,
   ErrorMsg,
   PageNotFound,
+  ErrorMsgBox,
 } from '../../common';
 
 export default function DSPBudgetApprovalContainer() {
@@ -94,6 +95,7 @@ export default function DSPBudgetApprovalContainer() {
     if (invoiceApprovalCondition === 'yes') {
       if (invoiceType === 'pause') {
         data.pause_approved = true;
+        data.budget_approved = true;
         data.adjustments = setAdjustmentsData(true);
       } else {
         data.budget_approved = true;
@@ -102,6 +104,7 @@ export default function DSPBudgetApprovalContainer() {
     if (invoiceApprovalCondition === 'no') {
       if (invoiceType === 'pause') {
         data.pause_approved = false;
+        data.budget_approved = false;
         data.adjustments = setAdjustmentsData(false);
       } else {
         data.budget_approved = false;
@@ -192,7 +195,7 @@ export default function DSPBudgetApprovalContainer() {
   };
 
   const renderInvoiceApproveReject = () => {
-    return (
+    return marketplaceData?.budget_approved === null ? (
       <>
         {invoiceApprovalFlag.map((item) => (
           <ModalRadioCheck className="mb-3" key={item.value}>
@@ -238,6 +241,14 @@ export default function DSPBudgetApprovalContainer() {
           )}
         </Button>
       </>
+    ) : marketplaceData?.budget_approved ? (
+      <ErrorMsgBox className="success large-text mt-3">
+        Adjustment is already been accepted.
+      </ErrorMsgBox>
+    ) : (
+      <ErrorMsgBox className="large-text mt-3">
+        Adjustment is already been rejected.
+      </ErrorMsgBox>
     );
   };
 
