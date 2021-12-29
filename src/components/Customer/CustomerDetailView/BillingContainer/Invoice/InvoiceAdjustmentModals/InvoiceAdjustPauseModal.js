@@ -99,7 +99,7 @@ const InvoiceAdjustPauseModal = ({
                 ? temp[0]?.adjustments
                 : [
                     ...new Map(
-                      res?.data?.results[0].adjustment.map((item) => [
+                      res?.data?.results[0]?.adjustments.map((item) => [
                         item.marketplace,
                         item,
                       ]),
