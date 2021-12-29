@@ -115,6 +115,7 @@ const InvoiceAdjustmentsContainer = ({
             onCount={(value) => {
               setCount(value);
             }}
+            isAllowToCreateAdjustment={isAllowToCreateAdjustment}
           />
 
           {count > 10 ? (
@@ -155,6 +156,7 @@ const InvoiceAdjustmentsContainer = ({
             setShowAllPastInvoicesModal(false);
           }}
           addThousandComma={addThousandComma}
+          isAllowToCreateAdjustment={isAllowToCreateAdjustment}
         />
       ) : null}
     </Wrapper>

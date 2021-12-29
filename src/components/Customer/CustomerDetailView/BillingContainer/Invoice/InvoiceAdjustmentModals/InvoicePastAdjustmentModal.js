@@ -74,10 +74,6 @@ const InvoicePastAdjustmntModal = ({
           if (res && res.status === 200) {
             if (res.data && res.data.results) {
               setInvoicesAdjustmentData(res.data.results);
-              console.log(
-                ' res.data.count > 10 ? res.data.count - 10 : res.d',
-                res.data.count > 10 ? res.data.count - 10 : res.data.count,
-              );
               setInvoiceCount(
                 res.data.count > 10 ? res.data.count - 10 : res.data.count,
               );
