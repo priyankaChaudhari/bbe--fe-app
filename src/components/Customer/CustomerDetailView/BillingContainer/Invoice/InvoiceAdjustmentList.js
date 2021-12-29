@@ -110,13 +110,16 @@ const InvoiceAdjustmentList = ({
           <div className="marketplace">{item?.marketplaces}</div>
         </td>
         <td width="20%" className="small-label-text">
-          ${addThousandComma(item.from_amount, 0)}
+          $
+          {item.from_amount === null
+            ? 0
+            : addThousandComma(item.from_amount, 0)}
           <div className="marketplace">
             {dayjs(item.applicable_from).format('DD/MM/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
-          ${addThousandComma(item.to_amount, 0)}
+          ${item.to_amount === null ? 0 : addThousandComma(item.to_amount, 0)}
           <div className="marketplace">
             {item.to_date === 'Ongoing'
               ? item.to_date
@@ -223,10 +226,18 @@ const InvoiceAdjustmentList = ({
                       : '#E3F2D2'
                   }
                   label="From"
-                  labelInfo={`$${addThousandComma(item.from_amount, 0)}`}
+                  labelInfo={`$${
+                    item.from_amount === null
+                      ? 0
+                      : addThousandComma(item.from_amount, 0)
+                  }`}
                   sublabel={dayjs(item.applicable_from).format('DD/MM/YY')}
                   label1="To"
-                  labelInfo1={`$${addThousandComma(item.to_amount, 0)}`}
+                  labelInfo1={`$${
+                    item.to_amount === null
+                      ? 0
+                      : addThousandComma(item.to_amount, 0)
+                  }`}
                   sublabel1={
                     item.to_date === 'Ongoing'
                       ? item.to_date

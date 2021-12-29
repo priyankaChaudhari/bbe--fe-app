@@ -142,13 +142,16 @@ const InvoicePastAdjustmntModal = ({
           <div className="marketplace">{item?.marketplaces}</div>
         </td>
         <td width="20%" className="small-label-text">
-          ${addThousandComma(item.from_amount, 0)}
+          $
+          {item.from_amount === null
+            ? 0
+            : addThousandComma(item.from_amount, 0)}
           <div className="marketplace">
             {dayjs(item.applicable_from).format('DD/MM/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
-          ${addThousandComma(item.to_amount, 0)}
+          ${item.to_amount === null ? 0 : addThousandComma(item.to_amount, 0)}
           <div className="marketplace">
             {item.to_date === 'Ongoing'
               ? item.to_date
@@ -263,20 +266,22 @@ const InvoicePastAdjustmntModal = ({
                       </div>
                       <div className="col-4 mt-2">
                         <div className="label"> From</div>
-                        <div className="type">{`$${addThousandComma(
-                          item.from_amount,
-                          0,
-                        )}`}</div>
+                        <div className="type">{`$${
+                          item.from_amount === null
+                            ? 0
+                            : addThousandComma(item.from_amount, 0)
+                        }`}</div>
                         <div className="marketplace">
                           {dayjs(item.applicable_from).format('DD/MM/YY')}
                         </div>
                       </div>
                       <div className="col-4 mt-2">
                         <div className="label"> To</div>
-                        <div className="type">{`$${addThousandComma(
-                          item.to_amount,
-                          0,
-                        )}`}</div>
+                        <div className="type">{`$${
+                          item.to_amount === null
+                            ? 0
+                            : addThousandComma(item.to_amount, 0)
+                        }`}</div>
                         <div className="marketplace">
                           {item.to_date === 'Ongoing'
                             ? item.to_date
