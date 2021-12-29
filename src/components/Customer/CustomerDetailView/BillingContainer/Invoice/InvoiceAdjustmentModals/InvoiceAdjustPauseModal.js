@@ -331,7 +331,7 @@ const InvoiceAdjustPauseModal = ({
                     }`}
                     role="presentation"
                     onClick={() => {
-                      setInvoiceType('standard');
+                      setInvoiceType('permanent additional');
                       setViewComponent('pauseInvoice');
                     }}>
                     Pause Invoice
