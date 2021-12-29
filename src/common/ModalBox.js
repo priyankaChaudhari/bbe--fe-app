@@ -16,7 +16,7 @@ const ModalBox = styled.div`
   }
 
   .past-adjustment-table-container {
-    height: 85vh;
+    height: 80vh;
     overflow-y: auto;
     padding-bottom: 50px;
   }
