@@ -351,7 +351,7 @@ const InvoiceViewAndReminderModal = ({
                   The new invoice amount will be available to spend from{' '}
                   {dayjs(adjustmentDetails.applicable_from).format('MMMM')}{' '}
                   onwards.
-                  <br /> The first bill for this amount willbe sent{' '}
+                  <br /> The first bill for this amount will be sent{' '}
                   {dayjs(previousMonth).format('MMMM')} 13.
                 </p>
               )}
