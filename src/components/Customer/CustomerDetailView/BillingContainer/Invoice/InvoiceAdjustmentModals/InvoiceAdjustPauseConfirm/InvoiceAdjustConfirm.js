@@ -226,50 +226,38 @@ const InvoiceAdjustConfirm = ({
             />
             Invoice Adjustment
           </h4>
-          <p className="normal-text">
-            The following proposal will be send to <b>{bpName}</b> for approval:
-          </p>
-          <div className=" straight-line horizontal-line pt-1 mb-2 " />
-          {invoiceType !== 'one time' ? (
-            <>
-              {renderDesktopView()}
-              {renderResponsiveView()}
-            </>
-          ) : (
-            <OneTimeInvoiceAdjustConfirm
-              adjustmentData={adjustmentData}
-              totalCurrentBudget={totalCurrentBudget}
-              totalNewBudget={totalNewBudget}
-              totalChangeAmount={totalChangeAmount}
-            />
-          )}
-          <div className=" straight-line horizontal-line mt-2 mb-2 " />
-          {invoiceType !== 'one time' ? (
+          <div className="body-content">
             <p className="normal-text">
-              The new invoice amount will be available to spend from{' '}
-              <b>
-                {invoiceType === 'standard'
-                  ? selectedMonthYear?.value.split(' ')[0]
-                  : dayjs(selectedMonthYear?.value)
-                      .add(1, 'M')
-                      .format('MMMM')}{' '}
-                onwards.
-              </b>
-              <br /> The first bill for this amount will be sent{' '}
-              {today > 10
-                ? invoiceType === 'standard'
-                  ? dayjs(selectedMonthYear?.value)
-                      .subtract(1, 'M')
-                      .format('MMMM')
-                  : dayjs(selectedMonthYear?.value).format('MMMM')
-                : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
-              13.
+              The following proposal will be send to <b>{bpName}</b> for
+              approval:
             </p>
-          ) : null}
-          {invoiceType === 'permanent additional' && (
-            <GreyCard className="yellow-card">
-              <p className="normal-text text-bold m-0">
-                Additional DSP invoice (
+            <div className=" straight-line horizontal-line pt-1 mb-2 " />
+            {invoiceType !== 'one time' ? (
+              <>
+                {renderDesktopView()}
+                {renderResponsiveView()}
+              </>
+            ) : (
+              <OneTimeInvoiceAdjustConfirm
+                adjustmentData={adjustmentData}
+                totalCurrentBudget={totalCurrentBudget}
+                totalNewBudget={totalNewBudget}
+                totalChangeAmount={totalChangeAmount}
+              />
+            )}
+            <div className=" straight-line horizontal-line mt-2 mb-2 " />
+            {invoiceType !== 'one time' ? (
+              <p className="normal-text">
+                The new invoice amount will be available to spend from{' '}
+                <b>
+                  {invoiceType === 'standard'
+                    ? selectedMonthYear?.value.split(' ')[0]
+                    : dayjs(selectedMonthYear?.value)
+                        .add(1, 'M')
+                        .format('MMMM')}{' '}
+                  onwards.
+                </b>
+                <br /> The first bill for this amount will be sent{' '}
                 {today > 10
                   ? invoiceType === 'standard'
                     ? dayjs(selectedMonthYear?.value)
@@ -277,28 +265,43 @@ const InvoiceAdjustConfirm = ({
                         .format('MMMM')
                     : dayjs(selectedMonthYear?.value).format('MMMM')
                   : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
-                only)
+                13.
               </p>
-              <p className="normal-text text-bold mb-0 mt-1">
-                {' '}
-                {totalChangeAmount.replace('+', '')}
-              </p>
+            ) : null}
+            {invoiceType === 'permanent additional' && (
+              <GreyCard className="yellow-card">
+                <p className="normal-text text-bold m-0">
+                  Additional DSP invoice (
+                  {today > 10
+                    ? invoiceType === 'standard'
+                      ? dayjs(selectedMonthYear?.value)
+                          .subtract(1, 'M')
+                          .format('MMMM')
+                      : dayjs(selectedMonthYear?.value).format('MMMM')
+                    : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
+                  only)
+                </p>
+                <p className="normal-text text-bold mb-0 mt-1">
+                  {' '}
+                  {totalChangeAmount.replace('+', '')}
+                </p>
+                <p className="normal-text mb-0 mt-1">
+                  The will be a one-off invoice, providing additional budget to
+                  spend in the current month. This invoice will be sent as soon
+                  as brand partner approves the proposal.
+                </p>
+              </GreyCard>
+            )}
+            {invoiceType === 'one time' ? (
               <p className="normal-text mb-0 mt-1">
                 The will be a one-off invoice, providing additional budget to
-                spend in the current month. This invoice will be sent as soon as
-                brand partner approves the proposal.
+                spend in the{' '}
+                <b>{dayjs(selectedMonthYear?.value).format('MMMM')} only.</b>{' '}
+                This invoice will be sent as soon as brand partner approves the
+                proposal.
               </p>
-            </GreyCard>
-          )}
-          {invoiceType === 'one time' ? (
-            <p className="normal-text mb-0 mt-1">
-              The will be a one-off invoice, providing additional budget to
-              spend in the{' '}
-              <b>{dayjs(selectedMonthYear?.value).format('MMMM')} only.</b> This
-              invoice will be sent as soon as brand partner approves the
-              proposal.
-            </p>
-          ) : null}
+            ) : null}
+          </div>
         </div>
 
         <div className="footer-line" />
