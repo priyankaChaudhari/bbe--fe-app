@@ -16,6 +16,7 @@ import {
   LeftArrowIcon,
   ReminderBell,
 } from '../../../../../../theme/images';
+import Theme from '../../../../../../theme/Theme';
 
 const customStyles = {
   content: {
@@ -345,11 +346,14 @@ const InvoiceViewAndReminderModal = ({
               {isMobile ? renderMobileView() : renderDesktopView()}
 
               <div className=" straight-line horizontal-line mt-2 mb-2 " />
+
               {status === 'rejected' ? (
                 adjustmentDetails?.rejection_note !== null ? (
                   <>
-                    {' '}
                     <p className="normal-text">
+                      <span className="normal-text text-bold">
+                        Reson for rejection:{' '}
+                      </span>
                       {showMoreRejectionNote
                         ? adjustmentDetails?.rejection_note
                         : adjustmentDetails?.rejection_note?.slice(0, 155)}
@@ -364,13 +368,14 @@ const InvoiceViewAndReminderModal = ({
                           {!showMoreRejectionNote ? ' show more' : ' show less'}
                         </span>
                       ) : (
-                        ''
+                        <span
+                          style={{ fontWeight: '300', color: Theme.gray35 }}>
+                          none provided
+                        </span>
                       )}
                     </p>
                   </>
-                ) : (
-                  <p className="normal-text">none provided</p>
-                )
+                ) : null
               ) : (
                 <p className="normal-text">
                   The new invoice amount will be available to spend from{' '}
