@@ -167,7 +167,7 @@ export async function postDSPBudgetAdjustPauseInvoiceData(
       old_budget: item.new_budget,
       marketplace: item.marketplace,
       marketplace_id: item.marketplace_id,
-      is_sent_for_pause: item.is_sent_for_pause,
+      is_sent_for_pause: type === 'pause' ? item.is_sent_for_pause : false,
     });
   });
 
