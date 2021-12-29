@@ -339,6 +339,15 @@ const InvoicePastAdjustmntModal = ({
             ) : (
               renderMobileView()
             )}
+          </div>
+          <div
+            className={
+              invoicesAdjustmentData < 9 && invoiceCount < 10
+                ? ''
+                : 'straight-line horizontal-line mt-3'
+            }
+          />
+          <div className="modal-footer p-0">
             {invoicesAdjustmentData && invoicesAdjustmentData.length >= 1 ? (
               <CommonPagination
                 count={invoiceCount}
