@@ -146,12 +146,15 @@ const InvoicePauseConfirm = ({
             />
             Confirm Pause
           </h4>
-          <p className="normal-text">
-            The following proposal will be send to <b>{bpName}</b> for approval:
-          </p>
-          <div className=" straight-line horizontal-line pt-1 mb-2 " />
-          {renderDesktopView()}
-          {renderResponsiveView()}
+          <div className="body-content">
+            <p className="normal-text">
+              The following proposal will be send to <b>{bpName}</b> for
+              approval:
+            </p>
+            <div className=" straight-line horizontal-line pt-1 mb-2 " />
+            {renderDesktopView()}
+            {renderResponsiveView()}
+          </div>
         </div>
         <div className="footer-line" />
         <div className="modal-footer">

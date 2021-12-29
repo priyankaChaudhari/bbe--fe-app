@@ -42,6 +42,7 @@ const InvoiceViewAndReminderModal = ({
   isAllowToCreateAdjustment,
 }) => {
   const mounted = useRef(true);
+  const [showMoreRejectionNote, setShowMoreRejectionNote] = useState(false);
   const previousMonth = new Date(adjustmentDetails?.applicable_from);
   previousMonth.setMonth(previousMonth.getMonth() - 1);
   const [reminderLoader, setReminderLoader] = useState(false);
@@ -74,6 +75,9 @@ const InvoiceViewAndReminderModal = ({
     });
   }, [customerId, onApply, adjustmentDetails.id]);
 
+  const insertShowMoreProp = () => {
+    setShowMoreRejectionNote(!showMoreRejectionNote);
+  };
   const generateAmount = (value, valueFor, currencySymbol) => {
     if (value && value !== null && value !== 0) {
       value = Number(value.toFixed(2));
@@ -310,7 +314,9 @@ const InvoiceViewAndReminderModal = ({
         />
         <ModalBox>
           <div className="modal-body pb-0 ">
-            <div style={{ display: 'flex', wordBreak: 'break-all' }}>
+            <div
+              className="pb-3"
+              style={{ display: 'flex', wordBreak: 'break-all' }}>
               <h4>
                 {' '}
                 <img
@@ -335,17 +341,36 @@ const InvoiceViewAndReminderModal = ({
               </div>
             </div>
             <div className="body-content">
-              <div className=" straight-line horizontal-line pt-3 mb-2 " />
+              <div className=" straight-line horizontal-line  mb-2 " />
               {isMobile ? renderMobileView() : renderDesktopView()}
 
               <div className=" straight-line horizontal-line mt-2 mb-2 " />
               {status === 'rejected' ? (
-                <p className="normal-text">
-                  Reason for rejection:{' '}
-                  {adjustmentDetails?.rejection_note !== null
-                    ? adjustmentDetails.rejection_note
-                    : 'none provided'}
-                </p>
+                adjustmentDetails?.rejection_note !== null ? (
+                  <>
+                    {' '}
+                    <p className="normal-text">
+                      {showMoreRejectionNote
+                        ? adjustmentDetails.rejection_note
+                        : adjustmentDetails.rejection_note.slice(0, 155)}
+
+                      {adjustmentDetails?.rejection_note.length > 155 ? (
+                        <span
+                          style={{ color: '#FF5933', cursor: 'pointer' }}
+                          role="presentation"
+                          onClick={() => {
+                            insertShowMoreProp();
+                          }}>
+                          {!showMoreRejectionNote ? ' show more' : ' show less'}
+                        </span>
+                      ) : (
+                        ''
+                      )}
+                    </p>
+                  </>
+                ) : (
+                  <p className="normal-text">none provided</p>
+                )
               ) : (
                 <p className="normal-text">
                   The new invoice amount will be available to spend from{' '}
