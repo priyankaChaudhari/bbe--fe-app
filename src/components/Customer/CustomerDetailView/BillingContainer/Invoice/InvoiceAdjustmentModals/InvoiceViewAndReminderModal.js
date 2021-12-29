@@ -351,10 +351,10 @@ const InvoiceViewAndReminderModal = ({
                     {' '}
                     <p className="normal-text">
                       {showMoreRejectionNote
-                        ? adjustmentDetails.rejection_note
-                        : adjustmentDetails.rejection_note.slice(0, 155)}
+                        ? adjustmentDetails?.rejection_note
+                        : adjustmentDetails?.rejection_note?.slice(0, 155)}
 
-                      {adjustmentDetails?.rejection_note.length > 155 ? (
+                      {adjustmentDetails?.rejection_note?.length > 155 ? (
                         <span
                           style={{ color: '#FF5933', cursor: 'pointer' }}
                           role="presentation"
