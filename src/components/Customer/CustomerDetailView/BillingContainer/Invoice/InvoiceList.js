@@ -215,7 +215,9 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
               : '#E3F2D2'
           }
           label="Amount"
-          labelInfo={`$${addThousandComma(item?.amount, 0)}`}
+          labelInfo={`$${
+            item?.amount === null ? 0 : addThousandComma(item?.amount, 0)
+          }`}
           label1="Created on"
           labelInfo1={
             item?.created !== null
@@ -381,7 +383,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           </td>
           <td className="product-table-body text-medium pl-2">
             <div className="notification-bell pl-2">
-              ${addThousandComma(item.amount, 0)}
+              ${item?.amount === null ? 0 : addThousandComma(item.amount, 0)}
               {item?.budget_approved === null ? (
                 <img
                   className="notification-bell-icon"
