@@ -356,6 +356,7 @@ const InvoicePastAdjustmntModal = ({
         </div>
         <InvoiceViewAndReminderModal
           id="BT-viewAndReminderInvoiceModal"
+          isAllowToCreateAdjustment={isAllowToCreateAdjustment}
           isOpen={showViewAndReminderModal}
           onClick={() => {
             setShowViewAndReminderModal(false);
