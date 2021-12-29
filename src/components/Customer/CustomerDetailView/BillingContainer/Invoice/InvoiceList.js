@@ -103,6 +103,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
       setPageNumber(currentPage);
       getDSPUpcomingInvoicesData(invoiceType, currentPage);
     }
+    window.scrollTo(0, 0);
   };
 
   useEffect(() => {
