@@ -406,8 +406,8 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
               className="float-right"
               label={item?.status}
               backgroundColor={
-                StatusColorSet[item?.status.split(' ')[0].toLowerCase()]
-                  ? StatusColorSet[item?.status.split(' ')[0].toLowerCase()]
+                StatusColorSet[item?.status?.split(' ')[0].toLowerCase()]
+                  ? StatusColorSet[item?.status?.split(' ')[0].toLowerCase()]
                   : '#E3F2D2'
               }
             />
