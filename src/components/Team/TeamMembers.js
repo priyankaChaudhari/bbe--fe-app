@@ -26,14 +26,28 @@ const TeamMembers = () => {
         role="presentation"
       />
       <div className="modal-body pb-0">
+        <h4 className="mb-4">Team Members</h4>
+        {/* <Button
+          className="btn-add-items back-btn"
+          onClick={() => setShowCureentTeam(true)}>
+          {' '}
+          <img
+            width="16px"
+            style={{ verticalAlign: 'bottom' }}
+            className="left-arrow back-to-members mr-1"
+            src={LeftArrowIcon}
+            alt="arrow"
+          />
+          <span className="back-to-members">Back To Team Members</span>
+        </Button> */}
+
         {/* List of current Team members with specific Role */}
         {showCureentTeam ? (
           <div className="body-content ">
-            <h4 className="mb-4">Team Members</h4>
             <div className="row">
               {currentTeamMembers.map((member) => {
                 return (
-                  <div className="col-12 mb-3" key={Math.random()}>
+                  <div className="col-12 mb-3 " key={Math.random()}>
                     <div
                       className="edit-profile-text float-left"
                       role="presentation">
@@ -53,16 +67,16 @@ const TeamMembers = () => {
                       </div>
                     </div>
                     {member.id ? (
-                      <div className="float-right roleName mt-3">Remove</div>
+                      <Button className="btn-add-items gray-text  float-right roleName mt-3">
+                        Remove
+                      </Button>
                     ) : (
-                      <div
-                        className="float-right roleName add-team-member mt-3"
-                        onClick={() => setShowCureentTeam(false)}
-                        onKeyPress={() => setShowCureentTeam(false)}
-                        role="button"
-                        tabIndex={0}>
+                      <Button
+                        className="btn-add-items float-right  mt-3"
+                        role="presentation"
+                        onClick={() => setShowCureentTeam(false)}>
                         Add team member
-                      </div>
+                      </Button>
                     )}
 
                     <div className="clear-fix" />
@@ -86,27 +100,9 @@ const TeamMembers = () => {
           <>
             {/* Add or Search New Team members for selected Role */}
             <div className="body-content ">
-              <h4>
-                {' '}
-                <img
-                  width="16px"
-                  style={{ verticalAlign: 'bottom' }}
-                  className="left-arrow back-to-members mr-1"
-                  src={LeftArrowIcon}
-                  alt="arrow"
-                />
-                <span
-                  className="back-to-members"
-                  onClick={() => setShowCureentTeam(true)}
-                  onKeyPress={() => setShowCureentTeam(true)}
-                  role="button"
-                  tabIndex={0}>
-                  Back To Team Members
-                </span>
-              </h4>
               <InputSearchWithRadius
-                id="BT-order-customerlist-search-input"
-                className="customer-list-header w-80">
+                id="BT-addTeamMembers-search-input"
+                className="customer-list-header w-80 mt-3">
                 <DebounceInput
                   className=" form-control search-filter"
                   placeholder="Search"
@@ -131,9 +127,11 @@ const TeamMembers = () => {
                           {member.role}
                         </div>
                       </div>
-                      <div className="float-right roleName add-team-member mt-3">
+                      <Button
+                        className="btn-add-items float-right  mt-3"
+                        role="presentation">
                         Add
-                      </div>
+                      </Button>
                       <div className="clear-fix" />
                     </div>
                   );
