@@ -183,8 +183,9 @@ import InvoiceIcon from './icons/icon_invoices.svg';
 import PartnersIcon from './icons/icon_partners.svg';
 import DisabledRecurring from './icons/disabled-recurring.svg';
 import InfoRedIcon from './icons/info-red-icon.svg';
-import helpCircleIcon from './icons/help-circle.png';
 import Dollar from './icons/fees.svg';
+import ReminderBell from './icons/reminder-bell-icons.png';
+import helpCircleIcon from './icons/helpCircleIcon.png';
 
 export {
   BannerBg,
@@ -374,4 +375,5 @@ export {
   InfoRedIcon,
   helpCircleIcon,
   Dollar,
+  ReminderBell,
 };

@@ -29,17 +29,24 @@ export const API_VENDOR_SHIPPED = '/performance-shipped-cogs/';
 export const API_MARKETPLACES = '/marketplaces/';
 export const API_ALL_MARKETPLACES = `${API_MARKETPLACES}all-marketplace/`;
 export const API_AD_PERFORMANCE = '/performance-metrics/';
+export const API_ALLOCATE_BALANCE = `${API_AD_PERFORMANCE}allocate-balance/`;
 export const API_ADM = '/manager-list/';
 export const API_SERVICES_FEE = '/type-of-services/';
 export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
+
+// BP Proposal
+export const API_BP_PROPOSAL = '/dsp-budget-proposal/';
 
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
 export const API_AD_DASHBOARD = '/ad-dashboard/';
 export const API_SALES_DASHBOARD = 'sales-dashboard/';
 
+// Billing, Invoice & Budget
 export const API_DSP_INVOICES = '/invoice/';
 export const API_DSP_BILLING = '/bill/';
+export const API_DSP_BUDGET_ADJUSTMENT = '/dsp-budget-adjustment/';
+export const API_DSP_EMPTY_BUDGET_ADJUSTMENT = `${API_DSP_BUDGET_ADJUSTMENT}empty-adjustment/`;
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';

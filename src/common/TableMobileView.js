@@ -1,8 +1,8 @@
-import { func, string } from 'prop-types';
+import { bool, func, string } from 'prop-types';
 import React from 'react';
 
 import styled from 'styled-components';
-import { CompanyDefaultUser } from '../theme/images';
+import { CompanyDefaultUser, BellNotification } from '../theme/images';
 import { WhiteCard } from './WhiteCard';
 import Theme from '../theme/Theme';
 import Status from './Status';
@@ -13,6 +13,7 @@ const TableMobileView = ({
   invoiceType,
   invoiceId,
   label,
+  statusLabelColor,
   labelInfo,
   label1,
   label2,
@@ -22,6 +23,8 @@ const TableMobileView = ({
   label6,
   label7,
   labelInfo1,
+  sublabel,
+  sublabel1,
   labelInfo2,
   labelInfo3,
   labelInfo4,
@@ -32,6 +35,10 @@ const TableMobileView = ({
   statusColor,
   onClick,
   icon,
+  marketplaces,
+  isColumnOnClick = false,
+  isShowBellIcon = false,
+  onColumnClick,
 }) => {
   const col = `${label3 ? (label7 ? 'col-4' : 'col-6') : 'col-4'}`;
   return (
@@ -56,10 +63,11 @@ const TableMobileView = ({
               </>
             ) : (
               <>
-                <div className="CompanyName LargeCompanyName">
-                  {invoiceType}
+                <div className="CompanyName">{invoiceType}</div>
+                <div className="CompanyId">
+                  {invoiceId ? `#${invoiceId}` : null}
+                  {marketplaces}
                 </div>
-                <div className="CompanyId">#{invoiceId}</div>
               </>
             )}
           </div>
@@ -70,6 +78,7 @@ const TableMobileView = ({
               className="card-staus-right"
               label={status}
               backgroundColor={statusColor}
+              labelColor={statusLabelColor}
             />
             <div className="clear-fix" />
           </div>
@@ -79,17 +88,37 @@ const TableMobileView = ({
           <div className={`${col} mb-3`}>
             {' '}
             <div className="label">{label}</div>
-            <div className="label-info label-bold"> {labelInfo}</div>
+            <div className="label-info label-bold">
+              {' '}
+              {labelInfo}
+              {isShowBellIcon ? (
+                <img
+                  className="notification-bell-icon"
+                  src={BellNotification}
+                  alt="bell"
+                  data-tip="Pending BP Sign-off"
+                  data-for="Pending-BP-Sign-off"
+                />
+              ) : null}
+            </div>
+            {sublabel && <div className="sub-label-text">{sublabel}</div>}
           </div>
           <div className={`${col} mb-3`}>
             {' '}
             <div className="label">{label1}</div>
             <div className="label-info label-bold"> {labelInfo1}</div>
+            {sublabel1 && <div className="sub-label-text">{sublabel1}</div>}
           </div>
           <div className={`${col} mb-3`}>
             {' '}
             <div className="label">{label2}</div>
-            <div className="label-info "> {labelInfo2}</div>
+            <div
+              role="presentation"
+              className="label-info "
+              onClick={isColumnOnClick ? () => onColumnClick() : null}>
+              {' '}
+              {labelInfo2}
+            </div>
           </div>
           {label3 ? (
             <div className={`${col} mb-3`}>
@@ -171,15 +200,24 @@ const TableMobileViewWrapper = styled.div`
   .label-bold {
     font-weight: bold;
   }
+  .sub-label-text {
+    font-size: ${Theme.extraNormal};
+    color: ${Theme.black};
+  }
 `;
 
 TableMobileView.defaultProps = {
+  isColumnOnClick: false,
+  isShowBellIcon: false,
   className: '',
   CompanyName: '',
   label: '',
+  statusLabelColor: '',
   labelInfo: '',
   label1: '',
   labelInfo1: '',
+  sublabel: '',
+  sublabel1: '',
   label2: '',
   labelInfo2: '',
   label3: '',
@@ -197,16 +235,23 @@ TableMobileView.defaultProps = {
   status: '',
   statusColor: '',
   icon: '',
+  marketplaces: '',
   onClick: () => {},
+  onColumnClick: () => {},
 };
 
 TableMobileView.propTypes = {
+  isColumnOnClick: bool,
+  isShowBellIcon: bool,
   className: string,
   CompanyName: string,
   label: string,
+  statusLabelColor: string,
   labelInfo: string,
   label1: string,
   labelInfo1: string,
+  sublabel: string,
+  sublabel1: string,
   label2: string,
   labelInfo2: string,
   label3: string,
@@ -224,5 +269,7 @@ TableMobileView.propTypes = {
   status: string,
   statusColor: string,
   icon: string,
+  marketplaces: string,
   onClick: func,
+  onColumnClick: func,
 };

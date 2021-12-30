@@ -16,6 +16,14 @@ const ErrorMsgBox = styled.div`
     margin-right: 2px;
     vertical-align: text-top;
   }
+
+  &.large-text {
+    font-size: 20px;
+  }
+  &.success {
+    background-color: ${Theme.lightGreen};
+    color: ${Theme.green};
+  }
 `;
 
 export default ErrorMsgBox;

@@ -14,10 +14,22 @@ const ModalBox = styled.div`
     vertical-align: middle;
     cursor: pointer;
   }
+
+  .past-adjustment-table-container {
+    height: 80vh;
+    overflow-y: auto;
+    padding-bottom: 50px;
+  }
+
   .account-setup-complete {
     padding: 34px 33px 33px 30px !important;
   }
-
+  .inner-body-content {
+    max-height: 380px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
   .modal-body {
     .role-selected {
       color: ${Theme.gray90};
@@ -123,7 +135,16 @@ const ModalBox = styled.div`
       margin-right: 15px;
       margin-top: -2px;
     }
+    .invoice-adj-radio {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
 
+      li {
+        display: inline-block;
+        margin-right: 25px;
+      }
+    }
     @media not all and (min-resolution: 0.001dpcm) {
       @supports (-webkit-appearance: none) {
         .modal-heading {
@@ -134,7 +155,7 @@ const ModalBox = styled.div`
     }
     .modal-heading {
       padding: 0px 0;
-      padding-left: 0;
+      padding-left: 0 !important;
 
       ::i-block-chrome,
       .modal-heading {
@@ -490,6 +511,9 @@ const ModalBox = styled.div`
   }
   .modal-footer {
     padding: 10px 30px 20px 30px;
+    @media only screen and (max-width: 610px) {
+      padding: 10px 15px 20px 15px;
+    }
   }
   .footer-line {
     border-bottom: 1px solid ${Theme.gray5};

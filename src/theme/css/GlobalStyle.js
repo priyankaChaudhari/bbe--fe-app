@@ -10,7 +10,7 @@ import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.wof
 import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff';
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
-// import NoahMedium from '../fonts/noah-font/NoahMedium.otf';
+import NoahMedium from '../fonts/Noah/Noah/WEB/NoahMedium.otf';
 
 import { CalendarFontBackArrow } from '../images/index';
 
@@ -52,6 +52,11 @@ const bodyStyles = createGlobalStyle`
    @font-face {
     font-family: 'Helvetica-Bold';
     src: url(${HelveticaBold});
+  } 
+   @font-face {
+    font-family: 'Noah-Medium';
+    src: url(${NoahMedium});
+    font-weight: 500;
   } 
 
 html,
@@ -237,6 +242,13 @@ h5 {
   margin: 0;
   color: ${Theme.gray90};
 
+  &.sub-title-text {
+     font-size: ${Theme.subTitle};
+     color: ${Theme.black};
+     font-family: ${Theme.titleFontFamily};  
+     font-weight: 800;
+  }
+
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     font-size:  ${Theme.smallTitleFontSizeRes};
   }
@@ -273,7 +285,12 @@ h6 {
   flex: initial;
   height: 100%;
 }
-
+.text-bold {
+   font-family: ${Theme.titleFontFamily};
+}
+.text-medium{
+   font-family: ${Theme.baseMediumFontFamily};
+}
 p {
   font-size: ${Theme.small};
 
@@ -331,6 +348,12 @@ p {
   &.gray-text {
     color: ${Theme.gray90};
     font-size: ${Theme.extraMedium}; 
+  }
+
+  &.orange-text-label {
+    color: ${Theme.orange};
+    font-size: ${Theme.extraNormal};
+    font-weight: ${Theme.baseFontFamily};
   }
   &.extra-bold {
     color: ${Theme.gray90};
@@ -582,6 +605,10 @@ a {
   }
 }
 
+.line-throught {
+  text-decoration: line-through;
+}
+
 .table-responsive {
   width: 100%;
   margin-bottom: 15px;
@@ -722,9 +749,7 @@ button:disabled {
 
   .modal-body {
     padding: 25px 32px 30px 32px;
-    &.escrow {
-       padding: 25px 20px 30px 20px;
-    }
+   
   }
 
   .edit-profiles {

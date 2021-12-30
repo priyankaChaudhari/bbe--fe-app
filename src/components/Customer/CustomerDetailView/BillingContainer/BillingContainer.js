@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { oneOfType, shape, string, object } from 'prop-types';
+import { arrayOf, shape, string } from 'prop-types';
 
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
@@ -16,6 +16,8 @@ const BillingContainer = ({
   onBoardingId,
   customerStatus,
   redirectType,
+  memberData,
+  bpName,
 }) => {
   const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
@@ -31,6 +33,7 @@ const BillingContainer = ({
           {financeTabsOptions.map((item) => {
             return (
               <li
+                key={item.key}
                 className={
                   viewComponent === item.key
                     ? 'active'
@@ -38,7 +41,6 @@ const BillingContainer = ({
                     ? 'disabled'
                     : ''
                 }
-                key={item.key}
                 onClick={() => {
                   setViewComponent(item.key);
                 }}
@@ -61,7 +63,8 @@ const BillingContainer = ({
           onLoading={onLoading}
           invoiceType={viewComponent}
           id={id}
-          userInfo={userInfo}
+          memberData={memberData}
+          bpName={bpName}
         />
       ) : (
         <BillingDetails
@@ -79,8 +82,10 @@ export default BillingContainer;
 
 BillingContainer.defaultProps = {
   onBoardingId: null,
-  customerStatus: null,
-  redirectType: 'Billing',
+  customerStatus: {},
+  redirectType: 'retainer',
+  memberData: [],
+  bpName: '',
 };
 
 BillingContainer.propTypes = {
@@ -89,9 +94,8 @@ BillingContainer.propTypes = {
     customer_onboarding: string,
   }).isRequired,
   onBoardingId: string,
-  customerStatus: oneOfType({
-    string,
-    object,
-  }),
+  customerStatus: shape({}),
   redirectType: string,
+  memberData: arrayOf(shape({})),
+  bpName: string,
 };

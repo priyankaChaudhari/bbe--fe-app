@@ -209,6 +209,9 @@ export const StatusColorSet = {
   overdue: '#F7D7DB',
   paid: '#E3F2D2',
   created: '#FDF3D7',
+  pending: '#fdf3d7',
+  approved: '#E3F2D2',
+  rejected: '#F7D7DB',
 };
 
 export const BillingVendorOptions = [

@@ -33,6 +33,11 @@ const Tabs = styled.div`
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};
       }
+
+      &.modal-tab {
+        font-size: ${Theme.extraNormal};
+        padding: 0 15px 10px 15px;
+      }
     }
   }
   .grey-box-tab {

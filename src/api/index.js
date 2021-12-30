@@ -5,7 +5,7 @@ export * from './AuthApi';
 export * from './CustomerApi';
 
 // Ad dashboard API
-export * from './AdDashboradApi';
+export * from './DashboradApi';
 
 // Choices
 export * from './ChoicesApi';
@@ -30,3 +30,6 @@ export * from './BillingApi';
 
 // Product
 export * from './ProductCatalogApi';
+
+// CompanyPerformanceApi
+export * from './CompanyPerformanceApi';

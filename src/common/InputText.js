@@ -1,21 +1,21 @@
 import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
-const InputText = styled.input`
+const InputText = styled.textarea`
   &.form-control {
-    color: ${Theme.gray35};
-    border: 1px solid ${Theme.gray15};
-    border-radius: 5px;
-    padding: 4px 10px;
+    border: 1px solid ${Theme.gray45};
+    background-color: ${Theme.gray6};
+    resize: none;
+    font-family: ${Theme.baseFontFamily};
+    min-height: 140px;
+    border-radius: 2px;
+    padding: 15px;
     display: block;
     width: 100%;
-    height: 38px;
-    background-color: rgba(224, 231, 255, 0.2);
-    margin-top: 8px;
-    &::placeholder {
-      color: ${Theme.gray30};
 
-      font-size: 13px;
+    &::placeholder {
+      color: ${Theme.gray40};
+      font-size: ${Theme.extraNormal};
     }
 
     &:focus {

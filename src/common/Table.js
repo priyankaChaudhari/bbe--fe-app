@@ -12,7 +12,7 @@ const Table = styled.table`
   tr {
     text-align: left;
     background: ${Theme.white};
-    border: 1px solid rgba(46, 91, 255, 0.08);
+    /* border: 1px solid rgba(46, 91, 255, 0.08); */
     border-radius: 1px;
     font-family: ${Theme.baseFontFamily};
     width: 100%;
@@ -51,6 +51,20 @@ const Table = styled.table`
           border-bottom: 1px solid #e0e6e8;
         }
       }
+
+      &.small-label-text {
+        font-size: ${Theme.extraNormal};
+        /* border-bottom: 1px solid ${Theme.gray11}; */
+
+        .type {
+          font-family: ${Theme.baseMediumFontFamily};
+        }
+        .marketplace {
+          font-family: ${Theme.baseFontFamily};
+          font-weight: 300;
+        }
+      }
+
       &.agreement {
         font-size: ${Theme.normal};
         border-bottom: 1px solid ${Theme.gray11};
@@ -67,6 +81,27 @@ const Table = styled.table`
 
         &.light-font {
           font-weight: 300;
+        }
+        .orange-status {
+          color: ${Theme.orange};
+          font-size: ${Theme.extraNormal};
+          font-weight: ${Theme.baseMediumFontFamily};
+        }
+      }
+
+      .notification-bell {
+        padding: 4px;
+        width: fit-content;
+        border-radius: 5px;
+        .notification-bell-icon {
+          width: 15px;
+          vertical-align: middle;
+          margin-left: 2px;
+        }
+        &:hover {
+          background-color: ${Theme.gray8};
+
+          cursor: pointer;
         }
       }
       &.product-catalog-body {

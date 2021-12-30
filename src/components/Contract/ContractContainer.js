@@ -95,7 +95,6 @@ export default function ContractContainer() {
   const location = useLocation();
   const history = useHistory();
   const params = queryString.parse(history.location.search);
-
   const { id } = useParams();
 
   const [data, setData] = useState([]);
