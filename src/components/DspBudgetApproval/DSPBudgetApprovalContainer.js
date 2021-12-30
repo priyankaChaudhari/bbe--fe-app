@@ -49,13 +49,8 @@ export default function DSPBudgetApprovalContainer() {
     let newResult = 0;
     if (res?.adjustments?.length) {
       for (const item of res?.adjustments) {
-        if (item?.is_sent_for_pause) {
-          oldResult += item?.new_budget;
-          newResult += 0;
-        } else {
-          oldResult += item?.old_budget;
-          newResult += item?.new_budget;
-        }
+        oldResult += item?.old_budget;
+        newResult += item?.new_budget;
       }
     }
     setTotal({ old_budget: oldResult, new_budget: newResult });
