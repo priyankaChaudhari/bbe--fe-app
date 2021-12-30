@@ -357,7 +357,6 @@ const InvoiceViewAndReminderModal = ({
                       {showMoreRejectionNote
                         ? adjustmentDetails?.rejection_note
                         : adjustmentDetails?.rejection_note?.slice(0, 155)}
-
                       {adjustmentDetails?.rejection_note?.length > 155 ? (
                         <span
                           style={{ color: '#FF5933', cursor: 'pointer' }}
@@ -367,12 +366,12 @@ const InvoiceViewAndReminderModal = ({
                           }}>
                           {!showMoreRejectionNote ? ' show more' : ' show less'}
                         </span>
-                      ) : (
+                      ) : adjustmentDetails?.rejection_note?.length === 0 ? (
                         <span
                           style={{ fontWeight: '300', color: Theme.gray35 }}>
                           none provided
                         </span>
-                      )}
+                      ) : null}
                     </p>
                   </>
                 ) : null
