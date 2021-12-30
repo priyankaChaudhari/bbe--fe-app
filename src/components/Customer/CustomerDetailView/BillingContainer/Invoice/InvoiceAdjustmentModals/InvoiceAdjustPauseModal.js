@@ -187,6 +187,20 @@ const InvoiceAdjustPauseModal = ({
     };
   }, [getAdjustInvoices, invoiceType]);
 
+  const renderToastMessage = useCallback(
+    (message) => {
+      toast.success(message);
+      setTimeout(() => {
+        history.push(
+          PATH_CUSTOMER_DETAILS.replace(':id', customerId),
+          'dsp service',
+        );
+        history.go(0);
+      }, 4000);
+    },
+    [customerId, history],
+  );
+
   const onSendDSPBudgetAdjustInvoice = useCallback(() => {
     setLoader(true);
     postDSPBudgetAdjustPauseInvoiceData(
@@ -198,17 +212,14 @@ const InvoiceAdjustPauseModal = ({
     ).then((res) => {
       if (res && res.status === 500) {
         setLoader(false);
+        toast.error('Something went wrong');
       }
       if (res && res.status === 400) {
         setLoader(false);
+        toast.error('Something went wrong');
       }
       if (res && res.status === 201) {
-        history.push(
-          PATH_CUSTOMER_DETAILS.replace(':id', customerId),
-          'dsp service',
-        );
-        history.go(0);
-        toast.success(
+        renderToastMessage(
           `${bpName}Invoice Adjust Created Successfuly for ${selectedMonthYear.value}`,
         );
         setLoader(false);
@@ -218,9 +229,9 @@ const InvoiceAdjustPauseModal = ({
   }, [
     bpName,
     customerId,
-    history,
     invoiceInputs,
     invoiceType,
+    renderToastMessage,
     selectedMonthYear,
   ]);
 
@@ -235,17 +246,14 @@ const InvoiceAdjustPauseModal = ({
     ).then((res) => {
       if (res && res.status === 500) {
         setLoader(false);
+        toast.error('Something went wrong');
       }
       if (res && res.status === 400) {
         setLoader(false);
+        toast.error('Something went wrong');
       }
       if (res && res.status === 201) {
-        history.go(0);
-        history.push(
-          PATH_CUSTOMER_DETAILS.replace(':id', customerId),
-          'dsp service',
-        );
-        toast.success(
+        renderToastMessage(
           `${bpName}Invoice Pause Successfuly for ${selectedMonthYear.value}`,
         );
         setLoader(false);
@@ -255,9 +263,9 @@ const InvoiceAdjustPauseModal = ({
   }, [
     bpName,
     customerId,
-    history,
     invoiceInputs,
     invoiceType,
+    renderToastMessage,
     selectedMonthYear,
   ]);
 
