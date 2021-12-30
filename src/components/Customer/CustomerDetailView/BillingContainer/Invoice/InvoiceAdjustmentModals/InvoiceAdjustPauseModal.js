@@ -102,7 +102,6 @@ const InvoiceAdjustPauseModal = ({
                         dayjs(item.applicable_from).format('YYYY-MM') ===
                         dayjs(date).format('YYYY-MM'),
                     );
-              console.log('temp----', temp);
 
               const finalResult =
                 temp.length > 0
@@ -117,6 +116,7 @@ const InvoiceAdjustPauseModal = ({
                       ).values(),
                     ]
                   : temp;
+
               setInvoiceInputs(finalResult);
               setLoader(false);
             }
