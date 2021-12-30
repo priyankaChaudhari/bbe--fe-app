@@ -279,6 +279,7 @@ h6 {
 .normal-text {
   color: ${Theme.black};
   font-size: ${Theme.normal};
+  word-break: break-word;
 }
 .fix-height {
   flex-wrap: wrap;
