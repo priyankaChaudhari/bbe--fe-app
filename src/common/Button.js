@@ -77,6 +77,31 @@ const Button = styled.button`
       outline: none;
     }
   }
+  &.btn-add-items {
+    font-size: ${Theme.extraNormal};
+    font-family: ${Theme.baseFontFamily};
+    color: ${Theme.orange};
+    border: none;
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+
+    &.gray-text {
+      color: ${Theme.gray90};
+    }
+
+    &.back-btn {
+      color: ${Theme.gray90};
+      text-transform: uppercase;
+      letter-spacing: 1.21px;
+      font-family: ${Theme.titleFontFamily};
+      font-size: ${Theme.small};
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
   &.font-style-regular {
     font-family: ${Theme.baseFontFamily};
     font-weight: 500;
