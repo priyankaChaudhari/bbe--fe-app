@@ -321,6 +321,7 @@ function Notes({
     );
   };
 
+  console.log(data);
   const insertShowMoreProp = (note) => {
     const list = data.notes;
     list.forEach((item) => {
