@@ -76,6 +76,7 @@ const InvoicePause = ({
                               defaultChecked={item.is_sent_for_pause === true}
                               onChange={() => {}}
                               onClick={() => onClick(item, true)}
+                              disabled={item?.pause_approved}
                             />
                             <span className="checkmark checkmark-customer-list" />
                             Yes
@@ -97,6 +98,7 @@ const InvoicePause = ({
                               }
                               onChange={() => {}}
                               onClick={() => onClick(item, false)}
+                              disabled={item?.pause_approved}
                             />
                             <span className="checkmark checkmark-customer-list" />
                             No
