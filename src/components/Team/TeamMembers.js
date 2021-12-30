@@ -26,20 +26,23 @@ const TeamMembers = () => {
         role="presentation"
       />
       <div className="modal-body pb-0">
-        <h4 className="mb-4">Team Members</h4>
-        {/* <Button
-          className="btn-add-items back-btn"
-          onClick={() => setShowCureentTeam(true)}>
-          {' '}
-          <img
-            width="16px"
-            style={{ verticalAlign: 'bottom' }}
-            className="left-arrow back-to-members mr-1"
-            src={LeftArrowIcon}
-            alt="arrow"
-          />
-          <span className="back-to-members">Back To Team Members</span>
-        </Button> */}
+        {showCureentTeam ? (
+          <h4 className="mb-4">Team Members</h4>
+        ) : (
+          <Button
+            className="btn-add-items back-btn"
+            onClick={() => setShowCureentTeam(true)}>
+            {' '}
+            <img
+              width="16px"
+              style={{ verticalAlign: 'bottom' }}
+              className="left-arrow back-to-members mr-1"
+              src={LeftArrowIcon}
+              alt="arrow"
+            />
+            <span className="back-to-members">Back To Team Members</span>
+          </Button>
+        )}
 
         {/* List of current Team members with specific Role */}
         {showCureentTeam ? (
