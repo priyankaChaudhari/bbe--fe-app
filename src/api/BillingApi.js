@@ -93,16 +93,21 @@ export async function getMetricsInvoiceData(invoiceType, id) {
 export async function getDSPBudgetAdjustData(
   invoiceType,
   customerId,
-  budgetApproved,
+  adjustType,
 ) {
   let params = {
     dsp_invoice_subtype: invoiceType,
     customer: customerId,
   };
-  if (budgetApproved) {
+  if (adjustType === 'adjustInvoice') {
     params = {
       ...params,
       budget_approved: true,
+    };
+  } else {
+    params = {
+      ...params,
+      pause_approved: true,
     };
   }
   const result = await axiosInstance
