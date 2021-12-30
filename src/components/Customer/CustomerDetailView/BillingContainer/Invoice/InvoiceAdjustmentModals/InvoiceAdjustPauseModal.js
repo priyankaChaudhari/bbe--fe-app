@@ -79,37 +79,50 @@ const InvoiceAdjustPauseModal = ({
       setLoader(true);
       setInvoiceInputs([]);
 
-      getDSPBudgetAdjustData('standard', customerId, true).then((res) => {
-        if (mounted.current && viewComponent) {
-          if (res && res.status === 500) {
-            setLoader(false);
-          }
+      getDSPBudgetAdjustData('standard', customerId, viewComponent).then(
+        (res) => {
+          if (mounted.current) {
+            if (res && res.status === 500) {
+              setLoader(false);
+            }
 
-          if (res && res.status === 400) {
-            setLoader(false);
-          }
-          if (res && res.status === 200) {
-            const temp = res?.data.results.filter(
-              (item) =>
-                item.applicable_from <= dayjs(date).format('YYYY-MM-DD'),
-            );
+            if (res && res.status === 400) {
+              setLoader(false);
+            }
+            if (res && res.status === 200) {
+              const temp =
+                viewComponent === 'adjustInvoice'
+                  ? res?.data.results.filter(
+                      (item) =>
+                        item.applicable_from <=
+                        dayjs(date).format('YYYY-MM-DD'),
+                    )
+                  : res?.data.results.filter(
+                      (item) =>
+                        dayjs(item.applicable_from).format('YYYY-MM') ===
+                        dayjs(date).format('YYYY-MM'),
+                    );
+              console.log('temp----', temp);
 
-            const finalResult =
-              temp.length > 0
-                ? temp[0]?.adjustments
-                : [
-                    ...new Map(
-                      res?.data?.results[0]?.adjustments.map((item) => [
-                        item.marketplace,
-                        item,
-                      ]),
-                    ).values(),
-                  ];
-            setInvoiceInputs(finalResult);
-            setLoader(false);
+              const finalResult =
+                temp.length > 0
+                  ? temp[0]?.adjustments
+                  : viewComponent === 'adjustInvoice'
+                  ? [
+                      ...new Map(
+                        res?.data?.results[0]?.adjustments.map((item) => [
+                          item.marketplace,
+                          item,
+                        ]),
+                      ).values(),
+                    ]
+                  : temp;
+              setInvoiceInputs(finalResult);
+              setLoader(false);
+            }
           }
-        }
-      });
+        },
+      );
     },
     [customerId, viewComponent],
   );
