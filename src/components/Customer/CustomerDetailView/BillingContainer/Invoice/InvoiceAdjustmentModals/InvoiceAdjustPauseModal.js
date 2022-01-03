@@ -171,6 +171,17 @@ const InvoiceAdjustPauseModal = ({
           });
         }
       }
+    } else if (invoiceType === 'standard') {
+      for (let i = 0; i <= 5; i += 1) {
+        temp.push({
+          value: dayjs()
+            .add(i + 1, 'M')
+            .format('MMMM YYYY'),
+          label: dayjs()
+            .add(i + 1, 'M')
+            .format('MMMM YYYY'),
+        });
+      }
     } else {
       for (let i = 0; i <= 5; i += 1) {
         temp.push({
