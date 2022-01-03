@@ -139,49 +139,60 @@ const InvoiceAdjustPauseModal = ({
 
   useEffect(() => {
     mounted.current = true;
-    const temp = [];
+    const monthsDropDown = [];
     if (day > 10) {
       if (invoiceType === 'standard') {
-        for (let i = 0; i <= 5; i += 1) {
-          temp.push({
+        for (let index = 0; index <= 5; index += 1) {
+          monthsDropDown.push({
             value: dayjs()
-              .add(i + 2, 'M')
+              .add(index + 2, 'M')
               .format('MMMM YYYY'),
             label: dayjs()
-              .add(i + 2, 'M')
+              .add(index + 2, 'M')
               .format('MMMM YYYY'),
           });
         }
       } else if (invoiceType === 'permanent additional') {
-        for (let i = 0; i <= 5; i += 1) {
-          temp.push({
+        for (let index = 0; index <= 5; index += 1) {
+          monthsDropDown.push({
             value: dayjs()
-              .add(i + 1, 'M')
+              .add(index + 1, 'M')
               .format('MMMM YYYY'),
             label: dayjs()
-              .add(i + 1, 'M')
+              .add(index + 1, 'M')
               .format('MMMM YYYY'),
           });
         }
       } else {
-        for (let i = 0; i <= 5; i += 1) {
-          temp.push({
-            value: dayjs().add(i, 'M').format('MMMM YYYY'),
-            label: dayjs().add(i, 'M').format('MMMM YYYY'),
+        for (let index = 0; index <= 5; index += 1) {
+          monthsDropDown.push({
+            value: dayjs().add(index, 'M').format('MMMM YYYY'),
+            label: dayjs().add(index, 'M').format('MMMM YYYY'),
           });
         }
       }
+    } else if (invoiceType === 'standard') {
+      for (let index = 0; index <= 5; index += 1) {
+        monthsDropDown.push({
+          value: dayjs()
+            .add(index + 1, 'M')
+            .format('MMMM YYYY'),
+          label: dayjs()
+            .add(index + 1, 'M')
+            .format('MMMM YYYY'),
+        });
+      }
     } else {
-      for (let i = 0; i <= 5; i += 1) {
-        temp.push({
-          value: dayjs().add(i, 'M').format('MMMM YYYY'),
-          label: dayjs().add(i, 'M').format('MMMM YYYY'),
+      for (let index = 0; index <= 5; index += 1) {
+        monthsDropDown.push({
+          value: dayjs().add(index, 'M').format('MMMM YYYY'),
+          label: dayjs().add(index, 'M').format('MMMM YYYY'),
         });
       }
     }
-    setMonthsYears(temp);
-    setselectedMonthYear(temp[0]);
-    getAdjustInvoices(temp[0].value);
+    setMonthsYears(monthsDropDown);
+    setselectedMonthYear(monthsDropDown[0]);
+    getAdjustInvoices(monthsDropDown[0].value);
     return () => {
       mounted.current = false;
     };
