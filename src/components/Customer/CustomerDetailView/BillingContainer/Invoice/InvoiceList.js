@@ -202,7 +202,9 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           className="mb-3"
           invoiceType={
             isDSPService
-              ? `${item?.dsp_invoice_subtype} (${item?.applicable_from})`
+              ? `${InvoiceTypeNames[item?.dsp_invoice_subtype]} (${
+                  item?.applicable_from
+                })`
               : null
           }
           invoiceId={null}
@@ -378,7 +380,8 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
         <tr key={item.id}>
           <td className="product-body">
             <div className="company-name">
-              {item?.dsp_invoice_subtype} ({item?.applicable_from})
+              {InvoiceTypeNames[item?.dsp_invoice_subtype]} (
+              {item?.applicable_from})
             </div>
             <div className="status">{item?.marketplaces}</div>
           </td>
