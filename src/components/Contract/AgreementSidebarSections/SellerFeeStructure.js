@@ -545,6 +545,7 @@ export default function SellerFeeStructure({
         styles={{
           control: (base, state) => ({
             ...base,
+            zIndex: 9999,
             background:
               !(formData && formData?.fee_structure?.[section]?.[item.key]) &&
               item.isMandatory
