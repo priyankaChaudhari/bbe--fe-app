@@ -142,7 +142,7 @@ export default function AdPerformance({
     // filterout previous data in one temporary object.
     if (response.daily_facts.previous && response.daily_facts.previous.length) {
       response.daily_facts.previous.forEach((item) => {
-        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        const previousDate = dayjs(item.revised_date).format('MMM D YYYY');
         tempData.push({
           adSalesPrevious: item.ad_sales,
           adSpendPrevious: item.ad_spend,
@@ -183,7 +183,7 @@ export default function AdPerformance({
     // filterout current data in one temporary object.
     if (response.daily_facts.current && response.daily_facts.current.length) {
       response.daily_facts.current.forEach((item, index) => {
-        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        const currentReportDate = dayjs(item.revised_date).format('MMM D YYYY');
         // let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
         if (
@@ -309,7 +309,7 @@ export default function AdPerformance({
     // filterout previous data in one temporary object.
     if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
       response.dsp_spend.previous.forEach((item) => {
-        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        const previousDate = dayjs(item.revised_date).format('MMM D YYYY');
         tempData.push({
           dspImpressionsPrevious: item.impressions,
           dspSpendPrevious: item.dsp_spend,
@@ -350,7 +350,7 @@ export default function AdPerformance({
     // filterout current data in one temporary object.
     if (response.dsp_spend.current && response.dsp_spend.current.length) {
       response.dsp_spend.current.forEach((item, index) => {
-        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        const currentReportDate = dayjs(item.revised_date).format('MMM D YYYY');
         // add the current data at same index of prevoius in temporary object
         if (
           response.dsp_spend.previous &&
@@ -873,7 +873,7 @@ export default function AdPerformance({
           getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         } else {
-          setDSPFilters({ daily: true, weekly: false, month: false });
+          setDSPFilters({ daily: true, weekly: true, month: false });
           setDSPGroupBy('daily');
 
           getDSPData(value, 'daily', selectedMarketplace);
