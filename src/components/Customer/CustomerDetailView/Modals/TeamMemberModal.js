@@ -34,8 +34,7 @@ export default function TeamMemberModal({
 
   return (
     <Modal
-      // isOpen={showMemberList.modal}
-      isOpen
+      isOpen={showMemberList.modal}
       style={teamDeleteModal ? alertCustomStyles : customStyles}
       ariaHideApp={false}
       contentLabel="Add team modal">
