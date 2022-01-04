@@ -276,27 +276,7 @@ export default function AgreementSidePanel({
     margin: '0',
   };
 
-  const goToSection = () => {
-    if (openCollapse.agreement) {
-      executeScroll('agreement');
-    }
-    if (openCollapse.statement) {
-      executeScroll('statement');
-    }
-    if (openCollapse.dspAddendum) {
-      executeScroll('dspAddendum');
-    }
-    if (openCollapse.addendum) {
-      executeScroll('addendum');
-    }
-    if (openCollapse.feeStructure) {
-      executeScroll('statement');
-    }
-  };
-
   useEffect(() => {
-    goToSection();
-
     const serviceData =
       additionalOneTimeServicesLength &&
       formData.additional_one_time_services.find((item) =>
