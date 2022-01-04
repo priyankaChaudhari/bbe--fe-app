@@ -21,6 +21,23 @@ export const dateOptionsWithYear = [
   },
 ];
 
+export const dateOptionsWithYearOverYear = [
+  { value: 'week', label: 'Recent 7 days', sub: 'vs Previous 7 days' },
+  { value: 'month', label: 'Recent Month', sub: 'vs Previous month' },
+  { value: '30days', label: 'Recent 30 Days', sub: 'vs Previous 30 days' },
+  { value: 'year', label: 'Year to Date', sub: 'vs Previous year' },
+  {
+    value: 'yearOverYear',
+    label: 'Year Over Year',
+    sub: 'Select start and end dates',
+  },
+  {
+    value: 'custom',
+    label: 'Custom Range',
+    sub: 'Select start and end dates',
+  },
+];
+
 export const vendorSalesMetricsTypeOptions = [
   { value: 'orderedRevenue', label: 'Ordered Revenue' },
   { value: 'shippedCOGS', label: 'Shipped COGS' },
