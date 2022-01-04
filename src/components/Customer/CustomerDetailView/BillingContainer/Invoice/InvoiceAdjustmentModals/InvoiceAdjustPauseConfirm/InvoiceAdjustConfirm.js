@@ -264,6 +264,10 @@ const InvoiceAdjustConfirm = ({
                         .subtract(1, 'M')
                         .format('MMMM')
                     : dayjs(selectedMonthYear?.value).format('MMMM')
+                  : invoiceType === 'standard'
+                  ? dayjs(selectedMonthYear?.value)
+                      .subtract(1, 'M')
+                      .format('MMMM')
                   : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
                 13.
               </p>
