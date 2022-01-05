@@ -48,10 +48,10 @@ import {
 } from '../../../common';
 import {
   getCustomerActivityLog,
-  getCustomerMembers,
   getDocumentList,
   getMarketPlaceList,
   getAccountMarketplace,
+  getCustomerMembers,
 } from '../../../api';
 
 export default function CustomerMainContainer() {
@@ -170,8 +170,8 @@ export default function CustomerMainContainer() {
 
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
-    getCustomerMembers(id).then((member) => {
-      setMemberData(member && member.data && member.data.results);
+    getCustomerMembers(id).then((members) => {
+      setMemberData(members?.data);
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id]);
@@ -510,7 +510,7 @@ export default function CustomerMainContainer() {
               {/* Customer Modals starts */}
               <TeamMemberModal
                 id={id}
-                getCustomerMemberList={getCustomerMemberList}
+                currentMembers={memberData}
                 showMemberList={showMemberList}
                 setShowMemberList={setShowMemberList}
                 setAgreementDetailModal={setAgreementDetailModal}
