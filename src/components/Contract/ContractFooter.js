@@ -336,9 +336,9 @@ export default function ContractFooter({
   };
 
   const displayApprovalFooter = () => {
-    return (userInfo?.role === 'Team Manager - TAM' ||
-      userInfo?.role === 'Sales Manager' ||
-      userInfo?.role === 'BGS Manager') &&
+    return (userInfo?.role?.includes('Team Manager - TAM') ||
+      userInfo?.role?.includes('Sales Manager') ||
+      userInfo?.role?.includes('BGS Manager')) &&
       transactionalData?.can_approve
       ? displayFooterForManagers()
       : displayApprovalFooterForInternalUsers();
@@ -507,7 +507,7 @@ export default function ContractFooter({
 
       {contractStatus === 'pending for cancellation' &&
       userInfo &&
-      userInfo.role === 'BGS Manager' ? (
+      userInfo.role?.includes('BGS Manager') ? (
         <div className="mt-4 pt-5">
           <Footer className=" mt-5 ">
             <div className="container-fluid ">
@@ -524,7 +524,7 @@ export default function ContractFooter({
 
       {contractStatus === 'active pending for pause' &&
       userInfo &&
-      userInfo.role === 'BGS Manager' ? (
+      userInfo.role?.includes('BGS Manager') ? (
         <div className="mt-4 pt-5">
           <Footer className=" mt-5 ">
             <div className="container-fluid ">
