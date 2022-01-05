@@ -33,11 +33,10 @@ export default function LeftSideBar({ userInfo }) {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          {userInfo?.role && userInfo.role === 'BGS' ? (
+          {userInfo?.role?.includes('BGS') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('bgs')
+                history.location.pathname?.includes('bgs')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -59,11 +58,10 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo?.role && userInfo.role === 'BGS Manager' ? (
+          {userInfo?.role?.includes('BGS Manager') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('bgsManager')
+                history.location.pathname?.includes('bgsManager')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -85,11 +83,10 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo?.role && userInfo.role === 'BGS Admin' ? (
+          {userInfo?.role?.includes('BGS Admin') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('bgsAdmin')
+                history.location.pathname?.includes('bgsAdmin')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -111,12 +108,10 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo?.role &&
-          userInfo.role.includes('Sponsored Advertising Ad Manager') ? (
+          {userInfo?.role?.includes('Sponsored Advertising Ad Manager') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('sponsored')
+                history.location.pathname?.includes('sponsored')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -138,11 +133,10 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo?.role && userInfo.role.includes('DSP Ad Manager') ? (
+          {userInfo?.role?.includes('DSP Ad Manager') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('dsp')
+                history.location.pathname?.includes('dsp')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -164,11 +158,10 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo?.role && userInfo.role.includes('Hybrid Ad Manager') ? (
+          {userInfo?.role?.includes('Hybrid Ad Manager') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('hybrid')
+                history.location.pathname?.includes('hybrid')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -190,11 +183,10 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo?.role && userInfo.role.includes('Ad Manager Admin') ? (
+          {userInfo?.role?.includes('Ad Manager Admin') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('adMangerAdmin')
+                history.location.pathname?.includes('adMangerAdmin')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -216,11 +208,10 @@ export default function LeftSideBar({ userInfo }) {
             </li>
           ) : null}
 
-          {userInfo && userInfo.role && userInfo.role.includes('Finance') ? (
+          {userInfo?.role?.includes('Finance') ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('finance')
+                history.location.pathname?.includes('finance')
                   ? ' cursor active'
                   : ' cursor'
               }
@@ -244,8 +235,7 @@ export default function LeftSideBar({ userInfo }) {
 
           <li
             className={
-              history.location.pathname &&
-              history.location.pathname.includes('customer')
+              history.location.pathname?.includes('customer')
                 ? ' cursor active'
                 : ' cursor'
             }
@@ -256,8 +246,7 @@ export default function LeftSideBar({ userInfo }) {
           </li>
           <li
             className={
-              history.location.pathname &&
-              history.location.pathname.includes('collections')
+              history.location.pathname?.includes('collections')
                 ? 'cursor active'
                 : ' cursor'
             }

@@ -55,8 +55,6 @@ import {
   PATH_BGS_ADMIN_DASHBOARD,
 } from '../constants';
 
-const _ = require('lodash');
-
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
     (state) => state.userState.isAuthenticated,
@@ -88,12 +86,11 @@ export default function AuthenticationComponent() {
   const generateHeader = () => {
     if (history.location.pathname.includes('account-setup')) return '';
     if (history.location.pathname.includes('agreement')) return '';
-    if (userInfo && userInfo.role === 'Customer')
+    if (userInfo?.role?.includes('Customer'))
       return <Header userInfo={userInfo} />;
     if (
       !history.location.pathname.includes('account-setup') &&
-      userInfo &&
-      userInfo.role !== 'Customer' &&
+      !userInfo?.role?.includes('Customer') &&
       !history.location.pathname.includes('/brand-asset/')
     )
       return (
@@ -125,7 +122,7 @@ export default function AuthenticationComponent() {
         {generateHeader()}
         <Switch>
           {/* Customer */}
-          {userInfo && userInfo.role !== 'Customer' ? (
+          {!userInfo?.role?.includes('Customer') ? (
             <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
           ) : (
             ''
@@ -149,21 +146,21 @@ export default function AuthenticationComponent() {
 
           {/* Account Setup */}
           {/* Knowledge Base  */}
-          {userInfo && userInfo.role !== 'Customer' ? (
+          {!userInfo?.role?.includes('Customer') ? (
             <Route path={PATH_ARTICLE_LIST} exact component={ArticleList} />
           ) : (
             ''
           )}
-          {userInfo && userInfo.role !== 'Customer' ? (
+          {!userInfo?.role?.includes('Customer') ? (
             <Route path={PATH_ARTICLE_DETAILS} component={ArticleDetails} />
           ) : (
             ''
           )}
 
           {/* AD MANAGER DASHBOARD, BGS DASHBOARD, FINANCE DASHBOARD PATH */}
-          {_.has(dashboardRolePaths, userInfo && userInfo.role) ? (
+          {Object.keys(dashboardRolePaths).includes(userInfo?.role?.[0]) ? (
             <Route
-              path={dashboardRolePaths[userInfo.role]}
+              path={dashboardRolePaths[userInfo.role[0]]}
               component={DashboardContainer}
             />
           ) : null}
