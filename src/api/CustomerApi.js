@@ -12,6 +12,7 @@ import {
   API_DELETE_MARKETPLACE,
   API_DOCUMENTS,
   API_ACCOUNT_MARKETPLACE,
+  API_USER,
 } from '../constants';
 
 export async function getCustomerList(
@@ -287,16 +288,41 @@ export async function updateAccountDetails(id, data) {
   return result;
 }
 
-export async function getCustomerMembers(id, pageNumber) {
-  const customer = id
-    ? {
-        customer: id,
-        page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
-      }
-    : { page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber };
-  const params = customer;
+// export async function getCustomerMembers(id, pageNumber) {
+//   const customer = id
+//     ? {
+//         customer: id,
+//         page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
+//       }
+//     : { page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber };
+//   const params = customer;
+//   const result = await axiosInstance
+//     .get(API_CUSTOMER_MEMBER, { params })
+//     .then((response) => {
+//       return response;
+//     })
+//     .catch((error) => {
+//       return error.response;
+//     });
+//   return result;
+// }
+
+export async function getCustomerMembers(id) {
   const result = await axiosInstance
-    .get(API_CUSTOMER_MEMBER, { params })
+    .get(`${API_CUSTOMER_MEMBER}?customer=${id}`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getAllMembers(role, findMembers) {
+  // &page=1
+  const result = await axiosInstance
+    .get(`${API_USER}?role=${role}&find-members=${findMembers}`)
     .then((response) => {
       return response;
     })

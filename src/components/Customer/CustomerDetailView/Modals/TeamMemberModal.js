@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Modal from 'react-modal';
 import { string, func, shape, bool } from 'prop-types';
@@ -9,7 +9,7 @@ import { AddTeamMember, EditTeamMember, TeamMembers } from '../../../Team';
 // !      Remove  the eslint disables-once work is done
 export default function TeamMemberModal({
   id,
-  getCustomerMemberList,
+  currentMembers,
   showMemberList,
   setShowMemberList,
   setAgreementDetailModal,
@@ -33,13 +33,15 @@ export default function TeamMemberModal({
   };
 
   return (
-    <Modal
-      isOpen={showMemberList.modal}
-      style={teamDeleteModal ? alertCustomStyles : customStyles}
-      ariaHideApp={false}
-      contentLabel="Add team modal">
-      <TeamMembers />
-      {/* {showMemberList.add ? (
+    <>
+      {showMemberList.modal ? (
+        <Modal
+          isOpen={showMemberList.modal}
+          style={teamDeleteModal ? alertCustomStyles : customStyles}
+          ariaHideApp={false}
+          contentLabel="Add team modal">
+          <TeamMembers customerID={id} currentMembers={currentMembers} />
+          {/* {showMemberList.add ? (
         <AddTeamMember
           id={id}
           getCustomerMemberList={getCustomerMemberList}
@@ -59,26 +61,27 @@ export default function TeamMemberModal({
           getActivityLogInfo={getActivityLogInfo}
         />
       )} */}
-    </Modal>
+        </Modal>
+      ) : null}
+    </>
   );
 }
 
 TeamMemberModal.defaultProps = {
-  setShowMemberList: () => {},
-  getCustomerMemberList: () => {},
   userInfo: {},
   customStyles: {},
+  setShowMemberList: () => {},
   setAgreementDetailModal: () => {},
 };
 
 TeamMemberModal.propTypes = {
   setShowMemberList: func,
   id: string.isRequired,
+  currentMembers: shape({}).isRequired,
   showMemberList: shape({
     modal: bool,
     add: bool,
   }).isRequired,
-  getCustomerMemberList: func,
   userInfo: shape({
     role: string,
     id: string,
