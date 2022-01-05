@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { arrayOf, shape, string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
@@ -8,6 +9,7 @@ import { Tabs } from '../../../../common';
 import {
   billingNavigationOptions,
   financeTabsOptions,
+  PATH_CUSTOMER_DETAILS,
 } from '../../../../constants';
 
 const BillingContainer = ({
@@ -19,6 +21,7 @@ const BillingContainer = ({
   memberData,
   bpName,
 }) => {
+  const history = useHistory();
   const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
 
@@ -42,6 +45,10 @@ const BillingContainer = ({
                     : ''
                 }
                 onClick={() => {
+                  history.push(
+                    PATH_CUSTOMER_DETAILS.replace(':id', id),
+                    item.key,
+                  );
                   setViewComponent(item.key);
                 }}
                 role="presentation">
@@ -52,7 +59,10 @@ const BillingContainer = ({
 
           <li
             className={viewComponent === 'Billing' ? 'active' : ''}
-            onClick={() => setViewComponent('Billing')}
+            onClick={() => {
+              history.push(PATH_CUSTOMER_DETAILS.replace(':id', id), 'Billing');
+              setViewComponent('Billing');
+            }}
             role="presentation">
             Billing Details
           </li>

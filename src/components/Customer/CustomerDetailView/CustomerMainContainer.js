@@ -466,8 +466,6 @@ export default function CustomerMainContainer() {
                           history.location.state,
                         )
                           ? history.location.state
-                          : customer?.status?.value === 'pending'
-                          ? 'retainer'
                           : 'Billing'
                       }
                       id={id}
