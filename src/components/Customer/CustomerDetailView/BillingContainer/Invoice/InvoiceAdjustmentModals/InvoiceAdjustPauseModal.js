@@ -231,7 +231,7 @@ const InvoiceAdjustPauseModal = ({
       }
       if (res && res.status === 201) {
         renderToastMessage(
-          `${bpName}Invoice Adjust Created Successfuly for ${selectedMonthYear.value}`,
+          `${bpName} invoice Adjustment created successfuly for ${selectedMonthYear.value}`,
         );
         setLoader(false);
       }
@@ -265,7 +265,7 @@ const InvoiceAdjustPauseModal = ({
       }
       if (res && res.status === 201) {
         renderToastMessage(
-          `${bpName}Invoice Pause Successfuly for ${selectedMonthYear.value}`,
+          `${bpName} invoice Pause successfuly for ${selectedMonthYear.value}`,
         );
         setLoader(false);
       }
