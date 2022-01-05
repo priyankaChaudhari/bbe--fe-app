@@ -32,8 +32,6 @@ import {
   PATH_BGS_ADMIN_DASHBOARD,
 } from '../../constants/index';
 
-const _ = require('lodash');
-
 export const userRequestInitiated = () => {
   return {
     type: actionTypes.USER_REQUEST_INITIATED,
@@ -53,7 +51,7 @@ export const userRequestFail = (error, type) => {
 };
 
 export const userMeSuccess = (data, type, history) => {
-  if (data.data.role === 'Customer') {
+  if (data.data.role.includes('Customer')) {
     localStorage.setItem('role', data.data.role);
     localStorage.setItem('step', JSON.stringify(data.data.step));
   }
@@ -96,8 +94,8 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     Finance: PATH_FINANCE_DASHBOARD,
   };
 
-  if (params && params.callback) {
-    if (params && params.customer && params.step) {
+  if (params?.callback) {
+    if (params?.customer && params?.step) {
       if ((data.user.step !== null && data.user.step[params.customer]) === 6) {
         history.push(PATH_CUSTOMER_DETAILS.replace(':id', params.customer));
       } else {
@@ -111,7 +109,7 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
     }
   } else {
     if (
-      data.user.role === 'Customer' &&
+      data.user.role.includes('Customer') &&
       data.user.customer &&
       data.user.customer.length === 0
     ) {
@@ -130,49 +128,38 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         }&email=${data.user.re_assigned_user_details.email}`,
       });
     }
+
     let id = '';
     if (
-      data &&
-      data.user &&
-      data.user.customer &&
-      typeof data.user.customer === 'object'
+      data?.user?.customer !== null &&
+      typeof data?.user?.customer === 'object'
     ) {
-      const customerId =
-        data.user.customer_onboarding &&
-        data.user.customer_onboarding.find(
-          (op) => Object.keys(op)[0] === onboardingId,
-        );
+      const customerId = data?.user?.customer_onboarding?.find(
+        (op) => Object.keys(op)[0] === onboardingId,
+      );
       id = Object.values(customerId)[0];
       localStorage.setItem('customer', Object.values(customerId)[0]);
     } else {
       id =
         data.user.step &&
-        Object.keys(data.user.step) &&
-        Object.keys(data.user.step).find(
-          (op) =>
-            op ===
-            (customer.customer || (data && data.user && data.user.customer)),
+        Object.keys(data.user.step)?.find(
+          (op) => op === (customer.customer || data?.user?.customer),
         );
       localStorage.setItem('customer', customer.customer);
     }
 
-    if (data.user && data.user.role === 'Customer') {
-      if (data.user && data.user.customer_onboarding === null) {
+    if (data?.user?.role?.includes('Customer')) {
+      if (data?.user?.customer_onboarding === null) {
         clearToken();
       } else {
-        if (id === undefined || id === null) {
+        if (!id) {
           history.push(PATH_COMPANY_DETAILS);
         } else {
-          if (
-            data.user.step === null ||
-            data.user.step === undefined ||
-            data.user.step[id] === null ||
-            data.user.step[id] === undefined
-          ) {
+          if (!data.user.step || !data.user.step[id]) {
             history.push(PATH_COMPANY_DETAILS);
             const detail = { step: { ...data.user.step, [id]: 1 } };
             updateUserMe(data.user.id, detail).then((user) => {
-              if (user && user.status === 200) {
+              if (user?.status === 200) {
                 history.push(PATH_COMPANY_DETAILS);
               }
             });
@@ -203,11 +190,12 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         }
       }
     } else {
-      if (_.has(adManagerRolePaths, data.user && data.user.role)) {
-        history.push(adManagerRolePaths[data.user.role]);
+      if (Object.keys(adManagerRolePaths).includes(data.user.role[0])) {
+        history.push(adManagerRolePaths[data.user.role[0]]);
       } else history.push(PATH_CUSTOMER_LIST);
     }
   }
+
   return {
     type: actionTypes.USER_REQUEST_SUCCESS,
     payload: data,

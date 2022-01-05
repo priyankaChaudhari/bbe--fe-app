@@ -120,7 +120,7 @@ export default function Header({ type, userInfo }) {
   return (
     <div
       className={
-        (userInfo?.role === 'Customer' &&
+        (userInfo?.role.includes('Customer') &&
           !history.location.pathname.includes('/brand-asset/')) ||
         history.location.pathname.includes(PATH_ACCOUNT_SETUP)
           ? 'common-header-sticky'
@@ -141,7 +141,7 @@ export default function Header({ type, userInfo }) {
               <div
                 className="logo cursor"
                 onClick={() =>
-                  userInfo?.role !== 'Customer'
+                  !userInfo?.role.includes('Customer')
                     ? history.push(PATH_CUSTOMER_LIST)
                     : ''
                 }
@@ -153,7 +153,7 @@ export default function Header({ type, userInfo }) {
                 src={NextLogo}
                 alt=""
                 onClick={() =>
-                  userInfo?.role !== 'Customer'
+                  !userInfo?.role.includes('Customer')
                     ? history.push(PATH_CUSTOMER_LIST)
                     : ''
                 }
@@ -162,7 +162,7 @@ export default function Header({ type, userInfo }) {
             </div>
             <div className="col-8 text-right">
               <ul className="right-nav">
-                {userInfo?.role !== 'Customer' &&
+                {!userInfo?.role.includes('Customer') &&
                 type !== 'onboarding' &&
                 !history.location.pathname.includes(PATH_SUMMARY) ? (
                   <li
@@ -245,7 +245,7 @@ export default function Header({ type, userInfo }) {
                           onClick={() => setShowModal(true)}>
                           <img src={EditIcons} alt="edit" /> Edit profile
                         </li>
-                        {userInfo?.role !== 'Customer' ? (
+                        {!userInfo?.role.includes('Customer') ? (
                           <>
                             <li
                               role="presentation"
@@ -308,7 +308,7 @@ export default function Header({ type, userInfo }) {
             <SideContents>
               {' '}
               <ul className="side-bar-icon ">
-                {userInfo?.role === 'BGS'
+                {userInfo?.role.includes('BGS')
                   ? renderDashboardIcon('bgs', PATH_BGS_DASHBOARD)
                   : null}
 
@@ -319,7 +319,7 @@ export default function Header({ type, userInfo }) {
                     )
                   : null}
 
-                {userInfo?.role === 'BGS Admin'
+                {userInfo?.role.includes('BGS Admin')
                   ? renderDashboardIcon('bgsAdmin', PATH_BGS_ADMIN_DASHBOARD)
                   : null}
 
@@ -341,7 +341,7 @@ export default function Header({ type, userInfo }) {
                     )
                   : null}
 
-                {userInfo?.role === 'Finance'
+                {userInfo?.role.includes('Finance')
                   ? renderDashboardIcon('finance', PATH_FINANCE_DASHBOARD)
                   : null}
 
