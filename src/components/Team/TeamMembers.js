@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 
-import { shape, string } from 'prop-types';
+import { shape, string, func } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 
 import { getAllMembers } from '../../api';
@@ -16,7 +16,7 @@ import {
 
 // !      Remove  the eslint disables-once work is done
 
-const TeamMembers = ({ customerID, currentMembers }) => {
+const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [loading, setLoading] = useState(false);
   const [showCureentTeam, setShowCureentTeam] = useState(true);
   const [selectedRole, setSelectedRole] = useState(null);
@@ -33,7 +33,6 @@ const TeamMembers = ({ customerID, currentMembers }) => {
   }, [showCureentTeam, selectedRole]);
 
   const addMembersForRole = (member) => {
-    console.log('all new', member);
     setSelectedRole(member.role_group.id);
     setShowCureentTeam(false);
   };
@@ -44,6 +43,9 @@ const TeamMembers = ({ customerID, currentMembers }) => {
         src={CloseIcon}
         alt="close"
         className="float-right cursor cross-icon mr-3"
+        onClick={() =>
+          setShowMemberList({ add: false, show: false, modal: false })
+        }
         role="presentation"
       />
       {loading ? (
@@ -78,7 +80,10 @@ const TeamMembers = ({ customerID, currentMembers }) => {
                       <div
                         className="edit-profile-text float-left"
                         role="presentation">
-                        <GetInitialName property="mr-3" />
+                        <GetInitialName
+                          userInfo={member?.user}
+                          property="mr-3"
+                        />
 
                         <div className="name-email">
                           <div className="label m-0">
@@ -189,6 +194,7 @@ const TeamMembers = ({ customerID, currentMembers }) => {
 TeamMembers.propTypes = {
   customerID: string.isRequired,
   currentMembers: shape({}).isRequired,
+  setShowMemberList: func.isRequired,
 };
 
 export default TeamMembers;

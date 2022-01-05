@@ -40,7 +40,11 @@ export default function TeamMemberModal({
           style={teamDeleteModal ? alertCustomStyles : customStyles}
           ariaHideApp={false}
           contentLabel="Add team modal">
-          <TeamMembers customerID={id} currentMembers={currentMembers} />
+          <TeamMembers
+            customerID={id}
+            currentMembers={currentMembers}
+            setShowMemberList={setShowMemberList}
+          />
           {/* {showMemberList.add ? (
         <AddTeamMember
           id={id}
