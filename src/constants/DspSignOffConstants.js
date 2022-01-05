@@ -33,7 +33,8 @@ export const InvoiceInfo = {
   },
   'permanent additional': {
     mainHeading: 'This will be your new, ongoing invoice amount. ',
-    boldHeading: 'The first bill for this amount will be due APPLICABLE_MONTH.',
+    boldHeading:
+      'The first bill for this amount will be due APPLICABLE_MONTH 25.',
   },
   'one time': {
     mainHeading:
