@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { func, shape, string } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import { setCustomerSelectedTab } from '../../../store/actions/customerState';
 import {
@@ -13,6 +14,7 @@ import {
   ExchangeIcon,
   CaretUp,
 } from '../../../theme/images';
+import { PATH_CUSTOMER_DETAILS } from '../../../constants';
 
 export default function CustomerTabDetails({
   role,
@@ -22,6 +24,7 @@ export default function CustomerTabDetails({
   subViewComponent,
   setSubViewComponent,
 }) {
+  const history = useHistory();
   const customerAccountType = customer?.customer_account_type;
   const dispatch = useDispatch();
   const [isCollapseOpen, setIsCollapseOpen] = useState(
@@ -29,6 +32,7 @@ export default function CustomerTabDetails({
   );
 
   const handleMenuOnclick = (selectedTab) => {
+    history.push(PATH_CUSTOMER_DETAILS.replace(':id', customer?.id), 'Billing');
     setViewComponent(selectedTab);
     dispatch(setCustomerSelectedTab('performance'));
     if (selectedTab !== 'performance') {
