@@ -18,39 +18,39 @@ export default function ShowTeamMembers({
         {role !== 'Customer' ? (
           <div className="add-more-people">
             {memberData &&
-              memberData.map((item) => (
-                <React.Fragment key={item.id}>
-                  <div
-                    className="add-more-people cursor "
-                    data-tip
-                    data-for={item.id}
-                    onClick={() =>
-                      setShowMemberList({
-                        show: true,
-                        add: false,
-                        modal: true,
-                      })
-                    }
-                    role="presentation">
-                    <GetInitialName userInfo={item.user_profile} type="team" />
-                  </div>
+              memberData.map((item) =>
+                item.id ? (
+                  <React.Fragment key={item.id}>
+                    <div
+                      className="add-more-people cursor "
+                      data-tip
+                      data-for={item.id}
+                      onClick={() =>
+                        setShowMemberList({
+                          show: true,
+                          add: false,
+                          modal: true,
+                        })
+                      }
+                      role="presentation">
+                      <GetInitialName userInfo={item?.user} type="team" />
+                    </div>
 
-                  <ReactTooltip
-                    place="bottom"
-                    id={item.id}
-                    aria-haspopup="true">
-                    <strong>
-                      {(item.user_profile && item.user_profile.first_name) ||
-                        ' '}{' '}
-                      {(item.user_profile && item.user_profile.last_name) ||
-                        ' '}
-                    </strong>
-                    <p style={{ color: 'white', fontSize: '11px' }}>
-                      {item.user_profile && item.user_profile.role}
-                    </p>
-                  </ReactTooltip>
-                </React.Fragment>
-              ))}
+                    <ReactTooltip
+                      place="bottom"
+                      id={item.id}
+                      aria-haspopup="true">
+                      <strong>
+                        {item?.user?.first_name || ' '}{' '}
+                        {item?.user?.last_name || ' '}
+                      </strong>
+                      <p style={{ color: 'white', fontSize: '11px' }}>
+                        {item?.role_group?.name}
+                      </p>
+                    </ReactTooltip>
+                  </React.Fragment>
+                ) : null,
+              )}
 
             <div
               className="add-more-people btn-add-team cursor"
