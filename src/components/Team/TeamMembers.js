@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 
-import { shape, string, func } from 'prop-types';
+import { shape, string, func, arrayOf } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 
 import { getAllMembers } from '../../api';
@@ -193,7 +193,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
 
 TeamMembers.propTypes = {
   customerID: string.isRequired,
-  currentMembers: shape({}).isRequired,
+  currentMembers: arrayOf(shape({})).isRequired,
   setShowMemberList: func.isRequired,
 };
 

@@ -78,7 +78,7 @@ ShowTeamMembers.defaultProps = {
 };
 
 ShowTeamMembers.propTypes = {
-  role: string.isRequired,
+  role: arrayOf(string).isRequired,
   memberData: arrayOf(shape({})).isRequired,
   setShowMemberList: func,
 };
