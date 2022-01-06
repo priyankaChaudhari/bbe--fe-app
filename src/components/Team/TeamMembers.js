@@ -18,23 +18,69 @@ import {
 
 const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [loading, setLoading] = useState(false);
+  const [assignedMembers, setAssignedMembers] = useState([...currentMembers]);
   const [showCureentTeam, setShowCureentTeam] = useState(true);
-  const [selectedRole, setSelectedRole] = useState(null);
+  const [selectedRole, setSelectedRole] = useState({});
   const [unassignedMembers, setUnassignedMembers] = useState([]);
+  const [newMembers, setNewMembers] = useState([]);
 
   useEffect(() => {
+    console.log('old', assignedMembers);
     if (!showCureentTeam) {
       setLoading(true);
-      getAllMembers(selectedRole, true).then((res) => {
+      getAllMembers(selectedRole.id, true).then((res) => {
         setUnassignedMembers(res.data.results);
         setLoading(false);
       });
     }
-  }, [showCureentTeam, selectedRole]);
+  }, [showCureentTeam, selectedRole, assignedMembers]);
 
-  const addMembersForRole = (member) => {
-    setSelectedRole(member.role_group.id);
+  const showUnassignedMembers = (member) => {
+    // console.log('roles', member);
+    setSelectedRole({ ...member.role_group });
     setShowCureentTeam(false);
+  };
+
+  const addNewMembers = (member) => {
+    // console.log('member', member);
+    // console.log('selected role', selectedRole);
+    const tempMembers = [...newMembers];
+    tempMembers.push({ user_id: member.id, role_group_id: selectedRole.id });
+    setAssignedMembers({ ...assignedMembers });
+    const newlyAssigned = assignedMembers.map((old) => {
+      if (old.role_group.id === selectedRole.id) {
+        return {
+          id: Math.random(),
+          user: {
+            id: member.id,
+            first_name: member.first_name,
+            last_name: member.last_name,
+            email: member.email,
+            documents: member.documents,
+          },
+          role_group: {
+            id: selectedRole.id,
+            name: selectedRole.name,
+          },
+        };
+      }
+      return old;
+    });
+    // console.log('newly assigned', newlyAssigned);
+    setAssignedMembers([...newlyAssigned]);
+    setNewMembers([...newMembers, ...tempMembers]);
+  };
+
+  const saveTeamChanges = () => {
+    const newMembersData = {
+      customer_id: customerID,
+      user: newMembers,
+    };
+    console.log('changes', newMembersData);
+  };
+
+  const discardChanges = () => {
+    setAssignedMembers(currentMembers);
   };
 
   return (
@@ -74,7 +120,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
           {showCureentTeam ? (
             <div className="body-content ">
               <div className="row">
-                {currentMembers.map((member) => {
+                {assignedMembers.map((member) => {
                   return (
                     <div className="col-12 mb-3 " key={Math.random()}>
                       <div
@@ -106,7 +152,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                         <Button
                           className="btn-add-items float-right  mt-3"
                           role="presentation"
-                          onClick={() => addMembersForRole(member)}>
+                          onClick={() => showUnassignedMembers(member)}>
                           Add team member
                         </Button>
                       )}
@@ -120,10 +166,16 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
               <div className="modal-footer">
                 <div className="row">
                   <div className="col-6">
-                    <Button className=" btn-primary ">Confirm</Button>
+                    <Button
+                      className=" btn-primary "
+                      onClick={() => saveTeamChanges()}>
+                      Confirm
+                    </Button>
                   </div>
                   <div className="col-6 text-center">
-                    <Button className=" btn-borderless ">
+                    <Button
+                      className=" btn-borderless "
+                      onClick={() => discardChanges()}>
                       {' '}
                       Discard Changes
                     </Button>
@@ -156,7 +208,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                         <div
                           className="edit-profile-text float-left"
                           role="presentation">
-                          <GetInitialName property="mr-3" />
+                          <GetInitialName userInfo={member} property="mr-3" />
                           <div className="name-email">
                             <div className="team-member-name">
                               {`${member?.first_name} ${member?.last_name}`}
@@ -166,7 +218,8 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                         </div>
                         <Button
                           className="btn-add-items float-right  mt-3"
-                          role="presentation">
+                          role="presentation"
+                          onClick={() => addNewMembers(member)}>
                           Add
                         </Button>
                         <div className="clear-fix" />
