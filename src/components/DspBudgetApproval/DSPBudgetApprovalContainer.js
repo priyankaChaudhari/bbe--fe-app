@@ -378,7 +378,7 @@ export default function DSPBudgetApprovalContainer() {
       </>
     );
   };
-
+  console.log(invoiceType);
   return (
     <>
       {userInfo?.role?.toLowerCase() !== 'customer' ? (
@@ -407,7 +407,9 @@ export default function DSPBudgetApprovalContainer() {
                 <p className="normal-text text-medium mb-2">
                   {InvoiceNewMonthHeader[invoiceType]}
                   {invoiceType === 'pause'
-                    ? dayjs(new Date(marketplaceData?.due_date)).format('MMMM')
+                    ? dayjs(new Date(marketplaceData?.applicable_from)).format(
+                        'MMMM',
+                      )
                     : null}
                 </p>
                 <h5 className="sub-title-text mt-2">
@@ -425,9 +427,13 @@ export default function DSPBudgetApprovalContainer() {
                     {InvoiceInfo[invoiceType]?.boldHeading
                       .replace(
                         'APPLICABLE_MONTH',
-                        dayjs(new Date(marketplaceData?.due_date)).format(
-                          'MMMM',
-                        ),
+                        dayjs(
+                          new Date(
+                            invoiceType === 'pause'
+                              ? marketplaceData?.applicable_from
+                              : marketplaceData?.due_date,
+                          ),
+                        ).format('MMMM'),
                       )
                       .replace(
                         'APPLICABLE_DATE',
