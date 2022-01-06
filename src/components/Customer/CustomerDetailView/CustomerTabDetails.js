@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { func, shape, string } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import { setCustomerSelectedTab } from '../../../store/actions/customerState';
@@ -41,6 +41,7 @@ export default function CustomerTabDetails({
       setIsCollapseOpen(true);
     }
   };
+
   return (
     <ul className="left-details-card d-lg-block d-none">
       {role === 'Customer' ? (
@@ -231,13 +232,17 @@ export default function CustomerTabDetails({
   );
 }
 
+CustomerTabDetails.defaultProps = {
+  subViewComponent: '',
+};
+
 CustomerTabDetails.propTypes = {
   setViewComponent: func.isRequired,
-  role: string.isRequired,
+  role: arrayOf(string).isRequired,
   viewComponent: string.isRequired,
   customer: shape({
     id: string,
   }).isRequired,
-  subViewComponent: string.isRequired,
+  subViewComponent: string,
   setSubViewComponent: func.isRequired,
 };

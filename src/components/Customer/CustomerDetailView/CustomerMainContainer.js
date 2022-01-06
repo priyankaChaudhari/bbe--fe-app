@@ -71,7 +71,8 @@ export default function CustomerMainContainer() {
   const [viewComponent, setViewComponent] = useState(
     customerSelectedTab || 'performance',
   );
-  const [subViewComponent, setSubViewComponent] = useState();
+  const [subViewComponent, setSubViewComponent] = useState('');
+
   useEffect(() => {
     if (
       customer?.customer_account_type !== undefined &&

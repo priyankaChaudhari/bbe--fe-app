@@ -40,7 +40,7 @@ function DashboardContainer() {
             <div className="row">
               <div className="col-lg-3 col-md-12">
                 <p className="black-heading-title ml-1 pt-1">
-                  {dashboardHeaders[userInfo?.role]}
+                  {dashboardHeaders[userInfo?.role[0]]}
                 </p>
               </div>
               <div className="straight-line horizontal-line  d-lg-none d-md-block" />
@@ -55,7 +55,7 @@ function DashboardContainer() {
     <BrandPartnerDashboard>
       {displayHeader()}
 
-      {_.has(dashboardRole, userInfo?.role) ? (
+      {_.has(dashboardRole, userInfo?.role[0]) ? (
         <AdManagerAdminContainer userInfo={userInfo} />
       ) : null}
 
