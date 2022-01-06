@@ -378,7 +378,7 @@ export default function DSPBudgetApprovalContainer() {
       </>
     );
   };
-  console.log(invoiceType);
+
   return (
     <>
       {userInfo?.role?.toLowerCase() !== 'customer' ? (
