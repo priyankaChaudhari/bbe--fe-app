@@ -11,7 +11,10 @@ import SalesMetrics from './SalesMetrics';
 import SalesKeyContribution from './SalesKeyContribution';
 import SalePerformanceChart from '../../../Customer/CompanyPerformance/SellerReporting/SalePerformanceChart';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
-import { dateOptionsWithYear, noGraphDataMessage } from '../../../../constants';
+import {
+  dateOptionsWithYearOverYear,
+  noGraphDataMessage,
+} from '../../../../constants';
 import {
   getManagersList,
   getSalesGraphData,
@@ -530,7 +533,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       setSalesGroupBy('weekly');
     }
 
-    if (dailyFactFlag === 'custom') {
+    if (dailyFactFlag === 'custom' || dailyFactFlag === 'yearOverYear') {
       sd = `${startDate.getDate()}-${
         startDate.getMonth() + 1
       }-${startDate.getFullYear()}`;
@@ -584,11 +587,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       setCurrency(event.currency);
       setCurrencySymbol(getSymbolFromCurrency(event.currency));
 
-      if (selectedSalesDF.value === 'custom') {
+      if (
+        selectedSalesDF.value === 'custom' ||
+        selectedSalesDF.value === 'yearOverYear'
+      ) {
         salesYearAndCustomDateFilter(
           customDateState[0].startDate,
           customDateState[0].endDate,
-          'custom',
+          selectedSalesDF.value,
           event.value,
           selectedManager.value,
           selectedBgs.value,
@@ -622,7 +628,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     if (value !== selectedSalesDF) {
       setSelectedSalesDF(event);
       setIsCustomDateApply(false);
-      if (value !== 'custom') {
+      if (value !== 'custom' || value !== 'yearOverYear') {
         setCustomDateState([
           {
             startDate: currentDate,
@@ -643,7 +649,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         );
       }
 
-      if (value === 'custom') {
+      if (value === 'custom' || value === 'yearOverYear') {
         setShowAdCustomDateModal(true);
       } else {
         setGropuByFilter(value);
@@ -681,11 +687,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
 
       setSelectedContributionOption(tabOption);
 
-      if (selectedSalesDF.value === 'custom') {
+      if (
+        selectedSalesDF.value === 'custom' ||
+        selectedSalesDF.value === 'yearOverYear'
+      ) {
         salesYearAndCustomDateFilter(
           customDateState[0].startDate,
           customDateState[0].endDate,
-          'custom',
+          selectedSalesDF.value,
           selectedMarketplace.value,
           value,
           bgsUser,
@@ -744,11 +753,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         }
       }
 
-      if (selectedSalesDF.value === 'custom') {
+      if (
+        selectedSalesDF.value === 'custom' ||
+        selectedSalesDF.value === 'yearOverYear'
+      ) {
         salesYearAndCustomDateFilter(
           customDateState[0].startDate,
           customDateState[0].endDate,
-          'custom',
+          selectedSalesDF.value,
           selectedMarketplace.value,
           manager,
           value,
@@ -781,7 +793,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     if (value !== salesGroupBy) {
       setSalesGroupBy(value);
 
-      if (selectedSalesDF.value === 'custom') {
+      if (
+        selectedSalesDF.value === 'custom' ||
+        selectedSalesDF.value === 'yearOverYear'
+      ) {
         const { startDate } = customDateState[0];
         const { endDate } = customDateState[0];
         let sd = startDate;
@@ -863,11 +878,14 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     }
     setSelectedContributionOption(contributionTab);
 
-    if (selectedSalesDF.value === 'custom') {
+    if (
+      selectedSalesDF.value === 'custom' ||
+      selectedSalesDF.value === 'yearOverYear'
+    ) {
       salesYearAndCustomDateFilter(
         customDateState[0].startDate,
         customDateState[0].endDate,
-        'custom',
+        selectedSalesDF.value,
         'all',
         'all',
         userManger,
@@ -941,6 +959,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         'MMM D, YYYY',
       )}  To- ${dayjs(customDateState[0].endDate).format('MMM D, YYYY')}`;
     }
+    if (selectedSalesDF.value === 'yearOverYear' && isCustomDateApply) {
+      return `From ${dayjs(customDateState[0].startDate).format(
+        'D MMM',
+      )}  To ${dayjs(customDateState[0].endDate).format('D MMM')}`;
+    }
 
     return props.data.sub;
   };
@@ -950,7 +973,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     salesYearAndCustomDateFilter(
       customDateState[0].startDate,
       customDateState[0].endDate,
-      'custom',
+      selectedSalesDF.value,
       selectedMarketplace.value,
       selectedManager.value,
       selectedBgs.value,
@@ -1048,16 +1071,18 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
                 <span>Recent</span>
               </div>
             </li>
-            <li>
-              <div className="weeks">
-                <ul className="dashed-line">
-                  <li className="darkGray block " />
-                  <li className=" darkGray block " />
-                </ul>
+            {selectedSalesDF.value !== 'custom' ? (
+              <li>
+                <div className="weeks">
+                  <ul className="dashed-line">
+                    <li className="darkGray block " />
+                    <li className=" darkGray block " />
+                  </ul>
 
-                <span>Previous</span>
-              </div>
-            </li>
+                  <span>Previous</span>
+                </div>
+              </li>
+            ) : null}
           </ul>
         </div>
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
@@ -1065,7 +1090,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
             <div className="days-container ">
               <ul className="days-tab">
                 <li
-                  // id=" BT-adperformance-days"
+                  id="BT-salesDashboard-days"
                   className={
                     groupByFilters.daily === false ? 'disabled-tab' : ''
                   }>
@@ -1133,10 +1158,10 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         <div className="col-md-6 col-sm1-12  mb-3">
           {DropDown(
             'days-performance',
-            dateOptionsWithYear,
-            dateOptionsWithYear[0].label,
+            dateOptionsWithYearOverYear,
+            dateOptionsWithYearOverYear[0].label,
             getSelectComponents,
-            dateOptionsWithYear[0],
+            dateOptionsWithYearOverYear[0],
             handleSalesDailyFact,
             salesGraphLoader,
             null,

@@ -1151,16 +1151,18 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
                 <span>Recent</span>
               </div>
             </li>
-            <li>
-              <div className="weeks">
-                <ul className="dashed-line">
-                  <li className="darkGray block " />
-                  <li className=" darkGray block " />
-                </ul>
+            {selectedAdDF.value !== 'custom' ? (
+              <li>
+                <div className="weeks">
+                  <ul className="dashed-line">
+                    <li className="darkGray block " />
+                    <li className=" darkGray block " />
+                  </ul>
 
-                <span>Previous</span>
-              </div>
-            </li>
+                  <span>Previous</span>
+                </div>
+              </li>
+            ) : null}
           </ul>
         </div>
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
@@ -1168,7 +1170,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             <div className="days-container ">
               <ul className="days-tab">
                 <li
-                  // id=" BT-adperformance-days"
+                  id=" BT-adDashboard-days"
                   className={adFilters.daily === false ? 'disabled-tab' : ''}>
                   <input
                     className="d-none"
