@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Modal from 'react-modal';
-import { string, func, shape, bool } from 'prop-types';
+import { string, func, shape, bool, arrayOf } from 'prop-types';
 
 import { AddTeamMember, EditTeamMember, TeamMembers } from '../../../Team';
 
@@ -81,15 +81,12 @@ TeamMemberModal.defaultProps = {
 TeamMemberModal.propTypes = {
   setShowMemberList: func,
   id: string.isRequired,
-  currentMembers: shape({}).isRequired,
+  currentMembers: arrayOf(shape({})).isRequired,
   showMemberList: shape({
     modal: bool,
     add: bool,
   }).isRequired,
-  userInfo: shape({
-    role: string,
-    id: string,
-  }),
+  userInfo: shape({}),
   customStyles: shape({}),
   setAgreementDetailModal: func,
   getActivityLogInfo: func.isRequired,
