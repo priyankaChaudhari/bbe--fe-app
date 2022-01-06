@@ -25,7 +25,6 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [newMembers, setNewMembers] = useState([]);
 
   useEffect(() => {
-    console.log('old', assignedMembers);
     if (!showCureentTeam) {
       setLoading(true);
       getAllMembers(selectedRole.id, true).then((res) => {
@@ -33,7 +32,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
         setLoading(false);
       });
     }
-  }, [showCureentTeam, selectedRole, assignedMembers]);
+  }, [showCureentTeam, selectedRole]);
 
   const showUnassignedMembers = (member) => {
     // console.log('roles', member);
@@ -46,9 +45,8 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
     // console.log('selected role', selectedRole);
     const tempMembers = [...newMembers];
     tempMembers.push({ user_id: member.id, role_group_id: selectedRole.id });
-    setAssignedMembers({ ...assignedMembers });
-    const newlyAssigned = assignedMembers.map((old) => {
-      if (old.role_group.id === selectedRole.id) {
+    const newlyAssigned = assignedMembers.map((oldMember) => {
+      if (oldMember.role_group.id === selectedRole.id) {
         return {
           id: Math.random(),
           user: {
@@ -64,11 +62,11 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
           },
         };
       }
-      return old;
+      return oldMember;
     });
     // console.log('newly assigned', newlyAssigned);
     setAssignedMembers([...newlyAssigned]);
-    setNewMembers([...newMembers, ...tempMembers]);
+    setNewMembers([...tempMembers]);
   };
 
   const saveTeamChanges = () => {
@@ -76,7 +74,23 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
       customer_id: customerID,
       user: newMembers,
     };
-    console.log('changes', newMembersData);
+    console.log('data on confirm', newMembersData);
+  };
+
+  const removeTeamMember = (member) => {
+    console.log('removed member', member);
+    const membersAfterRemove = assignedMembers.map((oldMember) => {
+      if (oldMember.id === member.id) {
+        delete oldMember.id;
+        delete oldMember.user;
+      }
+      return oldMember;
+    });
+    const tempMembers = [...newMembers];
+    tempMembers.push({ user_id: '', role_group_id: member.role_group.id });
+
+    setAssignedMembers([...membersAfterRemove]);
+    setNewMembers([...tempMembers]);
   };
 
   const discardChanges = () => {
@@ -118,49 +132,53 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
 
           {/* List of current Team members with specific Role */}
           {showCureentTeam ? (
-            <div className="body-content ">
-              <div className="row">
-                {assignedMembers.map((member) => {
-                  return (
-                    <div className="col-12 mb-3 " key={Math.random()}>
-                      <div
-                        className="edit-profile-text float-left"
-                        role="presentation">
-                        <GetInitialName
-                          userInfo={member?.user}
-                          property="mr-3"
-                        />
+            <>
+              <div className="body-content ">
+                <div className="row">
+                  {assignedMembers.map((member) => {
+                    return (
+                      <div className="col-12 mb-3 " key={Math.random()}>
+                        <div
+                          className="edit-profile-text float-left"
+                          role="presentation">
+                          <GetInitialName
+                            userInfo={member?.user}
+                            property="mr-3"
+                          />
 
-                        <div className="name-email">
-                          <div className="label m-0">
-                            {member.role_group.name}
-                          </div>
-                          {member.id ? (
-                            <div className="team-member-name text-bold">
-                              {`${member.user?.first_name} ${member.user?.last_name}`}
+                          <div className="name-email">
+                            <div className="label m-0">
+                              {member.role_group.name}
                             </div>
-                          ) : (
-                            <div className="team-member-name">Unassigned</div>
-                          )}
+                            {member.id ? (
+                              <div className="team-member-name text-bold">
+                                {`${member.user?.first_name} ${member.user?.last_name}`}
+                              </div>
+                            ) : (
+                              <div className="team-member-name">Unassigned</div>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                      {member.id ? (
-                        <Button className="btn-add-items gray-text  float-right roleName mt-3">
-                          Remove
-                        </Button>
-                      ) : (
-                        <Button
-                          className="btn-add-items float-right  mt-3"
-                          role="presentation"
-                          onClick={() => showUnassignedMembers(member)}>
-                          Add team member
-                        </Button>
-                      )}
+                        {member.id ? (
+                          <Button
+                            className="btn-add-items gray-text  float-right roleName mt-3"
+                            onClick={() => removeTeamMember(member)}>
+                            Remove
+                          </Button>
+                        ) : (
+                          <Button
+                            className="btn-add-items float-right  mt-3"
+                            role="presentation"
+                            onClick={() => showUnassignedMembers(member)}>
+                            Add team member
+                          </Button>
+                        )}
 
-                      <div className="clear-fix" />
-                    </div>
-                  );
-                })}
+                        <div className="clear-fix" />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <div className="footer-line " />
               <div className="modal-footer">
@@ -182,7 +200,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                   </div>
                 </div>
               </div>
-            </div>
+            </>
           ) : (
             <>
               {/* Add or Search New Team members for selected Role */}
