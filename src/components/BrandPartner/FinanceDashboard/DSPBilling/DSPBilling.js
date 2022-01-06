@@ -52,7 +52,7 @@ export default function DSPBilling({
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
     getDSPFinances(dateType, startDate, endDate).then((res) => {
       if (res && res.status === 400) {
-        //
+        setDSPData([]);
       }
       if (res && res.status === 200) {
         if (res.data && res.data) {

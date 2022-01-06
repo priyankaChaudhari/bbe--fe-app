@@ -160,7 +160,7 @@ export default function AuthenticationComponent() {
           {/* AD MANAGER DASHBOARD, BGS DASHBOARD, FINANCE DASHBOARD PATH */}
           {Object.keys(dashboardRolePaths).includes(userInfo?.role?.[0]) ? (
             <Route
-              path={dashboardRolePaths[userInfo.role[0]]}
+              path={dashboardRolePaths[userInfo?.role[0]]}
               component={DashboardContainer}
             />
           ) : null}
