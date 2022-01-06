@@ -407,9 +407,7 @@ export default function DSPBudgetApprovalContainer() {
                 <p className="normal-text text-medium mb-2">
                   {InvoiceNewMonthHeader[invoiceType]}
                   {invoiceType === 'pause'
-                    ? dayjs(new Date(marketplaceData?.applicable_from)).format(
-                        'MMMM',
-                      )
+                    ? dayjs(new Date(marketplaceData?.due_date)).format('MMMM')
                     : null}
                 </p>
                 <h5 className="sub-title-text mt-2">
