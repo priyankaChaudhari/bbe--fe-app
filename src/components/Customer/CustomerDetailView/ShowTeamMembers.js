@@ -15,7 +15,7 @@ export default function ShowTeamMembers({
     <>
       <div className="col-6 mt-4 text-right">
         {' '}
-        {role !== 'Customer' ? (
+        {!role.includes('Customer') ? (
           <div className="add-more-people">
             {memberData &&
               memberData.map((item) =>

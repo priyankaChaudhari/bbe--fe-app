@@ -6,7 +6,8 @@ export const CustomerDetailsBody = styled.div`
   background: ${Theme.gray6};
   min-height: 100%;
   width: 100%;
-  padding-left: ${(props) => (props.role === 'Customer' ? '45px' : '109px')};
+  padding-left: ${(props) =>
+    props.role.includes('Customer') ? '45px' : '109px'};
   padding-right: 45px;
   .back-btn-link {
     color: ${Theme.gray85};

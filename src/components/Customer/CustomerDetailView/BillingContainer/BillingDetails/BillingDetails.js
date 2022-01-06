@@ -681,8 +681,8 @@ export default function BillingDetails({
               {paymentTermsData?.length ? (
                 <WhiteCard className="mt-3">
                   <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
-                  {userInfo?.role === 'BGS' ||
-                  userInfo?.role === 'BGS Manager' ? (
+                  {userInfo?.role?.includes('BGS') ||
+                  userInfo?.role?.includes('BGS Manager') ? (
                     <div
                       className="edit-details"
                       role="presentation"

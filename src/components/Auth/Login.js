@@ -113,7 +113,7 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      if (role === 'Customer') {
+      if (role.includes('Customer') || role === 'Customer') {
         const id =
           step &&
           Object.keys(step) &&
@@ -191,8 +191,8 @@ export default function Login() {
                         role="presentation"
                         className="back-link"
                         onClick={() =>
-                          (customerNames && customerNames.length === 0) ||
-                          (customerNames && customerNames.length === 1) ||
+                          customerNames?.length === 0 ||
+                          customerNames?.length === 1 ||
                           customerNames === ''
                             ? setShowPassword({
                                 email: true,
@@ -244,9 +244,7 @@ export default function Login() {
                         <br />
                         <input
                           className={
-                            errors && errors.email
-                              ? 'form-control'
-                              : 'form-control '
+                            errors?.email ? 'form-control' : 'form-control '
                           }
                           type="text"
                           placeholder="Enter your Email Address"
@@ -267,8 +265,7 @@ export default function Login() {
                       </label>
                     </InputFormField>
                     <ErrorMsg>
-                      {(errors && errors.email && errors.email.message) ||
-                        (customerApiError && customerApiError[0])}
+                      {errors?.email?.message || customerApiError?.[0]}
                     </ErrorMsg>
                     <ErrorMsg>{forgotApiError}</ErrorMsg>
                   </>
@@ -319,16 +316,9 @@ export default function Login() {
                                 />
                               </label>
                             </InputFormField>
+                            <ErrorMsg>{errors?.password?.message}</ErrorMsg>
                             <ErrorMsg>
-                              {errors &&
-                                errors.password &&
-                                errors.password.message}
-                            </ErrorMsg>
-                            <ErrorMsg>
-                              {apiError &&
-                                apiError.data &&
-                                apiError.data.non_field_errors &&
-                                apiError.data.non_field_errors[0]}
+                              {apiError?.data?.non_field_errors?.[0]}
                             </ErrorMsg>
                             <ErrorMsg>{forgotApiError}</ErrorMsg>
                           </>
