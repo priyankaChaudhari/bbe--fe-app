@@ -86,7 +86,7 @@ AdPerformanceFilters.defaultProps = {
   dateOptions: {},
   getSelectComponents: () => {},
   isApiCall: false,
-  DropdownIndicator: () => {},
+  DropdownIndicator: {},
   handleAdDailyFact: () => {},
   selectedAdDF: {},
 };

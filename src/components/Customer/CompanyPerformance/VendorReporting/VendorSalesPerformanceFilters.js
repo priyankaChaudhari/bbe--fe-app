@@ -91,6 +91,7 @@ VendorSalesPerformanceFilters.defaultProps = {
 
 VendorSalesPerformanceFilters.propTypes = {
   isApiCall: bool,
+  DropdownIndicator: shape({}),
   marketplaceDefaultValue: arrayOf(shape({})),
   selectedSalesDF: instanceOf(Object),
   marketplaceOptions: arrayOf(Array),
