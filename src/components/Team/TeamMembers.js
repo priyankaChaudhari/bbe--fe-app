@@ -18,7 +18,7 @@ import {
 
 const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [loading, setLoading] = useState(false);
-  const [assignedMembers, setAssignedMembers] = useState([...currentMembers]);
+  const [assignedMembers, setAssignedMembers] = useState(currentMembers);
   const [showCureentTeam, setShowCureentTeam] = useState(true);
   const [selectedRole, setSelectedRole] = useState({});
   const [unassignedMembers, setUnassignedMembers] = useState([]);
@@ -69,20 +69,13 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
     setNewMembers([...tempMembers]);
   };
 
-  const saveTeamChanges = () => {
-    const newMembersData = {
-      customer_id: customerID,
-      user: newMembers,
-    };
-    console.log('data on confirm', newMembersData);
-  };
-
   const removeTeamMember = (member) => {
     console.log('removed member', member);
     const membersAfterRemove = assignedMembers.map((oldMember) => {
       if (oldMember.id === member.id) {
-        delete oldMember.id;
-        delete oldMember.user;
+        return {
+          role_group: oldMember.role_group,
+        };
       }
       return oldMember;
     });
@@ -93,8 +86,17 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
     setNewMembers([...tempMembers]);
   };
 
+  const saveTeamChanges = () => {
+    const newMembersData = {
+      customer_id: customerID,
+      user: newMembers,
+    };
+    console.log('data on confirm', newMembersData);
+  };
+
   const discardChanges = () => {
     setAssignedMembers(currentMembers);
+    setNewMembers([]);
   };
 
   return (
@@ -143,7 +145,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                           role="presentation">
                           <GetInitialName
                             userInfo={member?.user}
-                            property="mr-3"
+                            property={`mr-3 ${member.id ? '' : 'unassigned'}`}
                           />
 
                           <div className="name-email">
@@ -185,7 +187,9 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                 <div className="row">
                   <div className="col-6">
                     <Button
-                      className=" btn-primary "
+                      className={`btn-primary ${
+                        newMembers.length === 0 ? 'disabled' : ''
+                      }`}
                       onClick={() => saveTeamChanges()}>
                       Confirm
                     </Button>
