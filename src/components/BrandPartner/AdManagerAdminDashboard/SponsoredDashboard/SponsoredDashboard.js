@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import $ from 'jquery';
 import styled from 'styled-components';
-import PropTypes, { shape, string } from 'prop-types';
+import PropTypes, { arrayOf, shape, string } from 'prop-types';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
@@ -38,10 +38,11 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const mounted = useRef(false);
-  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
-  const isBGSManager = userInfo?.role === 'BGS Manager';
-  const isBGSAdmin = userInfo?.role === 'BGS Admin';
-  const isBGS = userInfo?.role === 'BGS';
+  const isBGSManager = userInfo?.role?.includes('BGS Manager');
+  const isAdManagerAdmin = userInfo?.role?.includes('Ad Manager Admin');
+  const isBGSAdmin = userInfo?.role?.includes('BGS Admin');
+  const isBGS = userInfo?.role?.includes('BGS');
+
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -102,7 +103,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value: 'all',
           label: isBGSAdmin ? 'All' : 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
 
   const [selectedBgs, setSelectedBgs] = useState(
@@ -111,7 +112,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
 
   const getManagerList = useCallback(() => {
@@ -451,7 +452,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     if (responseId === null && list.length && list[0].value !== null) {
       if (isAdManagerAdmin || isBGSAdmin) getManagerList();
       if (isBGSAdmin || isBGSManager)
-        getBGSList(isBGSManager ? userInfo.id : null);
+        getBGSList(isBGSManager ? userInfo?.id : null);
       getContributionData(
         selectedAdType,
         selectedAdDF.value,
@@ -942,11 +943,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     }
 
     if (isBGS) {
-      userBgs = userInfo.id;
+      userBgs = userInfo?.id;
       userManger = 'all';
     } else if (isBGSManager) {
       userBgs = 'all';
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedBgs({
         value: 'all',
         label: 'All',
@@ -964,12 +965,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       });
       contributionTab = 'positive';
     } else {
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedManager({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
       setSelectedBgs({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
     }
     setSelectedContributionOption(contributionTab);
@@ -1370,7 +1371,7 @@ SponsoredDashboard.defaultProps = {
   marketplaceChoices: [],
   selectedMarketplace: '',
   userInfo: {
-    role: '',
+    role: [],
     id: '',
   },
   data: {},
@@ -1380,7 +1381,7 @@ SponsoredDashboard.propTypes = {
   marketplaceChoices: PropTypes.arrayOf(PropTypes.object),
   selectedMarketplace: PropTypes.string,
   userInfo: shape({
-    role: string,
+    role: arrayOf(string).isRequired,
     id: string,
   }),
   data: shape({ sub: string, label: string }),

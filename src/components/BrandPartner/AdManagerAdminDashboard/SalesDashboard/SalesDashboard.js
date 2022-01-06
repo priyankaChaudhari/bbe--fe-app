@@ -37,10 +37,10 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const mounted = useRef(false);
-  const isBGSManager = userInfo?.role === 'BGS Manager';
-  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
-  const isBGSAdmin = userInfo?.role === 'BGS Admin';
-  const isBGS = userInfo?.role === 'BGS';
+  const isBGSManager = userInfo?.role?.includes('BGS Manager');
+  const isAdManagerAdmin = userInfo?.role?.includes('Ad Manager Admin');
+  const isBGSAdmin = userInfo?.role?.includes('BGS Admin');
+  const isBGS = userInfo?.role?.includes('BGS');
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [salesChartData, setSalesChartData] = useState([]);
@@ -62,7 +62,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
 
   const [selectedBgs, setSelectedBgs] = useState(
@@ -71,7 +71,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
   const [managersList, setManagersList] = useState([]);
   const [bgsList, setBgsList] = useState([]);
@@ -387,7 +387,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     if (responseId === null && list.length && list[0].value !== null) {
       if (isAdManagerAdmin || isBGSAdmin) getManagerList();
       if (isBGSAdmin || isBGSManager)
-        getBGSList(isBGSManager ? userInfo.id : null);
+        getBGSList(isBGSManager ? userInfo?.id : null);
 
       getContributionData(
         selectedSalesDF.value,
@@ -866,11 +866,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     }
 
     if (isBGS) {
-      userBgs = userInfo.id;
+      userBgs = userInfo?.id;
       userManger = 'all';
     } else if (isBGSManager) {
       userBgs = 'all';
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedBgs({
         value: 'all',
         label: 'All',
@@ -888,12 +888,12 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       });
       contributionTab = 'positive';
     } else {
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedManager({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
       setSelectedBgs({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
     }
     setSelectedContributionOption(contributionTab);
@@ -1351,7 +1351,7 @@ SalesDashboard.defaultProps = {
   marketplaceChoices: [],
   selectedMarketplace: '',
   userInfo: {
-    role: '',
+    role: [],
     id: '',
   },
   data: {},
@@ -1361,7 +1361,7 @@ SalesDashboard.propTypes = {
   marketplaceChoices: arrayOf(PropTypes.object),
   selectedMarketplace: string,
   userInfo: shape({
-    role: string,
+    role: arrayOf(string).isRequired,
     id: string,
   }),
   data: shape({ sub: string, label: string }),

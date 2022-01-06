@@ -312,7 +312,7 @@ export default function Header({ type, userInfo }) {
                   ? renderDashboardIcon('bgs', PATH_BGS_DASHBOARD)
                   : null}
 
-                {userInfo?.role === 'BGS Manager'
+                {userInfo?.role?.includes('BGS Manager')
                   ? renderDashboardIcon(
                       'bgsManager',
                       PATH_BGS_MANAGER_DASHBOARD,

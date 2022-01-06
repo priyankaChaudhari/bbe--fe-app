@@ -122,7 +122,7 @@ export default function AdPerformance({
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
 
   useEffect(() => {
-    if (userInfo.role === 'Ad Manager Admin') {
+    if (userInfo?.role?.includes('Ad Manager Admin')) {
       setIsAllowToSplitBalance(true);
     } else {
       getBPRoles(id, userInfo?.id).then((response) => {
