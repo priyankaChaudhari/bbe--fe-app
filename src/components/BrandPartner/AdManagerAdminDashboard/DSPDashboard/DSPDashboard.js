@@ -1050,16 +1050,18 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
                     <span>Recent</span>
                   </div>
                 </li>
-                <li>
-                  <div className="weeks">
-                    <ul className="dashed-line">
-                      <li className="darkGray block " />
-                      <li className=" darkGray block " />
-                    </ul>
+                {selectedAdDF.value !== 'custom' ? (
+                  <li>
+                    <div className="weeks">
+                      <ul className="dashed-line">
+                        <li className="darkGray block " />
+                        <li className=" darkGray block " />
+                      </ul>
 
-                    <span>Previous</span>
-                  </div>
-                </li>
+                      <span>Previous</span>
+                    </div>
+                  </li>
+                ) : null}
               </ul>
             </div>
             <div className="col-md-6 col-sm-12 order-md-2 order-1">
