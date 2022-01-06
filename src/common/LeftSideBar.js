@@ -1,8 +1,8 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { shape, arrayOf, string } from 'prop-types';
 
 import Theme from '../theme/Theme';
 import {
@@ -266,8 +266,8 @@ LeftSideBar.defaultProps = {
 };
 
 LeftSideBar.propTypes = {
-  userInfo: PropTypes.shape({
-    role: PropTypes.string,
+  userInfo: shape({
+    role: arrayOf(string).isRequired,
   }),
 };
 

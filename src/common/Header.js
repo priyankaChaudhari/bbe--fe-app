@@ -397,7 +397,7 @@ Header.defaultProps = {
 Header.propTypes = {
   type: string,
   userInfo: shape({
-    role: string,
+    role: arrayOf(string).isRequired,
     first_name: string,
     last_name: string,
     documents: arrayOf(shape({})),
