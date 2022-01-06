@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
@@ -15,19 +15,14 @@ import { logout } from '../store/actions/userState';
 import { MainHeader, MobileSidebar, SideContents } from './Styles/HeaderStyles';
 import {
   PATH_ARTICLE_LIST,
-  PATH_BGS_DASHBOARD,
-  PATH_BGS_MANAGER_DASHBOARD,
-  PATH_BGS_ADMIN_DASHBOARD,
   PATH_CUSTOMER_LIST,
-  PATH_SPONSORED_DASHBOARD,
-  PATH_DSP_DASHBOARD,
-  PATH_HYBRID_DASHBOARD,
-  PATH_AD_MANAGER_ADMIN_DASHBOARD,
-  PATH_FINANCE_DASHBOARD,
   helpDeskLink,
   managementLink,
   PATH_ACCOUNT_SETUP,
   PATH_SUMMARY,
+  dashboardRole,
+  roleURLs,
+  dashboardRolePaths,
 } from '../constants';
 import {
   NextLogo,
@@ -49,6 +44,7 @@ export default function Header({ type, userInfo }) {
   const history = useHistory();
   const dispatch = useDispatch();
 
+  const [userRole, setUserRole] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [showSuccessMsg, setShowSuccessMsg] = useState({
@@ -87,35 +83,12 @@ export default function Header({ type, userInfo }) {
     $('#idea').show();
   }
 
-  const renderDashboardIcon = (location, path) => {
-    return (
-      <li
-        className={
-          history.location.pathname?.includes(location)
-            ? ' cursor active'
-            : ' cursor'
-        }
-        role="presentation"
-        onClick={() => history.push(path)}>
-        {' '}
-        {history.location.pathname?.includes(location) ? (
-          <img
-            width="32px"
-            className=" speed0meter-icon active"
-            src={SpeedometerActive}
-            alt=""
-          />
-        ) : (
-          <img
-            width="32px"
-            className=" speed0meter-icon  disactive"
-            src={Speedometer}
-            alt=""
-          />
-        )}
-      </li>
+  useEffect(() => {
+    const role = userInfo?.role.filter((element) =>
+      dashboardRole.includes(element),
     );
-  };
+    setUserRole(role.length && role[0]);
+  }, [userInfo]);
 
   return (
     <div
@@ -308,43 +281,35 @@ export default function Header({ type, userInfo }) {
             <SideContents>
               {' '}
               <ul className="side-bar-icon ">
-                {userInfo?.role.includes('BGS')
-                  ? renderDashboardIcon('bgs', PATH_BGS_DASHBOARD)
-                  : null}
-
-                {userInfo?.role?.includes('BGS Manager')
-                  ? renderDashboardIcon(
-                      'bgsManager',
-                      PATH_BGS_MANAGER_DASHBOARD,
+                <li
+                  className={
+                    roleURLs.some((element) =>
+                      history.location.pathname?.includes(element),
                     )
-                  : null}
-
-                {userInfo?.role.includes('BGS Admin')
-                  ? renderDashboardIcon('bgsAdmin', PATH_BGS_ADMIN_DASHBOARD)
-                  : null}
-
-                {userInfo?.role?.includes('Sponsored Advertising Ad Manager')
-                  ? renderDashboardIcon('sponsored', PATH_SPONSORED_DASHBOARD)
-                  : null}
-
-                {userInfo?.role?.includes('DSP Ad Manager')
-                  ? renderDashboardIcon('dsp', PATH_DSP_DASHBOARD)
-                  : null}
-                {userInfo?.role?.includes('Hybrid Ad Manager')
-                  ? renderDashboardIcon('hybrid', PATH_HYBRID_DASHBOARD)
-                  : null}
-
-                {userInfo?.role?.includes('Ad Manager Admin')
-                  ? renderDashboardIcon(
-                      'adManager/admin',
-                      PATH_AD_MANAGER_ADMIN_DASHBOARD,
-                    )
-                  : null}
-
-                {userInfo?.role.includes('Finance')
-                  ? renderDashboardIcon('finance', PATH_FINANCE_DASHBOARD)
-                  : null}
-
+                      ? ' cursor active'
+                      : ' cursor'
+                  }
+                  role="presentation"
+                  onClick={() => history.push(dashboardRolePaths[userRole])}>
+                  {' '}
+                  {roleURLs.some((element) =>
+                    history.location.pathname?.includes(element),
+                  ) ? (
+                    <img
+                      width="32px"
+                      className=" speed0meter-icon active"
+                      src={SpeedometerActive}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      width="32px"
+                      className=" speed0meter-icon  disactive"
+                      src={Speedometer}
+                      alt=""
+                    />
+                  )}
+                </li>
                 <li
                   className={
                     history.location.pathname?.includes('customer')

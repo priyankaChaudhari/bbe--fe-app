@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
@@ -13,210 +13,42 @@ import {
   SpeedometerActive,
   Speedometer,
 } from '../theme/images';
+
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
-  PATH_BGS_DASHBOARD,
-  PATH_BGS_MANAGER_DASHBOARD,
-  PATH_SPONSORED_DASHBOARD,
-  PATH_DSP_DASHBOARD,
-  PATH_HYBRID_DASHBOARD,
-  PATH_AD_MANAGER_ADMIN_DASHBOARD,
-  PATH_FINANCE_DASHBOARD,
-  PATH_BGS_ADMIN_DASHBOARD,
+  roleURLs,
+  dashboardRole,
+  dashboardRolePaths,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
   const history = useHistory();
 
+  const [userRole, setUserRole] = useState('');
+
+  useEffect(() => {
+    const role = userInfo?.role.filter((element) =>
+      dashboardRole.includes(element),
+    );
+    setUserRole(role.length && role[0]);
+  }, [userInfo]);
+
   return (
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          {userInfo?.role?.includes('BGS') ? (
+          {userRole.length ? (
             <li
               className={
-                history.location.pathname?.includes('bgs')
+                roleURLs.some((element) =>
+                  history.location.pathname?.includes(element),
+                )
                   ? ' cursor active'
                   : ' cursor'
               }
               role="presentation"
-              onClick={() => history.push(PATH_BGS_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role?.includes('BGS Manager') ? (
-            <li
-              className={
-                history.location.pathname?.includes('bgsManager')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_BGS_MANAGER_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role?.includes('BGS Admin') ? (
-            <li
-              className={
-                history.location.pathname?.includes('bgsAdmin')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_BGS_ADMIN_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role?.includes('Sponsored Advertising Ad Manager') ? (
-            <li
-              className={
-                history.location.pathname?.includes('sponsored')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_SPONSORED_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role?.includes('DSP Ad Manager') ? (
-            <li
-              className={
-                history.location.pathname?.includes('dsp')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_DSP_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role?.includes('Hybrid Ad Manager') ? (
-            <li
-              className={
-                history.location.pathname?.includes('hybrid')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_HYBRID_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role?.includes('Ad Manager Admin') ? (
-            <li
-              className={
-                history.location.pathname?.includes('adMangerAdmin')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role?.includes('Finance') ? (
-            <li
-              className={
-                history.location.pathname?.includes('finance')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_FINANCE_DASHBOARD)}>
+              onClick={() => history.push(dashboardRolePaths[userRole])}>
               {' '}
               <img
                 width="32px"
