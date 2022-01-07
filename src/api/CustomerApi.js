@@ -332,6 +332,19 @@ export async function getAllMembers(role, findMembers) {
   return result;
 }
 
+export async function addCustomerMembers(data) {
+  const result = await axiosInstance
+    .post(`${API_CUSTOMER_MEMBER}bulk-create/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+// Remove delete, update, add Customer Meber API's after role enhancement
 export async function deleteCustomerMember(id) {
   const result = await axiosInstance
     .delete(`${API_CUSTOMER_MEMBER + id}/`)

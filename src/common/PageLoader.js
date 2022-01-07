@@ -146,7 +146,7 @@ export default function PageLoader({
             : ''
         }
         style={{
-          top: component === 'member' ? '120px' : '',
+          top: component === 'member' ? '60px' : '',
           width: component === 'activityLog' ? '50px' : '',
           // right: component === 'agreement' ? '14%' : '',
           position: component === 'activity' ? 'absolute' : '',
