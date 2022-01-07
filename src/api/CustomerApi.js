@@ -288,25 +288,6 @@ export async function updateAccountDetails(id, data) {
   return result;
 }
 
-// export async function getCustomerMembers(id, pageNumber) {
-//   const customer = id
-//     ? {
-//         customer: id,
-//         page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
-//       }
-//     : { page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber };
-//   const params = customer;
-//   const result = await axiosInstance
-//     .get(API_CUSTOMER_MEMBER, { params })
-//     .then((response) => {
-//       return response;
-//     })
-//     .catch((error) => {
-//       return error.response;
-//     });
-//   return result;
-// }
-
 export async function getCustomerMembers(id) {
   const result = await axiosInstance
     .get(`${API_CUSTOMER_MEMBER}?customer=${id}`)
@@ -319,10 +300,10 @@ export async function getCustomerMembers(id) {
   return result;
 }
 
-export async function getAllMembers(role, findMembers) {
-  // &page=1
+export async function getAllMembers(role, findMembers, pageNumber) {
+  const page = pageNumber === '' || pageNumber === undefined ? 1 : pageNumber;
   const result = await axiosInstance
-    .get(`${API_USER}?role=${role}&find-members=${findMembers}`)
+    .get(`${API_USER}?role=${role}&find-members=${findMembers}&page=${page}`)
     .then((response) => {
       return response;
     })
