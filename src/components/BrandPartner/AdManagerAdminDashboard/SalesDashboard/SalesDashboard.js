@@ -512,6 +512,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     marketplace,
     managerUser,
     bgsUser,
+    selectedTabOption,
   ) => {
     let temp = '';
     let sd = startDate;
@@ -550,13 +551,16 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         ed,
       );
 
-      if (selectedContributionOption === 'keyMetrics') {
+      if (
+        dailyFactFlag === 'yearOverYear' ||
+        selectedTabOption === 'keyMetrics'
+      ) {
         getContributionData(
           dailyFactFlag,
           marketplace,
           selectedManager.value,
           selectedBgs.value,
-          selectedContributionOption,
+          selectedTabOption,
           selectedTabMetrics,
           sd,
           ed,
@@ -598,6 +602,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           event.value,
           selectedManager.value,
           selectedBgs.value,
+          selectedContributionOption,
         );
       } else {
         getSalesData(
@@ -764,6 +769,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
           selectedMarketplace.value,
           manager,
           value,
+          selectedContributionOption,
         );
       } else {
         getSalesData(
@@ -888,8 +894,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         selectedSalesDF.value,
         'all',
         'all',
-        userManger,
         userBgs,
+        selectedContributionOption,
       );
     } else {
       getSalesData(
@@ -920,18 +926,42 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       if (selectedSalesDF.value === 'custom' && type === 'contribution') {
         return;
       }
+      if (selectedSalesDF.value === 'yearOverYear') {
+        const { startDate } = customDateState[0];
+        const { endDate } = customDateState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
 
-      getContributionData(
-        selectedSalesDF.value,
-        selectedMarketplace.value,
-        selectedManager.value,
-        selectedBgs.value,
-        type,
-        selectedTabMetrics,
-        null,
-        null,
-        1,
-      );
+        getContributionData(
+          selectedSalesDF.value,
+          selectedMarketplace.value,
+          selectedManager.value,
+          selectedBgs.value,
+          type,
+          selectedTabMetrics,
+          sd,
+          ed,
+          1,
+        );
+      } else {
+        getContributionData(
+          selectedSalesDF.value,
+          selectedMarketplace.value,
+          selectedManager.value,
+          selectedBgs.value,
+          type,
+          selectedTabMetrics,
+          null,
+          null,
+          1,
+        );
+      }
       setPageNumber(1);
     }
   };
@@ -939,17 +969,43 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const handleOnMetricsTabChange = (value) => {
     if (value !== selectedTabMetrics) {
       setSelectedTabMetrics(value);
-      getContributionData(
-        selectedSalesDF.value,
-        selectedMarketplace.value,
-        selectedManager.value,
-        selectedBgs.value,
-        selectedContributionOption,
-        value,
-        null,
-        null,
-        pageNumber,
-      );
+
+      if (selectedSalesDF.value === 'yearOverYear') {
+        const { startDate } = customDateState[0];
+        const { endDate } = customDateState[0];
+        let sd = startDate;
+        let ed = endDate;
+        sd = `${startDate.getDate()}-${
+          startDate.getMonth() + 1
+        }-${startDate.getFullYear()}`;
+        ed = `${endDate.getDate()}-${
+          endDate.getMonth() + 1
+        }-${endDate.getFullYear()}`;
+
+        getContributionData(
+          selectedSalesDF.value,
+          selectedMarketplace.value,
+          selectedManager.value,
+          selectedBgs.value,
+          selectedContributionOption,
+          value,
+          sd,
+          ed,
+          pageNumber,
+        );
+      } else {
+        getContributionData(
+          selectedSalesDF.value,
+          selectedMarketplace.value,
+          selectedManager.value,
+          selectedBgs.value,
+          selectedContributionOption,
+          value,
+          null,
+          null,
+          pageNumber,
+        );
+      }
     }
   };
 
@@ -977,6 +1033,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       selectedMarketplace.value,
       selectedManager.value,
       selectedBgs.value,
+      selectedContributionOption,
     );
 
     setShowAdCustomDateModal(false);
