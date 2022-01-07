@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react';
 
 import { shape, string, func, arrayOf } from 'prop-types';
@@ -15,7 +14,8 @@ import {
   InputSearchWithRadius,
 } from '../../common';
 
-// !      Remove  the eslint disables-once work is done
+// Both the Showing Current Assigned Team Members & New Members to add are in this component
+// There are two lists to handle here 1.assignedMemebers (old) &  2. newly Added member list which we will submit on confirm
 
 const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [loading, setLoading] = useState(false);
@@ -25,28 +25,34 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [selectedRole, setSelectedRole] = useState({});
   const [unassignedMembers, setUnassignedMembers] = useState([]);
   const [newMembers, setNewMembers] = useState([]);
+  const [pageNumber, setPageNumber] = useState();
+  const [totalCount, setTotalCount] = useState(0);
 
   useEffect(() => {
+    // Get un-assigned members for current BP
     if (!showCureentTeam) {
       setLoading(true);
-      getAllMembers(selectedRole.id, true).then((res) => {
+      getAllMembers(selectedRole.id, true, pageNumber).then((res) => {
+        setTotalCount(res.data.count);
         setUnassignedMembers(res.data.results);
         setLoading(false);
       });
     }
-  }, [showCureentTeam, selectedRole]);
+  }, [showCureentTeam, selectedRole, pageNumber]);
 
+  // Show un-assigned members for current BP
   const showUnassignedMembers = (member) => {
-    // console.log('roles', member);
     setSelectedRole({ ...member.role_group });
     setShowCureentTeam(false);
   };
 
+  // Add New members to Team
   const addNewMembers = (member) => {
-    // console.log('member', member);
-    // console.log('selected role', selectedRole);
+    // Add New members in temporary
     const tempMembers = [...newMembers];
     tempMembers.push({ user: member.id, role_group: selectedRole.id });
+
+    // Also add newly added member in Current Assigned List (Main List)
     const newlyAssigned = assignedMembers.map((oldMember) => {
       if (oldMember.role_group.id === selectedRole.id) {
         return {
@@ -66,13 +72,14 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
       }
       return oldMember;
     });
-    // console.log('newly assigned', newlyAssigned);
+
+    // Set New Members to old Team List & updated list (data submit)
     setAssignedMembers([...newlyAssigned]);
     setNewMembers([...tempMembers]);
   };
 
+  // Remove Team members
   const removeTeamMember = (member) => {
-    console.log('removed member', member);
     const membersAfterRemove = assignedMembers.map((oldMember) => {
       if (oldMember.id === member.id) {
         return {
@@ -81,6 +88,8 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
       }
       return oldMember;
     });
+
+    // Set it in temporary list when we submit data
     const tempMembers = [...newMembers];
     tempMembers.push({ user: '', role_group: member.role_group.id });
 
@@ -93,10 +102,9 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
       customer: customerID,
       members: newMembers,
     };
-    console.log('data on confirm', newMembersData);
     setButtonLoader(true);
     addCustomerMembers(newMembersData).then((res) => {
-      console.log('in compoenet data', res);
+      console.log('res', res);
       setButtonLoader(false);
     });
   };
@@ -104,6 +112,16 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const discardChanges = () => {
     setAssignedMembers(currentMembers);
     setNewMembers([]);
+  };
+
+  const handlePageChange = (currentPage) => {
+    setLoading(true);
+    setPageNumber(currentPage);
+    getAllMembers(selectedRole.id, true, currentPage).then((res) => {
+      setTotalCount(res.data.count);
+      setUnassignedMembers(res.data.results);
+      setLoading(false);
+    });
   };
 
   return (
@@ -215,7 +233,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
           </>
         ) : (
           <>
-            {/* Add or Search New Team members for selected Role */}
+            {/* $$$$$$$$$$$$$$$$ Add or Search New Team members for selected Role $$$$$$$$$$$$$$$$$$$ */}
             <div className="body-content ">
               {' '}
               {loading ? (
@@ -274,18 +292,16 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                 </>
               )}
             </div>
-            {!loading && unassignedMembers?.length !== 0 ? (
+            {!loading && unassignedMembers?.length !== 0 && totalCount > 10 ? (
               <div className="footer-sticky">
                 <div className="straight-line horizontal-line" />
                 <CommonPagination
-                  count={40}
-                  pageNumber={1}
-                  // handlePageChange={handlePageChange}
+                  count={totalCount}
+                  pageNumber={pageNumber}
+                  handlePageChange={handlePageChange}
                 />
               </div>
-            ) : (
-              ''
-            )}
+            ) : null}
           </>
         )}
       </div>

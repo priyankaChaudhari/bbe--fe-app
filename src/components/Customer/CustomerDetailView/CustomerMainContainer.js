@@ -89,7 +89,7 @@ export default function CustomerMainContainer() {
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
-    modal: true,
+    modal: false,
   });
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const [memberData, setMemberData] = useState([]);
