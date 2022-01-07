@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { shape, string, func, arrayOf } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 
-import { getAllMembers } from '../../api';
+import { getAllMembers, addCustomerMembers } from '../../api';
 import { CloseIcon, SearchIcon, LeftArrowIcon } from '../../theme/images';
 import {
   Button,
   ModalBox,
+  PageLoader,
   GetInitialName,
   CommonPagination,
   InputSearchWithRadius,
@@ -18,6 +19,7 @@ import {
 
 const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [loading, setLoading] = useState(false);
+  const [buttonLoader, setButtonLoader] = useState(false);
   const [assignedMembers, setAssignedMembers] = useState(currentMembers);
   const [showCureentTeam, setShowCureentTeam] = useState(true);
   const [selectedRole, setSelectedRole] = useState({});
@@ -44,7 +46,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
     // console.log('member', member);
     // console.log('selected role', selectedRole);
     const tempMembers = [...newMembers];
-    tempMembers.push({ user_id: member.id, role_group_id: selectedRole.id });
+    tempMembers.push({ user: member.id, role_group: selectedRole.id });
     const newlyAssigned = assignedMembers.map((oldMember) => {
       if (oldMember.role_group.id === selectedRole.id) {
         return {
@@ -80,7 +82,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
       return oldMember;
     });
     const tempMembers = [...newMembers];
-    tempMembers.push({ user_id: '', role_group_id: member.role_group.id });
+    tempMembers.push({ user: '', role_group: member.role_group.id });
 
     setAssignedMembers([...membersAfterRemove]);
     setNewMembers([...tempMembers]);
@@ -88,10 +90,15 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
 
   const saveTeamChanges = () => {
     const newMembersData = {
-      customer_id: customerID,
-      user: newMembers,
+      customer: customerID,
+      members: newMembers,
     };
     console.log('data on confirm', newMembersData);
+    setButtonLoader(true);
+    addCustomerMembers(newMembersData).then((res) => {
+      console.log('in compoenet data', res);
+      setButtonLoader(false);
+    });
   };
 
   const discardChanges = () => {
@@ -110,146 +117,164 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
         }
         role="presentation"
       />
-      {loading ? (
-        <h1>Loding...</h1>
-      ) : (
-        <div className="modal-body pb-0">
-          {showCureentTeam ? (
-            <h4 className="mb-4">Team Members</h4>
-          ) : (
-            <Button
-              className="btn-add-items back-btn"
-              onClick={() => setShowCureentTeam(true)}>
-              {' '}
-              <img
-                width="16px"
-                style={{ verticalAlign: 'bottom' }}
-                className="left-arrow back-to-members mr-1"
-                src={LeftArrowIcon}
-                alt="arrow"
-              />
-              <span className="back-to-members">Back To Team Members</span>
-            </Button>
-          )}
+      <div className="modal-body pb-0">
+        {showCureentTeam ? (
+          <h4 className="mb-4">Team Members</h4>
+        ) : (
+          <Button
+            className="btn-add-items back-btn"
+            onClick={() => setShowCureentTeam(true)}>
+            {' '}
+            <img
+              width="16px"
+              style={{ verticalAlign: 'bottom' }}
+              className="left-arrow back-to-members mr-1"
+              src={LeftArrowIcon}
+              alt="arrow"
+            />
+            <span className="back-to-members">Back To Team Members</span>
+          </Button>
+        )}
 
-          {/* List of current Team members with specific Role */}
-          {showCureentTeam ? (
-            <>
-              <div className="body-content ">
-                <div className="row">
-                  {assignedMembers.map((member) => {
-                    return (
-                      <div className="col-12 mb-3 " key={Math.random()}>
-                        <div
-                          className="edit-profile-text float-left"
-                          role="presentation">
-                          <GetInitialName
-                            userInfo={member?.user}
-                            property={`mr-3 ${member.id ? '' : 'unassigned'}`}
-                          />
+        {/* List of current Team members with specific Role */}
+        {showCureentTeam ? (
+          <>
+            <div className="body-content ">
+              <div className="row">
+                {assignedMembers.map((member) => {
+                  return (
+                    <div className="col-12 mb-3 " key={Math.random()}>
+                      <div
+                        className="edit-profile-text float-left"
+                        role="presentation">
+                        <GetInitialName
+                          userInfo={member?.user}
+                          property={`mr-3 ${member.id ? '' : 'unassigned'}`}
+                        />
 
-                          <div className="name-email">
-                            <div className="label m-0">
-                              {member.role_group.name}
-                            </div>
-                            {member.id ? (
-                              <div className="team-member-name text-bold">
-                                {`${member.user?.first_name} ${member.user?.last_name}`}
-                              </div>
-                            ) : (
-                              <div className="team-member-name">Unassigned</div>
-                            )}
+                        <div className="name-email">
+                          <div className="label m-0">
+                            {member.role_group.name}
                           </div>
+                          {member.id ? (
+                            <div className="team-member-name text-bold">
+                              {`${member.user?.first_name} ${member.user?.last_name}`}
+                            </div>
+                          ) : (
+                            <div className="team-member-name">Unassigned</div>
+                          )}
                         </div>
-                        {member.id ? (
-                          <Button
-                            className="btn-add-items gray-text  float-right roleName mt-3"
-                            onClick={() => removeTeamMember(member)}>
-                            Remove
-                          </Button>
-                        ) : (
-                          <Button
-                            className="btn-add-items float-right  mt-3"
-                            role="presentation"
-                            onClick={() => showUnassignedMembers(member)}>
-                            Add team member
-                          </Button>
-                        )}
-
-                        <div className="clear-fix" />
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
-              <div className="footer-line " />
-              <div className="modal-footer">
-                <div className="row">
-                  <div className="col-6">
-                    <Button
-                      className={`btn-primary ${
-                        newMembers.length === 0 ? 'disabled' : ''
-                      }`}
-                      onClick={() => saveTeamChanges()}>
-                      Confirm
-                    </Button>
-                  </div>
-                  <div className="col-6 text-center">
-                    <Button
-                      className=" btn-borderless "
-                      onClick={() => discardChanges()}>
-                      {' '}
-                      Discard Changes
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </>
-          ) : (
-            <>
-              {/* Add or Search New Team members for selected Role */}
-              <div className="body-content ">
-                <InputSearchWithRadius
-                  id="BT-addTeamMembers-search-input"
-                  className="customer-list-header w-80 mt-3">
-                  <DebounceInput
-                    className=" form-control search-filter"
-                    placeholder="Search"
-                  />
-                  <img
-                    src={SearchIcon}
-                    alt="search"
-                    className="search-input-icon"
-                  />
-                </InputSearchWithRadius>
-                <div className="horizontal-line straight-line mt-3 mb-3" />
-                <div className="row">
-                  {unassignedMembers.map((member) => {
-                    return (
-                      <div className="col-12 mb-3" key={member.id}>
-                        <div
-                          className="edit-profile-text float-left"
-                          role="presentation">
-                          <GetInitialName userInfo={member} property="mr-3" />
-                          <div className="name-email">
-                            <div className="team-member-name">
-                              {`${member?.first_name} ${member?.last_name}`}
-                            </div>
-                            {member.role[0]}
-                          </div>
-                        </div>
+                      {member.id ? (
+                        <Button
+                          className="btn-add-items gray-text  float-right roleName mt-3"
+                          onClick={() => removeTeamMember(member)}>
+                          Remove
+                        </Button>
+                      ) : (
                         <Button
                           className="btn-add-items float-right  mt-3"
                           role="presentation"
-                          onClick={() => addNewMembers(member)}>
-                          Add
+                          onClick={() => showUnassignedMembers(member)}>
+                          Add team member
                         </Button>
-                        <div className="clear-fix" />
-                      </div>
-                    );
-                  })}
+                      )}
+
+                      <div className="clear-fix" />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+            <div className="footer-line " />
+            <div className="modal-footer">
+              <div className="row">
+                <div className="col-6">
+                  <Button
+                    className={`btn-primary ${
+                      newMembers.length === 0 ? 'disabled' : ''
+                    }`}
+                    onClick={() => saveTeamChanges()}>
+                    {buttonLoader ? (
+                      <PageLoader color="#fff" type="button" />
+                    ) : (
+                      <>Confirm</>
+                    )}
+                  </Button>
+                </div>
+                <div className="col-6 text-center">
+                  <Button
+                    className=" btn-borderless "
+                    onClick={() => discardChanges()}>
+                    {' '}
+                    Discard Changes
+                  </Button>
                 </div>
               </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Add or Search New Team members for selected Role */}
+            <div className="body-content ">
+              {' '}
+              {loading ? (
+                <PageLoader
+                  component="member"
+                  color="#FF5933"
+                  type="page"
+                  height={40}
+                />
+              ) : unassignedMembers?.length === 0 ? (
+                <div className="text-center no-result-found mt-5">
+                  No User Found.
+                </div>
+              ) : (
+                <>
+                  <InputSearchWithRadius
+                    id="BT-addTeamMembers-search-input"
+                    className="customer-list-header w-80 mt-3">
+                    <DebounceInput
+                      className=" form-control search-filter"
+                      placeholder="Search"
+                    />
+                    <img
+                      src={SearchIcon}
+                      alt="search"
+                      className="search-input-icon"
+                    />
+                  </InputSearchWithRadius>
+                  <div className="horizontal-line straight-line mt-3 mb-3" />
+                  <div className="row">
+                    {unassignedMembers.map((member) => {
+                      return (
+                        <div className="col-12 mb-3" key={member.id}>
+                          <div
+                            className="edit-profile-text float-left"
+                            role="presentation">
+                            <GetInitialName userInfo={member} property="mr-3" />
+                            <div className="name-email">
+                              <div className="team-member-name">
+                                {`${member?.first_name} ${member?.last_name}`}
+                              </div>
+                              {member.role[0]}
+                            </div>
+                          </div>
+                          <Button
+                            className="btn-add-items float-right  mt-3"
+                            role="presentation"
+                            onClick={() => addNewMembers(member)}>
+                            Add
+                          </Button>
+                          <div className="clear-fix" />
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+            {!loading && unassignedMembers?.length !== 0 ? (
               <div className="footer-sticky">
                 <div className="straight-line horizontal-line" />
                 <CommonPagination
@@ -258,10 +283,12 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                   // handlePageChange={handlePageChange}
                 />
               </div>
-            </>
-          )}
-        </div>
-      )}
+            ) : (
+              ''
+            )}
+          </>
+        )}
+      </div>
     </ModalBox>
   );
 };
