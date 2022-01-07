@@ -27,18 +27,22 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [newMembers, setNewMembers] = useState([]);
   const [pageNumber, setPageNumber] = useState();
   const [totalCount, setTotalCount] = useState(0);
+  // eslint-disable-next-line no-unused-vars
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     // Get un-assigned members for current BP
     if (!showCureentTeam) {
       setLoading(true);
-      getAllMembers(selectedRole.id, true, pageNumber).then((res) => {
-        setTotalCount(res.data.count);
-        setUnassignedMembers(res.data.results);
-        setLoading(false);
-      });
+      getAllMembers(selectedRole.id, true, pageNumber, searchQuery).then(
+        (res) => {
+          setTotalCount(res.data.count);
+          setUnassignedMembers(res.data.results);
+          setLoading(false);
+        },
+      );
     }
-  }, [showCureentTeam, selectedRole, pageNumber]);
+  }, [showCureentTeam, selectedRole, pageNumber, searchQuery]);
 
   // Show un-assigned members for current BP
   const showUnassignedMembers = (member) => {
@@ -117,11 +121,13 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const handlePageChange = (currentPage) => {
     setLoading(true);
     setPageNumber(currentPage);
-    getAllMembers(selectedRole.id, true, currentPage).then((res) => {
-      setTotalCount(res.data.count);
-      setUnassignedMembers(res.data.results);
-      setLoading(false);
-    });
+    getAllMembers(selectedRole.id, true, currentPage, searchQuery).then(
+      (res) => {
+        setTotalCount(res.data.count);
+        setUnassignedMembers(res.data.results);
+        setLoading(false);
+      },
+    );
   };
 
   return (
