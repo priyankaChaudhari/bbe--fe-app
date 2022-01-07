@@ -300,10 +300,17 @@ export async function getCustomerMembers(id) {
   return result;
 }
 
-export async function getAllMembers(role, findMembers, pageNumber) {
+export async function getAllMembers(
+  role,
+  findMembers,
+  pageNumber,
+  searchQuery,
+) {
   const page = pageNumber === '' || pageNumber === undefined ? 1 : pageNumber;
   const result = await axiosInstance
-    .get(`${API_USER}?role=${role}&find-members=${findMembers}&page=${page}`)
+    .get(
+      `${API_USER}?role=${role}&find-members=${findMembers}&page=${page}&q=${searchQuery}`,
+    )
     .then((response) => {
       return response;
     })
