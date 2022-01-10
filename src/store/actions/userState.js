@@ -18,18 +18,11 @@ import {
   PATH_CUSTOMER_LIST,
   PATH_CUSTOMER_DETAILS,
   PATH_COMPANY_DETAILS,
-  PATH_BGS_DASHBOARD,
-  PATH_BGS_MANAGER_DASHBOARD,
   PATH_AMAZON_MERCHANT,
   PATH_SUMMARY,
   PATH_BILLING_DETAILS,
-  PATH_SPONSORED_DASHBOARD,
   PATH_ACCOUNT_SETUP_CHOOSE,
-  PATH_HYBRID_DASHBOARD,
-  PATH_DSP_DASHBOARD,
-  PATH_AD_MANAGER_ADMIN_DASHBOARD,
-  PATH_FINANCE_DASHBOARD,
-  PATH_BGS_ADMIN_DASHBOARD,
+  dashboardRolePaths,
 } from '../../constants/index';
 
 export const userRequestInitiated = () => {
@@ -83,16 +76,6 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
   const params = queryString.parse(history.location.search);
   localStorage.removeItem('email');
   localStorage.setItem('token', data.token);
-  const adManagerRolePaths = {
-    'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
-    'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
-    'DSP Ad Manager': PATH_DSP_DASHBOARD,
-    'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
-    'BGS Admin': PATH_BGS_ADMIN_DASHBOARD,
-    'BGS Manager': PATH_BGS_MANAGER_DASHBOARD,
-    BGS: PATH_BGS_DASHBOARD,
-    Finance: PATH_FINANCE_DASHBOARD,
-  };
 
   if (params?.callback) {
     if (params?.customer && params?.step) {
@@ -190,8 +173,8 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         }
       }
     } else {
-      if (Object.keys(adManagerRolePaths).includes(data.user.role[0])) {
-        history.push(adManagerRolePaths[data.user.role[0]]);
+      if (Object.keys(dashboardRolePaths).includes(data.user.role[0])) {
+        history.push(dashboardRolePaths[data.user.role[0]]);
       } else history.push(PATH_CUSTOMER_LIST);
     }
   }
