@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { shape, arrayOf, string } from 'prop-types';
+import { shape, string } from 'prop-types';
 
 import Theme from '../theme/Theme';
 import {
@@ -19,6 +19,7 @@ import {
   PATH_CUSTOMER_LIST,
   roleURLs,
   dashboardRolePaths,
+  dashboardRole,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
@@ -29,7 +30,7 @@ export default function LeftSideBar({ userInfo }) {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          {userRole.length ? (
+          {dashboardRole.includes(userRole) ? (
             <li
               className={
                 roleURLs.some((element) =>
@@ -90,7 +91,7 @@ LeftSideBar.defaultProps = {
 
 LeftSideBar.propTypes = {
   userInfo: shape({
-    role: arrayOf(string).isRequired,
+    role: string.isRequired,
   }),
 };
 

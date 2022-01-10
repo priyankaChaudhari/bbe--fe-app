@@ -358,6 +358,18 @@ export const roleURLs = [
   'bgs',
 ];
 
+export const dashboardRole = [
+  'Ad Manager Admin',
+  'Sponsored Advertising Ad Manager',
+  'DSP Ad Manager',
+  'Hybrid Ad Manager',
+  'BGS Manager',
+  'BGS Admin',
+  'BGS',
+  'Finance',
+  'BGS',
+];
+
 export const dashboardRolePaths = {
   'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
   'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,

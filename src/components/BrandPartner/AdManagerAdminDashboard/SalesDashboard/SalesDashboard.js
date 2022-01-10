@@ -1361,7 +1361,7 @@ SalesDashboard.propTypes = {
   marketplaceChoices: arrayOf(PropTypes.object),
   selectedMarketplace: string,
   userInfo: shape({
-    role: arrayOf(string).isRequired,
+    role: string.isRequired,
     id: string,
   }),
   data: shape({ sub: string, label: string }),

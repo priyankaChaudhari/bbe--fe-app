@@ -106,10 +106,10 @@ export default function AuthenticationComponent() {
   };
 
   const dashboardRolePaths = {
-    'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
     'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
     'DSP Ad Manager': PATH_DSP_DASHBOARD,
     'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
+    'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
     'BGS Manager': PATH_BGS_MANAGER_DASHBOARD,
     'BGS Admin': PATH_BGS_ADMIN_DASHBOARD,
     BGS: PATH_BGS_DASHBOARD,
@@ -158,9 +158,9 @@ export default function AuthenticationComponent() {
           )}
 
           {/* AD MANAGER DASHBOARD, BGS DASHBOARD, FINANCE DASHBOARD PATH */}
-          {Object.keys(dashboardRolePaths).includes(userInfo?.role?.[0]) ? (
+          {Object.keys(dashboardRolePaths).includes(userInfo?.role) ? (
             <Route
-              path={dashboardRolePaths[userInfo?.role[0]]}
+              path={dashboardRolePaths[userInfo?.role]}
               component={DashboardContainer}
             />
           ) : null}
