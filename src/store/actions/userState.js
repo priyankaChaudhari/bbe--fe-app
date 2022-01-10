@@ -173,8 +173,8 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         }
       }
     } else {
-      if (Object.keys(dashboardRolePaths).includes(data.user.role[0])) {
-        history.push(dashboardRolePaths[data.user.role[0]]);
+      if (Object.keys(dashboardRolePaths).includes(data.user.role)) {
+        history.push(dashboardRolePaths[data.user.role]);
       } else history.push(PATH_CUSTOMER_LIST);
     }
   }
