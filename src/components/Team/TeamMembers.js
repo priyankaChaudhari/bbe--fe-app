@@ -27,7 +27,6 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
   const [newMembers, setNewMembers] = useState([]);
   const [pageNumber, setPageNumber] = useState();
   const [totalCount, setTotalCount] = useState(0);
-  // eslint-disable-next-line no-unused-vars
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -80,6 +79,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
     // Set New Members to old Team List & updated list (data submit)
     setAssignedMembers([...newlyAssigned]);
     setNewMembers([...tempMembers]);
+    setShowCureentTeam(true);
   };
 
   // Remove Team members
@@ -95,7 +95,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
 
     // Set it in temporary list when we submit data
     const tempMembers = [...newMembers];
-    tempMembers.push({ user: '', role_group: member.role_group.id });
+    tempMembers.push({ role_group: member.role_group.id });
 
     setAssignedMembers([...membersAfterRemove]);
     setNewMembers([...tempMembers]);
@@ -128,6 +128,21 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
         setLoading(false);
       },
     );
+  };
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value);
+    event.persist();
+    setLoading(true);
+    setTimeout(() => {
+      getAllMembers(selectedRole.id, true, '', event.target.value).then(
+        (res) => {
+          setTotalCount(res.data.count);
+          setUnassignedMembers(res.data.results);
+          setLoading(false);
+        },
+      );
+    }, 1000);
   };
 
   return (
@@ -241,7 +256,21 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
           <>
             {/* $$$$$$$$$$$$$$$$ Add or Search New Team members for selected Role $$$$$$$$$$$$$$$$$$$ */}
             <div className="body-content ">
-              {' '}
+              <InputSearchWithRadius
+                id="BT-addTeamMembers-search-input"
+                className="customer-list-header w-80 mt-3">
+                <DebounceInput
+                  className=" form-control search-filter"
+                  placeholder="Search"
+                  onChange={(event) => handleSearch(event)}
+                  value={searchQuery || ''}
+                />
+                <img
+                  src={SearchIcon}
+                  alt="search"
+                  className="search-input-icon"
+                />
+              </InputSearchWithRadius>{' '}
               {loading ? (
                 <PageLoader
                   component="member"
@@ -255,19 +284,6 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                 </div>
               ) : (
                 <>
-                  <InputSearchWithRadius
-                    id="BT-addTeamMembers-search-input"
-                    className="customer-list-header w-80 mt-3">
-                    <DebounceInput
-                      className=" form-control search-filter"
-                      placeholder="Search"
-                    />
-                    <img
-                      src={SearchIcon}
-                      alt="search"
-                      className="search-input-icon"
-                    />
-                  </InputSearchWithRadius>
                   <div className="horizontal-line straight-line mt-3 mb-3" />
                   <div className="row">
                     {unassignedMembers.map((member) => {
