@@ -18,7 +18,12 @@ import {
 // Both the Showing Current Assigned Team Members & New Members to add are in this component
 // There are two lists to handle here 1.assignedMemebers (old) &  2. newly Added member list which we will submit on confirm
 
-const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
+const TeamMembers = ({
+  customerID,
+  currentMembers,
+  setShowMemberList,
+  getCustomerMemberList,
+}) => {
   const [loading, setLoading] = useState(false);
   const [buttonLoader, setButtonLoader] = useState(false);
   const [assignedMembers, setAssignedMembers] = useState(currentMembers);
@@ -109,11 +114,11 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
     };
     setButtonLoader(true);
 
-    addCustomerMembers(newMembersData).then((res) => {
-      console.log('res', res);
+    addCustomerMembers(newMembersData).then(() => {
       setButtonLoader(false);
       setShowMemberList({ add: false, show: false, modal: false });
       toast.success('Team Member(s) updated.');
+      getCustomerMemberList();
     });
   };
 
@@ -339,6 +344,7 @@ TeamMembers.propTypes = {
   customerID: string.isRequired,
   currentMembers: arrayOf(shape({})).isRequired,
   setShowMemberList: func.isRequired,
+  getCustomerMemberList: func.isRequired,
 };
 
 export default TeamMembers;

@@ -497,13 +497,14 @@ export default function CustomerMainContainer() {
               {/* Customer Modals starts */}
               <TeamMemberModal
                 id={id}
+                userInfo={userInfo}
                 currentMembers={memberData}
                 showMemberList={showMemberList}
                 setShowMemberList={setShowMemberList}
                 setAgreementDetailModal={setAgreementDetailModal}
-                userInfo={userInfo}
                 customStyles={customStyles}
                 getActivityLogInfo={getActivityLogInfo}
+                getCustomerMemberList={getCustomerMemberList}
               />
 
               <CustomerStatusModal

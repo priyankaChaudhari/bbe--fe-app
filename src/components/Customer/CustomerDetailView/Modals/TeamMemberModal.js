@@ -16,6 +16,7 @@ export default function TeamMemberModal({
   userInfo,
   customStyles,
   getActivityLogInfo,
+  getCustomerMemberList,
 }) {
   const [teamDeleteModal, setTeamDeleteModal] = useState(false);
   const alertCustomStyles = {
@@ -44,6 +45,7 @@ export default function TeamMemberModal({
             customerID={id}
             currentMembers={currentMembers}
             setShowMemberList={setShowMemberList}
+            getCustomerMemberList={getCustomerMemberList}
           />
           {/* {showMemberList.add ? (
         <AddTeamMember
@@ -90,4 +92,5 @@ TeamMemberModal.propTypes = {
   customStyles: shape({}),
   setAgreementDetailModal: func,
   getActivityLogInfo: func.isRequired,
+  getCustomerMemberList: func.isRequired,
 };
