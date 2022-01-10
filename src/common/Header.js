@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import ReactTooltip from 'react-tooltip';
 import $ from 'jquery';
@@ -20,7 +20,6 @@ import {
   managementLink,
   PATH_ACCOUNT_SETUP,
   PATH_SUMMARY,
-  dashboardRole,
   roleURLs,
   dashboardRolePaths,
 } from '../constants';
@@ -43,8 +42,7 @@ import {
 export default function Header({ type, userInfo }) {
   const history = useHistory();
   const dispatch = useDispatch();
-
-  const [userRole, setUserRole] = useState('');
+  const userRole = userInfo?.role;
   const [showModal, setShowModal] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [showSuccessMsg, setShowSuccessMsg] = useState({
@@ -82,14 +80,6 @@ export default function Header({ type, userInfo }) {
   } else {
     $('#idea').show();
   }
-
-  useEffect(() => {
-    const role = userInfo?.role.filter((element) =>
-      dashboardRole.includes(element),
-    );
-    setUserRole(role.length && role[0]);
-  }, [userInfo]);
-
   return (
     <div
       className={

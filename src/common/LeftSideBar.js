@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
@@ -18,21 +18,12 @@ import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
   roleURLs,
-  dashboardRole,
   dashboardRolePaths,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
   const history = useHistory();
-
-  const [userRole, setUserRole] = useState('');
-
-  useEffect(() => {
-    const role = userInfo?.role.filter((element) =>
-      dashboardRole.includes(element),
-    );
-    setUserRole(role.length && role[0]);
-  }, [userInfo]);
+  const userRole = userInfo?.role;
 
   return (
     <div>
