@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
+import { toast } from 'react-toastify';
 import { shape, string, func, arrayOf } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 
@@ -107,9 +108,12 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
       members: newMembers,
     };
     setButtonLoader(true);
+
     addCustomerMembers(newMembersData).then((res) => {
       console.log('res', res);
       setButtonLoader(false);
+      setShowMemberList({ add: false, show: false, modal: false });
+      toast.success('Team Member(s) updated.');
     });
   };
 
@@ -297,7 +301,7 @@ const TeamMembers = ({ customerID, currentMembers, setShowMemberList }) => {
                               <div className="team-member-name">
                                 {`${member?.first_name} ${member?.last_name}`}
                               </div>
-                              {member.role[0]}
+                              {member.role}
                             </div>
                           </div>
                           <Button
