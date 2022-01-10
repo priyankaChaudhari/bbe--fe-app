@@ -1,9 +1,7 @@
 import {
   PATH_BGS_DASHBOARD,
   PATH_BGS_MANAGER_DASHBOARD,
-  PATH_SPONSORED_DASHBOARD,
-  PATH_DSP_DASHBOARD,
-  PATH_HYBRID_DASHBOARD,
+  PATH_AD_MANAGER_DASHBOARD,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
   PATH_BGS_ADMIN_DASHBOARD,
@@ -348,10 +346,8 @@ export const commissionsTableheader = [
   },
 ];
 export const roleURLs = [
+  'adManager',
   'adMangerAdmin',
-  'sponsored',
-  'dsp',
-  'hybrid',
   'bgsManager',
   'bgsAdmin',
   'finance',
@@ -359,10 +355,8 @@ export const roleURLs = [
 ];
 
 export const dashboardRole = [
+  'Ad Manager',
   'Ad Manager Admin',
-  'Sponsored Advertising Ad Manager',
-  'DSP Ad Manager',
-  'Hybrid Ad Manager',
   'BGS Manager',
   'BGS Admin',
   'BGS',
@@ -371,10 +365,8 @@ export const dashboardRole = [
 ];
 
 export const dashboardRolePaths = {
+  'Ad Manager': PATH_AD_MANAGER_DASHBOARD,
   'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
-  'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
-  'DSP Ad Manager': PATH_DSP_DASHBOARD,
-  'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
   'BGS Manager': PATH_BGS_MANAGER_DASHBOARD,
   'BGS Admin': PATH_BGS_ADMIN_DASHBOARD,
   BGS: PATH_BGS_DASHBOARD,
