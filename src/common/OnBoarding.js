@@ -18,6 +18,7 @@ const OnBoardingBody = styled.div`
   &.body-white {
     background: ${Theme.white};
     padding-top: 0;
+    min-height: 100%;
   }
 
   &.grey-bg {
@@ -151,7 +152,7 @@ const OnBoardingBody = styled.div`
       color: ${Theme.gray90};
       font-family: ${Theme.regularItalicFontFamily};
       font-weight: 600;
-      // font-style: italic;
+      /* font-style: italic; */
       font-size: ${Theme.normal};
 
       .reach-out-link {
@@ -265,7 +266,7 @@ const OnBoardingBody = styled.div`
       margin: 0;
 
       li {
-        display: -webkit-box;
+        /* display: -webkit-box; */
         padding: 10px 0 10px 0;
         border-bottom: 1px solid ${Theme.gray7};
         .product-asset-image {
