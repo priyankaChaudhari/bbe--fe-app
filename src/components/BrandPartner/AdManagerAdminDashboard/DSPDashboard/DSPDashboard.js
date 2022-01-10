@@ -1221,7 +1221,7 @@ DSPDashboard.propTypes = {
   }),
   marketplaceChoices: arrayOf(Array),
   userInfo: shape({
-    role: arrayOf(string).isRequired,
+    role: string.isRequired,
     id: string,
   }),
 };

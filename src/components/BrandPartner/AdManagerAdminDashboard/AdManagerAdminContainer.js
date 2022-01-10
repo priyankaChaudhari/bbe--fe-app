@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-import { string, shape, arrayOf } from 'prop-types';
+import { string, shape } from 'prop-types';
 
 import DSPDashboard from './DSPDashboard/DSPDashboard';
 import SponsoredDashboard from './SponsoredDashboard/SponsoredDashboard';
@@ -122,6 +122,6 @@ AdManagerAdminContainer.defaultProps = {
 };
 AdManagerAdminContainer.propTypes = {
   userInfo: shape({
-    role: string,
+    role: string.isRequired,
   }),
 };

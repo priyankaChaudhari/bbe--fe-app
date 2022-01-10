@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { arrayOf, func, shape, string } from 'prop-types';
+import { func, shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import { setCustomerSelectedTab } from '../../../store/actions/customerState';
@@ -238,7 +238,7 @@ CustomerTabDetails.defaultProps = {
 
 CustomerTabDetails.propTypes = {
   setViewComponent: func.isRequired,
-  role: arrayOf(string).isRequired,
+  role: string.isRequired,
   viewComponent: string.isRequired,
   customer: shape({
     id: string,
