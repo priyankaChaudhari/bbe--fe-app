@@ -717,7 +717,8 @@ button:disabled {
 }
 
 .edit-profile-text {
-  display: flex;
+  /* display: flex; */
+  display: -webkit-box;
   align-items: center;
   flex-direction: row;
 }
