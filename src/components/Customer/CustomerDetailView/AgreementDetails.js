@@ -487,9 +487,7 @@ export default function AgreementDetails({
                     </Link>
                   ) : (
                     <>
-                      {userRole !== 'Customer' &&
-                      !agreement?.draft_from &&
-                      agreement?.contract_status?.value === 'active' ? (
+                      {userRole !== 'Customer' && !agreement?.draft_from ? (
                         <ActionDropDown>
                           {' '}
                           <Select
