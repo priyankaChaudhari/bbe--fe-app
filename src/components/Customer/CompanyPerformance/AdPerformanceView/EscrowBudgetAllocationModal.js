@@ -42,6 +42,7 @@ export default function EscrowBudgetAllocationModal({
 }) {
   const currentDate = new Date();
   currentDate.setDate(1);
+  currentDate.setHours(currentDate.getHours() + 12);
 
   const dspPacing = dspData?.dsp_pacing;
   const escrowBalance = dspPacing?.escrow_converted_usd
@@ -152,7 +153,7 @@ export default function EscrowBudgetAllocationModal({
   const handleOnAddAnotherMonth = () => {
     const lastRecord = allocatedMonths[allocatedMonths.length - 1];
     const nextMonth = new Date(lastRecord?.month_year);
-    nextMonth.setDate(1);
+    nextMonth.setHours(nextMonth.getHours() + 12);
     nextMonth.setMonth(nextMonth.getMonth() + 1);
     setAllocatedMonths([
       ...allocatedMonths,
