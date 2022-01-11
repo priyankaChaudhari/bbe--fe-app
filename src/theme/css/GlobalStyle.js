@@ -999,6 +999,7 @@ fieldset {
 
   &.unassigned {
     background: ${Theme.gray3};
+    border: none;
   }
 }
 
