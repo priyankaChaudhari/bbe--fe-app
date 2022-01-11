@@ -189,7 +189,7 @@ const BGSCommissionContainer = () => {
         <CustomDateRange id="BT-dspinvoices-daterange">
           <div className="text-left">
             <DatePicker
-              selected={new Date()}
+              selected={currentDate}
               onChange={(date) => onDateChange(date)}
               startDate={range[0]}
               endDate={range[1]}
