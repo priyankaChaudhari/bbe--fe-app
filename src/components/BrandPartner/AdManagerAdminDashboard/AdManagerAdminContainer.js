@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import PropTypes, { string } from 'prop-types';
+import { string, shape } from 'prop-types';
 
 import DSPDashboard from './DSPDashboard/DSPDashboard';
 import SponsoredDashboard from './SponsoredDashboard/SponsoredDashboard';
 import SalesDashboard from './SalesDashboard/SalesDashboard';
+import BGSCommissionContainer from './BGSCommission/BGSCommissionContainer';
 import { Tabs } from '../../../common';
 import { DashboardCard } from '../../../theme/Global';
 import { getMarketPlaceList } from '../../../api';
-import BGSComissionContainer from './BGSComission/BGSComissionContainer';
 
 export default function AdManagerAdminContainer({ userInfo }) {
   const [viewComponent, setViewComponent] = useState('sales');
@@ -62,8 +62,8 @@ export default function AdManagerAdminContainer({ userInfo }) {
           />
         );
 
-      case 'comissions':
-        return <BGSComissionContainer userInfo={userInfo} />;
+      case 'commissions':
+        return <BGSCommissionContainer userInfo={userInfo} />;
 
       default:
         return '';
@@ -94,14 +94,14 @@ export default function AdManagerAdminContainer({ userInfo }) {
               DSP Advertising
             </li>
 
-            {/* {userInfo && userInfo.role === 'BGS Admin' ? (
+            {userInfo && userInfo.role === 'BGS Admin' ? (
               <li
-                className={viewComponent === 'comissions' ? 'active' : ''}
-                onClick={() => setViewComponent('comissions')}
+                className={viewComponent === 'commissions' ? 'active' : ''}
+                onClick={() => setViewComponent('commissions')}
                 role="presentation">
-                Comissions
+                Commissions
               </li>
-            ) : null} */}
+            ) : null}
           </ul>
         </Tabs>
         {renderComponent(viewComponent)}
@@ -114,7 +114,7 @@ AdManagerAdminContainer.defaultProps = {
   userInfo: {},
 };
 AdManagerAdminContainer.propTypes = {
-  userInfo: PropTypes.shape({
+  userInfo: shape({
     role: string,
   }),
 };

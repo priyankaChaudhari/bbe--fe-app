@@ -171,7 +171,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
               ? `${item?.description?.budget_type} (${item?.month})`
               : item?.invoice_type
           }
-          invoiceId={item?.next_invoiced_id}
+          invoiceId={`#${item?.next_invoiced_id}`}
           marketplaces={
             isDSPService && item?.description?.marketplaces
               ? ` | ${item?.description?.marketplaces}`

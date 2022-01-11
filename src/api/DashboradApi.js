@@ -8,6 +8,10 @@ import {
   API_CUSTOMER_CONTRACT,
   API_SALES_DASHBOARD,
   metricsNameForAPI,
+  API_BGS_COMMISSION_DETAILS,
+  API_BGS_COMMISSION_INDIVIDUALS,
+  API_BGS_COMMISSION_MATRICS,
+  API_BGS_COMMISSION_GROUP_BY_MANAGER,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -575,6 +579,97 @@ export async function getEnableInvoices(page) {
 export async function setEnableInvoices(id) {
   const result = await axiosInstance
     .patch(`${API_CUSTOMER_CONTRACT}${id}/`, { is_invoicing_enable: true })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsCommissionMatrics(date) {
+  const params = {
+    start_date: `${date[0].getFullYear()}-${
+      date[0].getMonth() + 1
+    }-${date[0].getDate()}`,
+    end_date: `${date[1].getFullYear()}-${
+      date[1].getMonth() + 1
+    }-${date[1].getDate()}`,
+  };
+
+  const result = await axiosInstance
+    .get(API_BGS_COMMISSION_MATRICS, {
+      params,
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsCommissionGroupByTable(
+  date,
+  orderBy = 'full_name',
+) {
+  const params = {
+    start_date: `${date[0].getFullYear()}-${
+      date[0].getMonth() + 1
+    }-${date[0].getDate()}`,
+    end_date: `${date[1].getFullYear()}-${
+      date[1].getMonth() + 1
+    }-${date[1].getDate()}`,
+    'order-by': `${orderBy}`,
+  };
+
+  const result = await axiosInstance
+    .get(API_BGS_COMMISSION_GROUP_BY_MANAGER, {
+      params,
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsCommissionTableIndividualsData(date, orderBy) {
+  const params = {
+    start_date: `${date[0].getFullYear()}-${
+      date[0].getMonth() + 1
+    }-${date[0].getDate()}`,
+    end_date: `${date[1].getFullYear()}-${
+      date[1].getMonth() + 1
+    }-${date[1].getDate()}`,
+    'order-by': `${orderBy}`,
+  };
+
+  const result = await axiosInstance
+    .get(API_BGS_COMMISSION_INDIVIDUALS, {
+      params,
+    })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBgsBrandPartners(BgsID, startDate, endDate) {
+  const params = {
+    start_date: startDate,
+    end_date: endDate,
+  };
+
+  const result = await axiosInstance
+    .get(`${API_BGS_COMMISSION_DETAILS + BgsID}/`, { params })
     .then((response) => {
       return response;
     })

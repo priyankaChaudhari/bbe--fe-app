@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { arrayOf } from 'prop-types';
+import { shape } from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { Card } from '../../../../common';
-import { BGSComissionMetrics } from '../../../../constants';
+import { BGSCommissionMatrics } from '../../../../constants';
 
-const ComissionsMetrics = ({ comissionData }) => {
+const BGSCommissionsMatrics = ({ commissionMatrics }) => {
   const bindAmount = (orignalNumber, decimalDigits = 2) => {
     const number = Number(orignalNumber);
     if (number !== undefined && number !== null) {
@@ -29,21 +29,25 @@ const ComissionsMetrics = ({ comissionData }) => {
 
   return (
     <>
-      <div className="white-card-container mb-4">
-        {BGSComissionMetrics.map((item) => (
-          <div className="col-md-3 col-6 mb-3" key={item.value}>
+      <div className="white-card-container  mb-4">
+        {BGSCommissionMatrics.map((item) => (
+          <div className="col-md-3 col-6 mb-3" key={item.key}>
             <Card
               className="fix-height"
               heading={item.label}
-              title={renderTitle(comissionData, item.key)}
+              title={renderTitle(commissionMatrics, item.key)}
               titleColor={
-                item.key === 'total_overdue' && !comissionData[item.key]
+                item.key === 'total_overdue' && !commissionMatrics[item.key]
                   ? Theme.black
                   : item.titleColor
               }
-              prefix={comissionData[item.key] !== null ? item.prefix : ''}
+              prefix={commissionMatrics[item.key] !== null ? item.prefix : ''}
               postfix={item.postfix}
               type="invoices"
+              breakDown={item.breakdown}
+              retainer={commissionMatrics.total_retainer}
+              revShare={commissionMatrics.total_rev_share}
+              dsp={commissionMatrics.total_dsp}
             />
           </div>
         ))}
@@ -52,12 +56,12 @@ const ComissionsMetrics = ({ comissionData }) => {
   );
 };
 
-export default ComissionsMetrics;
+export default BGSCommissionsMatrics;
 
-ComissionsMetrics.defaultProps = {
-  comissionData: [],
+BGSCommissionsMatrics.defaultProps = {
+  commissionMatrics: {},
 };
 
-ComissionsMetrics.propTypes = {
-  comissionData: arrayOf(Array),
+BGSCommissionsMatrics.propTypes = {
+  commissionMatrics: shape({}),
 };

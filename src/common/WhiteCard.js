@@ -23,6 +23,7 @@ export const WhiteCard = styled.div`
     padding: 0 20px;
     border-top-left-radius: 0px !important;
     border-top-right-radius: 0px !important;
+    padding: 0 20px;
   }
 
   &.fix-height {

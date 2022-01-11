@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import Theme from '../theme/Theme';
 
 const HeaderDownloadFuntionality = styled.div`
@@ -12,6 +13,10 @@ const HeaderDownloadFuntionality = styled.div`
   font-size: ${Theme.normal};
   z-index: 9;
   top: 0px;
+
+  &.border-none {
+    border-bottom: 0;
+  }
   .header-title {
     font-family: ${Theme.titleFontFamily};
     font-size: 13px;
@@ -20,6 +25,7 @@ const HeaderDownloadFuntionality = styled.div`
     &.large-header-title {
       font-size: 20px;
       font-weight: 600;
+      margin-left: 25px;
     }
   }
 
@@ -86,6 +92,13 @@ const HeaderDownloadFuntionality = styled.div`
         .hide-mobile {
           display: none;
         }
+      }
+    }
+  }
+  @media only screen and (max-width: 610px) {
+    .header-title {
+      &.large-header-title {
+        margin-left: 10px;
       }
     }
   }

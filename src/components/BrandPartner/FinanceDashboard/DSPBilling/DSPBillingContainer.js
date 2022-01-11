@@ -591,7 +591,7 @@ export default function DSPBillingContainer() {
               CompanyName={item.customer && item.customer.name}
               icon={item && item.customer && item.customer.profile_picture}
               invoiceType={null}
-              invoiceId={item.bill_number}
+              invoiceId={`#${item?.bill_number}`}
               label="AMOUNT"
               labelInfo={`${bindCurrencySymbol()}${bindAmount(
                 item.amount,
