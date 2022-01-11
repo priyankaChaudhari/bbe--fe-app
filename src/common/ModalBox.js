@@ -200,6 +200,7 @@ const ModalBox = styled.div`
 
     .edit-profile-text {
       position: relative;
+      word-break: break-word;
 
       .name-email {
         color: ${Theme.black};
@@ -255,7 +256,7 @@ const ModalBox = styled.div`
     }
 
     .body-content {
-      max-height: 543px;
+      max-height: 520px;
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
@@ -532,6 +533,10 @@ const ModalBox = styled.div`
         }
       }
     }
+    @media only screen and (max-width: 767px) {
+      .body-content {
+        max-height: 420px;
+      }
   }
   .modal-footer {
     padding: 10px 30px 20px 30px;

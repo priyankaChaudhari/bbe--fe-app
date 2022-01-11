@@ -159,7 +159,7 @@ const TeamMembers = ({
       <img
         src={CloseIcon}
         alt="close"
-        className="float-right cursor cross-icon mr-3"
+        className=" cursor cross-icon mr-3 float-right"
         onClick={() =>
           setShowMemberList({ add: false, show: false, modal: false })
         }
@@ -191,47 +191,49 @@ const TeamMembers = ({
               <div className="row">
                 {assignedMembers.map((member) => {
                   return (
-                    <div className="col-12 mb-3 " key={Math.random()}>
-                      <div
-                        className="edit-profile-text float-left"
-                        role="presentation">
-                        <GetInitialName
-                          userInfo={member?.user}
-                          property={`mr-3 ${member.id ? '' : 'unassigned'}`}
-                        />
+                    <>
+                      <div className="col-8 mb-3 " key={Math.random()}>
+                        <div className="edit-profile-text" role="presentation">
+                          <GetInitialName
+                            userInfo={member?.user}
+                            property={`mr-3 ${member.id ? '' : 'unassigned'}`}
+                          />
 
-                        <div className="name-email">
-                          <div className="label m-0">
-                            {member.role_group.name}
+                          <div className="name-email">
+                            <div className="label m-0">
+                              {member.role_group.name}
+                            </div>
+                            {member.id ? (
+                              <div className="team-member-name text-medium">
+                                {`${member.user?.first_name} ${member.user?.last_name}`}
+                              </div>
+                            ) : (
+                              <div className="team-member-name text-medium disabled-tab">
+                                Unassigned
+                              </div>
+                            )}
                           </div>
-                          {member.id ? (
-                            <div className="team-member-name text-medium">
-                              {`${member.user?.first_name} ${member.user?.last_name}`}
-                            </div>
-                          ) : (
-                            <div className="team-member-name text-medium disabled-tab">
-                              Unassigned
-                            </div>
-                          )}
                         </div>
                       </div>
-                      {member.id ? (
-                        <Button
-                          className="btn-add-items gray-text  float-right roleName mt-3"
-                          onClick={() => removeTeamMember(member)}>
-                          Remove
-                        </Button>
-                      ) : (
-                        <Button
-                          className="btn-add-items float-right  mt-3"
-                          role="presentation"
-                          onClick={() => showUnassignedMembers(member)}>
-                          Add team member
-                        </Button>
-                      )}
+                      <div className="col-4 text-right">
+                        {member.id ? (
+                          <Button
+                            className="btn-add-items gray-text   roleName mt-3"
+                            onClick={() => removeTeamMember(member)}>
+                            Remove
+                          </Button>
+                        ) : (
+                          <Button
+                            className="btn-add-items   mt-3"
+                            role="presentation"
+                            onClick={() => showUnassignedMembers(member)}>
+                            Add team member
+                          </Button>
+                        )}
 
-                      <div className="clear-fix" />
-                    </div>
+                        <div className="clear-fix" />
+                      </div>
+                    </>
                   );
                 })}
               </div>
@@ -239,9 +241,9 @@ const TeamMembers = ({
             <div className="footer-line " />
             <div className="modal-footer">
               <div className="row">
-                <div className="col-6">
+                <div className="col-12 col-md-6 px-0">
                   <Button
-                    className={`btn-primary ${
+                    className={`btn-primary w-sm-100 ${
                       newMembers.length === 0 ? 'disabled' : ''
                     }`}
                     onClick={() => saveTeamChanges()}>
@@ -252,9 +254,9 @@ const TeamMembers = ({
                     )}
                   </Button>
                 </div>
-                <div className="col-6 text-center">
+                <div className="col-12 col-md-6 text-center">
                   <Button
-                    className=" btn-borderless "
+                    className=" btn-borderless w-sm-100"
                     onClick={() => discardChanges()}>
                     {' '}
                     Discard Changes
@@ -299,26 +301,33 @@ const TeamMembers = ({
                   <div className="row">
                     {unassignedMembers.map((member) => {
                       return (
-                        <div className="col-12 mb-3" key={member.id}>
-                          <div
-                            className="edit-profile-text float-left"
-                            role="presentation">
-                            <GetInitialName userInfo={member} property="mr-3" />
-                            <div className="name-email">
-                              <div className="team-member-name text-medium">
-                                {`${member?.first_name} ${member?.last_name}`}
+                        <>
+                          <div className="col-8 mb-3" key={member.id}>
+                            <div
+                              className="edit-profile-text "
+                              role="presentation">
+                              <GetInitialName
+                                userInfo={member}
+                                property="mr-3"
+                              />
+                              <div className="name-email">
+                                <div className="team-member-name text-medium">
+                                  {`${member?.first_name} ${member?.last_name}`}
+                                </div>
+                                {member.role}
                               </div>
-                              {member.role}
                             </div>
                           </div>
-                          <Button
-                            className="btn-add-items float-right  mt-3"
-                            role="presentation"
-                            onClick={() => addNewMembers(member)}>
-                            Add
-                          </Button>
-                          <div className="clear-fix" />
-                        </div>
+                          <div className="col-4 text-right">
+                            <Button
+                              className="btn-add-items   mt-3"
+                              role="presentation"
+                              onClick={() => addNewMembers(member)}>
+                              Add
+                            </Button>
+                            <div className="clear-fix" />
+                          </div>
+                        </>
                       );
                     })}
                   </div>
