@@ -205,11 +205,11 @@ const TeamMembers = ({
                             {member.role_group.name}
                           </div>
                           {member.id ? (
-                            <div className="team-member-name text-bold">
+                            <div className="team-member-name text-medium">
                               {`${member.user?.first_name} ${member.user?.last_name}`}
                             </div>
                           ) : (
-                            <div className="team-member-name disabled-tab">
+                            <div className="team-member-name text-medium disabled-tab">
                               Unassigned
                             </div>
                           )}
@@ -305,7 +305,7 @@ const TeamMembers = ({
                             role="presentation">
                             <GetInitialName userInfo={member} property="mr-3" />
                             <div className="name-email">
-                              <div className="team-member-name">
+                              <div className="team-member-name text-medium">
                                 {`${member?.first_name} ${member?.last_name}`}
                               </div>
                               {member.role}

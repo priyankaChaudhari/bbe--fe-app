@@ -287,7 +287,7 @@ h6 {
    font-family: ${Theme.titleFontFamily};
 }
 .text-medium{
-   font-family: ${Theme.baseMediumFontFamily};
+   font-family: ${Theme.baseMediumFontFamily} !important;
 }
 p {
   font-size: ${Theme.small};
