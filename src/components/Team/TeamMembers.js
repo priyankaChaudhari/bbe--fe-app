@@ -209,7 +209,9 @@ const TeamMembers = ({
                               {`${member.user?.first_name} ${member.user?.last_name}`}
                             </div>
                           ) : (
-                            <div className="team-member-name">Unassigned</div>
+                            <div className="team-member-name disabled-tab">
+                              Unassigned
+                            </div>
                           )}
                         </div>
                       </div>
