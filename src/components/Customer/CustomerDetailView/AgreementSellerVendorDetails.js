@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 import NumberFormat from 'react-number-format';
+import { func, shape } from 'prop-types';
 
 import {
   monthlyThresholdOptions,
@@ -14,13 +15,10 @@ import {
 
 export default function AgreementSellerVendorDetails({
   agreement,
-  type,
   setAccountType,
   accountType,
   multipleAgreement,
 }) {
-  const [isDSP, setIsDSP] = useState(false);
-
   useEffect(() => {
     for (const item of multipleAgreement) {
       setAccountType((prevState) => ({
@@ -33,77 +31,11 @@ export default function AgreementSellerVendorDetails({
             : item?.seller_type?.label?.toLowerCase(),
       }));
     }
-
-    if (agreement?.additional_monthly_services)
-      for (const item of agreement.additional_monthly_services) {
-        if (item.service.name.includes('DSP')) setIsDSP(true);
-      }
   }, [
     agreement.additional_monthly_services,
     multipleAgreement,
     setAccountType,
   ]);
-
-  if (type === 'header') {
-    if (agreement?.fee_structure) {
-      return (
-        `${
-          agreement?.seller_type !== null ||
-          agreement?.seller_type !== undefined
-            ? `${agreement?.seller_type?.label} |`
-            : ''
-        } ${
-          !agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
-            ? ''
-            : agreement?.fee_structure?.[accountType[agreement.id]]
-                ?.fee_type === 'Retainer + % Rev Share'
-            ? `${
-                agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
-              }
-          (${
-            agreement?.fee_structure?.[accountType[agreement.id]]
-              ?.threshold_type === null ||
-            agreement?.fee_structure?.[accountType[agreement.id]]
-              ?.threshold_type === 'None'
-              ? 'No Threshold'
-              : `${
-                  agreement?.fee_structure?.[
-                    accountType[agreement.id]
-                  ]?.threshold_type?.[0].toUpperCase() +
-                  agreement?.fee_structure?.[
-                    accountType[agreement.id]
-                  ]?.threshold_type?.substring(1)
-                }`
-          }),`
-            : agreement?.fee_structure?.[accountType[agreement.id]]
-                ?.fee_type === undefined
-            ? ''
-            : `${
-                agreement?.fee_structure?.[accountType[agreement.id]]?.fee_type
-              },`
-        } ${
-          agreement?.additional_monthly_services
-            ? 'Additional Services'
-            : 'No Additional Services'
-        } ` +
-        `${
-          agreement?.additional_one_time_services ? '+ One Time Services' : ''
-        }` +
-        `${isDSP ? ' + DSP' : ''}`
-      );
-    }
-    return (
-      `${
-        agreement?.additional_monthly_services
-          ? 'Additional Services'
-          : 'No Additional Services'
-      } ` +
-      `${
-        agreement?.additional_one_time_services ? '+ One Time Services' : ''
-      }` +
-      `${isDSP ? ' + DSP' : ''}`
-    );
-  }
 
   const mapDefaultValues = (item, threshold) => {
     if (threshold === 'quarter')
@@ -234,3 +166,15 @@ export default function AgreementSellerVendorDetails({
     );
   });
 }
+
+AgreementSellerVendorDetails.defaultProps = {
+  setAccountType: () => {},
+  accountType: {},
+};
+
+AgreementSellerVendorDetails.propTypes = {
+  agreement: shape({}).isRequired,
+  setAccountType: func,
+  accountType: shape({}),
+  multipleAgreement: shape({}).isRequired,
+};
