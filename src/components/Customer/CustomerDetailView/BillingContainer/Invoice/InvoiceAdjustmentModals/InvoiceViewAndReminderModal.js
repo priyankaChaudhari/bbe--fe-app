@@ -201,7 +201,7 @@ const InvoiceViewAndReminderModal = ({
         adjustmentDetails?.adjustments.length >= 1
           ? adjustmentDetails?.adjustments.map((item) => (
               <>
-                <div className="row">
+                <div key={item.id} className="row">
                   <div className="col-12 text-left">
                     <div className="label">Marketplace</div>
                     <div

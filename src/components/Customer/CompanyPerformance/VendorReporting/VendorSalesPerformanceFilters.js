@@ -2,7 +2,15 @@ import React from 'react';
 
 import Select from 'react-select';
 import styled from 'styled-components';
-import { arrayOf, bool, func, instanceOf, shape } from 'prop-types';
+import {
+  arrayOf,
+  bool,
+  func,
+  instanceOf,
+  oneOfType,
+  shape,
+  object,
+} from 'prop-types';
 
 import Theme from '../../../../theme/Theme';
 import { DropDown } from '../DropDown';
@@ -97,8 +105,11 @@ VendorSalesPerformanceFilters.propTypes = {
   dateOptions: arrayOf(Array),
   handleMarketplaceOptions: func,
   getSelectComponents: func,
-  DropdownIndicator: func,
   handleDailyFact: func,
+  DropdownIndicator: oneOfType({
+    object,
+    func,
+  }),
 };
 
 const ViewData = styled.div`

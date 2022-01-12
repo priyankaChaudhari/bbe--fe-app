@@ -480,7 +480,7 @@ export default function CustomerListTablet({
             {data &&
               data.map((item) => (
                 <div
-                  key={Math.random()}
+                  key={item?.id}
                   className="col-md-6 col-12"
                   onClick={() =>
                     history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))

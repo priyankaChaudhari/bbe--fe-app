@@ -1347,6 +1347,7 @@ export default function CustomerList() {
     ) {
       return (
         <li
+          key={type.contract_id}
           data-tip={type.contract_status}
           onClickCapture={(e) => {
             e.stopPropagation();
@@ -1375,6 +1376,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'pending contract') {
       return (
         <li
+          key={type.contract_id}
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push({
@@ -1403,6 +1405,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'pending contract approval') {
       return (
         <li
+          key={type.contract_id}
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push({
@@ -1431,6 +1434,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'pending contract signature') {
       return (
         <li
+          key={type.contract_id}
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push({
@@ -1459,6 +1463,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'active') {
       return (
         <li
+          key={type.contract_id}
           data-tip="Signed"
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
@@ -1476,6 +1481,7 @@ export default function CustomerList() {
     }
     return (
       <li
+        key={type.contract_id}
         onClickCapture={(e) => {
           e.stopPropagation();
           redirectIfContractExists(type, id);
@@ -1731,13 +1737,13 @@ export default function CustomerList() {
           <>
             {!showContracts
               ? item.contract.slice(0, 2).map((type) => (
-                  <React.Fragment key={Math.random()}>
+                  <React.Fragment key={type.contract_id}>
                     <ReactTooltip />
                     {generateContractHTML(type, item.id)}
                   </React.Fragment>
                 ))
               : item.contract.map((type) => (
-                  <React.Fragment key={Math.random()}>
+                  <React.Fragment key={type.contract_id}>
                     <ReactTooltip />
                     {generateContractHTML(type, item.id)}
                   </React.Fragment>
@@ -1766,7 +1772,7 @@ export default function CustomerList() {
     return (
       <tr
         className="cursor"
-        key={Math.random()}
+        key={item?.id}
         onClick={() =>
           history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
         }>
@@ -1790,7 +1796,7 @@ export default function CustomerList() {
       return (
         <tr
           className="cursor"
-          key={Math.random()}
+          key={item?.id}
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
@@ -1884,7 +1890,7 @@ export default function CustomerList() {
       return (
         <tr
           className="cursor"
-          key={Math.random()}
+          key={item?.id}
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
@@ -1982,7 +1988,7 @@ export default function CustomerList() {
       return (
         <tr
           className="cursor"
-          key={Math.random()}
+          key={item?.id}
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
