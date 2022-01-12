@@ -487,7 +487,14 @@ export default function AgreementDetails({
                     </Link>
                   ) : (
                     <>
-                      {userRole !== 'Customer' && !agreement?.draft_from ? (
+                      {userRole !== 'Customer' &&
+                      !agreement?.draft_from &&
+                      agreement?.contract_status?.value !==
+                        'pending contract' &&
+                      agreement.contract_status.value !==
+                        'pending contract approval' &&
+                      agreement.contract_status.value !==
+                        'pending contract signature' ? (
                         <ActionDropDown>
                           {' '}
                           <Select
