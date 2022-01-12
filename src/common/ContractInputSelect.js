@@ -17,6 +17,7 @@ const ContractInputSelect = styled.div`
      margin-top: 7px;
       height: 40px !important;
      
+     
       .form-control-error__control {
         height: 40px !important;
       }
@@ -43,7 +44,9 @@ const ContractInputSelect = styled.div`
       min-height: 40px !important;
       font-size:  ${Theme.extraNormal};
       font-weight:500;
-       cursor: pointer;
+      cursor: pointer;
+      z-index: 2;
+      
 
         .css-g1d714-ValueContainer {
           color: ${Theme.gray85};
@@ -79,6 +82,7 @@ const ContractInputSelect = styled.div`
         font-size: ${Theme.extraNormal};
         font-weight:500;
         cursor: pointer;
+         z-index: 2;
           &.form-control-error {
             border: 1px solid ${Theme.red} ;
             background: ${Theme.lightRed};

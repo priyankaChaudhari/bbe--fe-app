@@ -223,7 +223,7 @@ export default function RecentActivityNotes({
                     />
                   </div>
                 ) : (
-                  <div className="avatarName float-left mr-3">
+                  <div className=" float-left mr-3">
                     {getActivityInitials(item.history_change_reason)}
                   </div>
                 )}
