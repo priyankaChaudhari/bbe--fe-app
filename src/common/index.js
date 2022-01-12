@@ -94,4 +94,5 @@ export {
   AllocateBar,
   ErrorMsgBox,
   TableGap,
+  DropDownIndicator as DropdownIndicator,
 };
