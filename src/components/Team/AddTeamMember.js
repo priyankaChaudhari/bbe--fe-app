@@ -5,7 +5,12 @@ import { toast } from 'react-toastify';
 import { string, func, shape, bool, arrayOf } from 'prop-types';
 
 import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images';
-import { addCustomerMember, getRoles, userCustomerRoleList } from '../../api';
+import {
+  addCustomerMembers,
+  getRoles,
+  userCustomerRoleList,
+  getAllMembers,
+} from '../../api';
 import {
   CommonPagination,
   ModalBox,
@@ -102,13 +107,13 @@ export default function AddTeamMember({
         setRoles(role && role.data);
       });
 
-      userCustomerRoleList(
-        id,
-        currentPage,
-        searchQuery,
+      getAllMembers(
         showMemberList.agreement || showMemberList.requestApproval
           ? 'BGS Manager'
           : filterDetails.name.value,
+        true,
+        currentPage,
+        searchQuery,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setCount(response && response.data && response.data.count);
@@ -117,7 +122,6 @@ export default function AddTeamMember({
       });
     },
     [
-      id,
       searchQuery,
       filterDetails.name.value,
       showMemberList.agreement,
@@ -131,22 +135,25 @@ export default function AddTeamMember({
 
   const saveNewMember = () => {
     setIsLoading({ loader: true, type: 'button' });
-    addCustomerMember(userRoleId, id).then((response) => {
-      if (response && response.status === 200) {
-        if (!showMemberList.requestApproval) {
-          getCustomerMemberList();
-          getActivityLogInfo();
-        }
-        setShowCloseBtn(true);
-        setIsLoading({ loader: false, type: 'button' });
-        toast.success(`${userRoleId.length} Team Member(s) Added.`);
-        const showAgreementModal = showMemberList.agreement;
-        setShowMemberList({ add: false, show: false, modal: false });
-        if (!showAgreementModal) setAgreementDetailModal({ pause: false });
-        else setAgreementDetailModal(showAgreementModal);
-      } else {
-        setIsLoading({ loader: false, type: 'button' });
+    const newMembersData = {
+      customer: id,
+      members: [
+        { user: disabledRoles[0]?.['BGS Manager'], role_group: 'BGS Manager' },
+      ],
+    };
+
+    addCustomerMembers(newMembersData).then(() => {
+      if (!showMemberList.requestApproval) {
+        getCustomerMemberList();
+        getActivityLogInfo();
       }
+      setShowCloseBtn(true);
+      setIsLoading({ loader: false, type: 'button' });
+      toast.success(`${userRoleId.length} Team Member(s) Added.`);
+      const showAgreementModal = showMemberList.agreement;
+      setShowMemberList({ add: false, show: false, modal: false });
+      if (!showAgreementModal) setAgreementDetailModal({ pause: false });
+      else setAgreementDetailModal(showAgreementModal);
     });
   };
 
