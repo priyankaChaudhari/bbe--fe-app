@@ -201,7 +201,7 @@ const TeamMembers = ({
 
                           <div className="name-email">
                             <div className="label m-0">
-                              {member.role_group.name}
+                              {member?.role_group?.name}
                             </div>
                             {member.id ? (
                               <div className="team-member-name text-medium">
