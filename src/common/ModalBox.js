@@ -537,6 +537,7 @@ const ModalBox = styled.div`
       .body-content {
         max-height: 420px;
       }
+    }
   }
   .modal-footer {
     padding: 10px 30px 20px 30px;
