@@ -81,11 +81,9 @@ const BrandPartnerModal = ({
       contentLabel="Add team modal">
       {isLoading ? (
         <PageLoader
-          component="performance-graph"
+          component="comission-modal-loader"
           color="#FF5933"
-          type="detail"
-          width={40}
-          height={40}
+          type="page"
         />
       ) : (
         <ModalBox>
