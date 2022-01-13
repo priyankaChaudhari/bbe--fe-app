@@ -16,12 +16,14 @@ import {
 function Discount({
   discountFlag,
   agreementData,
+  formData,
   setShowDiscountModal,
   selectedDiscount,
   getDiscountData,
   updatedFormData,
   setIsEditContract,
   getAmendmentData,
+  getServicesAccordingToAccType,
 }) {
   const [showAmountInput, setShowAmountInput] = useState(false);
   const [selectedDiscountType, setSelectedDiscountType] = useState('none');
@@ -190,9 +192,40 @@ function Discount({
   };
 
   const displayErrorMsg = (apiErrorDiscountType) => {
-    return apiErrorDiscountType
-      ? `${apiErrorDiscountType} (if additional services are newly added, Please save the changes)`
-      : '';
+    if (discountFlag.serviceType === 'one time service') {
+      if (
+        Object.keys(updatedFormData).includes('additional_one_time_services')
+      ) {
+        return apiErrorDiscountType
+          ? `If additional services are newly added/removed, Please save the changes`
+          : '';
+      }
+    }
+
+    if (discountFlag.serviceType === 'monthly service') {
+      const serviceResult = getServicesAccordingToAccType(
+        formData?.additional_monthly_services,
+        discountFlag.accountType,
+      );
+      const marketplaceResult = getServicesAccordingToAccType(
+        formData?.additional_marketplaces,
+        discountFlag.accountType,
+      );
+      if (
+        (serviceResult && !serviceResult.every((item) => item.id)) ||
+        (marketplaceResult && !marketplaceResult.every((item) => item.id)) ||
+        (Object.keys(updatedFormData).includes('additional_marketplaces') &&
+          updatedFormData?.additional_marketplaces?.delete?.length) ||
+        (Object.keys(updatedFormData).includes('additional_monthly_services') &&
+          updatedFormData?.additional_monthly_services?.delete?.length)
+      ) {
+        return apiErrorDiscountType
+          ? `If additional services are newly added/removed, Please save the changes`
+          : '';
+      }
+    }
+
+    return apiErrorDiscountType ? `${apiErrorDiscountType}` : '';
   };
   const handleErrorMsg = () => {
     return (
@@ -295,12 +328,14 @@ function Discount({
 Discount.defaultProps = {
   discountFlag: '',
   agreementData: {},
+  formData: {},
   setShowDiscountModal: () => {},
   selectedDiscount: [],
   getDiscountData: () => {},
   updatedFormData: {},
   setIsEditContract: () => {},
   getAmendmentData: () => {},
+  getServicesAccordingToAccType: () => {},
 };
 Discount.propTypes = {
   discountFlag: string,
@@ -311,11 +346,16 @@ Discount.propTypes = {
     one_time_discount_type: oneOfType([string, number]),
     one_time_discount_amount: oneOfType([string, number]),
   }),
+  formData: shape({
+    additional_monthly_services: arrayOf(shape({})),
+    additional_marketplaces: arrayOf(shape({})),
+  }),
   setShowDiscountModal: func,
   selectedDiscount: arrayOf(shape({})),
   getDiscountData: func,
   updatedFormData: shape({}),
   setIsEditContract: func,
   getAmendmentData: func,
+  getServicesAccordingToAccType: func,
 };
 export default Discount;
