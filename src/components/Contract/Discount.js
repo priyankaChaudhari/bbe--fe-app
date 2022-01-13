@@ -212,8 +212,8 @@ function Discount({
         discountFlag.accountType,
       );
       if (
-        !serviceResult.every((item) => item.id) ||
-        !marketplaceResult.every((item) => item.id) ||
+        (serviceResult && !serviceResult.every((item) => item.id)) ||
+        (marketplaceResult && !marketplaceResult.every((item) => item.id)) ||
         (Object.keys(updatedFormData).includes('additional_marketplaces') &&
           updatedFormData?.additional_marketplaces?.delete?.length) ||
         (Object.keys(updatedFormData).includes('additional_monthly_services') &&
