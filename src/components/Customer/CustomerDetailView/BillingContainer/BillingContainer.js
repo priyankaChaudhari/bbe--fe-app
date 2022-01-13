@@ -80,6 +80,7 @@ const BillingContainer = ({
           userInfo={userInfo}
           onBoardingId={onBoardingId}
           customerStatus={customerStatus}
+          memberData={memberData}
         />
       )}
     </div>
