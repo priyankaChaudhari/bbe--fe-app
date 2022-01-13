@@ -35,7 +35,7 @@ export default function TeamMemberModal({
 
   return (
     <>
-      {showMemberList.modal ? (
+      {showMemberList.modal && !showMemberList.agreement ? (
         <Modal
           isOpen={showMemberList.modal}
           style={teamDeleteModal ? alertCustomStyles : customStyles}
@@ -47,26 +47,21 @@ export default function TeamMemberModal({
             setShowMemberList={setShowMemberList}
             getCustomerMemberList={getCustomerMemberList}
           />
-          {/* {showMemberList.add ? (
-        <AddTeamMember
-          id={id}
-          getCustomerMemberList={getCustomerMemberList}
-          setShowMemberList={setShowMemberList}
-          showMemberList={showMemberList}
-          setAgreementDetailModal={setAgreementDetailModal}
-          getActivityLogInfo={getActivityLogInfo}
-        />
-      ) : (
-        <EditTeamMember
-          id={id}
-          getCustomerMemberList={getCustomerMemberList}
-          setShowMemberList={setShowMemberList}
-          showMemberList={showMemberList}
-          setTeamDeleteModal={setTeamDeleteModal}
-          userInfo={userInfo}
-          getActivityLogInfo={getActivityLogInfo}
-        />
-      )} */}
+        </Modal>
+      ) : showMemberList.modal && showMemberList.agreement ? (
+        <Modal
+          isOpen={showMemberList.modal}
+          style={teamDeleteModal ? alertCustomStyles : customStyles}
+          ariaHideApp={false}
+          contentLabel="Add team modal">
+          <AddTeamMember
+            id={id}
+            getCustomerMemberList={getCustomerMemberList}
+            setShowMemberList={setShowMemberList}
+            showMemberList={showMemberList}
+            setAgreementDetailModal={setAgreementDetailModal}
+            getActivityLogInfo={getActivityLogInfo}
+          />
         </Modal>
       ) : null}
     </>
