@@ -191,12 +191,12 @@ const TeamMembers = ({
               <div className="row">
                 {assignedMembers.map((member) => {
                   return (
-                    <>
-                      <div className="col-8 mb-3 " key={Math.random()}>
+                    <React.Fragment key={Math.random()}>
+                      <div className="col-8 mb-3 ">
                         <div className="edit-profile-text" role="presentation">
                           <GetInitialName
                             userInfo={member?.user}
-                            property={`mr-3 ${member.id ? '' : 'unassigned'}`}
+                            property={`mr-3 ${member?.id ? '' : 'unassigned'}`}
                           />
 
                           <div className="name-email">
@@ -205,7 +205,7 @@ const TeamMembers = ({
                             </div>
                             {member.id ? (
                               <div className="team-member-name text-medium">
-                                {`${member.user?.first_name} ${member.user?.last_name}`}
+                                {`${member?.user?.first_name} ${member?.user?.last_name}`}
                               </div>
                             ) : (
                               <div className="team-member-name text-medium disabled-tab">
@@ -233,7 +233,7 @@ const TeamMembers = ({
 
                         <div className="clear-fix" />
                       </div>
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </div>
@@ -301,8 +301,8 @@ const TeamMembers = ({
                   <div className="row">
                     {unassignedMembers.map((member) => {
                       return (
-                        <>
-                          <div className="col-8 mb-3" key={member.id}>
+                        <React.Fragment key={member.id}>
+                          <div className="col-8 mb-3">
                             <div
                               className="edit-profile-text "
                               role="presentation">
@@ -327,7 +327,7 @@ const TeamMembers = ({
                             </Button>
                             <div className="clear-fix" />
                           </div>
-                        </>
+                        </React.Fragment>
                       );
                     })}
                   </div>
