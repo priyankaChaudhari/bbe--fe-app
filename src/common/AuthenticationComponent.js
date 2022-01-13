@@ -10,7 +10,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
-import DSPBudgetApprovalContainer from '../components/DspBudgetApproval/DSPBudgetApprovalContainer';
+
 import { userMe } from '../store/actions/index';
 import { Summary } from '../components/OnBoardingCustomer';
 import { clearToken } from '../store/actions/userState';
@@ -53,8 +53,7 @@ import {
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
   PATH_BGS_ADMIN_DASHBOARD,
-  PATH_DSP_BUDGET_APPROVAL,
-} from '../constants/index';
+} from '../constants';
 
 const _ = require('lodash');
 
@@ -193,12 +192,6 @@ export default function AuthenticationComponent() {
           <Route
             path={PATH_UPLOAD_PRODUCT_ASSET}
             component={ProductDelegation}
-          />
-
-          {/* DSP budget proposal to BP */}
-          <Route
-            path={PATH_DSP_BUDGET_APPROVAL}
-            component={DSPBudgetApprovalContainer}
           />
 
           <Route component={PageNotFound} />
