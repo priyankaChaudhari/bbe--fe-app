@@ -16,7 +16,7 @@ import {
 } from '../../common';
 
 // Both the Showing Current Assigned Team Members & New Members to add are in this component
-// There are two lists to handle here 1.assignedMemebers (old) &  2. newly Added member list which we will submit on confirm
+// There are two lists to handle here 1.assignedMemebers (current team members) &  2. newly Added member list which we will submit on confirm (bulk-create)
 
 const TeamMembers = ({
   customerID,
@@ -85,6 +85,7 @@ const TeamMembers = ({
     // Set New Members to old Team List & updated list (data submit)
     setAssignedMembers([...newlyAssigned]);
     setNewMembers([...tempMembers]);
+    setPageNumber();
     setShowCureentTeam(true);
   };
 

@@ -1,44 +1,26 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import Modal from 'react-modal';
 import { string, func, shape, bool, arrayOf } from 'prop-types';
 
-import { AddTeamMember, EditTeamMember, TeamMembers } from '../../../Team';
+import { AddTeamMember, TeamMembers } from '../../../Team';
 
-// !      Remove  the eslint disables-once work is done
 export default function TeamMemberModal({
   id,
   currentMembers,
   showMemberList,
   setShowMemberList,
   setAgreementDetailModal,
-  userInfo,
   customStyles,
   getActivityLogInfo,
   getCustomerMemberList,
 }) {
-  const [teamDeleteModal, setTeamDeleteModal] = useState(false);
-  const alertCustomStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      maxWidth: '474px ',
-      width: '100% ',
-      overlay: ' {zIndex: 1000}',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
-  };
-
   return (
     <>
       {showMemberList.modal && !showMemberList.agreement ? (
         <Modal
           isOpen={showMemberList.modal}
-          style={teamDeleteModal ? alertCustomStyles : customStyles}
+          style={customStyles}
           ariaHideApp={false}
           contentLabel="Add team modal">
           <TeamMembers
@@ -51,7 +33,7 @@ export default function TeamMemberModal({
       ) : showMemberList.modal && showMemberList.agreement ? (
         <Modal
           isOpen={showMemberList.modal}
-          style={teamDeleteModal ? alertCustomStyles : customStyles}
+          style={customStyles}
           ariaHideApp={false}
           contentLabel="Add team modal">
           <AddTeamMember
@@ -69,7 +51,6 @@ export default function TeamMemberModal({
 }
 
 TeamMemberModal.defaultProps = {
-  userInfo: {},
   customStyles: {},
   setShowMemberList: () => {},
   setAgreementDetailModal: () => {},
@@ -83,7 +64,6 @@ TeamMemberModal.propTypes = {
     modal: bool,
     add: bool,
   }).isRequired,
-  userInfo: shape({}),
   customStyles: shape({}),
   setAgreementDetailModal: func,
   getActivityLogInfo: func.isRequired,
