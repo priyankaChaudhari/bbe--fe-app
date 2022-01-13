@@ -81,18 +81,20 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     </ul>`;
       return htmlTooptip;
     };
-
+    // const padding = '15,40,15,20';
     // create category axis
     const categoryAxis = chart.current.yAxes.push(new am4charts.CategoryAxis());
     categoryAxis.renderer.grid.template.disabled = true;
     categoryAxis.renderer.minGridDistance = 20;
-    // categoryAxis.cursorTooltipEnabled = false;
+    categoryAxis.cursorTooltipEnabled = false;
     categoryAxis.dataFields.category = 'monthYear';
     categoryAxis.renderer.grid.template.location = 0;
     categoryAxis.renderer.inversed = true;
     categoryAxis.renderer.labels.template.fill = am4core.color('#556178');
     categoryAxis.renderer.labels.template.padding(15, 40, 15, 20);
+    // categoryAxis.renderer.labels.template.padding(padding);
     categoryAxis.renderer.labels.template.location = 0.5;
+
     // create value axis
     const valueAxis = chart.current.xAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.opposite = true;
@@ -154,12 +156,23 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series3.tooltip.background.strokeWidth = 0;
     series3.tooltip.background.filters.clear();
     series3.tooltip.background.cornerRadius = 10;
-    // series3.columns.template.tooltipX = -100;
-    series3.columns.template.tooltipPosition = 'pointer';
+    // series3.columns.template.tooltipPosition = 'pointer';
+    series3.tooltip.background.pointerLength = 20;
+    // series3.tooltip.pointerOrientation = 'left';
+    // series3.tooltip.dy = am4core.percent(80);
+    // series3.columns.template.tooltipY = am4core.percent(0);
+    // series3.columns.template.tooltipX = 300;
     series3.columns.template.adapter.add(
       'tooltipHTML',
       function (text, target) {
         if (target.dataItem) {
+          // console.log('target', target);
+          if (target.dataItem._index > 2) {
+            series3.tooltip.pointerOrientation = 'down';
+          }
+          if (target.dataItem._index <= 2) {
+            series3.tooltip.pointerOrientation = 'up';
+          }
           if (target.dataItem.valueX > 0) {
             return `<div style="width:250px; padding:5px 5px 10px 5px">
             ${renderToolTip(

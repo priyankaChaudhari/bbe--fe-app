@@ -67,12 +67,8 @@ export default function DspAdPacing({
         <>
           <div className="status-heading-red">Overspending</div>
           <p className="basic-text">
-            {' '}
-            You are currently overspending by an average of
-            {addThousandSeperator(
-              dspPacing?.current_spend_status,
-              'currency',
-            )}{' '}
+            You are currently overspending by an average of{' '}
+            {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}{' '}
             per day.
           </p>
         </>
