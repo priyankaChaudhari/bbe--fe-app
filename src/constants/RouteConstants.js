@@ -17,7 +17,8 @@ export const PATH_HELLO_SIGN = `/contract-signature`;
 export const PATH_WARNING = '/warning/';
 
 // DSP budget proposal
-export const PATH_DSP_BUDGET_APPROVAL = '/dsp-budget-approval/:adjustmentId';
+export const PATH_DSP_BUDGET_APPROVAL =
+  '/dsp-budget-approval/:key/:adjustmentId';
 
 // Account Setup
 export const PATH_ACCOUNT_SETUP = '/account-setup/';
