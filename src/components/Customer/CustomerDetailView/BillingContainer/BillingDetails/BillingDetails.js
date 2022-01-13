@@ -50,6 +50,7 @@ export default function BillingDetails({
   userInfo,
   onBoardingId,
   customerStatus,
+  memberData,
 }) {
   const dispatch = useDispatch();
   const [data, setData] = useState({});
@@ -139,6 +140,21 @@ export default function BillingDetails({
       }
     });
   }, [id]);
+
+  useEffect(() => {
+    for (const user of memberData) {
+      if (user.user) {
+        if (
+          (user?.role_group?.name === 'BGS Manager' ||
+            user?.role_group?.name === 'BGS') &&
+          user?.user?.id === userInfo?.id
+        ) {
+          setIsAllowToEdit(true);
+          break;
+        }
+      }
+    }
+  }, [memberData, userInfo]);
 
   useEffect(() => {
     billingDetails();
@@ -681,8 +697,7 @@ export default function BillingDetails({
               {paymentTermsData?.length ? (
                 <WhiteCard className="mt-3">
                   <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
-                  {userInfo?.role?.includes('BGS') ||
-                  userInfo?.role?.includes('BGS Manager') ? (
+                  {isAllowToEdit ? (
                     <div
                       className="edit-details"
                       role="presentation"
