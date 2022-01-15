@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 import { toast } from 'react-toastify';
-import { shape, string, func, arrayOf } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
+import { shape, string, func, arrayOf } from 'prop-types';
 
 import { getAllMembers, addCustomerMembers } from '../../api';
 import { CloseIcon, SearchIcon, LeftArrowIcon } from '../../theme/images';
@@ -55,6 +55,12 @@ const TeamMembers = ({
     setShowCureentTeam(false);
   };
 
+  // Redirect back to the original team members
+  const backToTeamMembers = () => {
+    setShowCureentTeam(true);
+    setSearchQuery('');
+  };
+
   // Add New members to Team
   const addNewMembers = (member) => {
     // Add New members in temporary
@@ -86,6 +92,7 @@ const TeamMembers = ({
     setAssignedMembers([...newlyAssigned]);
     setNewMembers([...tempMembers]);
     setPageNumber();
+    setSearchQuery('');
     setShowCureentTeam(true);
   };
 
@@ -108,6 +115,7 @@ const TeamMembers = ({
     setNewMembers([...tempMembers]);
   };
 
+  // Confirm all the changes made to team
   const saveTeamChanges = () => {
     const newMembersData = {
       customer: customerID,
@@ -123,11 +131,13 @@ const TeamMembers = ({
     });
   };
 
+  // Clear all the changes made to team
   const discardChanges = () => {
     setAssignedMembers(currentMembers);
     setNewMembers([]);
   };
 
+  // Handle Pagination
   const handlePageChange = (currentPage) => {
     setLoading(true);
     setPageNumber(currentPage);
@@ -140,6 +150,7 @@ const TeamMembers = ({
     );
   };
 
+  // Handle Search
   const handleSearch = (event) => {
     setSearchQuery(event.target.value);
     event.persist();
@@ -172,7 +183,7 @@ const TeamMembers = ({
         ) : (
           <Button
             className="btn-add-items back-btn"
-            onClick={() => setShowCureentTeam(true)}>
+            onClick={() => backToTeamMembers()}>
             {' '}
             <img
               width="16px"
