@@ -1677,26 +1677,6 @@ export default function ContractContainer() {
     return '';
   };
 
-  const mapServiceTotal = (key) => {
-    if (key === 'additional_one_time_services') {
-      return `$${
-        details?.total_fee?.onetime_service_after_discount
-          ? displayNumber(details.total_fee.onetime_service_after_discount)
-          : 0
-      }`;
-    }
-    const market = details.total_fee.additional_marketplaces
-      ? details.total_fee.additional_marketplaces
-      : 0;
-    const month = details.total_fee.monthly_service
-      ? details.total_fee.monthly_service
-      : 0;
-
-    return `$${(market + month)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-  };
-
   const calculateTotalFee = (type, serviceData, marketplaceData, accntType) => {
     let oneTimeSubTotal = 0;
     let monthlySubTotal = 0;
@@ -1756,10 +1736,7 @@ export default function ContractContainer() {
           monthlyDiscount: formData.monthly_discount_amount,
         };
       }
-      if (
-        type === 'onetime' &&
-        formData.additional_one_time_services !== null
-      ) {
+      if (type === 'onetime' && formData.additional_one_time_services) {
         formData.additional_one_time_services.forEach((item) => {
           const { quantity } = item;
 
@@ -1802,6 +1779,12 @@ export default function ContractContainer() {
     return 0;
   };
 
+  const mapServiceTotal = () => {
+    const totalFees = calculateTotalFee('onetime');
+    return `$${(totalFees?.oneTimeTotal ? totalFees?.oneTimeTotal : 0)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+  };
   const mapMonthlyServiceTotal = (
     monthlyServicesData,
     marketplaceData,
@@ -3537,6 +3520,7 @@ export default function ContractContainer() {
             templateData={data}
             servicesFees={servicesFees}
             discountData={discountData}
+            mapServiceTotal={mapServiceTotal}
           />
         </div>
 
