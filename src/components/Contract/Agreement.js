@@ -17,6 +17,7 @@ export default function Agreement({
   templateData,
   servicesFees,
   discountData,
+  mapServiceTotal,
 }) {
   const customerId = formData?.customer_id;
   const customerAddress = customerId?.address;
@@ -174,30 +175,6 @@ export default function Agreement({
       });
     }
     return fields.length ? fields.toString().replaceAll('>,<', '><') : '';
-  };
-
-  const mapServiceTotal = (key) => {
-    if (key === 'additional_one_time_services') {
-      const onetimeDiscount = discountData.find(
-        (item) => item.service_type === 'one time service',
-      );
-      const discountAmount = onetimeDiscount?.amount
-        ? onetimeDiscount?.amount
-        : 0;
-      return `$${displayNumber(
-        details?.total_fee?.onetime_service - discountAmount,
-      )}`;
-    }
-    const market = details.total_fee.additional_marketplaces
-      ? details.total_fee.additional_marketplaces
-      : 0;
-    const month = details.total_fee.monthly_service
-      ? details.total_fee.monthly_service
-      : 0;
-
-    return `$${(market + month)
-      .toString()
-      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
 
   const mapThadSignImg = () => {
@@ -410,6 +387,7 @@ Agreement.defaultProps = {
   templateData: {},
   servicesFees: {},
   discountData: [],
+  mapServiceTotal: () => {},
 };
 
 Agreement.propTypes = {
@@ -496,4 +474,5 @@ Agreement.propTypes = {
     }),
   ),
   discountData: arrayOf(shape({})),
+  mapServiceTotal: func,
 };
