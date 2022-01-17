@@ -134,6 +134,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           <Tabs className={pastInvoiceLoader ? 'disabled mb-3' : 'mb-3'}>
             <ul className="tabs">
               <li
+                key="pastInvoices"
                 className={selectedComponent === 'past' ? 'active' : ''}
                 onClick={() => {
                   getDSPInvoicesData(invoiceType);
@@ -143,6 +144,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
                 Past Invoices
               </li>
               <li
+                key="upcomingInvoices"
                 className={selectedComponent === 'upcoming' ? 'active' : ''}
                 onClick={() => {
                   getDSPUpcomingInvoicesData(invoiceType);

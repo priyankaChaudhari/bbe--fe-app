@@ -103,7 +103,6 @@ const InvoiceAdjustmentList = ({
     return (
       <tr className="product-body" key={item.id}>
         <td width="30%" className="small-label-text">
-          {' '}
           <div className="type">
             {InvoiceTypeNames[item?.dsp_invoice_subtype.toLowerCase()]}
           </div>

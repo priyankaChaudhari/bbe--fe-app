@@ -93,6 +93,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     categoryAxis.renderer.labels.template.fill = am4core.color('#556178');
     categoryAxis.renderer.labels.template.padding(15, 40, 15, 20);
     categoryAxis.renderer.labels.template.location = 0.5;
+
     // create value axis
     const valueAxis = chart.current.xAxes.push(new am4charts.ValueAxis());
     valueAxis.renderer.opposite = true;
@@ -154,6 +155,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series3.tooltip.background.strokeWidth = 0;
     series3.tooltip.background.filters.clear();
     series3.tooltip.background.cornerRadius = 10;
+    // series3.tooltip.background.pointerLength = 20;
     series3.columns.template.adapter.add(
       'tooltipHTML',
       function (text, target) {
@@ -184,7 +186,6 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
           </div>`;
       },
     );
-
     // color bullets for actual spent series 3
     const valueLabel = series3.columns.template.createChild(am4core.Label);
     valueLabel.text = '';

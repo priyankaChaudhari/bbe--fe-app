@@ -77,6 +77,7 @@ const customStyles = {
 };
 
 export default function CustomerList() {
+  const mounted = useRef(false);
   const history = useHistory();
   const selectInputRefMobile = useRef();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -290,10 +291,12 @@ export default function CustomerList() {
         selectedTimeFrame,
         orderByFlag ? { sequence: 'desc' } : { sequence: 'asc' },
       ).then((response) => {
-        setData(response && response.data && response.data.results);
-        setPageNumber(currentPage);
-        setCount(response && response.data && response.data.count);
-        setIsLoading({ loader: false, type: 'page' });
+        if (mounted.current) {
+          setData(response && response.data && response.data.results);
+          setPageNumber(currentPage);
+          setCount(response && response.data && response.data.count);
+          setIsLoading({ loader: false, type: 'page' });
+        }
       });
     },
 
@@ -317,42 +320,47 @@ export default function CustomerList() {
         ? 'sponsored_ad_dashboard'
         : 'dsp_ad_performance';
       getManagersList(type).then((adm) => {
-        if (adm && adm.data) {
-          const list = [{ value: 'any', label: 'All' }]; // for select one user
-          for (const brand of adm.data) {
-            list.push({
-              value: brand.id,
-              label: `${brand.first_name} ${brand.last_name}`,
-              icon:
-                brand.documents &&
-                brand.documents[0] &&
-                Object.values(brand.documents[0]),
-            });
+        if (mounted.current) {
+          if (adm && adm.data) {
+            const list = [{ value: 'any', label: 'All' }]; // for select one user
+            for (const brand of adm.data) {
+              list.push({
+                value: brand.id,
+                label: `${brand.first_name} ${brand.last_name}`,
+                icon:
+                  brand.documents &&
+                  brand.documents[0] &&
+                  Object.values(brand.documents[0]),
+              });
+            }
+            setBrandGrowthStrategist(list);
           }
-          setBrandGrowthStrategist(list);
         }
       });
     } else {
       getGrowthStrategist().then((gs) => {
-        if (gs && gs.data) {
-          const list = [{ value: 'any', label: 'All' }]; // for select one use
-          for (const brand of gs.data) {
-            list.push({
-              value: brand.id,
-              label: `${brand.first_name} ${brand.last_name}`,
-              icon:
-                brand.documents &&
-                brand.documents[0] &&
-                Object.values(brand.documents[0]),
-            });
+        if (mounted.current) {
+          if (gs && gs.data) {
+            const list = [{ value: 'any', label: 'All' }]; // for select one use
+            for (const brand of gs.data) {
+              list.push({
+                value: brand.id,
+                label: `${brand.first_name} ${brand.last_name}`,
+                icon:
+                  brand.documents &&
+                  brand.documents[0] &&
+                  Object.values(brand.documents[0]),
+              });
+            }
+            setBrandGrowthStrategist(list);
           }
-          setBrandGrowthStrategist(list);
         }
       });
     }
   }, [showAdPerformance, showDspAdPerformance]);
 
   useEffect(() => {
+    mounted.current = true;
     getStatus().then((statusResponse) => {
       if (statusResponse && statusResponse.status === 200) {
         setStatus(statusResponse.data);
@@ -366,6 +374,9 @@ export default function CustomerList() {
     });
 
     customerList(1);
+    return () => {
+      mounted.current = false;
+    };
   }, [customerList]);
 
   const handleClickOutside = (event) => {
@@ -1347,6 +1358,7 @@ export default function CustomerList() {
     ) {
       return (
         <li
+          key={type.contract_id}
           data-tip={type.contract_status}
           onClickCapture={(e) => {
             e.stopPropagation();
@@ -1375,6 +1387,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'pending contract') {
       return (
         <li
+          key={type.contract_id}
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push({
@@ -1403,6 +1416,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'pending contract approval') {
       return (
         <li
+          key={type.contract_id}
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push({
@@ -1431,6 +1445,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'pending contract signature') {
       return (
         <li
+          key={type.contract_id}
           onClickCapture={(e) => {
             e.stopPropagation();
             history.push({
@@ -1459,6 +1474,7 @@ export default function CustomerList() {
     if (type && type.contract_status === 'active') {
       return (
         <li
+          key={type.contract_id}
           data-tip="Signed"
           style={{ textTransform: 'capitalize' }}
           onClickCapture={(e) => {
@@ -1476,6 +1492,7 @@ export default function CustomerList() {
     }
     return (
       <li
+        key={type.contract_id}
         onClickCapture={(e) => {
           e.stopPropagation();
           redirectIfContractExists(type, id);
@@ -1731,13 +1748,13 @@ export default function CustomerList() {
           <>
             {!showContracts
               ? item.contract.slice(0, 2).map((type) => (
-                  <React.Fragment key={Math.random()}>
+                  <React.Fragment key={type.contract_id}>
                     <ReactTooltip />
                     {generateContractHTML(type, item.id)}
                   </React.Fragment>
                 ))
               : item.contract.map((type) => (
-                  <React.Fragment key={Math.random()}>
+                  <React.Fragment key={type.contract_id}>
                     <ReactTooltip />
                     {generateContractHTML(type, item.id)}
                   </React.Fragment>
@@ -1766,7 +1783,7 @@ export default function CustomerList() {
     return (
       <tr
         className="cursor"
-        key={Math.random()}
+        key={item?.id}
         onClick={() =>
           history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
         }>
@@ -1790,7 +1807,7 @@ export default function CustomerList() {
       return (
         <tr
           className="cursor"
-          key={Math.random()}
+          key={item?.id}
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
@@ -1884,7 +1901,7 @@ export default function CustomerList() {
       return (
         <tr
           className="cursor"
-          key={Math.random()}
+          key={item?.id}
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
@@ -1982,7 +1999,7 @@ export default function CustomerList() {
       return (
         <tr
           className="cursor"
-          key={Math.random()}
+          key={item?.id}
           onClick={() =>
             history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
           }>
