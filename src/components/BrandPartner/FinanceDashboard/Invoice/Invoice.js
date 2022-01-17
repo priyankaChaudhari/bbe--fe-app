@@ -26,6 +26,7 @@ export default function Invoice({
   setIsTimeFrameChange,
   selectedNavigation,
 }) {
+  const mounted = useRef(false);
   const dropdownRef = useRef(null);
   const currentDate = new Date();
   const [dspData, setDSPData] = useState([]);
@@ -55,12 +56,14 @@ export default function Invoice({
   const getDSPdata = useCallback((dateType, startDate, endDate) => {
     getDSPFinances(dateType, startDate, endDate, selectedNavigation).then(
       (res) => {
-        if (res && res.status === 400) {
-          // setInvoiceLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data) {
-            setDSPData(res.data);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            // setInvoiceLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data) {
+              setDSPData(res.data);
+            }
           }
         }
       },
@@ -68,6 +71,7 @@ export default function Invoice({
   }, []);
 
   useEffect(() => {
+    mounted.current = true;
     if (responseId === null) {
       getDSPdata(dummyDateType);
       setResponseId('12345');
@@ -75,6 +79,7 @@ export default function Invoice({
     document.addEventListener('click', handleClickOutside, true);
 
     return () => {
+      mounted.current = false;
       document.removeEventListener('click', handleClickOutside, true);
     };
   }, []);
