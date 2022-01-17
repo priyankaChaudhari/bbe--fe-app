@@ -45,6 +45,7 @@ function DiscountModal({
   setIsEditContract,
   getAmendmentData,
   getServicesAccordingToAccType,
+  getContractActivityLogInfo,
 }) {
   return (
     <Modal
@@ -73,6 +74,7 @@ function DiscountModal({
           setIsEditContract={setIsEditContract}
           getAmendmentData={getAmendmentData}
           getServicesAccordingToAccType={getServicesAccordingToAccType}
+          getContractActivityLogInfo={getContractActivityLogInfo}
         />
       </ModalBox>
     </Modal>
@@ -96,6 +98,7 @@ DiscountModal.defaultProps = {
   setIsEditContract: () => {},
   getAmendmentData: () => {},
   getServicesAccordingToAccType: () => {},
+  getContractActivityLogInfo: () => {},
 };
 
 DiscountModal.propTypes = {
@@ -125,4 +128,5 @@ DiscountModal.propTypes = {
   setIsEditContract: func,
   getAmendmentData: func,
   getServicesAccordingToAccType: func,
+  getContractActivityLogInfo: func,
 };
