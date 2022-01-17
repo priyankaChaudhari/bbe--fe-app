@@ -343,6 +343,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   );
 
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices?.length > 0)
       for (const option of marketplaceChoices) {
@@ -369,7 +370,6 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       getBBData(marketplace[0].value, bBDailyFact.value, 'daily');
       setResponseId('12345');
     }
-    mounted.current = true;
     return () => {
       mounted.current = false;
     };

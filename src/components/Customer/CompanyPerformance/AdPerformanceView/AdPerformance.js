@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -33,6 +33,7 @@ export default function AdPerformance({
   memberData,
   getActivityLogInfo,
 }) {
+  const mounted = useRef(false);
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -519,22 +520,24 @@ export default function AdPerformance({
         endDate,
         accountType,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setIsApiCall(false);
-          setAdGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.daily_facts) {
-            const adGraphData = bindAdResponseData(res.data);
-            setAdChartData(adGraphData);
-          } else {
-            setAdChartData([]);
-            setAdPreviousTotal([]);
-            setAdCurrentTotal([]);
-            setAdDifference([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setIsApiCall(false);
+            setAdGraphLoader(false);
           }
-          setIsApiCall(false);
-          setAdGraphLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.daily_facts) {
+              const adGraphData = bindAdResponseData(res.data);
+              setAdChartData(adGraphData);
+            } else {
+              setAdChartData([]);
+              setAdPreviousTotal([]);
+              setAdCurrentTotal([]);
+              setAdDifference([]);
+            }
+            setIsApiCall(false);
+            setAdGraphLoader(false);
+          }
         }
       });
     },
@@ -559,22 +562,24 @@ export default function AdPerformance({
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setIsApiCall(false);
-          setDspGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.dsp_spend) {
-            const dspGraphData = bindDSPResponseData(res.data);
-            setDSPChartData(dspGraphData);
-          } else {
-            setDSPChartData([]);
-            setDspCurrentTotal([]);
-            setDspPreviousTotal([]);
-            setDspDifference([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setIsApiCall(false);
+            setDspGraphLoader(false);
           }
-          setIsApiCall(false);
-          setDspGraphLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.dsp_spend) {
+              const dspGraphData = bindDSPResponseData(res.data);
+              setDSPChartData(dspGraphData);
+            } else {
+              setDSPChartData([]);
+              setDspCurrentTotal([]);
+              setDspPreviousTotal([]);
+              setDspDifference([]);
+            }
+            setIsApiCall(false);
+            setDspGraphLoader(false);
+          }
         }
       });
     },
@@ -585,10 +590,12 @@ export default function AdPerformance({
     (marketplace) => {
       setIsDspPacingLoading(true);
       getDspPacingData(id, marketplace).then((res) => {
-        if (res && res.status === 200) {
-          setDspData(res.data);
+        if (mounted.current) {
+          if (res && res.status === 200) {
+            setDspData(res.data);
+          }
+          setIsDspPacingLoading(false);
         }
-        setIsDspPacingLoading(false);
       });
     },
     [id],
@@ -599,29 +606,31 @@ export default function AdPerformance({
       setIsApiCall(true);
       setDspGraphLoader(true);
       getDSPPacingGraphData(id, marketplace).then((res) => {
-        if (res && res.status === 400) {
-          setIsApiCall(false);
-          setDspGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          // setDspData(res.data);
-          if (res.data && res.data.dsp_pacing_graph) {
-            const dspPacingGraphData = bindDSPPacingResponseData(
-              res.data && res.data.dsp_pacing_graph,
-            );
-            setDSPPacingChartData(dspPacingGraphData);
-          } else {
-            setDSPPacingChartData([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setIsApiCall(false);
+            setDspGraphLoader(false);
           }
-          setIsApiCall(false);
-          setDspGraphLoader(false);
+          if (res && res.status === 200) {
+            // setDspData(res.data);
+            if (res.data && res.data.dsp_pacing_graph) {
+              const dspPacingGraphData = bindDSPPacingResponseData(
+                res.data && res.data.dsp_pacing_graph,
+              );
+              setDSPPacingChartData(dspPacingGraphData);
+            } else {
+              setDSPPacingChartData([]);
+            }
+            setIsApiCall(false);
+            setDspGraphLoader(false);
+          }
         }
       });
     },
     [id],
   );
-
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
       for (const option of marketplaceChoices) {
@@ -655,6 +664,10 @@ export default function AdPerformance({
       }
       setResponseId('12345');
     }
+
+    return () => {
+      mounted.current = false;
+    };
   }, [
     getAdData,
     getDSPData,

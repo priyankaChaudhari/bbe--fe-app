@@ -360,6 +360,7 @@ export default function CustomerList() {
   }, [showAdPerformance, showDspAdPerformance]);
 
   useEffect(() => {
+    mounted.current = true;
     getStatus().then((statusResponse) => {
       if (statusResponse && statusResponse.status === 200) {
         setStatus(statusResponse.data);
@@ -373,7 +374,6 @@ export default function CustomerList() {
     });
 
     customerList(1);
-    mounted.current = true;
     return () => {
       mounted.current = false;
     };
