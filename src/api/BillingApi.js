@@ -117,13 +117,9 @@ export async function getDSPBudgetAdjustData(
   return result;
 }
 
-export async function getDSPBudgetAdjustDetail(dspAdjustmentID, key) {
-  const params = {
-    key,
-    id: dspAdjustmentID,
-  };
+export async function getDSPBudgetAdjustDetail(dspAdjustmentID) {
   const result = await axiosInstance
-    .get(`${API_DSP_BUDGET_ADJUSTMENT}`, { params })
+    .get(`${API_DSP_BUDGET_ADJUSTMENT}${dspAdjustmentID}/`)
     .then((response) => {
       return response?.data;
     })
@@ -144,20 +140,6 @@ export async function updateDSPBudgetAdjustment(dspAdjustmentID, data) {
     });
   return result;
 }
-
-// export async function verifyAuthToken(dspAdjustmentID, key) {
-//   // verify-dsp-token/?key=<key>/dsp_b  udget=<id>
-
-//   const result = await axiosInstance
-//     .get(API_DSP_BUDGET_VERIFY_AUTH, data)
-//     .then((response) => {
-//       return response;
-//     })
-//     .catch((error) => {
-//       return error.response;
-//     });
-//   return result;
-// }
 
 export async function postDSPBudgetAdjustPauseInvoiceData(
   invoiceData,
