@@ -1,10 +1,6 @@
 import dayjs from 'dayjs';
 import axiosInstance from '../axios';
-import {
-  API_DSP_BUDGET_ADJUSTMENT,
-  API_DSP_EMPTY_BUDGET_ADJUSTMENT,
-  API_DSP_INVOICES,
-} from '../constants';
+import { API_DSP_BUDGET_ADJUSTMENT, API_DSP_INVOICES } from '../constants';
 
 export async function getInvoiceData(invoiceType, id, pageNumber) {
   const params = {
@@ -123,7 +119,7 @@ export async function getDSPBudgetAdjustData(
 
 export async function getDSPBudgetAdjustDetail(dspAdjustmentID) {
   const result = await axiosInstance
-    .get(`${API_DSP_BUDGET_ADJUSTMENT + dspAdjustmentID}/`)
+    .get(`${API_DSP_BUDGET_ADJUSTMENT}${dspAdjustmentID}/`)
     .then((response) => {
       return response?.data;
     })
@@ -179,21 +175,6 @@ export async function postDSPBudgetAdjustPauseInvoiceData(
 
   const result = await axiosInstance
     .post(`${API_DSP_BUDGET_ADJUSTMENT}`, finalInvoiceAdjust)
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return result;
-}
-
-export async function getDSPEmptyBudgetAdjustment(customerId) {
-  const params = {
-    customer: customerId,
-  };
-  const result = await axiosInstance
-    .get(`${API_DSP_EMPTY_BUDGET_ADJUSTMENT}`, { params })
     .then((response) => {
       return response;
     })

@@ -352,7 +352,7 @@ const InvoiceViewAndReminderModal = ({
                   <>
                     <p className="normal-text">
                       <span className="normal-text text-bold">
-                        Reson for rejection:{' '}
+                        Note from BP:{' '}
                       </span>
                       {showMoreRejectionNote
                         ? adjustmentDetails?.rejection_note
