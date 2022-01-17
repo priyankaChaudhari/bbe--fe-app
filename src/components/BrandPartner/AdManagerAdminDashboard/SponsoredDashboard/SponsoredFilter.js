@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 
 import Select from 'react-select';
-import {
-  arrayOf,
-  bool,
-  func,
-  shape,
-  string,
-  oneOfType,
-  object,
-} from 'prop-types';
+import { arrayOf, bool, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import { DropDownSelect, WhiteCard, ModalRadioCheck } from '../../../../common';
@@ -247,14 +239,14 @@ const SponsoredFilter = ({
 export default SponsoredFilter;
 
 SponsoredFilter.defaultProps = {
-  handleMarketplace: () => {},
-  handleResetFilter: () => {},
   marketplaceOptions: [],
   SponsoredAdTypeOptions: [],
   managerList: [],
   bgsList: [],
   getAdManagerComponents: null,
-  DropdownIndicator: () => {},
+  DropdownIndicator: null,
+  handleMarketplace: () => {},
+  handleResetFilter: () => {},
   handleAdManagerFilter: () => {},
   handleAdType: () => {},
   selectedAdType: {},
@@ -277,10 +269,7 @@ SponsoredFilter.propTypes = {
   SponsoredAdTypeOptions: arrayOf(Array),
   managerList: arrayOf(Array),
   bgsList: arrayOf(Array),
-  DropdownIndicator: oneOfType({
-    object,
-    func,
-  }),
+  DropdownIndicator: shape({}),
   getAdManagerComponents: func,
   handleAdManagerFilter: func,
   handleBGSList: func,
