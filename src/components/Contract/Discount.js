@@ -24,6 +24,7 @@ function Discount({
   setIsEditContract,
   getAmendmentData,
   getServicesAccordingToAccType,
+  getContractActivityLogInfo,
 }) {
   const [showAmountInput, setShowAmountInput] = useState(false);
   const [selectedDiscountType, setSelectedDiscountType] = useState('none');
@@ -61,6 +62,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -79,6 +81,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -107,6 +110,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -124,6 +128,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -336,6 +341,7 @@ Discount.defaultProps = {
   setIsEditContract: () => {},
   getAmendmentData: () => {},
   getServicesAccordingToAccType: () => {},
+  getContractActivityLogInfo: () => {},
 };
 Discount.propTypes = {
   discountFlag: shape({}),
@@ -357,5 +363,6 @@ Discount.propTypes = {
   setIsEditContract: func,
   getAmendmentData: func,
   getServicesAccordingToAccType: func,
+  getContractActivityLogInfo: func,
 };
 export default Discount;
