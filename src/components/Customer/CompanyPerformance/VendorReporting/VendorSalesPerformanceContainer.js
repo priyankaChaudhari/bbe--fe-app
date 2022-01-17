@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import dayjs from 'dayjs';
 import * as am4core from '@amcharts/amcharts4/core';
@@ -21,6 +21,7 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 
 am4core.useTheme(am4themes_dataviz);
 export default function PerformanceReport({ marketplaceChoices, id }) {
+  const mounted = useRef(false);
   const { Option, SingleValue } = components;
   const [isSPCustomDateApply, setIsSPCustomDateApply] = useState(false);
   const [responseId, setResponseId] = useState(null);
@@ -286,19 +287,24 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         endDate,
         metricsType,
       ).then((res) => {
-        if (res?.status === 400 || res.status === 500) {
-          setIsApiCall(false);
-          setSalesGraphLoader(false);
-        }
-        if (res?.status === 200) {
-          if (res?.data?.result) {
-            const salesGraphData = bindSalesResponseData(res.data, metricsType);
-            setSalesChartData(salesGraphData);
-          } else {
-            setSalesChartData([]);
+        if (mounted.current) {
+          if (res?.status === 400 || res.status === 500) {
+            setIsApiCall(false);
+            setSalesGraphLoader(false);
           }
-          setIsApiCall(false);
-          setSalesGraphLoader(false);
+          if (res?.status === 200) {
+            if (res?.data?.result) {
+              const salesGraphData = bindSalesResponseData(
+                res.data,
+                metricsType,
+              );
+              setSalesChartData(salesGraphData);
+            } else {
+              setSalesChartData([]);
+            }
+            setIsApiCall(false);
+            setSalesGraphLoader(false);
+          }
         }
       });
     },
@@ -306,6 +312,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   );
 
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
       for (const option of marketplaceChoices) {
@@ -336,6 +343,9 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
 
       setResponseId('12345');
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     marketplaceChoices,
     getData,
