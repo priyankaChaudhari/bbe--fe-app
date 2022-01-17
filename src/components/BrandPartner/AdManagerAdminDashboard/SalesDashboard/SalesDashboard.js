@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import $ from 'jquery';
 import dayjs from 'dayjs';
@@ -36,6 +36,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SalesDashboard({ marketplaceChoices, userInfo }) {
+  const mounted = useRef(false);
   const isBGSManager = userInfo?.role === 'BGS Manager';
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSAdmin = userInfo?.role === 'BGS Admin';
@@ -117,8 +118,34 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const getManagerList = useCallback(() => {
     getManagersList(isBGSAdmin ? 'BGS' : 'sales_performance').then(
       (managersData) => {
-        if (managersData && managersData.data && managersData.data.length) {
-          const results = managersData.data;
+        if (mounted.current) {
+          if (managersData && managersData.data && managersData.data.length) {
+            const results = managersData.data;
+            const list = [{ value: 'all', label: 'All' }];
+
+            for (const brand of results) {
+              list.push({
+                value: brand.id,
+                label: `${brand.first_name} ${brand.last_name}`,
+                icon:
+                  brand.documents &&
+                  brand.documents[0] &&
+                  Object.values(brand.documents[0]) &&
+                  Object.values(brand.documents[0])[0],
+              });
+            }
+            setManagersList(list);
+          }
+        }
+      },
+    );
+  }, [isBGSAdmin]);
+
+  const getBGSList = useCallback((id) => {
+    getBgsUserList(id).then((bgsData) => {
+      if (mounted.current) {
+        if (bgsData && bgsData.data && bgsData.data.length) {
+          const results = bgsData.data;
           const list = [{ value: 'all', label: 'All' }];
 
           for (const brand of results) {
@@ -130,35 +157,13 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
                 brand.documents[0] &&
                 Object.values(brand.documents[0]) &&
                 Object.values(brand.documents[0])[0],
+              bgsManager: brand.bgs_manager,
             });
           }
-          setManagersList(list);
+          setBgsList(list);
+        } else {
+          setBgsList([{ value: 'all', label: 'All' }]);
         }
-      },
-    );
-  }, [isBGSAdmin]);
-
-  const getBGSList = useCallback((id) => {
-    getBgsUserList(id).then((bgsData) => {
-      if (bgsData && bgsData.data && bgsData.data.length) {
-        const results = bgsData.data;
-        const list = [{ value: 'all', label: 'All' }];
-
-        for (const brand of results) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-            bgsManager: brand.bgs_manager,
-          });
-        }
-        setBgsList(list);
-      } else {
-        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -284,31 +289,33 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setSalesGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            const response = res.data.result;
-            const salesGraphData = bindSalesResponseData(response);
-            setSalesChartData(salesGraphData);
-            // brekdown tooltip values
-            if (response && response.inorganic_sale) {
-              setInorganicSale(response.inorganic_sale);
-            }
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setSalesGraphLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              const response = res.data.result;
+              const salesGraphData = bindSalesResponseData(response);
+              setSalesChartData(salesGraphData);
+              // brekdown tooltip values
+              if (response && response.inorganic_sale) {
+                setInorganicSale(response.inorganic_sale);
+              }
 
-            if (response && response.organic_sale) {
-              setOrganicSale(response.organic_sale);
+              if (response && response.organic_sale) {
+                setOrganicSale(response.organic_sale);
+              }
+            } else {
+              setSalesChartData([]);
+              setSalesPreviousTotal([]);
+              setSalesCurrentTotal([]);
+              setSalesDifference([]);
             }
-          } else {
-            setSalesChartData([]);
-            setSalesPreviousTotal([]);
-            setSalesCurrentTotal([]);
-            setSalesDifference([]);
+            setSalesGraphLoader(false);
           }
           setSalesGraphLoader(false);
         }
-        setSalesGraphLoader(false);
       });
     },
     [isBGSManager, isBGSAdmin, isBGS],
@@ -341,21 +348,23 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
         endDate,
         page,
       ).then((res) => {
-        if (res && (res.status === 400 || res.status === 400)) {
-          setContributionLoader(false);
-          setContributionData([]);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            setContributionData(res.data.result);
-          } else if (res.data && res.data.results) {
-            setContributionData(res.data.results);
-            setContributionCount(res.data.count);
-          } else {
+        if (mounted.current) {
+          if (res && (res.status === 400 || res.status === 400)) {
+            setContributionLoader(false);
             setContributionData([]);
-            setPageNumber(page);
           }
-          setContributionLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              setContributionData(res.data.result);
+            } else if (res.data && res.data.results) {
+              setContributionData(res.data.results);
+              setContributionCount(res.data.count);
+            } else {
+              setContributionData([]);
+              setPageNumber(page);
+            }
+            setContributionLoader(false);
+          }
         }
       });
     },
@@ -363,6 +372,8 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   );
 
   useEffect(() => {
+    mounted.current = true;
+
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
       for (const option of marketplaceChoices) {
@@ -401,6 +412,9 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
       setCurrencySymbol(getSymbolFromCurrency('USD'));
       setResponseId('12345');
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     marketplaceChoices,
     responseId,

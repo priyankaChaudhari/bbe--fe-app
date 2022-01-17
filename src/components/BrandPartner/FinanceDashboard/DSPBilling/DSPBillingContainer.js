@@ -41,6 +41,7 @@ import {
 } from '../../../../common';
 
 export default function DSPBillingContainer() {
+  const mounted = useRef(false);
   const currentDate = new Date();
   const dropdownRef = useRef(null);
 
@@ -100,12 +101,14 @@ export default function DSPBillingContainer() {
 
   const getBillingMetricsdata = useCallback((dateType, startDate, endDate) => {
     getDSPBillingMetrics(dateType, startDate, endDate).then((res) => {
-      if (res && res.status === 400) {
-        // setInvoiceLoader(false);
-      }
-      if (res && res.status === 200) {
-        if (res.data && res.data) {
-          setDSPMetricsData(res.data);
+      if (mounted.current) {
+        if (res && res.status === 400) {
+          // setInvoiceLoader(false);
+        }
+        if (res && res.status === 200) {
+          if (res.data && res.data) {
+            setDSPMetricsData(res.data);
+          }
         }
       }
     });
@@ -116,16 +119,18 @@ export default function DSPBillingContainer() {
       setBillingLoader(true);
       getBills(searchKey, vendor, sortBy, page, dateType, dateRange).then(
         (res) => {
-          if (res && res.status === 400) {
-            setBillingLoader(false);
-          }
-          if (res && res.status === 200) {
-            if (res.data && res.data.results) {
-              setBillingData(res.data.results);
-              setBillsCount(res.data.count);
+          if (mounted.current) {
+            if (res && res.status === 400) {
+              setBillingLoader(false);
             }
-            setBillingLoader(false);
-            setPageNumber(page);
+            if (res && res.status === 200) {
+              if (res.data && res.data.results) {
+                setBillingData(res.data.results);
+                setBillsCount(res.data.count);
+              }
+              setBillingLoader(false);
+              setPageNumber(page);
+            }
           }
         },
       );
@@ -134,6 +139,7 @@ export default function DSPBillingContainer() {
   );
 
   useEffect(() => {
+    mounted.current = true;
     if (responseId === null) {
       getBillingMetricsdata(dummyDateType);
       getBillsData(
@@ -146,6 +152,9 @@ export default function DSPBillingContainer() {
       );
       setResponseId('12345');
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     responseId,
     getBillingMetricsdata,

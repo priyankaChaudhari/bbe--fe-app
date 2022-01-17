@@ -37,6 +37,7 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
+  const mounted = useRef(false);
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSManager = userInfo?.role === 'BGS Manager';
   const isBGSAdmin = userInfo?.role === 'BGS Admin';
@@ -116,14 +117,40 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const getManagerList = useCallback(() => {
     getManagersList(isBGSAdmin ? 'BGS' : 'sponsored_ad_dashboard').then(
       (managersData) => {
-        if (managersData && managersData.data && managersData.data.length) {
-          const list = [
-            {
-              value: 'all',
-              label: 'All',
-            },
-          ];
-          for (const brand of managersData.data) {
+        if (mounted.current) {
+          if (managersData && managersData.data && managersData.data.length) {
+            const list = [
+              {
+                value: 'all',
+                label: 'All',
+              },
+            ];
+            for (const brand of managersData.data) {
+              list.push({
+                value: brand.id,
+                label: `${brand.first_name} ${brand.last_name}`,
+                icon:
+                  brand.documents &&
+                  brand.documents[0] &&
+                  Object.values(brand.documents[0]) &&
+                  Object.values(brand.documents[0])[0],
+              });
+            }
+            setManagersList(list);
+          }
+        }
+      },
+    );
+  }, [isBGSAdmin]);
+
+  const getBGSList = useCallback((id) => {
+    getBgsUserList(id).then((bgsData) => {
+      if (mounted.current) {
+        if (bgsData && bgsData.data && bgsData.data.length) {
+          const results = bgsData.data;
+          const list = [{ value: 'all', label: 'All' }];
+
+          for (const brand of results) {
             list.push({
               value: brand.id,
               label: `${brand.first_name} ${brand.last_name}`,
@@ -132,35 +159,13 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
                 brand.documents[0] &&
                 Object.values(brand.documents[0]) &&
                 Object.values(brand.documents[0])[0],
+              bgsManager: brand.bgs_manager,
             });
           }
-          setManagersList(list);
+          setBgsList(list);
+        } else {
+          setBgsList([{ value: 'all', label: 'All' }]);
         }
-      },
-    );
-  }, [isBGSAdmin]);
-
-  const getBGSList = useCallback((id) => {
-    getBgsUserList(id).then((bgsData) => {
-      if (bgsData && bgsData.data && bgsData.data.length) {
-        const results = bgsData.data;
-        const list = [{ value: 'all', label: 'All' }];
-
-        for (const brand of results) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-            bgsManager: brand.bgs_manager,
-          });
-        }
-        setBgsList(list);
-      } else {
-        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -353,20 +358,22 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setAdGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            const adGraphData = bindAdResponseData(res.data.result);
-            setAdChartData(adGraphData);
-          } else {
-            setAdChartData([]);
-            setAdPreviousTotal([]);
-            setAdCurrentTotal([]);
-            setAdDifference([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setAdGraphLoader(false);
           }
-          setAdGraphLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              const adGraphData = bindAdResponseData(res.data.result);
+              setAdChartData(adGraphData);
+            } else {
+              setAdChartData([]);
+              setAdPreviousTotal([]);
+              setAdCurrentTotal([]);
+              setAdDifference([]);
+            }
+            setAdGraphLoader(false);
+          }
         }
       });
     },
@@ -403,24 +410,26 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         endDate,
         page,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setKeyContributionLoader(false);
-        }
-        if (res && res.status === 500) {
-          setKeyContributionLoader(false);
-          setContributionData([]);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            setContributionData(res.data.result);
-          } else if (res.data && res.data.results) {
-            setContributionData(res.data.results);
-            setContributionCount(res.data.count);
-          } else {
-            setContributionData([]);
-            setPageNumber(page);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setKeyContributionLoader(false);
           }
-          setKeyContributionLoader(false);
+          if (res && res.status === 500) {
+            setKeyContributionLoader(false);
+            setContributionData([]);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              setContributionData(res.data.result);
+            } else if (res.data && res.data.results) {
+              setContributionData(res.data.results);
+              setContributionCount(res.data.count);
+            } else {
+              setContributionData([]);
+              setPageNumber(page);
+            }
+            setKeyContributionLoader(false);
+          }
         }
       });
     },
@@ -428,6 +437,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   );
 
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
       for (const option of marketplaceChoices) {
@@ -467,6 +477,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       setCurrencySymbol(getSymbolFromCurrency('USD'));
       setResponseId('12345');
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     marketplaceChoices,
     responseId,
