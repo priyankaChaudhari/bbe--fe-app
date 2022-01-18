@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
-import { shape, string, object, oneOfType } from 'prop-types';
+import { shape, string } from 'prop-types';
 import { toast, ToastContainer } from 'react-toastify';
 import Select from 'react-select';
 
@@ -942,8 +942,5 @@ BillingDetails.propTypes = {
     customer_onboarding: string,
   }).isRequired,
   onBoardingId: string,
-  customerStatus: oneOfType({
-    string,
-    object,
-  }),
+  customerStatus: shape({}),
 };
