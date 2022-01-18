@@ -21,6 +21,7 @@ import {
 } from './BGSCommissionContainerStyle';
 
 const BGSCommissionContainer = () => {
+  const mounted = useRef(false);
   const dropdownRef = useRef(null);
   const currentDate = new Date();
   const today = currentDate.getDate();
@@ -58,12 +59,14 @@ const BGSCommissionContainer = () => {
   const getCommissionMatrics = useCallback(() => {
     setCommissionMetrics({});
     getBgsCommissionMatrics(timeFrame).then((res) => {
-      if (res && (res.status === 400 || res.status === 404)) {
-        setCommissionMetrics({});
-      }
-      if (res && res.status === 200) {
-        if (res.data) {
-          setCommissionMetrics(res.data);
+      if (mounted.current) {
+        if (res && (res.status === 400 || res.status === 404)) {
+          setCommissionMetrics({});
+        }
+        if (res && res.status === 200) {
+          if (res.data) {
+            setCommissionMetrics(res.data);
+          }
         }
       }
     });
@@ -76,24 +79,7 @@ const BGSCommissionContainer = () => {
       timeFrame,
       selectedTableFilter.value,
     ).then((res) => {
-      if (res && (res.status === 400 || res.status === 404)) {
-        setLoader(false);
-        setCommissionData(null);
-      }
-      if (res && res.status === 200) {
-        if (res.data && res.data.results && res.data.results.length > 0) {
-          setCommissionData(res.data.results);
-        }
-      }
-      setLoader(false);
-    });
-  }, [selectedTableFilter, timeFrame]);
-
-  const getCommissionTableGroupByBGS = useCallback(() => {
-    setCommissionData(null);
-    setLoader(true);
-    getBgsCommissionGroupByTable(timeFrame, selectedTableFilter.value).then(
-      (res) => {
+      if (mounted.current) {
         if (res && (res.status === 400 || res.status === 404)) {
           setLoader(false);
           setCommissionData(null);
@@ -104,20 +90,49 @@ const BGSCommissionContainer = () => {
           }
         }
         setLoader(false);
+      }
+    });
+  }, [selectedTableFilter, timeFrame]);
+
+  const getCommissionTableGroupByBGS = useCallback(() => {
+    setCommissionData(null);
+    setLoader(true);
+    getBgsCommissionGroupByTable(timeFrame, selectedTableFilter.value).then(
+      (res) => {
+        if (mounted.current) {
+          if (res && (res.status === 400 || res.status === 404)) {
+            setLoader(false);
+            setCommissionData(null);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.results && res.data.results.length > 0) {
+              setCommissionData(res.data.results);
+            }
+          }
+          setLoader(false);
+        }
       },
     );
   }, [selectedTableFilter, timeFrame]);
 
   useEffect(() => {
+    mounted.current = true;
     if (groupBy) {
       getCommissionTableGroupByBGS();
     } else {
       getCommissionTableIndividuals();
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [getCommissionTableGroupByBGS, getCommissionTableIndividuals, groupBy]);
 
   useEffect(() => {
+    mounted.current = true;
     getCommissionMatrics();
+    return () => {
+      mounted.current = false;
+    };
   }, [getCommissionMatrics]);
 
   const handleApply = () => {

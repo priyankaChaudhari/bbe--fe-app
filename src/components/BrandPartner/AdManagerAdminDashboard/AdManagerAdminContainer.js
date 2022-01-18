@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import { string, shape } from 'prop-types';
 
@@ -11,29 +11,36 @@ import { DashboardCard } from '../../../theme/Global';
 import { getMarketPlaceList } from '../../../api';
 
 export default function AdManagerAdminContainer({ userInfo }) {
+  const mounted = useRef(false);
   const [viewComponent, setViewComponent] = useState('sales');
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const getMarketPlace = useCallback(() => {
     getMarketPlaceList().then((res) => {
-      if (res && res.data && res.data.length) {
-        const list = [
-          {
-            name: 'all',
-            country: 'All Marketplaces',
-            currency: 'USD',
-          },
-        ];
+      if (mounted.current) {
+        if (res && res.data && res.data.length) {
+          const list = [
+            {
+              name: 'all',
+              country: 'All Marketplaces',
+              currency: 'USD',
+            },
+          ];
 
-        for (const marketplace of res.data) {
-          list.push(marketplace);
-          setMarketplaceChoices(list);
+          for (const marketplace of res.data) {
+            list.push(marketplace);
+            setMarketplaceChoices(list);
+          }
         }
       }
     });
   }, []);
 
   useEffect(() => {
+    mounted.current = true;
     getMarketPlace();
+    return () => {
+      mounted.current = false;
+    };
   }, [getMarketPlace]);
 
   const renderComponent = () => {

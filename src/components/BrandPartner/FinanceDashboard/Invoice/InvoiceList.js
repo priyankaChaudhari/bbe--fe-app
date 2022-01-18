@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import $ from 'jquery';
 import dayjs from 'dayjs';
@@ -42,6 +42,7 @@ export default function InvoicesList({
   isTablet,
   selectedNavigation,
 }) {
+  const mounted = useRef(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('any');
   const [invoiceLoader, setInvoiceLoader] = useState(false);
@@ -70,16 +71,18 @@ export default function InvoicesList({
         page,
         selectedNavigation,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setInvoiceLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.results) {
-            setInvoiceData(res.data.results);
-            setInvoiceCount(res.data.count);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setInvoiceLoader(false);
           }
-          setInvoiceLoader(false);
-          setPageNumber(page);
+          if (res && res.status === 200) {
+            if (res.data && res.data.results) {
+              setInvoiceData(res.data.results);
+              setInvoiceCount(res.data.count);
+            }
+            setInvoiceLoader(false);
+            setPageNumber(page);
+          }
         }
       });
     },
@@ -87,11 +90,15 @@ export default function InvoicesList({
   );
 
   useEffect(() => {
+    mounted.current = true;
     if (responseId === null || isTimeFrameChange) {
       getInvoices(searchQuery, selectedStatus, selectedSortBy.value, 1);
       setResponseId('12345');
       setIsTimeFrameChange(false);
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     getInvoices,
     searchQuery,
