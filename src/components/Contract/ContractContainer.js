@@ -3415,10 +3415,47 @@ export default function ContractContainer() {
   };
   const isBillingCapExists = () => {
     if (
-      formData?.fee_structure?.seller?.billing_cap ||
-      formData?.fee_structure?.vendor?.billing_cap
+      formData?.seller_type?.value === 'Seller' ||
+      formData?.seller_type?.value === 'Vendor'
     ) {
-      return true;
+      const type = formData?.seller_type?.value?.toLowerCase();
+
+      if (
+        formData?.fee_structure?.[type]?.fee_type === 'Revenue Share Only' ||
+        formData?.fee_structure?.[type]?.fee_type === 'Retainer + % Rev Share'
+      ) {
+        if (
+          formData?.fee_structure?.seller?.billing_cap ||
+          formData?.fee_structure?.vendor?.billing_cap
+        ) {
+          return true;
+        }
+      }
+    }
+
+    if (formData?.seller_type?.value === 'Hybrid') {
+      if (
+        formData?.fee_structure?.seller?.fee_type === 'Revenue Share Only' ||
+        formData?.fee_structure?.seller?.fee_type === 'Retainer + % Rev Share'
+      ) {
+        if (
+          formData?.fee_structure?.seller?.billing_cap ||
+          formData?.fee_structure?.vendor?.billing_cap
+        ) {
+          return true;
+        }
+      }
+      if (
+        formData?.fee_structure?.vendor?.fee_type === 'Revenue Share Only' ||
+        formData?.fee_structure?.vendor?.fee_type === 'Retainer + % Rev Share'
+      ) {
+        if (
+          formData?.fee_structure?.seller?.billing_cap ||
+          formData?.fee_structure?.vendor?.billing_cap
+        ) {
+          return true;
+        }
+      }
     }
     return false;
   };
