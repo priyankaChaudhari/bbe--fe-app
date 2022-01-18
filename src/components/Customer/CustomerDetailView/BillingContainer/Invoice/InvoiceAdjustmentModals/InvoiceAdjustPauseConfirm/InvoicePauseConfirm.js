@@ -126,7 +126,7 @@ const InvoicePauseConfirm = ({
         <div className=" straight-line horizontal-line mt-2 mb-2 " />
         <p className="normal-text">
           The change will apply to{' '}
-          <b>{selectedMonthYear?.value.split(' ')[0]} onwards.</b>
+          <b>{selectedMonthYear?.value.split(' ')[0]} only.</b>
         </p>
       </div>
     );
