@@ -35,11 +35,9 @@ const InvoiceAdjustConfirm = ({
         dayjs(selectedMonthYear?.value).subtract(1, 'M').format('MMMM') ===
         dayjs().format('MMMM')
       ) {
-        return `${dayjs().format('MMMM')} ${today}`;
+        return `${dayjs(selectedMonthYear?.value).format('MMMM')} 13`;
       }
-      return `${dayjs(selectedMonthYear?.value)
-        .subtract(1, 'M')
-        .format('MMMM')} 13`;
+      return `${dayjs(selectedMonthYear?.value).format('MMMM')} 13`;
     }
     if (invoiceType === 'standard') {
       return `${dayjs(selectedMonthYear?.value)
@@ -49,11 +47,9 @@ const InvoiceAdjustConfirm = ({
     if (
       dayjs(selectedMonthYear?.value).format('MMMM') !== dayjs().format('MMMM')
     ) {
-      return `${dayjs(selectedMonthYear?.value)
-        .subtract(1, 'M')
-        .format('MMMM')} 13`;
+      return `${dayjs(selectedMonthYear?.value).format('MMMM')} 13`;
     }
-    return `${dayjs().format('MMMM')} ${today}`;
+    return `${dayjs().format('MMMM')} 13`;
   };
 
   const totalChangeAmount =
@@ -284,7 +280,9 @@ const InvoiceAdjustConfirm = ({
                 <b>
                   {invoiceType === 'standard'
                     ? selectedMonthYear?.value.split(' ')[0]
-                    : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
+                    : dayjs(selectedMonthYear?.value)
+                        .add(1, 'M')
+                        .format('MMMM')}{' '}
                   onwards.
                 </b>
                 <br /> The first bill for this amount will be sent{' '}
@@ -299,15 +297,11 @@ const InvoiceAdjustConfirm = ({
                     ? dayjs(selectedMonthYear?.value)
                         .subtract(1, 'M')
                         .format('MMMM') === dayjs().format('MMMM')
-                      ? dayjs().format('MMMM')
-                      : dayjs(selectedMonthYear?.value)
-                          .subtract(1, 'M')
-                          .format('MMMM')
+                      ? dayjs(selectedMonthYear?.value).format('MMMM')
+                      : dayjs(selectedMonthYear?.value).format('MMMM')
                     : dayjs(selectedMonthYear?.value).format('MMMM') !==
                       dayjs().format('MMMM')
-                    ? dayjs(selectedMonthYear?.value)
-                        .subtract(1, 'M')
-                        .format('MMMM')
+                    ? dayjs(selectedMonthYear?.value).format('MMMM')
                     : dayjs().format('MMMM')}{' '}
                   only)
                 </p>
