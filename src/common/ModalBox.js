@@ -63,6 +63,20 @@ const ModalBox = styled.div`
         word-break: break-all;
       }
     }
+    .edit-contact {
+      position: absolute;
+      font-size: ${Theme.extraNormal};
+      color: ${Theme.gray85};
+      top: 10px;
+      right: 25px;
+      cursor: pointer;
+
+      img {
+        width: 18px;
+        margin-right: 4px;
+        vertical-align: text-top;
+      }
+    }
 
     .send-copy-contract {
       color: ${Theme.gray30};
