@@ -24,6 +24,38 @@ const InvoiceAdjustConfirm = ({
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
 
+  const returnInvoiceBillDate = () => {
+    if (today > 10) {
+      if (invoiceType === 'standard') {
+        return `${dayjs(selectedMonthYear?.value)
+          .subtract(1, 'M')
+          .format('MMMM')} 13`;
+      }
+      if (
+        dayjs(selectedMonthYear?.value).subtract(1, 'M').format('MMMM') ===
+        dayjs().format('MMMM')
+      ) {
+        return `${dayjs().format('MMMM')} ${today}`;
+      }
+      return `${dayjs(selectedMonthYear?.value)
+        .subtract(1, 'M')
+        .format('MMMM')} 13`;
+    }
+    if (invoiceType === 'standard') {
+      return `${dayjs(selectedMonthYear?.value)
+        .subtract(1, 'M')
+        .format('MMMM')} 13`;
+    }
+    if (
+      dayjs(selectedMonthYear?.value).format('MMMM') !== dayjs().format('MMMM')
+    ) {
+      return `${dayjs(selectedMonthYear?.value)
+        .subtract(1, 'M')
+        .format('MMMM')} 13`;
+    }
+    return `${dayjs().format('MMMM')} ${today}`;
+  };
+
   const totalChangeAmount =
     totalNewBudget - totalCurrentBudget > 0
       ? `+$${numberWithCommas(Math.abs(totalCurrentBudget - totalNewBudget))}`
@@ -252,24 +284,11 @@ const InvoiceAdjustConfirm = ({
                 <b>
                   {invoiceType === 'standard'
                     ? selectedMonthYear?.value.split(' ')[0]
-                    : dayjs(selectedMonthYear?.value)
-                        .add(1, 'M')
-                        .format('MMMM')}{' '}
+                    : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
                   onwards.
                 </b>
                 <br /> The first bill for this amount will be sent{' '}
-                {today > 10
-                  ? invoiceType === 'standard'
-                    ? dayjs(selectedMonthYear?.value)
-                        .subtract(1, 'M')
-                        .format('MMMM')
-                    : dayjs(selectedMonthYear?.value).format('MMMM')
-                  : invoiceType === 'standard'
-                  ? dayjs(selectedMonthYear?.value)
-                      .subtract(1, 'M')
-                      .format('MMMM')
-                  : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
-                13.
+                {returnInvoiceBillDate()}.
               </p>
             ) : null}
             {invoiceType === 'permanent additional' && (
@@ -277,12 +296,19 @@ const InvoiceAdjustConfirm = ({
                 <p className="normal-text text-bold m-0">
                   Additional DSP invoice (
                   {today > 10
-                    ? invoiceType === 'standard'
-                      ? dayjs(selectedMonthYear?.value)
+                    ? dayjs(selectedMonthYear?.value)
+                        .subtract(1, 'M')
+                        .format('MMMM') === dayjs().format('MMMM')
+                      ? dayjs().format('MMMM')
+                      : dayjs(selectedMonthYear?.value)
                           .subtract(1, 'M')
                           .format('MMMM')
-                      : dayjs(selectedMonthYear?.value).format('MMMM')
-                    : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
+                    : dayjs(selectedMonthYear?.value).format('MMMM') !==
+                      dayjs().format('MMMM')
+                    ? dayjs(selectedMonthYear?.value)
+                        .subtract(1, 'M')
+                        .format('MMMM')
+                    : dayjs().format('MMMM')}{' '}
                   only)
                 </p>
                 <p className="normal-text text-bold mb-0 mt-1">
