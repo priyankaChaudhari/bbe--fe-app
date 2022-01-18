@@ -153,23 +153,25 @@ const InvoicePauseConfirm = ({
             <p className="normal-text">
               This proposal will be send to the following contact:
             </p>
-            <div className="row">
-              <div className="col-10">
-                <div className="normal-text text-bold">
-                  {dspContact?.first_name} {dspContact?.last_name}
+            <fieldset className="less-border mb-3">
+              <div className="row">
+                <div className="col-9 pl-4">
+                  <div className="normal-text text-bold">
+                    {dspContact?.first_name} {dspContact?.last_name}
+                  </div>
+                  <div className="normal-text">{dspContact?.email}</div>
                 </div>
-                <div className="normal-text">{dspContact?.email}</div>
-              </div>
-              <div className="col-2">
-                <div
-                  className="edit-details"
-                  role="presentation"
-                  onClick={() => {}}>
-                  <img src={EditOrangeIcon} alt="" />
-                  Edit
+                <div className="col-3">
+                  <div
+                    className="edit-contact"
+                    role="presentation"
+                    onClick={() => {}}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
                 </div>
               </div>
-            </div>
+            </fieldset>
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {renderDesktopView()}
             {renderResponsiveView()}

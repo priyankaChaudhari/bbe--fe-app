@@ -786,7 +786,11 @@ fieldset {
     border-radius: 8px;
   }
   &.extra-radius {
-      border-radius: 15px;
+    border-radius: 15px;
+  }
+  &.less-border {
+    border-radius: 4px;
+    border: 1px solid ${Theme.gray11}; 
   }
 }
 
