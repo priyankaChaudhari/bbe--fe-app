@@ -4022,6 +4022,7 @@ export default function ContractContainer() {
             updatedFormData={updatedFormData}
             getAmendmentData={getAmendmentData}
             getServicesAccordingToAccType={getServicesAccordingToAccType}
+            getContractActivityLogInfo={getContractActivityLogInfo}
           />
 
           <ContractEditConfirmation
