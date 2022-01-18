@@ -21,7 +21,7 @@ const InvoiceAdjustmentsContainer = ({
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
-    true,
+    false,
   );
   const [showAllPastInvoicesModal, setShowAllPastInvoicesModal] = useState(
     false,
