@@ -52,6 +52,8 @@ export const API_DSP_INVOICES = '/invoice/';
 export const API_DSP_BILLING = '/bill/';
 export const API_DSP_BUDGET_ADJUSTMENT = '/dsp-budget-adjustment/';
 export const API_DSP_BUDGET_VERIFY_AUTH = `${API_DSP_BUDGET_ADJUSTMENT}verify-dsp-token`;
+export const API_DSP_EMPTY_BUDGET_ADJUSTMENT = `${API_DSP_BUDGET_ADJUSTMENT}empty-adjustment/`;
+export const API_DSP_CONTACT = '/dsp-contact/';
 
 // Agreement
 export const API_AGREEMENT_TEMPLATE = '/agreement-template/';
