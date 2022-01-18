@@ -6,6 +6,7 @@ import { arrayOf, func, number, shape, string } from 'prop-types';
 import {
   ArrowRightBlackIcon,
   ArrowRightIcon,
+  EditOrangeIcon,
   LeftArrowIcon,
 } from '../../../../../../../theme/images';
 import { ModalBox, Button, GreyCard } from '../../../../../../../common';
@@ -19,8 +20,8 @@ const InvoiceAdjustConfirm = ({
   selectedMonthYear,
   invoiceType,
   onApply,
-  bpName,
   today,
+  dspContact,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
 
@@ -256,9 +257,26 @@ const InvoiceAdjustConfirm = ({
           </h4>
           <div className="body-content">
             <p className="normal-text">
-              The following proposal will be send to <b>{bpName}</b> for
-              approval:
+              This proposal will be send to the following contact:
             </p>
+            <div className="row">
+              <div className="col-10">
+                <div className="normal-text text-bold">
+                  {dspContact?.first_name} {dspContact?.last_name}
+                </div>
+                <div className="normal-text">{dspContact?.email}</div>
+              </div>
+              <div className="col-2">
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => {}}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
+              </div>
+            </div>
+
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {invoiceType !== 'one time' ? (
               <>
@@ -350,7 +368,7 @@ InvoiceAdjustConfirm.defaultProps = {
   returnTotalAmount: () => {},
   selectedMonthYear: {},
   onApply: () => {},
-  bpName: '',
+  dspContact: {},
 };
 
 InvoiceAdjustConfirm.propTypes = {
@@ -360,6 +378,6 @@ InvoiceAdjustConfirm.propTypes = {
   selectedMonthYear: shape({}),
   invoiceType: string.isRequired,
   onApply: func,
-  bpName: string,
   today: number.isRequired,
+  dspContact: shape({}),
 };
