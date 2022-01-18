@@ -15,6 +15,7 @@ import Theme from '../../../../../../theme/Theme';
 import { CloseIcon, helpCircleIcon } from '../../../../../../theme/images';
 import {
   getDSPBudgetAdjustData,
+  getDSPContact,
   postDSPBudgetAdjustPauseInvoiceData,
 } from '../../../../../../api';
 import {
@@ -59,6 +60,7 @@ const InvoiceAdjustPauseModal = ({
   const history = useHistory();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [dspContact, setDspContact] = useState(null);
   const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
@@ -136,6 +138,22 @@ const InvoiceAdjustPauseModal = ({
     },
     [customerId, viewComponent],
   );
+
+  const getDSPContactInfo = useCallback(() => {
+    getDSPContact(customerId).then((res) => {
+      if (mounted.current) {
+        setDspContact(res?.data?.results?.[0]);
+      }
+    });
+  }, [customerId]);
+
+  useEffect(() => {
+    mounted.current = true;
+    getDSPContactInfo();
+    return () => {
+      mounted.current = false;
+    };
+  }, [getDSPContactInfo]);
 
   useEffect(() => {
     mounted.current = true;
@@ -508,7 +526,7 @@ const InvoiceAdjustPauseModal = ({
             onApply={() => {
               onSendInvoice();
             }}
-            bpName={bpName}
+            dspContact={dspContact}
           />
         ) : (
           <InvoiceAdjustConfirm
@@ -522,7 +540,7 @@ const InvoiceAdjustPauseModal = ({
             onApply={() => {
               onSendInvoice();
             }}
-            bpName={bpName}
+            dspContact={dspContact}
             today={day}
           />
         )}

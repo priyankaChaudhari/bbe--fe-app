@@ -4,7 +4,10 @@ import { arrayOf, func, shape, string } from 'prop-types';
 
 import numberWithCommas from '../../../../../../../hooks/numberWithComas';
 import { Button, ModalBox } from '../../../../../../../common';
-import { LeftArrowIcon } from '../../../../../../../theme/images';
+import {
+  EditOrangeIcon,
+  LeftArrowIcon,
+} from '../../../../../../../theme/images';
 
 const InvoicePauseConfirm = ({
   adjustmentData,
@@ -13,7 +16,7 @@ const InvoicePauseConfirm = ({
   onApply,
   onBackClick,
   selectedMonthYear,
-  bpName,
+  dspContact,
 }) => {
   const { totalNewBudget } = returnTotalAmount();
   const renderResponsiveView = () => {
@@ -148,9 +151,25 @@ const InvoicePauseConfirm = ({
           </h4>
           <div className="body-content">
             <p className="normal-text">
-              The following proposal will be send to <b>{bpName}</b> for
-              approval:
+              This proposal will be send to the following contact:
             </p>
+            <div className="row">
+              <div className="col-10">
+                <div className="normal-text text-bold">
+                  {dspContact?.first_name} {dspContact?.last_name}
+                </div>
+                <div className="normal-text">{dspContact?.email}</div>
+              </div>
+              <div className="col-2">
+                <div
+                  className="edit-details"
+                  role="presentation"
+                  onClick={() => {}}>
+                  <img src={EditOrangeIcon} alt="" />
+                  Edit
+                </div>
+              </div>
+            </div>
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {renderDesktopView()}
             {renderResponsiveView()}
@@ -178,7 +197,7 @@ InvoicePauseConfirm.defaultProps = {
   onBackClick: () => {},
   returnTotalAmount: () => {},
   selectedMonthYear: {},
-  bpName: '',
+  dspContact: null,
 };
 
 InvoicePauseConfirm.propTypes = {
@@ -188,5 +207,5 @@ InvoicePauseConfirm.propTypes = {
   onBackClick: func,
   returnTotalAmount: func,
   selectedMonthYear: shape({}),
-  bpName: string,
+  dspContact: shape({}),
 };
