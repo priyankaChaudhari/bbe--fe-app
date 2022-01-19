@@ -6,7 +6,7 @@ import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
 import { shape, string } from 'prop-types';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Select from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
@@ -42,6 +42,7 @@ import {
   WhiteCard,
   ContractInputSelect,
   DropdownIndicator,
+  ErrorMsgBox,
 } from '../../../../../common';
 
 export default function BillingDetails({
@@ -68,6 +69,7 @@ export default function BillingDetails({
   const [showDSPModal, setShowDSPModal] = useState(false);
   const [DSPData, setDSPData] = useState([]);
   const [showDSPEdit, setShowDSPEdit] = useState(false);
+  const [showDSPErrorTostr, setShowDSPErrorTostr] = useState(false);
 
   const customStyles = {
     content: {
@@ -484,6 +486,22 @@ export default function BillingDetails({
       ).then((res) => {
         if (res?.status === 400) {
           setApiError({ ...apiError, dsp_contact: res.data });
+          if (
+            res.data?.first_name?.[0].includes(
+              'This field may not be blank.',
+            ) ||
+            res.data?.last_name?.[0].includes('This field may not be blank.') ||
+            res.data?.email?.[0].includes('This field may not be blank.') ||
+            res.data?.first_name?.[0].includes('This field is required.') ||
+            res.data?.last_name?.[0].includes('This field is required.') ||
+            res.data?.email?.[0].includes('This field is required.')
+          ) {
+            setShowDSPErrorTostr(true);
+            setTimeout(() => {
+              setShowDSPErrorTostr(false);
+            }, 4000);
+          } else setShowDSPErrorTostr(false);
+
           setIsLoading({ loader: false, type: 'button' });
         }
         if (res?.status === 201 || res?.status === 200) {
@@ -585,11 +603,6 @@ export default function BillingDetails({
   return (
     <>
       {' '}
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        pauseOnFocusLoss={false}
-      />
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="performance-graph"
@@ -831,6 +844,15 @@ export default function BillingDetails({
             {showDSPModal ? (
               <>
                 <h4>Edit DSP Contact</h4>
+                <div className="straight-line horizontal-line mt-3" />
+                {showDSPErrorTostr ? (
+                  <ErrorMsgBox
+                    className="danger mt-3"
+                    style={{ textAlign: 'center' }}>
+                    You need to fill out all required fields before submitting
+                    the DSP Contact.
+                  </ErrorMsgBox>
+                ) : null}
                 {mapContactDetails('dsp')}
               </>
             ) : (
