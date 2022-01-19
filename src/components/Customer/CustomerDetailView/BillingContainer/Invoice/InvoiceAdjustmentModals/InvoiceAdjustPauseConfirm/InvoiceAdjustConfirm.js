@@ -1,6 +1,7 @@
 import React from 'react';
 
 import dayjs from 'dayjs';
+
 import { arrayOf, func, number, shape, string } from 'prop-types';
 
 import {
@@ -22,6 +23,7 @@ const InvoiceAdjustConfirm = ({
   onApply,
   today,
   dspContact,
+  onEditDspContact,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
 
@@ -271,7 +273,7 @@ const InvoiceAdjustConfirm = ({
                   <div
                     className="edit-contact"
                     role="presentation"
-                    onClick={() => {}}>
+                    onClick={onEditDspContact}>
                     <img src={EditOrangeIcon} alt="" />
                     Edit
                   </div>
@@ -371,6 +373,7 @@ InvoiceAdjustConfirm.defaultProps = {
   selectedMonthYear: {},
   onApply: () => {},
   dspContact: {},
+  onEditDspContact: () => {},
 };
 
 InvoiceAdjustConfirm.propTypes = {
@@ -382,4 +385,5 @@ InvoiceAdjustConfirm.propTypes = {
   onApply: func,
   today: number.isRequired,
   dspContact: shape({}),
+  onEditDspContact: func,
 };

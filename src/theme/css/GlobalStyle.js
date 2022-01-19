@@ -669,6 +669,11 @@ a {
      width: 100% !important;
    }
 }
+.col-sm-mt-3 {
+   @media only screen and (max-width: 767px)  {
+     margin-top: 16px;
+   }
+}
 
 .h-100 {
   height: 100% !important;

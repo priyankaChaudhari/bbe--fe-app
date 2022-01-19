@@ -26,6 +26,8 @@ import {
   ContractInputSelect,
   DropdownIndicator,
   PageLoader,
+  InputFormField,
+  ErrorMsgBox,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
 import { PATH_CUSTOMER_DETAILS } from '../../../../../../constants';
@@ -57,6 +59,9 @@ const InvoiceAdjustPauseModal = ({
   onApply,
   bpName,
 }) => {
+  const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
+    true,
+  );
   const history = useHistory();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [loader, setLoader] = useState(false);
@@ -542,9 +547,111 @@ const InvoiceAdjustPauseModal = ({
             }}
             dspContact={dspContact}
             today={day}
+            onEditDspContact={() => {
+              setShowInvoiceAdjustmentModal(true);
+            }}
           />
         )}
       </Modal>
+
+      {showInvoiceAdjustmentModal && (
+        <Modal
+          style={{ ...customStyles }}
+          isOpen={showInvoiceAdjustmentModal}
+          ariaHideApp={false}
+          contentLabel="Edit modal">
+          <img
+            src={CloseIcon}
+            alt="close"
+            className="float-right cursor cross-icon"
+            onClick={() => {
+              setShowInvoiceAdjustmentModal(false);
+            }}
+            role="presentation"
+          />
+          <ModalBox>
+            <div className="modal-body pb-1">
+              <h4>Edit DSP Contact</h4>
+              <ErrorMsgBox className="mt-3  ">
+                You need to fill out all required fields before submitting the
+                DSP Contact.
+              </ErrorMsgBox>
+              <div className="body-content">
+                <div className="row">
+                  <div className="col-12">
+                    <InputFormField className="mt-3">
+                      <label htmlFor="emailAddress">
+                        First Name
+                        <br />
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Enter your Email Address"
+                        />
+                      </label>
+                    </InputFormField>
+                  </div>
+                  <div className="col-12">
+                    <InputFormField className="mt-3">
+                      <label htmlFor="emailAddress">
+                        Last Name
+                        <br />
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Enter your Email Address"
+                        />
+                      </label>
+                    </InputFormField>
+                  </div>
+                  <div className="col-12">
+                    <InputFormField className="mt-3">
+                      <label htmlFor="emailAddress">
+                        Email Address
+                        <br />
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Enter your Email Address"
+                        />
+                      </label>
+                    </InputFormField>
+                  </div>
+                  <div className="col-12">
+                    <InputFormField className="mt-3">
+                      <label htmlFor="emailAddress">
+                        Phone Number
+                        <br />
+                        <input
+                          className="form-control"
+                          type="text"
+                          placeholder="Enter your Email Address"
+                        />
+                      </label>
+                    </InputFormField>
+                  </div>
+                </div>
+              </div>
+              <div className="footer-line" />
+              <div className="modal-footer">
+                <div className="row">
+                  <div className="col-md-6 col-12 col-sm-12  px-0">
+                    {' '}
+                    <Button className="btn-primary w-sm-100 ">
+                      Confirm{' '}
+                    </Button>{' '}
+                  </div>
+                  <div className="col-md-6 col-12 col-sm-12 col-sm-mt-3  text-center">
+                    <Button className=" btn-borderless w-sm-100 ">
+                      Discard Changes
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ModalBox>
+        </Modal>
+      )}
     </>
   );
 };
