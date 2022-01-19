@@ -17,6 +17,8 @@ import {
   getDSPBudgetAdjustData,
   getDSPContact,
   postDSPBudgetAdjustPauseInvoiceData,
+  saveDSPContact,
+  updateDSPContact,
 } from '../../../../../../api';
 import {
   ModalBox,
@@ -26,12 +28,11 @@ import {
   ContractInputSelect,
   DropdownIndicator,
   PageLoader,
-  InputFormField,
-  ErrorMsgBox,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
 import { PATH_CUSTOMER_DETAILS } from '../../../../../../constants';
 import InvoicePauseConfirm from './InvoiceAdjustPauseConfirm/InvoicePauseConfirm';
+import DSPContactModal from './DSPContactModal';
 
 const todaysDate = new Date();
 const day = todaysDate.getDate();
@@ -59,13 +60,16 @@ const InvoiceAdjustPauseModal = ({
   onApply,
   bpName,
 }) => {
-  const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
-    true,
-  );
+  const [showDspContactModal, setShowDspContactModal] = useState(false);
   const history = useHistory();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [dspLoader, setDspLoader] = useState(false);
+  const [visibleBtn, setVisibleBtn] = useState(false);
+  const [isUpdateDSPContact, setISUpdateDSPContact] = useState(false);
+  const [dspError, setDspError] = useState(null);
   const [dspContact, setDspContact] = useState(null);
+  const [formData, setFormData] = useState(null);
   const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
@@ -148,6 +152,7 @@ const InvoiceAdjustPauseModal = ({
     getDSPContact(customerId).then((res) => {
       if (mounted.current) {
         setDspContact(res?.data?.results?.[0]);
+        setFormData(res?.data?.results?.[0]);
       }
     });
   }, [customerId]);
@@ -220,6 +225,40 @@ const InvoiceAdjustPauseModal = ({
       mounted.current = false;
     };
   }, [getAdjustInvoices, invoiceType]);
+
+  const saveBillingData = () => {
+    setDspLoader(true);
+    if (isUpdateDSPContact) {
+      updateDSPContact(dspContact?.id, formData).then((res) => {
+        if (res?.status === 400) {
+          setDspError(res.data);
+          setDspLoader(false);
+        }
+        if (res?.status === 201 || res?.status === 200) {
+          getDSPContactInfo(id);
+          setShowDspContactModal(false);
+          setDspLoader(false);
+        }
+        setDspLoader(false);
+      });
+    } else {
+      saveDSPContact(
+        { ...formData, customer: customerId },
+        formData?.customerId,
+      ).then((res) => {
+        if (res?.status === 400) {
+          setDspError(res.data);
+          setDspLoader(false);
+        }
+        if (res?.status === 201 || res?.status === 200) {
+          getDSPContactInfo(id);
+          setShowDspContactModal(false);
+          setDspLoader(false);
+        }
+        setDspLoader(false);
+      });
+    }
+  };
 
   const renderToastMessage = useCallback(
     (message) => {
@@ -304,7 +343,6 @@ const InvoiceAdjustPauseModal = ({
   ]);
 
   const onSendInvoice = () => {
-    // onApply();
     if (viewComponent === 'adjustInvoice') {
       onSendDSPBudgetAdjustInvoice();
     } else {
@@ -348,6 +386,21 @@ const InvoiceAdjustPauseModal = ({
     }
     return 0;
   }, [invoiceInputs, invoiceType]);
+
+  useEffect(() => {
+    setVisibleBtn(JSON.stringify(formData) !== JSON.stringify(dspContact));
+  }, [dspContact, formData]);
+
+  const onHandleChange = (event, item) => {
+    setFormData({
+      ...formData,
+      [item.key]: event.target.value,
+    });
+    setDspError({
+      ...dspError,
+      [item.key]: '',
+    });
+  };
 
   return (
     <>
@@ -532,6 +585,12 @@ const InvoiceAdjustPauseModal = ({
               onSendInvoice();
             }}
             dspContact={dspContact}
+            onEditDspContact={(type) => {
+              setShowDspContactModal(true);
+              if (type === 'update') {
+                setISUpdateDSPContact(true);
+              }
+            }}
           />
         ) : (
           <InvoiceAdjustConfirm
@@ -547,110 +606,34 @@ const InvoiceAdjustPauseModal = ({
             }}
             dspContact={dspContact}
             today={day}
-            onEditDspContact={() => {
-              setShowInvoiceAdjustmentModal(true);
+            onEditDspContact={(type) => {
+              setShowDspContactModal(true);
+              if (type === 'update') {
+                setISUpdateDSPContact(true);
+              }
             }}
           />
         )}
       </Modal>
 
-      {showInvoiceAdjustmentModal && (
-        <Modal
-          style={{ ...customStyles }}
-          isOpen={showInvoiceAdjustmentModal}
-          ariaHideApp={false}
-          contentLabel="Edit modal">
-          <img
-            src={CloseIcon}
-            alt="close"
-            className="float-right cursor cross-icon"
-            onClick={() => {
-              setShowInvoiceAdjustmentModal(false);
-            }}
-            role="presentation"
-          />
-          <ModalBox>
-            <div className="modal-body pb-1">
-              <h4>Edit DSP Contact</h4>
-              <ErrorMsgBox className="mt-3  ">
-                You need to fill out all required fields before submitting the
-                DSP Contact.
-              </ErrorMsgBox>
-              <div className="body-content">
-                <div className="row">
-                  <div className="col-12">
-                    <InputFormField className="mt-3">
-                      <label htmlFor="emailAddress">
-                        First Name
-                        <br />
-                        <input
-                          className="form-control"
-                          type="text"
-                          placeholder="Enter your Email Address"
-                        />
-                      </label>
-                    </InputFormField>
-                  </div>
-                  <div className="col-12">
-                    <InputFormField className="mt-3">
-                      <label htmlFor="emailAddress">
-                        Last Name
-                        <br />
-                        <input
-                          className="form-control"
-                          type="text"
-                          placeholder="Enter your Email Address"
-                        />
-                      </label>
-                    </InputFormField>
-                  </div>
-                  <div className="col-12">
-                    <InputFormField className="mt-3">
-                      <label htmlFor="emailAddress">
-                        Email Address
-                        <br />
-                        <input
-                          className="form-control"
-                          type="text"
-                          placeholder="Enter your Email Address"
-                        />
-                      </label>
-                    </InputFormField>
-                  </div>
-                  <div className="col-12">
-                    <InputFormField className="mt-3">
-                      <label htmlFor="emailAddress">
-                        Phone Number
-                        <br />
-                        <input
-                          className="form-control"
-                          type="text"
-                          placeholder="Enter your Email Address"
-                        />
-                      </label>
-                    </InputFormField>
-                  </div>
-                </div>
-              </div>
-              <div className="footer-line" />
-              <div className="modal-footer">
-                <div className="row">
-                  <div className="col-md-6 col-12 col-sm-12  px-0">
-                    {' '}
-                    <Button className="btn-primary w-sm-100 ">
-                      Confirm{' '}
-                    </Button>{' '}
-                  </div>
-                  <div className="col-md-6 col-12 col-sm-12 col-sm-mt-3  text-center">
-                    <Button className=" btn-borderless w-sm-100 ">
-                      Discard Changes
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </ModalBox>
-        </Modal>
+      {showDspContactModal && (
+        <DSPContactModal
+          showDspContactModal={showDspContactModal}
+          onClose={() => {
+            setShowDspContactModal(false);
+            setDspError({});
+            if (JSON.stringify(formData) !== JSON.stringify(dspContact)) {
+              setVisibleBtn(true);
+              getDSPContactInfo(id);
+            }
+          }}
+          dspContact={dspContact}
+          dspError={dspError}
+          onConfirm={saveBillingData}
+          onHandleChange={onHandleChange}
+          visibleBtn={visibleBtn}
+          loader={dspLoader}
+        />
       )}
     </>
   );
