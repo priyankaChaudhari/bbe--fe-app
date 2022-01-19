@@ -8,6 +8,7 @@ import {
   EditOrangeIcon,
   LeftArrowIcon,
 } from '../../../../../../../theme/images';
+import Theme from '../../../../../../../theme/Theme';
 
 const InvoicePauseConfirm = ({
   adjustmentData,
@@ -17,6 +18,7 @@ const InvoicePauseConfirm = ({
   onBackClick,
   selectedMonthYear,
   dspContact,
+  onEditDspContact,
 }) => {
   const { totalNewBudget } = returnTotalAmount();
   const renderResponsiveView = () => {
@@ -150,28 +152,43 @@ const InvoicePauseConfirm = ({
             Confirm Pause
           </h4>
           <div className="body-content">
-            <p className="normal-text">
-              This proposal will be send to the following contact:
-            </p>
-            <fieldset className="less-border mb-3">
-              <div className="row">
-                <div className="col-9 pl-4">
-                  <div className="normal-text text-bold">
-                    {dspContact?.first_name} {dspContact?.last_name}
-                  </div>
-                  <div className="normal-text">{dspContact?.email}</div>
-                </div>
-                <div className="col-3">
-                  <div
-                    className="edit-contact"
-                    role="presentation"
-                    onClick={() => {}}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
-                  </div>
-                </div>
+            {dspContact &&
+            Object.keys(dspContact).length === 0 &&
+            Object.getPrototypeOf(dspContact) === Object.prototype ? (
+              <div
+                style={{ color: Theme.orange }}
+                className=" mt-2 mb-2 normal-text cursor"
+                onClick={() => onEditDspContact('add')}
+                aria-hidden="true">
+                Please Click here to add DSP Contact
               </div>
-            </fieldset>
+            ) : (
+              <>
+                {' '}
+                <p className="normal-text">
+                  This proposal will be send to the following contact:
+                </p>
+                <fieldset className="less-border mb-3">
+                  <div className="row">
+                    <div className="col-9 pl-4">
+                      <div className="normal-text text-bold">
+                        {dspContact?.first_name} {dspContact?.last_name}
+                      </div>
+                      <div className="normal-text">{dspContact?.email}</div>
+                    </div>
+                    <div className="col-3">
+                      <div
+                        className="edit-contact"
+                        role="presentation"
+                        onClick={() => onEditDspContact('update')}>
+                        <img src={EditOrangeIcon} alt="" />
+                        Edit
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>{' '}
+              </>
+            )}
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {renderDesktopView()}
             {renderResponsiveView()}
@@ -198,6 +215,7 @@ InvoicePauseConfirm.defaultProps = {
   onApply: () => {},
   onBackClick: () => {},
   returnTotalAmount: () => {},
+  onEditDspContact: () => {},
   selectedMonthYear: {},
   dspContact: null,
 };
@@ -208,6 +226,7 @@ InvoicePauseConfirm.propTypes = {
   onApply: func,
   onBackClick: func,
   returnTotalAmount: func,
+  onEditDspContact: func,
   selectedMonthYear: shape({}),
   dspContact: shape({}),
 };
