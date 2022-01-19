@@ -156,12 +156,6 @@ PastAgreement.propTypes = {
   showPastAgreements: bool.isRequired,
   setShowPastAgreements: func.isRequired,
   agreements: arrayOf(shape({})).isRequired,
-  // agreements: arrayOf(
-  //   shape({
-  //     map: func,
-  //     length: number,
-  //   }),
-  // ).isRequired,
   history: shape({
     push: func,
     location: shape({
