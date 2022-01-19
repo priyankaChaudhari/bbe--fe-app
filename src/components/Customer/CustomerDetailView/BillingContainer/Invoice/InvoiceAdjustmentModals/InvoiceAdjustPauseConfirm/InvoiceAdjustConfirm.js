@@ -70,23 +70,23 @@ const InvoiceAdjustConfirm = ({
             return (
               <>
                 <div className="row">
-                  <div className="col-12 text-left">
+                  <div className="col-12  text-left">
                     <div className="label">Marketplace</div>
                     <div className={textClass}>{item.marketplace}</div>
                   </div>
 
-                  <div className="col-4 text-left">
+                  <div className="col-4 pr-2 text-left">
                     <div className="label">From</div>
                     <div className={textClass}>
                       ${numberWithCommas(item.new_budget)}
                     </div>
                   </div>
-                  <div className="col-2 text-left">
+                  <div className="col-2 px-1 text-left">
                     <div className="mt-3">
                       <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
                     </div>
                   </div>
-                  <div className="col-3 text-left">
+                  <div className="col-3 px-1 text-left">
                     <div className="label">To</div>
                     <div className={textClass}>
                       $
@@ -95,7 +95,7 @@ const InvoiceAdjustConfirm = ({
                         : numberWithCommas(item.new_budget)}
                     </div>
                   </div>
-                  <div className="col-3 text-left">
+                  <div className="col-3 pl-1 text-left">
                     <div className="label">Change</div>
                     <div className={textClass}>
                       {item.change
@@ -122,24 +122,24 @@ const InvoiceAdjustConfirm = ({
             <div className="normal-text text-bold">Total invoice</div>
           </div>
 
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="label">From</div>
             <div className="gray-normal-text">
               ${numberWithCommas(totalCurrentBudget)}
             </div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="mt-3">
               <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
             </div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 px-1 text-left">
             <div className="label">To</div>
             <div className="gray-normal-text">
               ${numberWithCommas(totalNewBudget)}
             </div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="label">Change</div>
             <div className="gray-normal-text">{totalChangeAmount}</div>
           </div>
@@ -152,16 +152,16 @@ const InvoiceAdjustConfirm = ({
     return (
       <div className="d-md-block d-none">
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 px-1 text-left">
             <div className="label">From</div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="label">To</div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="label">Change</div>
           </div>
         </div>
@@ -176,20 +176,20 @@ const InvoiceAdjustConfirm = ({
                 : 'gray-normal-text';
             return (
               <div key={item.id} className="row mt-1">
-                <div className="col-4 text-left">
+                <div className="col-4 pr-2 text-left">
                   <div className={textClass}>{item.marketplace}</div>
                 </div>
-                <div className="col-2 text-left">
+                <div className="col-2 px-1 text-left">
                   <div className={textClass}>
                     ${numberWithCommas(item.new_budget)}
                   </div>
                 </div>
-                <div className="col-1 text-left">
+                <div className="col-1 px-1 text-left">
                   <div className={textClass}>
                     <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
                   </div>
                 </div>
-                <div className="col-2 text-left">
+                <div className="col-2 px-1 text-left">
                   <div className={textClass}>
                     $
                     {item.newAmount
@@ -197,7 +197,7 @@ const InvoiceAdjustConfirm = ({
                       : numberWithCommas(item.new_budget)}
                   </div>
                 </div>
-                <div className="col-3 text-left">
+                <div className="col-3 pl-1 text-left">
                   <div className={textClass}>
                     {item.change
                       ? item.change === 0
@@ -214,25 +214,25 @@ const InvoiceAdjustConfirm = ({
 
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="normal-text text-bold">Total invoice</div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="normal-text text-bold">
               ${numberWithCommas(totalCurrentBudget)}
             </div>
           </div>
-          <div className="col-1 text-left">
+          <div className="col-1 px-1 text-left">
             <div className="normal-text">
               <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
             </div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="normal-text text-bold">
               ${numberWithCommas(totalNewBudget)}
             </div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="normal-text text-bold"> {totalChangeAmount}</div>
           </div>
         </div>

@@ -262,13 +262,13 @@ export default function DSPBudgetApprovalContainer() {
     if (invoiceType === 'standard' || invoiceType === 'permanent additional') {
       return (
         <>
-          <div className="col-5 text-left">
+          <div className="col-5 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="label">From</div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="label">To</div>
           </div>
         </>
@@ -277,13 +277,13 @@ export default function DSPBudgetApprovalContainer() {
     if (invoiceType === 'one time') {
       return (
         <>
-          <div className="col-3 text-left">
+          <div className="col-3 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="label">Existing budget</div>
           </div>
-          <div className="col-5 text-left">
+          <div className="col-5 pl-1 text-left">
             <div className="label">Additional Amount</div>
           </div>
         </>
@@ -292,13 +292,13 @@ export default function DSPBudgetApprovalContainer() {
     // for pause invoice.
     return (
       <>
-        <div className="col-4 text-left">
+        <div className="col-4 pr-2 text-left">
           <div className="label">Marketplace</div>
         </div>
-        <div className="col-4 text-left">
+        <div className="col-4 px-1 text-left">
           <div className="label">Pause Invoice</div>
         </div>
-        <div className="col-4 text-left">
+        <div className="col-4 pl-1 text-left">
           <div className="label">Invoice Amount</div>
         </div>
       </>
@@ -310,12 +310,12 @@ export default function DSPBudgetApprovalContainer() {
       <>
         {marketplaceData?.adjustments?.map((item, index) => (
           <div className={index ? 'row mt-1' : 'row'} key={item.name}>
-            <div className="col-5 text-left">
+            <div className="col-5 pr-2 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
                 {item.marketplace}
               </div>
             </div>
-            <div className="col-2 text-left">
+            <div className="col-2 px-1 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
                 {invoiceType === 'pause'
                   ? item?.is_sent_for_pause
@@ -324,7 +324,7 @@ export default function DSPBudgetApprovalContainer() {
                   : generateAmount(item?.old_budget, 'from', '$')}
               </div>
             </div>
-            <div className="col-2 text-center">
+            <div className="col-2 px-1 text-center">
               {invoiceType === 'standard' ||
               invoiceType === 'permanent additional' ? (
                 !index ? (
@@ -338,7 +338,7 @@ export default function DSPBudgetApprovalContainer() {
                 )
               ) : null}
             </div>
-            <div className="col-3 text-left">
+            <div className="col-3 pl-1 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
                 {invoiceType === 'pause'
                   ? item?.is_sent_for_pause
@@ -358,12 +358,12 @@ export default function DSPBudgetApprovalContainer() {
       <>
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         <div className="row">
-          <div className="col-5 text-left">
+          <div className="col-5 pr-2 text-left">
             <div className="normal-text text-bold">
               {TotalInvoiceHeader[invoiceType]}
             </div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             {invoiceType === 'standard' ||
             invoiceType === 'permanent additional' ? (
               <div className="normal-text text-bold">
@@ -372,7 +372,7 @@ export default function DSPBudgetApprovalContainer() {
             ) : null}
           </div>
 
-          <div className="col-2 text-center">
+          <div className="col-2 px-1 text-center">
             {invoiceType === 'standard' ||
             invoiceType === 'permanent additional' ? (
               <div className="normal-text">
@@ -381,7 +381,7 @@ export default function DSPBudgetApprovalContainer() {
             ) : null}
           </div>
 
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="normal-text text-bold">
               {generateAmount(total?.new_budget, '', '$')}
             </div>
