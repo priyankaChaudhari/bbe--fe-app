@@ -2156,7 +2156,11 @@ export default function CustomerList() {
                         <Table className="customer-list">
                           <tbody>
                             {data && data.length === 0 ? (
-                              <NoRecordFound type="customer-list" />
+                              <tr>
+                                <td>
+                                  <NoRecordFound type="customer-list" />
+                                </td>
+                              </tr>
                             ) : (
                               data &&
                               data.map((item) => renderCustomerDetails(item))
