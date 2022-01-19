@@ -18,6 +18,7 @@ import {
   getDSPPerformance,
   getDspPacingData,
   getDSPPacingGraphData,
+  getBPRoles,
 } from '../../../../api';
 
 import 'react-date-range/dist/styles.css'; // main style file
@@ -30,7 +31,6 @@ export default function AdPerformance({
   marketplaceChoices,
   id,
   accountType,
-  memberData,
   getActivityLogInfo,
 }) {
   const mounted = useRef(false);
@@ -124,19 +124,23 @@ export default function AdPerformance({
   useEffect(() => {
     if (userInfo.role === 'Ad Manager Admin') {
       setIsAllowToSplitBalance(true);
-    } else if (
-      userInfo.role === 'Hybrid Ad Manager' ||
-      userInfo.role === 'DSP Ad Manager' ||
-      userInfo.role === 'BGS'
-    ) {
-      for (const user of memberData) {
-        if (user.user === userInfo.id) {
-          setIsAllowToSplitBalance(true);
-          break;
+    } else {
+      getBPRoles(id, userInfo?.id).then((response) => {
+        if (response?.status === 200) {
+          if (response?.data?.results?.length) {
+            const role = response?.data?.results?.[0]?.user_profile?.role;
+            if (
+              role === 'BGS' ||
+              role === 'DSP Ad Manager' ||
+              role === 'Hybrid Ad Manager'
+            )
+              setIsAllowToSplitBalance(true);
+            else setIsAllowToSplitBalance(false);
+          }
         }
-      }
+      });
     }
-  }, [isAllowToSplitBalance, memberData, userInfo]);
+  }, [id, userInfo]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];

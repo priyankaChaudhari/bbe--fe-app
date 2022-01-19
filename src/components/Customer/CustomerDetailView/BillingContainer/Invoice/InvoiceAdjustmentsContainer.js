@@ -1,23 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { arrayOf, func, shape, string } from 'prop-types';
+import { func, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import InvoiceAdjustmentList from './InvoiceAdjustmentList';
+import { getBPRoles, getDSPContact } from '../../../../../api';
+
 import { WhiteCard, Button } from '../../../../../common';
 import {
   InvoiceAdjustPauseModal,
   InvoicePastAdjustmentModal,
 } from './InvoiceAdjustmentModals';
 
-const InvoiceAdjustmentsContainer = ({
-  id,
-  addThousandComma,
-  memberData,
-  bpName,
-}) => {
+const InvoiceAdjustmentsContainer = ({ id, addThousandComma, bpName }) => {
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [showInvoiceAdjustmentModal, setShowInvoiceAdjustmentModal] = useState(
@@ -31,21 +28,33 @@ const InvoiceAdjustmentsContainer = ({
   );
   const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    if (
-      userInfo.role === 'Ad Manager Admin' ||
-      userInfo.role === 'BGS Manager' ||
-      userInfo.role === 'DSP Ad Manager' ||
-      userInfo.role === 'BGS'
-    ) {
-      for (const user of memberData) {
-        if (user.user === userInfo.id) {
-          setIsAllowToCreateAdjustment(true);
-          break;
+  const getDSPContactInfo = useCallback(() => {
+    getDSPContact(id).then((res) => {
+      if (res?.status === 200) {
+        if (res?.data?.is_dsp_contract) {
+          getBPRoles(id, userInfo?.id).then((response) => {
+            if (response?.status === 200) {
+              if (response?.data?.results?.length) {
+                const role = response?.data?.results?.[0]?.user_profile?.role;
+                if (
+                  role === 'BGS' ||
+                  role === 'BGS Manager' ||
+                  role === 'DSP Ad Manager' ||
+                  role === 'Ad Manager Admin'
+                )
+                  setIsAllowToCreateAdjustment(true);
+                else setIsAllowToCreateAdjustment(false);
+              }
+            }
+          });
         }
-      }
-    }
-  }, [setIsAllowToCreateAdjustment, memberData, userInfo]);
+      } else setIsAllowToCreateAdjustment(false);
+    });
+  }, [id, userInfo]);
+
+  useEffect(() => {
+    getDSPContactInfo();
+  }, [getDSPContactInfo]);
 
   return (
     <Wrapper>
@@ -167,14 +176,13 @@ export default InvoiceAdjustmentsContainer;
 
 InvoiceAdjustmentsContainer.defaultProps = {
   id: '',
-  memberData: [],
   addThousandComma: () => {},
   bpName: '',
 };
 
 InvoiceAdjustmentsContainer.propTypes = {
   id: string,
-  memberData: arrayOf(shape({})),
+
   addThousandComma: func,
   bpName: string,
 };

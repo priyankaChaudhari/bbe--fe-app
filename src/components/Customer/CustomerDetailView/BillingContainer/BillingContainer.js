@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { arrayOf, shape, string } from 'prop-types';
+import { shape, string } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import Invoice from './Invoice/Invoice';
@@ -18,7 +18,6 @@ const BillingContainer = ({
   onBoardingId,
   customerStatus,
   redirectType,
-  memberData,
   bpName,
 }) => {
   const history = useHistory();
@@ -73,7 +72,6 @@ const BillingContainer = ({
           onLoading={onLoading}
           invoiceType={viewComponent}
           id={id}
-          memberData={memberData}
           bpName={bpName}
         />
       ) : (
@@ -94,7 +92,6 @@ BillingContainer.defaultProps = {
   onBoardingId: null,
   customerStatus: {},
   redirectType: 'retainer',
-  memberData: [],
   bpName: '',
 };
 
@@ -106,6 +103,5 @@ BillingContainer.propTypes = {
   onBoardingId: string,
   customerStatus: shape({}),
   redirectType: string,
-  memberData: arrayOf(shape({})),
   bpName: string,
 };
