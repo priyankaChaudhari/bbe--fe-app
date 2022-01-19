@@ -60,13 +60,13 @@ const InvoiceAdjust = ({
     <GrayTable>
       <div className="modal-body pb-3">
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="label">From</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 pl-1 text-left">
             <div className="label">
               {invoiceType === 'one time' ? 'Additional amount' : 'To'}
             </div>
@@ -80,15 +80,15 @@ const InvoiceAdjust = ({
                 <>
                   <div
                     key={input.id ? input.id : Math.random()}
-                    className="col-4 text-left mt-3">
+                    className="col-4 pr-2 text-left mt-3">
                     <div className="normal-text ">{input?.marketplace}</div>
                   </div>
-                  <div className="col-4 text-left mt-3">
+                  <div className="col-4 px-1 text-left mt-3">
                     <div className="normal-text ">
                       ${numberWithCommas(input.new_budget)}
                     </div>
                   </div>
-                  <div className="col-4 text-left">
+                  <div className="col-4 pl-1 text-left">
                     <InputFormField id={index + input?.marketplace}>
                       <div className="input-container  ">
                         <span className="input-icon ">$</span>
@@ -117,17 +117,17 @@ const InvoiceAdjust = ({
             <NoData className="col-12">No Invoice Adjust Data Found</NoData>
           ) : null}
           <div className=" straight-line horizontal-line pt-2 " />
-          <div className="col-4 text-left mt-3">
+          <div className="col-4 pr-2 text-left mt-3">
             <div className="normal-text text-bold ">Total</div>
           </div>
-          <div className="col-4 text-left mt-3">
+          <div className="col-4 px-1 text-left mt-3">
             {invoiceType !== 'one time' ? (
               <div className="normal-text text-bold">
                 ${totalCurrentBudget ? numberWithCommas(totalCurrentBudget) : 0}
               </div>
             ) : null}
           </div>
-          <div className="col-4 text-left mt-3">
+          <div className="col-4 pl-1 text-left mt-3">
             <div className="normal-text text-bold">
               ${totalNewBudget ? numberWithCommas(totalNewBudget) : 0}
             </div>

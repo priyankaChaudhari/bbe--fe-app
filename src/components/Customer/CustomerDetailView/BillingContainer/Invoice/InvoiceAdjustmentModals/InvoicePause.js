@@ -32,13 +32,13 @@ const InvoicePause = ({
     <GrayTable>
       <div className="modal-body pb-3">
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="label">Invoice Amount</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 pl-1 text-left">
             <div className="label">Pause</div>
           </div>
 
@@ -48,10 +48,10 @@ const InvoicePause = ({
             invoiceChoices.map((item, index) => {
               return (
                 <>
-                  <div className="col-4 text-left mt-2">
+                  <div className="col-4 pr-2 text-left mt-2">
                     <div className="normal-text ">{item.marketplace}</div>
                   </div>
-                  <div className="col-4 text-left mt-3">
+                  <div className="col-4 px-1 text-left mt-3">
                     <div
                       style={{
                         textDecoration: item.is_sent_for_pause
@@ -62,7 +62,7 @@ const InvoicePause = ({
                       ${item.new_budget}
                     </div>
                   </div>
-                  <div className="col-4 text-left">
+                  <div className="col-4 pl-1 text-left">
                     <ul className="invoice-adj-radio mt-2">
                       <li>
                         <ModalRadioCheck className="mb-3">
