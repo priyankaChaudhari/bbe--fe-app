@@ -263,7 +263,7 @@ const InvoiceAdjustConfirm = ({
             Object.getPrototypeOf(dspContact) === Object.prototype ? (
               <div
                 style={{ color: Theme.orange }}
-                className="mt-2 mb-2 normal-text"
+                className="mt-2 mb-2 normal-text cursor"
                 onClick={() => onEditDspContact('add')}
                 aria-hidden="true">
                 Please Click here to add DSP Contact
