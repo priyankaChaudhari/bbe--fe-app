@@ -460,10 +460,7 @@ export default function AgreementDetails({
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {(agreement?.contract_status?.value !== 'active' &&
-                    agreement?.contract_status?.value !== 'renewed' &&
-                    multipleAgreement?.length === 1) ||
-                  userRole === 'Customer' ? (
+                  {userRole === 'Customer' ? (
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
