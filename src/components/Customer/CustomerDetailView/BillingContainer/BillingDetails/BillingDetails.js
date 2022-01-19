@@ -118,7 +118,7 @@ export default function BillingDetails({
       if (res?.status === 200) {
         if (res?.data?.is_dsp_contract) {
           getBPRoles(id, userInfo?.id).then((response) => {
-            if (res?.status === 200) {
+            if (response?.status === 200) {
               const role = response?.data?.results?.[0]?.user_profile?.role;
               if (response?.data?.results?.length === 0) setShowDSPEdit(false);
               if (

@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
-import { arrayOf, bool, shape, string } from 'prop-types';
+import { bool, string } from 'prop-types';
 
 import InvoiceAdjustmentsContainer from './InvoiceAdjustmentsContainer';
 import Theme from '../../../../../theme/Theme';
@@ -22,7 +22,7 @@ import {
   TableMobileView,
 } from '../../../../../common';
 
-const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
+const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
   const isDSPService = invoiceType === 'dsp service';
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [selectedComponent, setSelectedComponent] = useState('past');
@@ -534,7 +534,6 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
         <InvoiceAdjustmentsContainer
           id={id}
           addThousandComma={addThousandComma}
-          memberData={memberData}
           bpName={bpName}
         />
       ) : null}
@@ -547,7 +546,6 @@ export default InvoiceList;
 InvoiceList.defaultProps = {
   invoiceType: 'rev share',
   id: '',
-  memberData: [],
   bpName: '',
 };
 
@@ -555,7 +553,6 @@ InvoiceList.propTypes = {
   loader: bool.isRequired,
   invoiceType: string,
   id: string,
-  memberData: arrayOf(shape({})),
   bpName: string,
 };
 
