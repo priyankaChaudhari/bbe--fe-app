@@ -5,7 +5,6 @@ import {
   API_AMAZON_SELLER_ACCOUNT,
   API_AMAZON_VENDOR_ACCOUNT,
   API_BILLING_INFO,
-  API_CUSTOMER_CONTRACT,
   API_CUSTOMER_MEMBER,
   API_DSP_CONTACT,
   API_EDIT_EMAIL,
@@ -341,20 +340,6 @@ export async function getBPRoles(customer, user) {
 
   const result = await axiosInstance
     .get(API_CUSTOMER_MEMBER, { params })
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return result;
-}
-
-export async function getDSPAgreements(customer) {
-  const params = { customer, contract_type: 'dsp only' };
-
-  const result = await axiosInstance
-    .get(API_CUSTOMER_CONTRACT, { params })
     .then((response) => {
       return response;
     })

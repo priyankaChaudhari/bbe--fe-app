@@ -25,7 +25,6 @@ import {
 import {
   getBillingDetails,
   getBPRoles,
-  getDSPAgreements,
   getDSPContact,
   getPaymentTermsDetails,
   getPaymentTermsOptions,
@@ -116,19 +115,12 @@ export default function BillingDetails({
 
   const getDSPContactInfo = useCallback(() => {
     getDSPContact(id).then((res) => {
-      setDSPData(res?.data?.results);
-      setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
-    });
-  }, [id]);
-
-  useEffect(() => {
-    getDSPAgreements(id).then((response) => {
-      if (response?.status === 200) {
-        if (response?.data?.results?.length) {
-          getBPRoles(id, userInfo?.id).then((res) => {
+      if (res?.status === 200) {
+        if (res?.data?.is_dsp_contract) {
+          getBPRoles(id, userInfo?.id).then((response) => {
             if (res?.status === 200) {
-              const role = res?.data?.results?.[0]?.user_profile?.role;
-              if (res?.data?.results?.length === 0) setShowDSPEdit(false);
+              const role = response?.data?.results?.[0]?.user_profile?.role;
+              if (response?.data?.results?.length === 0) setShowDSPEdit(false);
               if (
                 role === 'BGS' ||
                 role === 'BGS Manager' ||
@@ -140,8 +132,13 @@ export default function BillingDetails({
             } else setShowDSPEdit(false);
           });
         } else setShowDSPEdit(false);
+        setDSPData(res?.data?.results);
+        setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
       }
     });
+  }, [id]);
+
+  useEffect(() => {
     billingDetails();
     getPaymentTerms();
     getDSPContactInfo();
