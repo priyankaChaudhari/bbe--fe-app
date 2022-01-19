@@ -51,7 +51,7 @@ export const API_BGS_COMMISSION_DETAILS = `${API_BGS_COMMISSION}details/`;
 export const API_DSP_INVOICES = '/invoice/';
 export const API_DSP_BILLING = '/bill/';
 export const API_DSP_BUDGET_ADJUSTMENT = '/dsp-budget-adjustment/';
-export const API_DSP_BUDGET_VERIFY_AUTH = `${API_DSP_BUDGET_ADJUSTMENT}verify-dsp-token`;
+export const API_DSP_BUDGET_ADJUSTMENT_UPCOMIN_INVOICES = `${API_DSP_BUDGET_ADJUSTMENT}upcoming-invoices/`;
 export const API_DSP_EMPTY_BUDGET_ADJUSTMENT = `${API_DSP_BUDGET_ADJUSTMENT}empty-adjustment/`;
 export const API_DSP_CONTACT = '/dsp-contact/';
 

@@ -65,9 +65,9 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
   );
 
   const getDSPUpcomingInvoicesData = useCallback(
-    (type, currentPage) => {
+    (currentPage) => {
       setPastInvoiceLoader(true);
-      getUpcomingInvoiceData(type, id, currentPage).then((res) => {
+      getUpcomingInvoiceData(id, currentPage).then((res) => {
         if (mounted.current) {
           if (res?.status === 500) {
             setPastInvoiceLoader(false);
@@ -101,7 +101,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
     }
     if (selectedComponent === 'upcoming') {
       setPageNumber(currentPage);
-      getDSPUpcomingInvoicesData(invoiceType, currentPage);
+      getDSPUpcomingInvoicesData(currentPage);
     }
     window.scrollTo(0, 0);
   };
@@ -147,7 +147,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
                 key="upcomingInvoices"
                 className={selectedComponent === 'upcoming' ? 'active' : ''}
                 onClick={() => {
-                  getDSPUpcomingInvoicesData(invoiceType);
+                  getDSPUpcomingInvoicesData();
                   setSelectedComponent('upcoming');
                 }}
                 role="presentation">
