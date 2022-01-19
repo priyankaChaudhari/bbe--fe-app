@@ -633,6 +633,10 @@ const InvoiceAdjustPauseModal = ({
           onHandleChange={onHandleChange}
           visibleBtn={visibleBtn}
           loader={dspLoader}
+          onDiscard={() => {
+            setShowDspContactModal(false);
+            setDspError({});
+          }}
         />
       )}
     </>

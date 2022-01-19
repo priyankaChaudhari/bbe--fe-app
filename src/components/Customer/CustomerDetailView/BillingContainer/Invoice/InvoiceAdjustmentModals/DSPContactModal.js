@@ -39,6 +39,7 @@ function DSPContactModal({
   dspError,
   visibleBtn,
   loader,
+  onDiscard,
 }) {
   return (
     <Modal
@@ -109,7 +110,9 @@ function DSPContactModal({
                 </Button>
               </div>
               <div className="col-md-6 col-12 col-sm-12 col-sm-mt-3  text-center">
-                <Button className=" btn-borderless w-sm-100 ">
+                <Button
+                  className=" btn-borderless w-sm-100 "
+                  onClick={onDiscard}>
                   Discard Changes
                 </Button>
               </div>
@@ -130,6 +133,7 @@ DSPContactModal.defaultProps = {
   onClose: () => {},
   onHandleChange: () => {},
   onConfirm: () => {},
+  onDiscard: () => {},
   dspError: {},
   loader: false,
 };
@@ -143,4 +147,5 @@ DSPContactModal.propTypes = {
   onClose: func,
   onHandleChange: func,
   onConfirm: func,
+  onDiscard: func,
 };
