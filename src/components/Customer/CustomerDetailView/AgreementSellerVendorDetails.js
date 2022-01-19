@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 
 import NumberFormat from 'react-number-format';
-import { func, shape } from 'prop-types';
+import { func, oneOfType, shape, array, object } from 'prop-types';
 
 import {
   monthlyThresholdOptions,
@@ -176,5 +176,5 @@ AgreementSellerVendorDetails.propTypes = {
   agreement: shape({}).isRequired,
   setAccountType: func,
   accountType: shape({}),
-  multipleAgreement: shape({}).isRequired,
+  multipleAgreement: oneOfType([array, object]).isRequired,
 };
