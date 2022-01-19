@@ -7,7 +7,7 @@ const ErrorMsgBox = styled.div`
   padding: 12px 13px 11px 13px;
   border-radius: 4px;
   font-weight: 500;
-  text-align: left;
+  text-align: center;
   font-size: ${Theme.extraSmall};
   font-family: ${Theme.baseFontFamily};
 

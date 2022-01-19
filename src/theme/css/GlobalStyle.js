@@ -669,6 +669,11 @@ a {
      width: 100% !important;
    }
 }
+.col-sm-mt-3 {
+   @media only screen and (max-width: 767px)  {
+     margin-top: 16px;
+   }
+}
 
 .h-100 {
   height: 100% !important;
@@ -786,7 +791,11 @@ fieldset {
     border-radius: 8px;
   }
   &.extra-radius {
-      border-radius: 15px;
+    border-radius: 15px;
+  }
+  &.less-border {
+    border-radius: 4px;
+    border: 1px solid ${Theme.gray11}; 
   }
 }
 

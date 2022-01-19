@@ -60,3 +60,36 @@ export const TotalInvoiceHeader = {
   'one time': 'One-time total',
   pause: 'Total invoice',
 };
+
+export const dspContactInputFields = [
+  {
+    key: 'first_name',
+    label: 'First name',
+    type: 'text',
+    property: 'col-6 pr-2',
+    section: 'contact',
+  },
+  {
+    key: 'last_name',
+    label: 'Last name',
+    type: 'text',
+    property: 'col-6 pl-2',
+    section: 'contact',
+  },
+
+  {
+    key: 'email',
+    label: 'Email',
+    type: 'email',
+    property: 'col-6 pr-2',
+    section: 'contact',
+  },
+  {
+    key: 'phone_number',
+    label: 'Phone number',
+    type: 'number',
+    property: 'col-6 pl-2',
+    section: 'contact',
+    removeForDSP: true,
+  },
+];

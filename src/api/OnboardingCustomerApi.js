@@ -335,6 +335,18 @@ export async function getDSPContact(customer) {
   return result;
 }
 
+export async function updateDSPContact(id, dspContact) {
+  const result = await axiosInstance
+    .patch(`${API_DSP_CONTACT + id}`, dspContact)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
 export async function getBPRoles(customer, user) {
   const params = { customer, user };
 

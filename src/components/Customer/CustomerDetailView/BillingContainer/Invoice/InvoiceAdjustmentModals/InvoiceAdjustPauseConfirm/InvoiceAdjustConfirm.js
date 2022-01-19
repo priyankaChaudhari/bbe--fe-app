@@ -6,11 +6,13 @@ import { arrayOf, func, number, shape, string } from 'prop-types';
 import {
   ArrowRightBlackIcon,
   ArrowRightIcon,
+  EditOrangeIcon,
   LeftArrowIcon,
 } from '../../../../../../../theme/images';
 import { ModalBox, Button, GreyCard } from '../../../../../../../common';
 import numberWithCommas from '../../../../../../../hooks/numberWithComas';
 import OneTimeInvoiceAdjustConfirm from './OneTimeInvoiceAdjustConfirm';
+import Theme from '../../../../../../../theme/Theme';
 
 const InvoiceAdjustConfirm = ({
   onBackClick,
@@ -19,8 +21,9 @@ const InvoiceAdjustConfirm = ({
   selectedMonthYear,
   invoiceType,
   onApply,
-  bpName,
   today,
+  dspContact,
+  onEditDspContact,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
 
@@ -255,10 +258,44 @@ const InvoiceAdjustConfirm = ({
             Invoice Adjustment
           </h4>
           <div className="body-content">
-            <p className="normal-text">
-              The following proposal will be send to <b>{bpName}</b> for
-              approval:
-            </p>
+            {dspContact &&
+            Object.keys(dspContact).length === 0 &&
+            Object.getPrototypeOf(dspContact) === Object.prototype ? (
+              <div
+                style={{ color: Theme.orange }}
+                className="mt-2 mb-2 normal-text"
+                onClick={() => onEditDspContact('add')}
+                aria-hidden="true">
+                Please Click here to add DSP Contact
+              </div>
+            ) : (
+              <>
+                {' '}
+                <p className="normal-text">
+                  This proposal will be send to the following contact:
+                </p>
+                <fieldset className="less-border mb-3">
+                  <div className="row">
+                    <div className="col-9 pl-4">
+                      <div className="normal-text text-bold">
+                        {dspContact?.first_name} {dspContact?.last_name}
+                      </div>
+                      <div className="normal-text">{dspContact?.email}</div>
+                    </div>
+                    <div className="col-3">
+                      <div
+                        className="edit-contact"
+                        role="presentation"
+                        onClick={() => onEditDspContact('update')}>
+                        <img src={EditOrangeIcon} alt="" />
+                        Edit
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>{' '}
+              </>
+            )}
+
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {invoiceType !== 'one time' ? (
               <>
@@ -350,7 +387,8 @@ InvoiceAdjustConfirm.defaultProps = {
   returnTotalAmount: () => {},
   selectedMonthYear: {},
   onApply: () => {},
-  bpName: '',
+  dspContact: {},
+  onEditDspContact: () => {},
 };
 
 InvoiceAdjustConfirm.propTypes = {
@@ -360,6 +398,7 @@ InvoiceAdjustConfirm.propTypes = {
   selectedMonthYear: shape({}),
   invoiceType: string.isRequired,
   onApply: func,
-  bpName: string,
   today: number.isRequired,
+  dspContact: shape({}),
+  onEditDspContact: func,
 };
