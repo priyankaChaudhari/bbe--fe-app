@@ -1,6 +1,10 @@
 import dayjs from 'dayjs';
 import axiosInstance from '../axios';
-import { API_DSP_BUDGET_ADJUSTMENT, API_DSP_INVOICES } from '../constants';
+import {
+  API_DSP_BUDGET_ADJUSTMENT,
+  API_DSP_INVOICES,
+  API_DSP_BUDGET_ADJUSTMENT_UPCOMIN_INVOICES,
+} from '../constants';
 
 export async function getInvoiceData(invoiceType, id, pageNumber) {
   const params = {
@@ -19,15 +23,13 @@ export async function getInvoiceData(invoiceType, id, pageNumber) {
   return result;
 }
 
-export async function getUpcomingInvoiceData(type, id, pageNumber) {
+export async function getUpcomingInvoiceData(id, pageNumber) {
   const params = {
     customer: id,
-    adjustment_data: 'upcoming',
-    invoice_type: type,
     page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
   };
   const result = await axiosInstance
-    .get(API_DSP_BUDGET_ADJUSTMENT, { params })
+    .get(API_DSP_BUDGET_ADJUSTMENT_UPCOMIN_INVOICES, { params })
     .then((response) => {
       return response;
     })
