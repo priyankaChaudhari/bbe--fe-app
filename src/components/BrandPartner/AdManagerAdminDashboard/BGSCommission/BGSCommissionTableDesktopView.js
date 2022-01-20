@@ -192,6 +192,8 @@ export default function BGSCommissionTableDesktopView({
                               OnSetShowModal(
                                 memberItem.id,
                                 memberItem.full_name,
+                                false,
+                                item.bgs_manager.id,
                               )
                             }>
                             <td width="10%">

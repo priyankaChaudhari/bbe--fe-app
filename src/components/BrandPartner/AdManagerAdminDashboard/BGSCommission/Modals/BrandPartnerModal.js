@@ -60,7 +60,7 @@ const BrandPartnerModal = ({
 
   useEffect(() => {
     setIsLoading(true);
-    getBgsBrandPartners(Bgs.id, startDate, endDate).then((res) => {
+    getBgsBrandPartners(Bgs, startDate, endDate).then((res) => {
       if (res && (res.status === 400 || res.status === 404)) {
         setIsLoading(false);
       }

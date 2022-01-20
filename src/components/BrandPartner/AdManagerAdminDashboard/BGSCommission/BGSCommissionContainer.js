@@ -296,8 +296,8 @@ const BGSCommissionContainer = () => {
         isGroupBy={groupBy}
         loader={loader}
         onHandleGroupBy={() => setGroupBy(!groupBy)}
-        OnSetShowModal={(id, name, isBgsManager) => {
-          setBgs({ id, name, isBgsManager });
+        OnSetShowModal={(id, name, isBgsManager, managerId) => {
+          setBgs({ id, name, isBgsManager, managerId });
           setShowModal(true);
         }}
         handleCommissionFilter={(event) => setSelectedTableFilter(event)}
