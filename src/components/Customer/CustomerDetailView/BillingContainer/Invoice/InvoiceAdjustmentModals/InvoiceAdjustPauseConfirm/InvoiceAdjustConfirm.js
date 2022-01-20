@@ -32,27 +32,27 @@ const InvoiceAdjustConfirm = ({
       if (invoiceType === 'standard') {
         return `${dayjs(selectedMonthYear?.value)
           .subtract(1, 'M')
-          .format('MMMM')} 13`;
+          .format('MMMM')}`;
       }
       if (
         dayjs(selectedMonthYear?.value).subtract(1, 'M').format('MMMM') ===
         dayjs().format('MMMM')
       ) {
-        return `${dayjs(selectedMonthYear?.value).format('MMMM')} 13`;
+        return `${dayjs(selectedMonthYear?.value).format('MMMM')}`;
       }
-      return `${dayjs(selectedMonthYear?.value).format('MMMM')} 13`;
+      return `${dayjs(selectedMonthYear?.value).format('MMMM')}`;
     }
     if (invoiceType === 'standard') {
       return `${dayjs(selectedMonthYear?.value)
         .subtract(1, 'M')
-        .format('MMMM')} 13`;
+        .format('MMMM')}`;
     }
     if (
       dayjs(selectedMonthYear?.value).format('MMMM') !== dayjs().format('MMMM')
     ) {
-      return `${dayjs(selectedMonthYear?.value).format('MMMM')} 13`;
+      return `${dayjs(selectedMonthYear?.value).format('MMMM')}`;
     }
-    return `${dayjs().format('MMMM')} 13`;
+    return `${dayjs().format('MMMM')}`;
   };
 
   const totalChangeAmount =
@@ -323,24 +323,13 @@ const InvoiceAdjustConfirm = ({
                   onwards.
                 </b>
                 <br /> The first bill for this amount will be sent{' '}
-                {returnInvoiceBillDate()}.
+                {returnInvoiceBillDate()} 13.
               </p>
             ) : null}
             {invoiceType === 'permanent additional' && (
               <GreyCard className="yellow-card">
                 <p className="normal-text text-bold m-0">
-                  Additional DSP invoice (
-                  {today > 10
-                    ? dayjs(selectedMonthYear?.value)
-                        .subtract(1, 'M')
-                        .format('MMMM') === dayjs().format('MMMM')
-                      ? dayjs(selectedMonthYear?.value).format('MMMM')
-                      : dayjs(selectedMonthYear?.value).format('MMMM')
-                    : dayjs(selectedMonthYear?.value).format('MMMM') !==
-                      dayjs().format('MMMM')
-                    ? dayjs(selectedMonthYear?.value).format('MMMM')
-                    : dayjs().format('MMMM')}{' '}
-                  only)
+                  Additional DSP invoice ({returnInvoiceBillDate()} only)
                 </p>
                 <p className="normal-text text-bold mb-0 mt-1">
                   {' '}
@@ -348,8 +337,8 @@ const InvoiceAdjustConfirm = ({
                 </p>
                 <p className="normal-text mb-0 mt-1">
                   The will be a one-off invoice, providing additional budget to
-                  spend in the current month. This invoice will be sent as soon
-                  as brand partner approves the proposal.
+                  spend in the {returnInvoiceBillDate()}. This invoice will be
+                  sent as soon as brand partner approves the proposal.
                 </p>
               </GreyCard>
             )}
