@@ -662,14 +662,21 @@ export async function getBgsCommissionTableIndividualsData(date, orderBy) {
   return result;
 }
 
-export async function getBgsBrandPartners(BgsID, startDate, endDate) {
-  const params = {
+export async function getBgsBrandPartners(bgs, startDate, endDate) {
+  const { isBgsManager, managerId, id } = bgs;
+  let params = {
     start_date: startDate,
     end_date: endDate,
   };
+  if (!isBgsManager) {
+    params = {
+      ...params,
+      manger_id: managerId,
+    };
+  }
 
   const result = await axiosInstance
-    .get(`${API_BGS_COMMISSION_DETAILS + BgsID}/`, { params })
+    .get(`${API_BGS_COMMISSION_DETAILS + id}/`, { params })
     .then((response) => {
       return response;
     })
