@@ -18,7 +18,6 @@ import {
   getDSPPerformance,
   getDspPacingData,
   getDSPPacingGraphData,
-  getBPRoles,
 } from '../../../../api';
 
 import 'react-date-range/dist/styles.css'; // main style file
@@ -32,6 +31,7 @@ export default function AdPerformance({
   id,
   accountType,
   getActivityLogInfo,
+  memberData,
 }) {
   const mounted = useRef(false);
   const { Option, SingleValue } = components;
@@ -125,22 +125,21 @@ export default function AdPerformance({
     if (userInfo?.role?.includes('Ad Manager Admin')) {
       setIsAllowToSplitBalance(true);
     } else {
-      getBPRoles(id, userInfo?.id).then((response) => {
-        if (response?.status === 200) {
-          if (response?.data?.results?.length) {
-            const role = response?.data?.results?.[0]?.user_profile?.role;
-            if (
-              role === 'BGS' ||
-              role === 'DSP Ad Manager' ||
-              role === 'Hybrid Ad Manager'
-            )
-              setIsAllowToSplitBalance(true);
-            else setIsAllowToSplitBalance(false);
+      for (const user of memberData) {
+        if (user.user) {
+          if (
+            (user?.role_group?.name === 'DSP Ad Manager' ||
+              user?.role_group?.name === 'Hybrid Ad Manager' ||
+              user?.role_group?.name === 'BGS') &&
+            user?.user?.id === userInfo?.id
+          ) {
+            setIsAllowToSplitBalance(true);
+            break;
           }
         }
-      });
+      }
     }
-  }, [id, userInfo]);
+  }, [memberData, userInfo]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];

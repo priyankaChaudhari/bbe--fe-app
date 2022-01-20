@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
-import { bool, string } from 'prop-types';
+import { arrayOf, bool, shape, string } from 'prop-types';
 
 import InvoiceAdjustmentsContainer from './InvoiceAdjustmentsContainer';
 import Theme from '../../../../../theme/Theme';
@@ -22,7 +22,7 @@ import {
   TableMobileView,
 } from '../../../../../common';
 
-const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
+const InvoiceList = ({ loader, invoiceType, id, bpName, memberData }) => {
   const isDSPService = invoiceType === 'dsp service';
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [selectedComponent, setSelectedComponent] = useState('past');
@@ -535,6 +535,7 @@ const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
           id={id}
           addThousandComma={addThousandComma}
           bpName={bpName}
+          memberData={memberData}
         />
       ) : null}
     </Wrapper>
@@ -554,6 +555,7 @@ InvoiceList.propTypes = {
   invoiceType: string,
   id: string,
   bpName: string,
+  memberData: arrayOf(shape({})).isRequired,
 };
 
 const Wrapper = styled.div`
