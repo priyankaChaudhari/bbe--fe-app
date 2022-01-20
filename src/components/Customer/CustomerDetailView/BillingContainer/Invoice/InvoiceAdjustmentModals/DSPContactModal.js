@@ -57,10 +57,12 @@ function DSPContactModal({
       <ModalBox>
         <div className="modal-body pb-1">
           <h4>Edit DSP Contact</h4>
-          <ErrorMsgBox className="mt-3  ">
-            You need to fill out all required fields before submitting the DSP
-            Contact.
-          </ErrorMsgBox>
+          {dspError?.toastError && (
+            <ErrorMsgBox className="mt-3  ">
+              You need to fill out all required fields before submitting the DSP
+              Contact.
+            </ErrorMsgBox>
+          )}
           <div className="body-content">
             {loader && <PageLoader color={Theme.orange} type="page" />}
             <div className="row">
@@ -91,7 +93,7 @@ function DSPContactModal({
                         )}
                       </label>
                     </InputFormField>
-                    <ErrorMsg>{dspError?.[item.key]}</ErrorMsg>
+                    <ErrorMsg>{dspError?.formError?.[item.key]}</ErrorMsg>
                   </div>
                 );
               })}

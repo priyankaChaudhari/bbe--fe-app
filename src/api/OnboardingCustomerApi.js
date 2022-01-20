@@ -337,7 +337,7 @@ export async function getDSPContact(customer) {
 
 export async function updateDSPContact(id, dspContact) {
   const result = await axiosInstance
-    .patch(`${API_DSP_CONTACT + id}`, dspContact)
+    .patch(`${API_DSP_CONTACT + id}/`, dspContact)
     .then((response) => {
       return response;
     })
