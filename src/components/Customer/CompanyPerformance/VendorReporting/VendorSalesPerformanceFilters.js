@@ -99,7 +99,6 @@ VendorSalesPerformanceFilters.propTypes = {
   handleMarketplaceOptions: func,
   getSelectComponents: func,
   handleDailyFact: func,
-  DropdownIndicator: shape({}),
 };
 
 const ViewData = styled.div`
