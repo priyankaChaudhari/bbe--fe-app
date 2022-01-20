@@ -72,7 +72,12 @@ function BGSCommissionTableResponsiveView({
                         <TableMobileView
                           key={memberItem.id}
                           onClick={() =>
-                            OnSetShowModal(memberItem.id, memberItem.full_name)
+                            OnSetShowModal(
+                              memberItem.id,
+                              memberItem.full_name,
+                              false,
+                              item.bgs_manager.id,
+                            )
                           }
                           label="Team Member"
                           labelInfo={memberItem.full_name.replace(
