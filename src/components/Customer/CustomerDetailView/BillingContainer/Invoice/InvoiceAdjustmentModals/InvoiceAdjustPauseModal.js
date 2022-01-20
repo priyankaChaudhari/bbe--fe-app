@@ -67,7 +67,7 @@ const InvoiceAdjustPauseModal = ({
   const [dspLoader, setDspLoader] = useState(false);
   const [visibleBtn, setVisibleBtn] = useState(false);
   const [isUpdateDSPContact, setISUpdateDSPContact] = useState(false);
-  const [dspError, setDspError] = useState(null);
+  const [dspError, setDspError] = useState();
   const [dspContact, setDspContact] = useState(null);
   const [formData, setFormData] = useState(null);
   const [invoiceInputs, setInvoiceInputs] = useState([]);
@@ -231,8 +231,11 @@ const InvoiceAdjustPauseModal = ({
     if (isUpdateDSPContact) {
       updateDSPContact(dspContact?.id, formData).then((res) => {
         if (res?.status === 400) {
-          setDspError(res.data);
+          setDspError({ formError: res.data, toastError: true });
           setDspLoader(false);
+          setTimeout(() => {
+            setDspError({ formError: res.data, toastError: false });
+          }, 3000);
         }
         if (res?.status === 201 || res?.status === 200) {
           getDSPContactInfo(id);
@@ -247,8 +250,11 @@ const InvoiceAdjustPauseModal = ({
         formData?.customerId,
       ).then((res) => {
         if (res?.status === 400) {
-          setDspError(res.data);
+          setDspError({ formError: res.data, toastError: true });
           setDspLoader(false);
+          setTimeout(() => {
+            setDspError({ formError: res.data, toastError: false });
+          }, 3000);
         }
         if (res?.status === 201 || res?.status === 200) {
           getDSPContactInfo(id);
@@ -396,9 +402,11 @@ const InvoiceAdjustPauseModal = ({
       ...formData,
       [item.key]: event.target.value,
     });
+
     setDspError({
       ...dspError,
-      [item.key]: '',
+      formError: { [item.key]: '' },
+      toastError: false,
     });
   };
 
