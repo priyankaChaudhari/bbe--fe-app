@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
-import { shape, string } from 'prop-types';
+import { shape, string, arrayOf } from 'prop-types';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 
@@ -71,6 +71,7 @@ export default function BillingDetails({
   const [DSPData, setDSPData] = useState([]);
   const [showDSPEdit, setShowDSPEdit] = useState(false);
   const [showDSPErrorTostr, setShowDSPErrorTostr] = useState(false);
+  const [isAllowToEdit, setIsAllowToEdit] = useState(false);
 
   const customStyles = {
     content: {
@@ -968,6 +969,7 @@ export default function BillingDetails({
 BillingDetails.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
+  memberData: [],
 };
 
 BillingDetails.propTypes = {
@@ -977,4 +979,5 @@ BillingDetails.propTypes = {
   }).isRequired,
   onBoardingId: string,
   customerStatus: shape({}),
+  memberData: arrayOf(shape({})),
 };
