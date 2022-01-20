@@ -188,9 +188,9 @@ const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
           label="Amount"
           labelInfo={`$${addThousandComma(item?.monthly_budget, 0)}`}
           label1="Created on"
-          labelInfo1={dayjs(item.generated_at).format('DD/MM/YY')}
+          labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
           label2="Due"
-          labelInfo2={dayjs(item.due_date).format('DD/MM/YY')}
+          labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
         />
       );
     });
@@ -226,12 +226,12 @@ const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
           label1="Created on"
           labelInfo1={
             item?.created !== null
-              ? dayjs(item?.created).format('DD/MM/YY')
+              ? dayjs(item?.created).format('MM/DD/YY')
               : 'N/A'
           }
           label2="Due"
           labelInfo2={
-            item?.due !== null ? dayjs(item?.due).format('DD/MM/YY') : 'N/A'
+            item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'
           }
           isShowBellIcon={item?.budget_approved === null}
         />
@@ -353,10 +353,10 @@ const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
             </div>
           </td>
           <td className="product-table-body light-font">
-            {dayjs(item.generated_at).format('DD/MM/YY')}
+            {dayjs(item.generated_at).format('MM/DD/YY')}
           </td>
           <td className="product-table-body light-font ">
-            {dayjs(item.due_date).format('DD/MM/YY')}
+            {dayjs(item.due_date).format('MM/DD/YY')}
           </td>
           <td className="product-table-body text-right">
             <Status
@@ -403,11 +403,11 @@ const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
           </td>
           <td className="product-table-body light-font">
             {item?.created !== null
-              ? dayjs(item?.created).format('DD/MM/YY')
+              ? dayjs(item?.created).format('MM/DD/YY')
               : 'N/A'}
           </td>
           <td className="product-table-body light-font ">
-            {item?.due !== null ? dayjs(item?.due).format('DD/MM/YY') : 'N/A'}
+            {item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'}
           </td>
           <td className="product-table-body text-right">
             <Status
