@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { func, string } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import MetricsInvoices from './MetricsInvoices';
@@ -8,7 +8,7 @@ import InvoiceList from './InvoiceList';
 import { PageLoader } from '../../../../../common';
 import { getMetricsInvoiceData } from '../../../../../api';
 
-const Invoice = ({ id, invoiceType, onLoading, bpName }) => {
+const Invoice = ({ id, invoiceType, onLoading, bpName, memberData }) => {
   const [loader, setLoader] = useState(false);
   const [invoiceMetricsData, setMetricsData] = useState(null);
   const getDSPMetricsData = useCallback(
@@ -69,6 +69,7 @@ const Invoice = ({ id, invoiceType, onLoading, bpName }) => {
             loader={loader}
             id={id}
             bpName={bpName}
+            memberData={memberData}
           />
         </>
       )}
@@ -89,4 +90,5 @@ Invoice.propTypes = {
   invoiceType: string,
   onLoading: func,
   bpName: string,
+  memberData: arrayOf(shape({})).isRequired,
 };

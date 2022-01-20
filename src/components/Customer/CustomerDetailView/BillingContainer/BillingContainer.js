@@ -74,6 +74,7 @@ const BillingContainer = ({
           invoiceType={viewComponent}
           id={id}
           bpName={bpName}
+          memberData={memberData}
         />
       ) : (
         <BillingDetails
