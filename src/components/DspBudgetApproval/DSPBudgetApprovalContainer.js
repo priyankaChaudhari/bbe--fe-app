@@ -193,8 +193,8 @@ export default function DSPBudgetApprovalContainer() {
         </p>
         <p className="normal-text mb-0 mt-1">
           The will be a one-off invoice, providing additional budget to spend in
-          the current month. This invoice will be sent as soon as brand partner
-          approves the proposal.
+          the {dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')}
+          . This invoice will be sent as soon as you approve the proposal.
         </p>
       </GreyCard>
     );
