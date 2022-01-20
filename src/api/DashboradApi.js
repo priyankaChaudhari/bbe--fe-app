@@ -664,8 +664,6 @@ export async function getBgsCommissionTableIndividualsData(date, orderBy) {
 
 export async function getBgsBrandPartners(bgs, startDate, endDate) {
   const { isBgsManager, managerId, id } = bgs;
-
-  console.log('bgs', bgs);
   let params = {
     start_date: startDate,
     end_date: endDate,
