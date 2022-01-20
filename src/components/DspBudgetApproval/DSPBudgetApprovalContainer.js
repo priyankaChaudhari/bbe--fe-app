@@ -34,6 +34,7 @@ export default function DSPBudgetApprovalContainer() {
   const [error, setError] = useState({});
   const [isAutherised, setIsAutherised] = useState(false);
   const [invoiceType, setInvoiceType] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [marketplaceData, setMarketplaceData] = useState(null);
   const [invoiceRejectMessage, setInvoiceRejectMessage] = useState('');
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -58,7 +59,12 @@ export default function DSPBudgetApprovalContainer() {
     setIsLoading({ loader: true, type: 'page' });
     getDSPBudgetAdjustDetail(adjustmentId, key).then((res) => {
       setMarketplaceData(res);
-      if (res?.status === 401 || res?.status === 403) {
+      if (res?.status === 404 || res?.status === 403) {
+        setErrorMessage('Page not found');
+        setIsAutherised(false);
+      }
+      if (res?.status === 401) {
+        setErrorMessage('Token Expired');
         setIsAutherised(false);
       }
       if (res?.id) {
@@ -464,7 +470,7 @@ export default function DSPBudgetApprovalContainer() {
       ) : isAutherised ? (
         renderMainPage()
       ) : (
-        <PageNotFound />
+        <PageNotFound title={errorMessage} />
       )}
     </>
   );
