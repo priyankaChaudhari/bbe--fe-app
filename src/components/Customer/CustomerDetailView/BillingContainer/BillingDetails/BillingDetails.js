@@ -24,7 +24,6 @@ import {
 } from '../../../../../constants';
 import {
   getBillingDetails,
-  getBPRoles,
   getDSPContact,
   getPaymentTermsDetails,
   getPaymentTermsOptions,
@@ -121,20 +120,20 @@ export default function BillingDetails({
     getDSPContact(id).then((res) => {
       if (res?.status === 200) {
         if (res?.data?.is_dsp_contract) {
-          getBPRoles(id, userInfo?.id).then((response) => {
-            if (response?.status === 200) {
-              const role = response?.data?.results?.[0]?.user_profile?.role;
-              if (response?.data?.results?.length === 0) setShowDSPEdit(false);
+          for (const user of memberData) {
+            if (user.user) {
               if (
-                role === 'BGS' ||
-                role === 'BGS Manager' ||
-                role === 'DSP Ad Manager' ||
-                role === 'Ad Manager Admin'
-              )
+                (user?.role_group?.name === 'BGS Manager' ||
+                  user?.role_group?.name === 'BGS' ||
+                  user?.role_group?.name === 'DSP Ad Manager' ||
+                  user?.role_group?.name === 'Ad Manager Admin') &&
+                user?.user?.id === userInfo?.id
+              ) {
                 setShowDSPEdit(true);
-              else setShowDSPEdit(false);
-            } else setShowDSPEdit(false);
-          });
+                break;
+              }
+            }
+          }
         } else setShowDSPEdit(false);
         setDSPData(res?.data?.results);
         setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
