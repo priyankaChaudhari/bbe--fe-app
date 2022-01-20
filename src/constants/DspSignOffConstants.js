@@ -41,7 +41,7 @@ export const InvoiceInfo = {
       'The will be a one-off invoice, providing additional budget for ',
     boldHeading: 'APPLICABLE_MONTH only. ',
     mainHeading2:
-      'This invoice will be sent as soon as you approve this proposal.',
+      'This invoice will be sent as soon as you approve the proposal.',
   },
   pause: {
     mainHeading: 'The changes will apply to ',
