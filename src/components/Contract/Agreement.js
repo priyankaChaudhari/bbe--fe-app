@@ -93,16 +93,20 @@ export default function Agreement({
 
   const customAmazonStorePrice = (fee) => {
     return `<td style="border: 1px solid black;padding: 13px;">
+      <span style=" background:#ffe5df; padding: 4px 9px;"> 
         ${fee ? `$${displayNumber(fee)}` : '$0'}
+        </span>
       </td>`;
   };
   const tdService = (service, fee) => {
     return `<td style="border: 1px solid black; padding: 13px;">
+      <span style=" background:#ffe5df; padding: 4px 9px;"> 
           ${
             service.quantity && fee
               ? `$${displayNumber(service.quantity * fee)}`
               : '$0'
           }
+          </span>
         </td>
         `;
   };
@@ -116,7 +120,9 @@ export default function Agreement({
         return fields.push(
           `<tr>
               <td style="border: 1px solid black; padding: 13px;">
+                <span style=" background:#ffe5df; padding: 4px 9px;"> 
                   ${service.quantity ? displayNumber(service.quantity) : 0}
+                  </span>
               </td>
               <td style="border: 1px solid black;padding: 13px;">
                   ${
@@ -137,10 +143,11 @@ export default function Agreement({
                     )
                       ? service.custom_amazon_store_price
                         ? `<td style="border: 1px solid black;padding: 13px;">
+                          <span style=" background:#ffe5df; padding: 4px 9px;"> 
                                 $${displayNumber(
                                   service.custom_amazon_store_price,
                                 )} 
-                               </td>`
+                              </span> </td>`
                         : customAmazonStorePrice(
                             fixedFee && fixedFee[0] && fixedFee[0].fee,
                           )
@@ -249,7 +256,9 @@ export default function Agreement({
         ? `<tr style="display: table-row; vertical-align: inherit; border-color: inherit;">
             <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px" text-align:left">Sub-total</td>
             <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px" text-align: right;">
-              $${displayNumber(totalFees?.oneTimeSubTotal)}
+            <span style=" background:#ffe5df; padding: 4px 9px; "> 
+            $${displayNumber(totalFees?.oneTimeSubTotal)}
+            </span>
             </td>
          </tr>`
         : ''
@@ -266,7 +275,9 @@ export default function Agreement({
               }
             </td>
             <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px; text-align: right;"> 
-              -$${displayNumber(totalFees?.oneTimeAmountAfterDiscount)}
+            <span style=" background:#ffe5df; padding: 4px 9px; ">  
+            -$${displayNumber(totalFees?.oneTimeAmountAfterDiscount)}
+            </span>
             </td>
          </tr>`
             : ''
@@ -274,7 +285,9 @@ export default function Agreement({
          <tr style="display: table-row; vertical-align: inherit; border-color: inherit;">
             <td class="total-service" colspan="3" style="border: 1px solid black; padding-top: 5px; text-align:left"> Total</td>
             <td class="total-service text-right" style="border: 1px solid black; padding-top: 5px; text-align: right;"> 
-              $${displayNumber(totalFees?.oneTimeTotal)} 
+            <span style=" background:#ffe5df; padding: 4px 9px; "> 
+            $${displayNumber(totalFees?.oneTimeTotal)} 
+            </span>
             </td>
          </tr>
          `;
