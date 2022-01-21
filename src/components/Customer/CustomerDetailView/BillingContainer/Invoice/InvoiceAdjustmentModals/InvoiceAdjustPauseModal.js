@@ -67,7 +67,7 @@ const InvoiceAdjustPauseModal = ({
   const [dspLoader, setDspLoader] = useState(false);
   const [visibleBtn, setVisibleBtn] = useState(false);
   const [isUpdateDSPContact, setISUpdateDSPContact] = useState(false);
-  const [dspError, setDspError] = useState();
+  const [dspError, setDspError] = useState({});
   const [dspContact, setDspContact] = useState(null);
   const [formData, setFormData] = useState(null);
   const [invoiceInputs, setInvoiceInputs] = useState([]);
@@ -227,15 +227,13 @@ const InvoiceAdjustPauseModal = ({
   }, [getAdjustInvoices, invoiceType]);
 
   const saveBillingData = () => {
+    setDspError({});
     setDspLoader(true);
     if (isUpdateDSPContact) {
       updateDSPContact(dspContact?.id, formData).then((res) => {
         if (res?.status === 400) {
           setDspError({ formError: res.data, toastError: true });
           setDspLoader(false);
-          setTimeout(() => {
-            setDspError({ formError: res.data, toastError: false });
-          }, 3000);
         }
         if (res?.status === 201 || res?.status === 200) {
           getDSPContactInfo(id);
@@ -406,7 +404,6 @@ const InvoiceAdjustPauseModal = ({
     setDspError({
       ...dspError,
       formError: { [item.key]: '' },
-      toastError: false,
     });
   };
 
@@ -628,8 +625,8 @@ const InvoiceAdjustPauseModal = ({
         <DSPContactModal
           showDspContactModal={showDspContactModal}
           onClose={() => {
-            setShowDspContactModal(false);
             setDspError({});
+            setShowDspContactModal(false);
             if (JSON.stringify(formData) !== JSON.stringify(dspContact)) {
               setVisibleBtn(true);
               getDSPContactInfo(id);
@@ -642,8 +639,8 @@ const InvoiceAdjustPauseModal = ({
           visibleBtn={visibleBtn}
           loader={dspLoader}
           onDiscard={() => {
-            setShowDspContactModal(false);
             setDspError({});
+            setShowDspContactModal(false);
           }}
         />
       )}
