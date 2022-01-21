@@ -68,7 +68,7 @@ const BGScommissionTable = ({
         <CommissionHeader>
           <div className=" d-md-block d-none">
             <div className="row">
-              <div className="col-4">
+              <div className="col-4 pl-4">
                 <div
                   className="black-heading-title mt-2 pt-1"
                   role="presentation">
