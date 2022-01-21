@@ -302,7 +302,7 @@ const InvoiceAdjustConfirm = ({
                     </div>
                     <div className="col-3">
                       <div
-                        className="edit-contact"
+                        className="edit-contact-detail"
                         role="presentation"
                         onClick={() => onEditDspContact('update')}>
                         <img src={EditOrangeIcon} alt="" />
