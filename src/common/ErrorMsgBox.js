@@ -8,7 +8,7 @@ const ErrorMsgBox = styled.div`
   border-radius: 4px;
   font-weight: 500;
   text-align: center;
-  font-size: ${Theme.extraSmall};
+  font-size: ${(props) => (props.font ? Theme.small : Theme.extraSmall)};
   font-family: ${Theme.baseFontFamily};
 
   .info-icon {
