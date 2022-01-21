@@ -4,7 +4,7 @@ import ReactTooltip from 'react-tooltip';
 import styled from 'styled-components';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
-import { arrayOf, bool, shape, string } from 'prop-types';
+import { bool, string } from 'prop-types';
 
 import InvoiceAdjustmentsContainer from './InvoiceAdjustmentsContainer';
 import Theme from '../../../../../theme/Theme';
@@ -22,7 +22,7 @@ import {
   TableMobileView,
 } from '../../../../../common';
 
-const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
+const InvoiceList = ({ loader, invoiceType, id, bpName }) => {
   const isDSPService = invoiceType === 'dsp service';
   const isMobile = useMediaQuery({ maxWidth: 768 });
   const [selectedComponent, setSelectedComponent] = useState('past');
@@ -65,9 +65,9 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
   );
 
   const getDSPUpcomingInvoicesData = useCallback(
-    (type, currentPage) => {
+    (currentPage) => {
       setPastInvoiceLoader(true);
-      getUpcomingInvoiceData(type, id, currentPage).then((res) => {
+      getUpcomingInvoiceData(id, currentPage).then((res) => {
         if (mounted.current) {
           if (res?.status === 500) {
             setPastInvoiceLoader(false);
@@ -101,7 +101,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
     }
     if (selectedComponent === 'upcoming') {
       setPageNumber(currentPage);
-      getDSPUpcomingInvoicesData(invoiceType, currentPage);
+      getDSPUpcomingInvoicesData(currentPage);
     }
     window.scrollTo(0, 0);
   };
@@ -134,6 +134,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           <Tabs className={pastInvoiceLoader ? 'disabled mb-3' : 'mb-3'}>
             <ul className="tabs">
               <li
+                key="pastInvoices"
                 className={selectedComponent === 'past' ? 'active' : ''}
                 onClick={() => {
                   getDSPInvoicesData(invoiceType);
@@ -143,9 +144,10 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
                 Past Invoices
               </li>
               <li
+                key="upcomingInvoices"
                 className={selectedComponent === 'upcoming' ? 'active' : ''}
                 onClick={() => {
-                  getDSPUpcomingInvoicesData(invoiceType);
+                  getDSPUpcomingInvoicesData();
                   setSelectedComponent('upcoming');
                 }}
                 role="presentation">
@@ -171,7 +173,7 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
               ? `${item?.description?.budget_type} (${item?.month})`
               : item?.invoice_type
           }
-          invoiceId={item?.next_invoiced_id}
+          invoiceId={`#${item?.next_invoiced_id}`}
           marketplaces={
             isDSPService && item?.description?.marketplaces
               ? ` | ${item?.description?.marketplaces}`
@@ -186,9 +188,9 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           label="Amount"
           labelInfo={`$${addThousandComma(item?.monthly_budget, 0)}`}
           label1="Created on"
-          labelInfo1={dayjs(item.generated_at).format('DD/MM/YY')}
+          labelInfo1={dayjs(item.generated_at).format('MM/DD/YY')}
           label2="Due"
-          labelInfo2={dayjs(item.due_date).format('DD/MM/YY')}
+          labelInfo2={dayjs(item.due_date).format('MM/DD/YY')}
         />
       );
     });
@@ -202,7 +204,9 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           className="mb-3"
           invoiceType={
             isDSPService
-              ? `${item?.dsp_invoice_subtype} (${item?.applicable_from})`
+              ? `${InvoiceTypeNames[item?.dsp_invoice_subtype]} (${
+                  item?.applicable_from
+                })`
               : null
           }
           invoiceId={null}
@@ -222,12 +226,12 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           label1="Created on"
           labelInfo1={
             item?.created !== null
-              ? dayjs(item?.created).format('DD/MM/YY')
+              ? dayjs(item?.created).format('MM/DD/YY')
               : 'N/A'
           }
           label2="Due"
           labelInfo2={
-            item?.due !== null ? dayjs(item?.due).format('DD/MM/YY') : 'N/A'
+            item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'
           }
           isShowBellIcon={item?.budget_approved === null}
         />
@@ -349,10 +353,10 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
             </div>
           </td>
           <td className="product-table-body light-font">
-            {dayjs(item.generated_at).format('DD/MM/YY')}
+            {dayjs(item.generated_at).format('MM/DD/YY')}
           </td>
           <td className="product-table-body light-font ">
-            {dayjs(item.due_date).format('DD/MM/YY')}
+            {dayjs(item.due_date).format('MM/DD/YY')}
           </td>
           <td className="product-table-body text-right">
             <Status
@@ -378,7 +382,8 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
         <tr key={item.id}>
           <td className="product-body">
             <div className="company-name">
-              {item?.dsp_invoice_subtype} ({item?.applicable_from})
+              {InvoiceTypeNames[item?.dsp_invoice_subtype]} (
+              {item?.applicable_from})
             </div>
             <div className="status">{item?.marketplaces}</div>
           </td>
@@ -398,11 +403,11 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
           </td>
           <td className="product-table-body light-font">
             {item?.created !== null
-              ? dayjs(item?.created).format('DD/MM/YY')
+              ? dayjs(item?.created).format('MM/DD/YY')
               : 'N/A'}
           </td>
           <td className="product-table-body light-font ">
-            {item?.due !== null ? dayjs(item?.due).format('DD/MM/YY') : 'N/A'}
+            {item?.due !== null ? dayjs(item?.due).format('MM/DD/YY') : 'N/A'}
           </td>
           <td className="product-table-body text-right">
             <Status
@@ -529,7 +534,6 @@ const InvoiceList = ({ loader, invoiceType, id, memberData, bpName }) => {
         <InvoiceAdjustmentsContainer
           id={id}
           addThousandComma={addThousandComma}
-          memberData={memberData}
           bpName={bpName}
         />
       ) : null}
@@ -542,7 +546,6 @@ export default InvoiceList;
 InvoiceList.defaultProps = {
   invoiceType: 'rev share',
   id: '',
-  memberData: [],
   bpName: '',
 };
 
@@ -550,7 +553,6 @@ InvoiceList.propTypes = {
   loader: bool.isRequired,
   invoiceType: string,
   id: string,
-  memberData: arrayOf(shape({})),
   bpName: string,
 };
 

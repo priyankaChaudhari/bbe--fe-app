@@ -5,6 +5,8 @@ import {
   API_AMAZON_SELLER_ACCOUNT,
   API_AMAZON_VENDOR_ACCOUNT,
   API_BILLING_INFO,
+  API_CUSTOMER_MEMBER,
+  API_DSP_CONTACT,
   API_EDIT_EMAIL,
   API_ONBOARD_CUSTOMER,
   API_PAYMENT_TERMS,
@@ -288,6 +290,68 @@ export async function deleteAmazonAccount(type, id) {
         ? `${API_AMAZON_SELLER_ACCOUNT + id}/`
         : `${API_AMAZON_VENDOR_ACCOUNT + id}/`,
     )
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function saveDSPContact(data, id) {
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_DSP_CONTACT + id}/`, data)
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(API_DSP_CONTACT, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getDSPContact(customer) {
+  const params = { customer };
+  const result = await axiosInstance
+    .get(API_DSP_CONTACT, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function updateDSPContact(id, dspContact) {
+  const result = await axiosInstance
+    .patch(`${API_DSP_CONTACT + id}/`, dspContact)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function getBPRoles(customer, user) {
+  const params = { customer, user };
+
+  const result = await axiosInstance
+    .get(API_CUSTOMER_MEMBER, { params })
     .then((response) => {
       return response;
     })

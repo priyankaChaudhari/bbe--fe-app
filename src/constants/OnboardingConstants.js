@@ -103,6 +103,7 @@ export const billingAddress = [
     type: 'number',
     property: 'col-6 pl-2',
     section: 'contact',
+    removeForDSP: true,
   },
 ];
 export const paymentTermValueLabel = [

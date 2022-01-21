@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
-
-import { useSelector } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { getDSPBudgetAdjustDetail, updateDSPBudgetAdjustment } from '../../api';
 import { ArrowRightBlackIcon, ArrowRightIcon } from '../../theme/images';
@@ -31,12 +29,12 @@ import {
 
 export default function DSPBudgetApprovalContainer() {
   const history = useHistory();
-  const { adjustmentId } = useParams();
-  const userInfo = useSelector((state) => state.userState.userInfo);
-
+  const { key, adjustmentId } = useParams();
   const [total, setTotal] = useState({});
   const [error, setError] = useState({});
+  const [isAutherised, setIsAutherised] = useState(false);
   const [invoiceType, setInvoiceType] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [marketplaceData, setMarketplaceData] = useState(null);
   const [invoiceRejectMessage, setInvoiceRejectMessage] = useState('');
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -56,19 +54,36 @@ export default function DSPBudgetApprovalContainer() {
     setTotal({ old_budget: oldResult, new_budget: newResult });
   };
 
-  useEffect(() => {
-    getDSPBudgetAdjustDetail(adjustmentId).then((res) => {
-      setIsLoading({ loader: false, type: 'page' });
-
+  const getDSPDetails = useCallback(() => {
+    localStorage.setItem('match', key);
+    setIsLoading({ loader: true, type: 'page' });
+    getDSPBudgetAdjustDetail(adjustmentId, key).then((res) => {
       setMarketplaceData(res);
+      if (res?.status === 404 || res?.status === 403) {
+        setErrorMessage('Page not found');
+        setIsAutherised(false);
+      }
+      if (res?.status === 401) {
+        setErrorMessage('Token Expired');
+        setIsAutherised(false);
+      }
+      if (res?.id) {
+        setIsAutherised(true);
+      }
       if (res?.is_sent_for_pause) {
         setInvoiceType('pause');
       } else {
         setInvoiceType(res?.dsp_invoice_subtype);
       }
       calculateTotal(res);
+      setIsLoading({ loader: false, type: 'page' });
+      localStorage.removeItem('match');
     });
-  }, [adjustmentId]);
+  }, [adjustmentId, key]);
+
+  useEffect(() => {
+    getDSPDetails();
+  }, [getDSPDetails]);
 
   const setAdjustmentsData = (flag) => {
     const result = [];
@@ -107,7 +122,8 @@ export default function DSPBudgetApprovalContainer() {
       data.rejection_note = invoiceRejectMessage;
     }
 
-    updateDSPBudgetAdjustment(adjustmentId, data).then((res) => {
+    localStorage.setItem('match', key);
+    updateDSPBudgetAdjustment(adjustmentId, data, key).then((res) => {
       setIsLoading({ loader: false, type: 'button' });
       if (res.status === 200) {
         history.push({
@@ -119,6 +135,7 @@ export default function DSPBudgetApprovalContainer() {
         setError(res?.data);
         setTimeout(() => setError(''), 3500);
       }
+      localStorage.removeItem('match');
     });
   };
 
@@ -182,8 +199,8 @@ export default function DSPBudgetApprovalContainer() {
         </p>
         <p className="normal-text mb-0 mt-1">
           The will be a one-off invoice, providing additional budget to spend in
-          the current month. This invoice will be sent as soon as brand partner
-          approves the proposal.
+          the {dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')}
+          . This invoice will be sent as soon as you approve the proposal.
         </p>
       </GreyCard>
     );
@@ -251,13 +268,13 @@ export default function DSPBudgetApprovalContainer() {
     if (invoiceType === 'standard' || invoiceType === 'permanent additional') {
       return (
         <>
-          <div className="col-5 text-left">
+          <div className="col-5 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="label">From</div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="label">To</div>
           </div>
         </>
@@ -266,13 +283,13 @@ export default function DSPBudgetApprovalContainer() {
     if (invoiceType === 'one time') {
       return (
         <>
-          <div className="col-3 text-left">
+          <div className="col-3 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="label">Existing budget</div>
           </div>
-          <div className="col-5 text-left">
+          <div className="col-5 pl-1 text-left">
             <div className="label">Additional Amount</div>
           </div>
         </>
@@ -281,13 +298,13 @@ export default function DSPBudgetApprovalContainer() {
     // for pause invoice.
     return (
       <>
-        <div className="col-4 text-left">
+        <div className="col-4 pr-2 text-left">
           <div className="label">Marketplace</div>
         </div>
-        <div className="col-4 text-left">
+        <div className="col-4 px-1 text-left">
           <div className="label">Pause Invoice</div>
         </div>
-        <div className="col-4 text-left">
+        <div className="col-4 pl-1 text-left">
           <div className="label">Invoice Amount</div>
         </div>
       </>
@@ -299,12 +316,12 @@ export default function DSPBudgetApprovalContainer() {
       <>
         {marketplaceData?.adjustments?.map((item, index) => (
           <div className={index ? 'row mt-1' : 'row'} key={item.name}>
-            <div className="col-5 text-left">
+            <div className="col-5 pr-2 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
                 {item.marketplace}
               </div>
             </div>
-            <div className="col-2 text-left">
+            <div className="col-2 px-1 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
                 {invoiceType === 'pause'
                   ? item?.is_sent_for_pause
@@ -313,7 +330,7 @@ export default function DSPBudgetApprovalContainer() {
                   : generateAmount(item?.old_budget, 'from', '$')}
               </div>
             </div>
-            <div className="col-2 text-center">
+            <div className="col-2 px-1 text-center">
               {invoiceType === 'standard' ||
               invoiceType === 'permanent additional' ? (
                 !index ? (
@@ -327,7 +344,7 @@ export default function DSPBudgetApprovalContainer() {
                 )
               ) : null}
             </div>
-            <div className="col-3 text-left">
+            <div className="col-3 pl-1 text-left">
               <div className={!index ? 'normal-text text-bold' : 'normal-text'}>
                 {invoiceType === 'pause'
                   ? item?.is_sent_for_pause
@@ -347,12 +364,12 @@ export default function DSPBudgetApprovalContainer() {
       <>
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         <div className="row">
-          <div className="col-5 text-left">
+          <div className="col-5 pr-2 text-left">
             <div className="normal-text text-bold">
               {TotalInvoiceHeader[invoiceType]}
             </div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             {invoiceType === 'standard' ||
             invoiceType === 'permanent additional' ? (
               <div className="normal-text text-bold">
@@ -361,7 +378,7 @@ export default function DSPBudgetApprovalContainer() {
             ) : null}
           </div>
 
-          <div className="col-2 text-center">
+          <div className="col-2 px-1 text-center">
             {invoiceType === 'standard' ||
             invoiceType === 'permanent additional' ? (
               <div className="normal-text">
@@ -370,7 +387,7 @@ export default function DSPBudgetApprovalContainer() {
             ) : null}
           </div>
 
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="normal-text text-bold">
               {generateAmount(total?.new_budget, '', '$')}
             </div>
@@ -379,76 +396,81 @@ export default function DSPBudgetApprovalContainer() {
       </>
     );
   };
+
+  const renderMainPage = () => {
+    return (
+      <OnBoardingBody className="body-white pt-3">
+        <div className="white-card-base panel pb-4">
+          {renderHeaderMessage()}
+          {renderHeading()}
+          {invoiceType !== 'one time' ? (
+            <>
+              <p className="normal-text text-medium mb-2">
+                {InvoiceCurrentMonthHeader[invoiceType]}
+              </p>
+              <h5 className="sub-title-text mt-2">
+                {generateAmount(total?.old_budget, '', '$')}
+              </h5>
+            </>
+          ) : null}
+          <div className="straight-line horizontal-line mt-3" />
+          <p className="normal-text text-medium mb-2">
+            {InvoiceNewMonthHeader[invoiceType]}
+            {invoiceType === 'pause'
+              ? dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')
+              : null}
+          </p>
+          <h5 className="sub-title-text mt-2">
+            {generateAmount(total?.new_budget, '', '$')}
+          </h5>{' '}
+          <fieldset className="shape-without-border mt-3 p-2">
+            <div className="row">{renderTableHeaders()}</div>
+            <div className=" straight-line horizontal-line pt-1 mb-2 " />
+            {renderTableData()}
+            {renderTotalInvoiceSection()}
+          </fieldset>
+          <p className="normal-text">
+            {InvoiceInfo[invoiceType]?.mainHeading}
+            <span className="text-bold">
+              {InvoiceInfo[invoiceType]?.boldHeading
+                .replace(
+                  'APPLICABLE_MONTH',
+                  dayjs(
+                    new Date(
+                      invoiceType === 'pause'
+                        ? marketplaceData?.applicable_from
+                        : marketplaceData?.due_date,
+                    ),
+                  ).format('MMMM'),
+                )
+                .replace(
+                  'APPLICABLE_DATE',
+                  new Date(marketplaceData?.due_date).getDate(),
+                )}
+            </span>
+            {InvoiceInfo[invoiceType]?.mainHeading2}
+          </p>
+          {invoiceType === 'pause' ? (
+            <div className=" straight-line horizontal-line pt-1 mb-2 " />
+          ) : null}
+          {invoiceType === 'permanent additional'
+            ? renderAdditionalDSPInvoice()
+            : null}
+          {renderInvoiceApproveReject()}
+        </div>
+      </OnBoardingBody>
+    );
+  };
+
   return (
     <>
-      {userInfo?.role?.toLowerCase() !== 'customer' ? (
-        <PageNotFound />
+      <UnauthorizedHeader />
+      {isLoading.loader && isLoading.type === 'page' ? (
+        <PageLoader color="#FF5933" type="page" />
+      ) : isAutherised ? (
+        renderMainPage()
       ) : (
-        <>
-          <UnauthorizedHeader />
-          {isLoading.loader && isLoading.type === 'page' ? (
-            <PageLoader color="#FF5933" type="page" />
-          ) : (
-            <OnBoardingBody className="body-white pt-3">
-              <div className="white-card-base mt-0 panel pb-4">
-                {renderHeaderMessage()}
-                {renderHeading()}
-                {invoiceType !== 'one time' ? (
-                  <>
-                    <p className="normal-text text-medium mb-2">
-                      {InvoiceCurrentMonthHeader[invoiceType]}
-                    </p>
-                    <h5 className="sub-title-text mt-2">
-                      {generateAmount(total?.old_budget, '', '$')}
-                    </h5>
-                  </>
-                ) : null}
-                <div className="straight-line horizontal-line mt-3" />
-                <p className="normal-text text-medium mb-2">
-                  {InvoiceNewMonthHeader[invoiceType]}
-                  {invoiceType === 'pause'
-                    ? dayjs(new Date(marketplaceData?.applicable_from)).format(
-                        'MMMM',
-                      )
-                    : null}
-                </p>
-                <h5 className="sub-title-text mt-2">
-                  {generateAmount(total?.new_budget, '', '$')}
-                </h5>{' '}
-                <fieldset className="shape-without-border mt-3 p-2">
-                  <div className="row">{renderTableHeaders()}</div>
-                  <div className=" straight-line horizontal-line pt-1 mb-2 " />
-                  {renderTableData()}
-                  {renderTotalInvoiceSection()}
-                </fieldset>
-                <p className="normal-text">
-                  {InvoiceInfo[invoiceType]?.mainHeading}
-                  <span className="text-bold">
-                    {InvoiceInfo[invoiceType]?.boldHeading
-                      .replace(
-                        'APPLICABLE_MONTH',
-                        dayjs(
-                          new Date(marketplaceData?.applicable_from),
-                        ).format('MMMM'),
-                      )
-                      .replace(
-                        'APPLICABLE_DATE',
-                        new Date(marketplaceData?.applicable_from).getDate(),
-                      )}
-                  </span>
-                  {InvoiceInfo[invoiceType]?.mainHeading2}
-                </p>
-                {invoiceType === 'pause' ? (
-                  <div className=" straight-line horizontal-line pt-1 mb-2 " />
-                ) : null}
-                {invoiceType === 'permanent additional'
-                  ? renderAdditionalDSPInvoice()
-                  : null}
-                {renderInvoiceApproveReject()}
-              </div>
-            </OnBoardingBody>
-          )}
-        </>
+        <PageNotFound title={errorMessage} />
       )}
     </>
   );

@@ -460,10 +460,7 @@ export default function AgreementDetails({
                   onClick={() =>
                     localStorage.setItem('agreementID', agreement.id)
                   }>
-                  {(agreement?.contract_status?.value !== 'active' &&
-                    agreement?.contract_status?.value !== 'renewed' &&
-                    multipleAgreement?.length === 1) ||
-                  userRole === 'Customer' ? (
+                  {userRole === 'Customer' ? (
                     <Link
                       to={{
                         pathname: PATH_AGREEMENT.replace(':id', id).replace(
@@ -487,9 +484,23 @@ export default function AgreementDetails({
                     </Link>
                   ) : (
                     <>
-                      {userRole !== 'Customer' &&
-                      !agreement?.draft_from &&
-                      agreement?.contract_status?.value === 'active' ? (
+                      {(userRole !== 'Customer' &&
+                        agreement?.draft_from &&
+                        (agreement?.contract_status?.value === 'active' ||
+                          agreement?.contract_status?.value === 'renewed' ||
+                          agreement?.contract_status?.value === 'pause' ||
+                          agreement?.contract_status?.value ===
+                            'active pending for pause' ||
+                          agreement?.contract_status?.value ===
+                            'pending for cancellation')) ||
+                      (userRole !== 'Customer' &&
+                        !agreement?.draft_from &&
+                        agreement?.contract_status?.value !==
+                          'pending contract' &&
+                        agreement.contract_status.value !==
+                          'pending contract approval' &&
+                        agreement.contract_status.value !==
+                          'pending contract signature') ? (
                         <ActionDropDown>
                           {' '}
                           <Select

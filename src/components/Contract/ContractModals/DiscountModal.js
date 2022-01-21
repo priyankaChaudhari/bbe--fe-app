@@ -1,15 +1,7 @@
 import React from 'react';
 
 import Modal from 'react-modal';
-import {
-  string,
-  bool,
-  func,
-  shape,
-  oneOfType,
-  number,
-  arrayOf,
-} from 'prop-types';
+import { string, bool, func, shape, oneOfType, number } from 'prop-types';
 
 import Discount from '../Discount';
 import { ModalBox } from '../../../common';
@@ -45,6 +37,7 @@ function DiscountModal({
   setIsEditContract,
   getAmendmentData,
   getServicesAccordingToAccType,
+  getContractActivityLogInfo,
 }) {
   return (
     <Modal
@@ -73,6 +66,7 @@ function DiscountModal({
           setIsEditContract={setIsEditContract}
           getAmendmentData={getAmendmentData}
           getServicesAccordingToAccType={getServicesAccordingToAccType}
+          getContractActivityLogInfo={getContractActivityLogInfo}
         />
       </ModalBox>
     </Modal>
@@ -90,12 +84,13 @@ DiscountModal.defaultProps = {
   setFormData: () => {},
   discountFlag: '',
   setDetails: () => {},
-  selectedDiscount: [],
+  selectedDiscount: {},
   getDiscountData: () => {},
   updatedFormData: {},
   setIsEditContract: () => {},
   getAmendmentData: () => {},
   getServicesAccordingToAccType: () => {},
+  getContractActivityLogInfo: () => {},
 };
 
 DiscountModal.propTypes = {
@@ -119,10 +114,11 @@ DiscountModal.propTypes = {
   setFormData: func,
   discountFlag: string,
   setDetails: func,
-  selectedDiscount: arrayOf(shape({})),
+  selectedDiscount: shape({}),
   getDiscountData: func,
   updatedFormData: shape({}),
   setIsEditContract: func,
   getAmendmentData: func,
   getServicesAccordingToAccType: func,
+  getContractActivityLogInfo: func,
 };

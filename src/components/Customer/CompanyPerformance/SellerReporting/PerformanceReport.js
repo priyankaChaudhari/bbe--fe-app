@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import dayjs from 'dayjs';
 import styled from 'styled-components';
@@ -27,6 +27,7 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 
 am4core.useTheme(am4themes_dataviz);
 export default function PerformanceReport({ marketplaceChoices, id }) {
+  const mounted = useRef(false);
   const [bBChartData, setBBChartData] = useState([{}]);
   const [dspData, setDspData] = useState(null);
   const [isSPCustomDateApply, setIsSPCustomDateApply] = useState(false);
@@ -221,31 +222,33 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         startDate,
         endDate,
       ).then((res) => {
-        if (res?.status === 400) {
-          setIsApiCall(false);
-          setBbGraphLoader(false);
-        }
-        if (res?.status === 200 && res.data?.bbep) {
-          const avg =
-            res.data.bbep
-              .filter((record) => record.bbep)
-              .reduce((acc, record) => acc + record.bbep, 0) /
-              res.data.bbep.length || 0;
-
-          const tempBBData = res.data.bbep.map((data) => {
-            return {
-              date: dayjs(data.report_date).format('MMM D YYYY'),
-              value: data.bbep,
-              avg: avg.toFixed(2),
-            };
-          });
-          const total = tempBBData?.length ? tempBBData.length : 0;
-          for (let i = 0; i <= Math.floor((total * 10) / 100); i += 1) {
-            tempBBData.push({ avg: avg.toFixed(2) });
+        if (mounted.current) {
+          if (res?.status === 400) {
+            setIsApiCall(false);
+            setBbGraphLoader(false);
           }
-          setBBChartData(tempBBData);
-          setIsApiCall(false);
-          setBbGraphLoader(false);
+          if (res?.status === 200 && res.data?.bbep) {
+            const avg =
+              res.data.bbep
+                .filter((record) => record.bbep)
+                .reduce((acc, record) => acc + record.bbep, 0) /
+                res.data.bbep.length || 0;
+
+            const tempBBData = res.data.bbep.map((data) => {
+              return {
+                date: dayjs(data.report_date).format('MMM D YYYY'),
+                value: data.bbep,
+                avg: avg.toFixed(2),
+              };
+            });
+            const total = tempBBData?.length ? tempBBData.length : 0;
+            for (let i = 0; i <= Math.floor((total * 10) / 100); i += 1) {
+              tempBBData.push({ avg: avg.toFixed(2) });
+            }
+            setBBChartData(tempBBData);
+            setIsApiCall(false);
+            setBbGraphLoader(false);
+          }
         }
       });
     },
@@ -270,67 +273,69 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
         startDate,
         endDate,
       ).then((res) => {
-        if (res?.status === 400) {
-          setIsApiCall(false);
-          setSalesGraphLoader(false);
-        }
-        if (res?.status === 200) {
-          if (res.data?.daily_facts) {
-            const salesGraphData = bindSalesResponseData(res.data);
-            setSalesChartData(salesGraphData);
+        if (mounted.current) {
+          if (res?.status === 400) {
+            setIsApiCall(false);
+            setSalesGraphLoader(false);
+          }
+          if (res?.status === 200) {
+            if (res.data?.daily_facts) {
+              const salesGraphData = bindSalesResponseData(res.data);
+              setSalesChartData(salesGraphData);
 
-            // brekdown tooltip values
-            if (res.data.daily_facts?.inorganic_sale) {
-              setInorganicSale(res.data.daily_facts.inorganic_sale);
-            }
+              // brekdown tooltip values
+              if (res.data.daily_facts?.inorganic_sale) {
+                setInorganicSale(res.data.daily_facts.inorganic_sale);
+              }
 
-            if (res.data.daily_facts?.organic_sale) {
-              setOrganicSale(res.data.daily_facts.organic_sale);
-            }
-            if (res.data.pf_oi_is?.length) {
-              const lastUpdated = res.data.pf_oi_is[0].latest_date;
-              res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
-                'MMM DD YYYY',
-              );
+              if (res.data.daily_facts?.organic_sale) {
+                setOrganicSale(res.data.daily_facts.organic_sale);
+              }
+              if (res.data.pf_oi_is?.length) {
+                const lastUpdated = res.data.pf_oi_is[0].latest_date;
+                res.data.pf_oi_is[0].latest_date = dayjs(lastUpdated).format(
+                  'MMM DD YYYY',
+                );
 
-              setDspData(res.data.pf_oi_is[0]);
-              const ipiValue = parseFloat(
-                res.data.pf_oi_is[0].inventory_performance_index,
-              );
-              if (Number.isNaN(ipiValue)) {
-                setPieData([
-                  {
-                    name: 'Inventory',
-                    value: 'N/A',
-                  },
-                  {
-                    name: 'Total',
-                    value: 1000,
-                  },
-                ]);
+                setDspData(res.data.pf_oi_is[0]);
+                const ipiValue = parseFloat(
+                  res.data.pf_oi_is[0].inventory_performance_index,
+                );
+                if (Number.isNaN(ipiValue)) {
+                  setPieData([
+                    {
+                      name: 'Inventory',
+                      value: 'N/A',
+                    },
+                    {
+                      name: 'Total',
+                      value: 1000,
+                    },
+                  ]);
+                } else {
+                  setPieData([
+                    {
+                      name: 'Inventory',
+                      value: ipiValue,
+                    },
+                    {
+                      name: 'Total',
+                      value: 1000 - ipiValue,
+                    },
+                  ]);
+                }
               } else {
                 setPieData([
-                  {
-                    name: 'Inventory',
-                    value: ipiValue,
-                  },
-                  {
-                    name: 'Total',
-                    value: 1000 - ipiValue,
-                  },
+                  { name: 'Inventory', value: 'N/A' },
+                  { name: 'Total', value: 1000 },
                 ]);
               }
             } else {
-              setPieData([
-                { name: 'Inventory', value: 'N/A' },
-                { name: 'Total', value: 1000 },
-              ]);
+              setSalesChartData([]);
             }
-          } else {
-            setSalesChartData([]);
+            setIsApiCall(false);
+            setSalesGraphLoader(false);
           }
-          setIsApiCall(false);
-          setSalesGraphLoader(false);
         }
       });
     },
@@ -338,6 +343,7 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
   );
 
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices?.length > 0)
       for (const option of marketplaceChoices) {
@@ -364,6 +370,9 @@ export default function PerformanceReport({ marketplaceChoices, id }) {
       getBBData(marketplace[0].value, bBDailyFact.value, 'daily');
       setResponseId('12345');
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     marketplaceChoices,
     getData,

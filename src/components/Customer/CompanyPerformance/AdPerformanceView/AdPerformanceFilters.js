@@ -98,7 +98,7 @@ AdPerformanceFilters.propTypes = {
   dateOptions: arrayOf(Array),
   getSelectComponents: func,
   isApiCall: bool,
-  DropdownIndicator: func,
+  DropdownIndicator: shape({}),
   handleAdDailyFact: func,
   selectedAdDF: instanceOf(Object),
 };

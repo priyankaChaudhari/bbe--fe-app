@@ -162,7 +162,7 @@ export default function AccountDetails({
         </div>
         <div className="mb-2">
           <a
-            css="text-transform: initial;"
+            style={{ textTransform: 'initial' }}
             href={
               customer && customer.website && customer.website.includes('http')
                 ? customer && customer.website

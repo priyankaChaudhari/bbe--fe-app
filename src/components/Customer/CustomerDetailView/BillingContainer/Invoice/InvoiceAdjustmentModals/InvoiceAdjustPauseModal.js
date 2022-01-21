@@ -15,7 +15,10 @@ import Theme from '../../../../../../theme/Theme';
 import { CloseIcon, helpCircleIcon } from '../../../../../../theme/images';
 import {
   getDSPBudgetAdjustData,
+  getDSPContact,
   postDSPBudgetAdjustPauseInvoiceData,
+  saveDSPContact,
+  updateDSPContact,
 } from '../../../../../../api';
 import {
   ModalBox,
@@ -27,8 +30,12 @@ import {
   PageLoader,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
-import { PATH_CUSTOMER_DETAILS } from '../../../../../../constants';
+import {
+  dspContactInputFields,
+  PATH_CUSTOMER_DETAILS,
+} from '../../../../../../constants';
 import InvoicePauseConfirm from './InvoiceAdjustPauseConfirm/InvoicePauseConfirm';
+import DSPContactModal from './DSPContactModal';
 
 const todaysDate = new Date();
 const day = todaysDate.getDate();
@@ -56,9 +63,16 @@ const InvoiceAdjustPauseModal = ({
   onApply,
   bpName,
 }) => {
+  const [showDspContactModal, setShowDspContactModal] = useState(false);
   const history = useHistory();
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [dspLoader, setDspLoader] = useState(false);
+  const [visibleBtn, setVisibleBtn] = useState(false);
+  const [isUpdateDSPContact, setISUpdateDSPContact] = useState(false);
+  const [dspError, setDspError] = useState({});
+  const [dspContact, setDspContact] = useState(null);
+  const [formData, setFormData] = useState(null);
   const [invoiceInputs, setInvoiceInputs] = useState([]);
   const [invoiceType, setInvoiceType] = useState('standard');
   const [viewComponent, setViewComponent] = useState('adjustInvoice');
@@ -137,6 +151,23 @@ const InvoiceAdjustPauseModal = ({
     [customerId, viewComponent],
   );
 
+  const getDSPContactInfo = useCallback(() => {
+    getDSPContact(customerId).then((res) => {
+      if (mounted.current) {
+        setDspContact(res?.data?.results?.[0]);
+        setFormData(res?.data?.results?.[0]);
+      }
+    });
+  }, [customerId]);
+
+  useEffect(() => {
+    mounted.current = true;
+    getDSPContactInfo();
+    return () => {
+      mounted.current = false;
+    };
+  }, [getDSPContactInfo]);
+
   useEffect(() => {
     mounted.current = true;
     const monthsDropDown = [];
@@ -198,6 +229,61 @@ const InvoiceAdjustPauseModal = ({
     };
   }, [getAdjustInvoices, invoiceType]);
 
+  const checkTextInput = () => {
+    let flag = true;
+    dspContactInputFields.forEach((item) => {
+      if (formData?.[item.key] !== null && !formData?.[item.key].trim()) {
+        setDspError({
+          formError: { [item.key]: ['This is a required field'] },
+          toastError: true,
+        });
+        flag = false;
+      }
+    });
+    return flag;
+  };
+
+  const saveBillingData = () => {
+    setDspError({});
+    if (checkTextInput()) {
+      setDspLoader(true);
+      if (isUpdateDSPContact) {
+        updateDSPContact(dspContact?.id, formData).then((res) => {
+          if (res?.status === 400) {
+            setDspError({ formError: res.data, toastError: true });
+            setDspLoader(false);
+          }
+          if (res?.status === 201 || res?.status === 200) {
+            getDSPContactInfo(id);
+            setShowDspContactModal(false);
+            setDspLoader(false);
+            setVisibleBtn(false);
+          }
+          setDspLoader(false);
+        });
+      } else {
+        saveDSPContact(
+          { ...formData, customer: customerId },
+          formData?.customerId,
+        ).then((res) => {
+          if (res?.status === 400) {
+            setDspError({ formError: res.data, toastError: true });
+            setDspLoader(false);
+            setTimeout(() => {
+              setDspError({ formError: res.data, toastError: false });
+            }, 3000);
+          }
+          if (res?.status === 201 || res?.status === 200) {
+            getDSPContactInfo(id);
+            setShowDspContactModal(false);
+            setDspLoader(false);
+          }
+          setDspLoader(false);
+        });
+      }
+    }
+  };
+
   const renderToastMessage = useCallback(
     (message) => {
       toast.success(message);
@@ -231,7 +317,7 @@ const InvoiceAdjustPauseModal = ({
       }
       if (res && res.status === 201) {
         renderToastMessage(
-          `${bpName}Invoice Adjust Created Successfuly for ${selectedMonthYear.value}`,
+          `${bpName} invoice Adjustment created successfuly for ${selectedMonthYear.value}`,
         );
         setLoader(false);
       }
@@ -265,7 +351,7 @@ const InvoiceAdjustPauseModal = ({
       }
       if (res && res.status === 201) {
         renderToastMessage(
-          `${bpName}Invoice Pause Successfuly for ${selectedMonthYear.value}`,
+          `${bpName} invoice Pause successfuly for ${selectedMonthYear.value}`,
         );
         setLoader(false);
       }
@@ -281,7 +367,6 @@ const InvoiceAdjustPauseModal = ({
   ]);
 
   const onSendInvoice = () => {
-    // onApply();
     if (viewComponent === 'adjustInvoice') {
       onSendDSPBudgetAdjustInvoice();
     } else {
@@ -325,6 +410,25 @@ const InvoiceAdjustPauseModal = ({
     }
     return 0;
   }, [invoiceInputs, invoiceType]);
+
+  const onHandleChange = (event, item) => {
+    setVisibleBtn(true);
+    setFormData({
+      ...formData,
+      [item.key]: event.target.value,
+    });
+
+    setDspError({
+      ...dspError,
+      formError: { [item.key]: '' },
+    });
+  };
+
+  const onClose = () => {
+    setDspError({});
+    setShowDspContactModal(false);
+    setVisibleBtn(false);
+  };
 
   return (
     <>
@@ -508,7 +612,13 @@ const InvoiceAdjustPauseModal = ({
             onApply={() => {
               onSendInvoice();
             }}
-            bpName={bpName}
+            dspContact={dspContact}
+            onEditDspContact={(type) => {
+              setShowDspContactModal(true);
+              if (type === 'update') {
+                setISUpdateDSPContact(true);
+              }
+            }}
           />
         ) : (
           <InvoiceAdjustConfirm
@@ -522,11 +632,31 @@ const InvoiceAdjustPauseModal = ({
             onApply={() => {
               onSendInvoice();
             }}
-            bpName={bpName}
+            dspContact={dspContact}
             today={day}
+            onEditDspContact={(type) => {
+              setShowDspContactModal(true);
+              if (type === 'update') {
+                setISUpdateDSPContact(true);
+              }
+            }}
           />
         )}
       </Modal>
+
+      {showDspContactModal && (
+        <DSPContactModal
+          showDspContactModal={showDspContactModal}
+          onClose={onClose}
+          dspContact={dspContact}
+          dspError={dspError}
+          onConfirm={saveBillingData}
+          onHandleChange={onHandleChange}
+          visibleBtn={visibleBtn}
+          loader={dspLoader}
+          onDiscard={onClose}
+        />
+      )}
     </>
   );
 };

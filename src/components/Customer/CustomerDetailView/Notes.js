@@ -75,7 +75,6 @@ function Notes({
     showEditor: false,
     showFilterDropdown: false,
   });
-
   const userInfo = useSelector((state) => state.userState.userInfo);
   const ref = useRef(null);
   const dropdownRef = useRef(null);
@@ -365,7 +364,7 @@ function Notes({
       data.notes.map((item) => {
         const noteType = item.note_type;
         return (
-          <div className="notes-pin-unpin">
+          <div className="notes-pin-unpin" key={item.id}>
             <GroupUser className="mb-3" key={item.id}>
               {displayUserInfo(item.user)}
               <div className="activity-user">
@@ -621,7 +620,7 @@ function Notes({
         <ul className="notes-option">
           {filtersOption.notes.map((item) => {
             return (
-              <li>
+              <li key={item.label}>
                 <ModalRadioCheck>
                   <label
                     className=" checkboxes radio-container customer-list"
@@ -644,7 +643,7 @@ function Notes({
           <li className="teams-title">Teams</li>
           {filtersOption.teams.map((teamFilter) => {
             return (
-              <li className="checkbox-option">
+              <li className="checkbox-option" key={teamFilter.team}>
                 <CheckBox>
                   <label
                     className={
@@ -672,11 +671,12 @@ function Notes({
           <div className="straight-line horizontal-line mt-2 mb-3" />
           {filtersOption.archived.map((item) => {
             return (
-              <li>
+              <li key={item.label}>
                 <ModalRadioCheck>
                   <label
                     className=" checkboxes radio-container customer-list"
-                    htmlFor={item.label}>
+                    htmlFor={item.label}
+                    key={item.label}>
                     {item.label}
                     <input
                       type="radio"

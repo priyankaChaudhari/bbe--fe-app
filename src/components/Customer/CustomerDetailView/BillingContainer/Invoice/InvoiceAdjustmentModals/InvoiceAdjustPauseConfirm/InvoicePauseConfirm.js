@@ -4,7 +4,11 @@ import { arrayOf, func, shape, string } from 'prop-types';
 
 import numberWithCommas from '../../../../../../../hooks/numberWithComas';
 import { Button, ModalBox } from '../../../../../../../common';
-import { LeftArrowIcon } from '../../../../../../../theme/images';
+import {
+  EditOrangeIcon,
+  LeftArrowIcon,
+} from '../../../../../../../theme/images';
+import Theme from '../../../../../../../theme/Theme';
 
 const InvoicePauseConfirm = ({
   adjustmentData,
@@ -13,7 +17,8 @@ const InvoicePauseConfirm = ({
   onApply,
   onBackClick,
   selectedMonthYear,
-  bpName,
+  dspContact,
+  onEditDspContact,
 }) => {
   const { totalNewBudget } = returnTotalAmount();
   const renderResponsiveView = () => {
@@ -73,13 +78,13 @@ const InvoicePauseConfirm = ({
     return (
       <div className="d-md-block d-none">
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="label">Invoice Amount</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 pl-1 text-left">
             <div className="label">Pause Invoice</div>
           </div>
         </div>
@@ -94,15 +99,15 @@ const InvoicePauseConfirm = ({
                 : 'gray-normal-text';
             return (
               <div className="row mt-1">
-                <div className="col-4 text-left">
+                <div className="col-4 pr-2 text-left">
                   <div className={textClass}>{item.marketplace}</div>
                 </div>
-                <div className="col-4 text-left">
+                <div className="col-4 px-1 text-left">
                   <div className={textClass}>
                     ${numberWithCommas(item.new_budget)}
                   </div>
                 </div>
-                <div className="col-4 text-left">
+                <div className="col-4 pl-1 text-left">
                   <div className={textClass}>
                     {item.is_sent_for_pause ? 'Yes' : 'No'}
                   </div>
@@ -113,20 +118,20 @@ const InvoicePauseConfirm = ({
 
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="normal-text text-bold">Total invoice</div>
           </div>
-          <div className="col-4 text-left">
+          <div className="col-4 px-1 text-left">
             <div className="normal-text text-bold">
               ${numberWithCommas(totalNewBudget)}
             </div>
           </div>
-          <div className="col-4 text-left" />
+          <div className="col-4 pl-1 text-left" />
         </div>
         <div className=" straight-line horizontal-line mt-2 mb-2 " />
         <p className="normal-text">
           The change will apply to{' '}
-          <b>{selectedMonthYear?.value.split(' ')[0]} onwards.</b>
+          <b>{selectedMonthYear?.value.split(' ')[0]} only.</b>
         </p>
       </div>
     );
@@ -147,10 +152,43 @@ const InvoicePauseConfirm = ({
             Confirm Pause
           </h4>
           <div className="body-content">
-            <p className="normal-text">
-              The following proposal will be send to <b>{bpName}</b> for
-              approval:
-            </p>
+            {dspContact &&
+            Object.keys(dspContact).length === 0 &&
+            Object.getPrototypeOf(dspContact) === Object.prototype ? (
+              <div
+                style={{ color: Theme.orange }}
+                className=" mt-2 mb-2 normal-text cursor"
+                onClick={() => onEditDspContact('add')}
+                aria-hidden="true">
+                Please Click here to add DSP Contact
+              </div>
+            ) : (
+              <>
+                {' '}
+                <p className="normal-text">
+                  This proposal will be send to the following contact:
+                </p>
+                <fieldset className="less-border mb-3">
+                  <div className="row">
+                    <div className="col-9 pl-4">
+                      <div className="normal-text text-bold">
+                        {dspContact?.first_name} {dspContact?.last_name}
+                      </div>
+                      <div className="normal-text">{dspContact?.email}</div>
+                    </div>
+                    <div className="col-3">
+                      <div
+                        className="edit-contact"
+                        role="presentation"
+                        onClick={() => onEditDspContact('update')}>
+                        <img src={EditOrangeIcon} alt="" />
+                        Edit
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>{' '}
+              </>
+            )}
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {renderDesktopView()}
             {renderResponsiveView()}
@@ -177,8 +215,9 @@ InvoicePauseConfirm.defaultProps = {
   onApply: () => {},
   onBackClick: () => {},
   returnTotalAmount: () => {},
+  onEditDspContact: () => {},
   selectedMonthYear: {},
-  bpName: '',
+  dspContact: null,
 };
 
 InvoicePauseConfirm.propTypes = {
@@ -187,6 +226,7 @@ InvoicePauseConfirm.propTypes = {
   onApply: func,
   onBackClick: func,
   returnTotalAmount: func,
+  onEditDspContact: func,
   selectedMonthYear: shape({}),
-  bpName: string,
+  dspContact: shape({}),
 };

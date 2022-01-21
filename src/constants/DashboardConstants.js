@@ -133,25 +133,26 @@ export const DSPFinanceMetrics = [
   },
 ];
 
-export const BGSComissionMetrics = [
+export const BGSCommissionMatrics = [
   {
-    value: 'openInvoices',
+    id: 1,
     key: 'total_book_size',
     label: 'TOTAL BOOK SIZE',
     titleColor: '#333333',
     prefix: '$',
     postfix: '',
+    breakdown: 'View Breakdown',
   },
   {
-    value: 'totalOverdue',
-    key: 'total_book_size_comission',
+    id: 2,
+    key: 'total_book_size_commission',
     label: 'TOTAL BOOK SIZE COMMISSION',
     titleColor: '#333333',
     prefix: '$',
     postfix: '',
   },
   {
-    value: 'expectedByEOM',
+    id: 3,
     key: 'total_upsells',
     label: 'TOTAL UPSELLS',
     titleColor: '#333333',
@@ -159,8 +160,8 @@ export const BGSComissionMetrics = [
     postfix: '',
   },
   {
-    value: '%pastDue',
-    key: 'total_upsells_comission',
+    id: 4,
+    key: 'total_upsells_commission',
     label: 'TOTAL UPSELL COMMISSION',
     titleColor: '#333333',
     prefix: '$',
@@ -247,4 +248,91 @@ export const monthNames = [
   'Oct',
   'Nov',
   'Dec',
+];
+
+export const bgsCommissionsFilterOptions = [
+  {
+    value: 'full_name',
+    label: 'Team Member',
+  },
+  {
+    value: '-retainer',
+    label: 'Retainer',
+  },
+  {
+    value: '-rev_share',
+    label: 'Rev Share',
+  },
+  {
+    value: '-dsp',
+    label: 'DSP',
+  },
+  {
+    value: '-total_book_size',
+    label: 'Total Book Size',
+  },
+  {
+    value: '-total_book_size_commission',
+    label: 'Book Size Commission',
+  },
+  {
+    value: '-upsell',
+    label: 'Upsells',
+  },
+  {
+    value: '-upsell_commission',
+    label: 'Upsell Commission',
+  },
+  {
+    value: '-total_commission',
+    label: 'Total Commission',
+  },
+];
+
+export const commissionsTableheader = [
+  {
+    key: 'full_name',
+    label: 'TEAM MEMBER',
+    width: '10%',
+  },
+  {
+    key: 'retainer',
+    label: 'RETAINER',
+    width: '10%',
+  },
+  {
+    key: 'rev_share',
+    label: 'REV SHARE',
+    width: '10%',
+  },
+  {
+    key: 'dsp',
+    label: 'DSP',
+    width: '8%',
+  },
+  {
+    key: 'total_book_size',
+    label: 'TOTAL BOOK SIZE',
+    width: '12%',
+  },
+  {
+    key: 'total_book_size_commission',
+    label: 'BOOK SIZE COMMISSION',
+    width: '12%',
+  },
+  {
+    key: 'upsell',
+    label: 'UPSELLS',
+    width: '8%',
+  },
+  {
+    key: 'upsell_commission',
+    label: 'UPSELLS COMMISSION',
+    width: '12%',
+  },
+  {
+    key: 'total_commission',
+    label: 'TOTAL COMMISSION',
+    width: '10%',
+  },
 ];

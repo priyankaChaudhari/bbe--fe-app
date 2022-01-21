@@ -1,39 +1,46 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-import PropTypes, { string } from 'prop-types';
+import { string, shape } from 'prop-types';
 
 import DSPDashboard from './DSPDashboard/DSPDashboard';
 import SponsoredDashboard from './SponsoredDashboard/SponsoredDashboard';
 import SalesDashboard from './SalesDashboard/SalesDashboard';
+import BGSCommissionContainer from './BGSCommission/BGSCommissionContainer';
 import { Tabs } from '../../../common';
 import { DashboardCard } from '../../../theme/Global';
 import { getMarketPlaceList } from '../../../api';
-import BGSComissionContainer from './BGSComission/BGSComissionContainer';
 
 export default function AdManagerAdminContainer({ userInfo }) {
+  const mounted = useRef(false);
   const [viewComponent, setViewComponent] = useState('sales');
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const getMarketPlace = useCallback(() => {
     getMarketPlaceList().then((res) => {
-      if (res && res.data && res.data.length) {
-        const list = [
-          {
-            name: 'all',
-            country: 'All Marketplaces',
-            currency: 'USD',
-          },
-        ];
+      if (mounted.current) {
+        if (res && res.data && res.data.length) {
+          const list = [
+            {
+              name: 'all',
+              country: 'All Marketplaces',
+              currency: 'USD',
+            },
+          ];
 
-        for (const marketplace of res.data) {
-          list.push(marketplace);
-          setMarketplaceChoices(list);
+          for (const marketplace of res.data) {
+            list.push(marketplace);
+            setMarketplaceChoices(list);
+          }
         }
       }
     });
   }, []);
 
   useEffect(() => {
+    mounted.current = true;
     getMarketPlace();
+    return () => {
+      mounted.current = false;
+    };
   }, [getMarketPlace]);
 
   const renderComponent = () => {
@@ -62,8 +69,8 @@ export default function AdManagerAdminContainer({ userInfo }) {
           />
         );
 
-      case 'comissions':
-        return <BGSComissionContainer userInfo={userInfo} />;
+      case 'commissions':
+        return <BGSCommissionContainer userInfo={userInfo} />;
 
       default:
         return '';
@@ -94,14 +101,14 @@ export default function AdManagerAdminContainer({ userInfo }) {
               DSP Advertising
             </li>
 
-            {/* {userInfo && userInfo.role === 'BGS Admin' ? (
+            {userInfo && userInfo.role === 'BGS Admin' ? (
               <li
-                className={viewComponent === 'comissions' ? 'active' : ''}
-                onClick={() => setViewComponent('comissions')}
+                className={viewComponent === 'commissions' ? 'active' : ''}
+                onClick={() => setViewComponent('commissions')}
                 role="presentation">
-                Comissions
+                Commissions
               </li>
-            ) : null} */}
+            ) : null}
           </ul>
         </Tabs>
         {renderComponent(viewComponent)}
@@ -114,7 +121,7 @@ AdManagerAdminContainer.defaultProps = {
   userInfo: {},
 };
 AdManagerAdminContainer.propTypes = {
-  userInfo: PropTypes.shape({
+  userInfo: shape({
     role: string,
   }),
 };

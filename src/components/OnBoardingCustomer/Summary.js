@@ -93,7 +93,8 @@ export default function Summary() {
             <h3 className="page-heading ">Account Summary</h3>
 
             <div className="sub-information mb-3">
-              Thanks! Below is a summary of everything that’s been submitted.
+              Thanks! Please review the information below and click
+              <strong> Submit</strong> to complete your account setup.
             </div>
 
             <div className="complete-steps mt-1 mb-3">
@@ -179,7 +180,7 @@ export default function Summary() {
                 {isLoading.loader && isLoading.type === 'button' ? (
                   <PageLoader color="#fff" type="button" />
                 ) : (
-                  'View Dashboard'
+                  'Submit'
                 )}
               </Button>
             ) : (

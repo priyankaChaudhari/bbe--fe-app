@@ -24,6 +24,7 @@ function Discount({
   setIsEditContract,
   getAmendmentData,
   getServicesAccordingToAccType,
+  getContractActivityLogInfo,
 }) {
   const [showAmountInput, setShowAmountInput] = useState(false);
   const [selectedDiscountType, setSelectedDiscountType] = useState('none');
@@ -61,6 +62,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -79,6 +81,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -107,6 +110,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -124,6 +128,7 @@ function Discount({
             setShowDiscountModal(false);
             if (!Object.keys(updatedFormData).length) {
               setIsEditContract(false);
+              getContractActivityLogInfo();
             }
             if (agreementData?.draft_from) {
               getAmendmentData(agreementData?.id);
@@ -212,8 +217,8 @@ function Discount({
         discountFlag.accountType,
       );
       if (
-        !serviceResult.every((item) => item.id) ||
-        !marketplaceResult.every((item) => item.id) ||
+        (serviceResult && !serviceResult.every((item) => item.id)) ||
+        (marketplaceResult && !marketplaceResult.every((item) => item.id)) ||
         (Object.keys(updatedFormData).includes('additional_marketplaces') &&
           updatedFormData?.additional_marketplaces?.delete?.length) ||
         (Object.keys(updatedFormData).includes('additional_monthly_services') &&
@@ -326,7 +331,7 @@ function Discount({
   );
 }
 Discount.defaultProps = {
-  discountFlag: '',
+  discountFlag: {},
   agreementData: {},
   formData: {},
   setShowDiscountModal: () => {},
@@ -336,9 +341,10 @@ Discount.defaultProps = {
   setIsEditContract: () => {},
   getAmendmentData: () => {},
   getServicesAccordingToAccType: () => {},
+  getContractActivityLogInfo: () => {},
 };
 Discount.propTypes = {
-  discountFlag: string,
+  discountFlag: shape({}),
   agreementData: shape({
     id: string,
     monthly_discount_amount: oneOfType([string, number]),
@@ -357,5 +363,6 @@ Discount.propTypes = {
   setIsEditContract: func,
   getAmendmentData: func,
   getServicesAccordingToAccType: func,
+  getContractActivityLogInfo: func,
 };
 export default Discount;

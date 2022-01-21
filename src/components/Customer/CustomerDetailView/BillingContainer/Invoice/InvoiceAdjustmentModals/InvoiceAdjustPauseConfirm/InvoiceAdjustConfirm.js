@@ -6,11 +6,13 @@ import { arrayOf, func, number, shape, string } from 'prop-types';
 import {
   ArrowRightBlackIcon,
   ArrowRightIcon,
+  EditOrangeIcon,
   LeftArrowIcon,
 } from '../../../../../../../theme/images';
 import { ModalBox, Button, GreyCard } from '../../../../../../../common';
 import numberWithCommas from '../../../../../../../hooks/numberWithComas';
 import OneTimeInvoiceAdjustConfirm from './OneTimeInvoiceAdjustConfirm';
+import Theme from '../../../../../../../theme/Theme';
 
 const InvoiceAdjustConfirm = ({
   onBackClick,
@@ -19,10 +21,39 @@ const InvoiceAdjustConfirm = ({
   selectedMonthYear,
   invoiceType,
   onApply,
-  bpName,
   today,
+  dspContact,
+  onEditDspContact,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
+
+  const returnInvoiceBillDate = () => {
+    if (today > 10) {
+      if (invoiceType === 'standard') {
+        return `${dayjs(selectedMonthYear?.value)
+          .subtract(1, 'M')
+          .format('MMMM')}`;
+      }
+      if (
+        dayjs(selectedMonthYear?.value).subtract(1, 'M').format('MMMM') ===
+        dayjs().format('MMMM')
+      ) {
+        return `${dayjs(selectedMonthYear?.value).format('MMMM')}`;
+      }
+      return `${dayjs(selectedMonthYear?.value).format('MMMM')}`;
+    }
+    if (invoiceType === 'standard') {
+      return `${dayjs(selectedMonthYear?.value)
+        .subtract(1, 'M')
+        .format('MMMM')}`;
+    }
+    if (
+      dayjs(selectedMonthYear?.value).format('MMMM') !== dayjs().format('MMMM')
+    ) {
+      return `${dayjs(selectedMonthYear?.value).format('MMMM')}`;
+    }
+    return `${dayjs().format('MMMM')}`;
+  };
 
   const totalChangeAmount =
     totalNewBudget - totalCurrentBudget > 0
@@ -42,23 +73,23 @@ const InvoiceAdjustConfirm = ({
             return (
               <>
                 <div className="row">
-                  <div className="col-12 text-left">
+                  <div className="col-12  text-left">
                     <div className="label">Marketplace</div>
                     <div className={textClass}>{item.marketplace}</div>
                   </div>
 
-                  <div className="col-4 text-left">
+                  <div className="col-4 pr-2 text-left">
                     <div className="label">From</div>
                     <div className={textClass}>
                       ${numberWithCommas(item.new_budget)}
                     </div>
                   </div>
-                  <div className="col-2 text-left">
+                  <div className="col-2 px-1 text-left">
                     <div className="mt-3">
                       <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
                     </div>
                   </div>
-                  <div className="col-3 text-left">
+                  <div className="col-3 px-1 text-left">
                     <div className="label">To</div>
                     <div className={textClass}>
                       $
@@ -67,7 +98,7 @@ const InvoiceAdjustConfirm = ({
                         : numberWithCommas(item.new_budget)}
                     </div>
                   </div>
-                  <div className="col-3 text-left">
+                  <div className="col-3 pl-1 text-left">
                     <div className="label">Change</div>
                     <div className={textClass}>
                       {item.change
@@ -94,24 +125,24 @@ const InvoiceAdjustConfirm = ({
             <div className="normal-text text-bold">Total invoice</div>
           </div>
 
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="label">From</div>
             <div className="gray-normal-text">
               ${numberWithCommas(totalCurrentBudget)}
             </div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="mt-3">
               <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
             </div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 px-1 text-left">
             <div className="label">To</div>
             <div className="gray-normal-text">
               ${numberWithCommas(totalNewBudget)}
             </div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="label">Change</div>
             <div className="gray-normal-text">{totalChangeAmount}</div>
           </div>
@@ -124,16 +155,16 @@ const InvoiceAdjustConfirm = ({
     return (
       <div className="d-md-block d-none">
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="label">Marketplace</div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 px-1 text-left">
             <div className="label">From</div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="label">To</div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="label">Change</div>
           </div>
         </div>
@@ -148,20 +179,20 @@ const InvoiceAdjustConfirm = ({
                 : 'gray-normal-text';
             return (
               <div key={item.id} className="row mt-1">
-                <div className="col-4 text-left">
+                <div className="col-4 pr-2 text-left">
                   <div className={textClass}>{item.marketplace}</div>
                 </div>
-                <div className="col-2 text-left">
+                <div className="col-2 px-1 text-left">
                   <div className={textClass}>
                     ${numberWithCommas(item.new_budget)}
                   </div>
                 </div>
-                <div className="col-1 text-left">
+                <div className="col-1 px-1 text-left">
                   <div className={textClass}>
                     <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
                   </div>
                 </div>
-                <div className="col-2 text-left">
+                <div className="col-2 px-1 text-left">
                   <div className={textClass}>
                     $
                     {item.newAmount
@@ -169,7 +200,7 @@ const InvoiceAdjustConfirm = ({
                       : numberWithCommas(item.new_budget)}
                   </div>
                 </div>
-                <div className="col-3 text-left">
+                <div className="col-3 pl-1 text-left">
                   <div className={textClass}>
                     {item.change
                       ? item.change === 0
@@ -186,25 +217,25 @@ const InvoiceAdjustConfirm = ({
 
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         <div className="row">
-          <div className="col-4 text-left">
+          <div className="col-4 pr-2 text-left">
             <div className="normal-text text-bold">Total invoice</div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="normal-text text-bold">
               ${numberWithCommas(totalCurrentBudget)}
             </div>
           </div>
-          <div className="col-1 text-left">
+          <div className="col-1 px-1 text-left">
             <div className="normal-text">
               <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
             </div>
           </div>
-          <div className="col-2 text-left">
+          <div className="col-2 px-1 text-left">
             <div className="normal-text text-bold">
               ${numberWithCommas(totalNewBudget)}
             </div>
           </div>
-          <div className="col-3 text-left">
+          <div className="col-3 pl-1 text-left">
             <div className="normal-text text-bold"> {totalChangeAmount}</div>
           </div>
         </div>
@@ -227,10 +258,44 @@ const InvoiceAdjustConfirm = ({
             Invoice Adjustment
           </h4>
           <div className="body-content">
-            <p className="normal-text">
-              The following proposal will be send to <b>{bpName}</b> for
-              approval:
-            </p>
+            {dspContact &&
+            Object.keys(dspContact).length === 0 &&
+            Object.getPrototypeOf(dspContact) === Object.prototype ? (
+              <div
+                style={{ color: Theme.orange }}
+                className="mt-2 mb-2 normal-text cursor"
+                onClick={() => onEditDspContact('add')}
+                aria-hidden="true">
+                Please Click here to add DSP Contact
+              </div>
+            ) : (
+              <>
+                {' '}
+                <p className="normal-text">
+                  This proposal will be send to the following contact:
+                </p>
+                <fieldset className="less-border mb-3">
+                  <div className="row">
+                    <div className="col-9 pl-4">
+                      <div className="normal-text text-bold">
+                        {dspContact?.first_name} {dspContact?.last_name}
+                      </div>
+                      <div className="normal-text">{dspContact?.email}</div>
+                    </div>
+                    <div className="col-3">
+                      <div
+                        className="edit-contact"
+                        role="presentation"
+                        onClick={() => onEditDspContact('update')}>
+                        <img src={EditOrangeIcon} alt="" />
+                        Edit
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>{' '}
+              </>
+            )}
+
             <div className=" straight-line horizontal-line pt-1 mb-2 " />
             {invoiceType !== 'one time' ? (
               <>
@@ -258,28 +323,13 @@ const InvoiceAdjustConfirm = ({
                   onwards.
                 </b>
                 <br /> The first bill for this amount will be sent{' '}
-                {today > 10
-                  ? invoiceType === 'standard'
-                    ? dayjs(selectedMonthYear?.value)
-                        .subtract(1, 'M')
-                        .format('MMMM')
-                    : dayjs(selectedMonthYear?.value).format('MMMM')
-                  : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
-                13.
+                {returnInvoiceBillDate()} 13.
               </p>
             ) : null}
             {invoiceType === 'permanent additional' && (
               <GreyCard className="yellow-card">
                 <p className="normal-text text-bold m-0">
-                  Additional DSP invoice (
-                  {today > 10
-                    ? invoiceType === 'standard'
-                      ? dayjs(selectedMonthYear?.value)
-                          .subtract(1, 'M')
-                          .format('MMMM')
-                      : dayjs(selectedMonthYear?.value).format('MMMM')
-                    : dayjs(selectedMonthYear?.value).format('MMMM')}{' '}
-                  only)
+                  Additional DSP invoice ({returnInvoiceBillDate()} only)
                 </p>
                 <p className="normal-text text-bold mb-0 mt-1">
                   {' '}
@@ -287,8 +337,8 @@ const InvoiceAdjustConfirm = ({
                 </p>
                 <p className="normal-text mb-0 mt-1">
                   The will be a one-off invoice, providing additional budget to
-                  spend in the current month. This invoice will be sent as soon
-                  as brand partner approves the proposal.
+                  spend in the {returnInvoiceBillDate()}. This invoice will be
+                  sent as soon as brand partner approves the proposal.
                 </p>
               </GreyCard>
             )}
@@ -326,7 +376,8 @@ InvoiceAdjustConfirm.defaultProps = {
   returnTotalAmount: () => {},
   selectedMonthYear: {},
   onApply: () => {},
-  bpName: '',
+  dspContact: {},
+  onEditDspContact: () => {},
 };
 
 InvoiceAdjustConfirm.propTypes = {
@@ -336,6 +387,7 @@ InvoiceAdjustConfirm.propTypes = {
   selectedMonthYear: shape({}),
   invoiceType: string.isRequired,
   onApply: func,
-  bpName: string,
   today: number.isRequired,
+  dspContact: shape({}),
+  onEditDspContact: func,
 };

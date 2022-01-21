@@ -84,14 +84,14 @@ export default function EditCompanyDetails({
 
     setClearSocialInput({ ...clearSocialInput, [key]: null });
     updateCustomerDetails(detail.id, { [key]: null }).then((response) => {
-      if (response && response.status === 200) {
-        setDetail(response && response.data);
+      if (response?.status === 200) {
+        setDetail(response?.data);
         toast.success('Social Media URL removed.');
         getActivityLogInfo();
         setIsLoading({ loader: false, type: 'page' });
       }
-      if (response && response.status === 400) {
-        setApiError(response && response.data);
+      if (response?.status === 400) {
+        setApiError(response?.data);
       }
     });
   };
@@ -113,17 +113,17 @@ export default function EditCompanyDetails({
         cols="50"
         name={item.key}
         style={{ height: '80px' }}
-        defaultValue={(detail && detail[item.key]) || ''}
+        defaultValue={detail?.[item.key] || ''}
         onChange={(event) => handleChange(event, item.key)}
       />
     );
   };
 
   const mapIconValues = (key) => {
-    if (detail && detail[key]) {
+    if (detail?.[key]) {
       return detail[key];
     }
-    if (formData && formData[key]) {
+    if (formData?.[key]) {
       return formData[key];
     }
     return '';
@@ -155,7 +155,7 @@ export default function EditCompanyDetails({
                 onChange={(event) => handleChange(event, icon.key)}
               />
 
-              {detail && detail[icon.key] ? (
+              {detail?.[icon.key] ? (
                 <img
                   src={TrashIcons}
                   alt="delete"
@@ -166,9 +166,7 @@ export default function EditCompanyDetails({
               ) : (
                 ''
               )}
-              <ErrorMsg>
-                {apiError && apiError[icon.key] && apiError[icon.key][0]}
-              </ErrorMsg>
+              <ErrorMsg>{apiError?.[icon.key]?.[0]}</ErrorMsg>
             </FormField>
           </div>
         </React.Fragment>,
@@ -186,8 +184,8 @@ export default function EditCompanyDetails({
         className="form-control"
         defaultValue={
           item.key === 'phone_number'
-            ? detail && detail[item.key]
-            : Math.round(detail && detail[item.key]) || ''
+            ? detail?.[item.key]
+            : Math.round(detail?.[item.key]) || ''
         }
         placeholder={item.label}
         prefix={item.type === 'number-currency' ? '$' : ''}
@@ -198,7 +196,7 @@ export default function EditCompanyDetails({
   };
 
   const mapInputValues = (item) => {
-    return detail && detail[item.key];
+    return detail?.[item.key];
   };
 
   const generateInput = (item) => {
@@ -237,7 +235,7 @@ export default function EditCompanyDetails({
     if (item.type === 'textarea') {
       return generateTextArea(item);
     }
-    if (item && item.type && item.type.includes('number')) {
+    if (item?.type?.includes('number')) {
       return generateNumberFormat(item);
     }
     return generateInput(item);
@@ -246,14 +244,14 @@ export default function EditCompanyDetails({
   const saveData = () => {
     setIsLoading({ loader: true, type: 'button' });
     updateCustomerDetails(detail.id, formData).then((response) => {
-      if (response && response.status === 400) {
+      if (response?.status === 400) {
         setIsLoading({ loader: false, type: 'button' });
-        setApiError(response && response.data);
+        setApiError(response?.data);
         setShowModal(true);
-      } else if (response && response.status === 200) {
+      } else if (response?.status === 200) {
         toast.success('Changes Saved!');
         setIsLoading({ loader: false, type: 'button' });
-        setDetail(response && response.data);
+        setDetail(response?.data);
         getActivityLogInfo();
         setShowModal(false);
       }
@@ -326,12 +324,13 @@ export default function EditCompanyDetails({
   };
 
   const saveContact = (contactId) => {
-    if (contactDetails && contactDetails.length === 1) {
+    setCheckChange({ [contactId]: true });
+    if (contactDetails?.length === 1) {
       createContactInfo(contactDetails[0]).then((responseContact) => {
-        if (responseContact && responseContact.status === 400) {
-          setContactApiError(responseContact && responseContact.data);
+        if (responseContact?.status === 400) {
+          setContactApiError(responseContact?.data);
         }
-        if (responseContact && responseContact.status === 201) {
+        if (responseContact?.status === 201) {
           toast.success('Contact Saved!');
           getContactData(id);
           setCheckChange({ ...checkChange, [contactId]: false });
@@ -342,10 +341,10 @@ export default function EditCompanyDetails({
     }
     if (contactFormData && contactId) {
       updateContactInfo(contactId, contactFormData).then((res) => {
-        if (res && res.status === 400) {
-          setContactApiError(res && res.data);
+        if (res?.status === 400) {
+          setContactApiError(res?.data);
         }
-        if (res && res.status === 200) {
+        if (res?.status === 200) {
           toast.success('Contact Saved!');
           getContactData(id);
           setCheckChange({ ...checkChange, [contactId]: false });
@@ -357,13 +356,7 @@ export default function EditCompanyDetails({
   };
 
   const mapContactValues = (item, key) => {
-    if (
-      item.id &&
-      contactApiError &&
-      contactApiError.email &&
-      contactApiError.email[0] &&
-      checkChange[item.id]
-    ) {
+    if (item.id && contactApiError?.email?.[0] && checkChange[item.id]) {
       return contactFormData[key] || item[key];
     }
     return item[key];
@@ -429,20 +422,14 @@ export default function EditCompanyDetails({
                         />
                         {checkChange[item.id] ? (
                           <ErrorMsg>
-                            {item.id &&
-                              contactApiError &&
-                              contactApiError.first_name &&
-                              contactApiError.first_name[0]}
+                            {item.id && contactApiError?.first_name?.[0]}
                           </ErrorMsg>
                         ) : (
                           ''
                         )}
                         {checkChange[i] && !item.id ? (
                           <ErrorMsg>
-                            {id &&
-                              contactApiError &&
-                              contactApiError.first_name &&
-                              contactApiError.first_name[0]}
+                            {id && contactApiError?.first_name?.[0]}
                           </ErrorMsg>
                         ) : (
                           ''
@@ -463,20 +450,14 @@ export default function EditCompanyDetails({
                         />
                         {checkChange[item.id] ? (
                           <ErrorMsg>
-                            {item.id &&
-                              contactApiError &&
-                              contactApiError.last_name &&
-                              contactApiError.last_name[0]}
+                            {item.id && contactApiError?.last_name?.[0]}
                           </ErrorMsg>
                         ) : (
                           ''
                         )}
                         {checkChange[i] && !item.id ? (
                           <ErrorMsg>
-                            {id &&
-                              contactApiError &&
-                              contactApiError.last_name &&
-                              contactApiError.last_name[0]}
+                            {id && contactApiError?.last_name?.[0]}
                           </ErrorMsg>
                         ) : (
                           ''
@@ -495,21 +476,6 @@ export default function EditCompanyDetails({
                             handleContactChange(event, item.id || i)
                           }
                         />
-                        {/* <InputSelect>
-                          <Select
-                            name="role"
-                            options={roles}
-                            defaultValue={item.role}
-                            onChange={(event) =>
-                              handleContactChange(event, item.id || i, 'choice')
-                            }
-                          />
-                        </InputSelect> */}
-                        <ErrorMsg>
-                          {contactApiError &&
-                            contactApiError.role &&
-                            contactApiError.role[0]}
-                        </ErrorMsg>
                       </FormField>
                     </div>
                     <div className="col-6">
@@ -528,16 +494,10 @@ export default function EditCompanyDetails({
                       {checkChange[item.id] ? (
                         <>
                           <ErrorMsg>
-                            {item.id &&
-                              contactApiError &&
-                              contactApiError.email &&
-                              contactApiError.email[0]}
+                            {item.id && contactApiError?.email?.[0]}
                           </ErrorMsg>
                           <ErrorMsg>
-                            {item.id &&
-                              contactApiError &&
-                              contactApiError.non_field_errors &&
-                              contactApiError.non_field_errors[0]}
+                            {item.id && contactApiError?.non_field_errors?.[0]}
                           </ErrorMsg>
                         </>
                       ) : (
@@ -546,16 +506,10 @@ export default function EditCompanyDetails({
                       {checkChange[i] && !item.id ? (
                         <>
                           <ErrorMsg>
-                            {id &&
-                              contactApiError &&
-                              contactApiError.email &&
-                              contactApiError.email[0]}
+                            {id && contactApiError?.email?.[0]}
                           </ErrorMsg>
                           <ErrorMsg>
-                            {id &&
-                              contactApiError &&
-                              contactApiError.non_field_errors &&
-                              contactApiError.non_field_errors[0]}
+                            {id && contactApiError?.non_field_errors?.[0]}
                           </ErrorMsg>
                         </>
                       ) : (
@@ -597,20 +551,14 @@ export default function EditCompanyDetails({
                         <ErrorMsg>
                           {checkChange[item.id] ? (
                             <ErrorMsg>
-                              {item.id &&
-                                contactApiError &&
-                                contactApiError.phone_number &&
-                                contactApiError.phone_number[0]}
+                              {item.id && contactApiError?.phone_number?.[0]}
                             </ErrorMsg>
                           ) : (
                             ''
                           )}
                           {checkChange[i] && !item.id ? (
                             <ErrorMsg>
-                              {id &&
-                                contactApiError &&
-                                contactApiError.phone_number &&
-                                contactApiError.phone_number[0]}
+                              {id && contactApiError?.phone_number?.[0]}
                             </ErrorMsg>
                           ) : (
                             ''
@@ -650,11 +598,7 @@ export default function EditCompanyDetails({
                         {generateHTML(item)}
                         <CheckPhoneNumber name="Phone" />
                       </label>
-                      <ErrorMsg>
-                        {apiError &&
-                          apiError[item.key] &&
-                          apiError[item.key][0]}
-                      </ErrorMsg>
+                      <ErrorMsg>{apiError?.[item.key]?.[0]}</ErrorMsg>
                     </FormField>
                   </div>
                 ) : (
@@ -703,14 +647,14 @@ export default function EditCompanyDetails({
               <div className="col-12">
                 <Button
                   className={
-                    (contactDetails && contactDetails.length === 1) ||
+                    contactDetails?.length === 1 ||
                     (contactApiError && Object.values(contactApiError).length)
                       ? 'btn-add-contact  disabled'
                       : 'btn-add-contact '
                   }
                   onClick={() => addNewContact()}
                   disabled={
-                    (contactDetails && contactDetails.length === 1) ||
+                    contactDetails?.length === 1 ||
                     (contactApiError && Object.values(contactApiError).length)
                   }>
                   {' '}

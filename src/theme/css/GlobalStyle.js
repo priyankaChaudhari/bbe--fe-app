@@ -1,8 +1,8 @@
 // globalStyles.js
 import { createGlobalStyle } from 'styled-components';
+
 import Theme from '../Theme';
 import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
-// import NoahRegular from '../fonts/noah-font/Noah Regular.otf';
 import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
 import NoahRegularItalic from '../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff';
 import NoahBoldItalic from '../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff';
@@ -11,10 +11,7 @@ import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.wof
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
 import NoahMedium from '../fonts/Noah/Noah/WEB/NoahMedium.otf';
-
-import { CalendarFontBackArrow } from '../images/index';
-
-// import theme from '@amcharts/amcharts4/themes/dataviz';
+import { CalendarFontBackArrow } from '../images';
 
 const bodyStyles = createGlobalStyle`
 
@@ -396,7 +393,6 @@ p {
     display: block;
     position: relative;
     padding-left: 35px;
-    /* margin-bottom: 12px; */
     cursor: pointer;
     font-size: ${Theme.extraMedium};
     -webkit-user-select: none;
@@ -673,6 +669,11 @@ a {
      width: 100% !important;
    }
 }
+.col-sm-mt-3 {
+   @media only screen and (max-width: 767px)  {
+     margin-top: 16px;
+   }
+}
 
 .h-100 {
   height: 100% !important;
@@ -790,7 +791,11 @@ fieldset {
     border-radius: 8px;
   }
   &.extra-radius {
-      border-radius: 15px;
+    border-radius: 15px;
+  }
+  &.less-border {
+    border-radius: 4px;
+    border: 1px solid ${Theme.gray11}; 
   }
 }
 

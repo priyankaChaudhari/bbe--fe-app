@@ -41,7 +41,7 @@ export const InvoiceInfo = {
       'The will be a one-off invoice, providing additional budget for ',
     boldHeading: 'APPLICABLE_MONTH only. ',
     mainHeading2:
-      'This invoice will be sent as soon as you approve this proposal.',
+      'This invoice will be sent as soon as you approve the proposal.',
   },
   pause: {
     mainHeading: 'The changes will apply to ',
@@ -60,3 +60,36 @@ export const TotalInvoiceHeader = {
   'one time': 'One-time total',
   pause: 'Total invoice',
 };
+
+export const dspContactInputFields = [
+  {
+    key: 'first_name',
+    label: 'First name',
+    type: 'text',
+    property: 'col-6 pr-2',
+    section: 'contact',
+  },
+  {
+    key: 'last_name',
+    label: 'Last name',
+    type: 'text',
+    property: 'col-6 pl-2',
+    section: 'contact',
+  },
+
+  {
+    key: 'email',
+    label: 'Email',
+    type: 'email',
+    property: 'col-6 pr-2',
+    section: 'contact',
+  },
+  {
+    key: 'phone_number',
+    label: 'Phone number',
+    type: 'number',
+    property: 'col-6 pl-2',
+    section: 'contact',
+    removeForDSP: true,
+  },
+];

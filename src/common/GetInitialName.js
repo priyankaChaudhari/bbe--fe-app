@@ -23,7 +23,7 @@ export default function GetInitialName({ userInfo, property, type }) {
           : type === 'team'
           ? 'avatarName team-avatarName'
           : type === 'activity'
-          ? ''
+          ? 'avatarName'
           : `avatarName ${property}`
       }>
       {getInitials(userInfo, type)}

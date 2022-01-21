@@ -1,11 +1,12 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
-import { shape, string, object, oneOfType } from 'prop-types';
-import { toast, ToastContainer } from 'react-toastify';
+import { shape, string } from 'prop-types';
+import { toast } from 'react-toastify';
 import Select from 'react-select';
 
 import Theme from '../../../../../theme/Theme';
@@ -23,9 +24,12 @@ import {
 } from '../../../../../constants';
 import {
   getBillingDetails,
+  getBPRoles,
+  getDSPContact,
   getPaymentTermsDetails,
   getPaymentTermsOptions,
   saveBillingInfo,
+  saveDSPContact,
   savePaymentTerms,
 } from '../../../../../api';
 import {
@@ -38,6 +42,7 @@ import {
   WhiteCard,
   ContractInputSelect,
   DropdownIndicator,
+  ErrorMsgBox,
 } from '../../../../../common';
 
 export default function BillingDetails({
@@ -61,6 +66,10 @@ export default function BillingDetails({
   const [paymentTermsOptions, setPaymentTermsOptions] = useState([]);
   const [paymentTermsValue, setPaymentTermsValue] = useState([]);
   const [showBtn, setShowBtn] = useState(false);
+  const [showDSPModal, setShowDSPModal] = useState(false);
+  const [DSPData, setDSPData] = useState([]);
+  const [showDSPEdit, setShowDSPEdit] = useState(false);
+  const [showDSPErrorTostr, setShowDSPErrorTostr] = useState(false);
 
   const customStyles = {
     content: {
@@ -106,12 +115,41 @@ export default function BillingDetails({
     });
   }, [id]);
 
+  const getDSPContactInfo = useCallback(() => {
+    getDSPContact(id).then((res) => {
+      if (res?.status === 200) {
+        if (res?.data?.is_dsp_contract) {
+          getBPRoles(id, userInfo?.id).then((response) => {
+            if (response?.status === 200) {
+              const role = response?.data?.results?.[0]?.user_profile?.role;
+              if (response?.data?.results?.length === 0) setShowDSPEdit(false);
+              if (
+                role === 'BGS' ||
+                role === 'BGS Manager' ||
+                role === 'DSP Ad Manager' ||
+                role === 'Ad Manager Admin'
+              )
+                setShowDSPEdit(true);
+              else setShowDSPEdit(false);
+            } else setShowDSPEdit(false);
+          });
+        } else setShowDSPEdit(false);
+        setDSPData(res?.data?.results);
+        setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
+      }
+    });
+  }, [id]);
+
   useEffect(() => {
     billingDetails();
     getPaymentTerms();
-  }, [billingDetails, getPaymentTerms]);
+    getDSPContactInfo();
+  }, [billingDetails, getPaymentTerms, getDSPContactInfo]);
 
   const mapDefaultValues = (type, key) => {
+    if (type === 'dsp_contact') {
+      return key;
+    }
     if (key === 'expiration_date') {
       const getDate = data?.card_details?.[0]?.[key]
         ? data.card_details[0][key].includes('-')
@@ -250,13 +288,6 @@ export default function BillingDetails({
             : ''
         }
         isNumericString
-        // isAllowed={(values) => {
-        //   const { formattedValue } = values;
-        //   if (item.key === 'expiration_date') {
-        //     return formattedValue?.split('/')?.[0] <= 12;
-        //   }
-        //   return formattedValue;
-        // }}
       />
     );
   };
@@ -267,15 +298,15 @@ export default function BillingDetails({
         className="form-control"
         placeholder={`Enter ${item.label}`}
         type={item.type}
-        defaultValue={data?.[type]?.[0]?.[item.key]}
+        defaultValue={data?.[type]?.[0]?.[item.key] || DSPData?.[0]?.[item.key]}
         onChange={(event) => handleChange(event, item, type)}
         maxLength={item.key === 'postal_code' ? 10 : ''}
-        readOnly={data?.id && item.key === 'email'}
+        readOnly={type !== 'dsp_contact' && data?.id && item.key === 'email'}
       />
     );
   };
 
-  const mapContactDetails = () => {
+  const mapContactDetails = (type) => {
     return (
       <div className="row">
         {billingAddress
@@ -283,25 +314,39 @@ export default function BillingDetails({
           .map((item) => {
             return (
               <div
-                className="col-md-6"
+                className={type === 'dsp' ? 'col-md-12' : 'col-md-6'}
                 key={item.key}
                 style={{
-                  opacity: data?.id && item.key === 'email' ? 0.5 : '',
+                  opacity:
+                    type !== 'dsp' && data?.id && item.key === 'email'
+                      ? 0.5
+                      : '',
                 }}>
                 <InputFormField className="mt-3">
                   <label htmlFor={item.label}>
                     {item.label}
                     <br />
                     {item.type === 'number' ? (
-                      <>{generateNumeric(item, 'billing_contact')}</>
+                      <>
+                        {generateNumeric(
+                          item,
+                          type === 'dsp' ? 'dsp_contact' : 'billing_contact',
+                        )}
+                      </>
                     ) : (
-                      <>{generateInput(item, 'billing_contact')}</>
+                      <>
+                        {generateInput(
+                          item,
+                          type === 'dsp' ? 'dsp_contact' : 'billing_contact',
+                        )}
+                      </>
                     )}
                   </label>
                 </InputFormField>
                 <ErrorMsg>
                   {apiError?.billing_contact?.[item.key]?.[0]}
                 </ErrorMsg>
+                <ErrorMsg>{apiError?.dsp_contact?.[item.key]}</ErrorMsg>
               </div>
             );
           })}
@@ -434,73 +479,106 @@ export default function BillingDetails({
 
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
+    if (showDSPModal && formData.dsp_contact) {
+      saveDSPContact(
+        { ...formData.dsp_contact, customer: id },
+        formData?.dsp_contact?.id,
+      ).then((res) => {
+        if (res?.status === 400) {
+          setApiError({ ...apiError, dsp_contact: res.data });
+          if (
+            res.data?.first_name?.[0].includes(
+              'This field may not be blank.',
+            ) ||
+            res.data?.last_name?.[0].includes('This field may not be blank.') ||
+            res.data?.email?.[0].includes('This field may not be blank.') ||
+            res.data?.first_name?.[0].includes('This field is required.') ||
+            res.data?.last_name?.[0].includes('This field is required.') ||
+            res.data?.email?.[0].includes('This field is required.')
+          ) {
+            setShowDSPErrorTostr(true);
+            setTimeout(() => {
+              setShowDSPErrorTostr(false);
+            }, 4000);
+          } else setShowDSPErrorTostr(false);
 
-    const getYear = new Date().getFullYear().toString().substring(0, 2);
-    let format = '';
-    if (!formData?.card_details?.expiration_date?.includes(getYear)) {
-      format = formData.card_details.expiration_date.split('/');
-      formData.card_details.expiration_date = `${getYear + format[1]}-${
-        format[0]
-      }`;
-    }
-    if (
-      formData?.billing_contact?.phone_number === '' ||
-      formData?.billing_contact?.phone_number === null
-    )
-      delete formData.billing_contact.phone_number;
-    if (
-      JSON.stringify(data?.card_details?.[0]) ===
-      JSON.stringify(formData.card_details)
-    ) {
-      delete formData.card_details;
-      delete formData.old_billinginfo_id;
+          setIsLoading({ loader: false, type: 'button' });
+        }
+        if (res?.status === 201 || res?.status === 200) {
+          getDSPContactInfo(id);
+          setShowDSPModal(false);
+          setIsLoading({ loader: false, type: 'button' });
+        }
+      });
     } else {
-      formData.old_billinginfo_id = data?.id;
-    }
-
-    if (formData?.old_billinginfo_id === '') delete formData.old_billinginfo_id;
-    if (formData?.billing_contact?.expiry_info)
-      delete formData.billing_contact.expiry_info;
-    delete formData.expiryMessage;
-
-    let details = {};
-
-    if (data?.id === undefined || data?.id === '') {
-      details = {
-        ...formData,
-        billing_address: formData.billing_address || {},
-        billing_contact: formData.billing_contact || {},
-        card_details: formData.card_details || {},
-        customer_onboarding: userInfo.customer_onboarding || onBoardingId,
-        payment_type: 'credit card',
-      };
-    } else {
-      details = {
-        ...formData,
-        billing_address: formData.billing_address,
-        billing_contact: formData.billing_contact,
-        customer_onboarding: userInfo.customer_onboarding || onBoardingId,
-        payment_type: 'credit card',
-      };
-    }
-
-    saveBillingInfo(
-      details,
-      formData?.old_billinginfo_id ? null : data?.id,
-    ).then((res) => {
-      if (res?.status === 200 || res?.status === 201) {
-        setIsLoading({ loader: false, type: 'button' });
-        billingDetails();
-        setShowModal(false);
-        setShowBtn(false);
-        dispatch(showProfileLoader(true));
-        dispatch(showProfileLoader(false));
+      const getYear = new Date().getFullYear().toString().substring(0, 2);
+      let format = '';
+      if (!formData?.card_details?.expiration_date?.includes(getYear)) {
+        format = formData.card_details.expiration_date.split('/');
+        formData.card_details.expiration_date = `${getYear + format[1]}-${
+          format[0]
+        }`;
       }
-      if (res?.status === 400) {
-        setIsLoading({ loader: false, type: 'button' });
-        setApiError(res?.data);
+      if (
+        formData?.billing_contact?.phone_number === '' ||
+        formData?.billing_contact?.phone_number === null
+      )
+        delete formData.billing_contact.phone_number;
+      if (
+        JSON.stringify(data?.card_details?.[0]) ===
+        JSON.stringify(formData.card_details)
+      ) {
+        delete formData.card_details;
+        delete formData.old_billinginfo_id;
+      } else {
+        formData.old_billinginfo_id = data?.id;
       }
-    });
+
+      if (formData?.old_billinginfo_id === '')
+        delete formData.old_billinginfo_id;
+      if (formData?.billing_contact?.expiry_info)
+        delete formData.billing_contact.expiry_info;
+      delete formData.expiryMessage;
+
+      let details = {};
+
+      if (data?.id === undefined || data?.id === '') {
+        details = {
+          ...formData,
+          billing_address: formData.billing_address || {},
+          billing_contact: formData.billing_contact || {},
+          card_details: formData.card_details || {},
+          customer_onboarding: userInfo.customer_onboarding || onBoardingId,
+          payment_type: 'credit card',
+        };
+      } else {
+        details = {
+          ...formData,
+          billing_address: formData.billing_address,
+          billing_contact: formData.billing_contact,
+          customer_onboarding: userInfo.customer_onboarding || onBoardingId,
+          payment_type: 'credit card',
+        };
+      }
+
+      saveBillingInfo(
+        details,
+        formData?.old_billinginfo_id ? null : data?.id,
+      ).then((res) => {
+        if (res?.status === 200 || res?.status === 201) {
+          setIsLoading({ loader: false, type: 'button' });
+          billingDetails();
+          setShowModal(false);
+          setShowBtn(false);
+          dispatch(showProfileLoader(true));
+          dispatch(showProfileLoader(false));
+        }
+        if (res?.status === 400) {
+          setIsLoading({ loader: false, type: 'button' });
+          setApiError(res?.data);
+        }
+      });
+    }
   };
 
   const savePaymentTermsData = () => {
@@ -525,11 +603,6 @@ export default function BillingDetails({
   return (
     <>
       {' '}
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        pauseOnFocusLoss={false}
-      />
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="performance-graph"
@@ -672,6 +745,44 @@ export default function BillingDetails({
               </WhiteCard>
 
               <WhiteCard className="mt-3">
+                <p className="black-heading-title mt-0 mb-4">DSP Contact</p>
+                {customerStatus?.value !== 'pending' && showDSPEdit ? (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowDSPModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                ) : null}
+                {DSPData?.map((item) => (
+                  <GroupUser className="mt-3" key={item.key}>
+                    {item.id ? (
+                      <GetInitialName
+                        property="float-left mr-3"
+                        userInfo={item}
+                      />
+                    ) : (
+                      ''
+                    )}
+                    <div className="activity-user">
+                      {mapDefaultValues('dsp_contact', item.first_name)}{' '}
+                      {mapDefaultValues('dsp_contact', item.last_name)}
+                      <br />
+                      <div className="user-email-address">
+                        {mapDefaultValues('dsp_contact', item.email)}
+                      </div>
+                      <br />
+                      <div className="user-email-address">
+                        {mapDefaultValues('dsp_contact', item.phone_number)}
+                      </div>
+                    </div>
+                    <div className="clear-fix" />
+                  </GroupUser>
+                ))}
+              </WhiteCard>
+
+              <WhiteCard className="mt-3">
                 <p className="black-heading-title mt-0 mb-0">Billing Address</p>
 
                 {customerStatus?.value !== 'pending' ? (
@@ -711,7 +822,7 @@ export default function BillingDetails({
         </div>
       )}
       <Modal
-        isOpen={showModal}
+        isOpen={showModal || showDSPModal}
         style={customStyles}
         ariaHideApp={false}
         contentLabel="Edit modal">
@@ -723,25 +834,44 @@ export default function BillingDetails({
             setShowModal(false);
             setShowBtn(false);
             setApiError({});
+            setShowDSPModal(false);
           }}
           role="presentation"
         />
         <ModalBox>
           {' '}
           <div className="modal-body">
-            <h4>Payment Details</h4>
-            <div className="body-content mt-3 ">
-              {mapPaymentDetails()}
-              <ErrorMsg style={{ textAlign: 'center' }}>
-                {apiError && apiError[0]}
-              </ErrorMsg>
-              <div className="straight-line horizontal-line  mt-3 mb-3" />
-              <h4>Billing Address</h4>
-              {mapAddressDetails()}
-              <div className="straight-line horizontal-line  mt-3 mb-3" />
-              <h4>Billing Contact</h4>
-              {mapContactDetails()}
-            </div>
+            {showDSPModal ? (
+              <>
+                <h4>Edit DSP Contact</h4>
+                <div className="straight-line horizontal-line mt-3" />
+                {showDSPErrorTostr ? (
+                  <ErrorMsgBox
+                    className="danger mt-3"
+                    style={{ textAlign: 'center' }}>
+                    You need to fill out all required fields before submitting
+                    the DSP Contact.
+                  </ErrorMsgBox>
+                ) : null}
+                {mapContactDetails('dsp')}
+              </>
+            ) : (
+              <>
+                <h4>Payment Details</h4>
+                <div className="body-content mt-3 ">
+                  {mapPaymentDetails()}
+                  <ErrorMsg style={{ textAlign: 'center' }}>
+                    {apiError && apiError[0]}
+                  </ErrorMsg>
+                  <div className="straight-line horizontal-line  mt-3 mb-3" />
+                  <h4>Billing Address</h4>
+                  {mapAddressDetails()}
+                  <div className="straight-line horizontal-line  mt-3 mb-3" />
+                  <h4>Billing Contact</h4>
+                  {mapContactDetails('billing')}
+                </div>
+              </>
+            )}
           </div>
           {showBtn ? (
             <>
@@ -753,7 +883,7 @@ export default function BillingDetails({
                   {isLoading.loader && isLoading.type === 'button' ? (
                     <PageLoader color={Theme.white} type="button" />
                   ) : (
-                    'Save Changes'
+                    'Confirm'
                   )}
                 </Button>
                 <Button
@@ -762,6 +892,7 @@ export default function BillingDetails({
                     setShowModal(false);
                     setShowBtn(false);
                     setApiError({});
+                    setShowDSPModal(false);
                   }}>
                   Discard Changes
                 </Button>
@@ -830,8 +961,5 @@ BillingDetails.propTypes = {
     customer_onboarding: string,
   }).isRequired,
   onBoardingId: string,
-  customerStatus: oneOfType({
-    string,
-    object,
-  }),
+  customerStatus: shape({}),
 };
