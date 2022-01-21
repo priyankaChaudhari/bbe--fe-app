@@ -30,7 +30,10 @@ import {
   PageLoader,
 } from '../../../../../../common';
 import { adjustInvoiceChoices } from '../../../../../../constants/CustomerConstants';
-import { PATH_CUSTOMER_DETAILS } from '../../../../../../constants';
+import {
+  dspContactInputFields,
+  PATH_CUSTOMER_DETAILS,
+} from '../../../../../../constants';
 import InvoicePauseConfirm from './InvoiceAdjustPauseConfirm/InvoicePauseConfirm';
 import DSPContactModal from './DSPContactModal';
 
@@ -226,41 +229,58 @@ const InvoiceAdjustPauseModal = ({
     };
   }, [getAdjustInvoices, invoiceType]);
 
+  const checkTextInput = () => {
+    let flag = true;
+    dspContactInputFields.forEach((item) => {
+      if (formData?.[item.key] !== null && !formData?.[item.key].trim()) {
+        setDspError({
+          formError: { [item.key]: ['This is a required field'] },
+          toastError: true,
+        });
+        flag = false;
+      }
+    });
+    return flag;
+  };
+
   const saveBillingData = () => {
     setDspError({});
-    setDspLoader(true);
-    if (isUpdateDSPContact) {
-      updateDSPContact(dspContact?.id, formData).then((res) => {
-        if (res?.status === 400) {
-          setDspError({ formError: res.data, toastError: true });
+    if (checkTextInput()) {
+      setDspLoader(true);
+      if (isUpdateDSPContact) {
+        updateDSPContact(dspContact?.id, formData).then((res) => {
+          if (res?.status === 400) {
+            setDspError({ formError: res.data, toastError: true });
+            setDspLoader(false);
+          }
+          if (res?.status === 201 || res?.status === 200) {
+            getDSPContactInfo(id);
+            setShowDspContactModal(false);
+            setDspLoader(false);
+            setVisibleBtn(false);
+          }
           setDspLoader(false);
-        }
-        if (res?.status === 201 || res?.status === 200) {
-          getDSPContactInfo(id);
-          setShowDspContactModal(false);
+        });
+      } else {
+        saveDSPContact(
+          { ...formData, customer: customerId },
+          formData?.customerId,
+        ).then((res) => {
+          if (res?.status === 400) {
+            setDspError({ formError: res.data, toastError: true });
+            setDspLoader(false);
+            setTimeout(() => {
+              setDspError({ formError: res.data, toastError: false });
+            }, 3000);
+          }
+          if (res?.status === 201 || res?.status === 200) {
+            getDSPContactInfo(id);
+            setShowDspContactModal(false);
+            setDspLoader(false);
+          }
           setDspLoader(false);
-        }
-        setDspLoader(false);
-      });
-    } else {
-      saveDSPContact(
-        { ...formData, customer: customerId },
-        formData?.customerId,
-      ).then((res) => {
-        if (res?.status === 400) {
-          setDspError({ formError: res.data, toastError: true });
-          setDspLoader(false);
-          setTimeout(() => {
-            setDspError({ formError: res.data, toastError: false });
-          }, 3000);
-        }
-        if (res?.status === 201 || res?.status === 200) {
-          getDSPContactInfo(id);
-          setShowDspContactModal(false);
-          setDspLoader(false);
-        }
-        setDspLoader(false);
-      });
+        });
+      }
     }
   };
 
@@ -391,11 +411,8 @@ const InvoiceAdjustPauseModal = ({
     return 0;
   }, [invoiceInputs, invoiceType]);
 
-  useEffect(() => {
-    setVisibleBtn(JSON.stringify(formData) !== JSON.stringify(dspContact));
-  }, [dspContact, formData]);
-
   const onHandleChange = (event, item) => {
+    setVisibleBtn(true);
     setFormData({
       ...formData,
       [item.key]: event.target.value,
@@ -405,6 +422,12 @@ const InvoiceAdjustPauseModal = ({
       ...dspError,
       formError: { [item.key]: '' },
     });
+  };
+
+  const onClose = () => {
+    setDspError({});
+    setShowDspContactModal(false);
+    setVisibleBtn(false);
   };
 
   return (
@@ -624,24 +647,14 @@ const InvoiceAdjustPauseModal = ({
       {showDspContactModal && (
         <DSPContactModal
           showDspContactModal={showDspContactModal}
-          onClose={() => {
-            setDspError({});
-            setShowDspContactModal(false);
-            if (JSON.stringify(formData) !== JSON.stringify(dspContact)) {
-              setVisibleBtn(true);
-              getDSPContactInfo(id);
-            }
-          }}
+          onClose={onClose}
           dspContact={dspContact}
           dspError={dspError}
           onConfirm={saveBillingData}
           onHandleChange={onHandleChange}
           visibleBtn={visibleBtn}
           loader={dspLoader}
-          onDiscard={() => {
-            setDspError({});
-            setShowDspContactModal(false);
-          }}
+          onDiscard={onClose}
         />
       )}
     </>
