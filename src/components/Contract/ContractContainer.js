@@ -1495,16 +1495,20 @@ export default function ContractContainer() {
 
   const customAmazonStorePrice = (fee) => {
     return `<td style="border: 1px solid black;padding: 13px;">
+      <span style=" background:#ffe5df; padding: 4px 9px;"> 
         ${fee ? `$${displayNumber(fee)}` : '$0'}
+        </span>
       </td>`;
   };
   const tdService = (service, fee) => {
     return `<td style="border: 1px solid black; padding: 13px;">
+      <span style=" background:#ffe5df; padding: 4px 9px;"> 
           ${
             service.quantity && fee
               ? `$${displayNumber(service.quantity * fee)}`
               : '$0'
           }
+          </span>
         </td>
         `;
   };
@@ -1530,26 +1534,36 @@ export default function ContractContainer() {
                 }</td>
                 ${
                   item.service?.fee
-                    ? `<td style="border: 1px solid black;padding: 13px;">$${
-                        item.service
-                          ? `${displayNumber(item.service.fee)}`
-                          : item.fee
-                          ? displayNumber(item.fee)
-                          : ''
-                      } /month
+                    ? `<td style="border: 1px solid black;padding: 13px;">
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+                    
+                    $${
+                      item.service
+                        ? `${displayNumber(item.service.fee)}`
+                        : item.fee
+                        ? displayNumber(item.fee)
+                        : ''
+                    } /month
+                    </span>
                   </td>`
                     : (
                         item.name
                           ? item.name === 'DSP Advertising'
                           : item.service.name === 'DSP Advertising'
                       )
-                    ? `<td style="border: 1px solid black;padding: 13px;">N/A</td>`
+                    ? `<td style="border: 1px solid black;padding: 13px;">
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+                    
+                    N/A</span></td>`
                     : `<td>
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+
                     ${
                       fixedFee && fixedFee[0] && fixedFee[0].fee
                         ? `$${displayNumber(fixedFee[0].fee)} /month`
                         : '$0'
                     }
+                    </span>
                     </td>`
                 }
                 </tr>`,
@@ -1566,7 +1580,9 @@ export default function ContractContainer() {
         return fields.push(
           `<tr>
             <td style="border: 1px solid black;padding: 13px;">
+              <span style=" background:#ffe5df; padding: 4px 9px;"> 
               ${service.quantity ? displayNumber(service.quantity) : 0}
+              </span>
             </td>                 
             <td style="border: 1px solid black;padding: 13px;">
               ${
@@ -1586,9 +1602,11 @@ export default function ContractContainer() {
                     )
               )
                 ? service.custom_amazon_store_price
-                  ? `<td style="border: 1px solid black;padding: 13px;">$${displayNumber(
-                      service.custom_amazon_store_price,
-                    )}</td>`
+                  ? `<td style="border: 1px solid black;padding: 13px;">
+                    <span style=" background:#ffe5df; padding: 4px 9px;"> 
+                  $${displayNumber(
+                    service.custom_amazon_store_price,
+                  )}</span></td>`
                   : customAmazonStorePrice(
                       fixedFee && fixedFee[0] && fixedFee[0].fee,
                     )
@@ -1634,6 +1652,8 @@ export default function ContractContainer() {
             ${
               item?.fee
                 ? `<td style="border: 1px solid black;padding: 13px;">
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+
                 $${
                   item.service
                     ? displayNumber(item.service.fee)
@@ -1642,10 +1662,14 @@ export default function ContractContainer() {
                     : ''
                 }
                 /month
+                </span>
               </td>`
-                : `<td>$${displayNumber(
-                    additionaMarketplaceAmount,
-                  )} /month</td>`
+                : `<td>
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+                
+                $${displayNumber(additionaMarketplaceAmount)} /month
+                </span>
+                </td>`
             }
           </tr>`,
         );
@@ -1668,7 +1692,10 @@ export default function ContractContainer() {
                    item.service ? item.service.name : item?.name
                  }</td>
                     <td style="border: 1px solid black;padding: 13px;"> 
-                  25% of recovered $s
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+
+                  25% of recovered $<span>&#39;</span>s
+                  </span>
                   </td>
                     </tr>`,
           );
@@ -1804,7 +1831,10 @@ export default function ContractContainer() {
         ? `<tr style=" border: 1px solid black;">
             <td class="total-service" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px"> Sub-total</td>
             <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+
             $${displayNumber(totalFees.monthlySubTotal)}
+            </span>
             </td>
          </tr>`
         : ''
@@ -1818,11 +1848,15 @@ export default function ContractContainer() {
                 ? `(${totalFees?.monthlyDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right"style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${
+            <td class="total-service text-right"style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+            
+            -$${
               totalFees?.monthlyAmountAfterDiscount
                 ? displayNumber(totalFees?.monthlyAmountAfterDiscount)
                 : 0
             }
+            </span>
             </td>
          </tr>`
         : ''
@@ -1830,9 +1864,12 @@ export default function ContractContainer() {
       <tr>
         <td class="total-service" style="border: 1px solid black;padding: 5px 13px; font-weight: 800"> Total</td>
         <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> 
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+
           $${
             totalFees?.monthlyTotal ? displayNumber(totalFees.monthlyTotal) : 0
           }
+          </span>
         </td>
       </tr>`;
   };
@@ -1844,9 +1881,10 @@ export default function ContractContainer() {
       totalFees?.oneTimeAmountAfterDiscount
         ? `<tr style=" border: 1px solid black;">
             <td  class="total-service" colspan="3" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px;"> Sub-total</td>
-            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">$${displayNumber(
-              totalFees?.oneTimeSubTotal,
-            )}
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">
+            <span style=" background:#ffe5df; padding: 4px 9px;"> 
+            $${displayNumber(totalFees?.oneTimeSubTotal)}
+            </span>
             </td>
          </tr>`
         : ''
@@ -1860,18 +1898,20 @@ export default function ContractContainer() {
                 ? `(${totalFees?.oneTimeDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right"> -$${displayNumber(
-              totalFees?.oneTimeAmountAfterDiscount,
-            )}
+            <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">
+            <span style=" background:#ffe5df; padding: 4px 9px;"> 
+            -$${displayNumber(totalFees?.oneTimeAmountAfterDiscount)}
+            </span>
             </td>
          </tr>`
         : ''
     }        
          <tr>
             <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
-            <td  class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> $${displayNumber(
-              totalFees?.oneTimeTotal,
-            )}
+            <td  class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right">
+            <span style=" background:#ffe5df; padding: 4px 9px;"> 
+            $${displayNumber(totalFees?.oneTimeTotal)}
+            </span>
             </td>
          </tr>
          `;
