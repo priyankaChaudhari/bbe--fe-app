@@ -671,7 +671,7 @@ export async function getBgsBrandPartners(bgs, startDate, endDate) {
   if (!isBgsManager) {
     params = {
       ...params,
-      manger_id: managerId,
+      manager_id: managerId,
     };
   }
 
