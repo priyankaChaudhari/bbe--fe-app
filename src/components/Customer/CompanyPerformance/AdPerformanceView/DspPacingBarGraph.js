@@ -155,11 +155,19 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
     series3.tooltip.background.strokeWidth = 0;
     series3.tooltip.background.filters.clear();
     series3.tooltip.background.cornerRadius = 10;
-    // series3.tooltip.background.pointerLength = 20;
+    series3.tooltip.background.pointerLength = 10;
     series3.columns.template.adapter.add(
       'tooltipHTML',
       function (text, target) {
         if (target.dataItem) {
+          if (target.dataItem._index <= 3) {
+            series3.tooltip.pointerOrientation = 'up';
+            series3.tooltip.dy = 10;
+          }
+          if (target.dataItem._index > 3) {
+            series3.tooltip.pointerOrientation = 'down';
+            series3.tooltip.dy = -10;
+          }
           if (target.dataItem.valueX > 0) {
             return `<div style="width:250px; padding:5px 5px 10px 5px">
             ${renderToolTip(
