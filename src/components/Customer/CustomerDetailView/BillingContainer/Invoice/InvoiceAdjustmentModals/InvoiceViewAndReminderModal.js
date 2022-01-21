@@ -42,6 +42,7 @@ const InvoiceViewAndReminderModal = ({
   customerId,
   isAllowToCreateAdjustment,
 }) => {
+  const isOneTime = adjustmentDetails?.dsp_invoice_subtype === 'one time';
   const mounted = useRef(true);
   const [showMoreRejectionNote, setShowMoreRejectionNote] = useState(false);
   const previousMonth = new Date(adjustmentDetails?.applicable_from);
@@ -97,18 +98,34 @@ const InvoiceViewAndReminderModal = ({
     return (
       <div className="d-md-block d-none">
         <div className="row">
-          <div className="col-4 text-left">
-            <div className="label">Marketplace</div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="label">From</div>
-          </div>
-          <div className="col-2 text-left">
-            <div className="label">To</div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="label">Change</div>
-          </div>
+          {isOneTime ? (
+            <>
+              <div className="col-4 text-left">
+                <div className="label">Marketplace</div>
+              </div>
+              <div className="col-4 text-left">
+                <div className="label">Existing Budget</div>
+              </div>
+              <div className="col-4 text-left">
+                <div className="label">Additional Amount</div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="col-4 text-left">
+                <div className="label">Marketplace</div>
+              </div>
+              <div className="col-3 text-left">
+                <div className="label">From</div>
+              </div>
+              <div className="col-2 text-left">
+                <div className="label">To</div>
+              </div>
+              <div className="col-3 text-left">
+                <div className="label">Change</div>
+              </div>
+            </>
+          )}
         </div>
         <div className=" straight-line horizontal-line pt-1 mb-2 " />
         {adjustmentDetails?.adjustments &&
@@ -120,10 +137,11 @@ const InvoiceViewAndReminderModal = ({
                     className={`normal-text ${
                       item?.new_budget - item?.old_budget ? 'text-bold' : null
                     } `}>
-                    {item.marketplace}
+                    {item?.marketplace}
                   </div>
                 </div>
-                <div className="col-2 text-left">
+                <div
+                  className={isOneTime ? 'col-4 text-left' : 'col-2 text-left'}>
                   <div
                     className={`normal-text ${
                       item?.new_budget - item?.old_budget ? 'text-bold' : null
@@ -131,12 +149,15 @@ const InvoiceViewAndReminderModal = ({
                     {generateAmount(item?.old_budget, 'from', '$')}
                   </div>
                 </div>
-                <div className="col-1 text-left">
-                  <div className="normal-text">
-                    <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+                {!isOneTime ? (
+                  <div className="col-1 text-left">
+                    <div className="normal-text">
+                      <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+                    </div>
                   </div>
-                </div>
-                <div className="col-2 text-left">
+                ) : null}
+                <div
+                  className={isOneTime ? 'col-4 text-left' : 'col-2 text-left'}>
                   <div
                     className={`normal-text ${
                       item?.new_budget - item?.old_budget ? 'text-bold' : null
@@ -144,18 +165,20 @@ const InvoiceViewAndReminderModal = ({
                     {generateAmount(item?.new_budget, 'to', '$')}
                   </div>
                 </div>
-                <div className="col-3 text-left">
-                  <div
-                    className={`normal-text ${
-                      item?.new_budget - item?.old_budget ? 'text-bold' : null
-                    } `}>
-                    {generateAmount(
-                      item?.new_budget - item?.old_budget,
-                      'change',
-                      '$',
-                    )}
+                {!isOneTime ? (
+                  <div className="col-3 text-left">
+                    <div
+                      className={`normal-text ${
+                        item?.new_budget - item?.old_budget ? 'text-bold' : null
+                      } `}>
+                      {generateAmount(
+                        item?.new_budget - item?.old_budget,
+                        'change',
+                        '$',
+                      )}
+                    </div>
                   </div>
-                </div>
+                ) : null}
               </div>
             ))
           : null}
@@ -165,30 +188,40 @@ const InvoiceViewAndReminderModal = ({
           <div className="col-4 text-left">
             <div className="normal-text text-bold">Total invoice</div>
           </div>
-          <div className="col-2 text-left">
-            <div className="normal-text text-bold">
-              {generateAmount(adjustmentDetails?.from_amount, '', '$')}
-            </div>
-          </div>
-          <div className="col-1 text-left">
-            <div className="normal-text">
-              <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
-            </div>
-          </div>
-          <div className="col-2 text-left">
+          {!isOneTime ? (
+            <>
+              <div
+                className={isOneTime ? 'col-4 text-left' : 'col-2 text-left'}>
+                <div className="normal-text text-bold">
+                  {generateAmount(adjustmentDetails?.from_amount, '', '$')}
+                </div>
+              </div>
+
+              <div className="col-1 text-left">
+                <div className="normal-text">
+                  <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+                </div>
+              </div>
+            </>
+          ) : null}
+          {isOneTime ? <div className="col-4 text-left" /> : null}
+
+          <div className={isOneTime ? 'col-4 text-left' : 'col-2 text-left'}>
             <div className="normal-text text-bold">
               {generateAmount(adjustmentDetails?.to_amount, '', '$')}
             </div>
           </div>
-          <div className="col-3 text-left">
-            <div className="normal-text text-bold">
-              {generateAmount(
-                adjustmentDetails?.to_amount - adjustmentDetails?.from_amount,
-                'change',
-                '$',
-              )}
+          {!isOneTime ? (
+            <div className="col-3 text-left">
+              <div className="normal-text text-bold">
+                {generateAmount(
+                  adjustmentDetails?.to_amount - adjustmentDetails?.from_amount,
+                  'change',
+                  '$',
+                )}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     );
@@ -208,12 +241,17 @@ const InvoiceViewAndReminderModal = ({
                       className={`normal-text ${
                         item?.new_budget - item?.old_budget ? 'text-bold' : null
                       } `}>
-                      {item.marketplaces}
+                      {item?.marketplace}
                     </div>
                   </div>
 
-                  <div className="col-4 text-left">
-                    <div className="label">From</div>
+                  <div
+                    className={
+                      isOneTime ? 'col-6 text-left' : 'col-4 text-left'
+                    }>
+                    <div className="label">
+                      {isOneTime ? 'Existing Budget' : 'From'}{' '}
+                    </div>
                     <div
                       className={`normal-text ${
                         item?.new_budget - item?.old_budget ? 'text-bold' : null
@@ -221,13 +259,24 @@ const InvoiceViewAndReminderModal = ({
                       {generateAmount(item?.old_budget, 'from', '$')}
                     </div>
                   </div>
-                  <div className="col-2 text-left">
-                    <div className="mt-3">
-                      <img src={ArrowRightBlackIcon} width="18px" alt="arrow" />{' '}
+                  {!isOneTime ? (
+                    <div className="col-2 text-left">
+                      <div className="mt-3">
+                        <img
+                          src={ArrowRightBlackIcon}
+                          width="18px"
+                          alt="arrow"
+                        />{' '}
+                      </div>
                     </div>
-                  </div>
-                  <div className="col-3 text-left">
-                    <div className="label">To</div>
+                  ) : null}
+                  <div
+                    className={
+                      isOneTime ? 'col-6 text-left' : 'col-3 text-left'
+                    }>
+                    <div className="label">
+                      {isOneTime ? 'Additional Amount' : 'To'}
+                    </div>
                     <div
                       className={`normal-text ${
                         item?.new_budget - item?.old_budget ? 'text-bold' : null
@@ -235,19 +284,23 @@ const InvoiceViewAndReminderModal = ({
                       {generateAmount(item?.new_budget, 'to', '$')}
                     </div>
                   </div>
-                  <div className="col-3 text-left">
-                    <div className="label">Change</div>
-                    <div
-                      className={`normal-text ${
-                        item?.new_budget - item?.old_budget ? 'text-bold' : null
-                      } `}>
-                      {generateAmount(
-                        item?.new_budget - item?.old_budget,
-                        'change',
-                        '$',
-                      )}
+                  {!isOneTime ? (
+                    <div className="col-3 text-left">
+                      <div className="label">Change</div>
+                      <div
+                        className={`normal-text ${
+                          item?.new_budget - item?.old_budget
+                            ? 'text-bold'
+                            : null
+                        } `}>
+                        {generateAmount(
+                          item?.new_budget - item?.old_budget,
+                          'change',
+                          '$',
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  ) : null}
                 </div>
                 <div className=" straight-line horizontal-line mt-2 mb-2 " />
               </>
@@ -259,35 +312,44 @@ const InvoiceViewAndReminderModal = ({
             <div className="normal-text text-bold">Total Invoice</div>
           </div>
 
-          <div className="col-4 text-left">
-            <div className="label">From</div>
+          <div className={isOneTime ? 'col-6 text-left' : 'col-4 text-left'}>
+            <div className="label">
+              {isOneTime ? 'Existing Budget' : 'From'}{' '}
+            </div>
             <div className="normal-text text-bold">
               {' '}
               {generateAmount(adjustmentDetails?.from_amount, '', '$')}
             </div>
           </div>
-          <div className="col-2 text-left">
-            <div className="mt-3">
-              <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
+          {!isOneTime ? (
+            <div className="col-2 text-left">
+              <div className="mt-3">
+                <img src={ArrowRightIcon} width="18px" alt="arrow" />{' '}
+              </div>
             </div>
-          </div>
-          <div className="col-3 text-left">
-            <div className="label">To</div>
+          ) : null}
+
+          <div className={isOneTime ? 'col-6 text-left' : 'col-3 text-left'}>
+            <div className="label">
+              {isOneTime ? 'Additional Amount' : 'To'}
+            </div>
             <div className="normal-text text-bold">
               {' '}
               {generateAmount(adjustmentDetails?.to_amount, '', '$')}
             </div>
           </div>
-          <div className="col-3 text-left">
-            <div className="label">Change</div>
-            <div className="normal-text text-bold">
-              {generateAmount(
-                adjustmentDetails?.to_amount - adjustmentDetails?.from_amount,
-                'change',
-                '$',
-              )}
+          {!isOneTime ? (
+            <div className="col-3 text-left">
+              <div className="label">Change</div>
+              <div className="normal-text text-bold">
+                {generateAmount(
+                  adjustmentDetails?.to_amount - adjustmentDetails?.from_amount,
+                  'change',
+                  '$',
+                )}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     );
