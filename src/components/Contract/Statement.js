@@ -596,7 +596,7 @@ export default function Statement({
         <table class=" contact-list " style="width: 100%; overflow:auto; border-collapse: collapse;">
           <tr><th colspan="3" style="text-align: left; border: 1px solid black;padding: 13px;">Service Components</th></tr>
           <tr>
-            <td style="border: 1px solid black; padding: 13px;">Expert Strategy and Consultation (AGS)</td>
+            <td style="border: 1px solid black; padding: 13px;">Expert Strategy and Consultation</td>
             <td style="border: 1px solid black; padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td>
             <td style="border: 1px solid black; padding: 13px;">Weekly Call</td>
           </tr>

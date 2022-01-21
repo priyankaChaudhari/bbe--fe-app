@@ -326,7 +326,7 @@ function Discount({
   );
 }
 Discount.defaultProps = {
-  discountFlag: '',
+  discountFlag: {},
   agreementData: {},
   formData: {},
   setShowDiscountModal: () => {},
@@ -338,7 +338,7 @@ Discount.defaultProps = {
   getServicesAccordingToAccType: () => {},
 };
 Discount.propTypes = {
-  discountFlag: string,
+  discountFlag: shape({}),
   agreementData: shape({
     id: string,
     monthly_discount_amount: oneOfType([string, number]),
