@@ -160,11 +160,11 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
       'tooltipHTML',
       function (text, target) {
         if (target.dataItem) {
-          if (target.dataItem._index <= 2) {
+          if (target.dataItem._index <= 3) {
             series3.tooltip.pointerOrientation = 'up';
             series3.tooltip.dy = 10;
           }
-          if (target.dataItem._index > 2) {
+          if (target.dataItem._index > 3) {
             series3.tooltip.pointerOrientation = 'down';
             series3.tooltip.dy = -10;
           }
