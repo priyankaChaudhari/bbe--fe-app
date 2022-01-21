@@ -101,24 +101,23 @@ function DSPContactModal({
           </div>
           <div className="footer-line" />
           <div className="modal-footer">
-            <div className="row">
-              <div className="col-md-6 col-12 col-sm-12  px-0">
-                {' '}
-                <Button
-                  disabled={!visibleBtn}
-                  className="btn-primary w-sm-100"
-                  onClick={onConfirm}>
-                  Confirm
-                </Button>
+            {visibleBtn && (
+              <div className="row">
+                <div className="col-md-6 col-12 col-sm-12  px-0">
+                  {' '}
+                  <Button className="btn-primary w-sm-100" onClick={onConfirm}>
+                    Confirm
+                  </Button>
+                </div>
+                <div className="col-md-6 col-12 col-sm-12 col-sm-mt-3  text-center">
+                  <Button
+                    className=" btn-borderless w-sm-100 "
+                    onClick={onDiscard}>
+                    Discard Changes
+                  </Button>
+                </div>
               </div>
-              <div className="col-md-6 col-12 col-sm-12 col-sm-mt-3  text-center">
-                <Button
-                  className=" btn-borderless w-sm-100 "
-                  onClick={onDiscard}>
-                  Discard Changes
-                </Button>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </ModalBox>
