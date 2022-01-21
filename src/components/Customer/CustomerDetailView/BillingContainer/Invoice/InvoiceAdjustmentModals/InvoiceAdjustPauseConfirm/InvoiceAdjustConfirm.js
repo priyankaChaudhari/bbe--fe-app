@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
 import { arrayOf, func, number, shape, string } from 'prop-types';
 
+import numberWithCommas from '../../../../../../../hooks/numberWithComas';
+import OneTimeInvoiceAdjustConfirm from './OneTimeInvoiceAdjustConfirm';
+import Theme from '../../../../../../../theme/Theme';
 import {
   ArrowRightBlackIcon,
   ArrowRightIcon,
   EditOrangeIcon,
   LeftArrowIcon,
 } from '../../../../../../../theme/images';
-import { ModalBox, Button, GreyCard } from '../../../../../../../common';
-import numberWithCommas from '../../../../../../../hooks/numberWithComas';
-import OneTimeInvoiceAdjustConfirm from './OneTimeInvoiceAdjustConfirm';
-import Theme from '../../../../../../../theme/Theme';
+import {
+  ModalBox,
+  Button,
+  GreyCard,
+  ErrorMsgBox,
+} from '../../../../../../../common';
 
 const InvoiceAdjustConfirm = ({
   onBackClick,
@@ -25,7 +30,20 @@ const InvoiceAdjustConfirm = ({
   dspContact,
   onEditDspContact,
 }) => {
+  const isPermanentAdditional = invoiceType === 'permanent additional';
+  const [showError, setShoeError] = useState(false);
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
+
+  useEffect(() => {
+    if (isPermanentAdditional) {
+      const isRecordExits = adjustmentData.filter((element) => {
+        return element.change && element.change < 0;
+      });
+      if (isRecordExits.length) {
+        setShoeError(true);
+      }
+    }
+  }, [isPermanentAdditional, adjustmentData]);
 
   const returnInvoiceBillDate = () => {
     if (today > 10) {
@@ -351,15 +369,27 @@ const InvoiceAdjustConfirm = ({
                 proposal.
               </p>
             ) : null}
+            <div>
+              {showError ? (
+                <ErrorMsgBox className="mt-3 mb-3" font>
+                  Please enter a value that is higher than the initial budget.
+                </ErrorMsgBox>
+              ) : null}
+            </div>
           </div>
         </div>
 
         <div className="footer-line" />
+
         <div className="modal-footer">
           <Button
             onClick={onApply}
             type="button"
-            className="btn-primary on-boarding   w-100">
+            className={
+              showError
+                ? 'btn-primary on-boarding w-100 disabled '
+                : 'btn-primary on-boarding w-100'
+            }>
             Confirm and send for approval
           </Button>
         </div>

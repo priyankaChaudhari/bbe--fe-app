@@ -437,6 +437,17 @@ const InvoiceViewAndReminderModal = ({
                     </p>
                   </>
                 ) : null
+              ) : isOneTime ? (
+                <p className="normal-text mb-0 mt-1">
+                  The will be a one-off invoice, providing additional budget to
+                  spend in the{' '}
+                  <b>
+                    {dayjs(adjustmentDetails.applicable_from).format('MMMM')}{' '}
+                    only.
+                  </b>{' '}
+                  This invoice will be sent as soon as brand partner approves
+                  the proposal.
+                </p>
               ) : (
                 <p className="normal-text">
                   The new invoice amount will be available to spend from{' '}
