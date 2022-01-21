@@ -673,6 +673,11 @@ export async function getBgsBrandPartners(bgs, startDate, endDate) {
       ...params,
       manager_id: managerId,
     };
+  } else {
+    params = {
+      ...params,
+      manager_id: id,
+    };
   }
 
   const result = await axiosInstance
