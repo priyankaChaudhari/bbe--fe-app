@@ -231,14 +231,21 @@ const InvoiceAdjustPauseModal = ({
 
   const checkTextInput = () => {
     let flag = true;
+    const formError = {};
     dspContactInputFields.forEach((item) => {
-      if (formData?.[item.key] !== null && !formData?.[item.key].trim()) {
-        setDspError({
-          formError: { [item.key]: ['This is a required field'] },
-          toastError: true,
-        });
+      if (
+        formData?.[item.key] !== null &&
+        !formData?.[item.key].trim() &&
+        item.key !== 'phone_number'
+      ) {
+        formError[item.key] = ['This is a required field'];
         flag = false;
       }
+    });
+    setDspError({
+      ...dspError,
+      formError,
+      toastError: !flag,
     });
     return flag;
   };
