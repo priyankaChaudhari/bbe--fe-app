@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { arrayOf, bool, func } from 'prop-types';
 
 import { ModalRadioCheck } from '../../../../../../common';
+import numberWithCommas from '../../../../../../hooks/numberWithComas';
 
 const InvoicePause = ({
   invoiceChoices,
@@ -59,7 +60,7 @@ const InvoicePause = ({
                           : 'none',
                       }}
                       className="normal-text ">
-                      ${item.new_budget}
+                      ${numberWithCommas(item.new_budget)}
                     </div>
                   </div>
                   <div className="col-4 pl-1 text-left">
@@ -114,11 +115,13 @@ const InvoicePause = ({
             <NoData className="col-12">No Invoice Adjust Data Found</NoData>
           ) : null}
           <div className=" straight-line horizontal-line pt-2 " />
-          <div className="col-4 text-left mt-3">
+          <div className="col-4 text-left mt-3 pr-1">
             <div className="normal-text text-bold ">Total</div>
           </div>
-          <div className="col-4 text-left mt-3">
-            <div className="normal-text text-bold">${totalNewBudget}</div>
+          <div className="col-4 text-left mt-3 px-1">
+            <div className="normal-text text-bold">
+              ${totalNewBudget ? numberWithCommas(totalNewBudget) : 0}
+            </div>
           </div>
           {/* <div className="col-4 text-left mt-3">
             <div className="normal-text text-bold">${returnTotalAmount()}</div>
