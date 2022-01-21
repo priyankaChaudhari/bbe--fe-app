@@ -63,7 +63,7 @@ const ModalBox = styled.div`
         word-break: break-all;
       }
     }
-    .edit-contact {
+    .edit-contact-detail {
       position: absolute;
       font-size: ${Theme.extraNormal};
       color: ${Theme.gray85};
