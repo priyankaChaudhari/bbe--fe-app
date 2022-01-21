@@ -400,7 +400,7 @@ export default function DSPBudgetApprovalContainer() {
   const renderMainPage = () => {
     return (
       <OnBoardingBody className="body-white pt-3">
-        <div className="white-card-base mt-0 panel pb-4">
+        <div className="white-card-base panel pb-4">
           {renderHeaderMessage()}
           {renderHeading()}
           {invoiceType !== 'one time' ? (
