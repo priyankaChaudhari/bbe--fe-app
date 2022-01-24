@@ -235,7 +235,7 @@ const InvoiceAdjustPauseModal = ({
     dspContactInputFields.forEach((item) => {
       if (
         formData?.[item.key] !== null &&
-        !formData?.[item.key].trim() &&
+        !formData?.[item.key]?.trim() &&
         item.key !== 'phone_number'
       ) {
         formError[item.key] = ['This is a required field'];
