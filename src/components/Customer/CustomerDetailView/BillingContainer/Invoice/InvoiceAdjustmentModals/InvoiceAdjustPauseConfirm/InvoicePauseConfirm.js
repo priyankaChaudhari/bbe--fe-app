@@ -157,7 +157,7 @@ const InvoicePauseConfirm = ({
             Object.getPrototypeOf(dspContact) === Object.prototype ? (
               <div
                 style={{ color: Theme.orange }}
-                className=" mt-2 mb-2 normal-text cursor"
+                className="mt-2 mb-2 normal-text cursor"
                 onClick={() => onEditDspContact('add')}
                 aria-hidden="true">
                 Please Click here to add DSP Contact
@@ -199,6 +199,11 @@ const InvoicePauseConfirm = ({
           <Button
             onClick={onApply}
             type="button"
+            disabled={
+              dspContact &&
+              Object.keys(dspContact).length === 0 &&
+              Object.getPrototypeOf(dspContact) === Object.prototype
+            }
             className="btn-primary on-boarding   w-100">
             Confirm and send for approval
           </Button>
@@ -217,7 +222,7 @@ InvoicePauseConfirm.defaultProps = {
   returnTotalAmount: () => {},
   onEditDspContact: () => {},
   selectedMonthYear: {},
-  dspContact: null,
+  dspContact: {},
 };
 
 InvoicePauseConfirm.propTypes = {

@@ -385,6 +385,11 @@ const InvoiceAdjustConfirm = ({
           <Button
             onClick={onApply}
             type="button"
+            disabled={
+              dspContact &&
+              Object.keys(dspContact).length === 0 &&
+              Object.getPrototypeOf(dspContact) === Object.prototype
+            }
             className={
               showError
                 ? 'btn-primary on-boarding w-100 disabled '
