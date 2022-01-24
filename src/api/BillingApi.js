@@ -167,6 +167,8 @@ export async function postDSPBudgetAdjustPauseInvoiceData(
     finalInvoiceAdjust.adjustments.push({
       new_budget: item.newAmount
         ? parseFloat(item.newAmount.replace(/,/g, ''))
+        : invoiceType === 'one time'
+        ? 0
         : item.new_budget,
       old_budget: item.new_budget,
       marketplace: item.marketplace,
