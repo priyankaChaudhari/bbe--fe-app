@@ -354,7 +354,7 @@ const InvoiceAdjustConfirm = ({
                   {totalChangeAmount.replace('+', '')}
                 </p>
                 <p className="normal-text mb-0 mt-1">
-                  The will be a one-off invoice, providing additional budget to
+                  This will be a one-off invoice, providing additional budget to
                   spend in the {returnInvoiceBillDate()}. This invoice will be
                   sent as soon as brand partner approves the proposal.
                 </p>

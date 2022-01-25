@@ -198,9 +198,10 @@ export default function DSPBudgetApprovalContainer() {
           {generateAmount(total?.new_budget - total?.old_budget, '', '$')}
         </p>
         <p className="normal-text mb-0 mt-1">
-          The will be a one-off invoice, providing additional budget to spend in
-          the {dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')}
-          . This invoice will be sent as soon as you approve the proposal.
+          This will be a one-off invoice, providing additional budget to spend
+          in the{' '}
+          {dayjs(new Date(marketplaceData?.applicable_from)).format('MMMM')}.
+          This invoice will be sent as soon as you approve the proposal.
         </p>
       </GreyCard>
     );

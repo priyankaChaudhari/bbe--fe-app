@@ -365,7 +365,7 @@ const InvoicePastAdjustmntModal = ({
             setShowViewAndReminderModal(false);
           }}
           adjustmentDetails={adjustmentDetails}
-          customerId={id}
+          customerId={customerId}
         />
       </ModalBox>
       <PastInvoices />
