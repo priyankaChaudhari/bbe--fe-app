@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
 import { useDispatch } from 'react-redux';
-import { shape, string } from 'prop-types';
+import { shape, string, arrayOf } from 'prop-types';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 
@@ -24,7 +24,6 @@ import {
 } from '../../../../../constants';
 import {
   getBillingDetails,
-  getBPRoles,
   getDSPContact,
   getPaymentTermsDetails,
   getPaymentTermsOptions,
@@ -50,6 +49,7 @@ export default function BillingDetails({
   userInfo,
   onBoardingId,
   customerStatus,
+  memberData,
 }) {
   const dispatch = useDispatch();
   const [data, setData] = useState({});
@@ -70,6 +70,7 @@ export default function BillingDetails({
   const [DSPData, setDSPData] = useState([]);
   const [showDSPEdit, setShowDSPEdit] = useState(false);
   const [showDSPErrorTostr, setShowDSPErrorTostr] = useState(false);
+  const [isAllowToEdit, setIsAllowToEdit] = useState(false);
 
   const customStyles = {
     content: {
@@ -119,26 +120,41 @@ export default function BillingDetails({
     getDSPContact(id).then((res) => {
       if (res?.status === 200) {
         if (res?.data?.is_dsp_contract) {
-          getBPRoles(id, userInfo?.id).then((response) => {
-            if (response?.status === 200) {
-              const role = response?.data?.results?.[0]?.user_profile?.role;
-              if (response?.data?.results?.length === 0) setShowDSPEdit(false);
+          for (const user of memberData) {
+            if (user.user) {
               if (
-                role === 'BGS' ||
-                role === 'BGS Manager' ||
-                role === 'DSP Ad Manager' ||
-                role === 'Ad Manager Admin'
-              )
+                (user?.role_group?.name === 'BGS Manager' ||
+                  user?.role_group?.name === 'BGS' ||
+                  user?.role_group?.name === 'DSP Ad Manager' ||
+                  user?.role_group?.name === 'Ad Manager Admin') &&
+                user?.user?.id === userInfo?.id
+              ) {
                 setShowDSPEdit(true);
-              else setShowDSPEdit(false);
-            } else setShowDSPEdit(false);
-          });
+                break;
+              }
+            }
+          }
         } else setShowDSPEdit(false);
         setDSPData(res?.data?.results);
         setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
       }
     });
   }, [id]);
+
+  useEffect(() => {
+    for (const user of memberData) {
+      if (user.user) {
+        if (
+          (user?.role_group?.name === 'BGS Manager' ||
+            user?.role_group?.name === 'BGS') &&
+          user?.user?.id === userInfo?.id
+        ) {
+          setIsAllowToEdit(true);
+          break;
+        }
+      }
+    }
+  }, [memberData, userInfo]);
 
   useEffect(() => {
     billingDetails();
@@ -681,8 +697,7 @@ export default function BillingDetails({
               {paymentTermsData?.length ? (
                 <WhiteCard className="mt-3">
                   <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
-                  {userInfo?.role === 'BGS' ||
-                  userInfo?.role === 'BGS Manager' ? (
+                  {isAllowToEdit ? (
                     <div
                       className="edit-details"
                       role="presentation"
@@ -953,6 +968,7 @@ export default function BillingDetails({
 BillingDetails.defaultProps = {
   onBoardingId: null,
   customerStatus: null,
+  memberData: [],
 };
 
 BillingDetails.propTypes = {
@@ -962,4 +978,5 @@ BillingDetails.propTypes = {
   }).isRequired,
   onBoardingId: string,
   customerStatus: shape({}),
+  memberData: arrayOf(shape({})),
 };

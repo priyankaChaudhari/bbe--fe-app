@@ -41,6 +41,7 @@ export default function CustomerTabDetails({
       setIsCollapseOpen(true);
     }
   };
+
   return (
     <ul className="left-details-card d-lg-block d-none">
       {role === 'Customer' ? (
@@ -231,6 +232,10 @@ export default function CustomerTabDetails({
   );
 }
 
+CustomerTabDetails.defaultProps = {
+  subViewComponent: '',
+};
+
 CustomerTabDetails.propTypes = {
   setViewComponent: func.isRequired,
   role: string.isRequired,
@@ -238,6 +243,6 @@ CustomerTabDetails.propTypes = {
   customer: shape({
     id: string,
   }).isRequired,
-  subViewComponent: string.isRequired,
+  subViewComponent: string,
   setSubViewComponent: func.isRequired,
 };

@@ -3902,7 +3902,9 @@ export default function ContractContainer() {
         <HeaderDownloadFuntionality>
           <div
             className={
-              userInfo && userInfo.role === 'Customer' ? ' customer-pdf' : ''
+              userInfo && userInfo.role?.includes('Customer')
+                ? ' customer-pdf'
+                : ''
             }>
             <div className="container-fluid">
               <div className="row">
@@ -4010,7 +4012,7 @@ export default function ContractContainer() {
                 {(contractStatusValue === 'pending for cancellation' ||
                   contractStatusValue === 'active pending for pause') &&
                 userInfo &&
-                userInfo.role === 'BGS Manager'
+                userInfo.role?.includes('BGS Manager')
                   ? displayFooter()
                   : ''}
               </>

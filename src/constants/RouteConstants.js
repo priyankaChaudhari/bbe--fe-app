@@ -51,9 +51,7 @@ export const PATH_BGS_ADMIN_DASHBOARD = '/dashboard/bgsAdmin';
 
 // Ad manager dashboard
 export const PATH_AD_MANAGER_ADMIN_DASHBOARD = '/dashboard/adMangerAdmin/';
-export const PATH_SPONSORED_DASHBOARD = '/dashboard/sponsored/';
-export const PATH_DSP_DASHBOARD = '/dashboard/dsp/';
-export const PATH_HYBRID_DASHBOARD = '/dashboard/hybrid/';
+export const PATH_AD_MANAGER_DASHBOARD = '/dashboard/adManager/';
 
 // Finance dashboard
 export const PATH_FINANCE_DASHBOARD = '/dashboard/finance/';

@@ -12,10 +12,8 @@ function DashboardContainer() {
   const userInfo = useSelector((state) => state.userState.userInfo);
 
   const dashboardHeaders = {
+    'Ad Manager': 'Ad Manager Dashboard',
     'Ad Manager Admin': 'Advertising Dashboard',
-    'Sponsored Advertising Ad Manager': 'Ad Manager Dashboard',
-    'DSP Ad Manager': 'Ad Manager Dashboard',
-    'Hybrid Ad Manager': 'Ad Manager Dashboard',
     BGS: 'Dashboard',
     'BGS Manager': 'Dashboard',
     'BGS Admin': 'Dashboard',
@@ -23,10 +21,8 @@ function DashboardContainer() {
   };
 
   const dashboardRole = {
+    'Ad Manager': '',
     'Ad Manager Admin': '',
-    'Sponsored Advertising Ad Manager': '',
-    'DSP Ad Manager': '',
-    'Hybrid Ad Manager': '',
     'BGS Manager': '',
     'BGS Admin': '',
     BGS: '',
@@ -40,7 +36,7 @@ function DashboardContainer() {
             <div className="row">
               <div className="col-lg-3 col-md-12">
                 <p className="black-heading-title ml-1 pt-1">
-                  {dashboardHeaders[userInfo && userInfo.role]}
+                  {dashboardHeaders[userInfo?.role]}
                 </p>
               </div>
               <div className="straight-line horizontal-line  d-lg-none d-md-block" />
@@ -55,11 +51,11 @@ function DashboardContainer() {
     <BrandPartnerDashboard>
       {displayHeader()}
 
-      {_.has(dashboardRole, userInfo && userInfo.role) ? (
+      {_.has(dashboardRole, userInfo?.role) ? (
         <AdManagerAdminContainer userInfo={userInfo} />
       ) : null}
 
-      {userInfo && userInfo.role === 'Finance' ? (
+      {userInfo?.role?.includes('Finance') ? (
         <FinanceDashboardContainer />
       ) : null}
     </BrandPartnerDashboard>

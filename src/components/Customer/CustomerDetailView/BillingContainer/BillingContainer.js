@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { shape, string } from 'prop-types';
+import { shape, string, arrayOf } from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
 import Invoice from './Invoice/Invoice';
@@ -19,6 +19,7 @@ const BillingContainer = ({
   customerStatus,
   redirectType,
   bpName,
+  memberData,
 }) => {
   const history = useHistory();
   const [viewComponent, setViewComponent] = useState(redirectType);
@@ -73,6 +74,7 @@ const BillingContainer = ({
           invoiceType={viewComponent}
           id={id}
           bpName={bpName}
+          memberData={memberData}
         />
       ) : (
         <BillingDetails
@@ -80,6 +82,7 @@ const BillingContainer = ({
           userInfo={userInfo}
           onBoardingId={onBoardingId}
           customerStatus={customerStatus}
+          memberData={memberData}
         />
       )}
     </div>
@@ -104,4 +107,5 @@ BillingContainer.propTypes = {
   customerStatus: shape({}),
   redirectType: string,
   bpName: string,
+  memberData: arrayOf(shape({})).isRequired,
 };

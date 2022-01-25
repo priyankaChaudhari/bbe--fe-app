@@ -1,3 +1,12 @@
+import {
+  PATH_BGS_DASHBOARD,
+  PATH_BGS_MANAGER_DASHBOARD,
+  PATH_AD_MANAGER_DASHBOARD,
+  PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  PATH_FINANCE_DASHBOARD,
+  PATH_BGS_ADMIN_DASHBOARD,
+} from './RouteConstants';
+
 export const financeNavigationOptions = [
   { key: 'retainer', value: 'Monthly Retainer' },
   { key: 'rev share', value: 'Rev Share' },
@@ -336,3 +345,30 @@ export const commissionsTableheader = [
     width: '10%',
   },
 ];
+export const roleURLs = [
+  'adManager',
+  'adMangerAdmin',
+  'bgsManager',
+  'bgsAdmin',
+  'finance',
+  'bgs',
+];
+
+export const dashboardRole = [
+  'Ad Manager',
+  'Ad Manager Admin',
+  'BGS Manager',
+  'BGS Admin',
+  'BGS',
+  'Finance',
+  'BGS',
+];
+
+export const dashboardRolePaths = {
+  'Ad Manager': PATH_AD_MANAGER_DASHBOARD,
+  'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
+  'BGS Manager': PATH_BGS_MANAGER_DASHBOARD,
+  'BGS Admin': PATH_BGS_ADMIN_DASHBOARD,
+  BGS: PATH_BGS_DASHBOARD,
+  Finance: PATH_FINANCE_DASHBOARD,
+};

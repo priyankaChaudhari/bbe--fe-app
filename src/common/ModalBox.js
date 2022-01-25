@@ -200,14 +200,17 @@ const ModalBox = styled.div`
 
     .edit-profile-text {
       position: relative;
+      word-break: break-word;
 
       .name-email {
-        color: ${Theme.gray36};
-        font-size: ${Theme.small};
+        color: ${Theme.black};
+        font-size: ${Theme.extraNormal};
 
         .team-member-name {
-          color: ${Theme.gray90};
-          font-size: ${Theme.medium};
+          color: ${Theme.black};
+          font-size: ${Theme.extraMedium};
+          font-family: ${Theme.titleFontFamily};
+          line-height: 22px;
         }
       }
       .brand-pratner {
@@ -253,7 +256,7 @@ const ModalBox = styled.div`
     }
 
     .body-content {
-      max-height: 543px;
+      max-height: 520px;
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
@@ -262,8 +265,16 @@ const ModalBox = styled.div`
         left: 30px;
         top: 10px;
         padding-left: 0px;
+        cursor: pointer;
         color: ${Theme.gray90};
-        font-weight: bold;
+
+        &.add-team-member {
+          color: ${Theme.orange};
+        }
+      }
+
+      .back-to-members {
+        cursor: pointer;
       }
 
       .no-result-found {
@@ -520,6 +531,11 @@ const ModalBox = styled.div`
         .drop-down {
           font-size: ${Theme.normalRes};
         }
+      }
+    }
+    @media only screen and (max-width: 767px) {
+      .body-content {
+        max-height: 420px;
       }
     }
   }

@@ -38,10 +38,10 @@ const month = dayjs(currentDate).format('MMMM');
 
 const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const mounted = useRef(false);
-  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
-  const isBGSManager = userInfo?.role === 'BGS Manager';
-  const isBGSAdmin = userInfo?.role === 'BGS Admin';
-  const isBGS = userInfo?.role === 'BGS';
+  const isBGSManager = userInfo?.role?.includes('BGS Manager');
+  const isAdManagerAdmin = userInfo?.role?.includes('Ad Manager Admin');
+  const isBGSAdmin = userInfo?.role?.includes('BGS Admin');
+  const isBGS = userInfo?.role?.includes('BGS');
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -103,7 +103,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
   const [selectedBgs, setSelectedBgs] = useState(
     isBGSManager || isBGSAdmin
@@ -111,7 +111,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
 
   const {
@@ -318,7 +318,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     if (responseId === null && list.length && list[0].value !== null) {
       if (isAdManagerAdmin || isBGSAdmin) getManagerList();
       if (isBGSAdmin || isBGSManager)
-        getBGSList(isBGSManager ? userInfo.id : null);
+        getBGSList(isBGSManager ? userInfo?.id : null);
       getDSPData(
         selectedAdDF.value,
         dspGroupBy,
@@ -719,11 +719,11 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     }
 
     if (isBGS) {
-      userBgs = userInfo.id;
+      userBgs = userInfo?.id;
       userManger = 'all';
     } else if (isBGSManager) {
       userBgs = 'all';
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedBgs({
         value: 'all',
         label: 'All',
@@ -741,12 +741,12 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       });
       contributionTab = 'positive';
     } else {
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedManager({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
       setSelectedBgs({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
     }
     setSelectedContributionOption(contributionTab);
@@ -1221,7 +1221,7 @@ DSPDashboard.propTypes = {
   }),
   marketplaceChoices: arrayOf(Array),
   userInfo: shape({
-    role: string,
+    role: string.isRequired,
     id: string,
   }),
 };

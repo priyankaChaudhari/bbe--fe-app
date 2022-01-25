@@ -48,10 +48,10 @@ import {
 } from '../../../common';
 import {
   getCustomerActivityLog,
-  getCustomerMembers,
   getDocumentList,
   getMarketPlaceList,
   getAccountMarketplace,
+  getCustomerMembers,
 } from '../../../api';
 
 export default function CustomerMainContainer() {
@@ -71,7 +71,8 @@ export default function CustomerMainContainer() {
   const [viewComponent, setViewComponent] = useState(
     customerSelectedTab || 'performance',
   );
-  const [subViewComponent, setSubViewComponent] = useState();
+  const [subViewComponent, setSubViewComponent] = useState('');
+
   useEffect(() => {
     if (
       customer?.customer_account_type !== undefined &&
@@ -134,7 +135,7 @@ export default function CustomerMainContainer() {
       bottom: 'auto',
       maxWidth: '600px ',
       width: '100% ',
-      minHeight: userInfo && userInfo.role === 'Customer' ? '130px' : '200px',
+      minHeight: userInfo?.role?.includes('Customer') ? '130px' : '200px',
       overlay: ' {zIndex: 1000}',
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
@@ -170,8 +171,8 @@ export default function CustomerMainContainer() {
 
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
-    getCustomerMembers(id).then((member) => {
-      setMemberData(member && member.data && member.data.results);
+    getCustomerMembers(id).then((members) => {
+      setMemberData(members?.data);
       setIsLoading({ loader: false, type: 'page' });
     });
   }, [id]);
@@ -188,7 +189,7 @@ export default function CustomerMainContainer() {
   }
 
   useEffect(() => {
-    if (userInfo && userInfo.role === 'Customer') {
+    if (userInfo?.role?.includes('Customer')) {
       setViewComponent('dashboard');
       dispatch(setCustomerSelectedTab('agreement'));
     }
@@ -202,7 +203,7 @@ export default function CustomerMainContainer() {
   }, [getActivityLogInfo]);
 
   useEffect(() => {
-    if (userInfo && userInfo.role !== 'Customer') {
+    if (!userInfo?.role?.includes('Customer')) {
       getMarketPlace(id);
     }
   }, [id, getMarketPlace]);
@@ -212,19 +213,19 @@ export default function CustomerMainContainer() {
   }, [id, dispatch]);
 
   useEffect(() => {
-    if (userInfo && userInfo.role !== 'Customer') getCustomerMemberList();
+    if (!userInfo?.role?.includes('Customer')) getCustomerMemberList();
   }, [getCustomerMemberList]);
 
   useEffect(() => {
     if (viewComponent === 'company') {
       getAccountMarketplace(id).then((response) => {
-        setMarketplaceData(response && response.data);
+        setMarketplaceData(response?.data);
         setIsLoading({ loader: false, type: 'page' });
       });
     }
   }, [id, viewComponent]);
 
-  if (userInfo && userInfo.role === 'Customer') {
+  if (userInfo?.role?.includes('Customer')) {
     viewOptions = [
       { value: 'dashboard', label: 'Dashboard' },
       { value: 'agreement', label: 'Agreements' },
@@ -265,12 +266,7 @@ export default function CustomerMainContainer() {
 
   return (
     <>
-      {(customerError &&
-        customerError.status &&
-        customerError.status === 404) ||
-      (customerError &&
-        customerError.status &&
-        customerError.status === 403) ? (
+      {customerError?.status === 404 || customerError?.status === 403 ? (
         <PageNotFound />
       ) : (
         <>
@@ -285,7 +281,7 @@ export default function CustomerMainContainer() {
                 <div className="row">
                   <div className="col-6  mt-4 pt-1">
                     {' '}
-                    {userInfo && userInfo.role !== 'Customer' ? (
+                    {!userInfo?.role?.includes('Customer') ? (
                       <Link to={PATH_CUSTOMER_LIST}>
                         <div className="back-btn-link ">
                           {' '}
@@ -403,11 +399,11 @@ export default function CustomerMainContainer() {
                   {viewComponent === 'agreement' ? (
                     <AgreementDetails
                       id={id}
-                      userId={userInfo && userInfo.id}
+                      userId={userInfo?.id}
                       setShowMemberList={setShowMemberList}
                       showModal={agreementDetailModal}
                       setShowModal={setAgreementDetailModal}
-                      userRole={userInfo && userInfo.role}
+                      userRole={userInfo?.role}
                       customerStatus={
                         customer && customer.status && customer.status.value
                       }
@@ -430,24 +426,14 @@ export default function CustomerMainContainer() {
                   ) : viewComponent === 'dashboard' ? (
                     <SetupCheckList
                       id={id}
-                      brandId={
-                        customer &&
-                        customer.brand_assets &&
-                        customer.brand_assets.id
-                      }
-                      productAssetsId={
-                        customer &&
-                        customer.product_assets &&
-                        customer.product_assets.id
-                      }
+                      brandId={customer?.brand_assets?.id}
+                      productAssetsId={customer?.product_assets?.id}
                     />
                   ) : viewComponent === 'brand asset' ? (
                     history.push({
                       pathname: PATH_BRAND_ASSET.replace(':id', id).replace(
                         ':brandId',
-                        customer &&
-                          customer.brand_assets &&
-                          customer.brand_assets.id,
+                        customer?.brand_assets?.id,
                       ),
                       search: 'step=brand-logo',
                     })
@@ -470,8 +456,9 @@ export default function CustomerMainContainer() {
                       }
                       id={id}
                       userInfo={userInfo}
-                      customerStatus={customer && customer.status}
-                      onBoardingId={customer && customer.customer_onboarding_id}
+                      customerStatus={customer?.status}
+                      onBoardingId={customer?.customer_onboarding_id}
+                      memberData={memberData}
                       bpName={customer?.company_name}
                     />
                   ) : (
@@ -510,13 +497,13 @@ export default function CustomerMainContainer() {
               {/* Customer Modals starts */}
               <TeamMemberModal
                 id={id}
-                getCustomerMemberList={getCustomerMemberList}
+                currentMembers={memberData}
                 showMemberList={showMemberList}
                 setShowMemberList={setShowMemberList}
                 setAgreementDetailModal={setAgreementDetailModal}
-                userInfo={userInfo}
                 customStyles={customStyles}
                 getActivityLogInfo={getActivityLogInfo}
+                getCustomerMemberList={getCustomerMemberList}
               />
 
               <CustomerStatusModal

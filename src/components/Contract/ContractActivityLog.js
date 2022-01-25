@@ -568,7 +568,7 @@ function ContractActivityLog({
                           agreementData.contract_status.value ===
                             'active pending for pause')) &&
                       loggedInuserInfo &&
-                      loggedInuserInfo.role === 'BGS Manager'
+                      loggedInuserInfo?.role?.includes('BGS Manager')
                       ? '80px'
                       : '0px'
                     : '80px'

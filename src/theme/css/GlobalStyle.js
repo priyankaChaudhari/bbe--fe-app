@@ -287,7 +287,7 @@ h6 {
    font-family: ${Theme.titleFontFamily};
 }
 .text-medium{
-   font-family: ${Theme.baseMediumFontFamily};
+   font-family: ${Theme.baseMediumFontFamily} !important;
 }
 p {
   font-size: ${Theme.small};
@@ -717,7 +717,8 @@ button:disabled {
 }
 
 .edit-profile-text {
-  display: flex;
+  /* display: flex; */
+  display: -webkit-box;
   align-items: center;
   flex-direction: row;
 }
@@ -995,6 +996,11 @@ fieldset {
     &:first-child {
       margin-left: 0;
     }
+  }
+
+  &.unassigned {
+    background: ${Theme.gray3};
+    border: none;
   }
 }
 

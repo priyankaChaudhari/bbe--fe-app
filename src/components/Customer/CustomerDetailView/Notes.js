@@ -107,7 +107,6 @@ function Notes({
         : searchQuery.q,
     ) => {
       setIsLoading({ loader: true, type: 'page' });
-      // const selectedFilters = { ...filters };
 
       const selectedFilters = JSON.parse(localStorage.getItem('noteFilters'))
         ? JSON.parse(localStorage.getItem('noteFilters'))
@@ -148,7 +147,6 @@ function Notes({
   );
 
   const handleChange = (event) => {
-    // setFilter({ ...filters, q: event.target.value });
     setSearchQuery({ q: event.target.value });
     localStorage.setItem(
       'noteFilters',
@@ -501,7 +499,6 @@ function Notes({
           team: [],
           q: searchQuery.q,
         });
-        // setShowDropdown({ show: false });
         localStorage.setItem(
           'noteFilters',
           JSON.stringify({
@@ -521,7 +518,6 @@ function Notes({
             team: [],
             q: searchQuery.q,
           });
-          // setShowDropdown({ show: false });
           localStorage.setItem(
             'noteFilters',
             JSON.stringify({
@@ -551,7 +547,6 @@ function Notes({
 
     if (section === 'archived') {
       setFilter({ ...filters, archived: item.value, q: searchQuery.q });
-      // setShowDropdown({ show: false });
       localStorage.setItem(
         'noteFilters',
         JSON.stringify({
@@ -789,15 +784,9 @@ function Notes({
                 className="dropdown-select-all-notes"
                 role="presentation"
                 id="clickbox"
-                onClick={() =>
-                  // setData({
-                  //   ...data,
-                  //   showFilterDropdown: !data.showFilterDropdown,
-                  // })
-                  {
-                    setShowDropdown({ show: !showDropdown.show });
-                  }
-                }>
+                onClick={() => {
+                  setShowDropdown({ show: !showDropdown.show });
+                }}>
                 {filters?.notes}
 
                 <img

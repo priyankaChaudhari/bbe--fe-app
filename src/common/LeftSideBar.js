@@ -1,8 +1,8 @@
 import React from 'react';
 
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { shape, string } from 'prop-types';
 
 import Theme from '../theme/Theme';
 import {
@@ -13,219 +13,34 @@ import {
   SpeedometerActive,
   Speedometer,
 } from '../theme/images';
+
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
-  PATH_BGS_DASHBOARD,
-  PATH_BGS_MANAGER_DASHBOARD,
-  PATH_SPONSORED_DASHBOARD,
-  PATH_DSP_DASHBOARD,
-  PATH_HYBRID_DASHBOARD,
-  PATH_AD_MANAGER_ADMIN_DASHBOARD,
-  PATH_FINANCE_DASHBOARD,
-  PATH_BGS_ADMIN_DASHBOARD,
+  roleURLs,
+  dashboardRolePaths,
+  dashboardRole,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
   const history = useHistory();
+  const userRole = userInfo?.role;
 
   return (
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          {userInfo?.role && userInfo.role === 'BGS' ? (
+          {dashboardRole.includes(userRole) ? (
             <li
               className={
-                history.location.pathname &&
-                history.location.pathname.includes('bgs')
+                roleURLs.some((element) =>
+                  history.location.pathname?.includes(element),
+                )
                   ? ' cursor active'
                   : ' cursor'
               }
               role="presentation"
-              onClick={() => history.push(PATH_BGS_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role && userInfo.role === 'BGS Manager' ? (
-            <li
-              className={
-                history.location.pathname &&
-                history.location.pathname.includes('bgsManager')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_BGS_MANAGER_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role && userInfo.role === 'BGS Admin' ? (
-            <li
-              className={
-                history.location.pathname &&
-                history.location.pathname.includes('bgsAdmin')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_BGS_ADMIN_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role &&
-          userInfo.role.includes('Sponsored Advertising Ad Manager') ? (
-            <li
-              className={
-                history.location.pathname &&
-                history.location.pathname.includes('sponsored')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_SPONSORED_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role && userInfo.role.includes('DSP Ad Manager') ? (
-            <li
-              className={
-                history.location.pathname &&
-                history.location.pathname.includes('dsp')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_DSP_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role && userInfo.role.includes('Hybrid Ad Manager') ? (
-            <li
-              className={
-                history.location.pathname &&
-                history.location.pathname.includes('hybrid')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_HYBRID_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo?.role && userInfo.role.includes('Ad Manager Admin') ? (
-            <li
-              className={
-                history.location.pathname &&
-                history.location.pathname.includes('adMangerAdmin')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD)}>
-              {' '}
-              <img
-                width="32px"
-                className=" speed0meter-icon active"
-                src={SpeedometerActive}
-                alt=""
-              />
-              <img
-                width="32px"
-                className=" speed0meter-icon  disactive"
-                src={Speedometer}
-                alt=""
-              />
-            </li>
-          ) : null}
-
-          {userInfo && userInfo.role && userInfo.role.includes('Finance') ? (
-            <li
-              className={
-                history.location.pathname &&
-                history.location.pathname.includes('finance')
-                  ? ' cursor active'
-                  : ' cursor'
-              }
-              role="presentation"
-              onClick={() => history.push(PATH_FINANCE_DASHBOARD)}>
+              onClick={() => history.push(dashboardRolePaths[userRole])}>
               {' '}
               <img
                 width="32px"
@@ -244,8 +59,7 @@ export default function LeftSideBar({ userInfo }) {
 
           <li
             className={
-              history.location.pathname &&
-              history.location.pathname.includes('customer')
+              history.location.pathname?.includes('customer')
                 ? ' cursor active'
                 : ' cursor'
             }
@@ -256,8 +70,7 @@ export default function LeftSideBar({ userInfo }) {
           </li>
           <li
             className={
-              history.location.pathname &&
-              history.location.pathname.includes('collections')
+              history.location.pathname?.includes('collections')
                 ? 'cursor active'
                 : ' cursor'
             }
@@ -277,8 +90,8 @@ LeftSideBar.defaultProps = {
 };
 
 LeftSideBar.propTypes = {
-  userInfo: PropTypes.shape({
-    role: PropTypes.string,
+  userInfo: shape({
+    role: string.isRequired,
   }),
 };
 

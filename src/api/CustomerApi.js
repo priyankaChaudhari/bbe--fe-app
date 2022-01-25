@@ -12,6 +12,7 @@ import {
   API_DELETE_MARKETPLACE,
   API_DOCUMENTS,
   API_ACCOUNT_MARKETPLACE,
+  API_USER,
 } from '../constants';
 
 export async function getCustomerList(
@@ -287,16 +288,9 @@ export async function updateAccountDetails(id, data) {
   return result;
 }
 
-export async function getCustomerMembers(id, pageNumber) {
-  const customer = id
-    ? {
-        customer: id,
-        page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
-      }
-    : { page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber };
-  const params = customer;
+export async function getCustomerMembers(id) {
   const result = await axiosInstance
-    .get(API_CUSTOMER_MEMBER, { params })
+    .get(`${API_CUSTOMER_MEMBER}?customer=${id}`)
     .then((response) => {
       return response;
     })
@@ -306,6 +300,39 @@ export async function getCustomerMembers(id, pageNumber) {
   return result;
 }
 
+export async function getAllMembers(
+  role,
+  findMembers,
+  pageNumber,
+  searchQuery,
+) {
+  const page = pageNumber === '' || pageNumber === undefined ? 1 : pageNumber;
+  const result = await axiosInstance
+    .get(
+      `${API_USER}?role=${role}&find-members=${findMembers}&page=${page}&q=${searchQuery}`,
+    )
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+export async function addCustomerMembers(data) {
+  const result = await axiosInstance
+    .post(`${API_CUSTOMER_MEMBER}bulk-create/`, data)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+// Remove delete, update, add Customer Meber API's after role enhancement
 export async function deleteCustomerMember(id) {
   const result = await axiosInstance
     .delete(`${API_CUSTOMER_MEMBER + id}/`)
