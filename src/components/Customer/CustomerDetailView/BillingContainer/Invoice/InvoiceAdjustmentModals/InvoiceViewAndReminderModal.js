@@ -439,7 +439,7 @@ const InvoiceViewAndReminderModal = ({
                 ) : null
               ) : isOneTime ? (
                 <p className="normal-text mb-0 mt-1">
-                  The will be a one-off invoice, providing additional budget to
+                  This will be a one-off invoice, providing additional budget to
                   spend in the{' '}
                   <b>
                     {dayjs(adjustmentDetails.applicable_from).format('MMMM')}{' '}
