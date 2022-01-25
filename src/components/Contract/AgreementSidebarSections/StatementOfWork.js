@@ -282,35 +282,30 @@ function StatementOfWork({
               ) : (
                 ''
               )}
-              {!formData?.draft_from ? (
-                <AdditionalOneTimeServices
-                  onAddDiscount={onAddDiscount}
-                  formData={formData}
-                  additionalMonthlySerError={additionalMonthlySerError}
-                  oneTimeService={oneTimeService}
-                  handleChange={handleChange}
-                  changeQuantity={changeQuantity}
-                  additionalOnetimeSerError={additionalOnetimeSerError}
-                  setShowAmazonPlanDropdown={setShowAmazonPlanDropdown}
-                  amazonService={amazonService}
-                  showAmazonPlanDropdown={showAmazonPlanDropdown}
-                  AmazonStoreOptions={AmazonStoreOptions}
-                  amazonStoreCustom={amazonStoreCustom}
-                  displayError={displayError}
-                  setAmazonStoreCustom={setAmazonStoreCustom}
-                  showFooter={showFooter}
-                  additionalOnetimeServices={additionalOnetimeServices}
-                  clearOneTimeQntyError={clearOneTimeQntyError}
-                  updateAdditionalOnetimeServicesSelectedData={
-                    updateAdditionalOnetimeServicesSelectedData
-                  }
-                  discountData={discountData}
-                  servicesFees={servicesFees}
-                />
-              ) : (
-                // displayOneTimeServices()
-                ''
-              )}
+              <AdditionalOneTimeServices
+                onAddDiscount={onAddDiscount}
+                formData={formData}
+                additionalMonthlySerError={additionalMonthlySerError}
+                oneTimeService={oneTimeService}
+                handleChange={handleChange}
+                changeQuantity={changeQuantity}
+                additionalOnetimeSerError={additionalOnetimeSerError}
+                setShowAmazonPlanDropdown={setShowAmazonPlanDropdown}
+                amazonService={amazonService}
+                showAmazonPlanDropdown={showAmazonPlanDropdown}
+                AmazonStoreOptions={AmazonStoreOptions}
+                amazonStoreCustom={amazonStoreCustom}
+                displayError={displayError}
+                setAmazonStoreCustom={setAmazonStoreCustom}
+                showFooter={showFooter}
+                additionalOnetimeServices={additionalOnetimeServices}
+                clearOneTimeQntyError={clearOneTimeQntyError}
+                updateAdditionalOnetimeServicesSelectedData={
+                  updateAdditionalOnetimeServicesSelectedData
+                }
+                discountData={discountData}
+                servicesFees={servicesFees}
+              />
 
               {accountType === 'Hybrid' ? (
                 <>
