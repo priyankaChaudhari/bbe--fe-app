@@ -101,14 +101,14 @@ export default function AdManagerAdminContainer({ userInfo }) {
               DSP Advertising
             </li>
 
-            {/* {userInfo && userInfo.role === 'BGS Admin' ? (
+            {userInfo && userInfo.role === 'BGS Admin' ? (
               <li
                 className={viewComponent === 'commissions' ? 'active' : ''}
                 onClick={() => setViewComponent('commissions')}
                 role="presentation">
                 Commissions
               </li>
-            ) : null} */}
+            ) : null}
           </ul>
         </Tabs>
         {renderComponent(viewComponent)}
