@@ -89,7 +89,7 @@ export default function Activity({
                         />
                       </div>
                     ) : (
-                      <div className="avatarName float-left mr-3">
+                      <div className=" float-left mr-3">
                         {getActivityInitials(item.history_change_reason)}
                       </div>
                     )}
