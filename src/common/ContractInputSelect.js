@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 const ContractInputSelect = styled.div`
   width: 100%;
 
-  label {
+   label {
     color: ${Theme.gray40};
     font-size:${Theme.verySmall};
     letter-spacing: 0.5px;
@@ -103,7 +103,8 @@ const ContractInputSelect = styled.div`
       display: none;
     }
       
-  }
+  } 
+
 `;
 
 export default ContractInputSelect;
