@@ -355,8 +355,8 @@ const InvoiceAdjustConfirm = ({
                 </p>
                 <p className="normal-text mb-0 mt-1">
                   This will be a one-off invoice, providing additional budget to
-                  spend in the {returnInvoiceBillDate()}. This invoice will be
-                  sent as soon as brand partner approves the proposal.
+                  spend in {returnInvoiceBillDate()}. This invoice will be sent
+                  as soon as brand partner approves the proposal.
                 </p>
               </GreyCard>
             )}
