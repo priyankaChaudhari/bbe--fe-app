@@ -5,7 +5,6 @@ import Select from 'react-select';
 import { arrayOf, shape, func, string, oneOfType, number } from 'prop-types';
 
 import {
-  InputFormField,
   CheckBox,
   ContractInputSelect,
   DropdownIndicator,
@@ -281,18 +280,17 @@ function AdditionalMarketplaces({
           <span className="checkmark" />
         </label>
       </CheckBox>
-      <InputFormField>
-        <ContractInputSelect>
-          {showAdditionalMarketplace[accountType]?.showDropdown
-            ? generateMultiChoice({
-                key: 'additional_marketplaces',
-                label: 'Additional Market Places',
-                type: 'multichoice',
-                accountType,
-              })
-            : ''}
-        </ContractInputSelect>
-      </InputFormField>
+
+      <ContractInputSelect>
+        {showAdditionalMarketplace[accountType]?.showDropdown
+          ? generateMultiChoice({
+              key: 'additional_marketplaces',
+              label: 'Additional Market Places',
+              type: 'multichoice',
+              accountType,
+            })
+          : ''}
+      </ContractInputSelect>
     </>
   );
 }
