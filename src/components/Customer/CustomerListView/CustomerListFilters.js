@@ -151,7 +151,7 @@ function CustomerListFilters({
                           <DebounceInput
                             // minLength={2}
                             debounceTimeout={600}
-                            className=" form-control search-filter"
+                            className=" form-control  search-filter"
                             placeholder="Search"
                             onChange={(event) => {
                               setSearchQuery(event.target.value);
