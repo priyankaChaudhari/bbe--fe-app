@@ -15,6 +15,21 @@ export default function TeamMemberModal({
   getActivityLogInfo,
   getCustomerMemberList,
 }) {
+  // Sort all the member roles as per mentioned in PRD, here on the basis of sequence key
+  const getCurrentMembers = () => {
+    const sortedMembers = currentMembers.sort((member, nextNemmber) => {
+      const memberIndex = member?.sequence;
+      const nextMemberIndex = nextNemmber?.sequence;
+      return memberIndex < nextMemberIndex
+        ? -1
+        : memberIndex > nextMemberIndex
+        ? 1
+        : 0;
+    });
+
+    return sortedMembers;
+  };
+
   return (
     <>
       {showMemberList.modal && !showMemberList.agreement ? (
@@ -25,7 +40,7 @@ export default function TeamMemberModal({
           contentLabel="Add team modal">
           <TeamMembers
             customerID={id}
-            currentMembers={currentMembers}
+            currentMembers={getCurrentMembers()}
             setShowMemberList={setShowMemberList}
             getCustomerMemberList={getCustomerMemberList}
           />
