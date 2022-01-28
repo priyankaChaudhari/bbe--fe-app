@@ -73,7 +73,7 @@ const DetailLoaderWrapper = styled.div`
   right: 0;
 
   &.customer-details {
-    top: -140px;
+    top: -120px;
     position: relative;
     left: 0;
   }
