@@ -35,6 +35,10 @@ const InputSearchWithRadius = styled.div`
       outline: none;
       background-color: ${Theme.white};
     }
+
+    &.form-control-info {
+      padding: 10px 33px 10px 40px;
+    }
   }
 
   .search-input-icon {
