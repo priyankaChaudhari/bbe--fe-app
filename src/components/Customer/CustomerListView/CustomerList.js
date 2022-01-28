@@ -1784,9 +1784,19 @@ export default function CustomerList() {
       <tr
         className="cursor"
         key={item?.id}
-        onClick={() =>
-          history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id))
-        }>
+        onClick={() => {
+          history.push(PATH_CUSTOMER_DETAILS.replace(':id', item.id));
+
+          localStorage.setItem(
+            'noteFilters',
+            JSON.stringify({
+              archived: 'hide',
+              team: [],
+              notes: 'All Notes',
+              q: '',
+            }),
+          );
+        }}>
         <td width="25.5%">
           {generateLogoCompanyNameAndGs(
             item,
