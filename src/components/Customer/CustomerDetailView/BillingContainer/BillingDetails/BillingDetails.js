@@ -621,7 +621,7 @@ export default function BillingDetails({
       {' '}
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
-          component="performance-graph"
+          component="agrement-details"
           type="detail"
           color={Theme.orange}
           width={40}

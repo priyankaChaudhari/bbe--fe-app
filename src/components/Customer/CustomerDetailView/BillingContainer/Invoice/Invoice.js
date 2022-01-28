@@ -55,7 +55,7 @@ const Invoice = ({ id, invoiceType, onLoading, bpName, memberData }) => {
     <div className="mt-4">
       {loader ? (
         <PageLoader
-          component="performance-graph"
+          component="agrement-details"
           type="detail"
           color={Theme.orange}
           width={40}
