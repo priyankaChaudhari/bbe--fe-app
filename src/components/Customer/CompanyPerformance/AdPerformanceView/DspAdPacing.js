@@ -4,7 +4,8 @@ import dayjs from 'dayjs';
 import { bool, func, shape, string } from 'prop-types';
 import styled from 'styled-components';
 
-import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
+// import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
+import EscrowBudgetAllocationModalCopy from './EscrowBudgetAllocationModalCopy';
 import Theme from '../../../../theme/Theme';
 import { LeftArrowIcon } from '../../../../theme/images';
 import { PageLoader, AllocateBar } from '../../../../common';
@@ -24,6 +25,7 @@ export default function DspAdPacing({
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
     showDspBudgetModal,
   );
+
   const dspPacing = dspData?.dsp_pacing;
 
   const addThousandSeperator = (value, type = '') => {
@@ -324,9 +326,27 @@ export default function DspAdPacing({
     );
   };
 
+  // const renderEscrowBudgetAllocationModal = () => {
+  //   return (
+  //     <EscrowBudgetAllocationModal
+  //       id="BT-escrowAllocation"
+  //       customerId={customerId}
+  //       marketplace={marketplace}
+  //       dspData={dspData}
+  //       isOpen={showAllocatedBalanceModal}
+  //       addThousandSeperator={addThousandSeperator}
+  //       onClick={() => {
+  //         setShowAllocatedBalanceModal(false);
+  //         setShowDspBudgetModal(false);
+  //         onModalClose();
+  //       }}
+  //       getActivityLogInfo={getActivityLogInfo}
+  //     />
+  //   );
+  // };
   const renderEscrowBudgetAllocationModal = () => {
     return (
-      <EscrowBudgetAllocationModal
+      <EscrowBudgetAllocationModalCopy
         id="BT-escrowAllocation"
         customerId={customerId}
         marketplace={marketplace}

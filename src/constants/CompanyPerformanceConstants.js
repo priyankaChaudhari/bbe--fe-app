@@ -161,3 +161,10 @@ export const toogleMetricsData = [
     label: 'ROAS',
   },
 ];
+export const escrowMarketplaceTabs = [
+  { key: 'US', budget: '14000' },
+  { key: 'UK', budget: '6000' },
+  { key: 'AUS', budget: '14000' },
+  { key: 'Spain', budget: '6000' },
+  { key: 'Germany', budget: '14000' },
+];
