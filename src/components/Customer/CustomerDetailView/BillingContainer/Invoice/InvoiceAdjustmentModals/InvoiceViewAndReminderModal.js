@@ -43,6 +43,7 @@ const InvoiceViewAndReminderModal = ({
   isAllowToCreateAdjustment,
 }) => {
   const isOneTime = adjustmentDetails?.dsp_invoice_subtype === 'one time';
+  const isPauseInvoice = adjustmentDetails?.pause_approved;
   const mounted = useRef(true);
   const [showMoreRejectionNote, setShowMoreRejectionNote] = useState(false);
   const previousMonth = new Date(adjustmentDetails?.applicable_from);
@@ -409,7 +410,7 @@ const InvoiceViewAndReminderModal = ({
 
               <div className=" straight-line horizontal-line mt-2 mb-2 " />
 
-              {status === 'rejected' ? (
+              {isPauseInvoice ? null : status === 'rejected' ? (
                 adjustmentDetails?.rejection_note !== null ? (
                   <>
                     <p className="normal-text">
