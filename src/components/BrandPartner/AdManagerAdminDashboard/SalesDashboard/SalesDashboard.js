@@ -37,10 +37,10 @@ const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const mounted = useRef(false);
-  const isBGSManager = userInfo?.role?.includes('BGS Manager');
-  const isAdManagerAdmin = userInfo?.role?.includes('Ad Manager Admin');
-  const isBGSAdmin = userInfo?.role?.includes('BGS Admin');
-  const isBGS = userInfo?.role?.includes('BGS');
+  const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
+  const isBGSManager = userInfo?.role === 'BGS Manager';
+  const isBGSAdmin = userInfo?.role === 'BGS Admin';
+  const isBGS = userInfo?.role === 'BGS';
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
   const [salesChartData, setSalesChartData] = useState([]);
