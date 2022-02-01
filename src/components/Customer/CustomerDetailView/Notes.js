@@ -112,14 +112,8 @@ function Notes({
         ? JSON.parse(localStorage.getItem('noteFilters'))
         : { ...filters };
 
-      if (selectedFilters.notes) {
-        delete selectedFilters.notes;
-      }
       if (!selectedFilters.archived) {
         delete selectedFilters.archived;
-      }
-      if (!selectedFilters.team?.length) {
-        delete selectedFilters.team;
       }
 
       getNotes(customerId, searchString, pageNumber, selectedFilters).then(
