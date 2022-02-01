@@ -4,11 +4,7 @@ import { toast } from 'react-toastify';
 import { string, func, shape, bool, arrayOf } from 'prop-types';
 
 import { SearchIcon, CloseIcon } from '../../theme/images';
-import {
-  addCustomerMembers,
-  userCustomerRoleList,
-  getAllMembers,
-} from '../../api';
+import { addCustomerMembers, getAllMembers } from '../../api';
 import {
   CommonPagination,
   ModalBox,
@@ -103,18 +99,6 @@ export default function AddTeamMember({
   const searchList = (event) => {
     setSearchQuery(event.target.value);
     setIsLoading({ loader: true, type: 'page' });
-
-    userCustomerRoleList(
-      id,
-      1,
-      event.target.value,
-      filterDetails.name.value,
-    ).then((response) => {
-      setData(response && response.data && response.data.results);
-      setCount(response && response.data && response.data.count);
-      setPageNumber(pageNumber);
-      setIsLoading({ loader: false, type: 'page' });
-    });
   };
 
   const checkDisable = (item) => {
