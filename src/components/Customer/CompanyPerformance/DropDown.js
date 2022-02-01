@@ -43,6 +43,7 @@ export const DropDown = (
         // defaultValue={defaultValue}
         onChange={(event) => handleOnChange(event)}
         styles={YearOverYearOptionStyles}
+        isLoading={isDisabled}
       />
     </DropDownSelect>
   );

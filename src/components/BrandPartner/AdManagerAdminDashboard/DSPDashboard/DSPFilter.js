@@ -95,6 +95,7 @@ const DSPFilter = ({
                   neutral50: '#1A1A1A',
                 },
               })}
+              isLoading={isApiCall}
             />
           </DropDownSelect>
         </div>
