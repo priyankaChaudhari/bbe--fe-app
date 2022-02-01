@@ -178,8 +178,12 @@ function EditMarketplaceAllocationModal({
               <img
                 className="modal-back-arrow "
                 src={LeftArrowIcon}
-                alt=""
-              />{' '}
+                alt="close"
+                onClick={() => {
+                  onClick();
+                }}
+                role="presentation"
+              />
               Marketplace Allocation
             </h4>
             <div className="body-content mt-2">

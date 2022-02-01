@@ -3,7 +3,6 @@ import React from 'react';
 import Modal from 'react-modal';
 
 import { bool, func, number, string } from 'prop-types';
-// import dayjs from 'dayjs';
 
 // import { storeAllocatedBudget } from '../../../../api';
 import { CloseIcon, LeftArrowIcon } from '../../../../theme/images';
@@ -11,7 +10,6 @@ import {
   ModalBox,
   Button,
   Table,
-
   // PageLoader,
   AllocateBar,
 } from '../../../../common';
@@ -124,7 +122,7 @@ export default function ConfirmMarketPlaceBudgetModal({
           <div className="row">
             <div className="col-12 mb-2">
               <div className="label">Marketplace</div>
-              <div className="label-info"> $6,000</div>
+              <div className="label-info"> US</div>
             </div>
             <div className="col-4">
               {' '}
@@ -165,8 +163,15 @@ export default function ConfirmMarketPlaceBudgetModal({
         <ModalBox>
           <div className="modal-body  pb-0">
             <h4>
-              {' '}
-              <img className="modal-back-arrow" src={LeftArrowIcon} alt="" />
+              <img
+                className="modal-back-arrow"
+                src={LeftArrowIcon}
+                alt="close"
+                onClick={() => {
+                  onClick();
+                }}
+                role="presentation"
+              />
               Allocate Balance
             </h4>
             <div className="body-content mt-2">
