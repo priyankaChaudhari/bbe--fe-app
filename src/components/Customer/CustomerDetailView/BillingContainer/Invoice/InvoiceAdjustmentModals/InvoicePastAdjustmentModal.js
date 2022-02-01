@@ -147,7 +147,7 @@ const InvoicePastAdjustmntModal = ({
             ? 0
             : addThousandComma(item.from_amount, 0)}
           <div className="marketplace">
-            {dayjs(item.applicable_from).format('DD/MM/YY')}
+            {dayjs(item.applicable_from).format('MM/DD/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
@@ -155,7 +155,7 @@ const InvoicePastAdjustmntModal = ({
           <div className="marketplace">
             {item.to_date === 'Ongoing'
               ? item.to_date
-              : dayjs(item.to_date).format('DD/MM/YY')}
+              : dayjs(item.to_date).format('MM/DD/YY')}
           </div>
         </td>
         <td width="20%" className="small-label-text">
@@ -272,7 +272,7 @@ const InvoicePastAdjustmntModal = ({
                             : addThousandComma(item.from_amount, 0)
                         }`}</div>
                         <div className="marketplace">
-                          {dayjs(item.applicable_from).format('DD/MM/YY')}
+                          {dayjs(item.applicable_from).format('MM/DD/YY')}
                         </div>
                       </div>
                       <div className="col-4 mt-2">
@@ -285,7 +285,7 @@ const InvoicePastAdjustmntModal = ({
                         <div className="marketplace">
                           {item.to_date === 'Ongoing'
                             ? item.to_date
-                            : dayjs(item.to_date).format('DD/MM/YY')}
+                            : dayjs(item.to_date).format('MM/DD/YY')}
                         </div>
                       </div>
                       <div className="col-4 mt-2 cursor">
