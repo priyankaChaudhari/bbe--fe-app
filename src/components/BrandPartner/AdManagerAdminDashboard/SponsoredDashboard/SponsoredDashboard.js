@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import $ from 'jquery';
 import styled from 'styled-components';
-import PropTypes, { shape, string } from 'prop-types';
+import { shape, string, arrayOf } from 'prop-types';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
@@ -1378,8 +1378,8 @@ SponsoredDashboard.defaultProps = {
 };
 
 SponsoredDashboard.propTypes = {
-  marketplaceChoices: PropTypes.arrayOf(PropTypes.object),
-  selectedMarketplace: PropTypes.string,
+  marketplaceChoices: arrayOf(shape({})),
+  selectedMarketplace: string,
   userInfo: shape({
     role: string.isRequired,
     id: string,
