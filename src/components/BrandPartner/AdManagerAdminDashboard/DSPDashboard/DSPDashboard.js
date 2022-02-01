@@ -125,7 +125,11 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     getManagersList(isBGSAdmin ? 'BGS' : 'dsp_ad_performance').then(
       (managersData) => {
         if (mounted.current) {
-          if (managersData && managersData.data && managersData.data.length) {
+          if (
+            managersData &&
+            managersData.data &&
+            managersData.data.length > 0
+          ) {
             const list = [{ value: 'all', label: 'All' }];
             for (const brand of managersData.data) {
               list.push({
@@ -148,7 +152,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const getBGSList = useCallback((id) => {
     getBgsUserList(id).then((bgsData) => {
       if (mounted.current) {
-        if (bgsData && bgsData.data && bgsData.data.length) {
+        if (bgsData && bgsData.data && bgsData.data.length > 0) {
           const results = bgsData.data;
           const list = [{ value: 'all', label: 'All' }];
 
@@ -165,8 +169,6 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
             });
           }
           setBgsList(list);
-        } else {
-          setBgsList([{ value: 'all', label: 'All' }]);
         }
       }
     });

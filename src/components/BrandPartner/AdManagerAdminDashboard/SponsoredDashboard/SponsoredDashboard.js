@@ -119,7 +119,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     getManagersList(isBGSAdmin ? 'BGS' : 'sponsored_ad_dashboard').then(
       (managersData) => {
         if (mounted.current) {
-          if (managersData && managersData.data && managersData.data.length) {
+          if (
+            managersData &&
+            managersData.data &&
+            managersData.data.length > 0
+          ) {
             const list = [
               {
                 value: 'all',
@@ -147,7 +151,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   const getBGSList = useCallback((id) => {
     getBgsUserList(id).then((bgsData) => {
       if (mounted.current) {
-        if (bgsData && bgsData.data && bgsData.data.length) {
+        if (
+          bgsData &&
+          bgsData.data &&
+          bgsData.data.length &&
+          bgsData.datalength > 0
+        ) {
           const results = bgsData.data;
           const list = [{ value: 'all', label: 'All' }];
 
@@ -164,8 +173,6 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             });
           }
           setBgsList(list);
-        } else {
-          setBgsList([{ value: 'all', label: 'All' }]);
         }
       }
     });
