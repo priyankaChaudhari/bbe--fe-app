@@ -6,10 +6,11 @@ import { bool, func, number, string } from 'prop-types';
 // import dayjs from 'dayjs';
 
 // import { storeAllocatedBudget } from '../../../../api';
-import { CloseIcon } from '../../../../theme/images';
+import { CloseIcon, LeftArrowIcon } from '../../../../theme/images';
 import {
   ModalBox,
   Button,
+  Table,
 
   // PageLoader,
   AllocateBar,
@@ -52,30 +53,95 @@ export default function ConfirmMarketPlaceBudgetModal({
   // }, [onClick, customerId, marketplace, allocatedMonths, getActivityLogInfo]);
   const renderAllocatedBalanceTable = () => {
     return (
-      <table>
-        <thead>
-          <tr>
-            <th>Marketplace</th>
-            <th>From</th>
-            <th>To</th>
-            <th>Change</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>US</td>
-            <td>14000</td>
-            <td>12000</td>
-            <td>-2000</td>
-          </tr>
-          <tr>
-            <td>UK</td>
-            <td>6000</td>
-            <td>8000</td>
-            <td>+2000</td>
-          </tr>
-        </tbody>
-      </table>
+      <>
+        <Table className="d-md-block d-none">
+          <table style={{ borderCollapse: 'collapse' }} width="100%">
+            <thead>
+              <tr>
+                <th className="product-header" width="30%">
+                  Marketplace
+                </th>
+                <th className="product-header" width="25%">
+                  From
+                </th>
+                <th className="product-header" width="25%">
+                  To
+                </th>
+                <th className="product-header text-right" width="20%">
+                  change
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td
+                  width="30%"
+                  className="small-label-text light-font product-body">
+                  US
+                </td>
+                <td
+                  width="25%"
+                  className=" small-label-text light-font product-body">
+                  $14,000
+                </td>
+                <td
+                  width="25%"
+                  className=" small-label-text light-font product-body">
+                  $6,000
+                </td>
+                <td
+                  width="20%"
+                  className=" small-label-text light-font product-body text-right">
+                  $6,000
+                </td>
+              </tr>
+              <tr>
+                <td
+                  width="30%"
+                  className="small-label-text light-font product-body">
+                  US
+                </td>
+                <td
+                  width="25%"
+                  className=" small-label-text light-font product-body">
+                  $14,000
+                </td>
+                <td
+                  width="25%"
+                  className=" small-label-text light-font product-body">
+                  $6,000
+                </td>
+                <td
+                  width="20%"
+                  className=" small-label-text light-font product-body text-right">
+                  $6,000
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </Table>
+        <Table className="d-md-none d-block">
+          <div className="row">
+            <div className="col-12 mb-2">
+              <div className="label">Marketplace</div>
+              <div className="label-info"> $6,000</div>
+            </div>
+            <div className="col-4">
+              {' '}
+              <div className="label"> From</div>
+              <div className="label-info"> $6,000</div>
+            </div>
+            <div className="col-4">
+              <div className="label"> To</div>
+              <div className="label-info"> $6,000</div>
+            </div>
+            <div className="col-4">
+              <div className="label"> change</div>
+              <div className="label-info"> $6,000</div>
+            </div>
+          </div>
+        </Table>
+      </>
     );
   };
   return (
@@ -98,14 +164,18 @@ export default function ConfirmMarketPlaceBudgetModal({
 
         <ModalBox>
           <div className="modal-body  pb-0">
-            <h4>Allocate Balance</h4>
-            <div className="body-content">
+            <h4>
+              {' '}
+              <img className="modal-back-arrow" src={LeftArrowIcon} alt="" />
+              Allocate Balance
+            </h4>
+            <div className="body-content mt-2">
+              <p className="normal-text-black mb-0">
+                Please confirm you wish to make the following changes. A
+                confirmation email will be sent to the BGS, BGS Manager, DSP Ad
+                Manager
+              </p>
               <div className="row">
-                <div className="col-12">
-                  Please confirm you wish to make the following changes. A
-                  confirmation email will be sent to the BGS, BGS Manager, DSP
-                  Ad Manager
-                </div>
                 <div className="col-12">
                   <AllocateBar
                     id="BT-escrowBalance-budgetAllocaion"

@@ -546,7 +546,7 @@ const ModalBox = styled.div`
     }
   }
   .footer-line {
-    border-bottom: 1px solid ${Theme.gray5};
+    border-bottom: 1px solid ${Theme.gray11};
     margin: 10px 0;
     width: 100%;
   }

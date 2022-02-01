@@ -7,7 +7,11 @@ import { bool, func, shape, string } from 'prop-types';
 
 // import { storeAllocatedBudget } from '../../../../api';
 import ConfirmMarketPlaceBudgetModal from './ConfirmMarketPlaceBudgetModal';
-import { CloseIcon, InfoRedIcon } from '../../../../theme/images';
+import {
+  CloseIcon,
+  InfoRedIcon,
+  LeftArrowIcon,
+} from '../../../../theme/images';
 import {
   ModalBox,
   Button,
@@ -114,8 +118,11 @@ function EditMarketplaceAllocationModal({
     return allocatedMarketplaceBudget.map((item, index) => {
       return (
         <React.Fragment key={item.marketplace}>
-          <div className="col-2">{item.marketplace}</div>
-          <div className="col-10 mt-1 mb-3">
+          <div className="col-2 mt-4 pt-2">
+            {' '}
+            <p className="m-0 gray-normal-text">{item.marketplace}</p>
+          </div>
+          <div className="col-10  mb-3">
             <InputFormField id="BT-escrow-numberFormat-budgetAllocaion">
               <label htmlFor="amount"> amount </label>
               <div className="input-container ">
@@ -166,10 +173,18 @@ function EditMarketplaceAllocationModal({
 
         <ModalBox>
           <div className="modal-body  pb-0">
-            <h4>Marketplace Allocation</h4>
-            <div className="body-content">
+            <h4>
+              {' '}
+              <img
+                className="modal-back-arrow "
+                src={LeftArrowIcon}
+                alt=""
+              />{' '}
+              Marketplace Allocation
+            </h4>
+            <div className="body-content mt-2">
               <div className="row">
-                <div className="col-12">
+                <div className="col-12 mb-2">
                   <AllocateBar
                     id="BT-escrowBalance-budgetAllocaion"
                     className="mt-3 mb-3">

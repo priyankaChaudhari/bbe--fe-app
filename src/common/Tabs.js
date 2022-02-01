@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const Tabs = styled.div`
+  overflow: auto;
   .tabs {
     list-style-type: none;
     position: relative;
@@ -10,15 +11,21 @@ const Tabs = styled.div`
     padding: 0;
     border-bottom: 1px solid ${Theme.gray11};
 
+    &.scrollable-container {
+      border-bottom: 1px solid ${Theme.gray11};
+      display: -webkit-inline-box;
+    }
     li {
       display: inline-block;
-      margin-right: 10px;
+      padding-right: 10px;
       font-weight: normal;
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
       font-family: ${Theme.baseFontFamily};
       cursor: pointer;
       padding: 0 15px 15px 15px;
+      /* /* display: block; */
+      /* border-bottom: 1px solid ${Theme.gray11}; */
 
       &:last-child {
         margin-right: 0;
@@ -32,6 +39,12 @@ const Tabs = styled.div`
         border-bottom: 2px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};
+      }
+
+      &.scrollable-tab {
+        display: block;
+        /* border-bottom: 1px solid ${Theme.gray11}; */
+        font-size: 14px;
       }
 
       &.modal-tab {

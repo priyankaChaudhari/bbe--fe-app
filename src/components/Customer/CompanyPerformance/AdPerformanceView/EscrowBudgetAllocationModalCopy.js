@@ -131,15 +131,17 @@ export default function EscrowBudgetAllocationModalCopy({
   const renderMarketplaceTab = () => {
     return (
       <>
-        <div className="col-12">
+        <div className="col-12 mt-3">
           <Tabs>
-            <ul className="tabs mb-3">
+            <ul className="tabs scrollable-container ">
               {escrowMarketplaceTabs.map((item) => {
                 return (
                   <li
                     key={item.key}
                     className={
-                      viewMarketplace === item.key ? 'active mt-1' : 'mt-1'
+                      viewMarketplace === item.key
+                        ? 'active scrollable-tab  mt-1'
+                        : ' scrollable-tab mt-1  '
                     }
                     onClick={() => {
                       setViewMarketplace(item.key);
@@ -242,31 +244,42 @@ export default function EscrowBudgetAllocationModalCopy({
         <ModalBox>
           <div className="modal-body  pb-0">
             <h4>Allocate Balance</h4>
-            <div className="body-content">
+            <div className="body-content mt-2">
               <div className="row">
                 <div className="col-12">
                   <AllocateBar
                     id="BT-escrowBalance-budgetAllocaion"
                     className="mt-3 mb-3">
                     {' '}
-                    <div className="remaing-label text-bold text-right">
-                      Total Escrow Balance:{' '}
-                      {addThousandSeperator(escrowBalance, 'currency')}
-                    </div>{' '}
-                    <div className="remaing-label text-bold float-right">
-                      <div
-                        className="edit-marketplace cursor"
-                        role="presentation"
-                        onClick={() => setShowMarketPlaceAllocationModal(true)}>
-                        Edit marketplace Allocation{' '}
-                        <img
-                          className="orange-left-arrow mb-1"
-                          src={LeftArrowIcon}
-                          alt=""
-                        />
+                    <div className="row">
+                      <div className="col-md-7 ">
+                        {' '}
+                        <div className="remaing-label text-bold text-right">
+                          Total Escrow Balance:{' '}
+                          {addThousandSeperator(escrowBalance, 'currency')}
+                        </div>
                       </div>
-                      <div className="clear-fix" />
-                    </div>
+                      <div className="col-md-5 ">
+                        {' '}
+                        <div className="remaing-label text-bold ">
+                          <div
+                            className="edit-marketplace cursor text-medium"
+                            role="presentation"
+                            onClick={() =>
+                              setShowMarketPlaceAllocationModal(true)
+                            }>
+                            Edit marketplace Allocation{' '}
+                            <img
+                              width="16px"
+                              className="orange-left-arrow "
+                              src={LeftArrowIcon}
+                              alt=""
+                            />
+                          </div>
+                          {/* <div className="clear-fix" /> */}
+                        </div>
+                      </div>
+                    </div>{' '}
                     <div className="clear-fix" />
                   </AllocateBar>
                 </div>
