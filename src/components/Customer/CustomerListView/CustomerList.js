@@ -81,6 +81,10 @@ export default function CustomerList() {
   const history = useHistory();
   const selectInputRefMobile = useRef();
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
+  const [isBGSLoading, setIsBGSLoading] = useState({
+    loader: false,
+    type: 'options',
+  });
   const [data, setData] = useState([]);
   const [count, setCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
@@ -338,7 +342,10 @@ export default function CustomerList() {
         }
       });
     } else {
+      setIsBGSLoading({ loader: true, type: 'options' });
       getGrowthStrategist().then((gs) => {
+        setIsBGSLoading({ loader: false, type: 'options' });
+
         if (mounted.current) {
           if (gs && gs.data) {
             const list = [{ value: 'any', label: 'All' }]; // for select one use
@@ -1319,6 +1326,7 @@ export default function CustomerList() {
           isMulti={false}
           components={getSelectComponents(item)}
           componentsValue={item === 'user' ? { Option: IconOption } : ''}
+          isLoading={isBGSLoading.loader}
         />
       </>
     );
