@@ -17,7 +17,15 @@ export async function getNotes(
     });
   }
 
+  if (
+    !(selectedFilters && selectedFilters.team && selectedFilters.team.length) &&
+    filters.notes === 'Team Notes'
+  ) {
+    filters.no_team = true;
+  }
+
   delete filters.team;
+  delete filters.notes;
 
   const params = {
     customer: customerId,
