@@ -68,24 +68,6 @@ export async function updatePassword(data = null) {
   return null;
 }
 
-export async function userCustomerRoleList(id, pageNumber, searchQuery, role) {
-  const params = {
-    'other-users-for-customer': id,
-    page: pageNumber === '' || pageNumber === undefined ? 1 : pageNumber,
-    q: searchQuery,
-    role,
-  };
-  const result = await axiosInstance
-    .get(API_USER, { params })
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return result;
-}
-
 export async function updateUserMe(id, data) {
   const result = await axiosInstance
     .patch(`${API_USER + id}/`, data)
