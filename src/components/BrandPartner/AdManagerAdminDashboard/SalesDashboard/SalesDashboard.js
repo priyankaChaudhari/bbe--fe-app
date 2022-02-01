@@ -119,7 +119,11 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
     getManagersList(isBGSAdmin ? 'BGS' : 'sales_performance').then(
       (managersData) => {
         if (mounted.current) {
-          if (managersData && managersData.data && managersData.data.length) {
+          if (
+            managersData &&
+            managersData.data &&
+            managersData.data.length > 0
+          ) {
             const results = managersData.data;
             const list = [{ value: 'all', label: 'All' }];
 
@@ -144,7 +148,7 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
   const getBGSList = useCallback((id) => {
     getBgsUserList(id).then((bgsData) => {
       if (mounted.current) {
-        if (bgsData && bgsData.data && bgsData.data.length) {
+        if (bgsData && bgsData.data && bgsData.data.length > 0) {
           const results = bgsData.data;
           const list = [{ value: 'all', label: 'All' }];
 
@@ -161,8 +165,6 @@ export default function SalesDashboard({ marketplaceChoices, userInfo }) {
             });
           }
           setBgsList(list);
-        } else {
-          setBgsList([{ value: 'all', label: 'All' }]);
         }
       }
     });
