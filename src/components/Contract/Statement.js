@@ -398,7 +398,7 @@ export default function Statement({
               <td style="border: 1px solid black;padding: 13px;">${
                 item.service ? item.service.name : item?.name
               }</td>
-              <td style="border: 1px solid black;padding: 13px;">25% of recovered $<span>&#39;</span>s </td>
+              <td style="border: 1px solid black;padding: 13px;">  <span style=" background:#ffe5df; padding: 4px 9px;"> 25% of recovered $<span>&#39;</span>s </span></td>
             </tr>`,
           );
         }
@@ -419,6 +419,7 @@ export default function Statement({
             ${
               item?.fee
                 ? `<td style="border: 1px solid black;padding: 13px;">
+                 <span style=" background:#ffe5df; padding: 4px 9px;"> 
                 $${
                   item.service
                     ? displayNumber(item.service.fee)
@@ -427,10 +428,13 @@ export default function Statement({
                     : ''
                 }
                 /month
+                </span>
               </td>`
-                : `<td>$${displayNumber(
-                    additionaMarketplaceAmount,
-                  )} /month</td>`
+                : `<td>
+                 <span style=" background:#ffe5df; padding: 4px 9px;"> 
+                $${displayNumber(
+                  additionaMarketplaceAmount,
+                )} /month </span></td>`
             }
           </tr>`,
         );
@@ -558,7 +562,9 @@ export default function Statement({
         ? `<tr>
             <td class="total-service-bordless"> Sub-total</td>
             <td class="total-service-bordless text-right">
+             <span style=" background:#ffe5df; padding: 4px 9px;"> 
             $${displayNumber(totalFees.monthlySubTotal)}
+            </span>
             </td>
          </tr>`
         : ''
@@ -572,11 +578,14 @@ export default function Statement({
                 ? `(${totalFees?.monthlyDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service-bordless text-right"> -$${
+            <td class="total-service-bordless text-right">
+             <span style=" background:#ffe5df; padding: 4px 9px;"> 
+            -$${
               totalFees?.monthlyAmountAfterDiscount
                 ? displayNumber(totalFees?.monthlyAmountAfterDiscount)
                 : 0
             }
+            </span>
             </td>
          </tr>`
         : ''
@@ -584,9 +593,11 @@ export default function Statement({
       <tr>
         <td class="total-service" style="padding-top: 5px"> Total</td>
         <td class="total-service text-right" style="padding-top: 5px;"> 
+         <span style=" background:#ffe5df; padding: 4px 9px;"> 
           $${
             totalFees?.monthlyTotal ? displayNumber(totalFees.monthlyTotal) : 0
           }
+          </span>
         </td>
       </tr>`;
   };
@@ -596,7 +607,7 @@ export default function Statement({
         <table class=" contact-list " style="width: 100%; overflow:auto; border-collapse: collapse;">
           <tr><th colspan="3" style="text-align: left; border: 1px solid black;padding: 13px;">Service Components</th></tr>
           <tr>
-            <td style="border: 1px solid black; padding: 13px;">Expert Strategy and Consultation (AGS)</td>
+            <td style="border: 1px solid black; padding: 13px;">Expert Strategy and Consultation</td>
             <td style="border: 1px solid black; padding: 13px;">Strategic Plan (Audit, SWOT Analysis, Critical Issues)</td>
             <td style="border: 1px solid black; padding: 13px;">Weekly Call</td>
           </tr>
@@ -665,9 +676,10 @@ export default function Statement({
       totalFees?.oneTimeAmountAfterDiscount
         ? `<tr>
             <td class="total-service-borderless" style="border-bottom: hidden; padding: 5px 13px" colspan="3"> Sub-total</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">$${displayNumber(
-              totalFees?.oneTimeSubTotal,
-            )}
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">
+            <span style=" background:#ffe5df; padding: 4px 9px; ">
+            $${displayNumber(totalFees?.oneTimeSubTotal)}
+            </span>
             </td>
          </tr>`
         : ''
@@ -681,34 +693,44 @@ export default function Statement({
                 ? `(${totalFees?.oneTimeDiscount}%)`
                 : ''
             }</td>
-            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px"> -$${displayNumber(
-              totalFees?.oneTimeAmountAfterDiscount,
-            )}
+            <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px">
+            <span style=" background:#ffe5df; padding: 4px 9px; ">
+            
+            -$${displayNumber(totalFees?.oneTimeAmountAfterDiscount)}
+            </span>
             </td>
          </tr>`
         : ''
     }        
          <tr>
             <td class="total-service" colspan="3" style=" padding-top: 5px "> Total</td>
-            <td class="total-service text-right"style="padding-top: 5px "> $${displayNumber(
-              totalFees?.oneTimeTotal,
-            )}
+            <td class="total-service text-right"style="padding-top: 5px ">
+            <span style=" background:#ffe5df; padding: 4px 9px; ">
+            
+            $${displayNumber(totalFees?.oneTimeTotal)}
+            </span>
             </td>
          </tr>
          `;
   };
   const customAmazonStorePrice = (fee) => {
     return `<td style="border: 1px solid black;padding: 13px;">
+     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+                
         ${fee ? `$${displayNumber(fee)}` : '$0'}
+        </span>
       </td>`;
   };
   const tdService = (service, fee) => {
     return `<td style="border: 1px solid black; padding: 13px;">
+     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+
           ${
             service.quantity && fee
               ? `$${displayNumber(service.quantity * fee)}`
               : '$0'
           }
+          </span>
         </td>
         `;
   };
@@ -734,26 +756,31 @@ export default function Statement({
                 }</td>
                 ${
                   item.service?.fee
-                    ? `<td style="border: 1px solid black;padding: 13px;">$${
-                        item.service
-                          ? `${displayNumber(item.service.fee)}`
-                          : item.fee
-                          ? displayNumber(item.fee)
-                          : ''
-                      } /month
+                    ? `<td style="border: 1px solid black;padding: 13px;">
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
+                    $${
+                      item.service
+                        ? `${displayNumber(item.service.fee)}`
+                        : item.fee
+                        ? displayNumber(item.fee)
+                        : ''
+                    } /month
+                    </span>
                   </td>`
                     : (
                         item.name
                           ? item.name === 'DSP Advertising'
                           : item.service.name === 'DSP Advertising'
                       )
-                    ? `<td>N/A</td>`
+                    ? `<td>  <span style=" background:#ffe5df; padding: 4px 9px;"> N/A </span></td>`
                     : `<td>
+                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
                     ${
                       fixedFee && fixedFee[0] && fixedFee[0].fee
                         ? `$${displayNumber(fixedFee[0].fee)} /month`
                         : '$0'
                     }
+                    </span>
                     </td>`
                 }
                 </tr>`,
@@ -769,8 +796,11 @@ export default function Statement({
         );
         return fields.push(
           `<tr>
-            <td style="border: 1px solid black;padding: 13px;">
+            <td style="border: 1px solid black;padding: 13px; ">
+                   <span style=" background:#ffe5df; padding: 4px 9px;"> 
+
               ${service.quantity ? displayNumber(service.quantity) : 0}
+              </span>
             </td>                 
             <td style="border: 1px solid black;padding: 13px;">
               ${
@@ -790,9 +820,11 @@ export default function Statement({
                     )
               )
                 ? service.custom_amazon_store_price
-                  ? `<td>$${displayNumber(
-                      service.custom_amazon_store_price,
-                    )}</td>`
+                  ? `<td>
+                   <span style=" background:#ffe5df; padding: 4px 9px; "> 
+                  $${displayNumber(
+                    service.custom_amazon_store_price,
+                  )}</span></td>`
                   : customAmazonStorePrice(
                       fixedFee && fixedFee[0] && fixedFee[0].fee,
                     )

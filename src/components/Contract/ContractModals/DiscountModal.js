@@ -1,15 +1,7 @@
 import React from 'react';
 
 import Modal from 'react-modal';
-import {
-  string,
-  bool,
-  func,
-  shape,
-  oneOfType,
-  number,
-  arrayOf,
-} from 'prop-types';
+import { string, bool, func, shape, oneOfType, number } from 'prop-types';
 
 import Discount from '../Discount';
 import { ModalBox } from '../../../common';
@@ -90,7 +82,7 @@ DiscountModal.defaultProps = {
   setFormData: () => {},
   discountFlag: '',
   setDetails: () => {},
-  selectedDiscount: [],
+  selectedDiscount: {},
   getDiscountData: () => {},
   updatedFormData: {},
   setIsEditContract: () => {},
@@ -119,7 +111,7 @@ DiscountModal.propTypes = {
   setFormData: func,
   discountFlag: string,
   setDetails: func,
-  selectedDiscount: arrayOf(shape({})),
+  selectedDiscount: shape({}),
   getDiscountData: func,
   updatedFormData: shape({}),
   setIsEditContract: func,
