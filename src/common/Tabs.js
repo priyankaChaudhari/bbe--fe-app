@@ -3,6 +3,16 @@ import Theme from '../theme/Theme';
 
 const Tabs = styled.div`
   overflow: auto;
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: ${Theme.white};
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: ${Theme.gray11};
+  }
   .tabs {
     list-style-type: none;
     position: relative;

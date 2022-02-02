@@ -9,7 +9,6 @@ import { CloseIcon, LeftArrowIcon } from '../../../../theme/images';
 import {
   ModalBox,
   Button,
-  Table,
   // PageLoader,
   AllocateBar,
 } from '../../../../common';
@@ -52,7 +51,52 @@ export default function ConfirmMarketPlaceBudgetModal({
   const renderAllocatedBalanceTable = () => {
     return (
       <>
-        <Table className="d-md-block d-none">
+        <div className="d-md-block d-none">
+          <div className="row">
+            <div className="col-3">
+              <div className="label">Marketplace</div>
+            </div>
+            <div className="col-3">
+              <div className="label">From</div>
+            </div>
+            <div className="col-3">
+              <div className="label"> To</div>
+            </div>
+            <div className="col-3">
+              <div className="label">change</div>
+            </div>
+          </div>
+          <div className="horizontal-line straight-line mt-2 mb-2" />
+          <div className="row mt-3">
+            <div className="col-3">
+              <div className="normal-text-black "> US</div>
+            </div>
+            <div className="col-3">
+              <div className="normal-text-black "> $6,000</div>
+            </div>
+            <div className="col-3">
+              <div className="normal-text-black "> $6,000</div>
+            </div>
+            <div className="col-3">
+              <div className="normal-text-black "> $6,000</div>
+            </div>
+          </div>
+          <div className="row mt-3">
+            <div className="col-3">
+              <div className="normal-text-black "> US</div>
+            </div>
+            <div className="col-3">
+              <div className="normal-text-black "> $6,000</div>
+            </div>
+            <div className="col-3">
+              <div className="normal-text-black "> $6,000</div>
+            </div>
+            <div className="col-3">
+              <div className="normal-text-black "> $6,000</div>
+            </div>
+          </div>
+        </div>
+        {/* <Table className="d-md-block d-none">
           <table style={{ borderCollapse: 'collapse' }} width="100%">
             <thead>
               <tr>
@@ -116,9 +160,9 @@ export default function ConfirmMarketPlaceBudgetModal({
                 </td>
               </tr>
             </tbody>
-          </table>
-        </Table>
-        <Table className="d-md-none d-block">
+          </table> */}
+        {/* </Table> */}
+        <div className="d-md-none d-block">
           <div className="row">
             <div className="col-12 mb-2">
               <div className="label">Marketplace</div>
@@ -138,7 +182,7 @@ export default function ConfirmMarketPlaceBudgetModal({
               <div className="label-info"> $6,000</div>
             </div>
           </div>
-        </Table>
+        </div>
       </>
     );
   };
@@ -183,8 +227,8 @@ export default function ConfirmMarketPlaceBudgetModal({
               <div className="row">
                 <div className="col-12">
                   <AllocateBar
-                    id="BT-escrowBalance-budgetAllocaion"
-                    className="mt-3 mb-3">
+                    id="BT-escrowBalance-DSPAllocaion"
+                    className="mt-3 mb-4">
                     <div className="remaing-label text-bold text-right">
                       Total Escrow Balance: {escrowBalance}
                     </div>
