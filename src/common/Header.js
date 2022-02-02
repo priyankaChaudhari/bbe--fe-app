@@ -16,6 +16,7 @@ import { MainHeader, MobileSidebar, SideContents } from './Styles/HeaderStyles';
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
+  PATH_BBE_GOAL_DASHBOARD,
   helpDeskLink,
   managementLink,
   PATH_ACCOUNT_SETUP,
@@ -271,6 +272,31 @@ export default function Header({ type, userInfo }) {
             <SideContents>
               {' '}
               <ul className="side-bar-icon ">
+                <li
+                  className={
+                    history.location.pathname?.includes('bbe-Goal')
+                      ? ' cursor active'
+                      : ' cursor'
+                  }
+                  role="presentation"
+                  onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
+                  {history.location.pathname?.includes('bbe-Goal') ? (
+                    <img
+                      width="32px"
+                      className=" speed0meter-icon active"
+                      src={SpeedometerActive}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      width="32px"
+                      className=" speed0meter-icon  disactive"
+                      src={Speedometer}
+                      alt=""
+                    />
+                  )}
+                </li>
+
                 <li
                   className={
                     roleURLs.some((element) =>

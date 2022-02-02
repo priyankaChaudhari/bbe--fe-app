@@ -17,6 +17,7 @@ import {
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
+  PATH_BBE_GOAL_DASHBOARD,
   roleURLs,
   dashboardRolePaths,
   dashboardRole,
@@ -30,6 +31,29 @@ export default function LeftSideBar({ userInfo }) {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
+          <li
+            className={
+              history.location.pathname?.includes('bbe-Goal')
+                ? ' cursor active'
+                : ' cursor'
+            }
+            role="presentation"
+            onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
+            {' '}
+            <img
+              width="32px"
+              className=" speed0meter-icon active"
+              src={SpeedometerActive}
+              alt=""
+            />
+            <img
+              width="32px"
+              className=" speed0meter-icon  disactive"
+              src={Speedometer}
+              alt=""
+            />
+          </li>
+
           {dashboardRole.includes(userRole) ? (
             <li
               className={

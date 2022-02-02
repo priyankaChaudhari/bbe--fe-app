@@ -22,7 +22,7 @@ import {
   PATH_SUMMARY,
   PATH_BILLING_DETAILS,
   PATH_ACCOUNT_SETUP_CHOOSE,
-  dashboardRolePaths,
+  PATH_BBE_GOAL_DASHBOARD,
 } from '../../constants/index';
 
 export const userRequestInitiated = () => {
@@ -173,8 +173,8 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         }
       }
     } else {
-      if (Object.keys(dashboardRolePaths).includes(data.user.role)) {
-        history.push(dashboardRolePaths[data.user.role]);
+      if (data.user.role !== 'Customer') {
+        history.push(PATH_BBE_GOAL_DASHBOARD);
       } else history.push(PATH_CUSTOMER_LIST);
     }
   }
