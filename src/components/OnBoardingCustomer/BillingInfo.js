@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 
 import $ from 'jquery';
+import axios from 'axios';
 import queryString from 'query-string';
 import NumberFormat from 'react-number-format';
 import { useDispatch } from 'react-redux';
@@ -23,6 +24,7 @@ import {
   updateAskSomeoneData,
   updateUserMe,
   saveBillingInfo,
+  saveDSPContact,
 } from '../../api';
 import {
   PATH_SUMMARY,
@@ -195,34 +197,89 @@ export default function BillingInfo({
         ? formData.billing_contact
         : formData.dsp_contact,
     };
-    saveBillingInfo(details, data?.id || null).then((res) => {
-      if (res?.status === 200 || res?.status === 201) {
-        saveDetails();
-        if (assignedToSomeone) {
-          const stringified = queryString?.stringify({
-            name: verifiedStepData.user_name,
-          });
-          history.push({
-            pathname: PATH_THANKS,
-            search: `${stringified}`,
-          });
-        } else {
-          CheckStep('billing information');
-        }
-      }
-      if (res?.status === 400) {
-        setIsLoading({ loader: false, type: 'button' });
-        setApiError(res?.data);
-        if (
-          (res?.data && res.data.billing_address) ||
-          (res?.data && res.data[0])
-        ) {
-          document.body.scrollTop = 0; // For Safari
-          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        }
-      }
-    });
+    axios
+      .all([
+        saveBillingInfo(details, data?.id || null),
+        saveDSPContact(
+          {
+            ...formData.dsp_contact,
+            customer: userInfo.customer || verifiedStepData.customer_id,
+          },
+          formData?.dsp_contact?.id,
+        ),
+      ])
+      .then(
+        axios.spread((...res) => {
+          if (
+            (res?.[0]?.status === 201 || res?.[0]?.status === 200) &&
+            (res?.[1]?.status === 201 || res?.[1]?.status === 200)
+          ) {
+            saveDetails();
+            if (assignedToSomeone) {
+              const stringified = queryString?.stringify({
+                name: verifiedStepData.user_name,
+              });
+              history.push({
+                pathname: PATH_THANKS,
+                search: `${stringified}`,
+              });
+            } else {
+              CheckStep('billing information');
+            }
+          }
+
+          if (res?.[0]?.status === 400 || res?.[1]?.status === 400) {
+            let billing = {};
+            let dsp = {};
+            if (res?.[0]?.status === 400) {
+              billing = res?.[0]?.data;
+            }
+            if (res?.[1]?.status === 400) {
+              dsp = res?.[1]?.data;
+            }
+
+            setIsLoading({ loader: false, type: 'button' });
+            setApiError({ dsp_contact: dsp, billing_address: billing });
+            if (
+              (res?.data && res.data.billing_address) ||
+              (res?.data && res.data[0])
+            ) {
+              document.body.scrollTop = 0; // For Safari
+              document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+            }
+          }
+        }),
+      );
   };
+
+  //   saveBillingInfo(details, data?.id || null).then((res) => {
+  //     if (res?.status === 200 || res?.status === 201) {
+  //       saveDetails();
+  //       if (assignedToSomeone) {
+  //         const stringified = queryString?.stringify({
+  //           name: verifiedStepData.user_name,
+  //         });
+  //         history.push({
+  //           pathname: PATH_THANKS,
+  //           search: `${stringified}`,
+  //         });
+  //       } else {
+  //         CheckStep('billing information');
+  //       }
+  //     }
+  //     if (res?.status === 400) {
+  //       setIsLoading({ loader: false, type: 'button' });
+  //       setApiError(res?.data);
+  //       if (
+  //         (res?.data && res.data.billing_address) ||
+  //         (res?.data && res.data[0])
+  //       ) {
+  //         document.body.scrollTop = 0; // For Safari
+  //         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  //       }
+  //     }
+  //   });
+  // };
 
   const handleChange = (event, item, type) => {
     setFormData({

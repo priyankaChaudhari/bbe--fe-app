@@ -13,15 +13,14 @@ import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
 import { showProfileLoader } from '../../../../../store/actions/userState';
 import {
+  billingAddress,
+  paymentTermValueLabel,
+} from '../../../../../constants';
+import {
   CloseIcon,
   EditOrangeIcon,
   helpCircleIcon,
 } from '../../../../../theme/images';
-import {
-  billingAddress,
-  creditCardDetails,
-  paymentTermValueLabel,
-} from '../../../../../constants';
 import {
   getBillingDetails,
   getDSPContact,
@@ -60,7 +59,6 @@ export default function BillingDetails({
   const [formData, setFormData] = useState({
     billing_contact: {},
     billing_address: {},
-    card_details: {},
   });
   const [paymentTermsData, setPaymentTermsData] = useState([]);
   const [paymentTermsOptions, setPaymentTermsOptions] = useState([]);
@@ -99,8 +97,6 @@ export default function BillingDetails({
       setFormData({
         billing_contact: response?.data?.billing_contact?.[0],
         billing_address: response?.data?.billing_address?.[0],
-        card_details: response?.data?.card_details?.[0],
-        expiryMessage: response?.data?.card_details?.[0]?.expiry_info,
       });
     });
   }, [id]);
@@ -166,21 +162,7 @@ export default function BillingDetails({
     if (type === 'dsp_contact') {
       return key;
     }
-    if (key === 'expiration_date') {
-      const getDate = data?.card_details?.[0]?.[key]
-        ? data.card_details[0][key].includes('-')
-          ? data.card_details[0][key].split('-')
-          : data.card_details[0][key].split('/')
-        : '';
 
-      return getDate
-        ? getDate[0].length > 2
-          ? `${getDate[1]}/${getDate[0].substring(2)}`
-          : `${getDate[1]}/${getDate[0]}`
-        : data.id
-        ? '**/**'
-        : '';
-    }
     if (data?.[type]?.[0]) {
       return data[type][0][key];
     }
@@ -239,7 +221,7 @@ export default function BillingDetails({
       ...formData,
       [type]: {
         ...formData[type],
-        [item.key]: item.key === 'card_number' ? event : event.target.value,
+        [item.key]: event.target.value,
       },
     });
     setApiError({
@@ -261,48 +243,15 @@ export default function BillingDetails({
       },
     ]);
   };
-  const mapPaymentDefaultValues = (item) => {
-    if (item === 'card_number')
-      return `************${data?.card_details?.[0]?.[item]}`;
-    if (item === 'expiration_date') {
-      const getDate = data?.card_details?.[0]?.[item]
-        ? data.card_details[0][item].includes('-')
-          ? data.card_details[0][item].split('-')
-          : data.card_details[0][item].split('/')
-        : '';
-
-      return getDate[0].length > 2
-        ? `${getDate[1]}${getDate[0].substring(2)}`
-        : `${getDate[1]}${getDate[0]}`;
-    }
-    return '';
-  };
 
   const generateNumeric = (item, type) => {
     return (
       <NumberFormat
         format={item.format}
         className="form-control"
-        onChange={(event) =>
-          item.key !== 'card_number' ? handleChange(event, item, type) : ''
-        }
-        placeholder={
-          item.key === 'expiration_date'
-            ? `Enter ${item.label} (MM/YY)`
-            : `Enter ${item.label}`
-        }
-        defaultValue={
-          type === 'card_details' && data?.id
-            ? mapPaymentDefaultValues(item.key)
-            : item.key === 'expiration_date'
-            ? [formData.type][item.key]
-            : formData?.[type]?.[item.key]
-        }
-        onValueChange={(values) =>
-          item.key === 'card_number'
-            ? handleChange(values.value, item, type)
-            : ''
-        }
+        onChange={(event) => handleChange(event, item, type)}
+        placeholder={`Enter ${item.label}`}
+        defaultValue={formData?.[type]?.[item.key]}
         isNumericString
       />
     );
@@ -317,7 +266,6 @@ export default function BillingDetails({
         defaultValue={data?.[type]?.[0]?.[item.key] || DSPData?.[0]?.[item.key]}
         onChange={(event) => handleChange(event, item, type)}
         maxLength={item.key === 'postal_code' ? 10 : ''}
-        readOnly={type !== 'dsp_contact' && data?.id && item.key === 'email'}
       />
     );
   };
@@ -331,13 +279,7 @@ export default function BillingDetails({
             return (
               <div
                 className={type === 'dsp' ? 'col-md-12' : 'col-md-6'}
-                key={item.key}
-                style={{
-                  opacity:
-                    type !== 'dsp' && data?.id && item.key === 'email'
-                      ? 0.5
-                      : '',
-                }}>
+                key={item.key}>
                 <InputFormField className="mt-3">
                   <label htmlFor={item.label}>
                     {item.label}
@@ -399,35 +341,6 @@ export default function BillingDetails({
             );
           })}
       </div>
-    );
-  };
-
-  const mapPaymentDetails = () => {
-    return (
-      <>
-        {creditCardDetails.map((field) => (
-          <div className="row" key={field}>
-            {field.details.map((item) => {
-              return (
-                <div className="col-md-6" key={item.key}>
-                  <InputFormField className="mt-3">
-                    <label htmlFor={item.label}>
-                      {item.label}
-                      <br />
-                      {item.type === 'number' ? (
-                        <>{generateNumeric(item, 'card_details')}</>
-                      ) : (
-                        <>{generateInput(item, 'card_details')}</>
-                      )}
-                    </label>
-                  </InputFormField>
-                  <ErrorMsg>{apiError?.card_details?.[item.key]?.[0]}</ErrorMsg>
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </>
     );
   };
 
@@ -527,55 +440,18 @@ export default function BillingDetails({
         }
       });
     } else {
-      const getYear = new Date().getFullYear().toString().substring(0, 2);
-      let format = '';
-      if (!formData?.card_details?.expiration_date?.includes(getYear)) {
-        format = formData.card_details.expiration_date.split('/');
-        formData.card_details.expiration_date = `${getYear + format[1]}-${
-          format[0]
-        }`;
-      }
       if (
         formData?.billing_contact?.phone_number === '' ||
         formData?.billing_contact?.phone_number === null
       )
         delete formData.billing_contact.phone_number;
-      if (
-        JSON.stringify(data?.card_details?.[0]) ===
-        JSON.stringify(formData.card_details)
-      ) {
-        delete formData.card_details;
-        delete formData.old_billinginfo_id;
-      } else {
-        formData.old_billinginfo_id = data?.id;
-      }
 
-      if (formData?.old_billinginfo_id === '')
-        delete formData.old_billinginfo_id;
-      if (formData?.billing_contact?.expiry_info)
-        delete formData.billing_contact.expiry_info;
-      delete formData.expiryMessage;
-
-      let details = {};
-
-      if (data?.id === undefined || data?.id === '') {
-        details = {
-          ...formData,
-          billing_address: formData.billing_address || {},
-          billing_contact: formData.billing_contact || {},
-          card_details: formData.card_details || {},
-          customer_onboarding: userInfo.customer_onboarding || onBoardingId,
-          payment_type: 'credit card',
-        };
-      } else {
-        details = {
-          ...formData,
-          billing_address: formData.billing_address,
-          billing_contact: formData.billing_contact,
-          customer_onboarding: userInfo.customer_onboarding || onBoardingId,
-          payment_type: 'credit card',
-        };
-      }
+      const details = {
+        ...formData,
+        billing_address: formData.billing_address || {},
+        billing_contact: formData.billing_contact || {},
+        customer_onboarding: userInfo.customer_onboarding || onBoardingId,
+      };
 
       saveBillingInfo(
         details,
@@ -629,71 +505,8 @@ export default function BillingDetails({
         />
       ) : (
         <div className="mt-4">
-          {formData?.expiryMessage?.message ? (
-            <div
-              className="already-user-msg mt-2 mb-3 p-2 text-center"
-              style={{
-                color: !formData.expiryMessage.is_expired
-                  ? Theme.black
-                  : Theme.orange,
-                backgroundColor: !formData.expiryMessage.is_expired
-                  ? Theme.yellow
-                  : Theme.lightOrange,
-                borderRadius: '15px',
-              }}>
-              {formData.expiryMessage.message}
-            </div>
-          ) : (
-            ''
-          )}
           <div className="row">
             <div className="col-md-6 col-sm-12 mb-3">
-              <WhiteCard>
-                <p className="black-heading-title mt-0 mb-3">Payment Type</p>
-                {customerStatus?.value !== 'pending' ? (
-                  <div
-                    className="edit-details"
-                    role="presentation"
-                    onClick={() => setShowModal(true)}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
-                  </div>
-                ) : null}
-                <div className="row">
-                  <div className="col-6">
-                    <div className="label">Payment Type</div>
-                    <div className="label-info">Credit Card</div>
-                  </div>
-                </div>
-                <div className="label mt-3">Cardholder name</div>
-                <div className="label-info">
-                  {' '}
-                  {mapDefaultValues('card_details', 'card_holder_name')}
-                </div>
-                <div className="row">
-                  <div className="col-6 pr-0 ">
-                    <div className="label mt-3">Credit Card Number</div>
-                    <div className="label-info">
-                      {data.id
-                        ? `**** **** **** ${mapDefaultValues(
-                            'card_details',
-                            'card_number',
-                          )}`
-                        : ''}
-                    </div>
-                  </div>
-                  <div className="col-3 pr-0">
-                    <div className="label mt-3">Exp. Date</div>
-                    <div className="label-info">
-                      {mapDefaultValues('card_details', 'expiration_date')}
-                    </div>
-                  </div>
-                  <div className="col-3">
-                    <div className="label mt-3">CVV</div>
-                    <div className="label-info">{data.id ? '***' : ''}</div>
-                  </div>
-                </div>
-              </WhiteCard>
               {paymentTermsData?.length ? (
                 <WhiteCard className="mt-3">
                   <p className="black-heading-title mt-0 mb-0">Payment Terms</p>
@@ -721,6 +534,42 @@ export default function BillingDetails({
               ) : (
                 ''
               )}
+
+              <WhiteCard className="mt-3">
+                <p className="black-heading-title mt-0 mb-0">Billing Address</p>
+
+                {customerStatus?.value !== 'pending' ? (
+                  <div
+                    className="edit-details"
+                    role="presentation"
+                    onClick={() => setShowModal(true)}>
+                    <img src={EditOrangeIcon} alt="" />
+                    Edit
+                  </div>
+                ) : null}
+                <div className="label mt-3">Address </div>
+                <div className="label-info">
+                  {mapDefaultValues('billing_address', 'address')}
+                </div>
+                <div className="label mt-3">City </div>
+                <div className="label-info">
+                  {mapDefaultValues('billing_address', 'city')}
+                </div>
+                <div className="row">
+                  <div className="col-6">
+                    <div className="label mt-3">State</div>
+                    <div className="label-info">
+                      {mapDefaultValues('billing_address', 'state')}
+                    </div>
+                  </div>
+                  <div className="col-6">
+                    <div className="label mt-3">Postal Code</div>
+                    <div className="label-info">
+                      {mapDefaultValues('billing_address', 'postal_code')}
+                    </div>
+                  </div>
+                </div>
+              </WhiteCard>
             </div>
             <div className="col-md-6 col-sm-12 mb-3">
               <WhiteCard>
@@ -796,42 +645,6 @@ export default function BillingDetails({
                   </GroupUser>
                 ))}
               </WhiteCard>
-
-              <WhiteCard className="mt-3">
-                <p className="black-heading-title mt-0 mb-0">Billing Address</p>
-
-                {customerStatus?.value !== 'pending' ? (
-                  <div
-                    className="edit-details"
-                    role="presentation"
-                    onClick={() => setShowModal(true)}>
-                    <img src={EditOrangeIcon} alt="" />
-                    Edit
-                  </div>
-                ) : null}
-                <div className="label mt-3">Address </div>
-                <div className="label-info">
-                  {mapDefaultValues('billing_address', 'address')}
-                </div>
-                <div className="label mt-3">City </div>
-                <div className="label-info">
-                  {mapDefaultValues('billing_address', 'city')}
-                </div>
-                <div className="row">
-                  <div className="col-6">
-                    <div className="label mt-3">State</div>
-                    <div className="label-info">
-                      {mapDefaultValues('billing_address', 'state')}
-                    </div>
-                  </div>
-                  <div className="col-6">
-                    <div className="label mt-3">Postal Code</div>
-                    <div className="label-info">
-                      {mapDefaultValues('billing_address', 'postal_code')}
-                    </div>
-                  </div>
-                </div>
-              </WhiteCard>
             </div>
           </div>
         </div>
@@ -874,7 +687,6 @@ export default function BillingDetails({
               <>
                 <h4>Payment Details</h4>
                 <div className="body-content mt-3 ">
-                  {mapPaymentDetails()}
                   <ErrorMsg style={{ textAlign: 'center' }}>
                     {apiError && apiError[0]}
                   </ErrorMsg>
