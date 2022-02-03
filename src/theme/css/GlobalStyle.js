@@ -207,6 +207,11 @@ h3 {
   color: ${Theme.black};
   text-transform: capitalize;
 
+
+  &.small-title-heading {
+    font-size: ${Theme.ExtraMediumTitleFontSize}
+  }
+
   &.gray-text {
     color: ${Theme.gray90};
     font-family: ${Theme.baseFontFamily};
@@ -1647,6 +1652,11 @@ text.cust-label-avg {
   font-size:${Theme.verySmall};
   text-transform: uppercase;
   font-weight: bold;
+}
+.sub-heading {
+  color: ${Theme.gray40};
+  font-size:${Theme.verySmall};
+  font-weight: 600;
 }
 
 .label-card-text {

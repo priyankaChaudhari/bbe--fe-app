@@ -7,6 +7,12 @@ export const WhiteCard = styled.div`
   padding: 20px;
   position: relative;
 
+  &.card-with-border {
+    border: 1px solid ${Theme.gray11};
+    border-radius: 8px;
+    padding: 15px;
+  }
+
   &.selected-card {
     border: 0.1rem dotted #bfc5d2;
   }
@@ -49,6 +55,16 @@ export const WhiteCard = styled.div`
 
   &.left-border {
     padding: 25px 25px 25px 0;
+  }
+  .green-text {
+    color: ${Theme.green};
+    font-size: ${Theme.extraMedium};
+  }
+  .large-size {
+    font-size: ${Theme.title};
+  }
+  .red-text {
+    color: ${Theme.red};
   }
 
   .orange-text {

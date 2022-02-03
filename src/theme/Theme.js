@@ -76,6 +76,7 @@ const Theme = {
   primaryTitleFontSize: '36px',
   pageTitleFontSize: '34px',
   MediumTitleFontSize: '32px',
+  ExtraMediumTitleFontSize: '26px',
   smallTitleFontSize: '28px',
   secondaryTitleFontSize: '24px',
   textFontSize: '16px',
