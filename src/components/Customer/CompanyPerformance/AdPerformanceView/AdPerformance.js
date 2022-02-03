@@ -120,7 +120,6 @@ export default function AdPerformance({
 
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
-
   useEffect(() => {
     if (userInfo?.role?.includes('Ad Manager Admin')) {
       setIsAllowToSplitBalance(true);
@@ -1134,6 +1133,7 @@ export default function AdPerformance({
           currencySymbol={currencySymbol}
           customerId={id}
           marketplace={selectedMarketplace}
+          marketplaceOptions={marketplaceOptions}
           onModalClose={() => {
             if (selectedAdDF.value === 'custom') {
               DSPYearAndCustomDateFilter(

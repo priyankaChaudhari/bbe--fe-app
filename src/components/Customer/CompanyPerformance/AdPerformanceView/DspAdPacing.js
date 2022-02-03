@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import dayjs from 'dayjs';
-import { bool, func, shape, string } from 'prop-types';
+import { bool, func, shape, string, arrayOf } from 'prop-types';
 import styled from 'styled-components';
 
 // import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
@@ -16,6 +16,7 @@ export default function DspAdPacing({
   currencySymbol,
   customerId,
   marketplace,
+  marketplaceOptions,
   onModalClose,
   isAllowToSplitBalance,
   showDspBudgetModal,
@@ -350,6 +351,7 @@ export default function DspAdPacing({
         id="BT-escrowAllocation"
         customerId={customerId}
         marketplace={marketplace}
+        marketplaceOptions={marketplaceOptions}
         dspData={dspData}
         isOpen={showAllocatedBalanceModal}
         addThousandSeperator={addThousandSeperator}
@@ -496,6 +498,7 @@ DspAdPacing.defaultProps = {
   onModalClose: () => {},
   setShowDspBudgetModal: () => {},
   getActivityLogInfo: () => {},
+  marketplaceOptions: [],
 };
 
 DspAdPacing.propTypes = {
@@ -509,4 +512,5 @@ DspAdPacing.propTypes = {
   onModalClose: func,
   setShowDspBudgetModal: func,
   getActivityLogInfo: func,
+  marketplaceOptions: arrayOf(shape()),
 };

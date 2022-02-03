@@ -1,40 +1,25 @@
 import React from 'react';
 
-import Modal from 'react-modal';
-
-import { bool, func, number, string } from 'prop-types';
+import { arrayOf, bool, func, number, shape } from 'prop-types';
 
 // import { storeAllocatedBudget } from '../../../../api';
-import { CloseIcon, LeftArrowIcon } from '../../../../theme/images';
+import { LeftArrowIcon } from '../../../../theme/images';
 import {
-  ModalBox,
   Button,
   // PageLoader,
+  Table,
   AllocateBar,
 } from '../../../../common';
 
-const customStyles = {
-  content: {
-    top: '50%',
-    left: '50%',
-    right: 'auto',
-    bottom: 'auto',
-    maxWidth: '600px ',
-    width: '100% ',
-    overlay: ' {zIndex: 1000}',
-    marginRight: '-50%',
-    transform: 'translate(-50%, -50%)',
-  },
-};
-
-export default function ConfirmMarketPlaceBudgetModal({
-  id,
+export default function ConfirmMarketPlaceAllocation({
   // customerId,
   // marketplace,
   escrowBalance,
-  isOpen,
-  onClick,
-  // getActivityLogInfo,
+  allocatedMarketplaceBalance,
+  addThousandSeperator,
+  setShowMarketPlaceAllocation,
+  showConfirmMarketplaceAllocation,
+  setShowConfirmMarketplaceAllocation,
 }) {
   // const submitAllocatedBudget = useCallback(() => {
   //   setIsSubmitLoader(true);
@@ -51,7 +36,7 @@ export default function ConfirmMarketPlaceBudgetModal({
   const renderAllocatedBalanceTable = () => {
     return (
       <>
-        <div className="d-md-block d-none">
+        {/* <div className="d-md-block d-none">
           <div className="row">
             <div className="col-3">
               <div className="label">Marketplace</div>
@@ -63,7 +48,7 @@ export default function ConfirmMarketPlaceBudgetModal({
               <div className="label"> To</div>
             </div>
             <div className="col-3">
-              <div className="label">change</div>
+              <div className="label text-right">change</div>
             </div>
           </div>
           <div className="horizontal-line straight-line mt-2 mb-2" />
@@ -78,7 +63,7 @@ export default function ConfirmMarketPlaceBudgetModal({
               <div className="normal-text-black "> $6,000</div>
             </div>
             <div className="col-3">
-              <div className="normal-text-black "> $6,000</div>
+              <div className="normal-text-black text-right"> $6,000</div>
             </div>
           </div>
           <div className="row mt-3">
@@ -92,11 +77,11 @@ export default function ConfirmMarketPlaceBudgetModal({
               <div className="normal-text-black "> $6,000</div>
             </div>
             <div className="col-3">
-              <div className="normal-text-black "> $6,000</div>
+              <div className="normal-text-black text-right"> $6,000</div>
             </div>
           </div>
-        </div>
-        {/* <Table className="d-md-block d-none">
+        </div> */}
+        <Table className="d-md-block d-none">
           <table style={{ borderCollapse: 'collapse' }} width="100%">
             <thead>
               <tr>
@@ -115,53 +100,37 @@ export default function ConfirmMarketPlaceBudgetModal({
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td
-                  width="30%"
-                  className="small-label-text light-font product-body">
-                  US
-                </td>
-                <td
-                  width="25%"
-                  className=" small-label-text light-font product-body">
-                  $14,000
-                </td>
-                <td
-                  width="25%"
-                  className=" small-label-text light-font product-body">
-                  $6,000
-                </td>
-                <td
-                  width="20%"
-                  className=" small-label-text light-font product-body text-right">
-                  $6,000
-                </td>
-              </tr>
-              <tr>
-                <td
-                  width="30%"
-                  className="small-label-text light-font product-body">
-                  US
-                </td>
-                <td
-                  width="25%"
-                  className=" small-label-text light-font product-body">
-                  $14,000
-                </td>
-                <td
-                  width="25%"
-                  className=" small-label-text light-font product-body">
-                  $6,000
-                </td>
-                <td
-                  width="20%"
-                  className=" small-label-text light-font product-body text-right">
-                  $6,000
-                </td>
-              </tr>
+              {allocatedMarketplaceBalance?.map((item) => {
+                return (
+                  <tr key={item.marketplace}>
+                    <td
+                      width="30%"
+                      className="small-label-text light-font product-body">
+                      {item.label}
+                    </td>
+                    <td
+                      width="25%"
+                      className=" small-label-text light-font product-body">
+                      ${item.escrow_allocated_converted_usd}
+                    </td>
+                    <td
+                      width="25%"
+                      className=" small-label-text light-font product-body">
+                      ${item.new_escrow_allocated_converted_usd}
+                    </td>
+                    <td
+                      width="20%"
+                      className=" small-label-text light-font product-body text-right">
+                      {item.balanceChanged === 0
+                        ? `$0`
+                        : addThousandSeperator(item.balanceChanged, 'currency')}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
-          </table> */}
-        {/* </Table> */}
+          </table>
+        </Table>
         <div className="d-md-none d-block">
           <div className="row">
             <div className="col-12 mb-2">
@@ -188,23 +157,8 @@ export default function ConfirmMarketPlaceBudgetModal({
   };
   return (
     <>
-      <Modal
-        id={id}
-        isOpen={isOpen}
-        style={{ ...customStyles }}
-        ariaHideApp={false}
-        contentLabel="Edit modal">
-        <img
-          src={CloseIcon}
-          alt="close"
-          className="float-right cursor cross-icon"
-          onClick={() => {
-            onClick();
-          }}
-          role="presentation"
-        />
-
-        <ModalBox>
+      {showConfirmMarketplaceAllocation ? (
+        <>
           <div className="modal-body  pb-0">
             <h4>
               <img
@@ -212,7 +166,8 @@ export default function ConfirmMarketPlaceBudgetModal({
                 src={LeftArrowIcon}
                 alt="close"
                 onClick={() => {
-                  onClick();
+                  setShowMarketPlaceAllocation(true);
+                  setShowConfirmMarketplaceAllocation(false);
                 }}
                 role="presentation"
               />
@@ -230,7 +185,8 @@ export default function ConfirmMarketPlaceBudgetModal({
                     id="BT-escrowBalance-DSPAllocaion"
                     className="mt-3 mb-4">
                     <div className="remaing-label text-bold text-right">
-                      Total Escrow Balance: {escrowBalance}
+                      Total Escrow Balance:{' '}
+                      {addThousandSeperator(escrowBalance, 'currency')}
                     </div>
                     <div className="clear-fix" />
                   </AllocateBar>
@@ -242,33 +198,41 @@ export default function ConfirmMarketPlaceBudgetModal({
           <div className="footer-line" />
           <div className="modal-footer">
             <div className="text-center ">
-              <Button className="btn-primary on-boarding  w-100" type="button">
+              <Button
+                className="btn-primary on-boarding  w-100"
+                type="button"
+                onClick={() => {}}>
                 Confirm
               </Button>
             </div>
           </div>
-        </ModalBox>
-      </Modal>{' '}
+        </>
+      ) : (
+        ''
+      )}
     </>
   );
 }
 
-ConfirmMarketPlaceBudgetModal.defaultProps = {
-  id: '',
+ConfirmMarketPlaceAllocation.defaultProps = {
   // customerId: '',
   // marketplace: '',
-  isOpen: false,
   escrowBalance: number,
-  onClick: () => {},
+  allocatedMarketplaceBalance: [],
   // getActivityLogInfo: () => {},
+  addThousandSeperator: () => {},
+  setShowMarketPlaceAllocation: func,
+  showConfirmMarketplaceAllocation: bool,
+  setShowConfirmMarketplaceAllocation: func,
 };
 
-ConfirmMarketPlaceBudgetModal.propTypes = {
-  id: string,
+ConfirmMarketPlaceAllocation.propTypes = {
   // customerId: string,
   // marketplace: string,
-  isOpen: bool,
   escrowBalance: number,
-  onClick: func,
-  // getActivityLogInfo: func,
+  allocatedMarketplaceBalance: arrayOf(shape()),
+  addThousandSeperator: func,
+  setShowMarketPlaceAllocation: func,
+  showConfirmMarketplaceAllocation: bool,
+  setShowConfirmMarketplaceAllocation: func,
 };
