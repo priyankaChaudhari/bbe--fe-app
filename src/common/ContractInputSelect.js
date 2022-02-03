@@ -15,14 +15,9 @@ const ContractInputSelect = styled.div`
  
   .css-2b097c-container {
      margin-top: 7px;
-     
-     
-      .form-control-error__control {
-        height: 40px !important;
-      }
-      .css-l9nmop-control {
-        height: 40px !important;
-      }
+    .css-l9nmop-control {
+         height: 40px !important;
+     }
 
      .css-6595ef-control  {
       border: 1px solid ${Theme.gray45};
