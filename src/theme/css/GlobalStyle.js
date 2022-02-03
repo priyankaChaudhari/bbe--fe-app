@@ -10,7 +10,6 @@ import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.wof
 import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff';
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
-import NoahMedium from '../fonts/Noah/Noah/WEB/Noah-Medium.otf';
 import { CalendarFontBackArrow } from '../images';
 
 const bodyStyles = createGlobalStyle`
@@ -50,11 +49,7 @@ const bodyStyles = createGlobalStyle`
     font-family: 'Helvetica-Bold';
     src: url(${HelveticaBold});
   } 
-   @font-face {
-    font-family: 'Noah-Medium';
-    src: url(${NoahMedium});
-    font-weight: 500;
-  } 
+ 
 
 html,
 #root {
@@ -288,6 +283,7 @@ h6 {
 }
 .text-medium{
    font-family: ${Theme.baseMediumFontFamily} !important;
+   font-weight: 500;
 }
 p {
   font-size: ${Theme.small};
