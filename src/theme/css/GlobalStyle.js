@@ -10,7 +10,7 @@ import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.wof
 import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff';
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
-import NoahMedium from '../fonts/Noah/Noah/WEB/NoahMedium.otf';
+import NoahMedium from '../fonts/Noah/Noah/WEB/Noah-Medium.otf';
 import { CalendarFontBackArrow } from '../images';
 
 const bodyStyles = createGlobalStyle`
