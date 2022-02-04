@@ -16,6 +16,7 @@ import ConfirmMarketPlaceAllocation from './ConfirmMarketPlaceAllocation';
 
 export default function EditMarketplaceAllocation({
   customerId,
+  currencySymbol,
   selectedMarketplace,
   escrowMarketplaceData,
   addThousandSeperator,
@@ -23,11 +24,11 @@ export default function EditMarketplaceAllocation({
   setShowMarketPlaceAllocation,
   setShowEscrowMonthlyAllocation,
 }) {
+  const [isAllowToContinue, setIsAllowToContinue] = useState(false);
   const [
     showConfirmMarketplaceAllocation,
     setShowConfirmMarketplaceAllocation,
   ] = useState(false);
-
   const [
     allocatedMarketplaceBalance,
     setAllocatedMarketPlaceBalance,
@@ -36,56 +37,57 @@ export default function EditMarketplaceAllocation({
       marketplace: 'United States',
       label: 'US',
       value: 'Amazon.com',
-      escrow_allocated_converted_usd: '4000',
-      new_escrow_allocated_converted_usd: '0',
-      balanceChanged: '',
+      escrow_allocated_converted_usd: 10000,
+      new_escrow_allocated_converted_usd: 10000,
+      balanceChanged: 0,
     },
     {
       marketplace: 'United Kingdom',
       label: 'UK',
       value: 'Amazon.co.uk',
-      escrow_allocated_converted_usd: '4000',
-      new_escrow_allocated_converted_usd: '0',
-      balanceChanged: '',
+      escrow_allocated_converted_usd: 4000,
+      new_escrow_allocated_converted_usd: 4000,
+      balanceChanged: 0,
     },
     {
       marketplace: 'United Arab Emirates (U.A.E.)',
       label: 'UAE',
       value: 'Amazon.ae',
-      escrow_allocated_converted_usd: '4000',
-      new_escrow_allocated_converted_usd: '0',
-      balanceChanged: '',
+      escrow_allocated_converted_usd: 12000,
+      new_escrow_allocated_converted_usd: 12000,
+      balanceChanged: 0,
     },
     {
       marketplace: 'Canada',
       label: 'CAD',
       value: 'Amazon.ca',
-      escrow_allocated_converted_usd: '4000',
-      new_escrow_allocated_converted_usd: '0',
+      escrow_allocated_converted_usd: 14000,
+      new_escrow_allocated_converted_usd: 14000,
+      balanceChanged: 0,
     },
     {
       marketplace: 'Australia',
       label: 'AUS',
       value: 'Amazon.com.au',
-      escrow_allocated_converted_usd: '4000',
-      new_escrow_allocated_converted_usd: '0',
-      balanceChanged: '',
+      escrow_allocated_converted_usd: 4000,
+      new_escrow_allocated_converted_usd: 4000,
+      balanceChanged: 0,
     },
     {
       marketplace: 'Mexico',
       label: 'MX',
       value: 'Amazon.com.mx',
-      escrow_allocated_converted_usd: '4000',
-      new_escrow_allocated_converted_usd: '0',
-      balanceChanged: '',
+      escrow_allocated_converted_usd: 6000,
+      new_escrow_allocated_converted_usd: 6000,
+      balanceChanged: 0,
     },
     {
       marketplace: 'Japan',
       label: 'JP',
       value: 'Amazon.co.jp',
-      escrow_allocated_converted_usd: '4000',
-      new_escrow_allocated_converted_usd: '0',
-      balanceChanged: '',
+      escrow_allocated_converted_usd: 8800,
+      new_escrow_allocated_converted_usd: 8800,
+      balanceChanged: 0,
     },
   ]);
 
@@ -95,22 +97,35 @@ export default function EditMarketplaceAllocation({
 
   const handleOnChange = (event, index) => {
     const tempData = [...allocatedMarketplaceBalance];
-    tempData[
-      index
-    ].new_escrow_allocated_converted_usd = event.target.value.replace(/,/g, '');
-    const balanceChanged =
-      event.target.value.replace(/,/g, '') -
-      tempData[index].escrow_allocated_converted_usd;
+    const newAllocatedBalance = event.target.value.replace(/,/g, '');
+    const oldEscrowBalance = tempData[index].escrow_allocated_converted_usd;
+    let newEscrowBalance = '';
+    if (newAllocatedBalance === '' || newAllocatedBalance === null) {
+      newEscrowBalance = oldEscrowBalance;
+      setIsAllowToContinue(false);
+    } else {
+      newEscrowBalance = newAllocatedBalance;
+      setIsAllowToContinue(true);
+    }
+    const balanceChanged = newEscrowBalance - oldEscrowBalance;
     tempData[index].balanceChanged = balanceChanged;
+    tempData[index].new_escrow_allocated_converted_usd = newEscrowBalance;
     setAllocatedMarketPlaceBalance(tempData);
-    // setIsSubmitLoader(true);
-    console.log('value', event.target.value);
-    console.log('balancechanged', balanceChanged);
   };
-  console.log('selectedMarketplace', selectedMarketplace);
   const renderMarketplace = () => {
+    const getIndex = allocatedMarketplaceBalance.findIndex(
+      (item) => item.value === selectedMarketplace,
+    );
+    if (getIndex >= 0) {
+      let numberOfDeletedElm = 1;
+      const obj = allocatedMarketplaceBalance.splice(
+        getIndex,
+        numberOfDeletedElm,
+      )[0];
+      numberOfDeletedElm = 0;
+      allocatedMarketplaceBalance.splice(0, numberOfDeletedElm, obj);
+    }
     return allocatedMarketplaceBalance?.map((item, index) => {
-      console.log('value', item.value);
       return (
         <div className="row" key={item.marketplace}>
           <div className="col-1 mt-4 pt-3">
@@ -136,7 +151,7 @@ export default function EditMarketplaceAllocation({
                   }
                   name={item.marketplace}
                   defaultValue={item.escrow_allocated_converted_usd}
-                  value={item.escrow_allocated_converted_usd}
+                  // value={item.new_escrow_allocated_converted_usd}
                   placeholder={0}
                   onChange={(event) => handleOnChange(event, index)}
                   thousandSeparator
@@ -191,7 +206,11 @@ export default function EditMarketplaceAllocation({
           <div className="modal-footer">
             <div className="text-center ">
               <Button
-                className="btn-primary on-boarding  w-100"
+                className={
+                  isAllowToContinue
+                    ? 'btn-primary on-boarding w-100'
+                    : 'btn-primary on-boarding w-100 disabled'
+                }
                 onClick={() => {
                   setShowConfirmMarketplaceAllocation(true);
                   setShowMarketPlaceAllocation(false);
@@ -210,6 +229,7 @@ export default function EditMarketplaceAllocation({
         <ConfirmMarketPlaceAllocation
           id="confirm-marketplace-allocation"
           customerId={customerId}
+          currencySymbol={currencySymbol}
           selectedMarketplace={selectedMarketplace}
           addThousandSeperator={addThousandSeperator}
           escrowBalance={escrowBalance}
@@ -229,6 +249,7 @@ export default function EditMarketplaceAllocation({
 
 EditMarketplaceAllocation.defaultProps = {
   customerId: '',
+  currencySymbol: '',
   selectedMarketplace: '',
   escrowMarketplaceData: {},
   addThousandSeperator: () => {},
@@ -239,6 +260,7 @@ EditMarketplaceAllocation.defaultProps = {
 
 EditMarketplaceAllocation.propTypes = {
   customerId: string,
+  currencySymbol: string,
   selectedMarketplace: string,
   escrowMarketplaceData: shape({}),
   addThousandSeperator: func,

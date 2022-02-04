@@ -38,7 +38,7 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     maxWidth: '600px ',
-    minHeight: '400px',
+    minHeight: '220px',
     width: '100% ',
     overlay: ' {zIndex: 1000}',
     marginRight: '-50%',
@@ -60,7 +60,7 @@ export default function EscrowBudgetAllocationModalCopy({
   const currentDate = useMemo(() => {
     return new Date();
   }, []);
-
+  const currencySymbol = '$';
   currentDate.setDate(1);
   currentDate.setHours(currentDate.getHours() + 12);
   const [escrowMarketplaceData, setEscrowMarketplaceData] = useState({});
@@ -79,7 +79,6 @@ export default function EscrowBudgetAllocationModalCopy({
   const [isEscrowbalanceExceed, setIsEscrowbalanceExceed] = useState(
     escrowBalance < 0,
   );
-
   const getDSPPacing = useCallback(
     (currentMarketplace) => {
       setIsDataLoading(true);
@@ -163,7 +162,7 @@ export default function EscrowBudgetAllocationModalCopy({
       <>
         <div className="col-12 mt-2 mb-3">
           <Tabs>
-            <ul className="tabs scrollable-container ">
+            <ul className="tabs scrollable-container" style={{ width: '100%' }}>
               {marketplaceOptions.map((item) => {
                 return (
                   <li
@@ -388,6 +387,7 @@ export default function EscrowBudgetAllocationModalCopy({
             <EditMarketplaceAllocation
               id="marketplace-allocation"
               customerId={customerId}
+              currencySymbol={currencySymbol}
               selectedMarketplace={selectedMarketplace}
               marketplaceOptions={marketplaceOptions}
               escrowMarketplaceData={escrowMarketplaceData}
