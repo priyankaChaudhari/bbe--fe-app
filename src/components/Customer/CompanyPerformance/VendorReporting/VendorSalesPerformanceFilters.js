@@ -14,7 +14,7 @@ const VendorSalesPerformanceFilters = ({
   handleMarketplaceOptions,
   dateOptions,
   getSelectComponents,
-  DropDownIndicator,
+  DropdownIndicator,
   handleDailyFact,
   selectedSalesDF,
   isApiCall,
@@ -34,7 +34,7 @@ const VendorSalesPerformanceFilters = ({
               <Select
                 classNamePrefix="react-select"
                 className="active"
-                components={DropDownIndicator}
+                components={DropdownIndicator}
                 options={marketplaceOptions}
                 defaultValue={
                   marketplaceDefaultValue && marketplaceDefaultValue[0]
@@ -83,7 +83,7 @@ VendorSalesPerformanceFilters.defaultProps = {
   marketplaceOptions: {},
   dateOptions: {},
   isApiCall: false,
-  DropDownIndicator: () => {},
+  DropdownIndicator: () => {},
   getSelectComponents: () => {},
   handleMarketplaceOptions: () => {},
   handleDailyFact: () => {},
@@ -91,13 +91,13 @@ VendorSalesPerformanceFilters.defaultProps = {
 
 VendorSalesPerformanceFilters.propTypes = {
   isApiCall: bool,
+  DropdownIndicator: shape({}),
   marketplaceDefaultValue: arrayOf(shape({})),
   selectedSalesDF: instanceOf(Object),
   marketplaceOptions: arrayOf(Array),
   dateOptions: arrayOf(Array),
   handleMarketplaceOptions: func,
   getSelectComponents: func,
-  DropDownIndicator: func,
   handleDailyFact: func,
 };
 

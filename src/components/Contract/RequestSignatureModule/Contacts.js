@@ -89,7 +89,7 @@ function Contacts({
           />
           <div className="row ">
             <div className="col-12 mb-2 mt-1">
-              <span className="owner-details">{info && info.role}</span>
+              <span className="owner-details">{info?.role}</span>
               <div className="clear-fix" />
             </div>
             <div className="col-6 ">

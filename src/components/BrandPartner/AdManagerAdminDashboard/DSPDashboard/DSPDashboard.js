@@ -16,7 +16,7 @@ import Theme from '../../../../theme/Theme';
 import DSPPerformanceChart from '../../../Customer/CompanyPerformance/AdPerformanceView/DSPPerformanceChart';
 import {
   CustomDateModal,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
   WhiteCard,
   ToggleButton,
@@ -37,6 +37,7 @@ currentDate.setDate(currentDate.getDate() - 1);
 const month = dayjs(currentDate).format('MMMM');
 
 const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
+  const mounted = useRef(false);
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSManager = userInfo?.role === 'BGS Manager';
   const isBGSAdmin = userInfo?.role === 'BGS Admin';
@@ -102,7 +103,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
   const [selectedBgs, setSelectedBgs] = useState(
     isBGSManager || isBGSAdmin
@@ -110,7 +111,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
 
   const {
@@ -123,19 +124,25 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
   const getManagerList = useCallback(() => {
     getManagersList(isBGSAdmin ? 'BGS' : 'dsp_ad_performance').then(
       (managersData) => {
-        if (managersData && managersData.data && managersData.data.length) {
-          const list = [{ value: 'all', label: 'All' }];
-          for (const brand of managersData.data) {
-            list.push({
-              value: brand.id,
-              label: `${brand.first_name} ${brand.last_name}`,
-              icon:
-                brand.documents &&
-                brand.documents[0] &&
-                Object.values(brand.documents[0]) &&
-                Object.values(brand.documents[0])[0],
-            });
-            setManagersList(list);
+        if (mounted.current) {
+          if (
+            managersData &&
+            managersData.data &&
+            managersData.data.length > 0
+          ) {
+            const list = [{ value: 'all', label: 'All' }];
+            for (const brand of managersData.data) {
+              list.push({
+                value: brand.id,
+                label: `${brand.first_name} ${brand.last_name}`,
+                icon:
+                  brand.documents &&
+                  brand.documents[0] &&
+                  Object.values(brand.documents[0]) &&
+                  Object.values(brand.documents[0])[0],
+              });
+              setManagersList(list);
+            }
           }
         }
       },
@@ -144,25 +151,25 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
 
   const getBGSList = useCallback((id) => {
     getBgsUserList(id).then((bgsData) => {
-      if (bgsData && bgsData.data && bgsData.data.length) {
-        const results = bgsData.data;
-        const list = [{ value: 'all', label: 'All' }];
+      if (mounted.current) {
+        if (bgsData && bgsData.data && bgsData.data.length > 0) {
+          const results = bgsData.data;
+          const list = [{ value: 'all', label: 'All' }];
 
-        for (const brand of results) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-            bgsManager: brand.bgs_manager,
-          });
+          for (const brand of results) {
+            list.push({
+              value: brand.id,
+              label: `${brand.first_name} ${brand.last_name}`,
+              icon:
+                brand.documents &&
+                brand.documents[0] &&
+                Object.values(brand.documents[0]) &&
+                Object.values(brand.documents[0])[0],
+              bgsManager: brand.bgs_manager,
+            });
+          }
+          setBgsList(list);
         }
-        setBgsList(list);
-      } else {
-        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -192,16 +199,18 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setDspGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            setTempDSPChartData(res.data.result);
-          } else {
-            setTempDSPChartData(null);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setDspGraphLoader(false);
           }
-          setDspGraphLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              setTempDSPChartData(res.data.result);
+            } else {
+              setTempDSPChartData(null);
+            }
+            setDspGraphLoader(false);
+          }
         }
       });
     },
@@ -237,25 +246,27 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         endDate,
         page,
       ).then((res) => {
-        if (res && res.status === 500) {
-          setKeyContributionLoader(false);
-          setContributionData(null);
-        }
-
-        if (res && res.status === 400) {
-          setKeyContributionLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            setContributionData(res.data.result);
-          } else if (res.data && res.data.results) {
-            setContributionData(res.data.results);
-            setContributionCount(res.data.count);
-          } else {
-            setContributionData([]);
-            setPageNumber(page);
+        if (mounted.current) {
+          if (res && res.status === 500) {
+            setKeyContributionLoader(false);
+            setContributionData(null);
           }
-          setKeyContributionLoader(false);
+
+          if (res && res.status === 400) {
+            setKeyContributionLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              setContributionData(res.data.result);
+            } else if (res.data && res.data.results) {
+              setContributionData(res.data.results);
+              setContributionCount(res.data.count);
+            } else {
+              setContributionData([]);
+              setPageNumber(page);
+            }
+            setKeyContributionLoader(false);
+          }
         }
       });
     },
@@ -274,25 +285,28 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
         isBGSAdmin,
         isBGS,
       ).then((res) => {
-        if (res && res.status === 400) {
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setDspPacingLoader(false);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              setDspPacingData(res.data.result);
+            } else if (res.data && res.data.results) {
+              setDspPacingData(res.data.results);
+            } else {
+              setDspPacingData(null);
+            }
+          }
           setDspPacingLoader(false);
         }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            setDspPacingData(res.data.result);
-          } else if (res.data && res.data.results) {
-            setDspPacingData(res.data.results);
-          } else {
-            setDspPacingData(null);
-          }
-        }
-        setDspPacingLoader(false);
       });
     },
     [isBGSManager, isBGSAdmin, isBGS],
   );
 
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
       for (const option of marketplaceChoices) {
@@ -306,7 +320,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     if (responseId === null && list.length && list[0].value !== null) {
       if (isAdManagerAdmin || isBGSAdmin) getManagerList();
       if (isBGSAdmin || isBGSManager)
-        getBGSList(isBGSManager ? userInfo.id : null);
+        getBGSList(isBGSManager ? userInfo?.id : null);
       getDSPData(
         selectedAdDF.value,
         dspGroupBy,
@@ -335,6 +349,9 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       setCurrencySymbol(getSymbolFromCurrency('USD'));
       setResponseId('12345');
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     marketplaceChoices,
     currency,
@@ -704,11 +721,11 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     }
 
     if (isBGS) {
-      userBgs = userInfo.id;
+      userBgs = userInfo?.id;
       userManger = 'all';
     } else if (isBGSManager) {
       userBgs = 'all';
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedBgs({
         value: 'all',
         label: 'All',
@@ -726,12 +743,12 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
       });
       contributionTab = 'positive';
     } else {
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedManager({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
       setSelectedBgs({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
     }
     setSelectedContributionOption(contributionTab);
@@ -807,7 +824,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -815,7 +832,7 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
     return {
       Option: filterOption,
       SingleValue: adMnagerFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -1050,16 +1067,18 @@ const DSPDashboard = ({ marketplaceChoices, userInfo }) => {
                     <span>Recent</span>
                   </div>
                 </li>
-                <li>
-                  <div className="weeks">
-                    <ul className="dashed-line">
-                      <li className="darkGray block " />
-                      <li className=" darkGray block " />
-                    </ul>
+                {selectedAdDF.value !== 'custom' ? (
+                  <li>
+                    <div className="weeks">
+                      <ul className="dashed-line">
+                        <li className="darkGray block " />
+                        <li className=" darkGray block " />
+                      </ul>
 
-                    <span>Previous</span>
-                  </div>
-                </li>
+                      <span>Previous</span>
+                    </div>
+                  </li>
+                ) : null}
               </ul>
             </div>
             <div className="col-md-6 col-sm-12 order-md-2 order-1">
@@ -1204,7 +1223,7 @@ DSPDashboard.propTypes = {
   }),
   marketplaceChoices: arrayOf(Array),
   userInfo: shape({
-    role: string,
+    role: string.isRequired,
     id: string,
   }),
 };

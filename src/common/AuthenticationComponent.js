@@ -10,6 +10,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
+
 import { userMe } from '../store/actions/index';
 import { Summary } from '../components/OnBoardingCustomer';
 import { clearToken } from '../store/actions/userState';
@@ -41,20 +42,16 @@ import {
   PATH_BGS_MANAGER_DASHBOARD,
   PATH_BGS_DASHBOARD,
   PATH_SUMMARY,
-  PATH_SPONSORED_DASHBOARD,
+  PATH_AD_MANAGER_DASHBOARD,
   PATH_CHOOSE_BRAND_DELEGATE,
   PATH_BRAND_ASSET,
   PATH_BRAND_ASSET_SUMMARY,
   PATH_BRAND_ASSET_PREVIEW,
-  PATH_DSP_DASHBOARD,
-  PATH_HYBRID_DASHBOARD,
   PATH_UPLOAD_PRODUCT_ASSET,
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
   PATH_BGS_ADMIN_DASHBOARD,
-} from '../constants/index';
-
-const _ = require('lodash');
+} from '../constants';
 
 export default function AuthenticationComponent() {
   const isAuthenticated = useSelector(
@@ -87,12 +84,11 @@ export default function AuthenticationComponent() {
   const generateHeader = () => {
     if (history.location.pathname.includes('account-setup')) return '';
     if (history.location.pathname.includes('agreement')) return '';
-    if (userInfo && userInfo.role === 'Customer')
+    if (userInfo?.role?.includes('Customer'))
       return <Header userInfo={userInfo} />;
     if (
       !history.location.pathname.includes('account-setup') &&
-      userInfo &&
-      userInfo.role !== 'Customer' &&
+      !userInfo?.role?.includes('Customer') &&
       !history.location.pathname.includes('/brand-asset/')
     )
       return (
@@ -108,10 +104,8 @@ export default function AuthenticationComponent() {
   };
 
   const dashboardRolePaths = {
+    'Ad Manager': PATH_AD_MANAGER_DASHBOARD,
     'Ad Manager Admin': PATH_AD_MANAGER_ADMIN_DASHBOARD,
-    'Sponsored Advertising Ad Manager': PATH_SPONSORED_DASHBOARD,
-    'DSP Ad Manager': PATH_DSP_DASHBOARD,
-    'Hybrid Ad Manager': PATH_HYBRID_DASHBOARD,
     'BGS Manager': PATH_BGS_MANAGER_DASHBOARD,
     'BGS Admin': PATH_BGS_ADMIN_DASHBOARD,
     BGS: PATH_BGS_DASHBOARD,
@@ -124,7 +118,7 @@ export default function AuthenticationComponent() {
         {generateHeader()}
         <Switch>
           {/* Customer */}
-          {userInfo && userInfo.role !== 'Customer' ? (
+          {!userInfo?.role?.includes('Customer') ? (
             <Route path={PATH_CUSTOMER_LIST} exact component={CustomerList} />
           ) : (
             ''
@@ -148,21 +142,21 @@ export default function AuthenticationComponent() {
 
           {/* Account Setup */}
           {/* Knowledge Base  */}
-          {userInfo && userInfo.role !== 'Customer' ? (
+          {!userInfo?.role?.includes('Customer') ? (
             <Route path={PATH_ARTICLE_LIST} exact component={ArticleList} />
           ) : (
             ''
           )}
-          {userInfo && userInfo.role !== 'Customer' ? (
+          {!userInfo?.role?.includes('Customer') ? (
             <Route path={PATH_ARTICLE_DETAILS} component={ArticleDetails} />
           ) : (
             ''
           )}
 
           {/* AD MANAGER DASHBOARD, BGS DASHBOARD, FINANCE DASHBOARD PATH */}
-          {_.has(dashboardRolePaths, userInfo && userInfo.role) ? (
+          {Object.keys(dashboardRolePaths).includes(userInfo?.role) ? (
             <Route
-              path={dashboardRolePaths[userInfo.role]}
+              path={dashboardRolePaths[userInfo?.role]}
               component={DashboardContainer}
             />
           ) : null}
@@ -192,6 +186,7 @@ export default function AuthenticationComponent() {
             path={PATH_UPLOAD_PRODUCT_ASSET}
             component={ProductDelegation}
           />
+
           <Route component={PageNotFound} />
           {/* Brand Asset Gathering */}
           {/* <Route path={PATH_UPLOAD_DELEGATION} component={UploadDelegation} /> */}

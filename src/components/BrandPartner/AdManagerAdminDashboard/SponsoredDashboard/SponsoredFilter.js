@@ -100,6 +100,7 @@ const SponsoredFilter = ({
                 neutral50: '#1A1A1A',
               },
             })}
+            isLoading={isApiCall}
           />
         </DropDownSelect>
       </div>
@@ -239,14 +240,14 @@ const SponsoredFilter = ({
 export default SponsoredFilter;
 
 SponsoredFilter.defaultProps = {
-  handleMarketplace: () => {},
-  handleResetFilter: () => {},
   marketplaceOptions: [],
   SponsoredAdTypeOptions: [],
   managerList: [],
   bgsList: [],
   getAdManagerComponents: null,
-  DropdownIndicator: () => {},
+  DropdownIndicator: null,
+  handleMarketplace: () => {},
+  handleResetFilter: () => {},
   handleAdManagerFilter: () => {},
   handleAdType: () => {},
   selectedAdType: {},
@@ -269,7 +270,7 @@ SponsoredFilter.propTypes = {
   SponsoredAdTypeOptions: arrayOf(Array),
   managerList: arrayOf(Array),
   bgsList: arrayOf(Array),
-  DropdownIndicator: func,
+  DropdownIndicator: shape({}),
   getAdManagerComponents: func,
   handleAdManagerFilter: func,
   handleBGSList: func,

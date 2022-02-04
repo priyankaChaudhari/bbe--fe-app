@@ -95,7 +95,6 @@ export default function ContractContainer() {
   const location = useLocation();
   const history = useHistory();
   const params = queryString.parse(history.location.search);
-
   const { id } = useParams();
 
   const [data, setData] = useState([]);
@@ -865,7 +864,6 @@ export default function ContractContainer() {
 
   const getContractDetails = (showSuccessToastr = false) => {
     setIsLoading({ loader: true, type: 'page' });
-
     if (splittedPath) {
       getcontract(splittedPath[4]).then((res) => {
         if (res && res.status === 200) {
@@ -897,6 +895,10 @@ export default function ContractContainer() {
           });
           if (history?.location?.showEditView) {
             showEditView(res?.data);
+
+            const historyState = { ...history.location };
+            delete historyState.showEditView;
+            history.replace({ ...historyState });
           }
         } else {
           setIsLoading({ loader: false, type: 'page' });
@@ -3778,6 +3780,7 @@ export default function ContractContainer() {
         manageErrorCount={manageErrorCount}
         checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
         servicesFees={servicesFees}
+        getData={getData}
       />
     );
   };
@@ -3899,7 +3902,9 @@ export default function ContractContainer() {
         <HeaderDownloadFuntionality>
           <div
             className={
-              userInfo && userInfo.role === 'Customer' ? ' customer-pdf' : ''
+              userInfo && userInfo.role?.includes('Customer')
+                ? ' customer-pdf'
+                : ''
             }>
             <div className="container-fluid">
               <div className="row">
@@ -4007,7 +4012,7 @@ export default function ContractContainer() {
                 {(contractStatusValue === 'pending for cancellation' ||
                   contractStatusValue === 'active pending for pause') &&
                 userInfo &&
-                userInfo.role === 'BGS Manager'
+                userInfo.role?.includes('BGS Manager')
                   ? displayFooter()
                   : ''}
               </>
@@ -4096,6 +4101,7 @@ export default function ContractContainer() {
             updatedFormData={updatedFormData}
             getAmendmentData={getAmendmentData}
             getServicesAccordingToAccType={getServicesAccordingToAccType}
+            getContractActivityLogInfo={getContractActivityLogInfo}
           />
 
           <ContractEditConfirmation

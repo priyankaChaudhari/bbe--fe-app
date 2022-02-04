@@ -14,10 +14,22 @@ const ModalBox = styled.div`
     vertical-align: middle;
     cursor: pointer;
   }
+
+  .past-adjustment-table-container {
+    height: 80vh;
+    overflow-y: auto;
+    padding-bottom: 50px;
+  }
+
   .account-setup-complete {
     padding: 34px 33px 33px 30px !important;
   }
-
+  .inner-body-content {
+    max-height: 380px;
+    width: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
   .modal-body {
     .role-selected {
       color: ${Theme.gray90};
@@ -49,6 +61,20 @@ const ModalBox = styled.div`
         color: ${Theme.black};
         font-size: ${Theme.normal};
         word-break: break-all;
+      }
+    }
+    .edit-contact-detail {
+      position: absolute;
+      font-size: ${Theme.extraNormal};
+      color: ${Theme.gray85};
+      top: 10px;
+      right: 25px;
+      cursor: pointer;
+
+      img {
+        width: 18px;
+        margin-right: 4px;
+        vertical-align: text-top;
       }
     }
 
@@ -123,7 +149,16 @@ const ModalBox = styled.div`
       margin-right: 15px;
       margin-top: -2px;
     }
+    .invoice-adj-radio {
+      padding: 0;
+      margin: 0;
+      list-style-type: none;
 
+      li {
+        display: inline-block;
+        margin-right: 25px;
+      }
+    }
     @media not all and (min-resolution: 0.001dpcm) {
       @supports (-webkit-appearance: none) {
         .modal-heading {
@@ -134,7 +169,7 @@ const ModalBox = styled.div`
     }
     .modal-heading {
       padding: 0px 0;
-      padding-left: 0;
+      padding-left: 0 !important;
 
       ::i-block-chrome,
       .modal-heading {
@@ -165,14 +200,17 @@ const ModalBox = styled.div`
 
     .edit-profile-text {
       position: relative;
+      word-break: break-word;
 
       .name-email {
-        color: ${Theme.gray36};
-        font-size: ${Theme.small};
+        color: ${Theme.black};
+        font-size: ${Theme.extraNormal};
 
         .team-member-name {
-          color: ${Theme.gray90};
-          font-size: ${Theme.medium};
+          color: ${Theme.black};
+          font-size: ${Theme.extraMedium};
+          font-family: ${Theme.titleFontFamily};
+          line-height: 22px;
         }
       }
       .brand-pratner {
@@ -218,7 +256,7 @@ const ModalBox = styled.div`
     }
 
     .body-content {
-      max-height: 543px;
+      max-height: 520px;
       width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
@@ -227,8 +265,16 @@ const ModalBox = styled.div`
         left: 30px;
         top: 10px;
         padding-left: 0px;
+        cursor: pointer;
         color: ${Theme.gray90};
-        font-weight: bold;
+
+        &.add-team-member {
+          color: ${Theme.orange};
+        }
+      }
+
+      .back-to-members {
+        cursor: pointer;
       }
 
       .no-result-found {
@@ -487,9 +533,17 @@ const ModalBox = styled.div`
         }
       }
     }
+    @media only screen and (max-width: 767px) {
+      .body-content {
+        max-height: 420px;
+      }
+    }
   }
   .modal-footer {
     padding: 10px 30px 20px 30px;
+    @media only screen and (max-width: 610px) {
+      padding: 10px 15px 20px 15px;
+    }
   }
   .footer-line {
     border-bottom: 1px solid ${Theme.gray5};

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import copy from 'copy-to-clipboard';
 import Modal from 'react-modal';
@@ -11,13 +11,9 @@ import {
   DropDownSelect,
   ErrorMsg,
   WhiteCard,
+  DropdownIndicator,
 } from '../../../common';
-import {
-  EditOrangeIcon,
-  CopyLinkIcon,
-  CaretUp,
-  CloseIcon,
-} from '../../../theme/images';
+import { EditOrangeIcon, CopyLinkIcon, CloseIcon } from '../../../theme/images';
 import {
   amazonSellerAccountDetails,
   amazonVendorAccountDetails,
@@ -30,6 +26,7 @@ export default function AmazonAccount({
   customStyles,
   getActivityLogInfo,
 }) {
+  const mounted = useRef(false);
   const { Option, SingleValue } = components;
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -41,30 +38,34 @@ export default function AmazonAccount({
 
   const getVendorDetails = (id, sellerData) => {
     getAmazonVendor(id).then((vendor) => {
-      setAmazonDetails({
-        Seller: sellerData,
-        Vendor: vendor?.data?.results?.[0],
-      });
-      setFormData({
-        Seller: sellerData,
-        Vendor: vendor?.data?.results?.[0],
-      });
+      if (mounted.current) {
+        setAmazonDetails({
+          Seller: sellerData,
+          Vendor: vendor?.data?.results?.[0],
+        });
+        setFormData({
+          Seller: sellerData,
+          Vendor: vendor?.data?.results?.[0],
+        });
+      }
     });
   };
 
   const getSellerDetails = useCallback(
     (id, type) => {
       getAmazonSeller(id).then((seller) => {
-        setAmazonDetails({
-          ...amazonDetails,
-          Seller: seller?.data?.results?.[0],
-        });
-        setFormData({
-          ...formData,
-          Seller: seller?.data?.results?.[0],
-        });
-        if (type === 'Hybrid') {
-          getVendorDetails(id, seller?.data?.results?.[0]);
+        if (mounted.current) {
+          setAmazonDetails({
+            ...amazonDetails,
+            Seller: seller?.data?.results?.[0],
+          });
+          setFormData({
+            ...formData,
+            Seller: seller?.data?.results?.[0],
+          });
+          if (type === 'Hybrid') {
+            getVendorDetails(id, seller?.data?.results?.[0]);
+          }
         }
       });
     },
@@ -85,6 +86,7 @@ export default function AmazonAccount({
   };
 
   useEffect(() => {
+    mounted.current = true;
     setMarketplaceChoices(marketplaceData);
     sellerVendorCall(
       marketplaceData.find((value) => value.is_primary)?.account_type ||
@@ -93,27 +95,10 @@ export default function AmazonAccount({
         marketplaceData?.[0]?.value,
       null,
     );
+    return () => {
+      mounted.current = false;
+    };
   }, [marketplaceData]);
-
-  const DropdownIndicator = (dataProps) => {
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...dataProps}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: dataProps.selectProps.menuIsOpen
-                ? 'rotate(180deg)'
-                : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
 
   const singleMarketplaceOption = (dataProps) => (
     <SingleValue {...dataProps}>

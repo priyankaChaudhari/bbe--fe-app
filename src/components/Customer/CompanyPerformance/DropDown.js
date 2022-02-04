@@ -15,6 +15,13 @@ export const DropDown = (
   reff = null,
   selectedValue,
 ) => {
+  const YearOverYearOptionStyles = {
+    menuList: (styles) => ({
+      ...styles,
+      maxHeight: '340px !important',
+    }),
+  };
+
   return (
     <DropDownSelect
       className={isDisabled ? `${className} disabled` : className}>
@@ -35,6 +42,8 @@ export const DropDown = (
         value={selectedValue}
         // defaultValue={defaultValue}
         onChange={(event) => handleOnChange(event)}
+        styles={YearOverYearOptionStyles}
+        isLoading={isDisabled}
       />
     </DropDownSelect>
   );

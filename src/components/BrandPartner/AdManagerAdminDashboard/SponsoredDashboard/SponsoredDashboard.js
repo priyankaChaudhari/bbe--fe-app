@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 import $ from 'jquery';
 import styled from 'styled-components';
-import PropTypes, { shape, string } from 'prop-types';
+import { shape, string, arrayOf } from 'prop-types';
 import dayjs from 'dayjs';
 import { components } from 'react-select';
 import { useMediaQuery } from 'react-responsive';
@@ -21,7 +21,7 @@ import {
 import {
   WhiteCard,
   PageLoader,
-  DropDownIndicator,
+  DropdownIndicator,
   CustomDateModal,
   ToggleButton,
 } from '../../../../common';
@@ -37,10 +37,12 @@ import 'react-date-range/dist/theme/default.css'; // theme css file
 const getSymbolFromCurrency = require('currency-symbol-map');
 
 export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
+  const mounted = useRef(false);
   const isAdManagerAdmin = userInfo?.role === 'Ad Manager Admin';
   const isBGSManager = userInfo?.role === 'BGS Manager';
   const isBGSAdmin = userInfo?.role === 'BGS Admin';
   const isBGS = userInfo?.role === 'BGS';
+
   const selectInputRef = useRef();
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const { Option, SingleValue } = components;
@@ -101,7 +103,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value: 'all',
           label: isBGSAdmin ? 'All' : 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
 
   const [selectedBgs, setSelectedBgs] = useState(
@@ -110,20 +112,55 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           value: 'all',
           label: 'All',
         }
-      : { value: userInfo.id },
+      : { value: userInfo?.id },
   );
 
   const getManagerList = useCallback(() => {
     getManagersList(isBGSAdmin ? 'BGS' : 'sponsored_ad_dashboard').then(
       (managersData) => {
-        if (managersData && managersData.data && managersData.data.length) {
-          const list = [
-            {
-              value: 'all',
-              label: 'All',
-            },
-          ];
-          for (const brand of managersData.data) {
+        if (mounted.current) {
+          if (
+            managersData &&
+            managersData.data &&
+            managersData.data.length > 0
+          ) {
+            const list = [
+              {
+                value: 'all',
+                label: 'All',
+              },
+            ];
+            for (const brand of managersData.data) {
+              list.push({
+                value: brand.id,
+                label: `${brand.first_name} ${brand.last_name}`,
+                icon:
+                  brand.documents &&
+                  brand.documents[0] &&
+                  Object.values(brand.documents[0]) &&
+                  Object.values(brand.documents[0])[0],
+              });
+            }
+            setManagersList(list);
+          }
+        }
+      },
+    );
+  }, [isBGSAdmin]);
+
+  const getBGSList = useCallback((id) => {
+    getBgsUserList(id).then((bgsData) => {
+      if (mounted.current) {
+        if (
+          bgsData &&
+          bgsData.data &&
+          bgsData.data.length &&
+          bgsData.datalength > 0
+        ) {
+          const results = bgsData.data;
+          const list = [{ value: 'all', label: 'All' }];
+
+          for (const brand of results) {
             list.push({
               value: brand.id,
               label: `${brand.first_name} ${brand.last_name}`,
@@ -132,35 +169,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
                 brand.documents[0] &&
                 Object.values(brand.documents[0]) &&
                 Object.values(brand.documents[0])[0],
+              bgsManager: brand.bgs_manager,
             });
           }
-          setManagersList(list);
+          setBgsList(list);
         }
-      },
-    );
-  }, [isBGSAdmin]);
-
-  const getBGSList = useCallback((id) => {
-    getBgsUserList(id).then((bgsData) => {
-      if (bgsData && bgsData.data && bgsData.data.length) {
-        const results = bgsData.data;
-        const list = [{ value: 'all', label: 'All' }];
-
-        for (const brand of results) {
-          list.push({
-            value: brand.id,
-            label: `${brand.first_name} ${brand.last_name}`,
-            icon:
-              brand.documents &&
-              brand.documents[0] &&
-              Object.values(brand.documents[0]) &&
-              Object.values(brand.documents[0])[0],
-            bgsManager: brand.bgs_manager,
-          });
-        }
-        setBgsList(list);
-      } else {
-        setBgsList([{ value: 'all', label: 'All' }]);
       }
     });
   }, []);
@@ -353,20 +366,22 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setAdGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            const adGraphData = bindAdResponseData(res.data.result);
-            setAdChartData(adGraphData);
-          } else {
-            setAdChartData([]);
-            setAdPreviousTotal([]);
-            setAdCurrentTotal([]);
-            setAdDifference([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setAdGraphLoader(false);
           }
-          setAdGraphLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              const adGraphData = bindAdResponseData(res.data.result);
+              setAdChartData(adGraphData);
+            } else {
+              setAdChartData([]);
+              setAdPreviousTotal([]);
+              setAdCurrentTotal([]);
+              setAdDifference([]);
+            }
+            setAdGraphLoader(false);
+          }
         }
       });
     },
@@ -403,24 +418,26 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
         endDate,
         page,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setKeyContributionLoader(false);
-        }
-        if (res && res.status === 500) {
-          setKeyContributionLoader(false);
-          setContributionData([]);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.result) {
-            setContributionData(res.data.result);
-          } else if (res.data && res.data.results) {
-            setContributionData(res.data.results);
-            setContributionCount(res.data.count);
-          } else {
-            setContributionData([]);
-            setPageNumber(page);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setKeyContributionLoader(false);
           }
-          setKeyContributionLoader(false);
+          if (res && res.status === 500) {
+            setKeyContributionLoader(false);
+            setContributionData([]);
+          }
+          if (res && res.status === 200) {
+            if (res.data && res.data.result) {
+              setContributionData(res.data.result);
+            } else if (res.data && res.data.results) {
+              setContributionData(res.data.results);
+              setContributionCount(res.data.count);
+            } else {
+              setContributionData([]);
+              setPageNumber(page);
+            }
+            setKeyContributionLoader(false);
+          }
         }
       });
     },
@@ -428,6 +445,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
   );
 
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
       for (const option of marketplaceChoices) {
@@ -441,7 +459,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     if (responseId === null && list.length && list[0].value !== null) {
       if (isAdManagerAdmin || isBGSAdmin) getManagerList();
       if (isBGSAdmin || isBGSManager)
-        getBGSList(isBGSManager ? userInfo.id : null);
+        getBGSList(isBGSManager ? userInfo?.id : null);
       getContributionData(
         selectedAdType,
         selectedAdDF.value,
@@ -467,6 +485,9 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       setCurrencySymbol(getSymbolFromCurrency('USD'));
       setResponseId('12345');
     }
+    return () => {
+      mounted.current = false;
+    };
   }, [
     marketplaceChoices,
     responseId,
@@ -929,11 +950,11 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     }
 
     if (isBGS) {
-      userBgs = userInfo.id;
+      userBgs = userInfo?.id;
       userManger = 'all';
     } else if (isBGSManager) {
       userBgs = 'all';
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedBgs({
         value: 'all',
         label: 'All',
@@ -951,12 +972,12 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
       });
       contributionTab = 'positive';
     } else {
-      userManger = userInfo.id;
+      userManger = userInfo?.id;
       setSelectedManager({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
       setSelectedBgs({
-        value: userInfo.id,
+        value: userInfo?.id,
       });
     }
     setSelectedContributionOption(contributionTab);
@@ -1117,7 +1138,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -1125,7 +1146,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
     return {
       Option: filterOption,
       SingleValue: adMnagerFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -1151,16 +1172,18 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
                 <span>Recent</span>
               </div>
             </li>
-            <li>
-              <div className="weeks">
-                <ul className="dashed-line">
-                  <li className="darkGray block " />
-                  <li className=" darkGray block " />
-                </ul>
+            {selectedAdDF.value !== 'custom' ? (
+              <li>
+                <div className="weeks">
+                  <ul className="dashed-line">
+                    <li className="darkGray block " />
+                    <li className=" darkGray block " />
+                  </ul>
 
-                <span>Previous</span>
-              </div>
-            </li>
+                  <span>Previous</span>
+                </div>
+              </li>
+            ) : null}
           </ul>
         </div>
         <div className="col-md-6 col-sm-12 order-md-2 order-1">
@@ -1168,7 +1191,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
             <div className="days-container ">
               <ul className="days-tab">
                 <li
-                  // id=" BT-adperformance-days"
+                  id=" BT-adDashboard-days"
                   className={adFilters.daily === false ? 'disabled-tab' : ''}>
                   <input
                     className="d-none"
@@ -1255,7 +1278,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           isBGSManager={isBGSManager}
           isBGSAdmin={isBGSAdmin}
           isApiCall={adGraphLoader}
-          DropdownIndicator={DropDownIndicator}
+          DropdownIndicator={{ DropdownIndicator }}
           marketplaceOptions={marketplaceOptions}
           managerList={managerList}
           selectedManager={selectedManager}
@@ -1355,17 +1378,17 @@ SponsoredDashboard.defaultProps = {
   marketplaceChoices: [],
   selectedMarketplace: '',
   userInfo: {
-    role: '',
+    role: [],
     id: '',
   },
   data: {},
 };
 
 SponsoredDashboard.propTypes = {
-  marketplaceChoices: PropTypes.arrayOf(PropTypes.object),
-  selectedMarketplace: PropTypes.string,
+  marketplaceChoices: arrayOf(shape({})),
+  selectedMarketplace: string,
   userInfo: shape({
-    role: string,
+    role: string.isRequired,
     id: string,
   }),
   data: shape({ sub: string, label: string }),

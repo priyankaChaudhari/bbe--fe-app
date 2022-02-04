@@ -4,7 +4,7 @@ import Theme from '../theme/Theme';
 const ContractInputSelect = styled.div`
   width: 100%;
 
-  label {
+   label {
     color: ${Theme.gray40};
     font-size:${Theme.verySmall};
     letter-spacing: 0.5px;
@@ -15,6 +15,9 @@ const ContractInputSelect = styled.div`
  
   .css-2b097c-container {
      margin-top: 7px;
+    .css-l9nmop-control {
+         height: 40px !important;
+     }
 
      .css-6595ef-control  {
       border: 1px solid ${Theme.gray45};
@@ -25,9 +28,7 @@ const ContractInputSelect = styled.div`
       height: 40px;
      }
 
-     .css-ih0vwr-control {
-        height: 40px;
-     }
+   
     .css-yk16xz-control {
       color: ${Theme.gray85};
       border: 1px solid ${Theme.gray45};
@@ -37,7 +38,9 @@ const ContractInputSelect = styled.div`
       min-height: 40px !important;
       font-size:  ${Theme.extraNormal};
       font-weight:500;
-       cursor: pointer;
+      cursor: pointer;
+      z-index: 2;
+      
 
         .css-g1d714-ValueContainer {
           color: ${Theme.gray85};
@@ -56,10 +59,10 @@ const ContractInputSelect = styled.div`
           }
           
           &.form-control-error {
-          border: 1px solid ${Theme.red};
-          background: ${Theme.lightRed};
-      
-        }
+            border: 1px solid ${Theme.red};
+            background: ${Theme.lightRed};
+         }
+        
       }
 
     .css-1pahdxg-control {
@@ -73,12 +76,18 @@ const ContractInputSelect = styled.div`
         font-size: ${Theme.extraNormal};
         font-weight:500;
         cursor: pointer;
+         z-index: 2;
           &.form-control-error {
             border: 1px solid ${Theme.red} ;
             background: ${Theme.lightRed};
+           
+            
+          }
+          &.form-control-error__control {
+            height: 40px !important;
           }
           .css-1gtu0rj-indicatorContainer {
-            padding: 4px;
+            padding: 4px !important;
           }
     }
     .css-1uccc91-singleValue {
@@ -94,7 +103,8 @@ const ContractInputSelect = styled.div`
       display: none;
     }
       
-  }
+  } 
+
 `;
 
 export default ContractInputSelect;

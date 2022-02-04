@@ -249,3 +249,60 @@ export const billingNavigationOptions = [
   'upsell',
   'dsp service',
 ];
+
+export const adjustInvoiceInputs = [
+  {
+    key: 1,
+    id: 'BT-adjustInvoice-usAmount',
+    label: 'US',
+    name: 'usAmount',
+    inputID: 'usAmount',
+    choices: [
+      { key: 4, id: 'yes', name: 'choice1', label: 'Yes' },
+      { key: 5, id: 'no', name: 'choice1', label: 'No' },
+    ],
+  },
+  {
+    key: 2,
+    id: 'BT-adjustInvoice-ukAmount',
+    label: 'UK',
+    name: 'ukAmount',
+    inputID: 'ukAmount',
+    choices: [
+      { key: 6, id: 'yes1', name: 'choice2', label: 'Yes' },
+      { key: 7, id: 'no1', name: 'choice2', label: 'No' },
+    ],
+  },
+  {
+    key: 3,
+    id: 'BT-adjustInvoice-caAmount',
+    label: 'Canada',
+    name: 'caAmount',
+    inputID: 'caAmount',
+    choices: [
+      { key: 8, id: 'yes2', name: 'choice3', label: 'Yes' },
+      { key: 9, id: 'no2', name: 'choice3', label: 'No' },
+    ],
+  },
+];
+
+export const adjustInvoiceChoices = [
+  {
+    key: 1,
+    id: 'BT-adjustInvoice-standard',
+    label: 'Standard',
+    name: 'standard',
+  },
+  {
+    key: 2,
+    id: 'BT-adjustInvoice-permanent',
+    label: 'Permanent Additional',
+    name: 'permanent additional',
+  },
+  {
+    key: 3,
+    id: 'BT-adjustInvoice-onetime',
+    label: 'One Time',
+    name: 'one time',
+  },
+];

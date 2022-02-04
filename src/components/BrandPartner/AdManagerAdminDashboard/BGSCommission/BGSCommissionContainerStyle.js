@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+
 import Theme from '../../../../theme/Theme';
 
-export const ComissionHeader = styled.div`
+export const CommissionHeader = styled.div`
   .comission-header {
     list-style-type: none;
     padding: 0;
@@ -176,5 +177,10 @@ export const CommissionResseque = styled.div`
         margin-bottom: 15px;
       }
     }
+  }
+  .comission-overlay-content {
+    height: 95vh;
+    overflow-y: auto;
+    padding-bottom: 30px;
   }
 `;

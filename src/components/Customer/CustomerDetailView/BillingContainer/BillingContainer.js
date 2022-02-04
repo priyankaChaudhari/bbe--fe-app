@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-import { oneOfType, shape, string, object } from 'prop-types';
+import { shape, string, arrayOf } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 
 import Invoice from './Invoice/Invoice';
 import BillingDetails from './BillingDetails/BillingDetails';
@@ -8,6 +9,7 @@ import { Tabs } from '../../../../common';
 import {
   billingNavigationOptions,
   financeTabsOptions,
+  PATH_CUSTOMER_DETAILS,
 } from '../../../../constants';
 
 const BillingContainer = ({
@@ -16,7 +18,10 @@ const BillingContainer = ({
   onBoardingId,
   customerStatus,
   redirectType,
+  bpName,
+  memberData,
 }) => {
+  const history = useHistory();
   const [viewComponent, setViewComponent] = useState(redirectType);
   const [loader, setLoader] = useState(false);
 
@@ -31,6 +36,7 @@ const BillingContainer = ({
           {financeTabsOptions.map((item) => {
             return (
               <li
+                key={item.key}
                 className={
                   viewComponent === item.key
                     ? 'active'
@@ -38,8 +44,11 @@ const BillingContainer = ({
                     ? 'disabled'
                     : ''
                 }
-                key={item.key}
                 onClick={() => {
+                  history.push(
+                    PATH_CUSTOMER_DETAILS.replace(':id', id),
+                    item.key,
+                  );
                   setViewComponent(item.key);
                 }}
                 role="presentation">
@@ -50,7 +59,10 @@ const BillingContainer = ({
 
           <li
             className={viewComponent === 'Billing' ? 'active' : ''}
-            onClick={() => setViewComponent('Billing')}
+            onClick={() => {
+              history.push(PATH_CUSTOMER_DETAILS.replace(':id', id), 'Billing');
+              setViewComponent('Billing');
+            }}
             role="presentation">
             Billing Details
           </li>
@@ -61,7 +73,8 @@ const BillingContainer = ({
           onLoading={onLoading}
           invoiceType={viewComponent}
           id={id}
-          userInfo={userInfo}
+          bpName={bpName}
+          memberData={memberData}
         />
       ) : (
         <BillingDetails
@@ -69,6 +82,7 @@ const BillingContainer = ({
           userInfo={userInfo}
           onBoardingId={onBoardingId}
           customerStatus={customerStatus}
+          memberData={memberData}
         />
       )}
     </div>
@@ -79,8 +93,9 @@ export default BillingContainer;
 
 BillingContainer.defaultProps = {
   onBoardingId: null,
-  customerStatus: null,
-  redirectType: 'Billing',
+  customerStatus: {},
+  redirectType: 'retainer',
+  bpName: '',
 };
 
 BillingContainer.propTypes = {
@@ -89,9 +104,8 @@ BillingContainer.propTypes = {
     customer_onboarding: string,
   }).isRequired,
   onBoardingId: string,
-  customerStatus: oneOfType({
-    string,
-    object,
-  }),
+  customerStatus: shape({}),
   redirectType: string,
+  bpName: string,
+  memberData: arrayOf(shape({})).isRequired,
 };

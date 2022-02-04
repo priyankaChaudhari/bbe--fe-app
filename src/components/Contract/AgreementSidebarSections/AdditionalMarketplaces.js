@@ -1,11 +1,14 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 
-import Select, { components } from 'react-select';
+import Select from 'react-select';
 import { arrayOf, shape, func, string, oneOfType, number } from 'prop-types';
 
-import { CaretUp } from '../../../theme/images';
-import { InputFormField, CheckBox, ContractInputSelect } from '../../../common';
+import {
+  CheckBox,
+  ContractInputSelect,
+  DropdownIndicator,
+} from '../../../common';
 
 function AdditionalMarketplaces({
   formData,
@@ -229,25 +232,6 @@ function AdditionalMarketplaces({
     }
   };
 
-  const DropdownIndicator = (props) => {
-    const { selectProps } = props;
-    return (
-      components.DropdownIndicator && (
-        <components.DropdownIndicator {...props}>
-          <img
-            src={CaretUp}
-            alt="caret"
-            style={{
-              transform: selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-              width: '25px',
-              height: '25px',
-            }}
-          />
-        </components.DropdownIndicator>
-      )
-    );
-  };
-
   const generateMultiChoice = (item) => {
     return (
       <Select
@@ -296,18 +280,17 @@ function AdditionalMarketplaces({
           <span className="checkmark" />
         </label>
       </CheckBox>
-      <InputFormField>
-        <ContractInputSelect>
-          {showAdditionalMarketplace[accountType]?.showDropdown
-            ? generateMultiChoice({
-                key: 'additional_marketplaces',
-                label: 'Additional Market Places',
-                type: 'multichoice',
-                accountType,
-              })
-            : ''}
-        </ContractInputSelect>
-      </InputFormField>
+
+      <ContractInputSelect>
+        {showAdditionalMarketplace[accountType]?.showDropdown
+          ? generateMultiChoice({
+              key: 'additional_marketplaces',
+              label: 'Additional Market Places',
+              type: 'multichoice',
+              accountType,
+            })
+          : ''}
+      </ContractInputSelect>
     </>
   );
 }

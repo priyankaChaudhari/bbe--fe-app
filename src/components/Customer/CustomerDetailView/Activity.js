@@ -89,7 +89,7 @@ export default function Activity({
                         />
                       </div>
                     ) : (
-                      <div className="avatarName float-left mr-3">
+                      <div className=" float-left mr-3">
                         {getActivityInitials(item.history_change_reason)}
                       </div>
                     )}
@@ -157,17 +157,20 @@ export default function Activity({
     </>
   );
 }
-
+Activity.defaultProps = {
+  count: number,
+  activityData: [],
+};
 Activity.propTypes = {
   isLoading: shape({
     loader: bool,
     type: string,
   }).isRequired,
-  activityData: arrayOf(shape).isRequired,
+  activityData: arrayOf(shape),
   activityDetail: func.isRequired,
   getActivityInitials: func.isRequired,
   images: arrayOf(shape).isRequired,
   handlePageChange: func.isRequired,
   pageNumber: number.isRequired,
-  count: number.isRequired,
+  count: number,
 };

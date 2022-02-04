@@ -14,6 +14,7 @@ const InputSelect = styled.div`
 
   .css-yk16xz-control {
     color: ${Theme.gray90};
+
     border: 1px solid ${Theme.gray2};
     background-color: rgba(224, 231, 255, 0.2);
     margin-top: 5px;

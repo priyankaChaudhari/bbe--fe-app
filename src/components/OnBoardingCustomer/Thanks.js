@@ -10,6 +10,7 @@ import { AccountSetupIcon } from '../../theme/images';
 export default function Thanks() {
   const history = useHistory();
   const params = queryString.parse(history.location.search);
+  const type = history.location?.type;
 
   return (
     <>
@@ -31,7 +32,10 @@ export default function Thanks() {
             <h5>Thanks!</h5>
             <p className="info">
               We’ve let {params && params.name} know that you’ve provided the
-              information we needed.
+              information we needed.{' '}
+              {type === 'dspSignOff'
+                ? 'They will get in touch with you if necessary.'
+                : null}
               <br />
               <br />
               You can close this tab when you’re ready.

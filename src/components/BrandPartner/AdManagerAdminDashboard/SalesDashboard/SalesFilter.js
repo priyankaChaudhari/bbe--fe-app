@@ -132,7 +132,7 @@ const SalesFilter = ({
             </p>
           </div>
           <div
-            className="col-1"
+            className="col-1 p-0"
             role="presentation"
             onClick={() => setIsCollapseOpen(!isCollapseOpen)}>
             <div className="black-heading-title ">

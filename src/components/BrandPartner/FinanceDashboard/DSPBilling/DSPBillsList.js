@@ -24,7 +24,7 @@ import {
   WhiteCard,
   Table,
   Status,
-  DropDownIndicator,
+  DropdownIndicator,
   PageLoader,
   CommonPagination,
 } from '../../../../common';
@@ -163,7 +163,7 @@ export default function DSPBillsList({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -285,7 +285,7 @@ export default function DSPBillsList({
               className="mb-3 cursor"
               CompanyName={item.customer && item.customer.name}
               invoiceType={item.invoice_type}
-              invoiceId={item.invoiced_id}
+              invoiceId={`#${item?.invoiced_id}`}
               label="AMOUNT"
               labelInfo={`$${bindAmount(item.monthly_budget, 0, true)}`}
               label1="CREATED ON"

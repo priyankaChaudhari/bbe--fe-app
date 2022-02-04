@@ -77,6 +77,31 @@ const Button = styled.button`
       outline: none;
     }
   }
+  &.btn-add-items {
+    font-size: ${Theme.extraNormal};
+    font-family: ${Theme.baseFontFamily};
+    color: ${Theme.orange};
+    border: none;
+    min-height: 0;
+    padding: 0;
+    background: transparent;
+
+    &.gray-text {
+      color: ${Theme.gray90};
+    }
+
+    &.back-btn {
+      color: ${Theme.gray90};
+      text-transform: uppercase;
+      letter-spacing: 1.21px;
+      font-family: ${Theme.titleFontFamily};
+      font-size: ${Theme.small};
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
   &.font-style-regular {
     font-family: ${Theme.baseFontFamily};
     font-weight: 500;
@@ -151,7 +176,7 @@ const Button = styled.button`
     img {
       vertical-align: bottom;
       width: 18px;
-      margin-right: 10px;
+      margin-right: 7px;
     }
 
     &:focus {
@@ -232,6 +257,11 @@ const Button = styled.button`
   @media only screen and (max-width: 1200px) {
     &.upload-asset {
       width: 152px;
+    }
+  }
+  @media only screen and (max-width: 450px) {
+    &.invoice-adjustment {
+      width: 100%;
     }
   }
 `;

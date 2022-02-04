@@ -16,6 +16,10 @@ export const PATH_PAUSE_AGREEMENT = `${PATH_CUSTOMER_DETAILS}/agreement/:contrac
 export const PATH_HELLO_SIGN = `/contract-signature`;
 export const PATH_WARNING = '/warning/';
 
+// DSP budget proposal
+export const PATH_DSP_BUDGET_APPROVAL =
+  '/dsp-budget-approval/:key/:adjustmentId';
+
 // Account Setup
 export const PATH_ACCOUNT_SETUP = '/account-setup/';
 export const PATH_ACCOUNT_SETUP_CHOOSE = `${PATH_ACCOUNT_SETUP}choose`;
@@ -47,9 +51,7 @@ export const PATH_BGS_ADMIN_DASHBOARD = '/dashboard/bgsAdmin';
 
 // Ad manager dashboard
 export const PATH_AD_MANAGER_ADMIN_DASHBOARD = '/dashboard/adMangerAdmin/';
-export const PATH_SPONSORED_DASHBOARD = '/dashboard/sponsored/';
-export const PATH_DSP_DASHBOARD = '/dashboard/dsp/';
-export const PATH_HYBRID_DASHBOARD = '/dashboard/hybrid/';
+export const PATH_AD_MANAGER_DASHBOARD = '/dashboard/adManager/';
 
 // Finance dashboard
 export const PATH_FINANCE_DASHBOARD = '/dashboard/finance/';

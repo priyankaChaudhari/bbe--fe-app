@@ -59,6 +59,7 @@ const Theme = {
   extraMedium: '16px',
   medium: '17px',
   title: '18px',
+  subTitle: '22px',
 
   verySmallRes: '14px',
   extraSmallRes: '15px',
@@ -90,7 +91,7 @@ const Theme = {
   /* Font family */
   baseFontFamily: 'Noah Regular',
   titleFontFamily: 'Noah-Bold',
-  // baseMediumFontFamily: 'Noah-Medium',
+  baseMediumFontFamily: 'Noah Regular',
   boldItalicFontFamily: 'Noah-BoldItalic',
   regularItalicFontFamily: 'Noah-RegularItalic',
   boldArialTextFontFamily: 'Arial-Bold',

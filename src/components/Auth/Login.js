@@ -20,18 +20,10 @@ import {
 } from '../../common';
 import {
   PATH_AMAZON_MERCHANT,
-  PATH_BGS_DASHBOARD,
-  PATH_BGS_MANAGER_DASHBOARD,
-  PATH_BGS_ADMIN_DASHBOARD,
   PATH_COMPANY_DETAILS,
   PATH_CUSTOMER_DETAILS,
   PATH_CUSTOMER_LIST,
   PATH_SUMMARY,
-  PATH_SPONSORED_DASHBOARD,
-  PATH_DSP_DASHBOARD,
-  PATH_HYBRID_DASHBOARD,
-  PATH_AD_MANAGER_ADMIN_DASHBOARD,
-  PATH_FINANCE_DASHBOARD,
 } from '../../constants';
 import { clearErrorMessage, login } from '../../store/actions/userState';
 import { getCustomerNames, getEmail } from '../../api';
@@ -121,23 +113,7 @@ export default function Login() {
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      if (role === 'BGS') {
-        history.push(PATH_BGS_DASHBOARD);
-      } else if (role === 'BGS Manager') {
-        history.push(PATH_BGS_MANAGER_DASHBOARD);
-      } else if (role === 'BGS Admin') {
-        history.push(PATH_BGS_ADMIN_DASHBOARD);
-      } else if (role === 'Sponsored Advertising Ad Manager') {
-        history.push(PATH_SPONSORED_DASHBOARD);
-      } else if (role.includes('DSP Ad Manager')) {
-        history.push(PATH_DSP_DASHBOARD);
-      } else if (role.includes('Hybrid Ad Manager')) {
-        history.push(PATH_HYBRID_DASHBOARD);
-      } else if (role.includes('Ad Manager Admin')) {
-        history.push(PATH_AD_MANAGER_ADMIN_DASHBOARD);
-      } else if (role.includes('Finance')) {
-        history.push(PATH_FINANCE_DASHBOARD);
-      } else if (role === 'Customer') {
+      if (role.includes('Customer') || role === 'Customer') {
         const id =
           step &&
           Object.keys(step) &&
@@ -215,8 +191,8 @@ export default function Login() {
                         role="presentation"
                         className="back-link"
                         onClick={() =>
-                          (customerNames && customerNames.length === 0) ||
-                          (customerNames && customerNames.length === 1) ||
+                          customerNames?.length === 0 ||
+                          customerNames?.length === 1 ||
                           customerNames === ''
                             ? setShowPassword({
                                 email: true,
@@ -268,9 +244,7 @@ export default function Login() {
                         <br />
                         <input
                           className={
-                            errors && errors.email
-                              ? 'form-control'
-                              : 'form-control '
+                            errors?.email ? 'form-control' : 'form-control '
                           }
                           type="text"
                           placeholder="Enter your Email Address"
@@ -291,8 +265,7 @@ export default function Login() {
                       </label>
                     </InputFormField>
                     <ErrorMsg>
-                      {(errors && errors.email && errors.email.message) ||
-                        (customerApiError && customerApiError[0])}
+                      {errors?.email?.message || customerApiError?.[0]}
                     </ErrorMsg>
                     <ErrorMsg>{forgotApiError}</ErrorMsg>
                   </>
@@ -343,16 +316,9 @@ export default function Login() {
                                 />
                               </label>
                             </InputFormField>
+                            <ErrorMsg>{errors?.password?.message}</ErrorMsg>
                             <ErrorMsg>
-                              {errors &&
-                                errors.password &&
-                                errors.password.message}
-                            </ErrorMsg>
-                            <ErrorMsg>
-                              {apiError &&
-                                apiError.data &&
-                                apiError.data.non_field_errors &&
-                                apiError.data.non_field_errors[0]}
+                              {apiError?.data?.non_field_errors?.[0]}
                             </ErrorMsg>
                             <ErrorMsg>{forgotApiError}</ErrorMsg>
                           </>

@@ -33,6 +33,10 @@ const PageLoaderWrapper = styled.div`
   &.Notes-modal-loader {
     margin-right: 250px;
   }
+  &.comission-modal-loader {
+    margin-right: 40%;
+  }
+
   @media only screen and (min-width: 1500px) {
     &.sidebar-loader {
       right: 0;
@@ -69,7 +73,7 @@ const DetailLoaderWrapper = styled.div`
   right: 0;
 
   &.customer-details {
-    top: -140px;
+    top: -120px;
     position: relative;
     left: 0;
   }
@@ -137,10 +141,12 @@ export default function PageLoader({
             ? 'upload-brand-asset'
             : component === 'Notes-modal-loader'
             ? 'Notes-modal-loader'
+            : component === 'comission-modal-loader'
+            ? 'comission-modal-loader'
             : ''
         }
         style={{
-          top: component === 'member' ? '120px' : '',
+          top: component === 'member' ? '60px' : '',
           width: component === 'activityLog' ? '50px' : '',
           // right: component === 'agreement' ? '14%' : '',
           position: component === 'activity' ? 'absolute' : '',

@@ -7,7 +7,7 @@ import { useMediaQuery } from 'react-responsive';
 import {
   DropDownSelect,
   WhiteCard,
-  DropDownIndicator,
+  DropdownIndicator,
 } from '../../../../common';
 import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { CaretUp } from '../../../../theme/images';
@@ -82,7 +82,7 @@ const DSPFilter = ({
             <Select
               classNamePrefix="react-select"
               className="active"
-              components={DropDownIndicator}
+              components={{ DropdownIndicator }}
               options={options}
               defaultValue={options && options[0]}
               value={selectedMarketplace}
@@ -95,6 +95,7 @@ const DSPFilter = ({
                   neutral50: '#1A1A1A',
                 },
               })}
+              isLoading={isApiCall}
             />
           </DropDownSelect>
         </div>

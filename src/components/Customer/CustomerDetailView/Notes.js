@@ -75,7 +75,6 @@ function Notes({
     showEditor: false,
     showFilterDropdown: false,
   });
-
   const userInfo = useSelector((state) => state.userState.userInfo);
   const ref = useRef(null);
   const dropdownRef = useRef(null);
@@ -108,20 +107,13 @@ function Notes({
         : searchQuery.q,
     ) => {
       setIsLoading({ loader: true, type: 'page' });
-      // const selectedFilters = { ...filters };
 
       const selectedFilters = JSON.parse(localStorage.getItem('noteFilters'))
         ? JSON.parse(localStorage.getItem('noteFilters'))
         : { ...filters };
 
-      if (selectedFilters.notes) {
-        delete selectedFilters.notes;
-      }
       if (!selectedFilters.archived) {
         delete selectedFilters.archived;
-      }
-      if (!selectedFilters.team?.length) {
-        delete selectedFilters.team;
       }
 
       getNotes(customerId, searchString, pageNumber, selectedFilters).then(
@@ -149,7 +141,6 @@ function Notes({
   );
 
   const handleChange = (event) => {
-    // setFilter({ ...filters, q: event.target.value });
     setSearchQuery({ q: event.target.value });
     localStorage.setItem(
       'noteFilters',
@@ -365,7 +356,7 @@ function Notes({
       data.notes.map((item) => {
         const noteType = item.note_type;
         return (
-          <div className="notes-pin-unpin">
+          <div className="notes-pin-unpin" key={item.id}>
             <GroupUser className="mb-3" key={item.id}>
               {displayUserInfo(item.user)}
               <div className="activity-user">
@@ -502,7 +493,6 @@ function Notes({
           team: [],
           q: searchQuery.q,
         });
-        // setShowDropdown({ show: false });
         localStorage.setItem(
           'noteFilters',
           JSON.stringify({
@@ -522,7 +512,6 @@ function Notes({
             team: [],
             q: searchQuery.q,
           });
-          // setShowDropdown({ show: false });
           localStorage.setItem(
             'noteFilters',
             JSON.stringify({
@@ -552,7 +541,6 @@ function Notes({
 
     if (section === 'archived') {
       setFilter({ ...filters, archived: item.value, q: searchQuery.q });
-      // setShowDropdown({ show: false });
       localStorage.setItem(
         'noteFilters',
         JSON.stringify({
@@ -621,7 +609,7 @@ function Notes({
         <ul className="notes-option">
           {filtersOption.notes.map((item) => {
             return (
-              <li>
+              <li key={item.label}>
                 <ModalRadioCheck>
                   <label
                     className=" checkboxes radio-container customer-list"
@@ -644,7 +632,7 @@ function Notes({
           <li className="teams-title">Teams</li>
           {filtersOption.teams.map((teamFilter) => {
             return (
-              <li className="checkbox-option">
+              <li className="checkbox-option" key={teamFilter.team}>
                 <CheckBox>
                   <label
                     className={
@@ -672,11 +660,12 @@ function Notes({
           <div className="straight-line horizontal-line mt-2 mb-3" />
           {filtersOption.archived.map((item) => {
             return (
-              <li>
+              <li key={item.label}>
                 <ModalRadioCheck>
                   <label
                     className=" checkboxes radio-container customer-list"
-                    htmlFor={item.label}>
+                    htmlFor={item.label}
+                    key={item.label}>
                     {item.label}
                     <input
                       type="radio"
@@ -789,15 +778,9 @@ function Notes({
                 className="dropdown-select-all-notes"
                 role="presentation"
                 id="clickbox"
-                onClick={() =>
-                  // setData({
-                  //   ...data,
-                  //   showFilterDropdown: !data.showFilterDropdown,
-                  // })
-                  {
-                    setShowDropdown({ show: !showDropdown.show });
-                  }
-                }>
+                onClick={() => {
+                  setShowDropdown({ show: !showDropdown.show });
+                }}>
                 {filters?.notes}
 
                 <img

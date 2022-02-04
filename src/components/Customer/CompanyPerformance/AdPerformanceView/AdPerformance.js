@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
 
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -11,7 +11,7 @@ import SponsoredPerformance from './SponsoredPerformance';
 import AdPerformanceFilters from './AdPerformanceFilters';
 import { DspAdPacing } from '../../../BrandPartner';
 import { CloseIcon } from '../../../../theme/images';
-import { CustomDateModal, DropDownIndicator } from '../../../../common';
+import { CustomDateModal, DropdownIndicator } from '../../../../common';
 import { dateOptions, noGraphDataMessage } from '../../../../constants';
 import {
   getAdPerformance,
@@ -30,9 +30,10 @@ export default function AdPerformance({
   marketplaceChoices,
   id,
   accountType,
-  memberData,
   getActivityLogInfo,
+  memberData,
 }) {
+  const mounted = useRef(false);
   const { Option, SingleValue } = components;
   const [marketplaceOptions, setMarketplaceOptions] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(null);
@@ -119,29 +120,33 @@ export default function AdPerformance({
 
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
+
   useEffect(() => {
-    if (userInfo.role === 'Ad Manager Admin') {
+    if (userInfo?.role?.includes('Ad Manager Admin')) {
       setIsAllowToSplitBalance(true);
-    } else if (
-      userInfo.role === 'Hybrid Ad Manager' ||
-      userInfo.role === 'DSP Ad Manager' ||
-      userInfo.role === 'BGS'
-    ) {
+    } else {
       for (const user of memberData) {
-        if (user.user === userInfo.id) {
-          setIsAllowToSplitBalance(true);
-          break;
+        if (user.user) {
+          if (
+            (user?.role_group?.name === 'DSP Ad Manager' ||
+              user?.role_group?.name === 'Hybrid Ad Manager' ||
+              user?.role_group?.name === 'BGS') &&
+            user?.user?.id === userInfo?.id
+          ) {
+            setIsAllowToSplitBalance(true);
+            break;
+          }
         }
       }
     }
-  }, [isAllowToSplitBalance, memberData, userInfo]);
+  }, [memberData, userInfo]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
     // filterout previous data in one temporary object.
     if (response.daily_facts.previous && response.daily_facts.previous.length) {
       response.daily_facts.previous.forEach((item) => {
-        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        const previousDate = dayjs(item.revised_date).format('MMM D YYYY');
         tempData.push({
           adSalesPrevious: item.ad_sales,
           adSpendPrevious: item.ad_spend,
@@ -182,7 +187,7 @@ export default function AdPerformance({
     // filterout current data in one temporary object.
     if (response.daily_facts.current && response.daily_facts.current.length) {
       response.daily_facts.current.forEach((item, index) => {
-        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        const currentReportDate = dayjs(item.revised_date).format('MMM D YYYY');
         // let indexNumber = index;
         // add the current data at same index of prevoius in temporary object
         if (
@@ -308,7 +313,7 @@ export default function AdPerformance({
     // filterout previous data in one temporary object.
     if (response.dsp_spend.previous && response.dsp_spend.previous.length) {
       response.dsp_spend.previous.forEach((item) => {
-        const previousDate = dayjs(item.report_date).format('MMM D YYYY');
+        const previousDate = dayjs(item.revised_date).format('MMM D YYYY');
         tempData.push({
           dspImpressionsPrevious: item.impressions,
           dspSpendPrevious: item.dsp_spend,
@@ -349,7 +354,7 @@ export default function AdPerformance({
     // filterout current data in one temporary object.
     if (response.dsp_spend.current && response.dsp_spend.current.length) {
       response.dsp_spend.current.forEach((item, index) => {
-        const currentReportDate = dayjs(item.report_date).format('MMM D YYYY');
+        const currentReportDate = dayjs(item.revised_date).format('MMM D YYYY');
         // add the current data at same index of prevoius in temporary object
         if (
           response.dsp_spend.previous &&
@@ -518,22 +523,24 @@ export default function AdPerformance({
         endDate,
         accountType,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setIsApiCall(false);
-          setAdGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.daily_facts) {
-            const adGraphData = bindAdResponseData(res.data);
-            setAdChartData(adGraphData);
-          } else {
-            setAdChartData([]);
-            setAdPreviousTotal([]);
-            setAdCurrentTotal([]);
-            setAdDifference([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setIsApiCall(false);
+            setAdGraphLoader(false);
           }
-          setIsApiCall(false);
-          setAdGraphLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.daily_facts) {
+              const adGraphData = bindAdResponseData(res.data);
+              setAdChartData(adGraphData);
+            } else {
+              setAdChartData([]);
+              setAdPreviousTotal([]);
+              setAdCurrentTotal([]);
+              setAdDifference([]);
+            }
+            setIsApiCall(false);
+            setAdGraphLoader(false);
+          }
         }
       });
     },
@@ -558,22 +565,24 @@ export default function AdPerformance({
         startDate,
         endDate,
       ).then((res) => {
-        if (res && res.status === 400) {
-          setIsApiCall(false);
-          setDspGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          if (res.data && res.data.dsp_spend) {
-            const dspGraphData = bindDSPResponseData(res.data);
-            setDSPChartData(dspGraphData);
-          } else {
-            setDSPChartData([]);
-            setDspCurrentTotal([]);
-            setDspPreviousTotal([]);
-            setDspDifference([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setIsApiCall(false);
+            setDspGraphLoader(false);
           }
-          setIsApiCall(false);
-          setDspGraphLoader(false);
+          if (res && res.status === 200) {
+            if (res.data && res.data.dsp_spend) {
+              const dspGraphData = bindDSPResponseData(res.data);
+              setDSPChartData(dspGraphData);
+            } else {
+              setDSPChartData([]);
+              setDspCurrentTotal([]);
+              setDspPreviousTotal([]);
+              setDspDifference([]);
+            }
+            setIsApiCall(false);
+            setDspGraphLoader(false);
+          }
         }
       });
     },
@@ -584,10 +593,12 @@ export default function AdPerformance({
     (marketplace) => {
       setIsDspPacingLoading(true);
       getDspPacingData(id, marketplace).then((res) => {
-        if (res && res.status === 200) {
-          setDspData(res.data);
+        if (mounted.current) {
+          if (res && res.status === 200) {
+            setDspData(res.data);
+          }
+          setIsDspPacingLoading(false);
         }
-        setIsDspPacingLoading(false);
       });
     },
     [id],
@@ -598,29 +609,31 @@ export default function AdPerformance({
       setIsApiCall(true);
       setDspGraphLoader(true);
       getDSPPacingGraphData(id, marketplace).then((res) => {
-        if (res && res.status === 400) {
-          setIsApiCall(false);
-          setDspGraphLoader(false);
-        }
-        if (res && res.status === 200) {
-          // setDspData(res.data);
-          if (res.data && res.data.dsp_pacing_graph) {
-            const dspPacingGraphData = bindDSPPacingResponseData(
-              res.data && res.data.dsp_pacing_graph,
-            );
-            setDSPPacingChartData(dspPacingGraphData);
-          } else {
-            setDSPPacingChartData([]);
+        if (mounted.current) {
+          if (res && res.status === 400) {
+            setIsApiCall(false);
+            setDspGraphLoader(false);
           }
-          setIsApiCall(false);
-          setDspGraphLoader(false);
+          if (res && res.status === 200) {
+            // setDspData(res.data);
+            if (res.data && res.data.dsp_pacing_graph) {
+              const dspPacingGraphData = bindDSPPacingResponseData(
+                res.data && res.data.dsp_pacing_graph,
+              );
+              setDSPPacingChartData(dspPacingGraphData);
+            } else {
+              setDSPPacingChartData([]);
+            }
+            setIsApiCall(false);
+            setDspGraphLoader(false);
+          }
         }
       });
     },
     [id],
   );
-
   useEffect(() => {
+    mounted.current = true;
     const list = [];
     if (marketplaceChoices && marketplaceChoices.length > 0)
       for (const option of marketplaceChoices) {
@@ -654,6 +667,10 @@ export default function AdPerformance({
       }
       setResponseId('12345');
     }
+
+    return () => {
+      mounted.current = false;
+    };
   }, [
     getAdData,
     getDSPData,
@@ -824,7 +841,7 @@ export default function AdPerformance({
     return {
       Option: filterOption,
       SingleValue: singleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -832,7 +849,7 @@ export default function AdPerformance({
     return {
       Option: filterOption,
       SingleValue: adTypesSingleFilterOption,
-      DropDownIndicator,
+      DropdownIndicator,
     };
   };
 
@@ -872,7 +889,7 @@ export default function AdPerformance({
           getAdData(selectedAdType.value, value, 'daily', selectedMarketplace);
           break;
         } else {
-          setDSPFilters({ daily: true, weekly: false, month: false });
+          setDSPFilters({ daily: true, weekly: true, month: false });
           setDSPGroupBy('daily');
 
           getDSPData(value, 'daily', selectedMarketplace);
@@ -1149,7 +1166,7 @@ export default function AdPerformance({
         handleMarketplaceOptions={handleMarketplaceOptions}
         dateOptions={dateOptions}
         getSelectComponents={getSelectComponents}
-        DropDownIndicator={DropDownIndicator}
+        DropdownIndicator={{ DropdownIndicator }}
         selectedAdDF={selectedAdDF}
         handleAdDailyFact={handleAdDailyFact}
         isApiCall={isApiCall}

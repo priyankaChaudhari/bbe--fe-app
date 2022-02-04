@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import Select, { components } from 'react-select';
 import { toast } from 'react-toastify';
 import { string, func, shape, bool, arrayOf } from 'prop-types';
 
-import { SearchIcon, SortDownIcon, CloseIcon } from '../../theme/images';
-import { addCustomerMember, getRoles, userCustomerRoleList } from '../../api';
+import { SearchIcon, CloseIcon } from '../../theme/images';
+import { addCustomerMembers, getAllMembers } from '../../api';
 import {
   CommonPagination,
   ModalBox,
   PageLoader,
   SearchInput,
-  TeamDropDown,
   Button,
   GetInitialName,
   CheckBoxList,
@@ -30,8 +28,7 @@ export default function AddTeamMember({
   const [data, setData] = useState([]);
   const [count, setCount] = useState(null);
   const [pageNumber, setPageNumber] = useState();
-  const [roles, setRoles] = useState([]);
-  const [filterDetails, setFilterDetails] = useState({
+  const [filterDetails] = useState({
     name: '',
     clear: false,
   });
@@ -40,75 +37,17 @@ export default function AddTeamMember({
   const [searchQuery, setSearchQuery] = useState('');
   const [showBtn, setShowBtn] = useState(false);
 
-  const customStyleCSS = {
-    menuPortal: (base) => ({
-      ...base,
-      zIndex: 9999,
-      color: '#2E384D',
-    }),
-    menu: (provided) => ({
-      ...provided,
-
-      border: '  1px solid rgba(46, 91, 255, 0.08);',
-      boxShadow: '0 10px 20px 0 rgba(46, 91, 255, 0.07)',
-      borderRadius: '2px',
-    }),
-    option: (provided, state) => {
-      return {
-        ...provided,
-        color: state.isSelected ? '#FF5933' : '#2E384D',
-        background: 'white',
-
-        ':hover': {
-          background: '#F9FAFF',
-          cursor: 'pointer',
-        },
-      };
-    },
-
-    control: (base) => ({
-      ...base,
-      border: 'none',
-      maxWidth: '60%',
-      margin: '0 auto',
-      textAlign: 'right',
-      '&:focus': {
-        border: 'none',
-        background: 'white !important',
-      },
-    }),
-  };
-
-  const DropdownIndicator = (dataProps) => {
-    return (
-      <components.DropdownIndicator {...dataProps}>
-        <img
-          src={SortDownIcon}
-          alt="sort"
-          style={{
-            width: '78%',
-            transform: dataProps.selectProps.menuIsOpen ? 'rotate(180deg)' : '',
-          }}
-        />
-      </components.DropdownIndicator>
-    );
-  };
-
   const getMembers = useCallback(
     (currentPage) => {
       setIsLoading({ loader: true, type: 'page' });
-      getRoles().then((role) => {
-        role.data.unshift({ value: 'All', label: 'All' });
-        setRoles(role && role.data);
-      });
 
-      userCustomerRoleList(
-        id,
-        currentPage,
-        searchQuery,
+      getAllMembers(
         showMemberList.agreement || showMemberList.requestApproval
           ? 'BGS Manager'
           : filterDetails.name.value,
+        true,
+        currentPage,
+        searchQuery,
       ).then((response) => {
         setData(response && response.data && response.data.results);
         setCount(response && response.data && response.data.count);
@@ -117,7 +56,6 @@ export default function AddTeamMember({
       });
     },
     [
-      id,
       searchQuery,
       filterDetails.name.value,
       showMemberList.agreement,
@@ -131,22 +69,25 @@ export default function AddTeamMember({
 
   const saveNewMember = () => {
     setIsLoading({ loader: true, type: 'button' });
-    addCustomerMember(userRoleId, id).then((response) => {
-      if (response && response.status === 200) {
-        if (!showMemberList.requestApproval) {
-          getCustomerMemberList();
-          getActivityLogInfo();
-        }
-        setShowCloseBtn(true);
-        setIsLoading({ loader: false, type: 'button' });
-        toast.success(`${userRoleId.length} Team Member(s) Added.`);
-        const showAgreementModal = showMemberList.agreement;
-        setShowMemberList({ add: false, show: false, modal: false });
-        if (!showAgreementModal) setAgreementDetailModal({ pause: false });
-        else setAgreementDetailModal(showAgreementModal);
-      } else {
-        setIsLoading({ loader: false, type: 'button' });
+    const newMembersData = {
+      customer: id,
+      members: [
+        { user: disabledRoles[0]?.['BGS Manager'], role_group: 'BGS Manager' },
+      ],
+    };
+
+    addCustomerMembers(newMembersData).then(() => {
+      if (!showMemberList.requestApproval) {
+        getCustomerMemberList();
+        getActivityLogInfo();
       }
+      setShowCloseBtn(true);
+      setIsLoading({ loader: false, type: 'button' });
+      toast.success(`${userRoleId.length} Team Member(s) Added.`);
+      const showAgreementModal = showMemberList.agreement;
+      setShowMemberList({ add: false, show: false, modal: false });
+      if (!showAgreementModal) setAgreementDetailModal({ pause: false });
+      else setAgreementDetailModal(showAgreementModal);
     });
   };
 
@@ -158,38 +99,6 @@ export default function AddTeamMember({
   const searchList = (event) => {
     setSearchQuery(event.target.value);
     setIsLoading({ loader: true, type: 'page' });
-
-    userCustomerRoleList(
-      id,
-      1,
-      event.target.value,
-      filterDetails.name.value,
-    ).then((response) => {
-      setData(response && response.data && response.data.results);
-      setCount(response && response.data && response.data.count);
-      setPageNumber(pageNumber);
-      setIsLoading({ loader: false, type: 'page' });
-    });
-  };
-
-  const cancelFilter = () => {
-    getMembers(1);
-    setFilterDetails({ name: '', clear: false });
-  };
-
-  const getFilteredRole = (event) => {
-    if (event && event.value === 'All') {
-      cancelFilter();
-    } else {
-      setFilterDetails({ clear: true, name: event });
-      setIsLoading({ loader: true, type: 'page' });
-      userCustomerRoleList(id, 1, searchQuery, event.value).then((response) => {
-        setData(response && response.data && response.data.results);
-        setCount(response && response.data && response.data.count);
-        setPageNumber(pageNumber);
-        setIsLoading({ loader: false, type: 'page' });
-      });
-    }
   };
 
   const checkDisable = (item) => {
@@ -252,7 +161,7 @@ export default function AddTeamMember({
         <div className="body-content mt-3 ">
           <>
             <div className="row">
-              <div className="col-7 pr-0">
+              <div className="col-11 pr-0">
                 <SearchInput className="mt-2">
                   <input
                     className="form-control search-filter "
@@ -265,35 +174,6 @@ export default function AddTeamMember({
                     className="search-input-icon"
                   />
                 </SearchInput>
-              </div>
-              <div className="col-1 mt-2 roleName">
-                <label htmlFor="role">Role:</label>
-              </div>
-              <div className="col-4 mt-2">
-                <TeamDropDown>
-                  <Select
-                    classNamePrefix="react-select"
-                    options={roles}
-                    placeholder="All"
-                    onChange={(event) => getFilteredRole(event)}
-                    value={filterDetails.name}
-                    menuPortalTarget={document.body}
-                    styles={customStyleCSS}
-                    components={{ DropdownIndicator }}
-                    theme={(theme) => ({
-                      ...theme,
-                      border: 'none',
-
-                      colors: {
-                        ...theme.colors,
-                        primary25: 'white',
-                        text: '#FF5933',
-                        color: '#FF5933',
-                        primary: 'transparent !important',
-                      },
-                    })}
-                  />
-                </TeamDropDown>
               </div>
             </div>
             {isLoading.loader && isLoading.type === 'page' ? (
@@ -388,7 +268,7 @@ export default function AddTeamMember({
       (isLoading.loader && isLoading.type === 'button') ? (
         <>
           <div className="footer-line  " />
-          <div className="modal-footer">
+          <div className="modal-footer ml-5 mb-4">
             <Button
               className=" btn-primary mr-4"
               onClick={() => saveNewMember()}>

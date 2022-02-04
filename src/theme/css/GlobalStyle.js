@@ -1,8 +1,8 @@
 // globalStyles.js
 import { createGlobalStyle } from 'styled-components';
+
 import Theme from '../Theme';
 import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
-// import NoahRegular from '../fonts/noah-font/Noah Regular.otf';
 import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
 import NoahRegularItalic from '../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff';
 import NoahBoldItalic from '../fonts/Noah/Noah/WEB/Noah-BoldItalic.woff';
@@ -10,11 +10,7 @@ import ArialBold from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTEXTRABOLD.wof
 import ArialRegular from '../fonts/arial-mt-cufonfonts-webfont/ARIALMTMEDIUM.woff';
 import HelveticaRegular from '../fonts/Helvetica-Font/Helvetica.ttf';
 import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
-// import NoahMedium from '../fonts/noah-font/NoahMedium.otf';
-
-import { CalendarFontBackArrow } from '../images/index';
-
-// import theme from '@amcharts/amcharts4/themes/dataviz';
+import { CalendarFontBackArrow } from '../images';
 
 const bodyStyles = createGlobalStyle`
 
@@ -53,6 +49,7 @@ const bodyStyles = createGlobalStyle`
     font-family: 'Helvetica-Bold';
     src: url(${HelveticaBold});
   } 
+ 
 
 html,
 #root {
@@ -237,6 +234,13 @@ h5 {
   margin: 0;
   color: ${Theme.gray90};
 
+  &.sub-title-text {
+     font-size: ${Theme.subTitle};
+     color: ${Theme.black};
+     font-family: ${Theme.titleFontFamily};  
+     font-weight: 800;
+  }
+
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     font-size:  ${Theme.smallTitleFontSizeRes};
   }
@@ -267,13 +271,20 @@ h6 {
 .normal-text {
   color: ${Theme.black};
   font-size: ${Theme.normal};
+  word-break: break-word;
 }
 .fix-height {
   flex-wrap: wrap;
   flex: initial;
   height: 100%;
 }
-
+.text-bold {
+   font-family: ${Theme.titleFontFamily};
+}
+.text-medium{
+   font-family: ${Theme.baseMediumFontFamily} !important;
+   font-weight: 500;
+}
 p {
   font-size: ${Theme.small};
 
@@ -332,6 +343,12 @@ p {
     color: ${Theme.gray90};
     font-size: ${Theme.extraMedium}; 
   }
+
+  &.orange-text-label {
+    color: ${Theme.orange};
+    font-size: ${Theme.extraNormal};
+    font-weight: ${Theme.baseFontFamily};
+  }
   &.extra-bold {
     color: ${Theme.gray90};
     font-size: ${Theme.normal};
@@ -372,7 +389,6 @@ p {
     display: block;
     position: relative;
     padding-left: 35px;
-    /* margin-bottom: 12px; */
     cursor: pointer;
     font-size: ${Theme.extraMedium};
     -webkit-user-select: none;
@@ -582,6 +598,10 @@ a {
   }
 }
 
+.line-throught {
+  text-decoration: line-through;
+}
+
 .table-responsive {
   width: 100%;
   margin-bottom: 15px;
@@ -645,6 +665,11 @@ a {
      width: 100% !important;
    }
 }
+.col-sm-mt-3 {
+   @media only screen and (max-width: 767px)  {
+     margin-top: 16px;
+   }
+}
 
 .h-100 {
   height: 100% !important;
@@ -688,7 +713,8 @@ button:disabled {
 }
 
 .edit-profile-text {
-  display: flex;
+  /* display: flex; */
+  display: -webkit-box;
   align-items: center;
   flex-direction: row;
 }
@@ -722,9 +748,7 @@ button:disabled {
 
   .modal-body {
     padding: 25px 32px 30px 32px;
-    &.escrow {
-       padding: 25px 20px 30px 20px;
-    }
+   
   }
 
   .edit-profiles {
@@ -764,7 +788,11 @@ fieldset {
     border-radius: 8px;
   }
   &.extra-radius {
-      border-radius: 15px;
+    border-radius: 15px;
+  }
+  &.less-border {
+    border-radius: 4px;
+    border: 1px solid ${Theme.gray11}; 
   }
 }
 
@@ -964,6 +992,11 @@ fieldset {
     &:first-child {
       margin-left: 0;
     }
+  }
+
+  &.unassigned {
+    background: ${Theme.gray3};
+    border: none;
   }
 }
 

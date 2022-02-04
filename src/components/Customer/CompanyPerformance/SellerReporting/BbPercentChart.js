@@ -46,9 +46,10 @@ function BbPercentChart({ chartId, chartData }) {
     valueAxis.renderer.labels.template.disabled = true;
     valueAxis.cursorTooltipEnabled = false;
     valueAxis.renderer.opposite = true;
-    valueAxis.min = 0;
+    valueAxis.min = -0.5;
     valueAxis.max = getValueAxisMaxValue();
     valueAxis.strictMinMax = true;
+
     //  Create X axes
     const dateAxis = chart.current.xAxes.push(new am4charts.DateAxis());
     dateAxis.renderer.grid.template.disabled = true;

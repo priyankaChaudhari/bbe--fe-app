@@ -43,6 +43,8 @@ function ServicesAmendment({ amendmentData }) {
     amendmentData?.monthly_services?.length;
   const amendmentDataAdditionalMarketplacesLength =
     amendmentData?.additional_marketplaces?.length;
+  const amendmentDataAdditionalOneTimeServicesLength =
+    amendmentData?.onetime_services?.length;
 
   const displayValue = (value, type) => {
     if (type && type.includes('number')) {
@@ -159,6 +161,7 @@ function ServicesAmendment({ amendmentData }) {
   const displayAmendments = () => {
     return !amendmentDataMonthlyServicesLength &&
       !amendmentDataAdditionalMarketplacesLength &&
+      !amendmentDataAdditionalOneTimeServicesLength &&
       !amendmentDataAddendumStatus &&
       !amendmentDataUpdatedLength ? (
       <div className="text-center mt-3">No data found</div>
@@ -175,9 +178,7 @@ function ServicesAmendment({ amendmentData }) {
                   </div>
                   {displayAdditionalService('monthly_services')}
                 </>
-              ) : (
-                ''
-              )}
+              ) : null}
               {amendmentDataAdditionalMarketplacesLength ? (
                 <>
                   <div className="col-8 text-left mb-3">
@@ -185,9 +186,15 @@ function ServicesAmendment({ amendmentData }) {
                   </div>
                   {displayAdditionalService('additional_marketplaces')}
                 </>
-              ) : (
-                ''
-              )}
+              ) : null}
+              {amendmentDataAdditionalOneTimeServicesLength ? (
+                <>
+                  <div className="col-12 mb-2">
+                    <p className=" label ">One time Services</p>
+                  </div>
+                  {displayAdditionalService('onetime_services')}
+                </>
+              ) : null}
               {amendmentDataAddendumStatus ? (
                 <>
                   <div className="col-8 text-left mb-3 mt-3">

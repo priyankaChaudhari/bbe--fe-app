@@ -1,86 +1,86 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import Modal from 'react-modal';
-import { string, func, shape, bool } from 'prop-types';
+import { string, func, shape, bool, arrayOf } from 'prop-types';
 
-import { AddTeamMember, EditTeamMember } from '../../../Team';
+import { AddTeamMember, TeamMembers } from '../../../Team';
 
 export default function TeamMemberModal({
   id,
-  getCustomerMemberList,
+  currentMembers,
   showMemberList,
   setShowMemberList,
   setAgreementDetailModal,
-  userInfo,
   customStyles,
   getActivityLogInfo,
+  getCustomerMemberList,
 }) {
-  const [teamDeleteModal, setTeamDeleteModal] = useState(false);
-  const alertCustomStyles = {
-    content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      maxWidth: '474px ',
-      width: '100% ',
-      overlay: ' {zIndex: 1000}',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
-    },
+  // Sort all the member roles as per mentioned in PRD, here on the basis of sequence key
+  const getCurrentMembers = () => {
+    const sortedMembers = currentMembers.sort((member, nextNemmber) => {
+      const memberIndex = member?.sequence;
+      const nextMemberIndex = nextNemmber?.sequence;
+      return memberIndex < nextMemberIndex
+        ? -1
+        : memberIndex > nextMemberIndex
+        ? 1
+        : 0;
+    });
+
+    return sortedMembers;
   };
 
   return (
-    <Modal
-      isOpen={showMemberList.modal}
-      style={teamDeleteModal ? alertCustomStyles : customStyles}
-      ariaHideApp={false}
-      contentLabel="Add team modal">
-      {showMemberList.add ? (
-        <AddTeamMember
-          id={id}
-          getCustomerMemberList={getCustomerMemberList}
-          setShowMemberList={setShowMemberList}
-          showMemberList={showMemberList}
-          setAgreementDetailModal={setAgreementDetailModal}
-          getActivityLogInfo={getActivityLogInfo}
-        />
-      ) : (
-        <EditTeamMember
-          id={id}
-          getCustomerMemberList={getCustomerMemberList}
-          setShowMemberList={setShowMemberList}
-          showMemberList={showMemberList}
-          setTeamDeleteModal={setTeamDeleteModal}
-          userInfo={userInfo}
-          getActivityLogInfo={getActivityLogInfo}
-        />
-      )}
-    </Modal>
+    <>
+      {showMemberList.modal && !showMemberList.agreement ? (
+        <Modal
+          isOpen={showMemberList.modal}
+          style={customStyles}
+          ariaHideApp={false}
+          contentLabel="Add team modal">
+          <TeamMembers
+            customerID={id}
+            currentMembers={getCurrentMembers()}
+            setShowMemberList={setShowMemberList}
+            getCustomerMemberList={getCustomerMemberList}
+          />
+        </Modal>
+      ) : showMemberList.modal && showMemberList.agreement ? (
+        <Modal
+          isOpen={showMemberList.modal}
+          style={customStyles}
+          ariaHideApp={false}
+          contentLabel="Add team modal">
+          <AddTeamMember
+            id={id}
+            getCustomerMemberList={getCustomerMemberList}
+            setShowMemberList={setShowMemberList}
+            showMemberList={showMemberList}
+            setAgreementDetailModal={setAgreementDetailModal}
+            getActivityLogInfo={getActivityLogInfo}
+          />
+        </Modal>
+      ) : null}
+    </>
   );
 }
 
 TeamMemberModal.defaultProps = {
-  setShowMemberList: () => {},
-  getCustomerMemberList: () => {},
-  userInfo: {},
   customStyles: {},
+  setShowMemberList: () => {},
   setAgreementDetailModal: () => {},
 };
 
 TeamMemberModal.propTypes = {
   setShowMemberList: func,
   id: string.isRequired,
+  currentMembers: arrayOf(shape({})).isRequired,
   showMemberList: shape({
     modal: bool,
     add: bool,
   }).isRequired,
-  getCustomerMemberList: func,
-  userInfo: shape({
-    role: string,
-    id: string,
-  }),
   customStyles: shape({}),
   setAgreementDetailModal: func,
   getActivityLogInfo: func.isRequired,
+  getCustomerMemberList: func.isRequired,
 };
