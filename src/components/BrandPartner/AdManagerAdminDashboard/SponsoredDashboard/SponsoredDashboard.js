@@ -155,7 +155,7 @@ export default function SponsoredDashboard({ marketplaceChoices, userInfo }) {
           bgsData &&
           bgsData.data &&
           bgsData.data.length &&
-          bgsData.datalength > 0
+          bgsData.data.length > 0
         ) {
           const results = bgsData.data;
           const list = [{ value: 'all', label: 'All' }];
