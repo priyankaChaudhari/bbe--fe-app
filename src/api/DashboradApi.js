@@ -680,3 +680,22 @@ export async function getBgsBrandPartners(bgs, startDate, endDate) {
     });
   return result;
 }
+
+export async function getRevShareContributionData(month, type, pageNumber) {
+  const params = {
+    type,
+    page: pageNumber,
+    month,
+  };
+
+  const result = await axiosInstance
+    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}key-contributors/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+
+  return result;
+}
