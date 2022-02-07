@@ -57,6 +57,15 @@ const ToggleButton = styled.div`
       }
     }
   }
+  .toggle-container {
+    max-width: 100%;
+    width: 100%;
+
+    li {
+      width: 50%;
+      text-align: center;
+    }
+  }
   @media only screen and (max-width: 767px) {
     .days-container {
       margin: 0 auto;

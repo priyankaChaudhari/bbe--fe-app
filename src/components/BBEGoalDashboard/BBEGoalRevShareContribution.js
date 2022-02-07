@@ -25,12 +25,12 @@ export default function BBEGoalRevShareContribution() {
                   <li>
                     {' '}
                     <input className="d-none" type="radio" />
-                    {/* <label>Positive</label> */}
+                    <label htmlFor="positive">Positive</label>
                   </li>
                   <li>
                     {' '}
                     <input className="d-none" type="radio" />
-                    {/* <label>Negative</label> */}
+                    <label htmlFor="negative">Negative</label>
                   </li>
                 </ul>
               </div>
@@ -133,17 +133,17 @@ export default function BBEGoalRevShareContribution() {
           </div>
           <div className="col-md-4 col-12 mt-3 mb-3">
             <ToggleButton>
-              <div className="days-container spending">
+              <div className="days-container toggle-container ">
                 <ul className="days-tab">
                   <li>
                     {' '}
                     <input className="d-none" type="radio" />
-                    {/* <label>Positive</label> */}
+                    <label htmlFor="positive">Positive</label>
                   </li>
                   <li>
                     {' '}
                     <input className="d-none" type="radio" />
-                    {/* <label>Negative</label> */}
+                    <label htmlFor="negative">Positive</label>
                   </li>
                 </ul>
               </div>

@@ -52,7 +52,20 @@ export const WhiteCard = styled.div`
     max-height: 145px;
     overflow: auto;
   }
+  .bbe-goals-partners {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 
+    li {
+      display: inline-block;
+      margin-right: 30px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
   &.left-border {
     padding: 25px 25px 25px 0;
   }
