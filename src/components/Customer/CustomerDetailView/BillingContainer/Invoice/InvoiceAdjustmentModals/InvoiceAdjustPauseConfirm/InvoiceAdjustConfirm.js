@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { arrayOf, func, number, shape, string } from 'prop-types';
 
-import numberWithCommas from '../../../../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../../../../hooks/numberWithCommas';
 import OneTimeInvoiceAdjustConfirm from './OneTimeInvoiceAdjustConfirm';
 import Theme from '../../../../../../../theme/Theme';
 import {

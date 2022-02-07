@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { arrayOf, number, string } from 'prop-types';
-import numberWithCommas from '../../../../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../../../../hooks/numberWithCommas';
 
 const OneTimeInvoiceAdjustConfirm = ({
   adjustmentData,

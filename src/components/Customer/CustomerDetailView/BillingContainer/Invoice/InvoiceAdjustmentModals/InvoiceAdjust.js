@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { arrayOf, bool, func, string } from 'prop-types';
 
 import { InputFormField } from '../../../../../../common';
-import numberWithCommas from '../../../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../../../hooks/numberWithCommas';
 
 const InvoiceAdjust = ({
   invoiceInputs,

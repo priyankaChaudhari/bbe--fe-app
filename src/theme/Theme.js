@@ -22,6 +22,7 @@ const Theme = {
   darkGreen: '#74b035',
   lightBlue: '#d6ebe8',
   blue: '#5578eb',
+  darkBlue: '#162C50',
   black: '#000000',
   gray90: '#2E384D',
   gray85: '#171725',

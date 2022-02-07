@@ -1,5 +1,58 @@
 import React from 'react';
+
 import { WhiteCard } from '../../common';
+import BBEGoalChart from './BBEGoalChart';
+
+const data = [
+  {
+    month: 'JANUARY',
+    revenue: 11,
+  },
+  {
+    month: 'FEBRUARY',
+    revenue: 2,
+  },
+  {
+    month: 'MARCH',
+    revenue: 3,
+  },
+  {
+    month: 'APRIL',
+    revenue: 4,
+  },
+  {
+    month: 'MARCH',
+    revenue: 5,
+  },
+  {
+    month: 'JUNE',
+    revenue: 6,
+  },
+  {
+    month: 'JULY',
+    revenue: 7,
+  },
+  {
+    month: 'AUGUST',
+    revenue: 8,
+  },
+  {
+    month: 'SEPTEMBER',
+    revenue: 9,
+  },
+  {
+    month: 'OCTOBER',
+    revenue: 10,
+  },
+  {
+    month: 'NOVEMBER',
+    revenue: 11,
+  },
+  {
+    month: 'DECEMBER',
+    revenue: 12,
+  },
+];
 
 export default function BBEGoalHighLevelMetrics() {
   return (
@@ -16,7 +69,9 @@ export default function BBEGoalHighLevelMetrics() {
                 {/* <div className="horizontal-line straight-line mt-3 mb-4 d-md-none d-block" /> */}
               </div>
 
-              <div className="col-md-8 col-12" />
+              <div className="col-md-8 col-12 ">
+                <BBEGoalChart CHART_ID="revenue_chart" data={data} />
+              </div>
             </div>
             <div className="horizontal-line straight-line mt-3 mb-3" />
             <div className="row">

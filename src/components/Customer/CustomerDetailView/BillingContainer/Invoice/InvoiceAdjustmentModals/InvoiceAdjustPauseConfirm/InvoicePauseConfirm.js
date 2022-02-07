@@ -2,7 +2,7 @@ import React from 'react';
 
 import { arrayOf, func, shape, string } from 'prop-types';
 
-import numberWithCommas from '../../../../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../../../../hooks/numberWithCommas';
 import { Button, ModalBox } from '../../../../../../../common';
 import {
   EditOrangeIcon,
