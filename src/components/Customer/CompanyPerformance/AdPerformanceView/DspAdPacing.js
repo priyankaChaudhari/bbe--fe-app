@@ -68,8 +68,8 @@ export default function DspAdPacing({
           <div className="status-heading-red">Overspending</div>
           <p className="basic-text">
             You are currently overspending by an average of{' '}
-            {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}{' '}
-            per day.
+            {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}
+            &nbsp;per day.
           </p>
         </>
       );
@@ -80,7 +80,6 @@ export default function DspAdPacing({
         <>
           <div className="status-heading-red green">On Track</div>
           <p className="basic-text">
-            {' '}
             You are currently on track to hit your monthly DSP budget.
           </p>
         </>
@@ -91,10 +90,9 @@ export default function DspAdPacing({
         <>
           <div className="status-heading-red">Underspending</div>
           <p className="basic-text">
-            {' '}
             You are currently underspending by an average of{' '}
             {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}
-            per day.
+            &nbsp;per day.
           </p>
         </>
       );
@@ -106,7 +104,7 @@ export default function DspAdPacing({
     return (
       <div className="row">
         <div className="col-7">
-          <div className="label-info mt-2">Invoice Amount</div>
+          <div className="label-info mt-2">Invoice Paid</div>
         </div>
         <div className="col-5">
           {' '}
@@ -174,7 +172,8 @@ export default function DspAdPacing({
           {' '}
           <div className="label-info text-right mt-2">
             {' '}
-            {addThousandSeperator(dspPacing?.planed_to_spend, 'currency')}(
+            {addThousandSeperator(dspPacing?.planed_to_spend, 'currency')}
+            &nbsp;(
             {addThousandSeperator(dspPacing?.planed_to_spend_percentage, '')}
             %)
           </div>{' '}
@@ -186,7 +185,7 @@ export default function DspAdPacing({
           {' '}
           <div className="label-info text-right mt-2">
             {' '}
-            {addThousandSeperator(dspPacing?.total_spend, 'currency')}(
+            {addThousandSeperator(dspPacing?.total_spend, 'currency')}&nbsp;(
             {addThousandSeperator(dspPacing?.total_spend_percentage, '')}
             %)
           </div>{' '}
@@ -215,7 +214,8 @@ export default function DspAdPacing({
                 : 'label-info text-right text-red mt-2'
             }>
             {' '}
-            {addThousandSeperator(dspPacing?.dsp_pacing_diff, 'currency')}(
+            {addThousandSeperator(dspPacing?.dsp_pacing_diff, 'currency')}
+            &nbsp;(
             {addThousandSeperator(dspPacing?.dsp_pacing_diff_percentage, '')}
             %)
           </div>{' '}

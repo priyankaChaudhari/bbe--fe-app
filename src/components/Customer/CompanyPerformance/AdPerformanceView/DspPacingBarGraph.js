@@ -49,7 +49,7 @@ function DspPacingBarGraph({ chartId, chartData, currencySymbol }) {
         width:10px; height:10px;"></div>
       </li>
       <li style="display:inline; color:#ffffff !important; font-size:11px; font-weight:400; text-transform: uppercase;
-        padding:0 0 0 5px">INVOICE AMOUNT</li>
+        padding:0 0 0 5px">INVOICE PAID</li>
       <li style="display:inline; float: right; font-size:14px;">${bindAmountAndCurrency(
         invoiceAmount,
       )}</li>
