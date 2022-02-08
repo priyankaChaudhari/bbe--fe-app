@@ -12,6 +12,7 @@ import {
   API_BGS_COMMISSION_INDIVIDUALS,
   API_BGS_COMMISSION_MATRICS,
   API_BGS_COMMISSION_GROUP_BY_MANAGER,
+  API_BBE_GOAL_DASHBOARD,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -690,6 +691,23 @@ export async function getRevShareContributionData(month, type, pageNumber) {
 
   const result = await axiosInstance
     .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}key-contributors/`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+
+  return result;
+}
+
+export async function getBBEGoalMetrics(monthYear) {
+  const params = {
+    month_year: monthYear,
+  };
+
+  const result = await axiosInstance
+    .get(`${API_BBE_GOAL_DASHBOARD}`, { params })
     .then((response) => {
       return response;
     })
