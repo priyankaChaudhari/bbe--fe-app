@@ -4,11 +4,10 @@ import dayjs from 'dayjs';
 import { bool, func, shape, string, arrayOf } from 'prop-types';
 import styled from 'styled-components';
 
-// import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
-import EscrowBudgetAllocationModalCopy from './EscrowBudgetAllocationModalCopy';
+import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
 import Theme from '../../../../theme/Theme';
 import { LeftArrowIcon } from '../../../../theme/images';
-import { PageLoader, AllocateBar, Tabs } from '../../../../common';
+import { PageLoader, AllocateBar } from '../../../../common';
 
 export default function DspAdPacing({
   dspData,
@@ -327,27 +326,9 @@ export default function DspAdPacing({
     );
   };
 
-  // const renderEscrowBudgetAllocationModal = () => {
-  //   return (
-  //     <EscrowBudgetAllocationModal
-  //       id="BT-escrowAllocation"
-  //       customerId={customerId}
-  //       marketplace={marketplace}
-  //       dspData={dspData}
-  //       isOpen={showAllocatedBalanceModal}
-  //       addThousandSeperator={addThousandSeperator}
-  //       onClick={() => {
-  //         setShowAllocatedBalanceModal(false);
-  //         setShowDspBudgetModal(false);
-  //         onModalClose();
-  //       }}
-  //       getActivityLogInfo={getActivityLogInfo}
-  //     />
-  //   );
-  // };
   const renderEscrowBudgetAllocationModal = () => {
     return (
-      <EscrowBudgetAllocationModalCopy
+      <EscrowBudgetAllocationModal
         id="BT-escrowAllocation"
         customerId={customerId}
         marketplace={marketplace}
@@ -406,7 +387,7 @@ export default function DspAdPacing({
               {renderEscrowBalance()}
               <div className="straight-line horizontal-line  mt-3 mb-3" />
 
-              <div className="label-info text-bold ">
+              {/* <div className="label-info text-bold ">
                 Escrow Balance per Marketplace:
               </div>
 
@@ -424,7 +405,7 @@ export default function DspAdPacing({
                   {' '}
                   <div className="label-info mt-2 text-right">$2,000</div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </DspAdPacingModal>
           {renderEscrowBudgetAllocationModal()}

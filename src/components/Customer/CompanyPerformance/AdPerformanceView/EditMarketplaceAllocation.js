@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 
 import NumberFormat from 'react-number-format';
-import { bool, func, shape, string } from 'prop-types';
-// import dayjs from 'dayjs';
+import { bool, func, number, string } from 'prop-types';
 
-// import { storeAllocatedBudget } from '../../../../api';
-import { LeftArrowIcon } from '../../../../theme/images';
+import { InfoRedIcon, LeftArrowIcon } from '../../../../theme/images';
 import {
   Button,
   InputFormField,
   // PageLoader,
   AllocateBar,
+  ErrorMsgBox,
 } from '../../../../common';
 import ConfirmMarketPlaceAllocation from './ConfirmMarketPlaceAllocation';
 
@@ -18,13 +17,17 @@ export default function EditMarketplaceAllocation({
   customerId,
   currencySymbol,
   selectedMarketplace,
-  escrowMarketplaceData,
+  // escrowMarketplaceData,
+  totalEscrowBalance,
   addThousandSeperator,
   showMarketPlaceAllocation,
   setShowMarketPlaceAllocation,
   setShowEscrowMonthlyAllocation,
 }) {
   const [isAllowToContinue, setIsAllowToContinue] = useState(false);
+  const [isEscrowBalanceExceed, setIsEscrowBalanceExceed] = useState(
+    totalEscrowBalance < 0,
+  );
   const [
     showConfirmMarketplaceAllocation,
     setShowConfirmMarketplaceAllocation,
@@ -53,16 +56,16 @@ export default function EditMarketplaceAllocation({
       marketplace: 'United Arab Emirates (U.A.E.)',
       label: 'UAE',
       value: 'Amazon.ae',
-      escrow_allocated_converted_usd: 12000,
-      new_escrow_allocated_converted_usd: 12000,
+      escrow_allocated_converted_usd: 2000,
+      new_escrow_allocated_converted_usd: 2000,
       balanceChanged: 0,
     },
     {
       marketplace: 'Canada',
       label: 'CAD',
       value: 'Amazon.ca',
-      escrow_allocated_converted_usd: 14000,
-      new_escrow_allocated_converted_usd: 14000,
+      escrow_allocated_converted_usd: 1000,
+      new_escrow_allocated_converted_usd: 1000,
       balanceChanged: 0,
     },
     {
@@ -85,15 +88,23 @@ export default function EditMarketplaceAllocation({
       marketplace: 'Japan',
       label: 'JP',
       value: 'Amazon.co.jp',
-      escrow_allocated_converted_usd: 8800,
-      new_escrow_allocated_converted_usd: 8800,
+      escrow_allocated_converted_usd: 3000,
+      new_escrow_allocated_converted_usd: 3000,
       balanceChanged: 0,
     },
   ]);
 
-  const escrowBalance = escrowMarketplaceData?.dsp_pacing?.escrow_converted_usd
-    ? escrowMarketplaceData?.dsp_pacing?.escrow_converted_usd
-    : 0;
+  // const escrowBalance = escrowMarketplaceData?.dsp_pacing?.escrow_converted_usd
+  //   ? escrowMarketplaceData?.dsp_pacing?.escrow_converted_usd
+  //   : 0;
+  const calculateSumOfNewEscrowBalance = (newValues) => {
+    const sumAll = newValues
+      .map(
+        (item, index) => index !== 0 && item.new_escrow_allocated_converted_usd,
+      )
+      .reduce((prev, curr) => Number(prev) + Number(curr), 0);
+    return sumAll;
+  };
 
   const handleOnChange = (event, index) => {
     const tempData = [...allocatedMarketplaceBalance];
@@ -101,29 +112,40 @@ export default function EditMarketplaceAllocation({
     const oldEscrowBalance = tempData[index].escrow_allocated_converted_usd;
     let newEscrowBalance = '';
     if (newAllocatedBalance === '' || newAllocatedBalance === null) {
-      newEscrowBalance = oldEscrowBalance;
       setIsAllowToContinue(false);
     } else {
       newEscrowBalance = newAllocatedBalance;
       setIsAllowToContinue(true);
     }
+
     const balanceChanged = newEscrowBalance - oldEscrowBalance;
     tempData[index].balanceChanged = balanceChanged;
     tempData[index].new_escrow_allocated_converted_usd = newEscrowBalance;
+
+    const sumOfNewEscrowBalance = calculateSumOfNewEscrowBalance(tempData);
+    const newSelectedMarketplaceBalance =
+      totalEscrowBalance - sumOfNewEscrowBalance;
+
+    tempData[0].new_escrow_allocated_converted_usd = String(
+      newSelectedMarketplaceBalance.toFixed(2),
+    );
+    tempData[0].balanceChanged =
+      newSelectedMarketplaceBalance -
+      tempData[0].escrow_allocated_converted_usd;
+    if (newSelectedMarketplaceBalance < 0) {
+      setIsEscrowBalanceExceed(true);
+      setIsAllowToContinue(false);
+    } else setIsEscrowBalanceExceed(false);
     setAllocatedMarketPlaceBalance(tempData);
   };
+
   const renderMarketplace = () => {
     const getIndex = allocatedMarketplaceBalance.findIndex(
       (item) => item.value === selectedMarketplace,
     );
     if (getIndex >= 0) {
-      let numberOfDeletedElm = 1;
-      const obj = allocatedMarketplaceBalance.splice(
-        getIndex,
-        numberOfDeletedElm,
-      )[0];
-      numberOfDeletedElm = 0;
-      allocatedMarketplaceBalance.splice(0, numberOfDeletedElm, obj);
+      const splicedObj = allocatedMarketplaceBalance.splice(getIndex, 1)[0];
+      allocatedMarketplaceBalance.splice(0, 0, splicedObj);
     }
     return allocatedMarketplaceBalance?.map((item, index) => {
       return (
@@ -151,7 +173,7 @@ export default function EditMarketplaceAllocation({
                   }
                   name={item.marketplace}
                   defaultValue={item.escrow_allocated_converted_usd}
-                  // value={item.new_escrow_allocated_converted_usd}
+                  value={item.new_escrow_allocated_converted_usd}
                   placeholder={0}
                   onChange={(event) => handleOnChange(event, index)}
                   thousandSeparator
@@ -193,12 +215,19 @@ export default function EditMarketplaceAllocation({
                     {' '}
                     <div className="remaing-label text-bold text-right">
                       Total Escrow Balance:{' '}
-                      {addThousandSeperator(escrowBalance, 'currency')}
+                      {addThousandSeperator(totalEscrowBalance, 'currency')}
                     </div>{' '}
                     <div className="clear-fix" />
                   </AllocateBar>
                 </div>
-              </div>
+              </div>{' '}
+              {isEscrowBalanceExceed ? (
+                <ErrorMsgBox className="mt-2">
+                  <img className="info-icon" src={InfoRedIcon} alt="info" /> All
+                  budgets across the selected marketplaces need to add up to the
+                  available escrow balance
+                </ErrorMsgBox>
+              ) : null}
               {renderMarketplace()}
             </div>
           </div>
@@ -232,7 +261,7 @@ export default function EditMarketplaceAllocation({
           currencySymbol={currencySymbol}
           selectedMarketplace={selectedMarketplace}
           addThousandSeperator={addThousandSeperator}
-          escrowBalance={escrowBalance}
+          totalEscrowBalance={totalEscrowBalance}
           allocatedMarketplaceBalance={allocatedMarketplaceBalance}
           setShowMarketPlaceAllocation={setShowMarketPlaceAllocation}
           showConfirmMarketplaceAllocation={showConfirmMarketplaceAllocation}
@@ -251,7 +280,8 @@ EditMarketplaceAllocation.defaultProps = {
   customerId: '',
   currencySymbol: '',
   selectedMarketplace: '',
-  escrowMarketplaceData: {},
+  totalEscrowBalance: number,
+  // escrowMarketplaceData: {},
   addThousandSeperator: () => {},
   showMarketPlaceAllocation: bool,
   setShowMarketPlaceAllocation: () => {},
@@ -262,7 +292,8 @@ EditMarketplaceAllocation.propTypes = {
   customerId: string,
   currencySymbol: string,
   selectedMarketplace: string,
-  escrowMarketplaceData: shape({}),
+  totalEscrowBalance: number,
+  // escrowMarketplaceData: shape({}),
   addThousandSeperator: func,
   showMarketPlaceAllocation: bool,
   setShowMarketPlaceAllocation: func,

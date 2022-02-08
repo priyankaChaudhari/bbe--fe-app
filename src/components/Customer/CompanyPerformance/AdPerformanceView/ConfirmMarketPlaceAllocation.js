@@ -14,7 +14,7 @@ import {
 export default function ConfirmMarketPlaceAllocation({
   // customerId,
   // marketplace,
-  escrowBalance,
+  totalEscrowBalance,
   allocatedMarketplaceBalance,
   addThousandSeperator,
   setShowMarketPlaceAllocation,
@@ -186,7 +186,7 @@ export default function ConfirmMarketPlaceAllocation({
                     className="mt-3 mb-4">
                     <div className="remaing-label text-bold text-right">
                       Total Escrow Balance:{' '}
-                      {addThousandSeperator(escrowBalance, 'currency')}
+                      {addThousandSeperator(totalEscrowBalance, 'currency')}
                     </div>
                     <div className="clear-fix" />
                   </AllocateBar>
@@ -217,7 +217,7 @@ export default function ConfirmMarketPlaceAllocation({
 ConfirmMarketPlaceAllocation.defaultProps = {
   // customerId: '',
   // marketplace: '',
-  escrowBalance: number,
+  totalEscrowBalance: number,
   allocatedMarketplaceBalance: [],
   // getActivityLogInfo: () => {},
   addThousandSeperator: () => {},
@@ -229,7 +229,7 @@ ConfirmMarketPlaceAllocation.defaultProps = {
 ConfirmMarketPlaceAllocation.propTypes = {
   // customerId: string,
   // marketplace: string,
-  escrowBalance: number,
+  totalEscrowBalance: number,
   allocatedMarketplaceBalance: arrayOf(shape()),
   addThousandSeperator: func,
   setShowMarketPlaceAllocation: func,
