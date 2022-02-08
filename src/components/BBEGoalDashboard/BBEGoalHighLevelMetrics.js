@@ -61,7 +61,7 @@ export default function BBEGoalHighLevelMetrics() {
         <div className="col-lg-9 col-md-12">
           <WhiteCard className="card-with-border mt-4">
             <div className="row">
-              <div className="col-md-4 col-12">
+              <div className="col-md-5 col-12">
                 <p className="black-heading-title mt-0">Financials</p>
                 <div className="label">Total Revenue</div>
                 <h3>$1,550,295</h3>
@@ -69,7 +69,7 @@ export default function BBEGoalHighLevelMetrics() {
                 {/* <div className="horizontal-line straight-line mt-3 mb-4 d-md-none d-block" /> */}
               </div>
 
-              <div className="col-md-8 col-12 ">
+              <div className="col-md-7 col-12 ">
                 <BBEGoalChart CHART_ID="revenue_chart" data={data} />
               </div>
             </div>

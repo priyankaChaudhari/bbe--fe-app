@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
+import numberWithCommas from '../../hooks/numberWithCommas';
 import { ArrowDownIcon } from '../../theme/images';
 import { getRevShareContributionData } from '../../api';
 import { keyContributionConstant, noGraphDataMessage } from '../../constants';
@@ -24,26 +25,27 @@ export default function BBEGoalRevShareContribution({ month }) {
   const [selectedContributionOption, setSelectedContributionOption] = useState(
     'positive',
   );
-  const [contributionData, setContributionData] = useState([]);
+  const [contributionData, setContributionData] = useState([{}, {}, {}, {}]);
   const [pageNumber, setPageNumber] = useState();
-  const [contributionCount, setContributionCount] = useState(null);
+  const [contributionCount, setContributionCount] = useState(2);
 
   const getContributionData = useCallback(
     (type, page) => {
       setContributionLoader(true);
       getRevShareContributionData(month, type, page).then((res) => {
         if (mounted.current) {
-          if (res && (res.status === 400 || res.status === 400)) {
+          if (res && (res.status === 400 || res.status === 403)) {
             setContributionLoader(false);
             setContributionData([]);
           }
           if (res && res.status === 200) {
             setContributionData(res.data.result);
             setContributionCount(res.data.count);
-          } else {
-            setContributionData([]);
-            setPageNumber(page);
           }
+          // else {
+          //   setContributionData([]);
+          //   setPageNumber(page);
+          // }
           setContributionLoader(false);
         }
       });
@@ -131,9 +133,13 @@ export default function BBEGoalRevShareContribution({ month }) {
           <div className="company-name">TRX Training</div>
           <div className="status">Gabriella Neske</div>
         </td>
-        <td className="product-table-body">$52,350.00</td>
-        <td className="product-table-body ">$52,350.00</td>
-        <td className="product-table-body ">$52,350.00</td>
+        <td className="product-table-body">${numberWithCommas('123456.00')}</td>
+        <td className="product-table-body ">
+          ${numberWithCommas('123456.00')}
+        </td>
+        <td className="product-table-body ">
+          ${numberWithCommas('123456.00')}
+        </td>
         <td className="product-table-body ">
           <div className="decrease-rate">
             {' '}
@@ -185,7 +191,7 @@ export default function BBEGoalRevShareContribution({ month }) {
             </div>
           </div>
           <div className="col-md-4 col-12 mt-3 mb-3">
-            {renderPositiveNegativeOptions()}
+            {!isDesktop ? renderPositiveNegativeOptions() : null}
           </div>
         </div>
 
@@ -201,13 +207,13 @@ export default function BBEGoalRevShareContribution({ month }) {
           contributionData.map(() => (
             <TableMobileView
               invoiceType="  Customer"
-              invoiceId=" December"
+              invoiceId=" Jack Miller"
               label="December"
-              labelInfo="hhhh"
+              labelInfo={`$${numberWithCommas('123456.00')}`}
               label1="January"
-              labelInfo1="jjj"
+              labelInfo1={`$${numberWithCommas('123456.00')}`}
               label2="Change"
-              labelInfo2="jjj"
+              labelInfo2="21.47%"
               status="high"
               // statusColor="#e3f2d2"
             />
@@ -234,7 +240,7 @@ export default function BBEGoalRevShareContribution({ month }) {
             </div>
           </div>
           <div className="col-md-4 col-12">
-            {renderPositiveNegativeOptions()}
+            {isDesktop ? renderPositiveNegativeOptions() : null}
           </div>
         </div>
         <div className="horizontal-line straight-line mt-3 mb-1" />

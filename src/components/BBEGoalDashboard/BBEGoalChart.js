@@ -60,7 +60,7 @@ const BBEGoalChart = ({ data, CHART_ID }) => {
         return am4core.color(Theme.gray45);
       });
       series.strokeWidth = 0;
-      series.columns.template.width = 25;
+      series.columns.template.width = am4core.percent(70);
       series.columns.template.column.cornerRadiusTopLeft = 6;
       series.columns.template.column.cornerRadiusTopRight = 6;
       series.columns.template.column.cornerRadiusBottomLeft = 6;
@@ -74,6 +74,7 @@ const BBEGoalChart = ({ data, CHART_ID }) => {
       series.tooltip.dy = -5;
       series.tooltip.getFillFromObject = false;
       series.tooltip.pointerOrientation = 'down';
+      series.tooltip.ignoreBounds = true;
       series.tooltip.background.fill = am4core.color(Theme.darkBlue);
       series.tooltip.background.stroke = am4core.color(Theme.darkBlue);
       // series.tooltip.label.maxWidth = 150;
