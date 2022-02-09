@@ -324,15 +324,18 @@ export async function saveDSPContact(data, id) {
 
 export async function getDSPContact(customer) {
   const params = { customer };
-  const result = await axiosInstance
-    .get(API_DSP_CONTACT, { params })
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  return result;
+  if (customer !== undefined) {
+    const result = await axiosInstance
+      .get(API_DSP_CONTACT, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  return null;
 }
 
 export async function updateDSPContact(id, dspContact) {

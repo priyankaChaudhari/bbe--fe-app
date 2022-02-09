@@ -239,3 +239,29 @@ export const billingTerms =
 
 export const delegatedInfo =
   ' If you’re unable to provide this information or you think this was sent to you unintentionally, please let them know via the email address highlighted above.';
+
+export const billingInformation = [
+  {
+    label: 'Billing Address',
+    part: 'Part 1',
+    array: billingAddress.filter((op) => op.section === 'address'),
+    key: 'billing_address',
+    hasCheckbox: false,
+  },
+  {
+    label: 'Billing Contact',
+    part: 'Part 2',
+    array: billingAddress.filter((op) => op.section === 'contact'),
+    key: 'billing_contact',
+    hasCheckbox: false,
+  },
+  {
+    label: 'DSP Budget Sign-off',
+    part: 'Part 3',
+    array: billingAddress.filter((op) => op.section === 'contact'),
+    key: 'dsp_contact',
+    hasCheckbox: true,
+    subTitle:
+      'From time to time, your Growth Strategist may recommend a change in your DSP budget. Please tell us who should receive the emails to approve any DSP budget change.',
+  },
+];
