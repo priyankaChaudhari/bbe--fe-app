@@ -151,14 +151,7 @@ const BrandPartnerModal = ({
                                 partner.total_book_size,
                               )}`}</td>
                               <td width="12%" className="text-bold">
-                                {partner.total_book_size_commission === null &&
-                                Bgs.isBgsManager
-                                  ? '-'
-                                  : partner.total_book_size_commission === null
-                                  ? '$0.0'
-                                  : `$${numberWithCommas(
-                                      partner.total_book_size_commission,
-                                    )}`}
+                                -
                               </td>
                               <td width="8%">
                                 {partner.upsell === null && Bgs.isBgsManager
@@ -178,9 +171,7 @@ const BrandPartnerModal = ({
                                     )}`}
                               </td>
                               <td width="10%" className="text-bold">
-                                {`$${numberWithCommas(
-                                  partner.total_commission,
-                                )}`}
+                                -
                               </td>
                             </tr>
                           ))}

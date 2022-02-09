@@ -663,10 +663,11 @@ export async function getBgsCommissionTableIndividualsData(date, orderBy) {
 }
 
 export async function getBgsBrandPartners(bgs, startDate, endDate) {
-  const { id } = bgs;
+  const { isBgsManager, managerId, id } = bgs;
   const params = {
     start_date: startDate,
     end_date: endDate,
+    manager_id: !isBgsManager ? managerId : id,
   };
 
   const result = await axiosInstance
