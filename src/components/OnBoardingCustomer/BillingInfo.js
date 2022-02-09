@@ -10,7 +10,6 @@ import { useHistory } from 'react-router-dom';
 import { string, shape, bool, func, number, arrayOf } from 'prop-types';
 
 import { userMe } from '../../store/actions';
-
 import {
   CheckBox,
   OnBoardingBody,
@@ -25,6 +24,7 @@ import {
   updateUserMe,
   saveBillingInfo,
   saveDSPContact,
+  getDSPContact,
 } from '../../api';
 import {
   PATH_SUMMARY,
@@ -48,15 +48,11 @@ export default function BillingInfo({
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    billing_address: {},
-    billing_contact: {},
-    dsp_contact: {},
-  });
-
   const params = queryString.parse(history.location.search);
+  const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
   const [sameAsBillingContact, setSameAsBillingContact] = useState(true);
+  const [DSPContactDetail, setDSPContactDetail] = useState({});
 
   const getIncompleteStep = summaryData.find(
     (op) =>
@@ -79,26 +75,42 @@ export default function BillingInfo({
   };
 
   useEffect(() => {
-    if (data && data.id) {
-      $('.checkboxes input:checkbox').prop('checked', true);
-      setFormData({
-        ...formData,
-        billing_address: data.billing_address[0],
-        billing_contact: data.billing_contact[0],
-        dsp_contact: data.billing_contact[0],
-      });
-    } else {
-      setFormData({
-        billing_address: {},
-        billing_contact: {},
-        dsp_contact: {},
-      });
-    }
+    setFormData({
+      ...formData,
+      billing_address: data?.billing_address?.[0] || {},
+      billing_contact: data?.billing_contact?.[0] || {},
+    });
   }, [data]);
+
+  useEffect(() => {
+    getDSPContact(userInfo.customer || verifiedStepData.customer_id).then(
+      (res) => {
+        $('.checkboxes input:checkbox').prop(
+          'checked',
+          res?.data?.results?.[0]
+            ? res?.data?.results?.[0]?.same_as_billing_contact
+            : true,
+        );
+        setSameAsBillingContact(
+          res?.data?.results?.[0]
+            ? res?.data?.results?.[0]?.same_as_billing_contact
+            : true,
+        );
+        setDSPContactDetail(res?.data?.results?.[0]);
+        setFormData((prevState) => ({
+          ...prevState,
+          dsp_contact:
+            res?.data?.results?.[0]?.same_as_billing_contact ||
+            sameAsBillingContact
+              ? data?.billing_contact?.[0]
+              : res?.data?.results?.[0],
+        }));
+      },
+    );
+  }, []);
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
-
     if (
       (stepData === undefined ||
         (stepData && Object.keys(stepData)?.length === 0)) &&
@@ -179,33 +191,36 @@ export default function BillingInfo({
 
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
+
     if (
       (formData && formData.billing_contact.phone_number === '') ||
       (formData && formData.billing_contact.phone_number === null)
     )
       delete formData.billing_contact.phone_number;
 
-    let details = {};
-
-    details = {
+    const details = {
       ...formData,
       billing_address: formData.billing_address,
       billing_contact: formData.billing_contact,
       customer_onboarding:
         userInfo.customer_onboarding || verifiedStepData.customer_onboarding_id,
-      dsp_contact: sameAsBillingContact
-        ? formData.billing_contact
-        : formData.dsp_contact,
     };
+
+    const dspData = sameAsBillingContact
+      ? formData.billing_contact
+      : formData.dsp_contact;
+    const dspDetail = {
+      ...dspData,
+      same_as_billing_contact: sameAsBillingContact,
+      customer: userInfo.customer || verifiedStepData.customer_id,
+    };
+
     axios
       .all([
         saveBillingInfo(details, data?.id || null),
         saveDSPContact(
-          {
-            ...formData.dsp_contact,
-            customer: userInfo.customer || verifiedStepData.customer_id,
-          },
-          formData?.dsp_contact?.id,
+          dspDetail,
+          DSPContactDetail?.id || formData?.dsp_contact?.id,
         ),
       ])
       .then(
@@ -235,6 +250,8 @@ export default function BillingInfo({
               billing = res?.[0]?.data;
             }
             if (res?.[1]?.status === 400) {
+              setSameAsBillingContact(false);
+              $('.checkboxes input:checkbox').prop('checked', false);
               dsp = res?.[1]?.data;
             }
 
@@ -251,35 +268,6 @@ export default function BillingInfo({
         }),
       );
   };
-
-  //   saveBillingInfo(details, data?.id || null).then((res) => {
-  //     if (res?.status === 200 || res?.status === 201) {
-  //       saveDetails();
-  //       if (assignedToSomeone) {
-  //         const stringified = queryString?.stringify({
-  //           name: verifiedStepData.user_name,
-  //         });
-  //         history.push({
-  //           pathname: PATH_THANKS,
-  //           search: `${stringified}`,
-  //         });
-  //       } else {
-  //         CheckStep('billing information');
-  //       }
-  //     }
-  //     if (res?.status === 400) {
-  //       setIsLoading({ loader: false, type: 'button' });
-  //       setApiError(res?.data);
-  //       if (
-  //         (res?.data && res.data.billing_address) ||
-  //         (res?.data && res.data[0])
-  //       ) {
-  //         document.body.scrollTop = 0; // For Safari
-  //         document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-  //       }
-  //     }
-  //   });
-  // };
 
   const handleChange = (event, item, type) => {
     setFormData({
@@ -307,7 +295,11 @@ export default function BillingInfo({
         className="form-control"
         onChange={(event) => handleChange(event, item, type)}
         placeholder={`Enter ${item.label}`}
-        value={formData?.[type]?.[item.key]}
+        value={
+          type === 'dsp_contact'
+            ? DSPContactDetail?.[item.key] || formData?.dsp_contact?.[item.key]
+            : formData?.[type]?.[item.key]
+        }
         isNumericString
       />
     );
@@ -319,7 +311,11 @@ export default function BillingInfo({
         className="form-control"
         placeholder={`Enter ${item.label}`}
         type={item.type}
-        defaultValue={data?.[type]?.[0]?.[item.key]}
+        defaultValue={
+          type === 'dsp_contact'
+            ? DSPContactDetail?.[item.key] || formData?.dsp_contact?.[item.key]
+            : data?.[type]?.[0]?.[item.key]
+        }
         onChange={(event) => handleChange(event, item, type)}
         maxLength={item.key === 'postal_code' ? 10 : ''}
       />
