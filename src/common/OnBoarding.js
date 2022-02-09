@@ -18,7 +18,7 @@ const OnBoardingBody = styled.div`
   &.body-white {
     background: ${Theme.white};
     padding-top: 0;
-    min-height: 100%;
+    min-height: calc(100% - 100px);
   }
 
   &.grey-bg {
