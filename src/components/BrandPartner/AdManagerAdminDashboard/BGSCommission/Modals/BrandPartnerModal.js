@@ -151,14 +151,7 @@ const BrandPartnerModal = ({
                                 partner.total_book_size,
                               )}`}</td>
                               <td width="12%" className="text-bold">
-                                {partner.total_book_size_commission === null &&
-                                Bgs.isBgsManager
-                                  ? '-'
-                                  : partner.total_book_size_commission === null
-                                  ? '$0.0'
-                                  : `$${numberWithCommas(
-                                      partner.total_book_size_commission,
-                                    )}`}
+                                -
                               </td>
                               <td width="8%">
                                 {partner.upsell === null && Bgs.isBgsManager
@@ -178,9 +171,7 @@ const BrandPartnerModal = ({
                                     )}`}
                               </td>
                               <td width="10%" className="text-bold">
-                                {`$${numberWithCommas(
-                                  partner.total_commission,
-                                )}`}
+                                -
                               </td>
                             </tr>
                           ))}
@@ -273,13 +264,7 @@ const BrandPartnerModal = ({
                           </li>
                           <li>
                             <div className="label">BOOK Size Comm.</div>
-                            <div className="label-info label-info-dark">
-                              {partner.total_book_size_commission === null
-                                ? '-'
-                                : `$${numberWithCommas(
-                                    partner.total_book_size_commission,
-                                  )}`}
-                            </div>
+                            <div className="label-info label-info-dark">-</div>
                           </li>
                           <li>
                             <div className="label">upsells </div>
@@ -301,9 +286,7 @@ const BrandPartnerModal = ({
                           </li>
                           <li>
                             <div className="label">total commission</div>
-                            <div className="label-info label-info-dark ">
-                              {`$${numberWithCommas(partner.total_commission)}`}
-                            </div>
+                            <div className="label-info label-info-dark ">-</div>
                           </li>
                         </ul>
                       </Fragment>
