@@ -244,10 +244,12 @@ export default function BillingInfo({
           }
 
           if (res?.[0]?.status === 400 || res?.[1]?.status === 400) {
-            let billing = {};
+            let address = {};
+            let contact = {};
             let dsp = {};
             if (res?.[0]?.status === 400) {
-              billing = res?.[0]?.data;
+              address = res?.[0]?.data?.billing_address;
+              contact = res?.[0]?.data?.billing_contact;
             }
             if (res?.[1]?.status === 400) {
               setSameAsBillingContact(false);
@@ -256,7 +258,11 @@ export default function BillingInfo({
             }
 
             setIsLoading({ loader: false, type: 'button' });
-            setApiError({ dsp_contact: dsp, billing_address: billing });
+            setApiError({
+              dsp_contact: dsp,
+              billing_address: address,
+              billing_contact: contact,
+            });
             if (
               (res?.data && res.data.billing_address) ||
               (res?.data && res.data[0])
