@@ -74,15 +74,14 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
                 <input
                   className="d-none"
                   type="radio"
-                  // id={item.id}
-                  id="postnegCheck"
+                  id={item.id}
                   name="flexRadioDefault2"
                   value={selectedContributionOption}
                   checked={item.id === selectedContributionOption}
                   onClick={() => handleContributionOptions(item.id)}
                   onChange={() => {}}
                 />
-                <label htmlFor="postnegCheck">{item.label}</label>
+                <label htmlFor={item.id}>{item.label}</label>
               </li>
             ))}
           </ul>

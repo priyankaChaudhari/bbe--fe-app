@@ -67,7 +67,8 @@ const ToggleButton = styled.div`
     }
     .days-tab {
       width: 100%;
-      #postnegCheck:checked + label {
+      #negative:checked + label,
+      #positive:checked + label {
         width: 100%;
         background-color: ${Theme.white};
         border: 1px solid ${Theme.orange};
