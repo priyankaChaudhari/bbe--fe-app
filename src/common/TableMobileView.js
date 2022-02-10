@@ -5,8 +5,13 @@ import { func, string, bool } from 'prop-types';
 
 import Status from './Status';
 import Theme from '../theme/Theme';
-import { CompanyDefaultUser, BellNotification } from '../theme/images';
 import { WhiteCard } from './WhiteCard';
+import {
+  CompanyDefaultUser,
+  BellNotification,
+  ArrowUpIcon,
+  ArrowDownIcon,
+} from '../theme/images';
 
 const TableMobileView = ({
   className,
@@ -43,6 +48,8 @@ const TableMobileView = ({
   isShowBellIcon = false,
   onColumnClick,
   mainLabel,
+  isShowPercentage,
+  isLabelInfo2Positive,
 }) => {
   const col = `${label3 ? (label7 ? 'col-4' : 'col-6') : 'col-4'}`;
   return (
@@ -137,9 +144,22 @@ const TableMobileView = ({
             <div className="label">{label2}</div>
             <div
               role="presentation"
-              className="label-info "
+              className={
+                isShowPercentage
+                  ? `label-info ${
+                      isLabelInfo2Positive ? 'increase-rate' : 'decrease-rate'
+                    }`
+                  : 'label-info'
+              }
               onClick={isColumnOnClick ? () => onColumnClick() : null}>
               {' '}
+              {isShowPercentage ? (
+                <img
+                  className={isLabelInfo2Positive ? 'green-arrow' : 'red-arrow'}
+                  src={isLabelInfo2Positive ? ArrowUpIcon : ArrowDownIcon}
+                  alt="arrow-up"
+                />
+              ) : null}
               {labelInfo2}
             </div>
           </div>
@@ -238,6 +258,8 @@ const TableMobileViewWrapper = styled.div`
 TableMobileView.defaultProps = {
   isColumnOnClick: false,
   isShowBellIcon: false,
+  isShowPercentage: false,
+  isLabelInfo2Positive: false,
   className: '',
   CompanyName: '',
   label: '',
@@ -275,6 +297,8 @@ TableMobileView.defaultProps = {
 TableMobileView.propTypes = {
   isColumnOnClick: bool,
   isShowBellIcon: bool,
+  isShowPercentage: bool,
+  isLabelInfo2Positive: bool,
   className: string,
   CompanyName: string,
   label: string,

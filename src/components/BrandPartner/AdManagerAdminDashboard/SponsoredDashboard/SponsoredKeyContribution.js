@@ -34,6 +34,7 @@ import {
   keyContributionHeaders,
   metricsCurrency,
   PATH_CUSTOMER_DETAILS,
+  contributionColorSet,
 } from '../../../../constants';
 
 const _ = require('lodash');
@@ -58,12 +59,6 @@ const SponsoredKeyContribution = ({
   count,
 }) => {
   const history = useHistory();
-
-  const contributionColorSet = {
-    High: '#E3F2D2',
-    Medium: '#FDF3D7',
-    Low: '#F4F6FC',
-  };
 
   const tabOptions = {
     adSales: 'Ad Sales',

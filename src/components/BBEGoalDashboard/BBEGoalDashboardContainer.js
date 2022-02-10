@@ -122,7 +122,7 @@ export default function BBEGoalDashboardContainer() {
           </div>
 
           <BBEGoalHighLevelMetrics selectedMonthYear={finalMonthYear} />
-          <BBEGoalRevShareContribution />
+          <BBEGoalRevShareContribution monthYear={monthYear} />
         </div>
       </DashboardCard>
     </>

@@ -4,21 +4,24 @@ import { string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import numberWithCommas from '../../hooks/numberWithCommas';
-import { ArrowDownIcon } from '../../theme/images';
+import { ArrowDownIcon, ArrowUpIcon } from '../../theme/images';
 import { getRevShareContributionData } from '../../api';
-import { keyContributionConstant, noGraphDataMessage } from '../../constants';
+import {
+  keyContributionConstant,
+  noGraphDataMessage,
+  contributionColorSet,
+} from '../../constants';
 import {
   Status,
   ToggleButton,
   WhiteCard,
   Table,
   TableMobileView,
-  CommonPagination,
   NoData,
   PageLoader,
 } from '../../common';
 
-export default function BBEGoalRevShareContribution({ month }) {
+export default function BBEGoalRevShareContribution({ monthYear }) {
   const mounted = useRef(false);
   const isDesktop = useMediaQuery({ minWidth: 992 });
   const [contributionLoader, setContributionLoader] = useState(false);
@@ -26,36 +29,28 @@ export default function BBEGoalRevShareContribution({ month }) {
     'positive',
   );
   const [contributionData, setContributionData] = useState([{}, {}, {}, {}]);
-  const [pageNumber, setPageNumber] = useState();
-  const [contributionCount, setContributionCount] = useState(2);
 
-  const getContributionData = useCallback(
-    (type, page) => {
-      setContributionLoader(true);
-      getRevShareContributionData(month, type, page).then((res) => {
-        if (mounted.current) {
-          if (res && (res.status === 400 || res.status === 403)) {
-            setContributionLoader(false);
-            setContributionData([]);
-          }
-          if (res && res.status === 200) {
-            setContributionData(res.data.result);
-            setContributionCount(res.data.count);
-          }
-          // else {
-          //   setContributionData([]);
-          //   setPageNumber(page);
-          // }
+  const getContributionData = useCallback(() => {
+    setContributionLoader(true);
+    getRevShareContributionData(monthYear).then((res) => {
+      if (mounted.current) {
+        if (res && (res.status === 400 || res.status === 403)) {
           setContributionLoader(false);
+          setContributionData([]);
         }
-      });
-    },
-    [month],
-  );
+        if (res && res.status === 200) {
+          setContributionData(res.data);
+        } else {
+          setContributionData([]);
+        }
+        setContributionLoader(false);
+      }
+    });
+  }, [monthYear]);
 
   useEffect(() => {
     mounted.current = true;
-    getContributionData('positive', 1);
+    getContributionData();
 
     return () => {
       mounted.current = false;
@@ -65,8 +60,6 @@ export default function BBEGoalRevShareContribution({ month }) {
   const handleContributionOptions = (type) => {
     if (type !== selectedContributionOption) {
       setSelectedContributionOption(type);
-      getContributionData(type, 1);
-      setPageNumber(1);
     }
   };
 
@@ -102,57 +95,63 @@ export default function BBEGoalRevShareContribution({ month }) {
     return (
       <thead>
         <tr>
-          <th width="25%" className="product-header">
+          <th width="30%" className="product-header">
             Customer
           </th>
-          <th width="15%" className="product-header">
-            December
+          <th width="20%" className="product-header">
+            {contributionData?.previous_date}
           </th>
-          <th width="15%" className="product-header">
-            january
+          <th width="20%" className="product-header">
+            {contributionData?.current_date}
           </th>
           <th width="15%" className="product-header">
             Change
           </th>
-          <th width="15%" className="product-header">
-            Contribution
-          </th>
           <th width="15%" className="product-header text-right pr-2">
             {' '}
-            Status
+            Contribution
           </th>
         </tr>
       </thead>
     );
   };
 
-  const renderTableData = () => {
+  const renderTableData = (item, type) => {
     return (
       <tr>
         <td className="product-body">
           {' '}
-          <div className="company-name">TRX Training</div>
-          <div className="status">Gabriella Neske</div>
+          <div className="company-name">{item?.customer_name}</div>
+          <div className="status">{item?.bgs}</div>
         </td>
-        <td className="product-table-body">${numberWithCommas('123456.00')}</td>
-        <td className="product-table-body ">
-          ${numberWithCommas('123456.00')}
-        </td>
-        <td className="product-table-body ">
-          ${numberWithCommas('123456.00')}
+        <td className="product-table-body">
+          ${numberWithCommas(item?.previous_rev_share)}
         </td>
         <td className="product-table-body ">
-          <div className="decrease-rate">
-            {' '}
-            <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-            21.47%
-          </div>
+          ${numberWithCommas(item?.current_rev_share)}
         </td>
+        {type === 'positive' ? (
+          <td className="product-table-body ">
+            <div className="increase-rate">
+              {' '}
+              <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
+              {`${item?.change_in_percentage.toFixed(2)}%`}
+            </div>
+          </td>
+        ) : (
+          <td className="product-table-body ">
+            <div className="decrease-rate">
+              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+              {`${item?.change_in_percentage.toFixed(2)}%`}
+            </div>
+          </td>
+        )}
+
         <td className="product-table-body text-right">
           <Status
             className="float-right"
-            label="High"
-            // backgroundColor={StatusColorSet[item.status]}
+            label={item.contribution_bracket}
+            backgroundColor={contributionColorSet[item.contribution_bracket]}
           />
           <div className="clear-fix" />
         </td>
@@ -161,21 +160,36 @@ export default function BBEGoalRevShareContribution({ month }) {
   };
 
   const renderDekstopView = () => {
+    let selectedContibutionData = [];
+
+    selectedContibutionData =
+      selectedContributionOption && selectedContributionOption === 'positive'
+        ? contributionData?.positive
+        : selectedContributionOption &&
+          selectedContributionOption === 'negative'
+        ? contributionData?.negative
+        : [];
+
     return (
       <>
-        <Table>
-          {renderTableHeader()}
-          {contributionData.length >= 1 ? (
-            <>
-              <tbody>
-                {contributionData &&
-                  contributionData.map((item) => renderTableData(item))}
-              </tbody>
-            </>
-          ) : null}
-        </Table>
-        {!contributionData ||
-        (contributionData && contributionData.length === 0) ? (
+        {selectedContibutionData && selectedContibutionData.length >= 1 ? (
+          <Table>
+            {renderTableHeader()}
+            <tbody>
+              {selectedContibutionData &&
+                selectedContibutionData.map((item) =>
+                  renderTableData(
+                    item,
+                    selectedContributionOption === 'positive'
+                      ? 'positive'
+                      : 'negative',
+                  ),
+                )}
+            </tbody>
+          </Table>
+        ) : null}
+        {!selectedContibutionData ||
+        (selectedContibutionData && selectedContibutionData.length === 0) ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
       </>
@@ -183,6 +197,16 @@ export default function BBEGoalRevShareContribution({ month }) {
   };
 
   const renderMobileView = () => {
+    let selectedContibutionData = [];
+
+    selectedContibutionData =
+      selectedContributionOption && selectedContributionOption === 'positive'
+        ? contributionData?.positive
+        : selectedContributionOption &&
+          selectedContributionOption === 'negative'
+        ? contributionData?.negative
+        : [];
+
     return (
       <div className="d-md-none d-block">
         <div className="row mt-3 mb-1">
@@ -195,7 +219,6 @@ export default function BBEGoalRevShareContribution({ month }) {
             {!isDesktop ? renderPositiveNegativeOptions() : null}
           </div>
         </div>
-
         {contributionLoader ? (
           <PageLoader
             component="performance-graph"
@@ -204,31 +227,28 @@ export default function BBEGoalRevShareContribution({ month }) {
             width={40}
             height={40}
           />
-        ) : contributionData.length >= 1 ? (
-          contributionData.map(() => (
+        ) : selectedContibutionData?.length >= 1 ? (
+          selectedContibutionData.map((item) => (
             <TableMobileView
-              invoiceType="  Customer"
-              invoiceId=" Jack Miller"
-              label="December"
-              labelInfo={`$${numberWithCommas('123456.00')}`}
-              label1="January"
-              labelInfo1={`$${numberWithCommas('123456.00')}`}
+              invoiceType={item?.customer_name}
+              invoiceId={item?.bgs}
+              label={contributionData?.previous_date}
+              labelInfo={`$${numberWithCommas(item?.previous_rev_share)}`}
+              label1={contributionData?.current_date}
+              labelInfo1={`$${numberWithCommas(item?.current_rev_share)}`}
               label2="Change"
-              labelInfo2="21.47%"
-              status="high"
-              // statusColor="#e3f2d2"
+              labelInfo2={`${item.change_in_percentage.toFixed(2)}%`}
+              status={item.contribution_bracket}
+              statusColor={contributionColorSet[item.contribution_bracket]}
+              isShowPercentage
+              isLabelInfo2Positive={selectedContributionOption === 'positive'}
             />
           ))
-        ) : contributionData && contributionData.length === 0 ? (
+        ) : selectedContibutionData && selectedContibutionData.length === 0 ? (
           <NoData>{noGraphDataMessage}</NoData>
         ) : null}
       </div>
     );
-  };
-
-  const handlePageChange = (currentPage) => {
-    setPageNumber(currentPage);
-    getContributionData(selectedContributionOption, currentPage);
   };
 
   return (
@@ -256,19 +276,11 @@ export default function BBEGoalRevShareContribution({ month }) {
         ) : isDesktop ? (
           renderDekstopView()
         ) : null}
-
-        {contributionData.length >= 1 ? (
-          <CommonPagination
-            count={contributionCount}
-            pageNumber={pageNumber}
-            handlePageChange={handlePageChange}
-          />
-        ) : null}
       </WhiteCard>
       {renderMobileView()}
     </>
   );
 }
 
-BBEGoalRevShareContribution.defaultProps = { month: '' };
-BBEGoalRevShareContribution.propTypes = { month: string };
+BBEGoalRevShareContribution.defaultProps = { monthYear: '' };
+BBEGoalRevShareContribution.propTypes = { monthYear: string };

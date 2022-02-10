@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import axiosInstance from '../axios';
 import {
   API_CUSTOMER,
@@ -13,6 +14,7 @@ import {
   API_BGS_COMMISSION_MATRICS,
   API_BGS_COMMISSION_GROUP_BY_MANAGER,
   API_BBE_GOAL_DASHBOARD,
+  API_BBE_GOAL_DASHBOARD_CONTRIBUTION,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -682,15 +684,13 @@ export async function getBgsBrandPartners(bgs, startDate, endDate) {
   return result;
 }
 
-export async function getRevShareContributionData(month, type, pageNumber) {
+export async function getRevShareContributionData(month) {
   const params = {
-    type,
-    page: pageNumber,
-    month,
+    date: dayjs(month).format('YYYY-MM-DD'),
   };
 
   const result = await axiosInstance
-    .get(`${API_AD_MANAGER_ADMIN_DASHBOARD}key-contributors/`, { params })
+    .get(`${API_BBE_GOAL_DASHBOARD_CONTRIBUTION}`, { params })
     .then((response) => {
       return response;
     })
