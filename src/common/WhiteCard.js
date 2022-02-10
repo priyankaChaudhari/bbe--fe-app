@@ -517,6 +517,7 @@ export const WhiteCard = styled.div`
   #revenue_chart {
     div {
       top: -24.587494px !important;
+      left: 20.25px !important;
     }
   }
 

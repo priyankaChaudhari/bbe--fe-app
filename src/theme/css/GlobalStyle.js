@@ -861,7 +861,12 @@ fieldset {
     color: ${Theme.white};
     font-size:  ${Theme.verySmall};
   }
+  
 }
+.__react_component_tooltip.show { 
+     opacity: 1.9 !important;
+     background: #162c50 !important;
+  }
 
 .react-datepicker-wrapper {
   width: 100%;

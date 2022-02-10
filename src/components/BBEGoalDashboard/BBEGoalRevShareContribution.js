@@ -23,7 +23,7 @@ import {
 
 export default function BBEGoalRevShareContribution({ monthYear }) {
   const mounted = useRef(false);
-  const isDesktop = useMediaQuery({ minWidth: 992 });
+  const isDesktop = useMediaQuery({ minWidth: 767 });
   const [contributionLoader, setContributionLoader] = useState(false);
   const [selectedContributionOption, setSelectedContributionOption] = useState(
     'positive',
@@ -241,6 +241,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
               statusColor={contributionColorSet[item.contribution_bracket]}
               isShowPercentage
               isLabelInfo2Positive={selectedContributionOption === 'positive'}
+              statusLabelColor="#000000"
             />
           ))
         ) : selectedContibutionData && selectedContibutionData.length === 0 ? (

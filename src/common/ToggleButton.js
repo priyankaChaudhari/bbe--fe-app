@@ -78,6 +78,7 @@ const ToggleButton = styled.div`
     }
     @media only screen and (max-width: 767px) {
       width: 100%;
+      max-width: 100%;
     }
   }
   @media only screen and (max-width: 767px) {

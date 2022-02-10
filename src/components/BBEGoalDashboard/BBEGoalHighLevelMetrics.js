@@ -205,8 +205,8 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 </ul>
                 <div className="horizontal-line straight-line mt-3 mb-0 d-md-none d-block" />
               </div>
-              <div className="col-lg-6 col-md-3 col-6  pt-3">
-                <div className="label mb-2">Onboarded</div>
+              <div className="col-lg-6 col-md-3 col-6   pt-3">
+                <div className="label mb-2 mt-md-3 mt-lg-0">Onboarded</div>
                 <div className="d-lg-block d-none">
                   <h3 className="small-title-heading">5</h3>
                   <div className="green-text large-size mt-2">+3</div>
@@ -222,7 +222,7 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 </ul>
               </div>
               <div className="col-lg-6 col-md-3 col-6  pt-3">
-                <div className="label mb-2">OFfboarded</div>
+                <div className="label mb-2 mt-md-3 mt-lg-0">OFfboarded</div>
                 <div className="d-lg-block d-none">
                   <h3 className="small-title-heading">5</h3>
                   <div className="green-text large-size mt-2">+3</div>
