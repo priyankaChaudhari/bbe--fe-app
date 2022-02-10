@@ -1,13 +1,16 @@
 /* eslint-disable no-empty */
 import React, { useCallback, useEffect, useState } from 'react';
 
+import dayjs from 'dayjs';
+import { string } from 'prop-types';
+
 import BBEGoalChart from './BBEGoalChart';
 import { WhiteCard } from '../../common';
 import { data } from './dummyData';
 import { getBBEGoalMetrics } from '../../api';
 import numberWithCommas from '../../hooks/numberWithCommas';
 
-export default function BBEGoalHighLevelMetrics() {
+export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
   const [metricsData, setMetricsData] = useState(null);
 
   const getKPIMetrics = useCallback(() => {
@@ -57,6 +60,9 @@ export default function BBEGoalHighLevelMetrics() {
                 <BBEGoalChart
                   CHART_ID="revenue_chart"
                   data={metricsData?.graph_data}
+                  selectedMonthYear={dayjs(selectedMonthYear)
+                    .format('MMMM')
+                    .toUpperCase()}
                 />
               </div>
             </div>
@@ -219,4 +225,6 @@ export default function BBEGoalHighLevelMetrics() {
 }
 
 BBEGoalHighLevelMetrics.defaultProps = {};
-BBEGoalHighLevelMetrics.propTypes = {};
+BBEGoalHighLevelMetrics.propTypes = {
+  selectedMonthYear: string.isRequired,
+};

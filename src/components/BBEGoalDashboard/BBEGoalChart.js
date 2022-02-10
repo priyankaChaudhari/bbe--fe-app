@@ -9,7 +9,7 @@ import Theme from '../../theme/Theme';
 
 am4core.useTheme(am4themesDataviz);
 
-const BBEGoalChart = ({ data, CHART_ID }) => {
+const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -42,7 +42,7 @@ const BBEGoalChart = ({ data, CHART_ID }) => {
     series.fillOpacity = 1;
     series.columns.template.column.adapter.add('fill', (fill, target) => {
       const valueX = target.dataItem.categories.categoryX;
-      if (valueX === 'JANUARY') {
+      if (valueX === selectedMonthYear) {
         return am4core.color(Theme.orange);
       }
       return am4core.color(Theme.gray45);
@@ -87,7 +87,7 @@ const BBEGoalChart = ({ data, CHART_ID }) => {
     return () => {
       chart.dispose();
     };
-  }, [CHART_ID, data]);
+  }, [CHART_ID, data, selectedMonthYear]);
 
   useEffect(() => {
     if (!chartRef.current) {
@@ -176,4 +176,5 @@ BBEGoalChart.defaultProps = {
 BBEGoalChart.propTypes = {
   data: arrayOf(shape({})),
   CHART_ID: string.isRequired,
+  selectedMonthYear: string.isRequired,
 };
