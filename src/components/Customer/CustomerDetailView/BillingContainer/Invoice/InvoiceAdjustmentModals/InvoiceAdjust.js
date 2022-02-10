@@ -16,45 +16,20 @@ const InvoiceAdjust = ({
   loading,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
-  const onChangeInput = (input, { target }) => {
-    if (invoiceInputs && invoiceInputs.length > 0) {
-      let flag = 0;
-      const resultArray = [...invoiceInputs];
-      invoiceInputs.forEach((item, index) => {
-        if (item.marketplace === input.marketplace) {
-          flag = 1;
-          resultArray[index] = {
-            ...invoiceInputs[index],
-            newAmount: target.value,
-            marketplace: input.marketplace,
-            change:
-              parseNumber(target.value) === input.new_budget
-                ? 0
-                : parseNumber(target.value) - input.new_budget > 0
-                ? `+${Math.abs(input.new_budget - parseNumber(target.value))}`
-                : `-${Math.abs(input.new_budget - parseNumber(target.value))}`,
-          };
-          setInvoiceInputs(resultArray);
-        }
-      });
-      if (flag === 0) {
-        setInvoiceInputs((state) => [
-          ...state,
-          {
-            newAmount: target.value,
-            marketplace: input.marketplace,
-          },
-        ]);
-      }
-    } else {
-      setInvoiceInputs((state) => [
-        ...state,
-        {
-          newAmount: target.value,
-          marketplace: input.marketplace,
-        },
-      ]);
-    }
+  const onChangeInput = (input, index, { target }) => {
+    const resultArray = [...invoiceInputs];
+    resultArray[index] = {
+      ...invoiceInputs[index],
+      newAmount: target.value,
+      marketplace: input.marketplace,
+      change:
+        parseNumber(target.value) === input.new_budget
+          ? 0
+          : parseNumber(target.value) - input.new_budget > 0
+          ? `+${Math.abs(input.new_budget - parseNumber(target.value))}`
+          : `-${Math.abs(input.new_budget - parseNumber(target.value))}`,
+    };
+    setInvoiceInputs(resultArray);
   };
   return (
     <GrayTable>
@@ -99,7 +74,7 @@ const InvoiceAdjust = ({
                             invoiceType === 'one time' ? 0 : input.new_budget
                           }
                           onChange={(e) => {
-                            onChangeInput(input, e);
+                            onChangeInput(input, index, e);
                           }}
                           thousandSeparator
                           decimalScale={2}

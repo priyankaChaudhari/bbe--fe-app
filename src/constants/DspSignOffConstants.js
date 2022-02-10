@@ -93,3 +93,15 @@ export const dspContactInputFields = [
     removeForDSP: true,
   },
 ];
+
+export const dspSignOffRoles = {
+  grpRole: {
+    BGS: true,
+    'BGS Manager': true,
+    'DSP Ad Manager': true,
+  },
+  userRole: {
+    'BGS Admin': true,
+    'Ad Manager Admin': true,
+  },
+};

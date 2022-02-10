@@ -7,12 +7,12 @@ import { useMediaQuery } from 'react-responsive';
 
 import InvoiceAdjustmentList from './InvoiceAdjustmentList';
 import { getDSPContact } from '../../../../../api';
-
 import { WhiteCard, Button } from '../../../../../common';
 import {
   InvoiceAdjustPauseModal,
   InvoicePastAdjustmentModal,
 } from './InvoiceAdjustmentModals';
+import { dspSignOffRoles } from '../../../../../constants';
 
 const InvoiceAdjustmentsContainer = ({
   id,
@@ -36,14 +36,13 @@ const InvoiceAdjustmentsContainer = ({
   const getDSPContactInfo = useCallback(() => {
     getDSPContact(id).then((res) => {
       if (res?.status === 200) {
-        if (res?.data?.is_dsp_contract) {
+        if (dspSignOffRoles.userRole[userInfo?.role]) {
+          setIsAllowToCreateAdjustment(true);
+        } else if (res?.data?.is_dsp_contract) {
           for (const user of memberData) {
             if (user.user) {
               if (
-                (user?.role_group?.name === 'BGS' ||
-                  user?.role_group?.name === 'BGS Manager' ||
-                  user?.role_group?.name === 'DSP Ad Manager' ||
-                  user?.role_group?.name === 'Ad Manager Admin') &&
+                dspSignOffRoles.grpRole[user?.role_group?.name] &&
                 user?.user?.id === userInfo?.id
               ) {
                 setIsAllowToCreateAdjustment(true);
