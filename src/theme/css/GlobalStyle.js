@@ -1112,7 +1112,14 @@ fieldset {
 .__react_component_tooltip {
   text-transform: capitalize;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 400 !important;
+}
+
+.label {
+  .__react_component_tooltip {
+    font-weight :300 !important;
+    font-family: ${Theme.baseFontFamily};
+  }
 }
 .customer-list-tooltip{
   max-width: 16%;

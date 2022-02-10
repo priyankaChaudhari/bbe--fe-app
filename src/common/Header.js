@@ -38,6 +38,8 @@ import {
   Speedometer,
   HelpDeskIcon,
   HandShake,
+  HomePageActiveIcon,
+  HomePageIcon,
 } from '../theme/images';
 
 export default function Header({ type, userInfo }) {
@@ -283,15 +285,15 @@ export default function Header({ type, userInfo }) {
                   {history.location.pathname?.includes('bbe-Goal') ? (
                     <img
                       width="32px"
-                      className=" speed0meter-icon active"
-                      src={SpeedometerActive}
+                      className=" home-page-icon active"
+                      src={HomePageActiveIcon}
                       alt=""
                     />
                   ) : (
                     <img
                       width="32px"
-                      className=" speed0meter-icon  disactive"
-                      src={Speedometer}
+                      className="home-page-icon  disactive"
+                      src={HomePageIcon}
                       alt=""
                     />
                   )}

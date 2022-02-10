@@ -73,7 +73,7 @@ export default function BBEGoalRevShareContribution({ month }) {
   const renderPositiveNegativeOptions = (id) => {
     return (
       <ToggleButton id={id}>
-        <div className="days-container spending">
+        <div className="days-container toggle-container">
           <ul className={contributionLoader ? 'days-tab disabled' : 'days-tab'}>
             {keyContributionConstant.noManagerSelected.map((item) => (
               <li key={item.id}>
@@ -81,14 +81,15 @@ export default function BBEGoalRevShareContribution({ month }) {
                 <input
                   className="d-none"
                   type="radio"
-                  id={item.id}
+                  // id={item.id}
+                  id="postnegCheck"
                   name="flexRadioDefault2"
                   value={selectedContributionOption}
                   checked={item.id === selectedContributionOption}
                   onClick={() => handleContributionOptions(item.id)}
                   onChange={() => {}}
                 />
-                <label htmlFor={item.id}>{item.label}</label>
+                <label htmlFor="postnegCheck">{item.label}</label>
               </li>
             ))}
           </ul>

@@ -514,6 +514,11 @@ export const WhiteCard = styled.div`
       }
     }
   }
+  #revenue_chart {
+    div {
+      top: -24.587494px !important;
+    }
+  }
 
   .DSP-contract-retainer {
     .label {

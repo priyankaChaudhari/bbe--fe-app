@@ -12,6 +12,8 @@ import {
   OrganizationIcon,
   SpeedometerActive,
   Speedometer,
+  HomePageActiveIcon,
+  HomePageIcon,
 } from '../theme/images';
 
 import {
@@ -41,15 +43,15 @@ export default function LeftSideBar({ userInfo }) {
             onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
             {' '}
             <img
-              width="32px"
-              className=" speed0meter-icon active"
-              src={SpeedometerActive}
+              width="28px"
+              className=" home-page-icon active"
+              src={HomePageActiveIcon}
               alt=""
             />
             <img
-              width="32px"
-              className=" speed0meter-icon  disactive"
-              src={Speedometer}
+              width="28px"
+              className=" home-page-icon  disactive"
+              src={HomePageIcon}
               alt=""
             />
           </li>

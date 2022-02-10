@@ -3,12 +3,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
 import { string } from 'prop-types';
+import ReactTooltip from 'react-tooltip';
 
 import BBEGoalChart from './BBEGoalChart';
 import { WhiteCard } from '../../common';
 import { data } from './dummyData';
 import { getBBEGoalMetrics } from '../../api';
 import numberWithCommas from '../../hooks/numberWithCommas';
+import { InfoIcons } from '../../theme/images';
 
 export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
   const [metricsData, setMetricsData] = useState(null);
@@ -56,7 +58,7 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 {/* <div className="horizontal-line straight-line mt-3 mb-4 d-md-none d-block" /> */}
               </div>
 
-              <div className="col-md-7 col-12 ">
+              <div className="col-md-7 col-12 mb-n4">
                 <BBEGoalChart
                   CHART_ID="revenue_chart"
                   data={metricsData?.graph_data}
@@ -82,7 +84,25 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
               </div>
 
               <div className="col-md-3 col-6">
-                <div className="label mb-2">Rev Share</div>
+                <div className="label mb-2">
+                  Rev Share{' '}
+                  <img
+                    className="ml-1 cursor"
+                    style={{ verticalAlign: 'text-bottom', fontWeight: '300' }}
+                    width="14px"
+                    src={InfoIcons}
+                    alt="info"
+                    data-tip="The rev share value gets <br/>updated on the 4th of each<br/> month for the prior month"
+                    data-for="dspAdditionalInfo"
+                  />{' '}
+                  <ReactTooltip
+                    id="dspAdditionalInfo"
+                    aria-haspopup="true"
+                    place="bottom"
+                    effect="solid"
+                    html
+                  />
+                </div>
                 <h3 className="small-title-heading">
                   {numberWithCommas(metricsData?.actual?.rev_share, '$')}
                 </h3>
