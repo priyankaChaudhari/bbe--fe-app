@@ -229,6 +229,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
         ) : selectedContibutionData?.length >= 1 ? (
           selectedContibutionData.map((item) => (
             <TableMobileView
+              className="mb-3"
               invoiceType={item?.customer_name}
               invoiceId={item?.bgs}
               label={contributionData?.previous_date}
