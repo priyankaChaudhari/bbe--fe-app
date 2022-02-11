@@ -36,7 +36,14 @@ const PageLoaderWrapper = styled.div`
   &.comission-modal-loader {
     margin-right: 40%;
   }
-
+  &.escrow-modal-loader {
+    position: relative;
+    width: unset;
+    svg {
+      width: 40px;
+      height: 40px;
+    }
+  }
   @media only screen and (min-width: 1500px) {
     &.sidebar-loader {
       right: 0;
@@ -89,7 +96,6 @@ const DetailLoaderWrapper = styled.div`
     width: 60px;
     margin: 0 auto;
   }
-
   @media only screen and (max-width: 991px) {
     left: 0;
   }
@@ -143,6 +149,8 @@ export default function PageLoader({
             ? 'Notes-modal-loader'
             : component === 'comission-modal-loader'
             ? 'comission-modal-loader'
+            : component === 'escrow-modal-loader'
+            ? 'escrow-modal-loader'
             : ''
         }
         style={{

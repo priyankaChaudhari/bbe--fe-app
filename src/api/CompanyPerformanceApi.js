@@ -5,6 +5,8 @@ import {
   API_VENDOR_ORDERED,
   API_VENDOR_SHIPPED,
   API_ALLOCATE_BALANCE,
+  API_ESCROW_BALANCE_MARKETPLACE,
+  API_ESCROW_REALLOCATION,
 } from '../constants';
 
 export async function getPerformance(
@@ -221,7 +223,18 @@ export async function getDspPacingData(id, marketplace) {
     });
   return result;
 }
-
+export async function getEscrowBalanceMarketplaceData(id) {
+  const params = { customer_id: id };
+  const result = await axiosInstance
+    .get(`${API_ESCROW_BALANCE_MARKETPLACE}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
 export async function storeAllocatedBudget(data, customerId, marketplace) {
   const allocateMonths = [];
   for (const option of data) {
@@ -241,6 +254,18 @@ export async function storeAllocatedBudget(data, customerId, marketplace) {
 
   const result = await axiosInstance
     .post(API_ALLOCATE_BALANCE, params)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+export async function storeEscrowReallocation(data) {
+  console.log('data', data);
+  const result = await axiosInstance
+    .post(API_ESCROW_REALLOCATION, data)
     .then((response) => {
       return response;
     })

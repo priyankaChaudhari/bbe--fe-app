@@ -128,7 +128,7 @@ export default function AdPerformance({
         if (user.user) {
           if (
             (user?.role_group?.name === 'DSP Ad Manager' ||
-              user?.role_group?.name === 'Hybrid Ad Manager' ||
+              user?.role_group?.name === 'BGS Manager' ||
               user?.role_group?.name === 'BGS') &&
             user?.user?.id === userInfo?.id
           ) {

@@ -1,156 +1,209 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 
-import { arrayOf, bool, func, number, shape } from 'prop-types';
+import { arrayOf, bool, func, number, shape, string } from 'prop-types';
 
-// import { storeAllocatedBudget } from '../../../../api';
+import { storeEscrowReallocation } from '../../../../api';
 import { LeftArrowIcon } from '../../../../theme/images';
-import {
-  Button,
-  // PageLoader,
-  Table,
-  AllocateBar,
-} from '../../../../common';
+import { Button, PageLoader, Table, AllocateBar } from '../../../../common';
 
 export default function ConfirmMarketPlaceAllocation({
-  // customerId,
-  // marketplace,
-  totalEscrowBalance,
-  allocatedMarketplaceBalance,
+  customerId,
+  selectedMarketplace,
+  currentMonthYear,
+  currencySymbol,
+  onClick,
+  getActivityLogInfo,
   addThousandSeperator,
+  // setIsDataLoading,
+  totalEscrowBalance,
+  // escrowReallocatedData,
+  escrowBalanceMarketplace,
   setShowMarketPlaceAllocation,
   showConfirmMarketplaceAllocation,
   setShowConfirmMarketplaceAllocation,
 }) {
-  // const submitAllocatedBudget = useCallback(() => {
-  //   setIsSubmitLoader(true);
-  //   storeAllocatedBudget(allocatedMonths, customerId, marketplace).then(
-  //     (res) => {
-  //       if (res && res.status === 200) {
-  //         onClick();
-  //         getActivityLogInfo();
-  //       }
-  //       setIsSubmitLoader(false);
-  //     },
-  //   );
-  // }, [onClick, customerId, marketplace, allocatedMonths, getActivityLogInfo]);
-  const renderAllocatedBalanceTable = () => {
+  const [isApiCall, setIsApiCall] = useState(false);
+  const balanceChangeValue = (value, type = '') => {
+    if (value && value !== null && value !== 0) {
+      value = Number(value.toFixed(2));
+      return `${value < 0 ? '-' : '+'}${
+        type === 'currency' ? currencySymbol : ''
+      }${value
+        .toString()
+        .replace('-', '')
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+    }
+    return 0;
+  };
+
+  const submitEscrowReallocatedData = useCallback(
+    (reallocatedData) => {
+      setIsApiCall(true);
+      const filteReallocatedData = reallocatedData.filter(
+        (item, index) => index !== 0 && item.balanceChanged,
+      );
+      const tempData = [];
+      filteReallocatedData.forEach((item) => {
+        if (item?.balanceChanged > 0) {
+          tempData.push({
+            customer: `${customerId}`,
+            month_year: `${currentMonthYear}`,
+            from_marketplace: `${selectedMarketplace}`,
+            to_marketplace: `${item.value}`,
+            escrow_reallocated_amount_usd: item.balanceChanged,
+          });
+        }
+        if (item?.balanceChanged < 0) {
+          tempData.push({
+            customer: `${customerId}`,
+            month_year: `${currentMonthYear}`,
+            from_marketplace: `${item.value}`,
+            to_marketplace: `${selectedMarketplace}`,
+            escrow_reallocated_amount_usd: Math.abs(item.balanceChanged),
+          });
+        }
+        return tempData;
+      });
+      storeEscrowReallocation(tempData).then((res) => {
+        if (res && res.status === 200) {
+          onClick();
+          getActivityLogInfo();
+          setShowConfirmMarketplaceAllocation(false);
+          setShowMarketPlaceAllocation(true);
+        }
+        setIsApiCall(false);
+      });
+    },
+    [
+      currentMonthYear,
+      customerId,
+      getActivityLogInfo,
+      onClick,
+      selectedMarketplace,
+      setShowConfirmMarketplaceAllocation,
+      setShowMarketPlaceAllocation,
+    ],
+  );
+  const renderAllocateBar = () => {
+    return (
+      <div className="col-12">
+        <AllocateBar id="BT-escrowBalance-DSPAllocaion" className="mt-3 mb-2">
+          <div className="remaing-label text-bold text-right">
+            Total Escrow Balance:
+            {addThousandSeperator(totalEscrowBalance, 'currency')}
+          </div>
+          <div className="clear-fix" />
+        </AllocateBar>
+      </div>
+    );
+  };
+  const renderReallocationTableHead = () => {
+    return (
+      <thead>
+        <tr>
+          <th className="product-header" width="30%">
+            Marketplace
+          </th>
+          <th className="product-header" width="25%">
+            From
+          </th>
+          <th className="product-header" width="25%">
+            To
+          </th>
+          <th className="product-header" width="20%">
+            change
+          </th>
+        </tr>
+      </thead>
+    );
+  };
+
+  const renderReallocationTableBody = () => {
+    const results = escrowBalanceMarketplace.filter(
+      (item) => item.balanceChanged,
+    );
+    return (
+      <tbody>
+        {results?.map((item) => {
+          return (
+            <tr key={item.label}>
+              <td
+                width="30%"
+                className="small-label-text light-font product-body">
+                {item.label}
+              </td>
+              <td
+                width="25%"
+                className=" small-label-text light-font product-body">
+                ${item.escrowBalance}
+              </td>
+              <td
+                width="25%"
+                className=" small-label-text light-font product-body">
+                ${item.escrowReallocatedBalance}
+              </td>
+              <td
+                width="20%"
+                className=" small-label-text light-font product-body">
+                {item.balanceChanged === 0
+                  ? `$0`
+                  : balanceChangeValue(item.balanceChanged, 'currency')}
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    );
+  };
+  const renderReallocationDesktopView = () => {
+    return (
+      <Table>
+        <table style={{ borderCollapse: 'collapse' }} width="100%">
+          {renderReallocationTableHead()}
+          {renderReallocationTableBody()}
+        </table>
+      </Table>
+    );
+  };
+  const renderReallocationMobileView = () => {
+    const results = escrowBalanceMarketplace.filter(
+      (item) => item.balanceChanged,
+    );
+    return results?.map((item) => {
+      return (
+        <div className="row" key={item.label}>
+          <div className="col-12 mb-2">
+            <div className="label">Marketplace</div>
+            <div className="label-info">{item.label}</div>
+          </div>
+          <div className="col-4">
+            <div className="label"> From</div>
+            <div className="label-info"> ${item.escrowBalance}</div>
+          </div>
+          <div className="col-4">
+            <div className="label"> To</div>
+            <div className="label-info">${item.escrowReallocatedBalance}</div>
+          </div>
+          <div className="col-4">
+            <div className="label"> change</div>
+            <div className="label-info">
+              {item.balanceChanged === 0
+                ? `$0`
+                : balanceChangeValue(item.balanceChanged, 'currency')}
+            </div>
+          </div>
+        </div>
+      );
+    });
+  };
+  const renderReallocatedBalanceTable = () => {
     return (
       <>
-        {/* <div className="d-md-block d-none">
-          <div className="row">
-            <div className="col-3">
-              <div className="label">Marketplace</div>
-            </div>
-            <div className="col-3">
-              <div className="label">From</div>
-            </div>
-            <div className="col-3">
-              <div className="label"> To</div>
-            </div>
-            <div className="col-3">
-              <div className="label text-right">change</div>
-            </div>
-          </div>
-          <div className="horizontal-line straight-line mt-2 mb-2" />
-          <div className="row mt-3">
-            <div className="col-3">
-              <div className="normal-text-black "> US</div>
-            </div>
-            <div className="col-3">
-              <div className="normal-text-black "> $6,000</div>
-            </div>
-            <div className="col-3">
-              <div className="normal-text-black "> $6,000</div>
-            </div>
-            <div className="col-3">
-              <div className="normal-text-black text-right"> $6,000</div>
-            </div>
-          </div>
-          <div className="row mt-3">
-            <div className="col-3">
-              <div className="normal-text-black "> US</div>
-            </div>
-            <div className="col-3">
-              <div className="normal-text-black "> $6,000</div>
-            </div>
-            <div className="col-3">
-              <div className="normal-text-black "> $6,000</div>
-            </div>
-            <div className="col-3">
-              <div className="normal-text-black text-right"> $6,000</div>
-            </div>
-          </div>
-        </div> */}
-        <Table className="d-md-block d-none">
-          <table style={{ borderCollapse: 'collapse' }} width="100%">
-            <thead>
-              <tr>
-                <th className="product-header" width="30%">
-                  Marketplace
-                </th>
-                <th className="product-header" width="25%">
-                  From
-                </th>
-                <th className="product-header" width="25%">
-                  To
-                </th>
-                <th className="product-header text-right" width="20%">
-                  change
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {allocatedMarketplaceBalance?.map((item) => {
-                return (
-                  <tr key={item.marketplace}>
-                    <td
-                      width="30%"
-                      className="small-label-text light-font product-body">
-                      {item.label}
-                    </td>
-                    <td
-                      width="25%"
-                      className=" small-label-text light-font product-body">
-                      ${item.escrow_allocated_converted_usd}
-                    </td>
-                    <td
-                      width="25%"
-                      className=" small-label-text light-font product-body">
-                      ${item.new_escrow_allocated_converted_usd}
-                    </td>
-                    <td
-                      width="20%"
-                      className=" small-label-text light-font product-body text-right">
-                      {item.balanceChanged === 0
-                        ? `$0`
-                        : addThousandSeperator(item.balanceChanged, 'currency')}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </Table>
+        <div className="d-md-block d-none">
+          {renderReallocationDesktopView()}
+        </div>
         <div className="d-md-none d-block">
-          <div className="row">
-            <div className="col-12 mb-2">
-              <div className="label">Marketplace</div>
-              <div className="label-info"> US</div>
-            </div>
-            <div className="col-4">
-              {' '}
-              <div className="label"> From</div>
-              <div className="label-info"> $6,000</div>
-            </div>
-            <div className="col-4">
-              <div className="label"> To</div>
-              <div className="label-info"> $6,000</div>
-            </div>
-            <div className="col-4">
-              <div className="label"> change</div>
-              <div className="label-info"> $6,000</div>
-            </div>
-          </div>
+          {renderReallocationMobileView()}
         </div>
       </>
     );
@@ -180,18 +233,8 @@ export default function ConfirmMarketPlaceAllocation({
                 Manager
               </p>
               <div className="row">
-                <div className="col-12">
-                  <AllocateBar
-                    id="BT-escrowBalance-DSPAllocaion"
-                    className="mt-3 mb-4">
-                    <div className="remaing-label text-bold text-right">
-                      Total Escrow Balance:{' '}
-                      {addThousandSeperator(totalEscrowBalance, 'currency')}
-                    </div>
-                    <div className="clear-fix" />
-                  </AllocateBar>
-                </div>
-                <div className="col-12">{renderAllocatedBalanceTable()}</div>
+                {renderAllocateBar()}
+                <div className="col-12">{renderReallocatedBalanceTable()}</div>
               </div>
             </div>
           </div>
@@ -199,10 +242,16 @@ export default function ConfirmMarketPlaceAllocation({
           <div className="modal-footer">
             <div className="text-center ">
               <Button
-                className="btn-primary on-boarding  w-100"
+                className="btn-primary on-boarding w-100"
                 type="button"
-                onClick={() => {}}>
-                Confirm
+                onClick={() => {
+                  submitEscrowReallocatedData(escrowBalanceMarketplace);
+                }}>
+                {isApiCall ? (
+                  <PageLoader color="#fff" type="button" />
+                ) : (
+                  'Confirm'
+                )}
               </Button>
             </div>
           </div>
@@ -215,23 +264,30 @@ export default function ConfirmMarketPlaceAllocation({
 }
 
 ConfirmMarketPlaceAllocation.defaultProps = {
-  // customerId: '',
-  // marketplace: '',
+  customerId: '',
+  selectedMarketplace: '',
+  currencySymbol: '',
+  currentMonthYear: '',
   totalEscrowBalance: number,
-  allocatedMarketplaceBalance: [],
-  // getActivityLogInfo: () => {},
+  onClick: () => {},
+  getActivityLogInfo: () => {},
   addThousandSeperator: () => {},
+  escrowBalanceMarketplace: [],
   setShowMarketPlaceAllocation: func,
   showConfirmMarketplaceAllocation: bool,
   setShowConfirmMarketplaceAllocation: func,
 };
 
 ConfirmMarketPlaceAllocation.propTypes = {
-  // customerId: string,
-  // marketplace: string,
+  customerId: string,
+  selectedMarketplace: string,
+  currencySymbol: string,
+  currentMonthYear: string,
   totalEscrowBalance: number,
-  allocatedMarketplaceBalance: arrayOf(shape()),
   addThousandSeperator: func,
+  onClick: func,
+  getActivityLogInfo: func,
+  escrowBalanceMarketplace: arrayOf(shape()),
   setShowMarketPlaceAllocation: func,
   showConfirmMarketplaceAllocation: bool,
   setShowConfirmMarketplaceAllocation: func,
