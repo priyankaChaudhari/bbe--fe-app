@@ -263,7 +263,6 @@ export async function storeAllocatedBudget(data, customerId, marketplace) {
   return result;
 }
 export async function storeEscrowReallocation(data) {
-  console.log('data', data);
   const result = await axiosInstance
     .post(API_ESCROW_REALLOCATION, data)
     .then((response) => {

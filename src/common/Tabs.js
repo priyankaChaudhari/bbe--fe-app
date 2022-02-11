@@ -34,8 +34,6 @@ const Tabs = styled.div`
       font-family: ${Theme.baseFontFamily};
       cursor: pointer;
       padding: 0 15px 15px 15px;
-      /* /* display: block; */
-      /* border-bottom: 1px solid ${Theme.gray11}; */
 
       &:last-child {
         margin-right: 0;
@@ -53,7 +51,6 @@ const Tabs = styled.div`
 
       &.scrollable-tab {
         display: block;
-        /* border-bottom: 1px solid ${Theme.gray11}; */
         font-size: 14px;
       }
 
