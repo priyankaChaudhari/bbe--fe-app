@@ -2,7 +2,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import dayjs from 'dayjs';
-import { string } from 'prop-types';
+import { instanceOf } from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 
 import BBEGoalChart from './BBEGoalChart';
@@ -79,7 +79,6 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 <div className="green-text large-size mt-2">
                   +
                   {numberWithCommas(metricsData?.planned?.avg_billing_cap, '$')}{' '}
-                  vs plan
                 </div>
               </div>
 
@@ -108,8 +107,7 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 </h3>
 
                 <div className="green-text large-size mt-2">
-                  +{numberWithCommas(metricsData?.planned?.rev_share, '$')} vs
-                  plan
+                  +{numberWithCommas(metricsData?.planned?.rev_share, '$')}
                 </div>
               </div>
               <div className="horizontal-line straight-line mt-3 mb-3 mx-3 d-md-none d-block" />
@@ -119,14 +117,7 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                   {numberWithCommas(metricsData?.actual?.rev_per_employee, '$')}
                 </h3>
 
-                <div className="green-text large-size mt-2">
-                  +
-                  {numberWithCommas(
-                    metricsData?.planned?.rev_per_employee,
-                    '$',
-                  )}{' '}
-                  vs plan
-                </div>
+                <div className="large-size black-text mt-2">N/A</div>
               </div>
               <div className="col-md-3 col-6">
                 <div className="label mb-2">Average LTV</div>
@@ -135,8 +126,7 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 </h3>
 
                 <div className="red-text large-size mt-2">
-                  +{numberWithCommas(metricsData?.planned?.average_ltv, '$')} vs
-                  plan
+                  -{numberWithCommas(metricsData?.planned?.average_ltv, '$')}
                 </div>
               </div>
             </div>
@@ -146,21 +136,14 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
           <WhiteCard className="card-with-border mt-4">
             <div className="d-lg-block d-none">
               <p className="black-heading-title mt-0">Partners</p>
-              <div className="label">Total Revenue</div>
+              <div className="label">Net New Customers</div>
               <h3>
                 {numberWithCommas(
                   metricsData?.actual?.total_total_rev_share,
                   '$',
                 )}
               </h3>
-              <div className="green-text mt-2">
-                +
-                {numberWithCommas(
-                  metricsData?.planned?.total_total_rev_share,
-                  '$',
-                )}{' '}
-                vs plan
-              </div>
+              <div className="mt-2">N/A</div>
               <div className="horizontal-line straight-line mt-3 d-lg-block d-none" />
             </div>
             <div className="row">
@@ -174,13 +157,7 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                       '$',
                     )}
                   </h3>
-                  <div className="green-text mt-2">
-                    +
-                    {numberWithCommas(
-                      metricsData?.planned?.total_total_rev_share,
-                      '$',
-                    )}
-                  </div>
+                  <div className="green-text mt-2">N/A</div>
                 </div>
                 <ul className="d-lg-none d-block bbe-goals-partners">
                   <li>
@@ -225,7 +202,7 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 <div className="label mb-2 mt-md-3 mt-lg-0">OFfboarded</div>
                 <div className="d-lg-block d-none">
                   <h3 className="small-title-heading">5</h3>
-                  <div className="green-text large-size mt-2">+3</div>
+                  <div className="large-size mt-2">N/A</div>
                 </div>
                 <ul className="d-lg-none d-block bbe-goals-partners">
                   <li>
@@ -246,5 +223,5 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
 
 BBEGoalHighLevelMetrics.defaultProps = {};
 BBEGoalHighLevelMetrics.propTypes = {
-  selectedMonthYear: string.isRequired,
+  selectedMonthYear: instanceOf(Date).isRequired,
 };

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 
-import { string } from 'prop-types';
+import { instanceOf } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import numberWithCommas from '../../hooks/numberWithCommas';
@@ -282,5 +282,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
   );
 }
 
-BBEGoalRevShareContribution.defaultProps = { monthYear: '' };
-BBEGoalRevShareContribution.propTypes = { monthYear: string };
+BBEGoalRevShareContribution.defaultProps = {};
+BBEGoalRevShareContribution.propTypes = {
+  monthYear: instanceOf(Date).isRequired,
+};
