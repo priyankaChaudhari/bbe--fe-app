@@ -243,6 +243,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
               isShowPercentage
               isLabelInfo2Positive={selectedContributionOption === 'positive'}
               statusLabelColor="#000000"
+              isBBEDashboard
             />
           ))
         ) : selectedContibutionData && selectedContibutionData.length === 0 ? (

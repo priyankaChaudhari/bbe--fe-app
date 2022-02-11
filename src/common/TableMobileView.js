@@ -50,6 +50,7 @@ const TableMobileView = ({
   mainLabel,
   isShowPercentage,
   isLabelInfo2Positive,
+  isBBEDashboard,
 }) => {
   const col = `${label3 ? (label7 ? 'col-4' : 'col-6') : 'col-4'}`;
   return (
@@ -86,7 +87,10 @@ const TableMobileView = ({
                     </div>
                   ) : invoiceType ? (
                     <>
-                      <div className="CompanyName LargeCompanyName">
+                      <div
+                        className={`CompanyName ${
+                          !isBBEDashboard ? 'LargeCompanyName' : null
+                        }`}>
                         {invoiceType}
                       </div>
                       <div className="CompanyId">
@@ -260,6 +264,7 @@ TableMobileView.defaultProps = {
   isShowBellIcon: false,
   isShowPercentage: false,
   isLabelInfo2Positive: false,
+  isBBEDashboard: false,
   className: '',
   CompanyName: '',
   label: '',
@@ -299,6 +304,7 @@ TableMobileView.propTypes = {
   isShowBellIcon: bool,
   isShowPercentage: bool,
   isLabelInfo2Positive: bool,
+  isBBEDashboard: bool,
   className: string,
   CompanyName: string,
   label: string,
