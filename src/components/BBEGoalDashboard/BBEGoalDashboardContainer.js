@@ -32,11 +32,11 @@ export default function BBEGoalDashboardContainer() {
     setMonthYear(date);
   };
 
-  const currentMonthYearLabel = `${
-    monthNames[finalMonthYear.getMonth()]
-  } '${finalMonthYear.getFullYear()}`;
-
   const renderTimeFilterLabel = () => {
+    const currentMonthYearLabel = `${
+      monthNames[finalMonthYear.getMonth()]
+    } ${finalMonthYear.getFullYear()}`;
+
     return currentMonthYearLabel;
   };
 
@@ -64,6 +64,7 @@ export default function BBEGoalDashboardContainer() {
                 inline
                 dateFormat="MM/yyyy"
                 showMonthYearPicker
+                previousMonthAriaLabel="asdasda"
               />
             </div>
           </CustomDateRange>
