@@ -8,8 +8,8 @@ import React, {
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
-import { bool, func, string } from 'prop-types';
 import dayjs from 'dayjs';
+import { bool, func, string } from 'prop-types';
 
 import EditMarketplaceAllocation from './EditMarketplaceAllocation';
 import {

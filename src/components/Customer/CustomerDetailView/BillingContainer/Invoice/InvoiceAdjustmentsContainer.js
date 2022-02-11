@@ -7,12 +7,12 @@ import { useMediaQuery } from 'react-responsive';
 
 import InvoiceAdjustmentList from './InvoiceAdjustmentList';
 import { getDSPContact } from '../../../../../api';
+import { dspSignOffRoles } from '../../../../../constants';
 import { WhiteCard, Button } from '../../../../../common';
 import {
   InvoiceAdjustPauseModal,
   InvoicePastAdjustmentModal,
 } from './InvoiceAdjustmentModals';
-import { dspSignOffRoles } from '../../../../../constants';
 
 const InvoiceAdjustmentsContainer = ({
   id,

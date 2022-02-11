@@ -19,7 +19,9 @@ export default function CompanyPerformance({
   const history = useHistory();
   const currentDate = new Date();
   const setTab =
-    history.location.state === 'adManager' ? 'adPerformance' : 'adPerformance';
+    history.location.state === 'adManager'
+      ? 'adPerformance'
+      : 'salePerformance';
   currentDate.setDate(currentDate.getDate() - 3);
   const [sellerViewComponent, setSellerViewComponent] = useState(setTab);
 

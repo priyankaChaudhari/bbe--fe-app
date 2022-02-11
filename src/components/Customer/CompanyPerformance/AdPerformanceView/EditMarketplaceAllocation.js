@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import NumberFormat from 'react-number-format';
 import { bool, func, number, string, arrayOf, shape } from 'prop-types';
 
+import ConfirmMarketPlaceAllocation from './ConfirmMarketPlaceAllocation';
 import { InfoRedIcon, LeftArrowIcon } from '../../../../theme/images';
 import {
   Button,
@@ -10,7 +11,6 @@ import {
   AllocateBar,
   ErrorMsgBox,
 } from '../../../../common';
-import ConfirmMarketPlaceAllocation from './ConfirmMarketPlaceAllocation';
 
 export default function EditMarketplaceAllocation({
   customerId,

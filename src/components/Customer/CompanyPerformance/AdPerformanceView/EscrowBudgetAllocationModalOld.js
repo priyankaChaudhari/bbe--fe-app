@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 
 import Modal from 'react-modal';
 import NumberFormat from 'react-number-format';
-import { bool, func, shape, string } from 'prop-types';
 import dayjs from 'dayjs';
+import { bool, func, shape, string } from 'prop-types';
 
 import { storeAllocatedBudget } from '../../../../api';
 import { CloseIcon, AddIcons, InfoRedIcon } from '../../../../theme/images';

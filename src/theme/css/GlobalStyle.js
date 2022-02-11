@@ -314,9 +314,6 @@ p {
     color: ${Theme.black};
     font-size: ${Theme.normal};
   }
-
-  
-
   &.no-result-found {
     color: ${Theme.gray40};
     font-size: ${Theme.normal};
