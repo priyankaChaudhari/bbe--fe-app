@@ -7,6 +7,7 @@ const useNumberWithCommas = (x, currency = '') => {
     Number(x)
       .toFixed(2)
       .toString()
+      .replace(/-/g, '')
       .replace(/\.0+$/, '')
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
   );

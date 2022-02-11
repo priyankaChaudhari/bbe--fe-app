@@ -6,28 +6,30 @@ import { instanceOf } from 'prop-types';
 import ReactTooltip from 'react-tooltip';
 
 import BBEGoalChart from './BBEGoalChart';
+import useNumberWithCommas from '../../hooks/useNumberWithCommas';
 import { WhiteCard } from '../../common';
-import { data } from './dummyData';
 import { getBBEGoalMetrics } from '../../api';
-import numberWithCommas from '../../hooks/numberWithCommas';
 import { InfoIcons } from '../../theme/images';
 
 export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
   const [metricsData, setMetricsData] = useState(null);
 
   const getKPIMetrics = useCallback(() => {
-    getBBEGoalMetrics().then((res) => {
+    setMetricsData(null);
+    getBBEGoalMetrics(selectedMonthYear).then((res) => {
       if (res && res.status === 500) {
+        setMetricsData(null);
       }
 
       if (res && res.status === 400) {
+        setMetricsData(null);
       }
+
       if (res && res.status === 200) {
-        setMetricsData(data);
+        setMetricsData(res.data);
       }
-      setMetricsData(data);
     });
-  }, []);
+  }, [selectedMonthYear]);
 
   useEffect(() => {
     getKPIMetrics();
@@ -43,15 +45,17 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 <p className="black-heading-title mt-0">Financials</p>
                 <div className="label">Total Revenue</div>
                 <h3>
-                  {numberWithCommas(
-                    metricsData?.actual?.total_total_rev_share,
-                    '$',
-                  )}
+                  {useNumberWithCommas(metricsData?.actual?.total_revenue, '$')}
                 </h3>
-                <div className="green-text mt-2">
-                  {numberWithCommas(
-                    metricsData?.planned?.total_total_rev_share,
-                    '$',
+                <div
+                  className={`${
+                    metricsData?.planned?.total_revenue > 0
+                      ? 'green-text'
+                      : 'red-text'
+                  } mt-2`}>
+                  {useNumberWithCommas(
+                    metricsData?.planned?.total_revenue,
+                    metricsData?.planned?.total_revenue > 0 ? '$' : '-$',
                   )}{' '}
                   vs plan
                 </div>
@@ -61,10 +65,10 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
               <div className="col-md-7 col-12 mb-n4">
                 <BBEGoalChart
                   CHART_ID="revenue_chart"
-                  data={metricsData?.graph_data}
-                  selectedMonthYear={dayjs(selectedMonthYear)
-                    .format('MMMM')
-                    .toUpperCase()}
+                  data={metricsData?.graph_data.reverse()}
+                  selectedMonthYear={dayjs(selectedMonthYear).format(
+                    'MMMM-YYYY',
+                  )}
                 />
               </div>
             </div>
@@ -73,12 +77,22 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
               <div className="col-md-3 col-6">
                 <div className="label mb-2">Avg. Billings/BP</div>
                 <h3 className="small-title-heading">
-                  {numberWithCommas(metricsData?.actual?.avg_billing_cap, '$')}
+                  {useNumberWithCommas(
+                    metricsData?.actual?.avg_billing_cap,
+                    '$',
+                  )}
                 </h3>
 
-                <div className="green-text large-size mt-2">
-                  +
-                  {numberWithCommas(metricsData?.planned?.avg_billing_cap, '$')}{' '}
+                <div
+                  className={`${
+                    metricsData?.planned?.avg_billing_cap > 0
+                      ? 'green-text'
+                      : 'red-text'
+                  } large-size mt-2`}>
+                  {useNumberWithCommas(
+                    metricsData?.planned?.avg_billing_cap,
+                    metricsData?.planned?.avg_billing_cap > 0 ? '+$' : '-$',
+                  )}
                 </div>
               </div>
 
@@ -103,18 +117,29 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                   />
                 </div>
                 <h3 className="small-title-heading">
-                  {numberWithCommas(metricsData?.actual?.rev_share, '$')}
+                  {useNumberWithCommas(metricsData?.actual?.rev_share, '$')}
                 </h3>
 
-                <div className="green-text large-size mt-2">
-                  +{numberWithCommas(metricsData?.planned?.rev_share, '$')}
+                <div
+                  className={`${
+                    metricsData?.planned?.rev_share > 0
+                      ? 'green-text'
+                      : 'red-text'
+                  } large-size mt-2`}>
+                  {useNumberWithCommas(
+                    metricsData?.planned?.rev_share,
+                    metricsData?.planned?.rev_share > 0 ? '+$' : '-$',
+                  )}
                 </div>
               </div>
               <div className="horizontal-line straight-line mt-3 mb-3 mx-3 d-md-none d-block" />
               <div className="col-md-3 col-6">
                 <div className="label mb-2">Rev Per Employee</div>
                 <h3 className="small-title-heading">
-                  {numberWithCommas(metricsData?.actual?.rev_per_employee, '$')}
+                  {useNumberWithCommas(
+                    metricsData?.actual?.rev_per_employee,
+                    '$',
+                  )}
                 </h3>
 
                 <div className="label-info mt-2">N/A</div>
@@ -122,11 +147,11 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
               <div className="col-md-3 col-6">
                 <div className="label mb-2">Average LTV</div>
                 <h3 className="small-title-heading">
-                  {numberWithCommas(metricsData?.actual?.average_ltv, '$')}
+                  {useNumberWithCommas(metricsData?.actual?.average_ltv, '$')}
                 </h3>
 
                 <div className="red-text large-size mt-2">
-                  -{numberWithCommas(metricsData?.planned?.average_ltv, '$')}
+                  -{useNumberWithCommas(metricsData?.planned?.average_ltv, '$')}
                 </div>
               </div>
             </div>
@@ -138,9 +163,9 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
               <p className="black-heading-title mt-0">Partners</p>
               <div className="label">Net New Customers</div>
               <h3>
-                {numberWithCommas(
-                  metricsData?.actual?.total_total_rev_share,
-                  '$',
+                {useNumberWithCommas(
+                  metricsData?.actual?.net_new_customers,
+                  '',
                 )}
               </h3>
               <div className="mt-2 label-info">N/A</div>
@@ -152,8 +177,8 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 <div className="label">Net New Customers</div>
                 <div className="d-lg-block d-none">
                   <h3>
-                    {numberWithCommas(
-                      metricsData?.actual?.total_total_rev_share,
+                    {useNumberWithCommas(
+                      metricsData?.actual?.total_revenue,
                       '$',
                     )}
                   </h3>
@@ -162,8 +187,8 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                 <ul className="d-lg-none d-block bbe-goals-partners">
                   <li>
                     <h3>
-                      {numberWithCommas(
-                        metricsData?.planned?.total_total_rev_share,
+                      {useNumberWithCommas(
+                        metricsData?.planned?.total_revenue,
                         '$',
                       )}
                     </h3>
@@ -172,8 +197,8 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
                     {' '}
                     <div className="green-text mt-2">
                       +
-                      {numberWithCommas(
-                        metricsData?.planned?.total_total_rev_share,
+                      {useNumberWithCommas(
+                        metricsData?.planned?.total_revenue,
                         '$',
                       )}{' '}
                       vs plan
@@ -185,31 +210,67 @@ export default function BBEGoalHighLevelMetrics({ selectedMonthYear }) {
               <div className="col-lg-6 col-md-3 col-6   pt-3">
                 <div className="label mb-2 mt-md-3 mt-lg-0">Onboarded</div>
                 <div className="d-lg-block d-none">
-                  <h3 className="small-title-heading">5</h3>
-                  <div className="green-text large-size mt-2">+3</div>
+                  <h3 className="small-title-heading">
+                    {useNumberWithCommas(metricsData?.actual?.onboarded)}
+                  </h3>
+                  <div
+                    className={`${
+                      metricsData?.planned?.onboarded > 0
+                        ? 'green-text'
+                        : 'red-text'
+                    } large-size mt-2`}>
+                    {useNumberWithCommas(
+                      metricsData?.planned?.onboarded,
+                      metricsData?.planned?.onboarded === 0
+                        ? metricsData?.planned?.onboarded > 0
+                          ? '+'
+                          : '-'
+                        : '',
+                    )}
+                  </div>
                 </div>
 
                 <ul className="d-lg-none d-block bbe-goals-partners">
                   <li>
-                    <h3 className="small-title-heading">5</h3>
+                    <h3 className="small-title-heading">
+                      {metricsData?.actual?.offboarded}
+                    </h3>
                   </li>
                   <li>
-                    <div className="green-text large-size mt-2">+3</div>
+                    <div
+                      className={`${
+                        metricsData?.planned?.offboarded > 0
+                          ? 'green-text'
+                          : 'red-text'
+                      } large-size mt-2`}>
+                      {useNumberWithCommas(
+                        metricsData?.planned?.offboarded,
+                        metricsData?.planned?.offboarded === 0
+                          ? metricsData?.planned?.offboarded > 0
+                            ? '+'
+                            : '-'
+                          : '',
+                      )}
+                    </div>
                   </li>
                 </ul>
               </div>
               <div className="col-lg-6 col-md-3 col-6  pt-3">
                 <div className="label mb-2 mt-md-3 mt-lg-0">OFfboarded</div>
                 <div className="d-lg-block d-none">
-                  <h3 className="small-title-heading">5</h3>
+                  <h3 className="small-title-heading">
+                    {metricsData?.actual?.offboarded}
+                  </h3>
                   <div className="label-info mt-2">N/A</div>
                 </div>
                 <ul className="d-lg-none d-block bbe-goals-partners">
                   <li>
-                    <h3 className="small-title-heading">5</h3>
+                    <h3 className="small-title-heading">
+                      {metricsData?.actual?.offboarded}
+                    </h3>
                   </li>
                   <li>
-                    <div className="green-text large-size mt-2">+3</div>
+                    <div className="green-text large-size mt-2">N/A</div>
                   </li>
                 </ul>
               </div>

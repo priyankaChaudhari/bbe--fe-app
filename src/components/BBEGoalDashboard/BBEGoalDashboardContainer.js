@@ -15,7 +15,7 @@ import { CaretUp, CloseIcon } from '../../theme/images';
 import { monthNames } from '../../constants';
 
 const currentDate = new Date();
-currentDate.setMonth(currentDate.getMonth());
+currentDate.setMonth(currentDate.getMonth() - 1);
 export default function BBEGoalDashboardContainer() {
   const dropdownRef = useRef(null);
   const [showDropdown, setShowDropdown] = useState({ show: false });

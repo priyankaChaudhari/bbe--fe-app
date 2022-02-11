@@ -36,9 +36,9 @@ const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
 
     // Create series
     const series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.valueY = 'total_rev_share';
+    series.dataFields.valueY = 'rev_share';
     series.dataFields.categoryX = 'month_year';
-    series.name = 'total_rev_share';
+    series.name = 'rev_share';
     series.fillOpacity = 1;
     series.columns.template.column.adapter.add('fill', (fill, target) => {
       const valueX = target.dataItem.categories.categoryX;
@@ -58,7 +58,18 @@ const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
     series.columns.template.column.tooltipX = am4core.percent(50);
     series.columns.template.column.tooltipY = am4core.percent(0);
 
-    series.columns.template.column.tooltipText = `[font-size: 10px]{categoryX} REVENUE[/]\n[bold ${Theme.gray6} font-size: 20px margin-botton:5px]\${valueY}[/]`;
+    series.columns.template.column.tooltipText = `[font-size: 10px]{categoryX.replace('-','')} REVENUE[/]\n[bold ${Theme.gray6} font-size: 20px margin-botton:5px]\${valueY}[/]`;
+
+    series.columns.template.column.adapter.add(
+      'tooltipText',
+      (fill, target) => {
+        const month = target.dataItem.categoryX.split('-');
+        return `[font-size: 10px]${month[0].toUpperCase()} REVENUE[/]\n[bold ${
+          Theme.gray6
+        } font-size: 20px margin-botton:5px]\${valueY}[/]`;
+      },
+    );
+
     series.tooltip.dy = -5;
     series.tooltip.getFillFromObject = false;
     series.tooltip.pointerOrientation = 'down';

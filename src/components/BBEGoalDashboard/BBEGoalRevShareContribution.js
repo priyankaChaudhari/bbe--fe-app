@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { instanceOf } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
-import numberWithCommas from '../../hooks/numberWithCommas';
+import useNumberWithCommas from '../../hooks/useNumberWithCommas';
 import { ArrowDownIcon, ArrowUpIcon } from '../../theme/images';
 import { getRevShareContributionData } from '../../api';
 import {
@@ -115,7 +115,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
     );
   };
 
-  const renderTableData = (item, type) => {
+  const renderTableData = (item, type, numberWithCommas) => {
     return (
       <tr>
         <td className="product-body">
@@ -123,11 +123,11 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
           <div className="company-name">{item?.customer_name}</div>
           <div className="status">{item?.bgs}</div>
         </td>
-        <td className="text-medium">
-          ${numberWithCommas(item?.previous_rev_share)}
+        <td className="product-table-body">
+          {numberWithCommas(item?.previous_rev_share, '$')}
         </td>
-        <td className="text-medium">
-          ${numberWithCommas(item?.current_rev_share)}
+        <td className="product-table-body ">
+          {numberWithCommas(item?.current_rev_share, '$')}
         </td>
         {type === 'positive' ? (
           <td className="text-medium ">
@@ -182,6 +182,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
                     selectedContributionOption === 'positive'
                       ? 'positive'
                       : 'negative',
+                    useNumberWithCommas,
                   ),
                 )}
             </tbody>
@@ -195,7 +196,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
     );
   };
 
-  const renderMobileView = () => {
+  const renderMobileView = (numberWithCommas) => {
     let selectedContibutionData = [];
 
     selectedContibutionData =
@@ -279,7 +280,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
           renderDekstopView()
         ) : null}
       </WhiteCard>
-      {renderMobileView()}
+      {renderMobileView(useNumberWithCommas)}
     </>
   );
 }
