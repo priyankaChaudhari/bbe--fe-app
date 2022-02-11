@@ -21,6 +21,7 @@ export default function ConfirmMarketPlaceAllocation({
   setShowConfirmMarketplaceAllocation,
 }) {
   const [isApiCall, setIsApiCall] = useState(false);
+
   const balanceChangeValue = (value, type = '') => {
     if (value && value !== null && value !== 0) {
       value = Number(value.toFixed(2));
@@ -48,7 +49,9 @@ export default function ConfirmMarketPlaceAllocation({
             month_year: `${currentMonthYear}`,
             from_marketplace: `${selectedMarketplace}`,
             to_marketplace: `${item.value}`,
-            escrow_reallocated_amount_usd: item.balanceChanged,
+            escrow_reallocated_amount_usd: Number(
+              item.balanceChanged.toFixed(2),
+            ),
           });
         }
         if (item?.balanceChanged < 0) {
@@ -57,7 +60,9 @@ export default function ConfirmMarketPlaceAllocation({
             month_year: `${currentMonthYear}`,
             from_marketplace: `${item.value}`,
             to_marketplace: `${selectedMarketplace}`,
-            escrow_reallocated_amount_usd: Math.abs(item.balanceChanged),
+            escrow_reallocated_amount_usd: Number(
+              Math.abs(item.balanceChanged.toFixed(2)),
+            ),
           });
         }
         return tempData;
@@ -69,7 +74,7 @@ export default function ConfirmMarketPlaceAllocation({
           setShowConfirmMarketplaceAllocation(false);
           setShowMarketPlaceAllocation(true);
         }
-        setIsApiCall(false);
+        setIsApiCall(true);
       });
     },
     [
@@ -87,7 +92,7 @@ export default function ConfirmMarketPlaceAllocation({
       <div className="col-12">
         <AllocateBar id="BT-escrowBalance-DSPAllocaion" className="mt-3 mb-2">
           <div className="remaing-label text-bold text-right">
-            Total Escrow Balance:
+            Total Escrow Balance:&nbsp;
             {addThousandSeperator(totalEscrowBalance, 'currency')}
           </div>
           <div className="clear-fix" />

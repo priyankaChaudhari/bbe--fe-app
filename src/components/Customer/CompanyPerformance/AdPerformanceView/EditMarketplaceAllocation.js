@@ -79,7 +79,7 @@ export default function EditMarketplaceAllocation({
           className="mt-3 mb-3">
           {' '}
           <div className="remaing-label text-bold text-right">
-            Total Escrow Balance:{' '}
+            Total Escrow Balance:&nbsp;
             {addThousandSeperator(totalEscrowBalance, 'currency')}
           </div>{' '}
           <div className="clear-fix" />

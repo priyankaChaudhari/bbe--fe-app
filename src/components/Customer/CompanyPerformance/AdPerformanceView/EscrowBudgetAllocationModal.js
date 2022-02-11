@@ -58,13 +58,19 @@ export default function EscrowBudgetAllocationModal({
   getActivityLogInfo,
 }) {
   const mounted = useRef(false);
+  const currencySymbol = '$';
   const currentDate = useMemo(() => {
     return new Date();
   }, []);
-  const currencySymbol = '$';
   currentDate.setDate(1);
   currentDate.setHours(currentDate.getHours() + 12);
-  const currentMonthYear = dayjs(currentDate).format('YYYY-MM-DD');
+  const newCurrentDate = useMemo(() => {
+    return new Date();
+  }, []);
+  newCurrentDate.setDate(1);
+  newCurrentDate.setHours(currentDate.getHours());
+  const currentMonthYear = dayjs(newCurrentDate).format('YYYY-MM-DD');
+
   const [escrowBalanceMarketplace, setEscrowBalanceMarketplace] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(marketplace);
   const [totalEscrowBalance, setTotalEscrowBalance] = useState();
@@ -93,7 +99,7 @@ export default function EscrowBudgetAllocationModal({
     const tempData = [];
     if (response) {
       setTotalEscrowBalance(
-        response?.total_escrow ? response?.total_escrow : 0,
+        response?.total_escrow ? response?.total_escrow : `$0`,
       );
       if (response?.marketplace?.length) {
         response.marketplace.forEach((item, index) => {
@@ -101,7 +107,7 @@ export default function EscrowBudgetAllocationModal({
             label: item?.label ? item?.label : null,
             value: item?.value ? item?.value : null,
             key: `${item.label}${index}${item.label}`,
-            escrowBalance: item?.total ? item?.total : null,
+            escrowBalance: item?.total ? item?.total : 0,
             escrowReallocatedBalance: item?.total ? item?.total : null,
           });
         });
@@ -231,14 +237,14 @@ export default function EscrowBudgetAllocationModal({
           <div className="row">
             <div className="col-md-7 ">
               <div className="remaing-label text-bold">
-                Total Escrow Balance:
+                Total Escrow Balance:&nbsp;
                 {addThousandSeperator(totalEscrowBalance, 'currency')}
               </div>
             </div>
             <div className="col-md-5">
               {escrowBalanceMarketplace?.length > 1 &&
               totalEscrowBalance > 0 ? (
-                <div className="text-bold text-right d-md-none">
+                <div className="text-bold text-right">
                   <div
                     className="edit-marketplace cursor text-medium"
                     role="presentation"
@@ -488,7 +494,6 @@ export default function EscrowBudgetAllocationModal({
               currencySymbol={currencySymbol}
               currentMonthYear={currentMonthYear}
               selectedMarketplace={selectedMarketplace}
-              // marketplaceOptions={marketplaceOptions}
               escrowBalanceMarketplace={escrowBalanceMarketplace}
               setEscrowBalanceMarketplace={setEscrowBalanceMarketplace}
               totalEscrowBalance={totalEscrowBalance}
