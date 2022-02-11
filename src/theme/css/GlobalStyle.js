@@ -209,7 +209,8 @@ h3 {
 
 
   &.small-title-heading {
-    font-size: ${Theme.ExtraMediumTitleFontSize}
+    font-size: ${Theme.ExtraMediumTitleFontSize};
+    word-break: break-all;
   }
 
   &.gray-text {
@@ -288,7 +289,7 @@ h6 {
 }
 .text-medium{
    font-family: ${Theme.baseMediumFontFamily} !important;
-   font-weight: 500;
+   font-weight: 500 !important;
 }
 p {
   font-size: ${Theme.small};
