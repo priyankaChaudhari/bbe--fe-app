@@ -16,7 +16,7 @@ const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
     const chart = am4core.create(CHART_ID, am4charts.XYChart);
     chartRef.current = chart;
     chart.logo.disabled = true; // disable amchart logo
-    chart.data = data;
+    chart.data = data?.reverse();
 
     // Add X Axis
     const xAxis = chart.xAxes.push(new am4charts.CategoryAxis());

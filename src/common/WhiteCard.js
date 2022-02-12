@@ -176,6 +176,13 @@ export const WhiteCard = styled.div`
       cursor: pointer;
     }
   }
+
+  .label-info-medium {
+    color: ${Theme.black};
+    font-size: 18px;
+    font-weight: normal;
+  }
+
   .label-info {
     color: ${Theme.black};
     font-size: ${Theme.normal};

@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 
+import Dayjs from 'dayjs';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 
@@ -22,6 +23,7 @@ export default function BBEGoalDashboardContainer() {
 
   const [monthYear, setMonthYear] = useState(currentDate);
   const [finalMonthYear, setFinalMonthYear] = useState(currentDate);
+  const [updatedDate, setUpdatedDate] = useState(null);
 
   const handleApply = () => {
     setFinalMonthYear(monthYear);
@@ -115,16 +117,22 @@ export default function BBEGoalDashboardContainer() {
         <div className="dashboard-container-body ">
           <div className="row">
             <div className="col-lg-8 col-md-8 col-6">
-              {' '}
               <h5 className="sub-title-text">Business Performance Snapshot</h5>
-              <div className="sub-heading ">Last Updated 24 Jan, 2022</div>
+              {updatedDate && (
+                <div className="sub-heading ">Last Updated {updatedDate}</div>
+              )}
             </div>
             <div className="col-lg-4 col-md-4 col-6 text-right">
               {renderTimeFilterDropDown()}
             </div>
           </div>
 
-          <BBEGoalHighLevelMetrics selectedMonthYear={finalMonthYear} />
+          <BBEGoalHighLevelMetrics
+            onSendDate={(date) =>
+              setUpdatedDate(Dayjs(date).format('DD MMM, YYYY'))
+            }
+            selectedMonthYear={finalMonthYear}
+          />
           <BBEGoalRevShareContribution monthYear={finalMonthYear} />
         </div>
       </DashboardCard>
