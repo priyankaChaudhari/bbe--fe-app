@@ -22,7 +22,7 @@ export default function EditMarketplaceAllocation({
   totalEscrowBalance,
   addThousandSeperator,
   setIsDataLoading,
-  getDSPPacing,
+  getEscrowBalanceMarketplace,
   showMarketPlaceAllocation,
   setShowMarketPlaceAllocation,
   setShowEscrowMonthlyAllocation,
@@ -180,7 +180,8 @@ export default function EditMarketplaceAllocation({
                 onClick={() => {
                   setShowMarketPlaceAllocation(false);
                   setShowEscrowMonthlyAllocation(true);
-                  getDSPPacing(selectedMarketplace);
+                  getEscrowBalanceMarketplace();
+                  setIsAllowToContinue(false);
                 }}
                 role="presentation"
               />
@@ -209,11 +210,13 @@ export default function EditMarketplaceAllocation({
           setIsDataLoading={setIsDataLoading}
           totalEscrowBalance={totalEscrowBalance}
           escrowBalanceMarketplace={escrowBalanceMarketplace}
+          getEscrowBalanceMarketplace={getEscrowBalanceMarketplace}
           setShowMarketPlaceAllocation={setShowMarketPlaceAllocation}
           showConfirmMarketplaceAllocation={showConfirmMarketplaceAllocation}
           setShowConfirmMarketplaceAllocation={
             setShowConfirmMarketplaceAllocation
           }
+          setShowEscrowMonthlyAllocation={setShowEscrowMonthlyAllocation}
         />
       ) : (
         ''
@@ -232,7 +235,7 @@ EditMarketplaceAllocation.defaultProps = {
   setEscrowBalanceMarketplace: () => {},
   setIsDataLoading: () => {},
   addThousandSeperator: () => {},
-  getDSPPacing: () => {},
+  getEscrowBalanceMarketplace: () => {},
   showMarketPlaceAllocation: bool,
   setShowMarketPlaceAllocation: () => {},
   setShowEscrowMonthlyAllocation: () => {},
@@ -248,7 +251,7 @@ EditMarketplaceAllocation.propTypes = {
   setEscrowBalanceMarketplace: func,
   addThousandSeperator: func,
   setIsDataLoading: func,
-  getDSPPacing: func,
+  getEscrowBalanceMarketplace: func,
   showMarketPlaceAllocation: bool,
   setShowMarketPlaceAllocation: func,
   setShowEscrowMonthlyAllocation: func,

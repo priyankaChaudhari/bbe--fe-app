@@ -72,6 +72,7 @@ export default function EscrowBudgetAllocationModal({
   const currentMonthYear = dayjs(newCurrentDate).format('YYYY-MM-DD');
 
   const [escrowBalanceMarketplace, setEscrowBalanceMarketplace] = useState([]);
+  const [oldEscrowAllocation, setOldEscrowAllocation] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(marketplace);
   const [totalEscrowBalance, setTotalEscrowBalance] = useState();
 
@@ -99,17 +100,18 @@ export default function EscrowBudgetAllocationModal({
     const tempData = [];
     if (response) {
       setTotalEscrowBalance(
-        response?.total_escrow ? response?.total_escrow : `$0`,
+        response?.total_escrow ? response?.total_escrow : 0,
       );
       if (response?.marketplace?.length) {
         response.marketplace.forEach((item, index) => {
           tempData.push({
             label: item?.label ? item?.label : null,
             value: item?.value ? item?.value : null,
-            key: `${item.label}${index}${item.label}`,
+            key: item?.id ? item.id : `${item.label}${index}`,
             escrowBalance: item?.total ? item?.total : 0,
-            escrowReallocatedBalance: item?.total ? item?.total : null,
+            escrowReallocatedBalance: item?.total ? item?.total : 0,
           });
+          setOldEscrowAllocation(tempData);
         });
       } else {
         setIsSubmitLoader(true);
@@ -160,6 +162,7 @@ export default function EscrowBudgetAllocationModal({
     },
     [currentDate, customerId],
   );
+
   const submitAllocatedBudget = useCallback(() => {
     setIsApiCall(true);
     storeAllocatedBudget(allocatedMonths, customerId, marketplace).then(
@@ -185,7 +188,6 @@ export default function EscrowBudgetAllocationModal({
   useEffect(() => {
     mounted.current = true;
     getDSPPacing(marketplace);
-
     return () => {
       mounted.current = false;
     };
@@ -295,11 +297,13 @@ export default function EscrowBudgetAllocationModal({
                     onClick={() => {
                       setSelectedMarketplace(item.value);
                       getDSPPacing(item.value);
-                      setEscrowBalanceMarketplace(escrowBalanceMarketplace);
                     }}
                     role="presentation">
-                    {item.label}&nbsp;(
-                    {addThousandSeperator(item.escrowBalance, 'currency')})
+                    {item.label}&nbsp; (
+                    {item.escrowBalance === 0
+                      ? `$0`
+                      : addThousandSeperator(item.escrowBalance, 'currency')}
+                    )
                   </li>
                 );
               })}
@@ -496,6 +500,8 @@ export default function EscrowBudgetAllocationModal({
               selectedMarketplace={selectedMarketplace}
               escrowBalanceMarketplace={escrowBalanceMarketplace}
               setEscrowBalanceMarketplace={setEscrowBalanceMarketplace}
+              oldEscrowAllocation={oldEscrowAllocation}
+              getEscrowBalanceMarketplace={getEscrowBalanceMarketplace}
               totalEscrowBalance={totalEscrowBalance}
               addThousandSeperator={addThousandSeperator}
               setIsDataLoading={setIsDataLoading}

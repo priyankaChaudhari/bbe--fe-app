@@ -16,9 +16,11 @@ export default function ConfirmMarketPlaceAllocation({
   addThousandSeperator,
   totalEscrowBalance,
   escrowBalanceMarketplace,
+  getEscrowBalanceMarketplace,
   setShowMarketPlaceAllocation,
   showConfirmMarketplaceAllocation,
   setShowConfirmMarketplaceAllocation,
+  setShowEscrowMonthlyAllocation,
 }) {
   const [isApiCall, setIsApiCall] = useState(false);
 
@@ -72,7 +74,8 @@ export default function ConfirmMarketPlaceAllocation({
           onClick();
           getActivityLogInfo();
           setShowConfirmMarketplaceAllocation(false);
-          setShowMarketPlaceAllocation(true);
+          setShowEscrowMonthlyAllocation(true);
+          getEscrowBalanceMarketplace();
         }
         setIsApiCall(true);
       });
@@ -81,10 +84,11 @@ export default function ConfirmMarketPlaceAllocation({
       currentMonthYear,
       customerId,
       getActivityLogInfo,
+      getEscrowBalanceMarketplace,
       onClick,
       selectedMarketplace,
       setShowConfirmMarketplaceAllocation,
-      setShowMarketPlaceAllocation,
+      setShowEscrowMonthlyAllocation,
     ],
   );
   const renderAllocateBar = () => {
@@ -276,9 +280,11 @@ ConfirmMarketPlaceAllocation.defaultProps = {
   getActivityLogInfo: () => {},
   addThousandSeperator: () => {},
   escrowBalanceMarketplace: [],
+  getEscrowBalanceMarketplace: () => {},
   setShowMarketPlaceAllocation: func,
   showConfirmMarketplaceAllocation: bool,
   setShowConfirmMarketplaceAllocation: func,
+  setShowEscrowMonthlyAllocation: func,
 };
 
 ConfirmMarketPlaceAllocation.propTypes = {
@@ -291,7 +297,9 @@ ConfirmMarketPlaceAllocation.propTypes = {
   onClick: func,
   getActivityLogInfo: func,
   escrowBalanceMarketplace: arrayOf(shape()),
+  getEscrowBalanceMarketplace: func,
   setShowMarketPlaceAllocation: func,
   showConfirmMarketplaceAllocation: bool,
   setShowConfirmMarketplaceAllocation: func,
+  setShowEscrowMonthlyAllocation: func,
 };
