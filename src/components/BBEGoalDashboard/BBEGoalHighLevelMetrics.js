@@ -23,15 +23,12 @@ export default function BBEGoalHighLevelMetrics({
   );
 
   const getKPIMetrics = useCallback(() => {
-    setMetricsData(null);
     setLoader(true);
     getBBEGoalMetrics(selectedMonthYear).then((res) => {
-      if (res && res.status === 500) {
-        setMetricsData(null);
-        setLoader(false);
-      }
-
-      if (res && res.status === 400) {
+      if (
+        res &&
+        (res.status === 500 || res.status === 400 || res.status === 403)
+      ) {
         setMetricsData(null);
         setLoader(false);
       }
