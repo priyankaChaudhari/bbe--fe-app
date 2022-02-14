@@ -445,9 +445,9 @@ export default function BillingInfo({
     if (
       (apiError?.billing_address &&
         Object.values(apiError.billing_address)?.find((op) => op !== '')) ||
-      (apiError?.billing_address &&
+      (apiError?.billing_contact &&
         Object.values(apiError.billing_contact)?.find((op) => op !== '')) ||
-      (apiError?.billing_address &&
+      (apiError?.dsp_contact &&
         Object.values(apiError.dsp_contact)?.find((op) => op !== ''))
     )
       return true;
