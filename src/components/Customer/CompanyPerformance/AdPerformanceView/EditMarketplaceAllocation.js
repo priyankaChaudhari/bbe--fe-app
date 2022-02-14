@@ -140,9 +140,9 @@ export default function EditMarketplaceAllocation({
   const renderErrorMessageBox = () => {
     return (
       <ErrorMsgBox className="mb-3">
-        <img className="info-icon" src={InfoRedIcon} alt="info" /> All budgets
-        across the selected marketplaces need to add up to the available escrow
-        balance
+        <img className="info-icon" src={InfoRedIcon} alt="info" />
+        All budgets across the selected marketplaces need to add up to the
+        available escrow balance
       </ErrorMsgBox>
     );
   };

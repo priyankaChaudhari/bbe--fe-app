@@ -40,5 +40,10 @@ const AllocateBar = styled.div`
     font-weight: 400;
     float: right;
   }
+  @media only screen and (max-width: 768px) {
+    .edit-marketplace {
+      margin-top: 15px;
+    }
+  }
 `;
 export default AllocateBar;

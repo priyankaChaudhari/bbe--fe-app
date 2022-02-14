@@ -112,9 +112,10 @@ export default function EscrowBudgetAllocationModal({
             escrowReallocatedBalance: item?.total ? item?.total : 0,
           });
           setOldEscrowAllocation(tempData);
+          setIsSubmitLoader(false);
         });
       } else {
-        setIsSubmitLoader(false);
+        setIsSubmitLoader(true);
       }
     }
     return tempData;
@@ -129,7 +130,6 @@ export default function EscrowBudgetAllocationModal({
           setEscrowBalanceMarketplace(getData);
         }
         setIsDataLoading(false);
-        setIsSubmitLoader(false);
       }
     });
   }, [bindEscrowMarketplaceData, customerId]);
@@ -401,9 +401,9 @@ export default function EscrowBudgetAllocationModal({
   const renderErrorMessageBox = () => {
     return (
       <ErrorMsgBox className="mt-2">
-        <img className="info-icon" src={InfoRedIcon} alt="info" /> All budgets
-        across the selected months need to add up to the available escrow
-        balance
+        <img className="info-icon" src={InfoRedIcon} alt="info" />
+        All budgets across the selected months need to add up to the available
+        escrow balance
       </ErrorMsgBox>
     );
   };

@@ -178,28 +178,30 @@ export default function ConfirmMarketPlaceAllocation({
     );
     return results?.map((item) => {
       return (
-        <div className="row" key={item.label}>
-          <div className="col-12 mb-2">
-            <div className="label">Marketplace</div>
-            <div className="label-info">{item.label}</div>
-          </div>
-          <div className="col-4">
-            <div className="label"> From</div>
-            <div className="label-info"> ${item.escrowBalance}</div>
-          </div>
-          <div className="col-4">
-            <div className="label"> To</div>
-            <div className="label-info">${item.escrowReallocatedBalance}</div>
-          </div>
-          <div className="col-4">
-            <div className="label"> change</div>
-            <div className="label-info">
-              {item.balanceChanged === 0
-                ? `$0`
-                : balanceChangeValue(item.balanceChanged, 'currency')}
+        <>
+          <div className="row mt-3 mb-3" key={item.label}>
+            <div className="col-12 mb-2">
+              <div className="label">Marketplace</div>
+              <div className="label-info">{item.label}</div>
+            </div>
+            <div className="col-4">
+              <div className="label">From</div>
+              <div className="label-info"> ${item.escrowBalance}</div>
+            </div>
+            <div className="col-4">
+              <div className="label">To</div>
+              <div className="label-info">${item.escrowReallocatedBalance}</div>
+            </div>
+            <div className="col-4">
+              <div className="label">Change</div>
+              <div className="label-info">
+                {item.balanceChanged === 0
+                  ? `$0`
+                  : balanceChangeValue(item.balanceChanged, 'currency')}
+              </div>
             </div>
           </div>
-        </div>
+        </>
       );
     });
   };
