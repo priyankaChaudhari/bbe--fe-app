@@ -60,12 +60,12 @@ export default function BBEGoalHighLevelMetrics({
   const formatNumber = (value, type, numberWithCommas) => {
     const prefix = type === 'currency' ? '$' : '';
     if (value < 0) {
-      return numberWithCommas(value, `-${prefix}`, true);
+      return numberWithCommas(value, `-${prefix}`, '', true);
     }
     if (value > 0) {
-      return numberWithCommas(value, `+${prefix}`, true);
+      return numberWithCommas(value, `+${prefix}`, '', true);
     }
-    return numberWithCommas(value, prefix, true);
+    return numberWithCommas(value, prefix, '', true);
   };
 
   const renderPartners = (numberWithCommas) => {
@@ -78,6 +78,7 @@ export default function BBEGoalHighLevelMetrics({
             <h3>
               {numberWithCommas(
                 metricsData?.actual?.net_new_customers,
+                '',
                 '',
                 true,
               )}
@@ -127,7 +128,12 @@ export default function BBEGoalHighLevelMetrics({
               <div className="label mb-2 mt-md-3 mt-lg-0">Onboarded</div>
               <div className="d-lg-block d-none">
                 <h3 className="small-title-heading">
-                  {numberWithCommas(metricsData?.actual?.onboarded, '', true)}
+                  {numberWithCommas(
+                    metricsData?.actual?.onboarded,
+                    '',
+                    '',
+                    true,
+                  )}
                 </h3>
                 <div
                   className={`${returnClassName(
@@ -144,7 +150,12 @@ export default function BBEGoalHighLevelMetrics({
               <ul className="d-lg-none d-block bbe-goals-partners">
                 <li>
                   <h3 className="small-title-heading">
-                    {numberWithCommas(metricsData?.actual?.onboarded, '', true)}
+                    {numberWithCommas(
+                      metricsData?.actual?.onboarded,
+                      '',
+                      '',
+                      true,
+                    )}
                   </h3>
                 </li>
                 <li>
@@ -165,7 +176,12 @@ export default function BBEGoalHighLevelMetrics({
               <div className="label mb-2 mt-md-3 mt-lg-0">OFfboarded</div>
               <div className="d-lg-block d-none">
                 <h3 className="small-title-heading">
-                  {numberWithCommas(metricsData?.actual?.offboarded, '', true)}
+                  {numberWithCommas(
+                    metricsData?.actual?.offboarded,
+                    '',
+                    '',
+                    true,
+                  )}
                 </h3>
                 <div
                   className={`${returnClassName(
@@ -183,6 +199,7 @@ export default function BBEGoalHighLevelMetrics({
                   <h3 className="small-title-heading">
                     {numberWithCommas(
                       metricsData?.actual?.offboarded,
+                      '',
                       '',
                       true,
                     )}
@@ -216,7 +233,12 @@ export default function BBEGoalHighLevelMetrics({
             <p className="black-heading-title mt-0">Financials</p>
             <div className="label">Total Revenue</div>
             <h3>
-              {numberWithCommas(metricsData?.actual?.total_revenue, '$', true)}
+              {numberWithCommas(
+                metricsData?.actual?.total_revenue,
+                '$',
+                '',
+                true,
+              )}
             </h3>
             <div
               className={`${returnClassName(
@@ -257,6 +279,7 @@ export default function BBEGoalHighLevelMetrics({
               {numberWithCommas(
                 metricsData?.actual?.avg_billing_cap,
                 '$',
+                '',
                 true,
               )}
             </h3>
@@ -294,7 +317,7 @@ export default function BBEGoalHighLevelMetrics({
               />
             </div>
             <h3 className="small-title-heading">
-              {numberWithCommas(metricsData?.actual?.rev_share, '$', true)}
+              {numberWithCommas(metricsData?.actual?.rev_share, '$', '', true)}
             </h3>
 
             <div
@@ -315,6 +338,7 @@ export default function BBEGoalHighLevelMetrics({
               {numberWithCommas(
                 metricsData?.actual?.rev_per_employee,
                 '$',
+                '',
                 true,
               )}
             </h3>
@@ -322,7 +346,12 @@ export default function BBEGoalHighLevelMetrics({
           <div className="col-md-3 col-6">
             <div className="label mb-2">Average LTV</div>
             <h3 className="small-title-heading">
-              {numberWithCommas(metricsData?.actual?.average_ltv, '$', true)}
+              {numberWithCommas(
+                metricsData?.actual?.average_ltv,
+                '$',
+                '',
+                true,
+              )}
             </h3>
 
             <div

@@ -1,4 +1,4 @@
-const useNumberWithCommas = (x, prefix = '', round = false) => {
+const useNumberWithCommas = (x, prefix = '', postfix = '', round = false) => {
   let result;
   if (x === undefined || x === null || isNaN(Number(x))) {
     result = 'N/A';
@@ -11,7 +11,8 @@ const useNumberWithCommas = (x, prefix = '', round = false) => {
         .toString()
         .replace(/-/g, '') // Remove dash
         .replace(/\.0+$/, '') // Remove decimal zero
-        .replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add comma seprator
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',') + // Add comma seprator
+      postfix;
   }
 
   return result;

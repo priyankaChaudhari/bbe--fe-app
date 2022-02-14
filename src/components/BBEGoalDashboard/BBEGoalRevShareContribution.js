@@ -134,14 +134,14 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
             <div className="increase-rate large text-medium">
               {' '}
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
-              {`${item?.change_in_percentage.toFixed(2)}%`}
+              {`${numberWithCommas(item?.change_in_percentage, '', '%')}`}
             </div>
           </td>
         ) : (
           <td className="product-body ">
             <div className="decrease-rate large text-medium">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-              {`${item?.change_in_percentage.toFixed(2)}%`}
+              {`${numberWithCommas(item?.change_in_percentage, '', '%')}`}
             </div>
           </td>
         )}
@@ -238,7 +238,11 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
               label1={contributionData?.current_date}
               labelInfo1={`$${numberWithCommas(item?.current_rev_share)}`}
               label2="Change"
-              labelInfo2={`${item.change_in_percentage.toFixed(2)}%`}
+              labelInfo2={`${numberWithCommas(
+                item?.change_in_percentage,
+                '',
+                '%',
+              )}`}
               status={item.contribution_bracket}
               statusColor={contributionColorSet[item.contribution_bracket]}
               isShowPercentage
