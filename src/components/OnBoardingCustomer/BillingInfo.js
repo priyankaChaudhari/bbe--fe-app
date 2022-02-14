@@ -54,50 +54,35 @@ export default function BillingInfo({
   const [apiError, setApiError] = useState({});
   const [sameAsBillingContact, setSameAsBillingContact] = useState(true);
   const [DSPContactDetail, setDSPContactDetail] = useState({});
-  let billingInformation = [];
 
-  billingInformation = showDSP
-    ? [
-        {
-          label: 'Billing Address',
-          part: 'Part 1',
-          array: billingAddress.filter((op) => op.section === 'address'),
-          key: 'billing_address',
-          hasCheckbox: false,
-        },
-        {
-          label: 'Billing Contact',
-          part: 'Part 2',
-          array: billingAddress.filter((op) => op.section === 'contact'),
-          key: 'billing_contact',
-          hasCheckbox: false,
-        },
-        {
-          label: 'DSP Budget Sign-off',
-          part: 'Part 3',
-          array: billingAddress.filter((op) => op.section === 'contact'),
-          key: 'dsp_contact',
-          hasCheckbox: true,
-          subTitle:
-            'From time to time, your Growth Strategist may recommend a change in your DSP budget. Please tell us who should receive the emails to approve any DSP budget change.',
-        },
-      ]
-    : [
-        {
-          label: 'Billing Address',
-          part: 'Part 1',
-          array: billingAddress.filter((op) => op.section === 'address'),
-          key: 'billing_address',
-          hasCheckbox: false,
-        },
-        {
-          label: 'Billing Contact',
-          part: 'Part 2',
-          array: billingAddress.filter((op) => op.section === 'contact'),
-          key: 'billing_contact',
-          hasCheckbox: false,
-        },
-      ];
+  const billingInformation = [
+    {
+      label: 'Billing Address',
+      part: 'Part 1',
+      array: billingAddress.filter((op) => op.section === 'address'),
+      key: 'billing_address',
+      hasCheckbox: false,
+    },
+    {
+      label: 'Billing Contact',
+      part: 'Part 2',
+      array: billingAddress.filter((op) => op.section === 'contact'),
+      key: 'billing_contact',
+      hasCheckbox: false,
+    },
+  ];
+  const dspInformation = [
+    ...billingInformation,
+    {
+      label: 'DSP Budget Sign-off',
+      part: 'Part 3',
+      array: billingAddress.filter((op) => op.section === 'contact'),
+      key: 'dsp_contact',
+      hasCheckbox: true,
+      subTitle:
+        'From time to time, your Growth Strategist may recommend a change in your DSP budget. Please tell us who should receive the emails to approve any DSP budget change.',
+    },
+  ];
 
   const getIncompleteStep = summaryData.find(
     (op) =>
@@ -354,7 +339,7 @@ export default function BillingInfo({
         placeholder={`Enter ${item.label}`}
         value={
           type === 'dsp_contact'
-            ? DSPContactDetail?.[item.key] || formData?.dsp_contact?.[item.key]
+            ? formData?.dsp_contact?.[item.key] || DSPContactDetail?.[item.key]
             : formData?.[type]?.[item.key]
         }
         isNumericString
@@ -370,7 +355,7 @@ export default function BillingInfo({
         type={item.type}
         defaultValue={
           type === 'dsp_contact'
-            ? DSPContactDetail?.[item.key] || formData?.dsp_contact?.[item.key]
+            ? formData?.dsp_contact?.[item.key] || DSPContactDetail?.[item.key]
             : data?.[type]?.[0]?.[item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
@@ -398,10 +383,10 @@ export default function BillingInfo({
     );
   };
 
-  const generateBillingAddressHTML = () => {
+  const generateBillingAddressHTML = (array) => {
     return (
       <>
-        {billingInformation.map((field) => (
+        {array.map((field) => (
           <fieldset className="shape-without-border  w-430 mt-3">
             <p className="account-steps m-0">{field.part}</p>
             <div className="billing-address"> {field.label}</div>
@@ -418,7 +403,7 @@ export default function BillingInfo({
                 {field.array.map((item) => (
                   <div className={item.property} key={item.key}>
                     <InputFormField className="mt-3">
-                      <label htmlFor={item.label}>
+                      <label htmlFor={item.key}>
                         {item.label}
                         <br />
                         {item.type === 'number' ? (
@@ -443,6 +428,32 @@ export default function BillingInfo({
 
   const disableWhenError = () => {
     if (
+      showDSP &&
+      (!formData?.dsp_contact ||
+        !formData?.dsp_contact?.first_name ||
+        !formData?.dsp_contact?.last_name ||
+        !formData?.dsp_contact?.email ||
+        !formData?.dsp_contact?.phone_number)
+    )
+      return true;
+
+    if (
+      !formData?.billing_contact ||
+      !formData?.billing_contact?.first_name ||
+      !formData?.billing_contact?.last_name ||
+      !formData?.billing_contact?.email ||
+      !formData?.billing_contact?.phone_number
+    )
+      return true;
+    if (
+      !formData?.billing_address ||
+      !formData?.billing_address?.address ||
+      !formData?.billing_address?.city ||
+      !formData?.billing_address?.state ||
+      !formData?.billing_address?.postal_code
+    )
+      return true;
+    if (
       (apiError?.billing_address &&
         Object.values(apiError.billing_address)?.find((op) => op !== '')) ||
       (apiError?.billing_contact &&
@@ -458,7 +469,9 @@ export default function BillingInfo({
   return (
     <>
       <OnBoardingBody className="body-white">
-        {generateBillingAddressHTML()}
+        {generateBillingAddressHTML(
+          showDSP ? dspInformation : billingInformation,
+        )}
 
         <div className="white-card-base panel gap-none">
           {isChecked ? (
