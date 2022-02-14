@@ -116,17 +116,21 @@ export default function BillingDetails({
     getDSPContact(id).then((res) => {
       if (res?.status === 200) {
         if (res?.data?.is_dsp_contract) {
-          for (const user of memberData) {
-            if (user.user) {
-              if (
-                (user?.role_group?.name === 'BGS Manager' ||
-                  user?.role_group?.name === 'BGS' ||
-                  user?.role_group?.name === 'DSP Ad Manager' ||
-                  user?.role_group?.name === 'Ad Manager Admin') &&
-                user?.user?.id === userInfo?.id
-              ) {
-                setShowDSPEdit(true);
-                break;
+          if (userInfo?.role === 'Customer') {
+            setShowDSPEdit(true);
+          } else {
+            for (const user of memberData) {
+              if (user.user) {
+                if (
+                  (user?.role_group?.name === 'BGS Manager' ||
+                    user?.role_group?.name === 'BGS' ||
+                    user?.role_group?.name === 'DSP Ad Manager' ||
+                    user?.role_group?.name === 'Ad Manager Admin') &&
+                  user?.user?.id === userInfo?.id
+                ) {
+                  setShowDSPEdit(true);
+                  break;
+                }
               }
             }
           }

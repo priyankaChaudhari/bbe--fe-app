@@ -30,7 +30,7 @@ import {
   PATH_SUMMARY,
   PATH_THANKS,
   stepPath,
-  billingInformation,
+  billingAddress,
 } from '../../constants';
 
 export default function BillingInfo({
@@ -45,6 +45,7 @@ export default function BillingInfo({
   summaryData,
   skipAmazonAccount,
   summaryDetails,
+  showDSP,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -53,6 +54,50 @@ export default function BillingInfo({
   const [apiError, setApiError] = useState({});
   const [sameAsBillingContact, setSameAsBillingContact] = useState(true);
   const [DSPContactDetail, setDSPContactDetail] = useState({});
+  let billingInformation = [];
+
+  billingInformation = showDSP
+    ? [
+        {
+          label: 'Billing Address',
+          part: 'Part 1',
+          array: billingAddress.filter((op) => op.section === 'address'),
+          key: 'billing_address',
+          hasCheckbox: false,
+        },
+        {
+          label: 'Billing Contact',
+          part: 'Part 2',
+          array: billingAddress.filter((op) => op.section === 'contact'),
+          key: 'billing_contact',
+          hasCheckbox: false,
+        },
+        {
+          label: 'DSP Budget Sign-off',
+          part: 'Part 3',
+          array: billingAddress.filter((op) => op.section === 'contact'),
+          key: 'dsp_contact',
+          hasCheckbox: true,
+          subTitle:
+            'From time to time, your Growth Strategist may recommend a change in your DSP budget. Please tell us who should receive the emails to approve any DSP budget change.',
+        },
+      ]
+    : [
+        {
+          label: 'Billing Address',
+          part: 'Part 1',
+          array: billingAddress.filter((op) => op.section === 'address'),
+          key: 'billing_address',
+          hasCheckbox: false,
+        },
+        {
+          label: 'Billing Contact',
+          part: 'Part 2',
+          array: billingAddress.filter((op) => op.section === 'contact'),
+          key: 'billing_contact',
+          hasCheckbox: false,
+        },
+      ];
 
   const getIncompleteStep = summaryData.find(
     (op) =>
@@ -83,31 +128,33 @@ export default function BillingInfo({
   }, [data]);
 
   useEffect(() => {
-    getDSPContact(userInfo.customer || verifiedStepData.customer_id).then(
-      (res) => {
-        $('.checkboxes input:checkbox').prop(
-          'checked',
-          res?.data?.results?.[0]
-            ? res?.data?.results?.[0]?.same_as_billing_contact
-            : true,
-        );
-        setSameAsBillingContact(
-          res?.data?.results?.[0]
-            ? res?.data?.results?.[0]?.same_as_billing_contact
-            : true,
-        );
-        setDSPContactDetail(res?.data?.results?.[0]);
-        setFormData((prevState) => ({
-          ...prevState,
-          dsp_contact:
-            res?.data?.results?.[0]?.same_as_billing_contact ||
-            sameAsBillingContact
-              ? data?.billing_contact?.[0]
-              : res?.data?.results?.[0],
-        }));
-      },
-    );
-  }, []);
+    if (showDSP) {
+      getDSPContact(userInfo.customer || verifiedStepData.customer_id).then(
+        (res) => {
+          $('.checkboxes input:checkbox').prop(
+            'checked',
+            res?.data?.results?.[0]
+              ? res?.data?.results?.[0]?.same_as_billing_contact
+              : true,
+          );
+          setSameAsBillingContact(
+            res?.data?.results?.[0]
+              ? res?.data?.results?.[0]?.same_as_billing_contact
+              : true,
+          );
+          setDSPContactDetail(res?.data?.results?.[0]);
+          setFormData((prevState) => ({
+            ...prevState,
+            dsp_contact:
+              res?.data?.results?.[0]?.same_as_billing_contact ||
+              sameAsBillingContact
+                ? data?.billing_contact?.[0]
+                : res?.data?.results?.[0],
+          }));
+        },
+      );
+    }
+  }, [showDSP]);
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
@@ -215,64 +262,68 @@ export default function BillingInfo({
       customer: userInfo.customer || verifiedStepData.customer_id,
     };
 
-    axios
-      .all([
-        saveBillingInfo(details, data?.id || null),
-        saveDSPContact(
-          dspDetail,
-          DSPContactDetail?.id || formData?.dsp_contact?.id,
-        ),
-      ])
-      .then(
-        axios.spread((...res) => {
-          if (
+    const apiArray = showDSP
+      ? [
+          saveBillingInfo(details, data?.id || null),
+          saveDSPContact(
+            dspDetail,
+            DSPContactDetail?.id || formData?.dsp_contact?.id,
+          ),
+        ]
+      : [saveBillingInfo(details, data?.id || null)];
+
+    axios.all(apiArray).then(
+      axios.spread((...res) => {
+        if (
+          (showDSP &&
             (res?.[0]?.status === 201 || res?.[0]?.status === 200) &&
-            (res?.[1]?.status === 201 || res?.[1]?.status === 200)
-          ) {
-            saveDetails();
-            if (assignedToSomeone) {
-              const stringified = queryString?.stringify({
-                name: verifiedStepData.user_name,
-              });
-              history.push({
-                pathname: PATH_THANKS,
-                search: `${stringified}`,
-              });
-            } else {
-              CheckStep('billing information');
-            }
-          }
-
-          if (res?.[0]?.status === 400 || res?.[1]?.status === 400) {
-            let address = {};
-            let contact = {};
-            let dsp = {};
-            if (res?.[0]?.status === 400) {
-              address = res?.[0]?.data?.billing_address;
-              contact = res?.[0]?.data?.billing_contact;
-            }
-            if (res?.[1]?.status === 400) {
-              setSameAsBillingContact(false);
-              $('.checkboxes input:checkbox').prop('checked', false);
-              dsp = res?.[1]?.data;
-            }
-
-            setIsLoading({ loader: false, type: 'button' });
-            setApiError({
-              dsp_contact: dsp,
-              billing_address: address,
-              billing_contact: contact,
+            (res?.[1]?.status === 201 || res?.[1]?.status === 200)) ||
+          (!showDSP && (res?.[0]?.status === 201 || res?.[0]?.status === 200))
+        ) {
+          saveDetails();
+          if (assignedToSomeone) {
+            const stringified = queryString?.stringify({
+              name: verifiedStepData.user_name,
             });
-            if (
-              (res?.data && res.data.billing_address) ||
-              (res?.data && res.data[0])
-            ) {
-              document.body.scrollTop = 0; // For Safari
-              document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-            }
+            history.push({
+              pathname: PATH_THANKS,
+              search: `${stringified}`,
+            });
+          } else {
+            CheckStep('billing information');
           }
-        }),
-      );
+        }
+
+        if (res?.[0]?.status === 400 || res?.[1]?.status === 400) {
+          let address = {};
+          let contact = {};
+          let dsp = {};
+          if (res?.[0]?.status === 400) {
+            address = res?.[0]?.data?.billing_address;
+            contact = res?.[0]?.data?.billing_contact;
+          }
+          if (res?.[1]?.status === 400) {
+            setSameAsBillingContact(false);
+            $('.checkboxes input:checkbox').prop('checked', false);
+            dsp = res?.[1]?.data;
+          }
+
+          setIsLoading({ loader: false, type: 'button' });
+          setApiError({
+            dsp_contact: dsp,
+            billing_address: address,
+            billing_contact: contact,
+          });
+          if (
+            (res?.data && res.data.billing_address) ||
+            (res?.data && res.data[0])
+          ) {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+          }
+        }
+      }),
+    );
   };
 
   const handleChange = (event, item, type) => {
@@ -390,6 +441,20 @@ export default function BillingInfo({
     );
   };
 
+  const disableWhenError = () => {
+    if (
+      (apiError?.billing_address &&
+        Object.values(apiError.billing_address)?.find((op) => op !== '')) ||
+      (apiError?.billing_address &&
+        Object.values(apiError.billing_contact)?.find((op) => op !== '')) ||
+      (apiError?.billing_address &&
+        Object.values(apiError.dsp_contact)?.find((op) => op !== ''))
+    )
+      return true;
+
+    return false;
+  };
+
   return (
     <>
       <OnBoardingBody className="body-white">
@@ -401,7 +466,8 @@ export default function BillingInfo({
           ) : (
             <Button
               className="btn-primary w-100  mt-3 mb-4"
-              onClick={() => saveBillingData()}>
+              onClick={() => saveBillingData()}
+              disabled={disableWhenError()}>
               {' '}
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
@@ -459,4 +525,5 @@ BillingInfo.propTypes = {
   summaryData: arrayOf(shape({})).isRequired,
   skipAmazonAccount: bool.isRequired,
   summaryDetails: func,
+  showDSP: bool.isRequired,
 };
