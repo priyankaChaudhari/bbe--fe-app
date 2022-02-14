@@ -6,11 +6,11 @@ import ReactTooltip from 'react-tooltip';
 import { func, instanceOf } from 'prop-types';
 
 import Theme from '../../theme/Theme';
-import BBEGoalChart from './BBEGoalChart';
 import useNumberWithCommas from '../../hooks/useNumberWithCommas';
 import { PageLoader, WhiteCard } from '../../common';
 import { getBBEGoalMetrics } from '../../api';
 import { InfoIcons } from '../../theme/images';
+import BBEGoalChart from './BBEGoalChart';
 
 export default function BBEGoalHighLevelMetrics({
   selectedMonthYear,

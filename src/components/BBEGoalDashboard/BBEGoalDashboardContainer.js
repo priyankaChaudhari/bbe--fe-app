@@ -4,8 +4,8 @@ import Dayjs from 'dayjs';
 import DatePicker from 'react-datepicker';
 import styled from 'styled-components';
 
-import BBEGoalRevShareContribution from './BBEGoalRevShareContribution';
 import BBEGoalHighLevelMetrics from './BBEGoalHighLevelMetrics';
+import BBEGoalRevShareContribution from './BBEGoalRevShareContribution';
 import { DashboardCard } from '../../theme/Global';
 import { Button, CustomDateRange } from '../../common';
 import {

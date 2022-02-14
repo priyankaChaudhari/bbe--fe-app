@@ -10,7 +10,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
-import BBEGoalDashboardContainer from '../components/BBEGoalDashboard/BBEGoalDashboardContainer';
+import { BBEGoalDashboardContainer } from '../components/BBEGoalDashboard';
 
 import { userMe } from '../store/actions/index';
 import { Summary } from '../components/OnBoardingCustomer';
