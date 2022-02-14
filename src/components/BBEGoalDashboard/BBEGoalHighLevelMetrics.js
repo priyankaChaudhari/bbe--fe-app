@@ -82,7 +82,16 @@ export default function BBEGoalHighLevelMetrics({
                 true,
               )}
             </h3>
-            <div className="mt-2 label-info-medium">N/A</div>
+            <div
+              className={`${returnClassName(
+                metricsData?.planned?.net_new_customers,
+              )} large-size mt-2`}>
+              {formatNumber(
+                metricsData?.planned?.net_new_customers,
+                '',
+                numberWithCommas,
+              )}
+            </div>
             <div className="horizontal-line straight-line mt-3 d-lg-block d-none" />
           </div>
           <div className="row">
@@ -100,7 +109,16 @@ export default function BBEGoalHighLevelMetrics({
                   </h3>
                 </li>
                 <li>
-                  <div className="label-info-medium  mt-2">N/A</div>
+                  <div
+                    className={`${returnClassName(
+                      metricsData?.planned?.net_new_customers,
+                    )} large-size mt-2`}>
+                    {formatNumber(
+                      metricsData?.planned?.net_new_customers,
+                      '',
+                      numberWithCommas,
+                    )}
+                  </div>
                 </li>
               </ul>
               <div className="horizontal-line straight-line mt-3 mb-0 d-md-none d-block" />
@@ -149,7 +167,16 @@ export default function BBEGoalHighLevelMetrics({
                 <h3 className="small-title-heading">
                   {numberWithCommas(metricsData?.actual?.offboarded, '', true)}
                 </h3>
-                <div className="label-info-medium mt-2">N/A</div>
+                <div
+                  className={`${returnClassName(
+                    metricsData?.planned?.offboarded,
+                  )} large-size mt-2`}>
+                  {formatNumber(
+                    metricsData?.planned?.offboarded,
+                    '',
+                    numberWithCommas,
+                  )}
+                </div>
               </div>
               <ul className="d-lg-none d-block bbe-goals-partners">
                 <li>
@@ -162,7 +189,16 @@ export default function BBEGoalHighLevelMetrics({
                   </h3>
                 </li>
                 <li>
-                  <div className="label-info-medium large-size mt-2">N/A</div>
+                  <div
+                    className={`${returnClassName(
+                      metricsData?.planned?.offboarded,
+                    )} large-size mt-2`}>
+                    {formatNumber(
+                      metricsData?.planned?.offboarded,
+                      '',
+                      numberWithCommas,
+                    )}
+                  </div>
                 </li>
               </ul>
             </div>
@@ -282,8 +318,6 @@ export default function BBEGoalHighLevelMetrics({
                 true,
               )}
             </h3>
-
-            <div className="label-info-medium mt-2">N/A</div>
           </div>
           <div className="col-md-3 col-6">
             <div className="label mb-2">Average LTV</div>
