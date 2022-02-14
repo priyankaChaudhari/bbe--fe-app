@@ -70,7 +70,7 @@ export default function ConfirmMarketPlaceAllocation({
         return tempData;
       });
       storeEscrowReallocation(tempData).then((res) => {
-        if (res && res.status === 200) {
+        if (res && res.status === 201) {
           onClick();
           getActivityLogInfo();
           setShowConfirmMarketplaceAllocation(false);
@@ -135,7 +135,7 @@ export default function ConfirmMarketPlaceAllocation({
       <tbody>
         {results?.map((item) => {
           return (
-            <tr key={item.label}>
+            <tr key={item.key}>
               <td
                 width="30%"
                 className="small-label-text light-font product-body">
@@ -179,7 +179,7 @@ export default function ConfirmMarketPlaceAllocation({
     return results?.map((item) => {
       return (
         <>
-          <div className="row mt-3 mb-3" key={item.label}>
+          <div className="row mt-3 mb-3" key={item.key}>
             <div className="col-12 mb-2">
               <div className="label">Marketplace</div>
               <div className="label-info">{item.label}</div>
@@ -239,7 +239,7 @@ export default function ConfirmMarketPlaceAllocation({
               <p className="normal-text-black mb-0">
                 Please confirm you wish to make the following changes. A
                 confirmation email will be sent to the BGS, BGS Manager, DSP Ad
-                Manager
+                Manager.
               </p>
               <div className="row">
                 {renderAllocateBar()}

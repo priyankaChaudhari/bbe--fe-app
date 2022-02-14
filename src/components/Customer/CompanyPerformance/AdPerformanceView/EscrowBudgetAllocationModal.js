@@ -501,6 +501,7 @@ export default function EscrowBudgetAllocationModal({
               customerId={customerId}
               currencySymbol={currencySymbol}
               currentMonthYear={currentMonthYear}
+              getActivityLogInfo={getActivityLogInfo}
               selectedMarketplace={selectedMarketplace}
               escrowBalanceMarketplace={escrowBalanceMarketplace}
               setEscrowBalanceMarketplace={setEscrowBalanceMarketplace}
