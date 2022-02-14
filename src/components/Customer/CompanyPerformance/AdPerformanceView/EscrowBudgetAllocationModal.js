@@ -90,7 +90,7 @@ export default function EscrowBudgetAllocationModal({
   const [allocatedMonths, setAllocatedMonths] = useState();
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [isMonthlyDataLoading, setIsMonthlyDataLoading] = useState(true);
-  const [isSubmitLoader, setIsSubmitLoader] = useState(false);
+  const [isSubmitLoader, setIsSubmitLoader] = useState(true);
   const [isApiCall, setIsApiCall] = useState(false);
   const [isEscrowBalanceExceed, setIsEscrowBalanceExceed] = useState(
     totalEscrowBalance < 0,
@@ -114,7 +114,7 @@ export default function EscrowBudgetAllocationModal({
           setOldEscrowAllocation(tempData);
         });
       } else {
-        setIsSubmitLoader(true);
+        setIsSubmitLoader(false);
       }
     }
     return tempData;
@@ -129,6 +129,7 @@ export default function EscrowBudgetAllocationModal({
           setEscrowBalanceMarketplace(getData);
         }
         setIsDataLoading(false);
+        setIsSubmitLoader(false);
       }
     });
   }, [bindEscrowMarketplaceData, customerId]);
@@ -237,13 +238,15 @@ export default function EscrowBudgetAllocationModal({
           id="BT-escrowBalance-budgetAllocaion"
           className="mt-3 mb-3">
           <div className="row">
-            <div className="col-md-7 ">
+            <div className="col-12 col-md-7">
               <div className="remaing-label text-bold">
                 Total Escrow Balance:&nbsp;
-                {addThousandSeperator(totalEscrowBalance, 'currency')}
+                {totalEscrowBalance === 0
+                  ? `$${totalEscrowBalance}`
+                  : addThousandSeperator(totalEscrowBalance, 'currency')}
               </div>
             </div>
-            <div className="col-md-5">
+            <div className="col-12 col-md-5">
               {escrowBalanceMarketplace?.length > 1 &&
               totalEscrowBalance > 0 ? (
                 <div className="text-bold text-right">
@@ -301,7 +304,7 @@ export default function EscrowBudgetAllocationModal({
                     role="presentation">
                     {item.label}&nbsp; (
                     {item.escrowBalance === 0
-                      ? `$0`
+                      ? `$${item.escrowBalance}`
                       : addThousandSeperator(item.escrowBalance, 'currency')}
                     )
                   </li>
@@ -318,48 +321,52 @@ export default function EscrowBudgetAllocationModal({
     return allocatedMonths?.map((item, index) => {
       return (
         <>
-          <div className="col-md-6 col-12" key={item.month_year}>
-            <InputFormField
-              id="BT-escrow-month-budgetAllocation"
-              className="mt-1 hide-spinner">
-              <label htmlFor="emailAddress">
-                Month
-                <br />
-                <input
-                  className={
-                    !index ? 'disabled form-control ' : 'form-control '
-                  }
-                  value={dayjs(item.month_year).format('MMMM YYYY')}
-                  type="text"
-                  readOnly
-                />
-              </label>
-            </InputFormField>
-          </div>
-          <div
-            className="col-md-6 col-12 mt-1 mb-3"
-            key={dayjs(item.month_year).format('MM/DD/YYYY')}>
-            <InputFormField id="BT-escrow-numberFormat-budgetAllocation">
-              <label htmlFor="amount"> amount </label>
-              <div className="input-container">
-                <span
-                  className={!index ? 'disabled input-icon ' : 'input-icon'}>
-                  $
-                </span>
+          <div className="row" key={item.month_year}>
+            <div className="col-md-6 col-12" key={item.month_year}>
+              <InputFormField
+                id="BT-escrow-month-budgetAllocation"
+                className="mt-1 hide-spinner">
+                <label htmlFor="emailAddress">
+                  Month
+                  <br />
+                  <input
+                    className={
+                      !index ? 'disabled form-control ' : 'form-control '
+                    }
+                    value={dayjs(item.month_year).format('MMMM YYYY')}
+                    type="text"
+                    readOnly
+                  />
+                </label>
+              </InputFormField>
+            </div>
+            <div
+              className="col-md-6 col-12 mt-1 mb-3"
+              key={dayjs(item.month_year).format('MM/DD/YYYY')}>
+              <InputFormField id="BT-escrow-numberFormat-budgetAllocation">
+                <label htmlFor="amount"> amount </label>
+                <div className="input-container">
+                  <span
+                    className={!index ? 'disabled input-icon ' : 'input-icon'}>
+                    $
+                  </span>
 
-                <NumberFormat
-                  className={!index ? 'disabled form-control' : 'form-control'}
-                  name={item.month_year}
-                  defaultValue={item.escrow_allocated_converted_usd}
-                  value={item.escrow_allocated_converted_usd}
-                  placeholder={0}
-                  onChange={(event) => handleOnChange(event, index)}
-                  thousandSeparator
-                  decimalScale={2}
-                  allowNegative={!index}
-                />
-              </div>
-            </InputFormField>
+                  <NumberFormat
+                    className={
+                      !index ? 'disabled form-control' : 'form-control'
+                    }
+                    name={item.month_year}
+                    defaultValue={item.escrow_allocated_converted_usd}
+                    value={item.escrow_allocated_converted_usd}
+                    placeholder={0}
+                    onChange={(event) => handleOnChange(event, index)}
+                    thousandSeparator
+                    decimalScale={2}
+                    allowNegative={!index}
+                  />
+                </div>
+              </InputFormField>
+            </div>
           </div>
         </>
       );
@@ -368,36 +375,36 @@ export default function EscrowBudgetAllocationModal({
 
   const renderAddAnotherMonth = () => {
     return (
-      <div className="col-12" key="addMonth00">
-        <Button
-          style={{ textTransform: 'uppercase' }}
-          className={
-            allocatedMonths?.length > 6 || selectedMarketplaceBalance < 0
-              ? 'btn-add-contact  disabled'
-              : 'btn-add-contact '
-          }
-          onClick={() => handleOnAddAnotherMonth()}>
-          <img
-            width="14px"
-            style={{ verticalAlign: 'middle' }}
-            src={AddIcons}
-            className="ml-1 add-icon"
-            alt="add"
-          />{' '}
-          Add another Month
-        </Button>
+      <div className="row" key="ANOTHERMONTH001">
+        <div className="col-12">
+          <Button
+            style={{ textTransform: 'uppercase' }}
+            className={
+              allocatedMonths?.length > 6 || selectedMarketplaceBalance < 0
+                ? 'btn-add-contact  disabled'
+                : 'btn-add-contact '
+            }
+            onClick={() => handleOnAddAnotherMonth()}>
+            <img
+              width="14px"
+              style={{ verticalAlign: 'middle' }}
+              src={AddIcons}
+              className="ml-1 add-icon"
+              alt="add"
+            />{' '}
+            Add another Month
+          </Button>
+        </div>
       </div>
     );
   };
   const renderErrorMessageBox = () => {
     return (
-      <div className="col-12" key="errorBox01">
-        <ErrorMsgBox className="mt-2">
-          <img className="info-icon" src={InfoRedIcon} alt="info" /> All budgets
-          across the selected months need to add up to the available escrow
-          balance
-        </ErrorMsgBox>
-      </div>
+      <ErrorMsgBox className="mt-2">
+        <img className="info-icon" src={InfoRedIcon} alt="info" /> All budgets
+        across the selected months need to add up to the available escrow
+        balance
+      </ErrorMsgBox>
     );
   };
   const renderModalFooter = () => {
@@ -439,7 +446,7 @@ export default function EscrowBudgetAllocationModal({
           <>
             {showEscrowMonthlyAllocation ? (
               <>
-                <div className="modal-body  pb-0">
+                <div className="modal-body pb-0">
                   <h4>Allocate Balance</h4>
                   {isDataLoading ? (
                     <PageLoader
@@ -467,23 +474,20 @@ export default function EscrowBudgetAllocationModal({
                             color="#FF5933"
                             type="page"
                           />
-                        ) : (
-                          <>
-                            {escrowBalanceMarketplace?.length > 0 ? (
-                              <>
-                                {renderMonths()}
-                                {renderAddAnotherMonth()}
-                              </>
-                            ) : null}
+                        ) : escrowBalanceMarketplace?.length > 0 ? (
+                          <div className="col-12">
+                            {renderMonths()}
+                            {renderAddAnotherMonth()}
                             {isEscrowBalanceExceed
                               ? renderErrorMessageBox()
                               : null}
-                          </>
-                        )}
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   )}
                 </div>
+
                 {!isDataLoading ? (
                   <>
                     <div className="footer-line" />

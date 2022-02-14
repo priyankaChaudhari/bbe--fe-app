@@ -73,15 +73,16 @@ export default function EditMarketplaceAllocation({
 
   const renderAllocateBar = () => {
     return (
-      <div className="col-12 mb-2">
+      <div className="col-12 mb-2" key="AllocateBar01">
         <AllocateBar
           id="BT-escrowBalance-budgetAllocaion"
           className="mt-3 mb-3">
-          {' '}
           <div className="remaing-label text-bold text-right">
             Total Escrow Balance:&nbsp;
-            {addThousandSeperator(totalEscrowBalance, 'currency')}
-          </div>{' '}
+            {totalEscrowBalance === 0
+              ? `$${totalEscrowBalance}`
+              : addThousandSeperator(totalEscrowBalance, 'currency')}
+          </div>
           <div className="clear-fix" />
         </AllocateBar>
       </div>
@@ -120,7 +121,7 @@ export default function EditMarketplaceAllocation({
                       ? ' disabled form-control'
                       : ' form-control'
                   }
-                  name={item.lavel}
+                  name={item.label}
                   defaultValue={item.escrowBalance}
                   value={item.escrowReallocatedBalance}
                   placeholder={0}
@@ -138,7 +139,7 @@ export default function EditMarketplaceAllocation({
   };
   const renderErrorMessageBox = () => {
     return (
-      <ErrorMsgBox className="mt-2 mb-2">
+      <ErrorMsgBox className="mb-3">
         <img className="info-icon" src={InfoRedIcon} alt="info" /> All budgets
         across the selected marketplaces need to add up to the available escrow
         balance

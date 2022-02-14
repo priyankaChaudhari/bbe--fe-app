@@ -97,7 +97,9 @@ export default function ConfirmMarketPlaceAllocation({
         <AllocateBar id="BT-escrowBalance-DSPAllocaion" className="mt-3 mb-2">
           <div className="remaing-label text-bold text-right">
             Total Escrow Balance:&nbsp;
-            {addThousandSeperator(totalEscrowBalance, 'currency')}
+            {totalEscrowBalance === 0
+              ? `$${totalEscrowBalance}`
+              : addThousandSeperator(totalEscrowBalance, 'currency')}
           </div>
           <div className="clear-fix" />
         </AllocateBar>
