@@ -166,11 +166,9 @@ export default function ConfirmMarketPlaceAllocation({
   };
   const renderReallocationDesktopView = () => {
     return (
-      <Table>
-        <table style={{ borderCollapse: 'collapse' }} width="100%">
-          {renderReallocationTableHead()}
-          {renderReallocationTableBody()}
-        </table>
+      <Table style={{ borderCollapse: 'collapse' }} width="100%">
+        {renderReallocationTableHead()}
+        {renderReallocationTableBody()}
       </Table>
     );
   };
