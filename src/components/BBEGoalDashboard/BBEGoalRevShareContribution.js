@@ -123,14 +123,14 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
           <div className="company-name">{item?.customer_name}</div>
           <div className="status">{item?.bgs}</div>
         </td>
-        <td className="product-table-body">
+        <td className="product-body">
           {numberWithCommas(item?.previous_rev_share, '$')}
         </td>
-        <td className="product-table-body ">
+        <td className="product-body ">
           {numberWithCommas(item?.current_rev_share, '$')}
         </td>
         {type === 'positive' ? (
-          <td className="text-medium ">
+          <td className="product-body">
             <div className="increase-rate large text-medium">
               {' '}
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
@@ -138,7 +138,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
             </div>
           </td>
         ) : (
-          <td className="text-medium ">
+          <td className="product-body ">
             <div className="decrease-rate large text-medium">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
               {`${item?.change_in_percentage.toFixed(2)}%`}
