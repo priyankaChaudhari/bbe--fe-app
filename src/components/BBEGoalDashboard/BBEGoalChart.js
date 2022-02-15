@@ -9,12 +9,7 @@ import Theme from '../../theme/Theme';
 
 am4core.useTheme(am4themesDataviz);
 
-const BBEGoalChart = ({
-  data,
-  CHART_ID,
-  selectedMonthYear,
-  numberWithCommas,
-}) => {
+const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear, formatNumber }) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -68,12 +63,7 @@ const BBEGoalChart = ({
     series.columns.template.column.adapter.add(
       'tooltipText',
       (fill, target) => {
-        const revenue = numberWithCommas(
-          target.dataItem?.valueY,
-          '$',
-          '',
-          true,
-        );
+        const revenue = formatNumber(target.dataItem?.valueY, '$', '', true);
         const month = target.dataItem.categoryX.split('-');
         return `[font-size: 10px]${month[0].toUpperCase()} REVENUE[/]\n[bold ${
           Theme.gray6
@@ -109,7 +99,7 @@ const BBEGoalChart = ({
     return () => {
       chart.dispose();
     };
-  }, [CHART_ID, data, numberWithCommas, selectedMonthYear]);
+  }, [CHART_ID, data, formatNumber, selectedMonthYear]);
 
   return <div id={CHART_ID} style={{ width: '100%' }} />;
 };
@@ -123,5 +113,5 @@ BBEGoalChart.propTypes = {
   data: arrayOf(shape({})),
   CHART_ID: string.isRequired,
   selectedMonthYear: string.isRequired,
-  numberWithCommas: func.isRequired,
+  formatNumber: func.isRequired,
 };

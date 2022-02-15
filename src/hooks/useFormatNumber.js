@@ -1,12 +1,20 @@
-const useNumberWithCommas = (x, prefix = '', postfix = '', round = false) => {
+const useFormatNumber = (
+  x,
+  prefix = '',
+  postfix = '',
+  round = false,
+  showPositiveSign = false,
+) => {
   let result;
   if (x === undefined || x === null || isNaN(Number(x))) {
     result = 'N/A';
   } else {
-    const tempNumer = round ? Math.round(x) : x;
+    const finalNumber = round ? Math.round(x) : x;
+    const finalPrefix =
+      finalNumber < 0 ? `-${prefix}` : showPositiveSign ? `+${prefix}` : prefix;
     result =
-      prefix +
-      Number(tempNumer)
+      finalPrefix +
+      Number(finalNumber)
         .toFixed(2)
         .toString()
         .replace(/-/g, '') // Remove dash
@@ -18,4 +26,4 @@ const useNumberWithCommas = (x, prefix = '', postfix = '', round = false) => {
   return result;
 };
 
-export default useNumberWithCommas;
+export default useFormatNumber;
