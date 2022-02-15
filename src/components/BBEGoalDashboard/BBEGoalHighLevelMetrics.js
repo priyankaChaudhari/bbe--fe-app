@@ -75,14 +75,7 @@ export default function BBEGoalHighLevelMetrics({
           <div className="d-lg-block d-none">
             <p className="black-heading-title mt-0">Partners</p>
             <div className="label">Net New Customers</div>
-            <h3>
-              {numberWithCommas(
-                metricsData?.actual?.net_new_customers,
-                '',
-                '',
-                true,
-              )}
-            </h3>
+            <h3>{metricsData?.actual?.net_new_customers}</h3>
             <div
               className={`${returnClassName(
                 metricsData?.planned?.net_new_customers,
@@ -91,7 +84,8 @@ export default function BBEGoalHighLevelMetrics({
                 metricsData?.planned?.net_new_customers,
                 '',
                 numberWithCommas,
-              )}
+              )}{' '}
+              vs plan
             </div>
             <div className="horizontal-line straight-line mt-3 d-lg-block d-none" />
           </div>
@@ -101,13 +95,7 @@ export default function BBEGoalHighLevelMetrics({
               <div className="label">Net New Customers</div>
               <ul className="d-lg-none d-block bbe-goals-partners">
                 <li>
-                  <h3>
-                    {numberWithCommas(
-                      metricsData?.actual?.net_new_customers,
-                      '',
-                      true,
-                    )}
-                  </h3>
+                  <h3>{metricsData?.actual?.net_new_customers}</h3>
                 </li>
                 <li>
                   <div
@@ -118,7 +106,8 @@ export default function BBEGoalHighLevelMetrics({
                       metricsData?.planned?.net_new_customers,
                       '',
                       numberWithCommas,
-                    )}
+                    )}{' '}
+                    vs plan
                   </div>
                 </li>
               </ul>
@@ -128,12 +117,7 @@ export default function BBEGoalHighLevelMetrics({
               <div className="label mb-2 mt-md-3 mt-lg-0">Onboarded</div>
               <div className="d-lg-block d-none">
                 <h3 className="small-title-heading">
-                  {numberWithCommas(
-                    metricsData?.actual?.onboarded,
-                    '',
-                    '',
-                    true,
-                  )}
+                  {metricsData?.actual?.onboarded}
                 </h3>
                 <div
                   className={`${returnClassName(
@@ -150,12 +134,7 @@ export default function BBEGoalHighLevelMetrics({
               <ul className="d-lg-none d-block bbe-goals-partners">
                 <li>
                   <h3 className="small-title-heading">
-                    {numberWithCommas(
-                      metricsData?.actual?.onboarded,
-                      '',
-                      '',
-                      true,
-                    )}
+                    {metricsData?.actual?.onboarded}
                   </h3>
                 </li>
                 <li>
@@ -176,12 +155,7 @@ export default function BBEGoalHighLevelMetrics({
               <div className="label mb-2 mt-md-3 mt-lg-0">OFfboarded</div>
               <div className="d-lg-block d-none">
                 <h3 className="small-title-heading">
-                  {numberWithCommas(
-                    metricsData?.actual?.offboarded,
-                    '',
-                    '',
-                    true,
-                  )}
+                  {metricsData?.actual?.offboarded}
                 </h3>
                 <div
                   className={`${returnClassName(
@@ -197,12 +171,7 @@ export default function BBEGoalHighLevelMetrics({
               <ul className="d-lg-none d-block bbe-goals-partners">
                 <li>
                   <h3 className="small-title-heading">
-                    {numberWithCommas(
-                      metricsData?.actual?.offboarded,
-                      '',
-                      '',
-                      true,
-                    )}
+                    {metricsData?.actual?.offboarded}
                   </h3>
                 </li>
                 <li>
