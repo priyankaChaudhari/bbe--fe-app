@@ -36,9 +36,9 @@ const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
 
     // Create series
     const series = chart.series.push(new am4charts.ColumnSeries());
-    series.dataFields.valueY = 'rev_share';
+    series.dataFields.valueY = 'revenue';
     series.dataFields.categoryX = 'month_year';
-    series.name = 'rev_share';
+    series.name = 'revenue';
     series.fillOpacity = 1;
     series.columns.template.column.adapter.add('fill', (fill, target) => {
       const valueX = target.dataItem.categories.categoryX;
