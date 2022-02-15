@@ -50,7 +50,6 @@ const customStyles = {
 
 export default function EscrowBudgetAllocationModal({
   id,
-  addThousandSeperator,
   isOpen,
   onClick,
   customerId,
@@ -96,6 +95,18 @@ export default function EscrowBudgetAllocationModal({
     totalEscrowBalance < 0,
   );
 
+  const addThousandSeperator = (value, type = '') => {
+    if (value && value !== null && value !== 0) {
+      value = Number(value.toFixed(2));
+      return `${value < 0 ? '-' : ''}${
+        type === 'currency' ? currencySymbol : ''
+      }${value
+        .toString()
+        .replace('-', '')
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+    }
+    return 0;
+  };
   const bindEscrowMarketplaceData = useCallback((response) => {
     const tempData = [];
     if (response) {
@@ -166,7 +177,7 @@ export default function EscrowBudgetAllocationModal({
 
   const submitAllocatedBudget = useCallback(() => {
     setIsApiCall(true);
-    storeAllocatedBudget(allocatedMonths, customerId, marketplace).then(
+    storeAllocatedBudget(allocatedMonths, customerId, selectedMarketplace).then(
       (res) => {
         if (mounted.current) {
           if (res && res.status === 200) {
@@ -177,7 +188,13 @@ export default function EscrowBudgetAllocationModal({
         }
       },
     );
-  }, [onClick, customerId, marketplace, allocatedMonths, getActivityLogInfo]);
+  }, [
+    allocatedMonths,
+    customerId,
+    selectedMarketplace,
+    onClick,
+    getActivityLogInfo,
+  ]);
 
   useEffect(() => {
     mounted.current = true;
@@ -528,7 +545,6 @@ EscrowBudgetAllocationModal.defaultProps = {
   marketplace: '',
   isOpen: false,
   onClick: () => {},
-  addThousandSeperator: () => {},
   getActivityLogInfo: () => {},
 };
 
@@ -538,6 +554,5 @@ EscrowBudgetAllocationModal.propTypes = {
   marketplace: string,
   isOpen: bool,
   onClick: func,
-  addThousandSeperator: func,
   getActivityLogInfo: func,
 };
