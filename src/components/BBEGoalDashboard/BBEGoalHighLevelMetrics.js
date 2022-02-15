@@ -274,7 +274,7 @@ export default function BBEGoalHighLevelMetrics({
                 width="14px"
                 src={InfoIcons}
                 alt="info"
-                data-tip="The rev share value gets <br/>updated on the 4th of each<br/> month for the prior month"
+                data-tip="Revenue Sharing values are updated on <br/>the 3rd of each month for the previous <br/> month as this is when the rev share <br/>invoices are issued."
                 data-for="dspAdditionalInfo"
               />{' '}
               <ReactTooltip
