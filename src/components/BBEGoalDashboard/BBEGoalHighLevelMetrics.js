@@ -222,7 +222,7 @@ export default function BBEGoalHighLevelMetrics({
             </div>
           </div>
 
-          <div style={{ zIndex: 100 }} className="col-md-7 col-12 mb-n4">
+          <div style={{ zIndex: 50 }} className="col-md-7 col-12 mb-n4">
             {loader ? (
               <PageLoader
                 component="performance-graph"
@@ -236,6 +236,7 @@ export default function BBEGoalHighLevelMetrics({
                 CHART_ID="revenue_chart"
                 data={metricsData?.graph_data}
                 selectedMonthYear={Dayjs(selectedMonthYear).format('MMMM-YYYY')}
+                numberWithCommas={useNumberWithCommas}
               />
             )}
           </div>

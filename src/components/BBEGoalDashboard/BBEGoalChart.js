@@ -3,13 +3,18 @@ import React, { useEffect, useRef } from 'react';
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
 import am4themesDataviz from '@amcharts/amcharts4/themes/dataviz';
-import { arrayOf, shape, string } from 'prop-types';
+import { arrayOf, func, shape, string } from 'prop-types';
 
 import Theme from '../../theme/Theme';
 
 am4core.useTheme(am4themesDataviz);
 
-const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
+const BBEGoalChart = ({
+  data,
+  CHART_ID,
+  selectedMonthYear,
+  numberWithCommas,
+}) => {
   const chartRef = useRef(null);
 
   useEffect(() => {
@@ -63,10 +68,16 @@ const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
     series.columns.template.column.adapter.add(
       'tooltipText',
       (fill, target) => {
+        const revenue = numberWithCommas(
+          target.dataItem?.valueY,
+          '$',
+          '',
+          true,
+        );
         const month = target.dataItem.categoryX.split('-');
         return `[font-size: 10px]${month[0].toUpperCase()} REVENUE[/]\n[bold ${
           Theme.gray6
-        } font-size: 20px margin-botton:5px]\${valueY}[/]`;
+        } font-size: 20px margin-botton:5px]${revenue}[/]`;
       },
     );
 
@@ -98,7 +109,7 @@ const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear }) => {
     return () => {
       chart.dispose();
     };
-  }, [CHART_ID, data, selectedMonthYear]);
+  }, [CHART_ID, data, numberWithCommas, selectedMonthYear]);
 
   return <div id={CHART_ID} style={{ width: '100%' }} />;
 };
@@ -112,4 +123,5 @@ BBEGoalChart.propTypes = {
   data: arrayOf(shape({})),
   CHART_ID: string.isRequired,
   selectedMonthYear: string.isRequired,
+  numberWithCommas: func.isRequired,
 };
