@@ -370,12 +370,18 @@ export default function BillingInfo({
             type="checkbox"
             id="same as billing"
             checked={showDSPContact.sameAsBilling}
-            onChange={() =>
+            onChange={(event) => {
+              if (
+                event.target.checked &&
+                apiError?.dsp_contact &&
+                Object.keys(apiError.dsp_contact).length !== 0
+              )
+                setApiError({ ...apiError, dsp_contact: {} });
               setshowDSPContact({
                 ...showDSPContact,
                 sameAsBilling: !showDSPContact.sameAsBilling,
-              })
-            }
+              });
+            }}
           />
           <span className="checkmark" />
         </label>
