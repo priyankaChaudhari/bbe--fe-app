@@ -76,7 +76,6 @@ export default function MainContainer() {
   const [marketplaceDetails, setMarketplaceDetails] = useState({});
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
   const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
-  const [showDSPContact, setshowDSPContact] = useState(false);
   const [noAmazonAccount, setNoAmazonAccount] = useState({
     Seller: false,
     Vendor: false,
@@ -171,7 +170,6 @@ export default function MainContainer() {
     ) {
       getBillingDetails(customerId).then((response) => {
         if (response && response.status === 200) {
-          setshowDSPContact(response?.data?.show_dsp);
           setBillingData(response && response.data);
         }
         if (response && response.status === 404) {
@@ -332,7 +330,6 @@ export default function MainContainer() {
           summaryData={summaryData}
           skipAmazonAccount={skipAmazonAccount}
           summaryDetails={summaryDetails}
-          showDSP={showDSPContact}
         />
       );
     if (path === 'amazon-merchant' && !skipAmazonAccount)
