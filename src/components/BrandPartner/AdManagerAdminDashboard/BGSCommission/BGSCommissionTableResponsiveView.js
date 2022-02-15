@@ -4,7 +4,7 @@ import { arrayOf, bool, func } from 'prop-types';
 
 import TableMobileView from '../../../../common/TableMobileView';
 import { NoData, PageLoader } from '../../../../common';
-import numberWithCommas from '../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../hooks/numberWithCommas';
 import { CommissionTabletView } from './BGSCommissionContainerStyle';
 
 function BGSCommissionTableResponsiveView({

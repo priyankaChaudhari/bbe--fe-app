@@ -12,11 +12,14 @@ import {
   OrganizationIcon,
   SpeedometerActive,
   Speedometer,
+  HomePageActiveIcon,
+  HomePageIcon,
 } from '../theme/images';
 
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
+  PATH_BBE_GOAL_DASHBOARD,
   roleURLs,
   dashboardRolePaths,
   dashboardRole,
@@ -30,6 +33,29 @@ export default function LeftSideBar({ userInfo }) {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
+          <li
+            className={
+              history.location.pathname?.includes('bbe-Goal')
+                ? ' cursor active'
+                : ' cursor'
+            }
+            role="presentation"
+            onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
+            {' '}
+            <img
+              width="28px"
+              className=" home-page-icon active"
+              src={HomePageActiveIcon}
+              alt=""
+            />
+            <img
+              width="28px"
+              className=" home-page-icon  disactive"
+              src={HomePageIcon}
+              alt=""
+            />
+          </li>
+
           {dashboardRole.includes(userRole) ? (
             <li
               className={

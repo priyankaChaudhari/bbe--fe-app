@@ -186,6 +186,8 @@ import InfoRedIcon from './icons/info-red-icon.svg';
 import Dollar from './icons/fees.svg';
 import ReminderBell from './icons/reminder-bell-icons.png';
 import helpCircleIcon from './icons/helpCircleIcon.png';
+import HomePageIcon from './icons/home-page.png';
+import HomePageActiveIcon from './icons/home-page-active.png';
 
 export {
   BannerBg,
@@ -376,4 +378,6 @@ export {
   helpCircleIcon,
   Dollar,
   ReminderBell,
+  HomePageIcon,
+  HomePageActiveIcon,
 };

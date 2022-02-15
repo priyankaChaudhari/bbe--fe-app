@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { number, oneOfType, string } from 'prop-types';
 
 import Theme from '../theme/Theme';
-import numberWithCommas from '../hooks/numberWithComas';
+import numberWithCommas from '../hooks/numberWithCommas';
 
 const rendeTootipData = (retainer, revshare, dsp) => {
   return `

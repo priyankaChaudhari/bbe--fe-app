@@ -207,6 +207,12 @@ h3 {
   color: ${Theme.black};
   text-transform: capitalize;
 
+
+  &.small-title-heading {
+    font-size: ${Theme.ExtraMediumTitleFontSize};
+    word-break: break-all;
+  }
+
   &.gray-text {
     color: ${Theme.gray90};
     font-family: ${Theme.baseFontFamily};
@@ -237,8 +243,7 @@ h5 {
   &.sub-title-text {
      font-size: ${Theme.subTitle};
      color: ${Theme.black};
-     font-family: ${Theme.titleFontFamily};  
-     font-weight: 800;
+     font-family: ${Theme.baseMediumFontFamily};  
   }
 
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
@@ -283,7 +288,7 @@ h6 {
 }
 .text-medium{
    font-family: ${Theme.baseMediumFontFamily} !important;
-   font-weight: 500;
+   font-weight: 500 !important;
 }
 p {
   font-size: ${Theme.small};
@@ -856,7 +861,12 @@ fieldset {
     color: ${Theme.white};
     font-size:  ${Theme.verySmall};
   }
+  
 }
+.__react_component_tooltip.show { 
+     opacity: 1.9 !important;
+     background: #162c50 !important;
+  }
 
 .react-datepicker-wrapper {
   width: 100%;
@@ -1107,7 +1117,14 @@ fieldset {
 .__react_component_tooltip {
   text-transform: capitalize;
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 400 !important;
+}
+
+.label {
+  .__react_component_tooltip {
+    font-weight :300 !important;
+    font-family: ${Theme.baseFontFamily};
+  }
 }
 .customer-list-tooltip{
   max-width: 16%;
@@ -1647,6 +1664,11 @@ text.cust-label-avg {
   font-size:${Theme.verySmall};
   text-transform: uppercase;
   font-weight: bold;
+}
+.sub-heading {
+  color: ${Theme.gray40};
+  font-size:${Theme.verySmall};
+  font-weight: 600;
 }
 
 .label-card-text {

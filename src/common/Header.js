@@ -16,6 +16,7 @@ import { MainHeader, MobileSidebar, SideContents } from './Styles/HeaderStyles';
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
+  PATH_BBE_GOAL_DASHBOARD,
   helpDeskLink,
   managementLink,
   PATH_ACCOUNT_SETUP,
@@ -37,6 +38,8 @@ import {
   Speedometer,
   HelpDeskIcon,
   HandShake,
+  HomePageActiveIcon,
+  HomePageIcon,
 } from '../theme/images';
 
 export default function Header({ type, userInfo }) {
@@ -271,6 +274,31 @@ export default function Header({ type, userInfo }) {
             <SideContents>
               {' '}
               <ul className="side-bar-icon ">
+                <li
+                  className={
+                    history.location.pathname?.includes('bbe-Goal')
+                      ? ' cursor active'
+                      : ' cursor'
+                  }
+                  role="presentation"
+                  onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
+                  {history.location.pathname?.includes('bbe-Goal') ? (
+                    <img
+                      width="32px"
+                      className=" home-page-icon active"
+                      src={HomePageActiveIcon}
+                      alt=""
+                    />
+                  ) : (
+                    <img
+                      width="32px"
+                      className="home-page-icon  disactive"
+                      src={HomePageIcon}
+                      alt=""
+                    />
+                  )}
+                </li>
+
                 <li
                   className={
                     roleURLs.some((element) =>

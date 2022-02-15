@@ -57,6 +57,30 @@ const ToggleButton = styled.div`
       }
     }
   }
+  .toggle-container {
+    width: 100%;
+    max-width: 280px;
+
+    li {
+      width: 50%;
+      text-align: center;
+    }
+    .days-tab {
+      width: 100%;
+      #negative:checked + label,
+      #positive:checked + label {
+        width: 100%;
+        background-color: ${Theme.white};
+        border: 1px solid ${Theme.orange};
+        border-radius: 18px;
+        color: ${Theme.orange};
+      }
+    }
+    @media only screen and (max-width: 767px) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
   @media only screen and (max-width: 767px) {
     .days-container {
       margin: 0 auto;
