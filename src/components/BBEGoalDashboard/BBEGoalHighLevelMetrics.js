@@ -222,7 +222,7 @@ export default function BBEGoalHighLevelMetrics({
             </div>
           </div>
 
-          <div className="col-md-7 col-12 mb-n4">
+          <div style={{ zIndex: 100 }} className="col-md-7 col-12 mb-n4">
             {loader ? (
               <PageLoader
                 component="performance-graph"
