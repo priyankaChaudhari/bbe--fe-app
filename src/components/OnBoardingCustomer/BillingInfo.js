@@ -45,7 +45,6 @@ export default function BillingInfo({
   summaryData,
   skipAmazonAccount,
   summaryDetails,
-  showDSP,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -54,6 +53,7 @@ export default function BillingInfo({
   const [apiError, setApiError] = useState({});
   const [sameAsBillingContact, setSameAsBillingContact] = useState(true);
   const [DSPContactDetail, setDSPContactDetail] = useState({});
+  const [showDSPContact, setshowDSPContact] = useState(false);
 
   const billingInformation = [
     {
@@ -113,33 +113,32 @@ export default function BillingInfo({
   }, [data]);
 
   useEffect(() => {
-    if (showDSP) {
-      getDSPContact(userInfo.customer || verifiedStepData.customer_id).then(
-        (res) => {
-          $('.checkboxes input:checkbox').prop(
-            'checked',
-            res?.data?.results?.[0]
-              ? res?.data?.results?.[0]?.same_as_billing_contact
-              : true,
-          );
-          setSameAsBillingContact(
-            res?.data?.results?.[0]
-              ? res?.data?.results?.[0]?.same_as_billing_contact
-              : true,
-          );
-          setDSPContactDetail(res?.data?.results?.[0]);
-          setFormData((prevState) => ({
-            ...prevState,
-            dsp_contact:
-              res?.data?.results?.[0]?.same_as_billing_contact ||
-              sameAsBillingContact
-                ? data?.billing_contact?.[0]
-                : res?.data?.results?.[0],
-          }));
-        },
-      );
-    }
-  }, [showDSP]);
+    getDSPContact(userInfo.customer || verifiedStepData.customer_id).then(
+      (res) => {
+        setshowDSPContact(res?.data?.is_dsp_contract);
+        $('.checkboxes input:checkbox').prop(
+          'checked',
+          res?.data?.results?.[0]
+            ? res?.data?.results?.[0]?.same_as_billing_contact
+            : true,
+        );
+        setSameAsBillingContact(
+          res?.data?.results?.[0]
+            ? res?.data?.results?.[0]?.same_as_billing_contact
+            : true,
+        );
+        setDSPContactDetail(res?.data?.results?.[0]);
+        setFormData((prevState) => ({
+          ...prevState,
+          dsp_contact:
+            res?.data?.results?.[0]?.same_as_billing_contact ||
+            sameAsBillingContact
+              ? data?.billing_contact?.[0]
+              : res?.data?.results?.[0],
+        }));
+      },
+    );
+  }, []);
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
@@ -247,7 +246,7 @@ export default function BillingInfo({
       customer: userInfo.customer || verifiedStepData.customer_id,
     };
 
-    const apiArray = showDSP
+    const apiArray = showDSPContact
       ? [
           saveBillingInfo(details, data?.id || null),
           saveDSPContact(
@@ -260,10 +259,11 @@ export default function BillingInfo({
     axios.all(apiArray).then(
       axios.spread((...res) => {
         if (
-          (showDSP &&
+          (showDSPContact &&
             (res?.[0]?.status === 201 || res?.[0]?.status === 200) &&
             (res?.[1]?.status === 201 || res?.[1]?.status === 200)) ||
-          (!showDSP && (res?.[0]?.status === 201 || res?.[0]?.status === 200))
+          (!showDSPContact &&
+            (res?.[0]?.status === 201 || res?.[0]?.status === 200))
         ) {
           saveDetails();
           if (assignedToSomeone) {
@@ -428,12 +428,12 @@ export default function BillingInfo({
 
   const disableWhenError = () => {
     if (
-      showDSP &&
+      !sameAsBillingContact &&
+      showDSPContact &&
       (!formData?.dsp_contact ||
         !formData?.dsp_contact?.first_name ||
         !formData?.dsp_contact?.last_name ||
-        !formData?.dsp_contact?.email ||
-        !formData?.dsp_contact?.phone_number)
+        !formData?.dsp_contact?.email)
     )
       return true;
 
@@ -441,8 +441,7 @@ export default function BillingInfo({
       !formData?.billing_contact ||
       !formData?.billing_contact?.first_name ||
       !formData?.billing_contact?.last_name ||
-      !formData?.billing_contact?.email ||
-      !formData?.billing_contact?.phone_number
+      !formData?.billing_contact?.email
     )
       return true;
     if (
@@ -470,7 +469,7 @@ export default function BillingInfo({
     <>
       <OnBoardingBody className="body-white">
         {generateBillingAddressHTML(
-          showDSP ? dspInformation : billingInformation,
+          showDSPContact ? dspInformation : billingInformation,
         )}
 
         <div className="white-card-base panel gap-none">
@@ -538,5 +537,4 @@ BillingInfo.propTypes = {
   summaryData: arrayOf(shape({})).isRequired,
   skipAmazonAccount: bool.isRequired,
   summaryDetails: func,
-  showDSP: bool.isRequired,
 };
