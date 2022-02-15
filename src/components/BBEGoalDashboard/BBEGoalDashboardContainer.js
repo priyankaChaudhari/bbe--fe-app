@@ -44,7 +44,7 @@ export default function BBEGoalDashboardContainer() {
 
   const displayTimeFilterOption = () => {
     return showDropdown.show ? (
-      <DateRangeDropDown>
+      <DateRangeDropDown style={{ zIndex: 200 }}>
         <h4 className="mb-3 text-left">Select Date Range</h4>
         <img
           className="float-right cursor cross-icon "
