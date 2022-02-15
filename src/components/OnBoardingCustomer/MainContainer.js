@@ -35,6 +35,7 @@ import {
   getBillingDetails,
   deleteAmazonAccount,
   getAmazonAccountDetails,
+  getDSPContact,
 } from '../../api';
 import {
   PATH_AMAZON_MERCHANT,
@@ -76,6 +77,12 @@ export default function MainContainer() {
   const [marketplaceDetails, setMarketplaceDetails] = useState({});
   const [showAmazonVideo, setShowAmazonVideo] = useState({});
   const [skipAmazonAccount, setSkipAmazonAccount] = useState(false);
+  const [dspData, setDspData] = useState([]);
+  const [showDSPContact, setshowDSPContact] = useState({
+    show: false,
+    sameAsBilling: true,
+  });
+
   const [noAmazonAccount, setNoAmazonAccount] = useState({
     Seller: false,
     Vendor: false,
@@ -168,13 +175,22 @@ export default function MainContainer() {
       history.location.pathname.includes(PATH_UNAUTHORIZED_BILLING_DETAILS) ||
       history.location.pathname.includes(PATH_BILLING_DETAILS)
     ) {
-      getBillingDetails(customerId).then((response) => {
-        if (response && response.status === 200) {
-          setBillingData(response && response.data);
-        }
-        if (response && response.status === 404) {
-          setBillingData({});
-        }
+      getDSPContact(customerId).then((res) => {
+        setshowDSPContact({
+          show: res?.data?.is_dsp_contract,
+          sameAsBilling: res?.data?.results?.[0]
+            ? res?.data?.results?.[0]?.same_as_billing_contact
+            : true,
+        });
+        setDspData(res?.data?.results?.[0]);
+        getBillingDetails(customerId).then((response) => {
+          if (response?.status === 200) {
+            setBillingData(response?.data);
+          }
+          if (response?.status === 404) {
+            setBillingData({});
+          }
+        });
       });
     } else if (
       history.location.pathname.includes(PATH_UNAUTHORIZED_AMAZON_MERCHANT) ||
@@ -330,6 +346,9 @@ export default function MainContainer() {
           summaryData={summaryData}
           skipAmazonAccount={skipAmazonAccount}
           summaryDetails={summaryDetails}
+          showDSPContact={showDSPContact}
+          dspContactDetail={dspData}
+          setshowDSPContact={setshowDSPContact}
         />
       );
     if (path === 'amazon-merchant' && !skipAmazonAccount)
