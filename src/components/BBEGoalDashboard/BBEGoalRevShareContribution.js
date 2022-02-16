@@ -133,7 +133,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
         {type === 'positive' ? (
           <td className="product-body">
             {item?.previous_rev_share === 0 ? (
-              'NA'
+              'N/A'
             ) : (
               <div className="increase-rate large text-medium">
                 {' '}
@@ -145,7 +145,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
         ) : (
           <td className="product-body ">
             {item?.previous_rev_share === 0 ? (
-              'NA'
+              'N/A'
             ) : (
               <div className="decrease-rate large text-medium">
                 <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
@@ -249,7 +249,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
               label2="Change"
               labelInfo2={
                 item?.previous_rev_share === 0
-                  ? 'NA'
+                  ? 'N/A'
                   : `${formatNumber(
                       Math.abs(item?.change_in_percentage),
                       '',
