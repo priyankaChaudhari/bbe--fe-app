@@ -132,18 +132,26 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
         </td>
         {type === 'positive' ? (
           <td className="product-body">
-            <div className="increase-rate large text-medium">
-              {' '}
-              <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
-              {`${formatNumber(item?.change_in_percentage, '', '%')}`}
-            </div>
+            {item?.previous_rev_share === 0 ? (
+              'NA'
+            ) : (
+              <div className="increase-rate large text-medium">
+                {' '}
+                <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
+                {formatNumber(Math.abs(item?.change_in_percentage), '', '%')}
+              </div>
+            )}
           </td>
         ) : (
           <td className="product-body ">
-            <div className="decrease-rate large text-medium">
-              <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-              {`${formatNumber(Math.abs(item?.change_in_percentage), '', '%')}`}
-            </div>
+            {item?.previous_rev_share === 0 ? (
+              'NA'
+            ) : (
+              <div className="decrease-rate large text-medium">
+                <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
+                {formatNumber(Math.abs(item?.change_in_percentage), '', '%')}
+              </div>
+            )}
           </td>
         )}
 
@@ -239,14 +247,18 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
               label1={contributionData?.current_date}
               labelInfo1={`$${formatNumber(item?.current_rev_share)}`}
               label2="Change"
-              labelInfo2={`${formatNumber(
-                Math.abs(item?.change_in_percentage),
-                '',
-                '%',
-              )}`}
+              labelInfo2={
+                item?.previous_rev_share === 0
+                  ? 'NA'
+                  : `${formatNumber(
+                      Math.abs(item?.change_in_percentage),
+                      '',
+                      '%',
+                    )}`
+              }
               status={item.contribution_bracket}
               statusColor={contributionColorSet[item.contribution_bracket]}
-              isShowPercentage
+              isShowPercentage={item?.previous_rev_share !== 0}
               isLabelInfo2Positive={selectedContributionOption === 'positive'}
               statusLabelColor="#000000"
               isBBEDashboard
