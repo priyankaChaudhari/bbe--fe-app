@@ -68,7 +68,6 @@ export default function EscrowBudgetAllocationModal({
   newCurrentDate.setDate(1);
   newCurrentDate.setHours(currentDate.getHours());
   const currentMonthYear = dayjs(newCurrentDate).format('YYYY-MM-DD');
-
   const [escrowBalanceMarketplace, setEscrowBalanceMarketplace] = useState([]);
   const [oldEscrowAllocation, setOldEscrowAllocation] = useState([]);
   const [selectedMarketplace, setSelectedMarketplace] = useState(marketplace);
@@ -139,11 +138,15 @@ export default function EscrowBudgetAllocationModal({
         if (response?.status === 200) {
           const getData = bindEscrowMarketplaceData(response?.data);
           setEscrowBalanceMarketplace(getData);
+          const data = getData.filter(
+            (item) => item.value === selectedMarketplace,
+          );
+          setIsAllowToEdit(data[0].escrowBalance >= 0);
         }
         setIsDataLoading(false);
       }
     });
-  }, [bindEscrowMarketplaceData, customerId]);
+  }, [bindEscrowMarketplaceData, customerId, selectedMarketplace]);
 
   const getDSPPacing = useCallback(
     (currentMarketplace) => {
@@ -264,10 +267,14 @@ export default function EscrowBudgetAllocationModal({
               </div>
             </div>
             <div className="col-12 col-md-5">
-              {escrowBalanceMarketplace?.length > 1 && isAllowToEdit ? (
+              {escrowBalanceMarketplace?.length > 1 ? (
                 <div className="text-bold text-right">
                   <div
-                    className="edit-marketplace cursor text-medium"
+                    className={
+                      !isAllowToEdit
+                        ? 'edit-marketplace cursor disabled'
+                        : 'edit-marketplace cursor'
+                    }
                     role="presentation"
                     onClick={() => {
                       setShowMarketPlaceAllocation(true);
@@ -316,7 +323,6 @@ export default function EscrowBudgetAllocationModal({
                     onClick={() => {
                       setSelectedMarketplace(item.value);
                       getDSPPacing(item.value);
-                      setIsAllowToEdit(item.escrowBalance >= 0);
                     }}
                     role="presentation">
                     {item.label}&nbsp; (
