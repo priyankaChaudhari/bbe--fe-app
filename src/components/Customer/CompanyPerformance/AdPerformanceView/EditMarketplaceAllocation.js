@@ -62,6 +62,10 @@ export default function EditMarketplaceAllocation({
     tempData[index].balanceChanged = balanceChanged;
     tempData[index].escrowReallocatedBalance = Number(newEscrowBalance);
 
+    if (tempData[index].escrowReallocatedBalance === oldEscrowBalance) {
+      setIsAllowToContinue(false);
+    }
+
     const sumOfNewEscrowBalance = calculateSumOfNewEscrowBalance(tempData);
     const updatedBalance = totalEscrowBalance - sumOfNewEscrowBalance;
     tempData[0].escrowReallocatedBalance = Number(updatedBalance.toFixed(2));

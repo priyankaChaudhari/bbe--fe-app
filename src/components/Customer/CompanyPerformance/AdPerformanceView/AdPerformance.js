@@ -600,7 +600,10 @@ export default function AdPerformance({
         if (mounted.current) {
           if (res && res.status === 200) {
             setDspData(res.data);
-            if (res?.data?.dsp_pacing === null || undefined) {
+            if (
+              res?.data?.dsp_pacing === null ||
+              res?.data?.dsp_pacing === undefined
+            ) {
               setIsAllowToSplitBalance(false);
             } else {
               checkPermission();
