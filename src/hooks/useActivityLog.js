@@ -387,7 +387,7 @@ export default function useActivityLog({ viewComponent }) {
             <span>worth of escrow from</span>
             {oldMonth}
             <span>to</span>
-            {newMonth}
+            {newMonth}.
           </>
         );
       }
@@ -398,7 +398,7 @@ export default function useActivityLog({ viewComponent }) {
           <span>reallocated</span>
           {oldValue}
           <span>worth of escrow to</span>
-          {newValue}
+          {newValue}.
         </>
       );
     }

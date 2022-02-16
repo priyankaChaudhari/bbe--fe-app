@@ -290,6 +290,10 @@ h6 {
    font-family: ${Theme.baseMediumFontFamily} !important;
    font-weight: 500 !important;
 }
+.normal-text-black {
+  color: ${Theme.black};
+  font-size: ${Theme.extraNormal};  
+}
 p {
   font-size: ${Theme.small};
 
@@ -310,7 +314,6 @@ p {
     color: ${Theme.black};
     font-size: ${Theme.normal};
   }
-
   &.no-result-found {
     color: ${Theme.gray40};
     font-size: ${Theme.normal};
