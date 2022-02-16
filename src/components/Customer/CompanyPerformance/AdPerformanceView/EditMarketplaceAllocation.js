@@ -130,7 +130,7 @@ export default function EditMarketplaceAllocation({
                   onChange={(event) => handleOnChange(event, index)}
                   thousandSeparator
                   decimalScale={2}
-                  allowNegative={!index}
+                  // allowNegative={!index}
                 />
               </div>
             </InputFormField>

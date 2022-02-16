@@ -86,6 +86,7 @@ export default function EscrowBudgetAllocationModal({
     false,
   );
   const [allocatedMonths, setAllocatedMonths] = useState();
+  const [isAllowToEdit, setIsAllowToEdit] = useState(false);
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [isMonthlyDataLoading, setIsMonthlyDataLoading] = useState(true);
   const [isSubmitLoader, setIsSubmitLoader] = useState(true);
@@ -263,8 +264,7 @@ export default function EscrowBudgetAllocationModal({
               </div>
             </div>
             <div className="col-12 col-md-5">
-              {escrowBalanceMarketplace?.length > 1 &&
-              totalEscrowBalance > 0 ? (
+              {escrowBalanceMarketplace?.length > 1 && isAllowToEdit ? (
                 <div className="text-bold text-right">
                   <div
                     className="edit-marketplace cursor text-medium"
@@ -316,6 +316,7 @@ export default function EscrowBudgetAllocationModal({
                     onClick={() => {
                       setSelectedMarketplace(item.value);
                       getDSPPacing(item.value);
+                      setIsAllowToEdit(item.escrowBalance >= 0);
                     }}
                     role="presentation">
                     {item.label}&nbsp; (
