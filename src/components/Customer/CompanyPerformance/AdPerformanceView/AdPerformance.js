@@ -120,7 +120,8 @@ export default function AdPerformance({
 
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
-  useEffect(() => {
+
+  const checkPermission = useCallback(() => {
     if (userInfo?.role?.includes('Ad Manager Admin')) {
       setIsAllowToSplitBalance(true);
     } else {
@@ -138,7 +139,11 @@ export default function AdPerformance({
         }
       }
     }
-  }, [memberData, userInfo]);
+  }, [memberData, userInfo?.id, userInfo?.role]);
+
+  useEffect(() => {
+    checkPermission();
+  }, [checkPermission]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
@@ -598,14 +603,14 @@ export default function AdPerformance({
             if (res?.data?.dsp_pacing === null || undefined) {
               setIsAllowToSplitBalance(false);
             } else {
-              setIsAllowToSplitBalance(true);
+              checkPermission();
             }
           }
           setIsDspPacingLoading(false);
         }
       });
     },
-    [id],
+    [checkPermission, id],
   );
 
   const getPacingGraphData = useCallback(
