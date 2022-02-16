@@ -17,6 +17,7 @@ export default function ConfirmMarketPlaceAllocation({
   totalEscrowBalance,
   escrowBalanceMarketplace,
   getEscrowBalanceMarketplace,
+  getDSPPacing,
   setShowMarketPlaceAllocation,
   showConfirmMarketplaceAllocation,
   setShowConfirmMarketplaceAllocation,
@@ -76,6 +77,7 @@ export default function ConfirmMarketPlaceAllocation({
           setShowConfirmMarketplaceAllocation(false);
           setShowEscrowMonthlyAllocation(true);
           getEscrowBalanceMarketplace();
+          getDSPPacing(selectedMarketplace);
         }
         setIsApiCall(true);
       });
@@ -84,6 +86,7 @@ export default function ConfirmMarketPlaceAllocation({
       currentMonthYear,
       customerId,
       getActivityLogInfo,
+      getDSPPacing,
       getEscrowBalanceMarketplace,
       onClick,
       selectedMarketplace,
@@ -283,6 +286,7 @@ ConfirmMarketPlaceAllocation.defaultProps = {
   addThousandSeperator: () => {},
   escrowBalanceMarketplace: [],
   getEscrowBalanceMarketplace: () => {},
+  getDSPPacing: () => {},
   setShowMarketPlaceAllocation: func,
   showConfirmMarketplaceAllocation: bool,
   setShowConfirmMarketplaceAllocation: func,
@@ -300,6 +304,7 @@ ConfirmMarketPlaceAllocation.propTypes = {
   getActivityLogInfo: func,
   escrowBalanceMarketplace: arrayOf(shape()),
   getEscrowBalanceMarketplace: func,
+  getDSPPacing: func,
   setShowMarketPlaceAllocation: func,
   showConfirmMarketplaceAllocation: bool,
   setShowConfirmMarketplaceAllocation: func,
