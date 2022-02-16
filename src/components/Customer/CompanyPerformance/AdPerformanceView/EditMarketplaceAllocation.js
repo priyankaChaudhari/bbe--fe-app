@@ -24,6 +24,7 @@ export default function EditMarketplaceAllocation({
   addThousandSeperator,
   setIsDataLoading,
   getEscrowBalanceMarketplace,
+  getDSPPacing,
   showMarketPlaceAllocation,
   setShowMarketPlaceAllocation,
   setShowEscrowMonthlyAllocation,
@@ -214,6 +215,7 @@ export default function EditMarketplaceAllocation({
           totalEscrowBalance={totalEscrowBalance}
           escrowBalanceMarketplace={escrowBalanceMarketplace}
           getEscrowBalanceMarketplace={getEscrowBalanceMarketplace}
+          getDSPPacing={getDSPPacing}
           setShowMarketPlaceAllocation={setShowMarketPlaceAllocation}
           showConfirmMarketplaceAllocation={showConfirmMarketplaceAllocation}
           setShowConfirmMarketplaceAllocation={
@@ -240,6 +242,7 @@ EditMarketplaceAllocation.defaultProps = {
   setIsDataLoading: () => {},
   addThousandSeperator: () => {},
   getEscrowBalanceMarketplace: () => {},
+  getDSPPacing: () => {},
   showMarketPlaceAllocation: bool,
   setShowMarketPlaceAllocation: () => {},
   setShowEscrowMonthlyAllocation: () => {},
@@ -256,6 +259,7 @@ EditMarketplaceAllocation.propTypes = {
   addThousandSeperator: func,
   setIsDataLoading: func,
   getEscrowBalanceMarketplace: func,
+  getDSPPacing: func,
   showMarketPlaceAllocation: bool,
   setShowMarketPlaceAllocation: func,
   setShowEscrowMonthlyAllocation: func,

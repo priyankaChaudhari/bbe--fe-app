@@ -595,6 +595,11 @@ export default function AdPerformance({
         if (mounted.current) {
           if (res && res.status === 200) {
             setDspData(res.data);
+            if (res?.data?.dsp_pacing?.escrow_converted_usd >= 0) {
+              setIsAllowToSplitBalance(true);
+            } else {
+              setIsAllowToSplitBalance(false);
+            }
           }
           setIsDspPacingLoading(false);
         }

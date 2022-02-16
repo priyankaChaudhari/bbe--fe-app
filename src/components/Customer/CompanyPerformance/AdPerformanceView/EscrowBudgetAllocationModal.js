@@ -47,7 +47,6 @@ const customStyles = {
     transform: 'translate(-50%, -50%)',
   },
 };
-
 export default function EscrowBudgetAllocationModal({
   id,
   isOpen,
