@@ -264,10 +264,14 @@ export default function EscrowBudgetAllocationModal({
               </div>
             </div>
             <div className="col-12 col-md-5">
-              {escrowBalanceMarketplace?.length > 1 && isAllowToEdit ? (
+              {escrowBalanceMarketplace?.length > 1 ? (
                 <div className="text-bold text-right">
                   <div
-                    className="edit-marketplace cursor text-medium"
+                    className={
+                      !isAllowToEdit
+                        ? 'edit-marketplace cursor disabled'
+                        : 'edit-marketplace cursor'
+                    }
                     role="presentation"
                     onClick={() => {
                       setShowMarketPlaceAllocation(true);

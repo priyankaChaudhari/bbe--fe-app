@@ -67,7 +67,11 @@ export default function EditMarketplaceAllocation({
     tempData[0].escrowReallocatedBalance = Number(updatedBalance.toFixed(2));
     tempData[0].balanceChanged = updatedBalance - tempData[0].escrowBalance;
     setEscrowBalanceMarketplace(tempData);
-    if (updatedBalance < 0) {
+    if (
+      updatedBalance < 0 ||
+      parseFloat(event.target.value.replace(/,/g, '')) <
+        escrowBalanceMarketplace[index]?.escrowBalance
+    ) {
       setIsEscrowBalanceExceed(true);
       setIsAllowToContinue(false);
     } else setIsEscrowBalanceExceed(false);
