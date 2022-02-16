@@ -76,7 +76,7 @@ export default function BBEGoalHighLevelMetrics({
                 true,
                 true,
               )}{' '}
-              vs plan
+              {metricsData?.planned?.net_new_customers ? 'vs plan' : ''}
             </div>
             <div className="horizontal-line straight-line mt-3 d-lg-block d-none" />
           </div>
@@ -100,7 +100,7 @@ export default function BBEGoalHighLevelMetrics({
                       true,
                       true,
                     )}{' '}
-                    vs plan
+                    {metricsData?.planned?.net_new_customers ? 'vs plan' : ''}
                   </div>
                 </li>
               </ul>
@@ -216,7 +216,7 @@ export default function BBEGoalHighLevelMetrics({
                 true,
                 true,
               )}{' '}
-              vs plan
+              {metricsData?.planned?.total_revenue ? 'vs plan' : ''}
             </div>
           </div>
 
