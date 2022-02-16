@@ -25,14 +25,14 @@ const BBEGoalChart = ({ data, CHART_ID, selectedMonthYear, formatNumber }) => {
     xAxis.renderer.grid.template.disabled = true;
     xAxis.renderer.labels.template.disabled = true;
     xAxis.renderer.baseGrid.disabled = true;
-    xAxis.cursorTooltipEnabled = false;
+    xAxis.cursorTooltipEnabled = true;
 
     // Add Y Axis
     const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
     yAxis.renderer.grid.template.disabled = true;
     yAxis.renderer.labels.template.disabled = true;
     yAxis.renderer.baseGrid.disabled = true;
-    xAxis.cursorTooltipEnabled = false;
+    xAxis.cursorTooltipEnabled = true;
 
     // Create series
     const series = chart.series.push(new am4charts.ColumnSeries());
