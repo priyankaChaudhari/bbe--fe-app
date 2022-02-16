@@ -6,7 +6,7 @@ import ReactTooltip from 'react-tooltip';
 import { func, instanceOf } from 'prop-types';
 
 import Theme from '../../theme/Theme';
-import useNumberWithCommas from '../../hooks/useNumberWithCommas';
+import useFormatNumber from '../../hooks/useFormatNumber';
 import { PageLoader, WhiteCard } from '../../common';
 import { getBBEGoalMetrics } from '../../api';
 import { InfoIcons } from '../../theme/images';
@@ -57,18 +57,7 @@ export default function BBEGoalHighLevelMetrics({
     return 'label-info-medium';
   };
 
-  const formatNumber = (value, type, numberWithCommas) => {
-    const prefix = type === 'currency' ? '$' : '';
-    if (value < 0) {
-      return numberWithCommas(value, `-${prefix}`, '', true);
-    }
-    if (value > 0) {
-      return numberWithCommas(value, `+${prefix}`, '', true);
-    }
-    return numberWithCommas(value, prefix, '', true);
-  };
-
-  const renderPartners = (numberWithCommas) => {
+  const renderPartners = (formatNumber) => {
     return (
       <div className="col-lg-3 col-md-12">
         <WhiteCard className="card-with-border mt-4">
@@ -83,7 +72,9 @@ export default function BBEGoalHighLevelMetrics({
               {formatNumber(
                 metricsData?.planned?.net_new_customers,
                 '',
-                numberWithCommas,
+                '',
+                true,
+                true,
               )}{' '}
               vs plan
             </div>
@@ -105,7 +96,9 @@ export default function BBEGoalHighLevelMetrics({
                     {formatNumber(
                       metricsData?.planned?.net_new_customers,
                       '',
-                      numberWithCommas,
+                      '',
+                      true,
+                      true,
                     )}{' '}
                     vs plan
                   </div>
@@ -126,7 +119,9 @@ export default function BBEGoalHighLevelMetrics({
                   {formatNumber(
                     metricsData?.planned?.onboarded,
                     '',
-                    numberWithCommas,
+                    '',
+                    true,
+                    true,
                   )}
                 </div>
               </div>
@@ -145,7 +140,9 @@ export default function BBEGoalHighLevelMetrics({
                     {formatNumber(
                       metricsData?.planned?.onboarded,
                       '',
-                      numberWithCommas,
+                      '',
+                      true,
+                      true,
                     )}
                   </div>
                 </li>
@@ -164,7 +161,9 @@ export default function BBEGoalHighLevelMetrics({
                   {formatNumber(
                     metricsData?.planned?.offboarded,
                     '',
-                    numberWithCommas,
+                    '',
+                    true,
+                    true,
                   )}
                 </div>
               </div>
@@ -182,7 +181,9 @@ export default function BBEGoalHighLevelMetrics({
                     {formatNumber(
                       metricsData?.planned?.offboarded,
                       '',
-                      numberWithCommas,
+                      '',
+                      true,
+                      true,
                     )}
                   </div>
                 </li>
@@ -194,7 +195,7 @@ export default function BBEGoalHighLevelMetrics({
     );
   };
 
-  const renderFinancial = (numberWithCommas) => {
+  const renderFinancial = (formatNumber) => {
     return (
       <WhiteCard className="card-with-border mt-4">
         <div className="row">
@@ -202,12 +203,7 @@ export default function BBEGoalHighLevelMetrics({
             <p className="black-heading-title mt-0">Financials</p>
             <div className="label">Total Revenue</div>
             <h3>
-              {numberWithCommas(
-                metricsData?.actual?.total_revenue,
-                '$',
-                '',
-                true,
-              )}
+              {formatNumber(metricsData?.actual?.total_revenue, '$', '', true)}
             </h3>
             <div
               className={`${returnClassName(
@@ -215,8 +211,10 @@ export default function BBEGoalHighLevelMetrics({
               )} large-size mt-2`}>
               {formatNumber(
                 metricsData?.planned?.total_revenue,
-                'currency',
-                numberWithCommas,
+                '$',
+                '',
+                true,
+                true,
               )}{' '}
               vs plan
             </div>
@@ -236,7 +234,7 @@ export default function BBEGoalHighLevelMetrics({
                 CHART_ID="revenue_chart"
                 data={metricsData?.graph_data}
                 selectedMonthYear={Dayjs(selectedMonthYear).format('MMMM-YYYY')}
-                numberWithCommas={useNumberWithCommas}
+                formatNumber={useFormatNumber}
               />
             )}
           </div>
@@ -246,7 +244,7 @@ export default function BBEGoalHighLevelMetrics({
           <div className="col-md-3 col-6">
             <div className="label mb-2">Avg. Billings/BP</div>
             <h3 className="small-title-heading">
-              {numberWithCommas(
+              {formatNumber(
                 metricsData?.actual?.avg_billing_cap,
                 '$',
                 '',
@@ -260,8 +258,10 @@ export default function BBEGoalHighLevelMetrics({
               )} large-size mt-2`}>
               {formatNumber(
                 metricsData?.planned?.avg_billing_cap,
-                'currency',
-                numberWithCommas,
+                '$',
+                '',
+                true,
+                true,
               )}
             </div>
           </div>
@@ -287,7 +287,7 @@ export default function BBEGoalHighLevelMetrics({
               />
             </div>
             <h3 className="small-title-heading">
-              {numberWithCommas(metricsData?.actual?.rev_share, '$', '', true)}
+              {formatNumber(metricsData?.actual?.rev_share, '$', '', true)}
             </h3>
 
             <div
@@ -296,8 +296,10 @@ export default function BBEGoalHighLevelMetrics({
               )} large-size mt-2`}>
               {formatNumber(
                 metricsData?.planned?.rev_share,
-                'currency',
-                numberWithCommas,
+                '$',
+                '',
+                true,
+                true,
               )}
             </div>
           </div>
@@ -305,7 +307,7 @@ export default function BBEGoalHighLevelMetrics({
           <div className="col-md-3 col-6">
             <div className="label mb-2">Rev Per Employee</div>
             <h3 className="small-title-heading">
-              {numberWithCommas(
+              {formatNumber(
                 metricsData?.actual?.rev_per_employee,
                 '$',
                 '',
@@ -316,12 +318,7 @@ export default function BBEGoalHighLevelMetrics({
           <div className="col-md-3 col-6">
             <div className="label mb-2">Average LTV</div>
             <h3 className="small-title-heading">
-              {numberWithCommas(
-                metricsData?.actual?.average_ltv,
-                '$',
-                '',
-                true,
-              )}
+              {formatNumber(metricsData?.actual?.average_ltv, '$', '', true)}
             </h3>
 
             <div
@@ -330,8 +327,10 @@ export default function BBEGoalHighLevelMetrics({
               )} large-size mt-2`}>
               {formatNumber(
                 metricsData?.planned?.average_ltv,
-                'currency',
-                numberWithCommas,
+                '$',
+                '',
+                true,
+                true,
               )}
             </div>
           </div>
@@ -344,9 +343,9 @@ export default function BBEGoalHighLevelMetrics({
     <>
       <div className="row">
         <div className="col-lg-9 col-md-12">
-          {renderFinancial(useNumberWithCommas)}
+          {renderFinancial(useFormatNumber)}
         </div>
-        {renderPartners(useNumberWithCommas)}
+        {renderPartners(useFormatNumber)}
       </div>
     </>
   );

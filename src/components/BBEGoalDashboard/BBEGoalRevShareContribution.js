@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { instanceOf } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
-import useNumberWithCommas from '../../hooks/useNumberWithCommas';
+import useFormatNumber from '../../hooks/useFormatNumber';
 import { ArrowDownIcon, ArrowUpIcon } from '../../theme/images';
 import { getRevShareContributionData } from '../../api';
 import {
@@ -20,6 +20,7 @@ import {
   NoData,
   PageLoader,
 } from '../../common';
+import Theme from '../../theme/Theme';
 
 export default function BBEGoalRevShareContribution({ monthYear }) {
   const mounted = useRef(false);
@@ -115,7 +116,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
     );
   };
 
-  const renderTableData = (item, type, numberWithCommas) => {
+  const renderTableData = (item, type, formatNumber) => {
     return (
       <tr>
         <td className="product-body">
@@ -124,24 +125,24 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
           <div className="status">{item?.bgs}</div>
         </td>
         <td className="product-body">
-          {numberWithCommas(item?.previous_rev_share, '$')}
+          {formatNumber(item?.previous_rev_share, '$')}
         </td>
         <td className="product-body ">
-          {numberWithCommas(item?.current_rev_share, '$')}
+          {formatNumber(item?.current_rev_share, '$')}
         </td>
         {type === 'positive' ? (
           <td className="product-body">
             <div className="increase-rate large text-medium">
               {' '}
               <img className="green-arrow" src={ArrowUpIcon} alt="arrow-up" />
-              {`${numberWithCommas(item?.change_in_percentage, '', '%')}`}
+              {`${formatNumber(item?.change_in_percentage, '', '%')}`}
             </div>
           </td>
         ) : (
           <td className="product-body ">
             <div className="decrease-rate large text-medium">
               <img className="red-arrow" src={ArrowDownIcon} alt="arrow-up" />
-              {`${numberWithCommas(item?.change_in_percentage, '', '%')}`}
+              {`${formatNumber(Math.abs(item?.change_in_percentage), '', '%')}`}
             </div>
           </td>
         )}
@@ -182,7 +183,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
                     selectedContributionOption === 'positive'
                       ? 'positive'
                       : 'negative',
-                    useNumberWithCommas,
+                    useFormatNumber,
                   ),
                 )}
             </tbody>
@@ -196,7 +197,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
     );
   };
 
-  const renderMobileView = (numberWithCommas) => {
+  const renderMobileView = (formatNumber) => {
     let selectedContibutionData = [];
 
     selectedContibutionData =
@@ -222,7 +223,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
         {contributionLoader ? (
           <PageLoader
             component="performance-graph"
-            color="#FF5933"
+            color={Theme.orange}
             type="detail"
             width={40}
             height={40}
@@ -234,12 +235,12 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
               invoiceType={item?.customer_name}
               invoiceId={item?.bgs}
               label={contributionData?.previous_date}
-              labelInfo={`$${numberWithCommas(item?.previous_rev_share)}`}
+              labelInfo={`$${formatNumber(item?.previous_rev_share)}`}
               label1={contributionData?.current_date}
-              labelInfo1={`$${numberWithCommas(item?.current_rev_share)}`}
+              labelInfo1={`$${formatNumber(item?.current_rev_share)}`}
               label2="Change"
-              labelInfo2={`${numberWithCommas(
-                item?.change_in_percentage,
+              labelInfo2={`${formatNumber(
+                Math.abs(item?.change_in_percentage),
                 '',
                 '%',
               )}`}
@@ -284,7 +285,7 @@ export default function BBEGoalRevShareContribution({ monthYear }) {
           renderDekstopView()
         ) : null}
       </WhiteCard>
-      {renderMobileView(useNumberWithCommas)}
+      {renderMobileView(useFormatNumber)}
     </>
   );
 }
