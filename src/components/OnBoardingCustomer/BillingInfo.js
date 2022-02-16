@@ -334,7 +334,7 @@ export default function BillingInfo({
         placeholder={`Enter ${item.label}`}
         value={
           type === 'dsp_contact'
-            ? formData?.dsp_contact?.[item.key] || dspContactDetail?.[item.key]
+            ? formData?.dsp_contact?.[item.key]
             : formData?.[type]?.[item.key]
         }
         isNumericString
@@ -350,7 +350,7 @@ export default function BillingInfo({
         type={item.type}
         defaultValue={
           type === 'dsp_contact'
-            ? formData?.dsp_contact?.[item.key] || dspContactDetail?.[item.key]
+            ? formData?.dsp_contact?.[item.key]
             : formData?.[type]?.[0]?.[item.key] || data?.[type]?.[0]?.[item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
@@ -377,6 +377,8 @@ export default function BillingInfo({
                 Object.keys(apiError.dsp_contact).length !== 0
               )
                 setApiError({ ...apiError, dsp_contact: {} });
+              if (!event.target.checked)
+                setFormData({ ...formData, dsp_contact: {} });
               setshowDSPContact({
                 ...showDSPContact,
                 sameAsBilling: !showDSPContact.sameAsBilling,
