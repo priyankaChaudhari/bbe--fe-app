@@ -16,7 +16,7 @@ import { MainHeader, MobileSidebar, SideContents } from './Styles/HeaderStyles';
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
-  PATH_BBE_GOAL_DASHBOARD,
+  // PATH_BBE_GOAL_DASHBOARD,
   helpDeskLink,
   managementLink,
   PATH_ACCOUNT_SETUP,
@@ -38,8 +38,8 @@ import {
   Speedometer,
   HelpDeskIcon,
   HandShake,
-  HomePageActiveIcon,
-  HomePageIcon,
+  // HomePageActiveIcon,
+  // HomePageIcon,
 } from '../theme/images';
 
 export default function Header({ type, userInfo }) {
@@ -274,7 +274,7 @@ export default function Header({ type, userInfo }) {
             <SideContents>
               {' '}
               <ul className="side-bar-icon ">
-                <li
+                {/* <li
                   className={
                     history.location.pathname?.includes('bbe-Goal')
                       ? ' cursor active'
@@ -297,7 +297,7 @@ export default function Header({ type, userInfo }) {
                       alt=""
                     />
                   )}
-                </li>
+                </li> */}
 
                 <li
                   className={

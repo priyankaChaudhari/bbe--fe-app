@@ -12,14 +12,14 @@ import {
   OrganizationIcon,
   SpeedometerActive,
   Speedometer,
-  HomePageActiveIcon,
-  HomePageIcon,
+  // HomePageActiveIcon,
+  // HomePageIcon,
 } from '../theme/images';
 
 import {
   PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
-  PATH_BBE_GOAL_DASHBOARD,
+  // PATH_BBE_GOAL_DASHBOARD,
   roleURLs,
   dashboardRolePaths,
   dashboardRole,
@@ -33,7 +33,7 @@ export default function LeftSideBar({ userInfo }) {
     <div>
       <LeftSideBars>
         <ul className="side-bar-icon">
-          <li
+          {/* <li
             className={
               history.location.pathname?.includes('bbe-Goal')
                 ? ' cursor active'
@@ -54,7 +54,7 @@ export default function LeftSideBar({ userInfo }) {
               src={HomePageIcon}
               alt=""
             />
-          </li>
+          </li> */}
 
           {dashboardRole.includes(userRole) ? (
             <li

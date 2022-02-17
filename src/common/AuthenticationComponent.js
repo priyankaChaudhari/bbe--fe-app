@@ -10,7 +10,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
-import { BBEGoalDashboardContainer } from '../components/BBEGoalDashboard';
+// import { BBEGoalDashboardContainer } from '../components/BBEGoalDashboard';
 
 import { userMe } from '../store/actions/index';
 import { Summary } from '../components/OnBoardingCustomer';
@@ -52,7 +52,7 @@ import {
   PATH_AD_MANAGER_ADMIN_DASHBOARD,
   PATH_FINANCE_DASHBOARD,
   PATH_BGS_ADMIN_DASHBOARD,
-  PATH_BBE_GOAL_DASHBOARD,
+  // PATH_BBE_GOAL_DASHBOARD,
 } from '../constants';
 
 export default function AuthenticationComponent() {
@@ -156,10 +156,10 @@ export default function AuthenticationComponent() {
           )}
 
           {/* BBE-goal dashboard */}
-          <Route
+          {/* <Route
             path={PATH_BBE_GOAL_DASHBOARD}
             component={BBEGoalDashboardContainer}
-          />
+          /> */}
 
           {/* AD MANAGER DASHBOARD, BGS DASHBOARD, FINANCE DASHBOARD PATH */}
           {Object.keys(dashboardRolePaths).includes(userInfo?.role) ? (

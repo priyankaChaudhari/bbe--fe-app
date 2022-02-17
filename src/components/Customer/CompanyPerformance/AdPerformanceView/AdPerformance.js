@@ -139,7 +139,7 @@ export default function AdPerformance({
         }
       }
     }
-  }, [memberData, userInfo?.id, userInfo?.role]);
+  }, [memberData, userInfo]);
 
   useEffect(() => {
     checkPermission();
