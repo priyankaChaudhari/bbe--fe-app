@@ -2,22 +2,19 @@
 import React, { useState, useEffect } from 'react';
 
 import $ from 'jquery';
+import axios from 'axios';
 import queryString from 'query-string';
 import NumberFormat from 'react-number-format';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { string, shape, bool, func, number, arrayOf } from 'prop-types';
 
-import BillingTermsModal from './Modals/BillingTermsModal';
 import { userMe } from '../../store/actions';
-import { SecurityLock } from '../../theme/images';
-import { CollapseOpenContainer } from './OnBoardingStyles';
 import {
   CheckBox,
   OnBoardingBody,
   InputFormField,
   Button,
-  ModalRadioCheck,
   PageLoader,
   ErrorMsg,
 } from '../../common';
@@ -26,16 +23,13 @@ import {
   updateAskSomeoneData,
   updateUserMe,
   saveBillingInfo,
+  saveDSPContact,
 } from '../../api';
 import {
   PATH_SUMMARY,
   PATH_THANKS,
-  achDetails,
-  billingAddress,
-  creditCardDetails,
   stepPath,
-  authorizeLink,
-  billingTerms,
+  billingAddress,
 } from '../../constants';
 
 export default function BillingInfo({
@@ -50,21 +44,44 @@ export default function BillingInfo({
   summaryData,
   skipAmazonAccount,
   summaryDetails,
+  dspContactDetail,
+  showDSPContact,
+  setshowDSPContact,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const [formData, setFormData] = useState({
-    ach: false,
-    credit_card: true,
-    billing_address: {},
-    billing_contact: {},
-    agreed: false,
-    card_details: {},
-  });
-
-  const [showModal, setShowModal] = useState(false);
   const params = queryString.parse(history.location.search);
+  const [formData, setFormData] = useState({});
   const [apiError, setApiError] = useState({});
+
+  const billingInformation = [
+    {
+      label: 'Billing Address',
+      part: 'Part 1',
+      array: billingAddress.filter((op) => op.section === 'address'),
+      key: 'billing_address',
+      hasCheckbox: false,
+    },
+    {
+      label: 'Billing Contact',
+      part: 'Part 2',
+      array: billingAddress.filter((op) => op.section === 'contact'),
+      key: 'billing_contact',
+      hasCheckbox: false,
+    },
+  ];
+  const dspInformation = [
+    ...billingInformation,
+    {
+      label: 'DSP Budget Sign-off',
+      part: 'Part 3',
+      array: billingAddress.filter((op) => op.section === 'contact'),
+      key: 'dsp_contact',
+      hasCheckbox: true,
+      subTitle:
+        'From time to time, your Growth Strategist may recommend a change in your DSP budget. Please tell us who should receive the emails to approve any DSP budget change.',
+    },
+  ];
 
   const getIncompleteStep = summaryData.find(
     (op) =>
@@ -87,37 +104,31 @@ export default function BillingInfo({
   };
 
   useEffect(() => {
-    if (data && data.id) {
-      $('.checkboxes input:checkbox').prop('checked', true);
-      setFormData({
-        ...formData,
-        agreed: true,
-        billing_address: data.billing_address[0],
-        billing_contact: data.billing_contact[0],
-        card_details: data.card_details[0],
-      });
-    } else {
-      setFormData({
-        ach: false,
-        credit_card: true,
-        billing_address: {},
-        billing_contact: {},
-        agreed: false,
-        card_details: {},
-      });
-    }
-  }, [data]);
+    $('.checkboxes input:checkbox').prop(
+      'checked',
+      showDSPContact.sameAsBilling || true,
+    );
+
+    setFormData({
+      ...formData,
+      billing_address: data?.billing_address?.[0] || {},
+      billing_contact: data?.billing_contact?.[0] || {},
+      dsp_contact:
+        dspContactDetail === undefined
+          ? {}
+          : showDSPContact.sameAsBilling
+          ? data?.billing_contact?.[0]
+          : dspContactDetail,
+    });
+  }, [data, dspContactDetail]);
 
   const saveDetails = () => {
     setIsLoading({ loader: true, type: 'button' });
     if (
       (stepData === undefined ||
-        (stepData &&
-          Object.keys(stepData) &&
-          Object.keys(stepData).length === 0)) &&
+        (stepData && Object.keys(stepData)?.length === 0)) &&
       verifiedStepData &&
-      Object.keys(verifiedStepData) &&
-      Object.keys(verifiedStepData).length === 0
+      Object.keys(verifiedStepData)?.length === 0
     ) {
       const detail = {
         is_completed: true,
@@ -126,13 +137,11 @@ export default function BillingInfo({
         customer_onboarding: userInfo.customer_onboarding,
       };
       askSomeoneData(detail).then((stepResponse) => {
-        if (stepResponse && stepResponse.status === 201) {
+        if (stepResponse?.status === 201) {
           if (assignedToSomeone) {
-            const stringified =
-              queryString &&
-              queryString.stringify({
-                name: verifiedStepData.user_name,
-              });
+            const stringified = queryString?.stringify({
+              name: verifiedStepData.user_name,
+            });
             history.push({
               pathname: PATH_THANKS,
               search: `${stringified}`,
@@ -146,7 +155,7 @@ export default function BillingInfo({
               [userInfo.customer || verifiedStepData.customer_id]: 3,
             },
           }).then((user) => {
-            if (user && user.status === 200) {
+            if (user?.status === 200) {
               if (assignedToSomeone) {
                 localStorage.removeItem('match');
               } else dispatch(userMe());
@@ -156,27 +165,21 @@ export default function BillingInfo({
         }
       });
     } else {
-      updateAskSomeoneData(
-        (stepData && stepData.id) || verifiedStepData.step_id,
-        {
-          token: assignedToSomeone ? params && params.key : '',
-          is_completed: true,
-        },
-      ).then((response) => {
-        if (response && response.status === 200) {
+      updateAskSomeoneData(stepData?.id || verifiedStepData.step_id, {
+        token: assignedToSomeone ? params?.key : '',
+        is_completed: true,
+      }).then((response) => {
+        if (response?.status === 200) {
           if (assignedToSomeone) {
-            const stringified =
-              queryString &&
-              queryString.stringify({
-                name: verifiedStepData.user_name,
-              });
+            const stringified = queryString?.stringify({
+              name: verifiedStepData.user_name,
+            });
             history.push({
               pathname: PATH_THANKS,
               search: `${stringified}`,
             });
           } else {
             CheckStep('billing information');
-            // history.push(PATH_AMAZON_MERCHANT);
           }
           updateUserMe(userInfo.id || verifiedStepData.user_id, {
             step: {
@@ -184,7 +187,7 @@ export default function BillingInfo({
               [userInfo.customer || verifiedStepData.customer_id]: 3,
             },
           }).then((user) => {
-            if (user && user.status === 200) {
+            if (user?.status === 200) {
               if (assignedToSomeone) {
                 localStorage.removeItem('match');
               } else dispatch(userMe());
@@ -201,74 +204,93 @@ export default function BillingInfo({
 
   const saveBillingData = () => {
     setIsLoading({ loader: true, type: 'button' });
-    const getYear = new Date().getFullYear().toString().substring(0, 2);
-    let format = '';
-    if (
-      formData &&
-      formData.card_details &&
-      formData.card_details.expiration_date &&
-      !formData.card_details.expiration_date.includes(getYear)
-    ) {
-      format = formData.card_details.expiration_date.split('/');
-      formData.card_details.expiration_date = `${getYear + format[1]}-${
-        format[0]
-      }`;
-    }
-    delete formData.agreed;
-    delete formData.ach;
-    delete formData.credit_card;
 
     if (
       (formData && formData.billing_contact.phone_number === '') ||
       (formData && formData.billing_contact.phone_number === null)
     )
       delete formData.billing_contact.phone_number;
-    if (data && data.id) {
-      delete formData.card_details;
-      delete formData.billing_contact.email;
-    }
-    let details = {};
 
-    details = {
+    const details = {
       ...formData,
-      payment_type: 'credit card',
       billing_address: formData.billing_address,
       billing_contact: formData.billing_contact,
-      card_details: formData.card_details,
       customer_onboarding:
         userInfo.customer_onboarding || verifiedStepData.customer_onboarding_id,
     };
-    saveBillingInfo(details, (data && data.id) || null).then((res) => {
-      if ((res && res.status === 200) || (res && res.status === 201)) {
-        saveDetails();
-        if (assignedToSomeone) {
-          const stringified =
-            queryString &&
-            queryString.stringify({
+
+    const dspData = showDSPContact.sameAsBilling
+      ? formData.billing_contact
+      : formData.dsp_contact;
+    const dspDetail = {
+      ...dspData,
+      same_as_billing_contact: showDSPContact.sameAsBilling,
+      customer: userInfo.customer || verifiedStepData.customer_id,
+    };
+
+    const apiArray = showDSPContact.show
+      ? [
+          saveBillingInfo(details, data?.id || null),
+          saveDSPContact(
+            dspDetail,
+            dspContactDetail?.id || formData?.dsp_contact?.id,
+          ),
+        ]
+      : [saveBillingInfo(details, data?.id || null)];
+
+    axios.all(apiArray).then(
+      axios.spread((...res) => {
+        if (
+          (showDSPContact.show &&
+            (res?.[0]?.status === 201 || res?.[0]?.status === 200) &&
+            (res?.[1]?.status === 201 || res?.[1]?.status === 200)) ||
+          (!showDSPContact.show &&
+            (res?.[0]?.status === 201 || res?.[0]?.status === 200))
+        ) {
+          saveDetails();
+          if (assignedToSomeone) {
+            const stringified = queryString?.stringify({
               name: verifiedStepData.user_name,
             });
-          history.push({
-            pathname: PATH_THANKS,
-            search: `${stringified}`,
+            history.push({
+              pathname: PATH_THANKS,
+              search: `${stringified}`,
+            });
+          } else {
+            CheckStep('billing information');
+          }
+        }
+
+        if (res?.[0]?.status === 400 || res?.[1]?.status === 400) {
+          let address = {};
+          let contact = {};
+          let dsp = {};
+          if (res?.[0]?.status === 400) {
+            address = res?.[0]?.data?.billing_address;
+            contact = res?.[0]?.data?.billing_contact;
+          }
+          if (res?.[1]?.status === 400) {
+            setshowDSPContact({ ...showDSPContact, sameAsBilling: false });
+            $('.checkboxes input:checkbox').prop('checked', false);
+            dsp = res?.[1]?.data;
+          }
+
+          setIsLoading({ loader: false, type: 'button' });
+          setApiError({
+            dsp_contact: dsp,
+            billing_address: address,
+            billing_contact: contact,
           });
-        } else {
-          CheckStep('billing information');
+          if (
+            (res?.data && res.data.billing_address) ||
+            (res?.data && res.data[0])
+          ) {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+          }
         }
-      }
-      if (res && res.status === 400) {
-        setIsLoading({ loader: false, type: 'button' });
-        setApiError(res && res.data);
-        if (
-          (res && res.data && res.data.card_details) ||
-          (res && res.data && res.data[0])
-        ) {
-          document.body.scrollTop = 0; // For Safari
-          document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-        }
-        setFormData({ ...formData, agreed: false });
-        $('.checkboxes input:checkbox').prop('checked', false);
-      }
-    });
+      }),
+    );
   };
 
   const handleChange = (event, item, type) => {
@@ -276,7 +298,7 @@ export default function BillingInfo({
       ...formData,
       [type]: {
         ...formData[type],
-        [item.key]: item.key === 'card_number' ? event : event.target.value,
+        [item.key]: event.target.value,
       },
     });
 
@@ -288,22 +310,19 @@ export default function BillingInfo({
       },
       0: '',
     });
-  };
-
-  const mapDetails = (item) => {
-    if (item === 'card_number')
-      return `************${
-        data.card_details && data.card_details[0] && data.card_details[0][item]
-      }`;
-    if (item === 'expiration_date') {
-      const getDate =
-        data.card_details && data.card_details[0] && data.card_details[0][item]
-          ? data.card_details[0][item].split('-')
-          : '';
-      return getDate ? `${getDate[1] + getDate[0].substring(2)}` : '****';
+    if (showDSPContact.sameAsBilling && type === 'billing_contact') {
+      setFormData({
+        ...formData,
+        billing_contact: {
+          ...formData.billing_contact,
+          [item.key]: event.target.value,
+        },
+        dsp_contact: {
+          ...formData.dsp_contact,
+          [item.key]: event.target.value,
+        },
+      });
     }
-
-    return '';
   };
 
   const generateNumeric = (item, type) => {
@@ -311,48 +330,15 @@ export default function BillingInfo({
       <NumberFormat
         format={item.format}
         className="form-control"
-        onChange={(event) =>
-          item.key !== 'card_number' ? handleChange(event, item, type) : ''
-        }
-        placeholder={
-          item.key === 'expiration_date'
-            ? `Enter ${item.label} (MM/YY)`
-            : `Enter ${item.label}`
-        }
+        onChange={(event) => handleChange(event, item, type)}
+        placeholder={`Enter ${item.label}`}
         value={
-          type === 'card_details' && data && data.id
-            ? mapDetails(item.key)
-            : item.key === 'expiration_date'
-            ? [formData.type][item.key]
-            : formData && formData[type] && formData[type][item.key]
-        }
-        onValueChange={(values) =>
-          item.key === 'card_number'
-            ? handleChange(values.value, item, type)
-            : ''
+          type === 'dsp_contact'
+            ? formData?.dsp_contact?.[item.key]
+            : formData?.[type]?.[item.key]
         }
         isNumericString
-        readOnly={
-          (type === 'card_details' || type === 'billing_address') &&
-          data &&
-          data.id
-        }
       />
-    );
-  };
-
-  const generateRadio = (item) => {
-    return (
-      <ModalRadioCheck className="mt-1">
-        <label className="radio-container contact-billing" htmlFor={item.key}>
-          <img className="card" src={item.icon} alt="card" />
-
-          {item.label}
-          <br />
-          <input type="radio" name="radio" id={item.key} readOnly />
-          <span className="checkmark" />
-        </label>
-      </ModalRadioCheck>
     );
   };
 
@@ -363,229 +349,145 @@ export default function BillingInfo({
         placeholder={`Enter ${item.label}`}
         type={item.type}
         defaultValue={
-          data && data[type] && data[type][0] && data[type][0][item.key]
+          type === 'dsp_contact'
+            ? formData?.dsp_contact?.[item.key]
+            : formData?.[type]?.[0]?.[item.key] || data?.[type]?.[0]?.[item.key]
         }
         onChange={(event) => handleChange(event, item, type)}
         maxLength={item.key === 'postal_code' ? 10 : ''}
-        readOnly={
-          (type === 'card_details' ||
-            type === 'billing_address' ||
-            item.key === 'email') &&
-          data &&
-          data.id
-        }
       />
     );
   };
 
-  const generatePayment = () => {
-    if (formData.ach) {
-      return (
-        <>
-          {achDetails.map((item) => (
-            <React.Fragment key={item.key}>
-              <InputFormField
-                className={item.key !== 'account_name' ? 'mt-3' : ''}>
-                <label htmlFor={item.label}>
-                  {item.label}
-                  {item.type === 'number' ? (
-                    <>{generateNumeric(item)}</>
-                  ) : item.type === 'checkbox' ? (
-                    <>{generateRadio(item)}</>
-                  ) : (
-                    <>{generateInput(item)}</>
-                  )}
-                </label>
-              </InputFormField>
-              <ErrorMsg>
-                {apiError && apiError[item.key] && apiError[item.key][0]}
-              </ErrorMsg>
-            </React.Fragment>
-          ))}
-        </>
-      );
-    }
-    return creditCardDetails.map((item) => (
-      <div key={item.key} style={{ opacity: data && data.id ? 0.5 : '' }}>
-        <div className="inner-content">
-          <div className="row">
-            {item &&
-              item.details.map((field) => (
-                <div className={field.property} key={field.key}>
-                  <InputFormField className="mt-3">
-                    <label htmlFor={field.label}>
-                      {field.label}
-                      <br />
-                      {field.type === 'number' ? (
-                        <>{generateNumeric(field, 'card_details')}</>
-                      ) : (
-                        <>{generateInput(field, 'card_details')}</>
-                      )}
-                    </label>
-                  </InputFormField>
-                  <ErrorMsg>
-                    {apiError &&
-                      apiError.card_details &&
-                      apiError.card_details[field.key] &&
-                      apiError.card_details[field.key][0]}
-                  </ErrorMsg>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div>
-    ));
+  const checkBoxHTML = () => {
+    return (
+      <CheckBox className="mt-3 ">
+        <label
+          className="checkboxes check-container customer-pannel hereby-acknowledge"
+          htmlFor="same as billing">
+          Same as Billing Contact
+          <input
+            type="checkbox"
+            id="same as billing"
+            checked={showDSPContact.sameAsBilling}
+            onChange={(event) => {
+              if (
+                event.target.checked &&
+                apiError?.dsp_contact &&
+                Object.keys(apiError.dsp_contact).length !== 0
+              )
+                setApiError({ ...apiError, dsp_contact: {} });
+              if (!event.target.checked)
+                setFormData({ ...formData, dsp_contact: {} });
+              setshowDSPContact({
+                ...showDSPContact,
+                sameAsBilling: !showDSPContact.sameAsBilling,
+              });
+            }}
+          />
+          <span className="checkmark" />
+        </label>
+      </CheckBox>
+    );
   };
 
-  const generateBillingAddressHTML = () => {
+  const generateBillingAddressHTML = (array) => {
     return (
       <>
-        <fieldset
-          className="shape-without-border  w-430 mt-3"
-          style={{ opacity: data && data.id ? 0.5 : '' }}>
-          <p className="account-steps m-0">Part 2</p>
-          <div className="billing-address"> Billing Address </div>
-          <div className="row">
-            {billingAddress
-              .filter((op) => op.section === 'address')
-              .map((item) => (
-                <div className={item.property} key={item.key}>
-                  <InputFormField className="mt-3">
-                    <label htmlFor={item.label}>
-                      {item.label}
-                      <br />
-                      {item.type === 'number' ? (
-                        <>{generateNumeric(item, 'billing_address')}</>
-                      ) : (
-                        <>{generateInput(item, 'billing_address')}</>
-                      )}
-                    </label>
-                  </InputFormField>
-                  <ErrorMsg>
-                    {apiError &&
-                      apiError.billing_address &&
-                      apiError.billing_address[item.key] &&
-                      apiError.billing_address[item.key][0]}
-                  </ErrorMsg>
-                </div>
-              ))}
-          </div>
-        </fieldset>
-
-        <fieldset className="shape-without-border  w-430 mt-3 mb-2">
-          <p className="account-steps m-0">Part 3</p>
-          <div className="billing-address">Billing Contact</div>
-          <div className="row">
-            {billingAddress
-              .filter((op) => op.section === 'contact')
-              .map((item) => (
-                <div
-                  className={item.property}
-                  key={item.key}
-                  style={{
-                    opacity: data && data.id && item.key === 'email' ? 0.5 : '',
-                  }}>
-                  <InputFormField className="mt-3">
-                    <label htmlFor={item.label}>
-                      {item.label}
-                      <br />
-                      {item.type === 'number' ? (
-                        <>{generateNumeric(item, 'billing_contact')}</>
-                      ) : (
-                        <>{generateInput(item, 'billing_contact')}</>
-                      )}
-                    </label>
-                  </InputFormField>
-                  <ErrorMsg>
-                    {apiError &&
-                      apiError.billing_contact &&
-                      apiError.billing_contact[item.key] &&
-                      apiError.billing_contact[item.key][0]}
-                  </ErrorMsg>
-                </div>
-              ))}
-          </div>
-        </fieldset>
+        {array.map((field) => (
+          <fieldset className="shape-without-border  w-430 mt-3">
+            <p className="account-steps m-0">{field.part}</p>
+            <div className="billing-address"> {field.label}</div>
+            <p className="mt-2">{field.subTitle}</p>
+            {field.hasCheckbox ? (
+              <div className="mt-3">{checkBoxHTML()}</div>
+            ) : (
+              ''
+            )}
+            {showDSPContact.sameAsBilling && field.hasCheckbox ? (
+              ''
+            ) : (
+              <div className="row">
+                {field.array.map((item) => (
+                  <div className={item.property} key={item.key}>
+                    <InputFormField className="mt-3">
+                      <label htmlFor={item.key}>
+                        {item.label}
+                        <br />
+                        {item.type === 'number' ? (
+                          <>{generateNumeric(item, field.key)}</>
+                        ) : (
+                          <>{generateInput(item, field.key)}</>
+                        )}
+                      </label>
+                    </InputFormField>
+                    <ErrorMsg>
+                      {apiError?.[field.key]?.[item.key]?.[0]}
+                    </ErrorMsg>
+                  </div>
+                ))}
+              </div>
+            )}
+          </fieldset>
+        ))}
       </>
     );
+  };
+
+  const disableWhenError = () => {
+    if (
+      !showDSPContact.sameAsBilling &&
+      showDSPContact.show &&
+      (!formData?.dsp_contact ||
+        !formData?.dsp_contact?.first_name ||
+        !formData?.dsp_contact?.last_name ||
+        !formData?.dsp_contact?.email)
+    )
+      return true;
+
+    if (
+      !formData?.billing_contact ||
+      !formData?.billing_contact?.first_name ||
+      !formData?.billing_contact?.last_name ||
+      !formData?.billing_contact?.email
+    )
+      return true;
+    if (
+      !formData?.billing_address ||
+      !formData?.billing_address?.address ||
+      !formData?.billing_address?.city ||
+      !formData?.billing_address?.state ||
+      !formData?.billing_address?.postal_code
+    )
+      return true;
+    if (
+      (apiError?.billing_address &&
+        Object.values(apiError.billing_address)?.find((op) => op !== '')) ||
+      (apiError?.billing_contact &&
+        Object.values(apiError.billing_contact)?.find((op) => op !== '')) ||
+      (apiError?.dsp_contact &&
+        Object.values(apiError.dsp_contact)?.find((op) => op !== ''))
+    )
+      return true;
+
+    return false;
   };
 
   return (
     <>
       <OnBoardingBody className="body-white">
-        <fieldset className="shape-without-border  w-430 mt-3">
-          <p className="account-steps m-0">Part 1</p>
-          <div className="billing-address mb-3 pb-1"> Payment Type </div>
-          <p className="account-steps m-0">Payment Type</p>
-          <ul className="payment-type">
-            <li>
-              {/* <label
-                className="radio-container  contact-billing"
-                htmlFor="card">
-                Credit Card
-              </label> */}
-              Credit Card
-            </li>
-          </ul>
-
-          <CollapseOpenContainer>{generatePayment()}</CollapseOpenContainer>
-
-          <img
-            className=" mt-2 pt-1"
-            width="16px"
-            src={SecurityLock}
-            alt="lock"
-          />
-          <p className="info-text-gray security mb-0">
-            {' '}
-            We have partnered with{' '}
-            <a
-              className="cursor link-url"
-              style={{ fontSize: '12px' }}
-              href={authorizeLink}
-              target="_BLANK"
-              rel="noopener noreferrer">
-              Authorize.Net
-            </a>
-            , to capture your credit card payment information safely and
-            securely.
-          </p>
-
-          <div className="clear-fix" />
-          <ErrorMsg>{apiError && apiError[0]}</ErrorMsg>
-        </fieldset>
-        {generateBillingAddressHTML()}
+        {generateBillingAddressHTML(
+          showDSPContact.show ? dspInformation : billingInformation,
+        )}
 
         <div className="white-card-base panel gap-none">
-          <CheckBox className="mt-3 ">
-            <label
-              className="checkboxes check-container customer-pannel hereby-acknowledge"
-              htmlFor="contract-copy-check">
-              {billingTerms}
-              <span
-                className="link-url"
-                onClick={() => setShowModal(true)}
-                role="presentation">
-                here.
-              </span>
-              <input
-                type="checkbox"
-                id="contract-copy-check"
-                defaultChecked={formData.agreed}
-                onChange={(event) =>
-                  setFormData({ ...formData, agreed: event.target.checked })
-                }
-              />
-              <span className="checkmark" />
-            </label>
-          </CheckBox>
           {isChecked ? (
             ''
           ) : (
             <Button
               className="btn-primary w-100  mt-3 mb-4"
               onClick={() => saveBillingData()}
-              disabled={!formData.agreed}>
+              disabled={disableWhenError()}>
               {' '}
               {isLoading.loader && isLoading.type === 'button' ? (
                 <PageLoader color="#fff" type="button" />
@@ -596,7 +498,6 @@ export default function BillingInfo({
           )}
         </div>
       </OnBoardingBody>
-      <BillingTermsModal showModal={showModal} setShowModal={setShowModal} />
     </>
   );
 }
@@ -644,4 +545,10 @@ BillingInfo.propTypes = {
   summaryData: arrayOf(shape({})).isRequired,
   skipAmazonAccount: bool.isRequired,
   summaryDetails: func,
+  setshowDSPContact: func.isRequired,
+  showDSPContact: shape({
+    sameAsBilling: bool,
+    show: bool,
+  }).isRequired,
+  dspContactDetail: shape({}).isRequired,
 };

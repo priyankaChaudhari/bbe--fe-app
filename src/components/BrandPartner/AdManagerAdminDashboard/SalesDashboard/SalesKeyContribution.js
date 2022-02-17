@@ -15,6 +15,7 @@ import {
   keyContributionConstant,
   noGraphDataMessage,
   keyContributionHeaders,
+  contributionColorSet,
   metricsCurrency,
   PATH_CUSTOMER_DETAILS,
 } from '../../../../constants';
@@ -48,12 +49,6 @@ const SalesKeyContribution = ({
   isBGSAdmin,
 }) => {
   const history = useHistory();
-
-  const contributionColorSet = {
-    High: '#E3F2D2',
-    Medium: '#FDF3D7',
-    Low: '#F4F6FC',
-  };
 
   const tabOptions = [
     { value: 'revenue', label: 'Total Sales' },

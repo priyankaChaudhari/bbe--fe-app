@@ -12,8 +12,6 @@ import {
   API_LOGIN,
   API_USER_ME,
   API_LOGOUT,
-} from '../../constants/ApiConstants';
-import {
   PATH_LOGIN,
   PATH_CUSTOMER_LIST,
   PATH_CUSTOMER_DETAILS,
@@ -22,8 +20,9 @@ import {
   PATH_SUMMARY,
   PATH_BILLING_DETAILS,
   PATH_ACCOUNT_SETUP_CHOOSE,
+  // PATH_BBE_GOAL_DASHBOARD,
   dashboardRolePaths,
-} from '../../constants/index';
+} from '../../constants';
 
 export const userRequestInitiated = () => {
   return {
@@ -177,6 +176,11 @@ export const userRequestSuccess = (data, history, customer, onboardingId) => {
         history.push(dashboardRolePaths[data.user.role]);
       } else history.push(PATH_CUSTOMER_LIST);
     }
+    // else {
+    //   if (data.user.role !== 'Customer') {
+    //     history.push(PATH_BBE_GOAL_DASHBOARD);
+    //   } else history.push(PATH_CUSTOMER_LIST);
+    // }
   }
 
   return {

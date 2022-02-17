@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { arrayOf, bool, func } from 'prop-types';
 
 import { ModalRadioCheck } from '../../../../../../common';
-import numberWithCommas from '../../../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../../../hooks/numberWithCommas';
 
 const InvoicePause = ({
   invoiceChoices,

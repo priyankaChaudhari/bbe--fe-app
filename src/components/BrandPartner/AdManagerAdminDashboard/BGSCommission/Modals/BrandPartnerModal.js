@@ -15,7 +15,7 @@ import {
   PageLoader,
   TableGap,
 } from '../../../../../common';
-import numberWithCommas from '../../../../../hooks/numberWithComas';
+import numberWithCommas from '../../../../../hooks/numberWithCommas';
 
 const BrandPartnerModal = ({
   showModal,

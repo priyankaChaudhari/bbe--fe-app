@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import $ from 'jquery';
 import queryString from 'query-string';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -69,6 +70,8 @@ export default function CompanyDigital({
         return '';
       });
     }
+    $('body').scrollTop(0);
+
     setIsLoading({ loader: false, type: 'button' });
   };
 

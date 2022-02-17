@@ -22,7 +22,8 @@ const Table = styled.table`
       color: ${Theme.gray40};
       font-size: 11px;
       background: ${Theme.white};
-      font-family: ${Theme.baseFontFamily};
+      font-weight: 800;
+      font-family: ${Theme.titleFontFamily};
       &.product-catalog-header {
         border-top: 1px solid ${Theme.gray11};
       }
@@ -332,7 +333,7 @@ const Table = styled.table`
 
         &.large {
           font-size: ${Theme.extraMedium};
-          font-weight: 600;
+          font-weight: 600 !important;
         }
 
         .green-arrow {

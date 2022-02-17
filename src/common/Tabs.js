@@ -2,6 +2,17 @@ import styled from 'styled-components';
 import Theme from '../theme/Theme';
 
 const Tabs = styled.div`
+  overflow: auto;
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: ${Theme.white};
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: ${Theme.gray11};
+  }
   .tabs {
     list-style-type: none;
     position: relative;
@@ -10,9 +21,13 @@ const Tabs = styled.div`
     padding: 0;
     border-bottom: 1px solid ${Theme.gray11};
 
+    &.scrollable-container {
+      border-bottom: 1px solid ${Theme.gray11};
+      display: -webkit-inline-box;
+    }
     li {
       display: inline-block;
-      margin-right: 10px;
+      padding-right: 10px;
       font-weight: normal;
       color: ${Theme.black};
       font-size: ${Theme.extraMedium};
@@ -32,6 +47,11 @@ const Tabs = styled.div`
         border-bottom: 2px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};
+      }
+
+      &.scrollable-tab {
+        display: block;
+        font-size: 14px;
       }
 
       &.modal-tab {

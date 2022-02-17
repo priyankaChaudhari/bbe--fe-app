@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import axiosInstance from '../axios';
 import {
   API_CUSTOMER,
@@ -12,6 +13,8 @@ import {
   API_BGS_COMMISSION_INDIVIDUALS,
   API_BGS_COMMISSION_MATRICS,
   API_BGS_COMMISSION_GROUP_BY_MANAGER,
+  API_BBE_GOAL_DASHBOARD_CONTRIBUTION,
+  API_BBE_GOAL_METRICS,
 } from '../constants';
 
 export async function getAdManagerAdminGraphData(
@@ -678,5 +681,39 @@ export async function getBgsBrandPartners(bgs, startDate, endDate) {
     .catch((error) => {
       return error.response;
     });
+  return result;
+}
+
+export async function getRevShareContributionData(month) {
+  const params = {
+    date: dayjs(month).format('YYYY-MM-DD'),
+  };
+
+  const result = await axiosInstance
+    .get(`${API_BBE_GOAL_DASHBOARD_CONTRIBUTION}`, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+
+  return result;
+}
+
+export async function getBBEGoalMetrics(monthYear) {
+  const params = {
+    date: dayjs(monthYear).format('YYYY-MM-DD'),
+  };
+
+  const result = await axiosInstance
+    .get(API_BBE_GOAL_METRICS, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+
   return result;
 }

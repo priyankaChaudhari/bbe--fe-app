@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
 import dayjs from 'dayjs';
-import { bool, func, shape, string } from 'prop-types';
+import { bool, func, shape, string, arrayOf } from 'prop-types';
 import styled from 'styled-components';
 
-import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
+import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModalOld';
 import Theme from '../../../../theme/Theme';
 import { LeftArrowIcon } from '../../../../theme/images';
 import { PageLoader, AllocateBar } from '../../../../common';
@@ -15,6 +15,7 @@ export default function DspAdPacing({
   currencySymbol,
   customerId,
   marketplace,
+  marketplaceOptions,
   onModalClose,
   isAllowToSplitBalance,
   showDspBudgetModal,
@@ -24,6 +25,7 @@ export default function DspAdPacing({
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
     showDspBudgetModal,
   );
+
   const dspPacing = dspData?.dsp_pacing;
 
   const addThousandSeperator = (value, type = '') => {
@@ -68,8 +70,8 @@ export default function DspAdPacing({
           <div className="status-heading-red">Overspending</div>
           <p className="basic-text">
             You are currently overspending by an average of{' '}
-            {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}{' '}
-            per day.
+            {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}
+            &nbsp;per day.
           </p>
         </>
       );
@@ -80,7 +82,6 @@ export default function DspAdPacing({
         <>
           <div className="status-heading-red green">On Track</div>
           <p className="basic-text">
-            {' '}
             You are currently on track to hit your monthly DSP budget.
           </p>
         </>
@@ -91,10 +92,9 @@ export default function DspAdPacing({
         <>
           <div className="status-heading-red">Underspending</div>
           <p className="basic-text">
-            {' '}
             You are currently underspending by an average of{' '}
             {addThousandSeperator(dspPacing?.current_spend_status, 'currency')}
-            per day.
+            &nbsp;per day.
           </p>
         </>
       );
@@ -106,7 +106,7 @@ export default function DspAdPacing({
     return (
       <div className="row">
         <div className="col-7">
-          <div className="label-info mt-2">Invoice Amount</div>
+          <div className="label-info mt-2">Invoice Paid</div>
         </div>
         <div className="col-5">
           {' '}
@@ -174,7 +174,8 @@ export default function DspAdPacing({
           {' '}
           <div className="label-info text-right mt-2">
             {' '}
-            {addThousandSeperator(dspPacing?.planed_to_spend, 'currency')}(
+            {addThousandSeperator(dspPacing?.planed_to_spend, 'currency')}
+            &nbsp;(
             {addThousandSeperator(dspPacing?.planed_to_spend_percentage, '')}
             %)
           </div>{' '}
@@ -186,7 +187,7 @@ export default function DspAdPacing({
           {' '}
           <div className="label-info text-right mt-2">
             {' '}
-            {addThousandSeperator(dspPacing?.total_spend, 'currency')}(
+            {addThousandSeperator(dspPacing?.total_spend, 'currency')}&nbsp;(
             {addThousandSeperator(dspPacing?.total_spend_percentage, '')}
             %)
           </div>{' '}
@@ -215,7 +216,8 @@ export default function DspAdPacing({
                 : 'label-info text-right text-red mt-2'
             }>
             {' '}
-            {addThousandSeperator(dspPacing?.dsp_pacing_diff, 'currency')}(
+            {addThousandSeperator(dspPacing?.dsp_pacing_diff, 'currency')}
+            &nbsp;(
             {addThousandSeperator(dspPacing?.dsp_pacing_diff_percentage, '')}
             %)
           </div>{' '}
@@ -330,6 +332,7 @@ export default function DspAdPacing({
         id="BT-escrowAllocation"
         customerId={customerId}
         marketplace={marketplace}
+        marketplaceOptions={marketplaceOptions}
         dspData={dspData}
         isOpen={showAllocatedBalanceModal}
         addThousandSeperator={addThousandSeperator}
@@ -382,6 +385,27 @@ export default function DspAdPacing({
               <div className="straight-line horizontal-line  mt-3 mb-3" />
 
               {renderEscrowBalance()}
+              <div className="straight-line horizontal-line  mt-3 mb-3" />
+
+              {/* <div className="label-info text-bold ">
+                Escrow Balance per Marketplace:
+              </div>
+
+              <Tabs className="mt-3  mb-2">
+                <ul className="tabs scrollable-container ">
+                  <li className="active scrollable-tab  mt-1">US ($5,000)</li>
+                  <li className=" scrollable-tab  mt-1">US ($5,000)</li>
+                </ul>
+              </Tabs>
+              <div className="row">
+                <div className="col-7">
+                  <div className="label-info mt-2">Total Allocated Budget</div>{' '}
+                </div>
+                <div className="col-5">
+                  {' '}
+                  <div className="label-info mt-2 text-right">$2,000</div>
+                </div>
+              </div> */}
             </div>
           </DspAdPacingModal>
           {renderEscrowBudgetAllocationModal()}
@@ -416,6 +440,8 @@ const DspAdPacingModal = styled.div`
   }
   .modal-body-section {
     padding: 0 15px;
+    height: 85vh;
+    overflow: scroll;
 
     .status-heading-red {
       color: ${Theme.red};
@@ -453,6 +479,7 @@ DspAdPacing.defaultProps = {
   onModalClose: () => {},
   setShowDspBudgetModal: () => {},
   getActivityLogInfo: () => {},
+  marketplaceOptions: [],
 };
 
 DspAdPacing.propTypes = {
@@ -466,4 +493,5 @@ DspAdPacing.propTypes = {
   onModalClose: func,
   setShowDspBudgetModal: func,
   getActivityLogInfo: func,
+  marketplaceOptions: arrayOf(shape()),
 };

@@ -48,11 +48,11 @@ export const CustomerListPage = styled.div`
     color: ${Theme.gray40};
     font-size: 11px;
     background: ${Theme.white};
-    font-family: ${Theme.baseFontFamily};
+    font-weight: 800;
+    font-family: ${Theme.titleFontFamily};
     text-transform: uppercase;
     border-bottom: 1px solid ${Theme.gray7};
     padding: 13px;
-    font-weight: 600;
     vertical-align: top;
   }
   .dropdown-select-all-notes {

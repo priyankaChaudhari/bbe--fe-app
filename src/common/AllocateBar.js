@@ -33,5 +33,17 @@ const AllocateBar = styled.div`
     transform: rotate(180deg);
     vertical-align: middle;
   }
+  .edit-marketplace {
+    color: ${Theme.orange};
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 400;
+    float: right;
+  }
+  @media only screen and (max-width: 768px) {
+    .edit-marketplace {
+      margin-top: 15px;
+    }
+  }
 `;
 export default AllocateBar;

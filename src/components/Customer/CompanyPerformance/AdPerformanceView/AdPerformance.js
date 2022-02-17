@@ -121,7 +121,7 @@ export default function AdPerformance({
   const userInfo = useSelector((state) => state.userState.userInfo);
   const [isAllowToSplitBalance, setIsAllowToSplitBalance] = useState(false);
 
-  useEffect(() => {
+  const checkPermission = useCallback(() => {
     if (userInfo?.role?.includes('Ad Manager Admin')) {
       setIsAllowToSplitBalance(true);
     } else {
@@ -129,7 +129,7 @@ export default function AdPerformance({
         if (user.user) {
           if (
             (user?.role_group?.name === 'DSP Ad Manager' ||
-              user?.role_group?.name === 'Hybrid Ad Manager' ||
+              user?.role_group?.name === 'BGS Manager' ||
               user?.role_group?.name === 'BGS') &&
             user?.user?.id === userInfo?.id
           ) {
@@ -140,6 +140,10 @@ export default function AdPerformance({
       }
     }
   }, [memberData, userInfo]);
+
+  useEffect(() => {
+    checkPermission();
+  }, [checkPermission]);
 
   const bindAdResponseData = (response) => {
     const tempData = [];
@@ -596,12 +600,20 @@ export default function AdPerformance({
         if (mounted.current) {
           if (res && res.status === 200) {
             setDspData(res.data);
+            if (
+              res?.data?.dsp_pacing === null ||
+              res?.data?.dsp_pacing === undefined
+            ) {
+              setIsAllowToSplitBalance(false);
+            } else {
+              checkPermission();
+            }
           }
           setIsDspPacingLoading(false);
         }
       });
     },
-    [id],
+    [checkPermission, id],
   );
 
   const getPacingGraphData = useCallback(
@@ -1134,6 +1146,7 @@ export default function AdPerformance({
           currencySymbol={currencySymbol}
           customerId={id}
           marketplace={selectedMarketplace}
+          marketplaceOptions={marketplaceOptions}
           onModalClose={() => {
             if (selectedAdDF.value === 'custom') {
               DSPYearAndCustomDateFilter(
