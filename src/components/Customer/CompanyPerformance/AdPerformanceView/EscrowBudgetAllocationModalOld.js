@@ -30,7 +30,7 @@ const customStyles = {
   },
 };
 
-export default function EscrowBudgetAllocationModal({
+export default function EscrowBudgetAllocationModalOld({
   id,
   dspData,
   addThousandSeperator,
@@ -256,7 +256,7 @@ export default function EscrowBudgetAllocationModal({
   );
 }
 
-EscrowBudgetAllocationModal.defaultProps = {
+EscrowBudgetAllocationModalOld.defaultProps = {
   id: '',
   customerId: '',
   marketplace: '',
@@ -267,7 +267,7 @@ EscrowBudgetAllocationModal.defaultProps = {
   getActivityLogInfo: () => {},
 };
 
-EscrowBudgetAllocationModal.propTypes = {
+EscrowBudgetAllocationModalOld.propTypes = {
   id: string,
   customerId: string,
   marketplace: string,

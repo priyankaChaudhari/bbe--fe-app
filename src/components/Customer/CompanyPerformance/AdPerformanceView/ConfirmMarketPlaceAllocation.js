@@ -147,12 +147,19 @@ export default function ConfirmMarketPlaceAllocation({
               <td
                 width="25%"
                 className=" small-label-text light-font product-body">
-                ${item.escrowBalance}
+                {item.escrowBalance === 0
+                  ? `$0`
+                  : balanceChangeValue(item.escrowBalance, 'currency')}
               </td>
               <td
                 width="25%"
                 className=" small-label-text light-font product-body">
-                ${item.escrowReallocatedBalance}
+                {item.escrowReallocatedBalance === 0
+                  ? `$0`
+                  : balanceChangeValue(
+                      item.escrowReallocatedBalance,
+                      'currency',
+                    )}
               </td>
               <td
                 width="20%"
@@ -189,11 +196,22 @@ export default function ConfirmMarketPlaceAllocation({
             </div>
             <div className="col-4">
               <div className="label">From</div>
-              <div className="label-info"> ${item.escrowBalance}</div>
+              <div className="label-info">
+                {item.escrowBalance === 0
+                  ? `$0`
+                  : balanceChangeValue(item.escrowBalance, 'currency')}
+              </div>
             </div>
             <div className="col-4">
               <div className="label">To</div>
-              <div className="label-info">${item.escrowReallocatedBalance}</div>
+              <div className="label-info">
+                {item.escrowReallocatedBalance === 0
+                  ? `$0`
+                  : balanceChangeValue(
+                      item.escrowReallocatedBalance,
+                      'currency',
+                    )}
+              </div>
             </div>
             <div className="col-4">
               <div className="label">Change</div>
