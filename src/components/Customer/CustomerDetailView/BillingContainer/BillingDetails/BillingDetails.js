@@ -115,6 +115,7 @@ export default function BillingDetails({
   const getDSPContactInfo = useCallback(() => {
     getDSPContact(id).then((res) => {
       if (res?.status === 200) {
+        setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
         if (res?.data?.is_dsp_contract) {
           if (userInfo?.role === 'Customer') {
             setShowDSPEdit(true);
@@ -136,7 +137,6 @@ export default function BillingDetails({
           }
         } else setShowDSPEdit(false);
         setDSPData(res?.data?.results);
-        setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
       }
     });
   }, [id]);
@@ -415,7 +415,7 @@ export default function BillingDetails({
     if (showDSPModal && formData.dsp_contact) {
       saveDSPContact(
         { ...formData.dsp_contact, customer: id },
-        formData?.dsp_contact?.id,
+        formData?.dsp_contact?.id || DSPData?.[0]?.id,
       ).then((res) => {
         if (res?.status === 400) {
           setApiError({ ...apiError, dsp_contact: res.data });
@@ -449,13 +449,29 @@ export default function BillingDetails({
         formData?.billing_contact?.phone_number === null
       )
         delete formData.billing_contact.phone_number;
-
-      const details = {
-        ...formData,
-        billing_address: formData.billing_address || {},
-        billing_contact: formData.billing_contact || {},
+      let details = {
         customer_onboarding: userInfo.customer_onboarding || onBoardingId,
       };
+      if (
+        formData?.billing_address &&
+        Object.keys(formData.billing_address).length !== 0
+      ) {
+        details = {
+          ...details,
+          ...formData,
+          billing_address: formData?.billing_address,
+        };
+      }
+      if (
+        formData?.billing_contact &&
+        Object.keys(formData.billing_contact).length !== 0
+      ) {
+        details = {
+          ...details,
+          ...formData,
+          billing_contact: formData?.billing_contact,
+        };
+      }
 
       saveBillingInfo(
         details,
