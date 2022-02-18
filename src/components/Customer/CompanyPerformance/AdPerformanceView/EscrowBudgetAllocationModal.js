@@ -141,7 +141,7 @@ export default function EscrowBudgetAllocationModal({
           const data = getData.filter(
             (item) => item.value === selectedMarketplace,
           );
-          setIsAllowToEdit(data[0].escrowBalance >= 0);
+          setIsAllowToEdit(data[0]?.escrowBalance >= 0);
         }
         setIsDataLoading(false);
       }

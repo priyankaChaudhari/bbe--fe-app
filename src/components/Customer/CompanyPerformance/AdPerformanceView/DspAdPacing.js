@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import { bool, func, shape, string, arrayOf } from 'prop-types';
 import styled from 'styled-components';
 
-import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModalOld';
+import EscrowBudgetAllocationModal from './EscrowBudgetAllocationModal';
 import Theme from '../../../../theme/Theme';
 import { LeftArrowIcon } from '../../../../theme/images';
 import { PageLoader, AllocateBar } from '../../../../common';
