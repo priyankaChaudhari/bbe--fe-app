@@ -19,7 +19,7 @@ import {
 import { API_DOCUMENTS } from '../constants/ApiConstants';
 import { Button, PageLoader, ErrorMsg, ModalBox } from './index';
 import { getCustomerDetails } from '../store/actions/customerState';
-import { showProfileLoader, userMe } from '../store/actions/userState';
+import { userMe } from '../store/actions/userState';
 
 export default function CropUploadImage({ type, id, setDocumentImage }) {
   const dispatch = useDispatch();
@@ -114,7 +114,6 @@ export default function CropUploadImage({ type, id, setDocumentImage }) {
             .then(() => {
               if (type === 'user') {
                 dispatch(userMe());
-                dispatch(showProfileLoader(true));
               } else {
                 dispatch(getCustomerDetails(id));
               }

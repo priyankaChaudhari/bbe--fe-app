@@ -1,11 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 
-import copy from 'copy-to-clipboard';
 import Modal from 'react-modal';
+import copy from 'copy-to-clipboard';
 import Select, { components } from 'react-select';
-import { func, shape, arrayOf } from 'prop-types';
+import { shape, arrayOf } from 'prop-types';
 
+import EditAmazonAccountDetails from './EditAmazonAccountDetails';
+import { getAmazonSeller, getAmazonVendor } from '../../../api';
+import {
+  amazonSellerAccountDetails,
+  amazonVendorAccountDetails,
+} from '../../../constants';
+import { EditOrangeIcon, CopyLinkIcon, CloseIcon } from '../../../theme/images';
 import {
   InputFormField,
   DropDownSelect,
@@ -13,19 +20,8 @@ import {
   WhiteCard,
   DropdownIndicator,
 } from '../../../common';
-import { EditOrangeIcon, CopyLinkIcon, CloseIcon } from '../../../theme/images';
-import {
-  amazonSellerAccountDetails,
-  amazonVendorAccountDetails,
-} from '../../../constants';
-import { getAmazonSeller, getAmazonVendor } from '../../../api';
-import EditAmazonAccountDetails from './EditAmazonAccountDetails';
 
-export default function AmazonAccount({
-  marketplaceData,
-  customStyles,
-  getActivityLogInfo,
-}) {
+export default function AmazonAccount({ marketplaceData, customStyles }) {
   const mounted = useRef(false);
   const { Option, SingleValue } = components;
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
@@ -355,7 +351,6 @@ export default function AmazonAccount({
           showBtn={showBtn}
           amazonDetails={amazonDetails}
           sellerVendorCall={sellerVendorCall}
-          getActivityLogInfo={getActivityLogInfo}
           setApiError={setApiError}
         />
       </Modal>
@@ -370,5 +365,4 @@ AmazonAccount.defaultProps = {
 AmazonAccount.propTypes = {
   customStyles: shape({}),
   marketplaceData: arrayOf(shape({})).isRequired,
-  getActivityLogInfo: func.isRequired,
 };

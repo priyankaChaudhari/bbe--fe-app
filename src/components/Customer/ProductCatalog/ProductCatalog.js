@@ -395,7 +395,7 @@ export default function ProductCatalog({
 
   return (
     <>
-      <div className="col-lg-6 col-12">
+      <div className="col-lg-9 col-12">
         <WhiteCard>
           {' '}
           <Tabs>

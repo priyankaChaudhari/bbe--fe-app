@@ -17,7 +17,6 @@ export default function EditAmazonAccountDetails({
   selectedMarketplace,
   amazonDetails,
   sellerVendorCall,
-  getActivityLogInfo,
   setApiError,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
@@ -31,7 +30,6 @@ export default function EditAmazonAccountDetails({
       selectedMarketplace?.value,
       selectedMarketplace,
     );
-    getActivityLogInfo();
   };
 
   const vendorAccount = (vendor) => {
@@ -196,6 +194,5 @@ EditAmazonAccountDetails.propTypes = {
     Vendor: shape({}),
   }).isRequired,
   sellerVendorCall: func.isRequired,
-  getActivityLogInfo: func.isRequired,
   setApiError: func,
 };

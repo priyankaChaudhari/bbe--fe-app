@@ -12,7 +12,6 @@ export default function TeamMemberModal({
   setShowMemberList,
   setAgreementDetailModal,
   customStyles,
-  getActivityLogInfo,
   getCustomerMemberList,
 }) {
   // Sort all the member roles as per mentioned in PRD, here on the basis of sequence key
@@ -57,7 +56,6 @@ export default function TeamMemberModal({
             setShowMemberList={setShowMemberList}
             showMemberList={showMemberList}
             setAgreementDetailModal={setAgreementDetailModal}
-            getActivityLogInfo={getActivityLogInfo}
           />
         </Modal>
       ) : null}
@@ -81,6 +79,5 @@ TeamMemberModal.propTypes = {
   }).isRequired,
   customStyles: shape({}),
   setAgreementDetailModal: func,
-  getActivityLogInfo: func.isRequired,
   getCustomerMemberList: func.isRequired,
 };

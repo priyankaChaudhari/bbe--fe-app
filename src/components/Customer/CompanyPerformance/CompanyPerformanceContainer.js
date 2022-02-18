@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 
-import { arrayOf, shape, string, func } from 'prop-types';
 import { useHistory } from 'react-router-dom';
+import { arrayOf, shape, string } from 'prop-types';
 
 import PerformanceReport from './SellerReporting/PerformanceReport';
 import AdPerformance from './AdPerformanceView/AdPerformance';
 import VendorSalesPerformanceContainer from './VendorReporting/VendorSalesPerformanceContainer';
-
 import { Tabs } from '../../../common';
 
 export default function CompanyPerformance({
@@ -14,7 +13,6 @@ export default function CompanyPerformance({
   id,
   subViewComponent,
   memberData,
-  getActivityLogInfo,
 }) {
   const history = useHistory();
   const currentDate = new Date();
@@ -40,7 +38,6 @@ export default function CompanyPerformance({
               id={id}
               accountType={subViewComponent}
               memberData={memberData}
-              getActivityLogInfo={getActivityLogInfo}
             />
           )}
         </div>
@@ -65,7 +62,7 @@ export default function CompanyPerformance({
   };
 
   return (
-    <div className="col-lg-6 col-12" key={subViewComponent}>
+    <div className="col-lg-9 col-12" key={subViewComponent}>
       <Tabs className="mb-3">
         <ul className="tabs">
           <li
@@ -95,7 +92,6 @@ CompanyPerformance.defaultProps = {
   id: '',
   subViewComponent: 'seller',
   memberData: [],
-  getActivityLogInfo: () => {},
 };
 
 CompanyPerformance.propTypes = {
@@ -103,5 +99,4 @@ CompanyPerformance.propTypes = {
   id: string,
   subViewComponent: string,
   memberData: arrayOf(shape({})),
-  getActivityLogInfo: func,
 };

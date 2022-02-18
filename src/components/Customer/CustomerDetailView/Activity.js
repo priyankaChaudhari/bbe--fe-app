@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-import { shape, string, bool, func, arrayOf, number } from 'prop-types';
+import { shape, string, bool, func } from 'prop-types';
 
 import Theme from '../../../theme/Theme';
+import useActivityLog from '../../../hooks/useActivityLog';
 import { GroupUser } from '../../../theme/Global';
+import { getCustomerActivityLog, getDocumentList } from '../../../api';
 import {
   ContractEmailIcon,
   DefaultUser,
@@ -11,6 +13,7 @@ import {
 } from '../../../theme/images';
 import {
   CommonPagination,
+  GetInitialName,
   PageLoader,
   Status,
   WhiteCard,
@@ -18,17 +21,49 @@ import {
 
 export default function Activity({
   isLoading,
-  activityData,
-  activityDetail,
-  getActivityInitials,
-  images,
-  handlePageChange,
-  count,
-  pageNumber,
+  viewComponent,
+  setIsLoading,
+  id,
 }) {
+  const activityDetail = useActivityLog(viewComponent);
+
+  const [activityData, setActivityData] = useState(null);
+  const [activityCount, setActivityCount] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [images, setImages] = useState([]);
+
+  useEffect(() => {
+    setIsLoading({ loader: true, type: 'activityPage' });
+    getCustomerActivityLog(pageNumber, id).then((response) => {
+      setActivityData(response?.data?.results);
+      setActivityCount(response?.data?.count);
+      setPageNumber(pageNumber);
+      getDocumentList().then((picResponse) => {
+        setImages(picResponse);
+      });
+      setIsLoading({ loader: false, type: 'activityPage' });
+    });
+  }, [id, setIsLoading, pageNumber]);
+
+  const getActivityInitials = (user) => {
+    if (user) {
+      const userDetail = {
+        first_name: user.split(' ')[0],
+        last_name: user.split(' ')[1],
+      };
+      return <GetInitialName userInfo={userDetail} type="activity" />;
+    }
+    return '';
+  };
+
+  const handlePageChange = (currentPage) => {
+    setPageNumber(currentPage);
+    getCustomerActivityLog(currentPage);
+  };
+
   return (
     <>
-      <div className="col-lg-6  col-12 mb-3">
+      <div className="col-lg-9  col-12 mb-3">
         <WhiteCard className="activity-card">
           {(isLoading.loader && isLoading.type === 'activityPage') ||
           activityData === null ? (
@@ -145,7 +180,7 @@ export default function Activity({
                   ''
                 )}
                 <CommonPagination
-                  count={count}
+                  count={activityCount}
                   pageNumber={pageNumber}
                   handlePageChange={handlePageChange}
                 />
@@ -157,20 +192,13 @@ export default function Activity({
     </>
   );
 }
-Activity.defaultProps = {
-  count: number,
-  activityData: [],
-};
+
 Activity.propTypes = {
   isLoading: shape({
     loader: bool,
     type: string,
   }).isRequired,
-  activityData: arrayOf(shape),
-  activityDetail: func.isRequired,
-  getActivityInitials: func.isRequired,
-  images: arrayOf(shape).isRequired,
-  handlePageChange: func.isRequired,
-  pageNumber: number.isRequired,
-  count: number,
+  id: string.isRequired,
+  viewComponent: string.isRequired,
+  setIsLoading: func.isRequired,
 };

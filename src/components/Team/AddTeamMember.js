@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { toast } from 'react-toastify';
-import { string, func, shape, bool, arrayOf } from 'prop-types';
+import { string, func, shape, bool } from 'prop-types';
 
 import { SearchIcon, CloseIcon } from '../../theme/images';
 import { addCustomerMembers, getAllMembers } from '../../api';
@@ -21,7 +21,6 @@ export default function AddTeamMember({
   setShowMemberList,
   showMemberList,
   setAgreementDetailModal,
-  getActivityLogInfo,
   setShowCloseBtn,
 }) {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
@@ -79,7 +78,6 @@ export default function AddTeamMember({
     addCustomerMembers(newMembersData).then(() => {
       if (!showMemberList.requestApproval) {
         getCustomerMemberList();
-        getActivityLogInfo();
       }
       setShowCloseBtn(true);
       setIsLoading({ loader: false, type: 'button' });
@@ -312,6 +310,5 @@ AddTeamMember.propTypes = {
     requestApproval: bool,
   }).isRequired,
   setAgreementDetailModal: func,
-  getActivityLogInfo: arrayOf(shape({})).isRequired,
   setShowCloseBtn: func,
 };

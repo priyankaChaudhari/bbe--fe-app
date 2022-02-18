@@ -27,12 +27,11 @@ export default function RecentActivityNotes({
   setShowNotesModal,
   setNewNoteEditor,
   showNotesModal,
-  getActivityLogInfo,
   setIsLoading,
 }) {
   const [noteData, setNoteData] = useState([]);
   const getNotes = useCallback(() => {
-    setIsLoading({ loader: true, type: 'note' });
+    setIsLoading({ loader: false, type: 'note' });
     getRecentNotes(id).then((res) => {
       setNoteData(res?.data?.results);
       setIsLoading({ loader: false, type: 'note' });
@@ -44,11 +43,7 @@ export default function RecentActivityNotes({
     if (showNotesModal.apiCall) {
       getNotes();
     }
-    if (showNotesModal.deleteNote) {
-      getActivityLogInfo();
-    }
-    getActivityLogInfo();
-  }, [getNotes, showNotesModal, getActivityLogInfo, role]);
+  }, [getNotes, showNotesModal, role]);
 
   return (
     <>
@@ -267,12 +262,7 @@ RecentActivityNotes.propTypes = {
       deleteNote: bool,
     }),
   ]).isRequired,
-  // showNotesModal: shape({
-  //   apiCall: bool,
-  //   deleteNote: bool,
-  // }).isRequired,
   setShowNotesModal: func.isRequired,
   setNewNoteEditor: func.isRequired,
-  getActivityLogInfo: func.isRequired,
   setIsLoading: func.isRequired,
 };

@@ -20,7 +20,6 @@ export default function DspAdPacing({
   isAllowToSplitBalance,
   showDspBudgetModal,
   setShowDspBudgetModal,
-  getActivityLogInfo,
 }) {
   const [showAllocatedBalanceModal, setShowAllocatedBalanceModal] = useState(
     showDspBudgetModal,
@@ -341,7 +340,6 @@ export default function DspAdPacing({
           setShowDspBudgetModal(false);
           onModalClose();
         }}
-        getActivityLogInfo={getActivityLogInfo}
       />
     );
   };
@@ -478,7 +476,6 @@ DspAdPacing.defaultProps = {
   dspData: {},
   onModalClose: () => {},
   setShowDspBudgetModal: () => {},
-  getActivityLogInfo: () => {},
   marketplaceOptions: [],
 };
 
@@ -492,6 +489,5 @@ DspAdPacing.propTypes = {
   dspData: shape({}),
   onModalClose: func,
   setShowDspBudgetModal: func,
-  getActivityLogInfo: func,
   marketplaceOptions: arrayOf(shape()),
 };
