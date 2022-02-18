@@ -15,8 +15,6 @@ import AccountDetails from './AccountDetails';
 import ShowTeamMembers from './ShowTeamMembers';
 import AgreementDetails from './AgreementDetails';
 import CustomerTabDetails from './CustomerTabDetails';
-import RecentActivityNotes from './RecentActivityNotes';
-import useActivityLog from '../../../hooks/useActivityLog';
 import BillingContainer from './BillingContainer/BillingContainer';
 import CompanyPerformance from '../CompanyPerformance/CompanyPerformanceContainer';
 import { CustomerDetailsBody } from './CustomerDetailStyles';
@@ -43,12 +41,9 @@ import {
   PageNotFound,
   BackToTop,
   WhiteCard,
-  GetInitialName,
   ModalRadioCheck,
 } from '../../../common';
 import {
-  getCustomerActivityLog,
-  getDocumentList,
   getMarketPlaceList,
   getAccountMarketplace,
   getCustomerMembers,
@@ -72,20 +67,6 @@ export default function CustomerMainContainer() {
     customerSelectedTab || 'performance',
   );
   const [subViewComponent, setSubViewComponent] = useState('');
-
-  useEffect(() => {
-    if (
-      customer?.customer_account_type !== undefined &&
-      customer?.customer_account_type !== 'Vendor'
-    )
-      setSubViewComponent('seller');
-    else if (
-      customer?.customer_account_type !== undefined &&
-      customer?.customer_account_type === 'Vendor'
-    )
-      setSubViewComponent('vendor');
-  }, [customer, setSubViewComponent]);
-
   const [showMemberList, setShowMemberList] = useState({
     show: false,
     add: false,
@@ -93,24 +74,16 @@ export default function CustomerMainContainer() {
   });
   const [marketplaceChoices, setMarketplaceChoices] = useState([]);
   const [memberData, setMemberData] = useState([]);
-  const [activityData, setActivityData] = useState(null);
-  const [activityCount, setActivityCount] = useState(null);
-  const [pageNumber, setPageNumber] = useState();
-  const [images, setImages] = useState([]);
   const [showNewNoteEditor, setNewNoteEditor] = useState(false);
   const [showNotesModal, setShowNotesModal] = useState({
     modal: false,
     apiCall: false,
     deleteNote: false,
   });
-
   const [statusModal, setStatusModal] = useState({
     show: false,
     type: '',
   });
-  const profileLoader = useSelector(
-    (state) => state.userState.isActivityLoading,
-  );
   const customerError = useSelector((state) => state.customerState.error);
   const userInfo = useSelector((state) => state.userState.userInfo);
 
@@ -118,7 +91,6 @@ export default function CustomerMainContainer() {
   const [agreementDetailModal, setAgreementDetailModal] = useState({
     pause: false,
   });
-  const activityDetail = useActivityLog(viewComponent);
 
   let viewOptions = [
     { value: 'performance', label: 'Performance' },
@@ -144,6 +116,19 @@ export default function CustomerMainContainer() {
 
   useEffect(() => {
     if (
+      customer?.customer_account_type !== undefined &&
+      customer?.customer_account_type !== 'Vendor'
+    )
+      setSubViewComponent('seller');
+    else if (
+      customer?.customer_account_type !== undefined &&
+      customer?.customer_account_type === 'Vendor'
+    )
+      setSubViewComponent('vendor');
+  }, [customer, setSubViewComponent]);
+
+  useEffect(() => {
+    if (
       history.location.state === 'rev share' ||
       history.location.state === 'dsp service' ||
       history.location.state === 'retainer' ||
@@ -152,22 +137,6 @@ export default function CustomerMainContainer() {
       setViewComponent('billing');
     }
   }, [dispatch, history.location.state]);
-
-  const getActivityLogInfo = useCallback(
-    (currentPage) => {
-      setIsLoading({ loader: true, type: 'activityPage' });
-      getCustomerActivityLog(currentPage, id).then((response) => {
-        setActivityData(response && response.data && response.data.results);
-        setActivityCount(response && response.data && response.data.count);
-        setPageNumber(currentPage);
-        getDocumentList().then((picResponse) => {
-          setImages(picResponse);
-        });
-        setIsLoading({ loader: false, type: 'activityPage' });
-      });
-    },
-    [id],
-  );
 
   const getCustomerMemberList = useCallback(() => {
     setIsLoading({ loader: true, type: 'page' });
@@ -191,16 +160,10 @@ export default function CustomerMainContainer() {
   useEffect(() => {
     if (userInfo?.role?.includes('Customer')) {
       setViewComponent('dashboard');
+      setIsLoading({ loader: false, type: 'page' });
       dispatch(setCustomerSelectedTab('agreement'));
     }
-    if (profileLoader) {
-      getActivityLogInfo();
-    }
-  }, [dispatch, id, getActivityLogInfo, profileLoader, userInfo]);
-
-  useEffect(() => {
-    getActivityLogInfo();
-  }, [getActivityLogInfo]);
+  }, [dispatch, id, userInfo]);
 
   useEffect(() => {
     if (!userInfo?.role?.includes('Customer')) {
@@ -248,30 +211,13 @@ export default function CustomerMainContainer() {
     ];
   }
 
-  const getActivityInitials = (user) => {
-    if (user) {
-      const userDetail = {
-        first_name: user.split(' ')[0],
-        last_name: user.split(' ')[1],
-      };
-      return <GetInitialName userInfo={userDetail} type="activity" />;
-    }
-    return '';
-  };
-
-  const handlePageChange = (currentPage) => {
-    setPageNumber(currentPage);
-    getActivityLogInfo(currentPage);
-  };
-
   return (
     <>
       {customerError?.status === 404 || customerError?.status === 403 ? (
         <PageNotFound />
       ) : (
         <>
-          {profileLoader ||
-          loader ||
+          {loader ||
           customerLoader ||
           (isLoading.loader && isLoading.type === 'page') ? (
             <PageLoader color={Theme.orange} type="page" width={20} />
@@ -279,7 +225,7 @@ export default function CustomerMainContainer() {
             <>
               <CustomerDetailsBody role={userInfo && userInfo.role}>
                 <div className="row">
-                  <div className="col-6  mt-4 pt-1">
+                  <div className="col-6 mt-4 pt-1">
                     {' '}
                     {!userInfo?.role?.includes('Customer') ? (
                       <Link to={PATH_CUSTOMER_LIST}>
@@ -301,6 +247,7 @@ export default function CustomerMainContainer() {
                     role={userInfo && userInfo.role}
                     setShowMemberList={setShowMemberList}
                     memberData={memberData}
+                    setShowNotesModal={setShowNotesModal}
                   />
                 </div>
 
@@ -315,7 +262,6 @@ export default function CustomerMainContainer() {
                         customerData={customer}
                         showModal={showModal}
                         IsSaveDataClicked={IsSaveDataClicked}
-                        getActivityLogInfo={getActivityLogInfo}
                         customStyles={customStyles}
                       />
                       <CustomerTabDetails
@@ -407,7 +353,6 @@ export default function CustomerMainContainer() {
                       customerStatus={
                         customer && customer.status && customer.status.value
                       }
-                      getActivityLogInfo={getActivityLogInfo}
                     />
                   ) : viewComponent === 'product catalog' ? (
                     <ProductCatalog id={id} />
@@ -420,7 +365,6 @@ export default function CustomerMainContainer() {
                         agreement.seller_type &&
                         agreement.seller_type.value
                       }
-                      getActivityLogInfo={getActivityLogInfo}
                       marketplaceData={marketplaceData}
                     />
                   ) : viewComponent === 'dashboard' ? (
@@ -443,7 +387,6 @@ export default function CustomerMainContainer() {
                       id={id}
                       subViewComponent={subViewComponent}
                       memberData={memberData}
-                      getActivityLogInfo={getActivityLogInfo}
                     />
                   ) : viewComponent === 'billing' ? (
                     <BillingContainer
@@ -463,31 +406,12 @@ export default function CustomerMainContainer() {
                     />
                   ) : (
                     <Activity
-                      activityData={activityData}
-                      getActivityInitials={getActivityInitials}
-                      activityDetail={activityDetail}
+                      id={id}
+                      viewComponent={viewComponent}
                       isLoading={isLoading}
-                      images={images}
-                      handlePageChange={handlePageChange}
-                      count={activityCount}
-                      pageNumber={pageNumber || 1}
+                      setIsLoading={setIsLoading}
                     />
                   )}
-                  <RecentActivityNotes
-                    id={id}
-                    setViewComponent={setViewComponent}
-                    activityData={activityData}
-                    images={images}
-                    isLoading={isLoading}
-                    getActivityInitials={getActivityInitials}
-                    activityDetail={activityDetail}
-                    role={userInfo && userInfo.role}
-                    setShowNotesModal={setShowNotesModal}
-                    setNewNoteEditor={setNewNoteEditor}
-                    showNotesModal={showNotesModal}
-                    getActivityLogInfo={getActivityLogInfo}
-                    setIsLoading={setIsLoading}
-                  />
                 </div>
               </CustomerDetailsBody>
               <div className="col-12 mt-5">
@@ -502,7 +426,6 @@ export default function CustomerMainContainer() {
                 setShowMemberList={setShowMemberList}
                 setAgreementDetailModal={setAgreementDetailModal}
                 customStyles={customStyles}
-                getActivityLogInfo={getActivityLogInfo}
                 getCustomerMemberList={getCustomerMemberList}
               />
 
@@ -511,7 +434,6 @@ export default function CustomerMainContainer() {
                 customStyles={customStyles}
                 setStatusModal={setStatusModal}
                 customer={customer}
-                getActivityLogInfo={getActivityLogInfo}
               />
 
               <NotesModal

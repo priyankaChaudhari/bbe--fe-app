@@ -38,7 +38,6 @@ export default function EscrowBudgetAllocationModalOld({
   onClick,
   customerId,
   marketplace,
-  getActivityLogInfo,
 }) {
   const currentDate = new Date();
   currentDate.setDate(1);
@@ -68,12 +67,11 @@ export default function EscrowBudgetAllocationModalOld({
       (res) => {
         if (res && res.status === 200) {
           onClick();
-          getActivityLogInfo();
         }
         setIsSubmitLoader(false);
       },
     );
-  }, [onClick, customerId, marketplace, allocatedMonths, getActivityLogInfo]);
+  }, [onClick, customerId, marketplace, allocatedMonths]);
 
   const calculateSumOfFutureMonths = (newValues) => {
     const sumAll = newValues
@@ -264,7 +262,6 @@ EscrowBudgetAllocationModalOld.defaultProps = {
   dspData: {},
   onClick: () => {},
   addThousandSeperator: () => {},
-  getActivityLogInfo: () => {},
 };
 
 EscrowBudgetAllocationModalOld.propTypes = {
@@ -275,5 +272,4 @@ EscrowBudgetAllocationModalOld.propTypes = {
   dspData: shape({}),
   onClick: func,
   addThousandSeperator: func,
-  getActivityLogInfo: func,
 };

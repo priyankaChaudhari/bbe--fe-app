@@ -17,7 +17,6 @@ export default function EditMarketplaceAllocation({
   currencySymbol,
   currentMonthYear,
   selectedMarketplace,
-  getActivityLogInfo,
   escrowBalanceMarketplace,
   setEscrowBalanceMarketplace,
   totalEscrowBalance,
@@ -218,7 +217,6 @@ export default function EditMarketplaceAllocation({
           customerId={customerId}
           currencySymbol={currencySymbol}
           currentMonthYear={currentMonthYear}
-          getActivityLogInfo={getActivityLogInfo}
           selectedMarketplace={selectedMarketplace}
           addThousandSeperator={addThousandSeperator}
           setIsDataLoading={setIsDataLoading}
@@ -247,7 +245,6 @@ EditMarketplaceAllocation.defaultProps = {
   selectedMarketplace: '',
   totalEscrowBalance: 0,
   escrowBalanceMarketplace: [],
-  getActivityLogInfo: () => {},
   setEscrowBalanceMarketplace: () => {},
   setIsDataLoading: () => {},
   addThousandSeperator: () => {},
@@ -273,5 +270,4 @@ EditMarketplaceAllocation.propTypes = {
   showMarketPlaceAllocation: bool,
   setShowMarketPlaceAllocation: func,
   setShowEscrowMonthlyAllocation: func,
-  getActivityLogInfo: func,
 };

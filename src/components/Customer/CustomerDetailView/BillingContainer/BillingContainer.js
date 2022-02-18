@@ -30,7 +30,7 @@ const BillingContainer = ({
   };
 
   return (
-    <div className="col-lg-6 col-12">
+    <div className="col-lg-9 col-12">
       <Tabs>
         <ul className="tabs">
           {financeTabsOptions.map((item) => {

@@ -22,6 +22,21 @@ export const CustomerDetailsBody = styled.div`
       vertical-align: bottom;
     }
   }
+  .notes-btn {
+    background: #f1f1f5;
+    color: ${Theme.black};
+    border: 0;
+    border-radius: 6px;
+    display: inline-block;
+    height: 38px;
+    width: 92px;
+    padding: 0;
+    img {
+      vertical-align: middle;
+      transform: rotate(90deg);
+      width: 27px !important;
+    }
+  }
   .add-more-people {
     background-size: 100%;
     display: inline-block;

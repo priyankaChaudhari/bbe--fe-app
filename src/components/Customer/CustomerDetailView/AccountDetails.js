@@ -23,7 +23,6 @@ export default function AccountDetails({
   role,
   setStatusModal,
   showModal,
-  getActivityLogInfo,
   IsSaveDataClicked,
   customStyles,
 }) {
@@ -278,7 +277,6 @@ export default function AccountDetails({
           <EditAccountDetails
             setShowModal={setShowModal}
             setDocumentImage={customer.documents}
-            getActivityLogInfo={getActivityLogInfo}
             IsSaveDataClicked={IsSaveDataClicked}
             id={id}
             customer={customer}
@@ -300,7 +298,6 @@ AccountDetails.defaultProps = {
 
 AccountDetails.propTypes = {
   id: string,
-  getActivityLogInfo: func.isRequired,
   role: string.isRequired,
   customerData: shape({
     id: string,
