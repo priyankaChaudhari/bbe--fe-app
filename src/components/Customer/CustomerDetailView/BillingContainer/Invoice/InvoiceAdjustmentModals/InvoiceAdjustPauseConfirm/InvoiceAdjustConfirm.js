@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import { arrayOf, func, number, shape, string } from 'prop-types';
 
-import numberWithCommas from '../../../../../../../hooks/numberWithCommas';
 import OneTimeInvoiceAdjustConfirm from './OneTimeInvoiceAdjustConfirm';
 import Theme from '../../../../../../../theme/Theme';
 import {
@@ -29,6 +28,7 @@ const InvoiceAdjustConfirm = ({
   today,
   dspContact,
   onEditDspContact,
+  formatNumber,
 }) => {
   const isPermanentAdditional = invoiceType === 'permanent additional';
   const [showError, setShoeError] = useState(false);
@@ -75,8 +75,8 @@ const InvoiceAdjustConfirm = ({
 
   const totalChangeAmount =
     totalNewBudget - totalCurrentBudget > 0
-      ? `+$${numberWithCommas(Math.abs(totalCurrentBudget - totalNewBudget))}`
-      : `-$${numberWithCommas(Math.abs(totalCurrentBudget - totalNewBudget))}`;
+      ? `+$${formatNumber(Math.abs(totalCurrentBudget - totalNewBudget))}`
+      : `-$${formatNumber(Math.abs(totalCurrentBudget - totalNewBudget))}`;
 
   const renderResponsiveView = () => {
     return (
@@ -99,7 +99,7 @@ const InvoiceAdjustConfirm = ({
                   <div className="col-4 pr-2 text-left">
                     <div className="label">From</div>
                     <div className={textClass}>
-                      ${numberWithCommas(item.new_budget)}
+                      {formatNumber(item.new_budget, '$')}
                     </div>
                   </div>
                   <div className="col-2 px-1 text-left">
@@ -110,10 +110,9 @@ const InvoiceAdjustConfirm = ({
                   <div className="col-3 px-1 text-left">
                     <div className="label">To</div>
                     <div className={textClass}>
-                      $
                       {item.newAmount
-                        ? item.newAmount
-                        : numberWithCommas(item.new_budget)}
+                        ? `$${item.newAmount}`
+                        : formatNumber(item.new_budget, '$')}
                     </div>
                   </div>
                   <div className="col-3 pl-1 text-left">
@@ -122,12 +121,7 @@ const InvoiceAdjustConfirm = ({
                       {item.change
                         ? item.change === 0
                           ? '-'
-                          : item.change > 0
-                          ? `+$${numberWithCommas(item.change)}`
-                          : `-$${numberWithCommas(item.change).replace(
-                              '-',
-                              '',
-                            )}`
+                          : formatNumber(item.change, '$', '', false, true)
                         : '-'}
                     </div>
                   </div>
@@ -146,7 +140,7 @@ const InvoiceAdjustConfirm = ({
           <div className="col-4 pr-2 text-left">
             <div className="label">From</div>
             <div className="gray-normal-text">
-              ${numberWithCommas(totalCurrentBudget)}
+              {formatNumber(totalCurrentBudget, '$')}
             </div>
           </div>
           <div className="col-2 px-1 text-left">
@@ -157,7 +151,7 @@ const InvoiceAdjustConfirm = ({
           <div className="col-3 px-1 text-left">
             <div className="label">To</div>
             <div className="gray-normal-text">
-              ${numberWithCommas(totalNewBudget)}
+              {formatNumber(totalNewBudget, '$')}
             </div>
           </div>
           <div className="col-3 pl-1 text-left">
@@ -202,7 +196,7 @@ const InvoiceAdjustConfirm = ({
                 </div>
                 <div className="col-2 px-1 text-left">
                   <div className={textClass}>
-                    ${numberWithCommas(item.new_budget)}
+                    {formatNumber(item.new_budget, '$')}
                   </div>
                 </div>
                 <div className="col-1 px-1 text-left">
@@ -212,10 +206,9 @@ const InvoiceAdjustConfirm = ({
                 </div>
                 <div className="col-2 px-1 text-left">
                   <div className={textClass}>
-                    $
                     {item.newAmount
-                      ? item.newAmount
-                      : numberWithCommas(item.new_budget)}
+                      ? `$${item.newAmount}`
+                      : formatNumber(item.new_budget, '$')}
                   </div>
                 </div>
                 <div className="col-3 pl-1 text-left">
@@ -223,9 +216,7 @@ const InvoiceAdjustConfirm = ({
                     {item.change
                       ? item.change === 0
                         ? '-'
-                        : item.change > 0
-                        ? `+$${numberWithCommas(item.change)}`
-                        : `-$${numberWithCommas(item.change).replace('-', '')}`
+                        : formatNumber(item.change, '$', '', false, true)
                       : '-'}
                   </div>
                 </div>
@@ -240,7 +231,7 @@ const InvoiceAdjustConfirm = ({
           </div>
           <div className="col-2 px-1 text-left">
             <div className="normal-text text-bold">
-              ${numberWithCommas(totalCurrentBudget)}
+              {formatNumber(totalCurrentBudget, '$')}
             </div>
           </div>
           <div className="col-1 px-1 text-left">
@@ -250,11 +241,11 @@ const InvoiceAdjustConfirm = ({
           </div>
           <div className="col-2 px-1 text-left">
             <div className="normal-text text-bold">
-              ${numberWithCommas(totalNewBudget)}
+              {formatNumber(totalNewBudget, '$')}
             </div>
           </div>
           <div className="col-3 pl-1 text-left">
-            <div className="normal-text text-bold"> {totalChangeAmount}</div>
+            <div className="normal-text text-bold">{totalChangeAmount}</div>
           </div>
         </div>
       </div>
@@ -326,6 +317,7 @@ const InvoiceAdjustConfirm = ({
                 totalCurrentBudget={totalCurrentBudget}
                 totalNewBudget={totalNewBudget}
                 totalChangeAmount={totalChangeAmount}
+                formatNumber={formatNumber}
               />
             )}
             <div className=" straight-line horizontal-line mt-2 mb-2 " />
@@ -425,4 +417,5 @@ InvoiceAdjustConfirm.propTypes = {
   today: number.isRequired,
   dspContact: shape({}),
   onEditDspContact: func,
+  formatNumber: func.isRequired,
 };

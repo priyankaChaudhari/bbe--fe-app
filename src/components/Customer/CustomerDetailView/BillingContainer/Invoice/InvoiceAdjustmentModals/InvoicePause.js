@@ -4,13 +4,13 @@ import styled from 'styled-components';
 import { arrayOf, bool, func } from 'prop-types';
 
 import { ModalRadioCheck } from '../../../../../../common';
-import numberWithCommas from '../../../../../../hooks/numberWithCommas';
 
 const InvoicePause = ({
   invoiceChoices,
   setInvoiceChoices,
   returnTotalAmount,
   loading,
+  formatNumber,
 }) => {
   const { totalNewBudget } = returnTotalAmount();
 
@@ -60,7 +60,7 @@ const InvoicePause = ({
                           : 'none',
                       }}
                       className="normal-text ">
-                      ${numberWithCommas(item.new_budget)}
+                      {formatNumber(item.new_budget, '$')}
                     </div>
                   </div>
                   <div className="col-4 pl-1 text-left">
@@ -120,7 +120,7 @@ const InvoicePause = ({
           </div>
           <div className="col-4 text-left mt-3 px-1">
             <div className="normal-text text-bold">
-              ${totalNewBudget ? numberWithCommas(totalNewBudget) : 0}
+              {totalNewBudget ? formatNumber(totalNewBudget, '$') : '$0'}
             </div>
           </div>
           {/* <div className="col-4 text-left mt-3">
@@ -146,6 +146,7 @@ InvoicePause.propTypes = {
   setInvoiceChoices: func,
   returnTotalAmount: func,
   loading: bool,
+  formatNumber: func.isRequired,
 };
 
 const GrayTable = styled.div`

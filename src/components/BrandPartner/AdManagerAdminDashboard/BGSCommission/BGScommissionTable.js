@@ -9,6 +9,7 @@ import { DropDown } from '../../../Customer/CompanyPerformance/DropDown';
 import { CommissionHeader } from './BGSCommissionContainerStyle';
 import { bgsCommissionsFilterOptions } from '../../../../constants';
 import { WhiteCard, CheckBox, DropDownIndicator } from '../../../../common';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const BGScommissionTable = ({
   selectedTableFilter,
@@ -138,6 +139,7 @@ const BGScommissionTable = ({
           commissionData={commissionData}
           loader={loader}
           OnSetShowModal={OnSetShowModal}
+          formatNumber={useFormatNumber}
         />
       </WhiteCard>
       <BGSCommissionTableDesktopView
@@ -145,6 +147,7 @@ const BGScommissionTable = ({
         commissionData={commissionData}
         loader={loader}
         OnSetShowModal={OnSetShowModal}
+        formatNumber={useFormatNumber}
       />
     </>
   );
