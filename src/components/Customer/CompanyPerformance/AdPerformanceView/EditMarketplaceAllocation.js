@@ -194,6 +194,7 @@ export default function EditMarketplaceAllocation({
                   setShowEscrowMonthlyAllocation(true);
                   getEscrowBalanceMarketplace();
                   setIsAllowToContinue(false);
+                  setIsEscrowBalanceExceed(false);
                 }}
                 role="presentation"
               />
