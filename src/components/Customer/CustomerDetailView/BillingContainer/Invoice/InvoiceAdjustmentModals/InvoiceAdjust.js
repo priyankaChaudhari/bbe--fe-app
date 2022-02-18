@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { arrayOf, bool, func, string } from 'prop-types';
 
 import { InputFormField } from '../../../../../../common';
-import numberWithCommas from '../../../../../../hooks/numberWithCommas';
 
 const InvoiceAdjust = ({
   invoiceInputs,
@@ -14,6 +13,7 @@ const InvoiceAdjust = ({
   parseNumber,
   invoiceType,
   loading,
+  formatNumber,
 }) => {
   const { totalCurrentBudget, totalNewBudget } = returnTotalAmount();
   const onChangeInput = (input, index, { target }) => {
@@ -60,7 +60,7 @@ const InvoiceAdjust = ({
                   </div>
                   <div className="col-4 px-1 text-left mt-3">
                     <div className="normal-text ">
-                      ${numberWithCommas(input.new_budget)}
+                      {formatNumber(input.new_budget, '$')}
                     </div>
                   </div>
                   <div className="col-4 pl-1 text-left">
@@ -98,13 +98,15 @@ const InvoiceAdjust = ({
           <div className="col-4 px-1 text-left mt-3">
             {invoiceType !== 'one time' ? (
               <div className="normal-text text-bold">
-                ${totalCurrentBudget ? numberWithCommas(totalCurrentBudget) : 0}
+                {totalCurrentBudget
+                  ? formatNumber(totalCurrentBudget, '$')
+                  : '$0'}
               </div>
             ) : null}
           </div>
           <div className="col-4 pl-1 text-left mt-3">
             <div className="normal-text text-bold">
-              ${totalNewBudget ? numberWithCommas(totalNewBudget) : 0}
+              {totalNewBudget ? formatNumber(totalNewBudget, '$') : '$0'}
             </div>
           </div>
         </div>
@@ -130,6 +132,7 @@ InvoiceAdjust.propTypes = {
   setInvoiceInputs: func,
   returnTotalAmount: func,
   parseNumber: func,
+  formatNumber: func.isRequired,
 };
 
 const GrayTable = styled.div`

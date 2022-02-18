@@ -36,6 +36,7 @@ import {
 } from '../../../../../../constants';
 import InvoicePauseConfirm from './InvoiceAdjustPauseConfirm/InvoicePauseConfirm';
 import DSPContactModal from './DSPContactModal';
+import useFormatNumber from '../../../../../../hooks/useFormatNumber';
 
 const todaysDate = new Date();
 const day = todaysDate.getDate();
@@ -573,6 +574,7 @@ const InvoiceAdjustPauseModal = ({
                   invoiceType={invoiceType}
                   selectedMonthYear={selectedMonthYear}
                   loading={loader}
+                  formatNumber={useFormatNumber}
                 />
               ) : (
                 <InvoicePause
@@ -581,6 +583,7 @@ const InvoiceAdjustPauseModal = ({
                   returnTotalAmount={returnTotalAmount}
                   parseNumber={parseNumber}
                   loading={loader}
+                  formatNumber={useFormatNumber}
                 />
               )}
             </div>
@@ -626,6 +629,7 @@ const InvoiceAdjustPauseModal = ({
                 setISUpdateDSPContact(true);
               }
             }}
+            formatNumber={useFormatNumber}
           />
         ) : (
           <InvoiceAdjustConfirm
@@ -647,6 +651,7 @@ const InvoiceAdjustPauseModal = ({
                 setISUpdateDSPContact(true);
               }
             }}
+            formatNumber={useFormatNumber}
           />
         )}
       </Modal>

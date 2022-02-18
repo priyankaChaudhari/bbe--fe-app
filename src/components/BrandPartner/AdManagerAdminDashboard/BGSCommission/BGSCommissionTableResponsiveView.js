@@ -2,9 +2,9 @@ import React from 'react';
 
 import { arrayOf, bool, func } from 'prop-types';
 
+import Theme from '../../../../theme/Theme';
 import TableMobileView from '../../../../common/TableMobileView';
 import { NoData, PageLoader } from '../../../../common';
-import numberWithCommas from '../../../../hooks/numberWithCommas';
 import { CommissionTabletView } from './BGSCommissionContainerStyle';
 
 function BGSCommissionTableResponsiveView({
@@ -12,6 +12,7 @@ function BGSCommissionTableResponsiveView({
   loader,
   commissionData,
   OnSetShowModal,
+  formatNumber,
 }) {
   return (
     <CommissionTabletView className="mt-4 d-md-none d-block">
@@ -34,34 +35,41 @@ function BGSCommissionTableResponsiveView({
                         (s) => s.toUpperCase(),
                       )}
                       label="retainer"
-                      labelInfo={`$${numberWithCommas(
+                      labelInfo={`${formatNumber(
                         item.bgs_manager.retainer,
+                        '$',
                       )}`}
                       label1="rev share"
-                      labelInfo1={`$${numberWithCommas(
+                      labelInfo1={`${formatNumber(
                         item.bgs_manager.rev_share,
+                        '$',
                       )}`}
                       label2="DSP"
-                      labelInfo2={`$${numberWithCommas(item.bgs_manager.dsp)}`}
+                      labelInfo2={`${formatNumber(item.bgs_manager.dsp, '$')}`}
                       label3="total book size"
-                      labelInfo3={`$${numberWithCommas(
+                      labelInfo3={`${formatNumber(
                         item.bgs_manager.total_book_size,
+                        '$',
                       )}`}
                       label4="Book Size Commission"
-                      labelInfo4={`$${numberWithCommas(
+                      labelInfo4={`${formatNumber(
                         item.bgs_manager.total_book_size_commission,
+                        '$',
                       )}`}
                       label5="Upsells"
-                      labelInfo5={`$${numberWithCommas(
+                      labelInfo5={`${formatNumber(
                         item.bgs_manager.upsell,
+                        '$',
                       )}`}
                       label6="Upsells Commission"
-                      labelInfo6={`$${numberWithCommas(
+                      labelInfo6={`${formatNumber(
                         item.bgs_manager.upsell_commission,
+                        '$',
                       )}`}
                       label7="Total Commission"
-                      labelInfo7={`$${numberWithCommas(
+                      labelInfo7={`${formatNumber(
                         item.bgs_manager.total_commission,
+                        '$',
                       )}`}
                     />
                   ) : null}
@@ -85,32 +93,38 @@ function BGSCommissionTableResponsiveView({
                             (s) => s.toUpperCase(),
                           )}
                           label1="retainer"
-                          labelInfo1={`$${numberWithCommas(
+                          labelInfo1={`${formatNumber(
                             memberItem.retainer,
+                            '$',
                           )}`}
                           label2="rev share"
-                          labelInfo2={`$${numberWithCommas(
+                          labelInfo2={`${formatNumber(
                             memberItem.rev_share,
+                            '$',
                           )}`}
                           label3="DSP"
-                          labelInfo3={`$${numberWithCommas(memberItem.dsp)}`}
+                          labelInfo3={`${formatNumber(memberItem.dsp, '$')}`}
                           label4="total book size"
-                          labelInfo4={`$${numberWithCommas(
+                          labelInfo4={`${formatNumber(
                             memberItem.total_book_size,
+                            '$',
                           )}`}
                           label5="book size Comm."
-                          labelInfo5={`$${numberWithCommas(
+                          labelInfo5={`${formatNumber(
                             memberItem.total_book_size_commission,
+                            '$',
                           )}`}
                           label6="Upsells"
-                          labelInfo6={`$${numberWithCommas(memberItem.upsell)}`}
+                          labelInfo6={`${formatNumber(memberItem.upsell, '$')}`}
                           label7="Upsells Comm."
-                          labelInfo7={`$${numberWithCommas(
+                          labelInfo7={`${formatNumber(
                             memberItem.upsell_commission,
+                            '$',
                           )}`}
                           label8="Total Commission"
-                          labelInfo8={`$${numberWithCommas(
+                          labelInfo8={`${formatNumber(
                             memberItem.total_commission,
+                            '$',
                           )}`}
                         />
                       );
@@ -132,25 +146,27 @@ function BGSCommissionTableResponsiveView({
                   s.toUpperCase(),
                 )}
                 label1="retainer"
-                labelInfo1={`$${numberWithCommas(memberItem.retainer)}`}
+                labelInfo1={`${formatNumber(memberItem.retaine, '$')}`}
                 label2="rev share"
-                labelInfo2={`$${numberWithCommas(memberItem.rev_share)}`}
+                labelInfo2={`${formatNumber(memberItem.rev_share, '$')}`}
                 label3="DSP"
-                labelInfo3={`$${numberWithCommas(memberItem.dsp)}`}
+                labelInfo3={`${formatNumber(memberItem.dsp, '$')}`}
                 label4="total book size"
-                labelInfo4={`$${numberWithCommas(memberItem.total_book_size)}`}
+                labelInfo4={`${formatNumber(memberItem.total_book_size, '$')}`}
                 label5="book size Comm."
-                labelInfo5={`$${numberWithCommas(
+                labelInfo5={`${formatNumber(
                   memberItem.total_book_size_commission,
+                  '$',
                 )}`}
                 label6="Upsells"
-                labelInfo6={`$${numberWithCommas(memberItem.upsell)}`}
+                labelInfo6={`${formatNumber(memberItem.upsell, '$')}`}
                 label7="Upsells Comm."
-                labelInfo7={`$${numberWithCommas(
+                labelInfo7={`${formatNumber(
                   memberItem.upsell_commission,
+                  '$',
                 )}`}
                 label8="Total Commission"
-                labelInfo8={`$${numberWithCommas(memberItem.total_commission)}`}
+                labelInfo8={`${formatNumber(memberItem.total_commission, '$')}`}
               />
             );
           })
@@ -162,7 +178,7 @@ function BGSCommissionTableResponsiveView({
       {loader ? (
         <PageLoader
           component="performance-graph"
-          color="#FF5933"
+          color={Theme.orange}
           type="detail"
           width={40}
           height={40}
@@ -185,4 +201,5 @@ BGSCommissionTableResponsiveView.propTypes = {
   loader: bool,
   commissionData: arrayOf(Array),
   OnSetShowModal: func,
+  formatNumber: func.isRequired,
 };

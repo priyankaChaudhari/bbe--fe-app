@@ -3,14 +3,14 @@ import React from 'react';
 import { arrayOf, bool, func } from 'prop-types';
 
 import { NoData, PageLoader, TableGap, WhiteCard } from '../../../../common';
-import numberWithCommas from '../../../../hooks/numberWithCommas';
 
-export default function BGSCommissionTableDesktopView({
+const BGSCommissionTableDesktopView = ({
   commissionData,
   isGroupBy,
   loader,
   OnSetShowModal,
-}) {
+  formatNumber,
+}) => {
   return (
     <TableGap className="d-md-block d-none">
       <WhiteCard className="table-card ">
@@ -83,30 +83,28 @@ export default function BGSCommissionTableDesktopView({
                           )}
                         </td>
                         <td width="10%" className="text-medium">
-                          {`$${numberWithCommas(item.retainer)}`}
+                          {formatNumber(item.retainer, '$')}
                         </td>
                         <td width="10%" className="text-medium">
-                          {`$${numberWithCommas(item.rev_share)}`}
+                          {formatNumber(item.rev_share, '$')}
                         </td>
                         <td width="8%" className="text-medium">
-                          {`$${numberWithCommas(item.dsp)}`}
+                          {formatNumber(item.dsp, '$')}
                         </td>
                         <td width="12%" className="text-medium">
-                          {`$${numberWithCommas(item.total_book_size)}`}
+                          {formatNumber(item.total_book_size, '$')}
                         </td>
                         <td width="12%" className="text-bold">
-                          {`$${numberWithCommas(
-                            item.total_book_size_commission,
-                          )}`}
+                          {formatNumber(item.total_book_size_commission, '$')}
                         </td>
                         <td width="8%" className="text-medium">
-                          {`$${numberWithCommas(item.upsell)}`}
+                          {formatNumber(item.upsell, '$')}
                         </td>
                         <td width="12%" className="text-bold">
-                          {`$${numberWithCommas(item.upsell_commission)}`}
+                          {formatNumber(item.upsell_commission, '$')}
                         </td>
                         <td width="10%" className="text-bold">
-                          {`$${numberWithCommas(item.total_commission)}`}
+                          {formatNumber(item.total_commission, '$')}
                         </td>
                       </tr>
                     </div>
@@ -148,36 +146,34 @@ export default function BGSCommissionTableDesktopView({
                           )}
                         </td>
                         <td width="10%" className="text-medium">
-                          {`$${numberWithCommas(item.bgs_manager.retainer)}`}
+                          {formatNumber(item.bgs_manager.retainer, '$')}
                         </td>
                         <td width="10%" className="text-medium">
-                          {`$${numberWithCommas(item.bgs_manager.rev_share)}`}
+                          {formatNumber(item.bgs_manager.rev_share, '$')}
                         </td>
                         <td width="8%" className="text-medium">
-                          {`$${numberWithCommas(item.bgs_manager.dsp)}`}
+                          {formatNumber(item.bgs_manager.dsp, '$')}
                         </td>
                         <td width="12%" className="text-medium">
-                          {`$${numberWithCommas(
-                            item.bgs_manager.total_book_size,
-                          )}`}
+                          {formatNumber(item.bgs_manager.total_book_size, '$')}
                         </td>
                         <td width="12%" className="text-bold">
-                          {`$${numberWithCommas(
+                          {formatNumber(
                             item.bgs_manager.total_book_size_commission,
-                          )}`}
+                            '$',
+                          )}
                         </td>
                         <td width="8%" className="text-medium">
-                          {`$${numberWithCommas(item.bgs_manager.upsell)}`}
+                          {formatNumber(item.bgs_manager.upsell, '$')}
                         </td>
                         <td width="12%" className="text-bold">
-                          {`$${numberWithCommas(
+                          {formatNumber(
                             item.bgs_manager.upsell_commission,
-                          )}`}
+                            '$',
+                          )}
                         </td>
                         <td width="10%" className="text-bold">
-                          {`$${numberWithCommas(
-                            item.bgs_manager.total_commission,
-                          )}`}
+                          {formatNumber(item.bgs_manager.total_commission, '$')}
                         </td>
                       </tr>
                     ) : null}
@@ -202,36 +198,31 @@ export default function BGSCommissionTableDesktopView({
                               )}
                             </td>
                             <td width="10%" className="text-medium">
-                              {`$${numberWithCommas(memberItem.retainer)}`}
+                              {formatNumber(memberItem.retainer, '$')}
                             </td>
                             <td width="10%" className="text-medium">
-                              {`$${numberWithCommas(memberItem.rev_share)}`}
+                              {formatNumber(memberItem.rev_share, '$')}
                             </td>
                             <td width="8%" className="text-medium">
-                              {`$${numberWithCommas(memberItem.dsp)}`}
+                              {formatNumber(memberItem.dsp, '$')}
                             </td>
                             <td width="12%" className="text-medium">
-                              {`$${numberWithCommas(
-                                memberItem.total_book_size,
-                              )}`}
+                              {formatNumber(memberItem.total_book_size, '$')}
                             </td>
                             <td width="12%" className="text-bold">
-                              {`$${numberWithCommas(
+                              {formatNumber(
                                 memberItem.total_book_size_commission,
-                              )}`}
+                                '$',
+                              )}
                             </td>
                             <td width="8%" className="text-medium">
-                              {`$${numberWithCommas(memberItem.upsell)}`}
+                              {formatNumber(memberItem.upsell, '$')}
                             </td>
                             <td width="12%" className="text-bold">
-                              {`$${numberWithCommas(
-                                memberItem.upsell_commission,
-                              )}`}
+                              {formatNumber(memberItem.upsell_commission, '$')}
                             </td>
                             <td width="10%" className="text-bold">
-                              {`$${numberWithCommas(
-                                memberItem.total_commission,
-                              )}`}
+                              {formatNumber(memberItem.total_commission, '$')}
                             </td>
                           </tr>
                         );
@@ -245,7 +236,9 @@ export default function BGSCommissionTableDesktopView({
       ) : null}
     </TableGap>
   );
-}
+};
+
+export default BGSCommissionTableDesktopView;
 
 BGSCommissionTableDesktopView.defaultProps = {
   isGroupBy: true,
@@ -259,4 +252,5 @@ BGSCommissionTableDesktopView.propTypes = {
   loader: bool,
   commissionData: arrayOf(Array),
   OnSetShowModal: func,
+  formatNumber: func.isRequired,
 };

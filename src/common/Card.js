@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { number, oneOfType, string } from 'prop-types';
 
 import Theme from '../theme/Theme';
-import numberWithCommas from '../hooks/numberWithCommas';
+import useFormatNumber from '../hooks/useFormatNumber';
 
-const rendeTootipData = (retainer, revshare, dsp) => {
+const rendeTootipData = (retainer, revshare, dsp, formatNumber) => {
   return `
     <div style="padding:0; margin: 0 0 4px 0; max-width: 240px; width: 100%;opacity: 100%;"> 
       <div style="display: "> 
@@ -30,7 +30,7 @@ const rendeTootipData = (retainer, revshare, dsp) => {
               float: right;
               text-align: right;
               margin-top: 4px;
-             "> $${numberWithCommas(retainer)}
+             "> ${formatNumber(retainer, '$')}
            </div>
            </div>
              <div class="col-6">
@@ -49,7 +49,7 @@ const rendeTootipData = (retainer, revshare, dsp) => {
               text-align: right;
               margin-top: 4px;
              ">
-             $${numberWithCommas(revshare)}
+             ${formatNumber(revshare, '$')}
            </div>
            </div>
            <div class="col-6">
@@ -68,7 +68,7 @@ const rendeTootipData = (retainer, revshare, dsp) => {
               text-align: right;
               margin-top: 4px;
              ">
-             $${numberWithCommas(dsp)}
+             ${formatNumber(dsp, '$')}
            </div>
            </div>
       </div>     
@@ -111,7 +111,12 @@ const Card = ({
           {breakDown ? (
             <div
               className="label-card-text "
-              data-tip={rendeTootipData(retainer, revShare, dsp)}
+              data-tip={rendeTootipData(
+                retainer,
+                revShare,
+                dsp,
+                useFormatNumber,
+              )}
               data-html
               data-for="break-down">
               {breakDown}
