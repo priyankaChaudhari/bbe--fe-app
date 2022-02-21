@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 
-import { useSelector } from 'react-redux';
-import styled from 'styled-components';
-import Modal from 'react-modal';
 import dayjs from 'dayjs';
+import Modal from 'react-modal';
+import styled from 'styled-components';
 import { components } from 'react-select';
-import { arrayOf, func, instanceOf, shape, string } from 'prop-types';
+import { useSelector } from 'react-redux';
+import { arrayOf, instanceOf, shape, string } from 'prop-types';
+
 import DSPPerformance from './DSPPerformance';
 import SponsoredPerformance from './SponsoredPerformance';
 import AdPerformanceFilters from './AdPerformanceFilters';
@@ -30,7 +31,6 @@ export default function AdPerformance({
   marketplaceChoices,
   id,
   accountType,
-  getActivityLogInfo,
   memberData,
 }) {
   const mounted = useRef(false);
@@ -1165,7 +1165,6 @@ export default function AdPerformance({
           isAllowToSplitBalance={isAllowToSplitBalance}
           showDspBudgetModal={showDspBudgetModal}
           setShowDspBudgetModal={setShowDspBudgetModal}
-          getActivityLogInfo={getActivityLogInfo}
         />
       </Modal>
     );
@@ -1263,7 +1262,6 @@ AdPerformance.defaultProps = {
   accountType: 'seller',
   memberData: [],
   data: {},
-  getActivityLogInfo: () => {},
 };
 
 AdPerformance.propTypes = {
@@ -1275,7 +1273,6 @@ AdPerformance.propTypes = {
     label: string,
     sub: string,
   }),
-  getActivityLogInfo: func,
 };
 
 const AddPerformance = styled.div`

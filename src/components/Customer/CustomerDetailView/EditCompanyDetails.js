@@ -35,7 +35,6 @@ import {
 export default function EditCompanyDetails({
   setShowModal,
   id,
-  getActivityLogInfo,
   scrollDown,
   setScrollDown,
   setDetail,
@@ -87,7 +86,6 @@ export default function EditCompanyDetails({
       if (response?.status === 200) {
         setDetail(response?.data);
         toast.success('Social Media URL removed.');
-        getActivityLogInfo();
         setIsLoading({ loader: false, type: 'page' });
       }
       if (response?.status === 400) {
@@ -252,7 +250,6 @@ export default function EditCompanyDetails({
         toast.success('Changes Saved!');
         setIsLoading({ loader: false, type: 'button' });
         setDetail(response?.data);
-        getActivityLogInfo();
         setShowModal(false);
       }
     });
@@ -706,7 +703,6 @@ EditCompanyDetails.propTypes = {
   detail: shape({
     id: string,
   }).isRequired,
-  getActivityLogInfo: func.isRequired,
   setScrollDown: func.isRequired,
   scrollDown: bool,
   setDetail: func.isRequired,

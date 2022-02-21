@@ -12,7 +12,6 @@ export default function ConfirmMarketPlaceAllocation({
   currentMonthYear,
   currencySymbol,
   onClick,
-  getActivityLogInfo,
   addThousandSeperator,
   totalEscrowBalance,
   escrowBalanceMarketplace,
@@ -73,7 +72,6 @@ export default function ConfirmMarketPlaceAllocation({
       storeEscrowReallocation(tempData).then((res) => {
         if (res && res.status === 201) {
           onClick();
-          getActivityLogInfo();
           setShowConfirmMarketplaceAllocation(false);
           setShowEscrowMonthlyAllocation(true);
           getEscrowBalanceMarketplace();
@@ -85,7 +83,6 @@ export default function ConfirmMarketPlaceAllocation({
     [
       currentMonthYear,
       customerId,
-      getActivityLogInfo,
       getDSPPacing,
       getEscrowBalanceMarketplace,
       onClick,
@@ -300,7 +297,6 @@ ConfirmMarketPlaceAllocation.defaultProps = {
   currentMonthYear: '',
   totalEscrowBalance: number,
   onClick: () => {},
-  getActivityLogInfo: () => {},
   addThousandSeperator: () => {},
   escrowBalanceMarketplace: [],
   getEscrowBalanceMarketplace: () => {},
@@ -319,7 +315,6 @@ ConfirmMarketPlaceAllocation.propTypes = {
   totalEscrowBalance: number,
   addThousandSeperator: func,
   onClick: func,
-  getActivityLogInfo: func,
   escrowBalanceMarketplace: arrayOf(shape()),
   getEscrowBalanceMarketplace: func,
   getDSPPacing: func,

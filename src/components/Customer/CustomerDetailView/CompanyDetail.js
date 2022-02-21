@@ -1,23 +1,18 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-import ReadMoreAndLess from 'react-read-more-less';
 import Modal from 'react-modal';
-import { func, shape, arrayOf, string } from 'prop-types';
+import ReadMoreAndLess from 'react-read-more-less';
+import { shape, arrayOf, string } from 'prop-types';
 
 import EditCompanyDetails from './EditCompanyDetails';
 import AmazonAccount from './AmazonAccount';
-import { getCustomerDetails, getCustomerContactDetails } from '../../../api';
 import { GroupUser } from '../../../theme/Global';
 import { socialIcons } from '../../../constants';
 import { EditOrangeIcon, CloseIcon } from '../../../theme/images';
+import { getCustomerDetails, getCustomerContactDetails } from '../../../api';
 import { GetInitialName, PageLoader, WhiteCard } from '../../../common';
 
-export default function CompanyDetail({
-  customer,
-  id,
-  getActivityLogInfo,
-  marketplaceData,
-}) {
+export default function CompanyDetail({ customer, id, marketplaceData }) {
   const customStyles = {
     content: {
       top: '50%',
@@ -161,7 +156,7 @@ export default function CompanyDetail({
           height={40}
         />
       ) : (
-        <div className="col-lg-6 col-12 mb-3">
+        <div className="col-lg-9 col-12 mb-3">
           <WhiteCard>
             <div className="row">
               <div className="col-10">
@@ -218,7 +213,6 @@ export default function CompanyDetail({
               <AmazonAccount
                 marketplaceData={marketplaceData}
                 customStyles={customStyles}
-                getActivityLogInfo={getActivityLogInfo}
               />
             </div>
           </div>
@@ -239,7 +233,6 @@ export default function CompanyDetail({
               id={id}
               detail={detail}
               showModal={showModal}
-              getActivityLogInfo={getActivityLogInfo}
               scrollDown={scrollDown}
               setScrollDown={setScrollDown}
               setDetail={setDetail}
@@ -266,6 +259,5 @@ CompanyDetail.propTypes = {
     phone_number: string,
     merchant_id: string,
   }).isRequired,
-  getActivityLogInfo: func.isRequired,
   marketplaceData: arrayOf(shape({})).isRequired,
 };

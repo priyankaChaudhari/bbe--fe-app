@@ -80,7 +80,7 @@ export default function SetupCheckList({ id, brandId }) {
   };
 
   return (
-    <div className="col-lg-6  col-12 mb-3">
+    <div className="col-lg-9  col-12 mb-3">
       {isLoading.loader && isLoading.type === 'page' ? (
         <PageLoader
           component="agrement-details"

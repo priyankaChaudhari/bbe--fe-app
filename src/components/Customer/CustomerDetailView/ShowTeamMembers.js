@@ -3,18 +3,18 @@ import React from 'react';
 import ReactTooltip from 'react-tooltip';
 import { func, string, shape, arrayOf } from 'prop-types';
 
-import { GetInitialName } from '../../../common';
-import { PlusIcon } from '../../../theme/images';
+import { Button, GetInitialName } from '../../../common';
+import { CaretUp, PlusIcon } from '../../../theme/images';
 
 export default function ShowTeamMembers({
   role,
   memberData,
   setShowMemberList,
+  setShowNotesModal,
 }) {
   return (
     <>
       <div className="col-6 mt-4 text-right">
-        {' '}
         {!role.includes('Customer') ? (
           <div className="add-more-people">
             {memberData &&
@@ -51,9 +51,8 @@ export default function ShowTeamMembers({
                   </React.Fragment>
                 ) : null,
               )}
-
             <div
-              className="add-more-people btn-add-team cursor"
+              className="add-more-people btn-add-team cursor mr-4"
               role="presentation"
               onClick={() =>
                 setShowMemberList({
@@ -64,6 +63,17 @@ export default function ShowTeamMembers({
               }>
               <img src={PlusIcon} alt="add" />
             </div>
+            <Button
+              className="notes-btn cursor"
+              onClick={() =>
+                setShowNotesModal({
+                  modal: true,
+                  apiCall: false,
+                })
+              }>
+              <img src={CaretUp} alt="caret" />
+              Notes
+            </Button>{' '}
           </div>
         ) : (
           ''
@@ -75,10 +85,12 @@ export default function ShowTeamMembers({
 
 ShowTeamMembers.defaultProps = {
   setShowMemberList: () => {},
+  setShowNotesModal: () => {},
 };
 
 ShowTeamMembers.propTypes = {
   role: string.isRequired,
   memberData: arrayOf(shape({})).isRequired,
   setShowMemberList: func,
+  setShowNotesModal: func,
 };
