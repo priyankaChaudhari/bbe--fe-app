@@ -12,6 +12,7 @@ import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
 import {
   billingAddress,
+  dspSignOffRoles,
   paymentTermValueLabel,
 } from '../../../../../constants';
 import {
@@ -114,16 +115,16 @@ export default function BillingDetails({
       if (res?.status === 200) {
         setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
         if (res?.data?.is_dsp_contract) {
-          if (userInfo?.role === 'Customer') {
+          if (
+            userInfo?.role === 'Customer' ||
+            dspSignOffRoles.userRole[userInfo?.role]
+          ) {
             setShowDSPEdit(true);
           } else {
             for (const user of memberData) {
               if (user.user) {
                 if (
-                  (user?.role_group?.name === 'BGS Manager' ||
-                    user?.role_group?.name === 'BGS' ||
-                    user?.role_group?.name === 'DSP Ad Manager' ||
-                    user?.role_group?.name === 'Ad Manager Admin') &&
+                  dspSignOffRoles.grpRole[user?.role_group?.name] &&
                   user?.user?.id === userInfo?.id
                 ) {
                   setShowDSPEdit(true);
