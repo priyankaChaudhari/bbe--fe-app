@@ -62,7 +62,7 @@ export default function AgreementSellerVendorDetails({
       );
     }
     return (
-      agreement?.fee_structure?.[accountType[agreement.id]]?.[item.key] || 0
+      agreement?.fee_structure?.[accountType[agreement.id]]?.[item.key] || 'N/A'
     );
   };
 
@@ -142,6 +142,7 @@ export default function AgreementSellerVendorDetails({
         </div>
       ));
     }
+
     return (
       <div className=" col-lg-3 col-md-3 mb-3 col-6 " key={item?.key}>
         <div className="label">{item?.label?.replace('(OPTIONAL)', '')}</div>
@@ -154,7 +155,8 @@ export default function AgreementSellerVendorDetails({
               item.key === 'rev_share' ||
               item.key === 'content_optimization' ||
               item.key === 'design_optimization' ||
-              item.key === 'rev_share_threshold'
+              item.key === 'rev_share_threshold' ||
+              !agreement?.fee_structure?.[accountType[agreement.id]]?.[item.key]
                 ? ''
                 : '$'
             }
