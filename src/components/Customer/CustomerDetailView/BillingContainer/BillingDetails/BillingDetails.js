@@ -2,16 +2,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import Modal from 'react-modal';
+import Select from 'react-select';
 import NumberFormat from 'react-number-format';
 import ReactTooltip from 'react-tooltip';
-import { useDispatch } from 'react-redux';
-import { shape, string, arrayOf } from 'prop-types';
 import { toast } from 'react-toastify';
-import Select from 'react-select';
+import { shape, string, arrayOf } from 'prop-types';
 
 import Theme from '../../../../../theme/Theme';
 import { GroupUser } from '../../../../../theme/Global';
-import { showProfileLoader } from '../../../../../store/actions/userState';
 import {
   billingAddress,
   dspSignOffRoles,
@@ -51,7 +49,6 @@ export default function BillingDetails({
   customerStatus,
   memberData,
 }) {
-  const dispatch = useDispatch();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const [showModal, setShowModal] = useState(false);
@@ -483,8 +480,6 @@ export default function BillingDetails({
           billingDetails();
           setShowModal(false);
           setShowBtn(false);
-          dispatch(showProfileLoader(true));
-          dispatch(showProfileLoader(false));
         }
         if (res?.status === 400) {
           setIsLoading({ loader: false, type: 'button' });
@@ -502,8 +497,6 @@ export default function BillingDetails({
         getPaymentTerms();
         setShowModal(false);
         setShowBtn(false);
-        dispatch(showProfileLoader(true));
-        dispatch(showProfileLoader(false));
         toast.success('You have successfully changed your payment terms');
       }
       if (res?.status === 400) {

@@ -1,13 +1,11 @@
 import React from 'react';
 
 import Modal from 'react-modal';
-import { useDispatch } from 'react-redux';
 import { bool, func, shape } from 'prop-types';
 
 import SuccessMsg from '../SuccessMsg';
 import { EditProfile } from '../../components/Profile';
 import { CloseIcon } from '../../theme/images';
-import { showProfileLoader } from '../../store/actions/userState';
 
 export default function ProfileModal({
   showModal,
@@ -16,7 +14,6 @@ export default function ProfileModal({
   setShowSuccessMsg,
   showSuccessMsg,
 }) {
-  const dispatch = useDispatch();
   const customStyles = {
     content: {
       top: '50%',
@@ -42,7 +39,6 @@ export default function ProfileModal({
         className="float-right cross-icon cursor"
         onClick={() => {
           setShowModal(false);
-          dispatch(showProfileLoader(false));
         }}
         role="presentation"
       />

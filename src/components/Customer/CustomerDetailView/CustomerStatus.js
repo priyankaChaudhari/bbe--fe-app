@@ -11,12 +11,7 @@ import { RightArrowIcon } from '../../../theme/images';
 import { getCustomerDetails } from '../../../store/actions/customerState';
 import { Button, ModalBox, FormField, PageLoader } from '../../../common';
 
-export default function CustomerStatus({
-  type,
-  setStatusModal,
-  customer,
-  getActivityLogInfo,
-}) {
+export default function CustomerStatus({ type, setStatusModal, customer }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState({ loader: false, type: 'button' });
   const [startDate, setStartDate] = useState(new Date());
@@ -79,7 +74,6 @@ export default function CustomerStatus({
       if (response && response.status === 200) {
         toast.success('Status Updated!');
         dispatch(getCustomerDetails(customer.id));
-        getActivityLogInfo();
         setStatusModal({ show: false, type });
         setIsLoading({ loader: false, type: 'button' });
       }
@@ -176,5 +170,4 @@ CustomerStatus.propTypes = {
       value: string,
     }),
   }).isRequired,
-  getActivityLogInfo: func.isRequired,
 };

@@ -53,7 +53,6 @@ export default function EscrowBudgetAllocationModal({
   onClick,
   customerId,
   marketplace,
-  getActivityLogInfo,
 }) {
   const mounted = useRef(false);
   const currencySymbol = '$';
@@ -185,19 +184,12 @@ export default function EscrowBudgetAllocationModal({
         if (mounted.current) {
           if (res && res.status === 200) {
             onClick();
-            getActivityLogInfo();
           }
           setIsApiCall(false);
         }
       },
     );
-  }, [
-    allocatedMonths,
-    customerId,
-    selectedMarketplace,
-    onClick,
-    getActivityLogInfo,
-  ]);
+  }, [allocatedMonths, customerId, selectedMarketplace, onClick]);
 
   useEffect(() => {
     mounted.current = true;
@@ -524,7 +516,6 @@ export default function EscrowBudgetAllocationModal({
               customerId={customerId}
               currencySymbol={currencySymbol}
               currentMonthYear={currentMonthYear}
-              getActivityLogInfo={getActivityLogInfo}
               selectedMarketplace={selectedMarketplace}
               escrowBalanceMarketplace={escrowBalanceMarketplace}
               setEscrowBalanceMarketplace={setEscrowBalanceMarketplace}
@@ -551,7 +542,6 @@ EscrowBudgetAllocationModal.defaultProps = {
   marketplace: '',
   isOpen: false,
   onClick: () => {},
-  getActivityLogInfo: () => {},
 };
 
 EscrowBudgetAllocationModal.propTypes = {
@@ -560,5 +550,4 @@ EscrowBudgetAllocationModal.propTypes = {
   marketplace: string,
   isOpen: bool,
   onClick: func,
-  getActivityLogInfo: func,
 };

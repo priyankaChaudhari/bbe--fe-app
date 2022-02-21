@@ -63,7 +63,6 @@ export default function AgreementDetails({
   showModal,
   setShowModal,
   userRole,
-  getActivityLogInfo,
 }) {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -126,7 +125,6 @@ export default function AgreementDetails({
     getBGSManagers(id).then((res) => {
       setBgsManagerEmail(res && res.data && res.data.email);
     });
-    getActivityLogInfo();
   }, [dispatch, id]);
 
   const countDays = (value) => {
@@ -239,7 +237,6 @@ export default function AgreementDetails({
                 toast.success('Your Agreement has been unpaused successfully.');
               dispatch(getAccountDetails(id));
               setPauseDateDetails({ start_date: null, end_date: null });
-              getActivityLogInfo();
             });
           }
         });
@@ -906,7 +903,6 @@ export default function AgreementDetails({
           `We have emailed the BGS manager for ${statusName} your agreement.`,
         );
         dispatch(getAccountDetails(id));
-        getActivityLogInfo();
       }
     });
   };
@@ -986,7 +982,7 @@ export default function AgreementDetails({
 
   return (
     <>
-      <div className="col-lg-6 col-12 cutomer-middle-panel">
+      <div className="col-lg-9 col-12 cutomer-middle-panel">
         <Tabs>
           <ul className="tabs">
             <li
@@ -1214,7 +1210,6 @@ AgreementDetails.propTypes = {
   setShowModal: func.isRequired,
   showModal: oneOfType([bool, shape({})]).isRequired,
   userRole: string.isRequired,
-  getActivityLogInfo: func.isRequired,
 };
 
 const CustomerDetailCoppase = styled.div`

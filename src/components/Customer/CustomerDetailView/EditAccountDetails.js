@@ -14,7 +14,6 @@ import { Button, ErrorMsg, FormField, PageLoader } from '../../../common';
 export default function EditAccountDetails({
   setShowModal,
   setDocumentImage,
-  getActivityLogInfo,
   IsSaveDataClicked,
   customer,
   setCustomer,
@@ -142,7 +141,6 @@ export default function EditAccountDetails({
         setShowModal(true);
       } else if (response && response.status === 200) {
         setCustomer(response && response.data);
-        getActivityLogInfo();
         setIsLoading({ loader: false, type: 'button' });
         IsSaveDataClicked(true);
         setShowModal(false);
@@ -228,7 +226,6 @@ EditAccountDetails.propTypes = {
     id: string,
   }).isRequired,
   setDocumentImage: arrayOf(shape({})),
-  getActivityLogInfo: func.isRequired,
   IsSaveDataClicked: func,
   setCustomer: func.isRequired,
 };
