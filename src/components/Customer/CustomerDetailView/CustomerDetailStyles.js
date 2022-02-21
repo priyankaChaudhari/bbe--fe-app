@@ -26,7 +26,7 @@ export const CustomerDetailsBody = styled.div`
     background: #f1f1f5;
     color: ${Theme.black};
     border: 0;
-    border-radius: 6px;
+    border-radius: 8px;
     display: inline-block;
     height: 38px;
     width: 92px;
@@ -34,7 +34,8 @@ export const CustomerDetailsBody = styled.div`
     img {
       vertical-align: middle;
       transform: rotate(90deg);
-      width: 27px !important;
+      width: 20px !important;
+      height: 25px !important;
     }
   }
   .add-more-people {
