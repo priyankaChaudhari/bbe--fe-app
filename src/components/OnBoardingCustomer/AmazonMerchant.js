@@ -957,6 +957,11 @@ export default function AmazonMerchant({
           </>
         )}
 
+        <p className="text-detail ml-3">
+          To continue, please fill up all the fields above. Please review the
+          information for each marketplace before continuing.
+        </p>
+
         {marketplaceDetails.type === 'Hybrid'
           ? generateBtn()
           : generateSaveBtn()}
