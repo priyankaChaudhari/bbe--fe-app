@@ -33,7 +33,6 @@ import {
   getVideoLink,
   verifyStepToken,
   getBillingDetails,
-  deleteAmazonAccount,
   getAmazonAccountDetails,
   getDSPContact,
 } from '../../api';
@@ -82,11 +81,11 @@ export default function MainContainer() {
     show: false,
     sameAsBilling: true,
   });
+  const [noAmazonAccount, setNoAmazonAccount] = useState(false);
+  const [secondaryMarketplaces, setSecondaryMarketplaces] = useState([]);
 
-  const [noAmazonAccount, setNoAmazonAccount] = useState({
-    Seller: false,
-    Vendor: false,
-  });
+  const [sellerMarketplaces, setSellerMarketplaces] = useState([]);
+  const [vendorMarketplaces, setVendorMarketplaces] = useState([]);
 
   const whichStep = [
     {
@@ -132,29 +131,198 @@ export default function MainContainer() {
   };
 
   const getAccountDetails = (id) => {
+    setIsLoading({ loader: true, type: 'page' });
     getAmazonAccountDetails(
       'amazon-account-details',
       localStorage.getItem('customer') || id,
     ).then((response) => {
       if (response && response.data) {
-        setNoAmazonAccount({
-          Seller:
-            response.data.Seller && response.data.Seller.no_amazon_account,
-          Vendor:
-            response.data.Vendor && response.data.Vendor.no_amazon_account,
-        });
+        if (response?.data?.account_type === 'Hybrid') {
+          setNoAmazonAccount(
+            !!(
+              response?.data?.Seller?.no_amazon_account &&
+              response?.data?.Vendor?.no_amazon_account
+            ),
+          );
+        } else {
+          setNoAmazonAccount(
+            response?.data?.[response?.data?.account_type]?.no_amazon_account ??
+              false,
+          );
+        }
 
         setMarketplaceDetails({
-          marketplace:
-            response.data.marketplace &&
-            response.data.marketplace.name &&
-            response.data.marketplace.name.label,
-          type: response.data.account_type,
-          marketplaceId:
-            response.data.marketplace && response.data.marketplace.id,
+          marketplace: response?.data?.marketplace?.name?.label,
+          type: response?.data?.account_type,
+          marketplaceId: response?.data?.marketplace?.id,
           Seller: response.data.marketplace && response.data.Seller,
           Vendor: response.data.marketplace && response.data.Vendor,
         });
+
+        let sellerData = [];
+        let vendorData = [];
+
+        // Combine primary & secondary marketplaces of Seller
+        if (response?.data?.Seller?.no_amazon_account) {
+          const secondarySellerData = response?.data?.secondary_marketplaces.map(
+            (entry) => {
+              return {
+                advertiser_name: entry?.Seller?.doesnt_advertise
+                  ? ' '
+                  : entry?.Seller?.advertiser_name,
+                advertiser_id: entry?.Seller?.doesnt_advertise
+                  ? ' '
+                  : entry?.Seller?.advertiser_id,
+                doesnt_advertise: entry?.Seller?.doesnt_advertise ?? false,
+                marketplace: entry?.id,
+                type: entry?.account_type,
+                id: entry?.Seller?.id,
+              };
+            },
+          );
+          const sortedSellerData = secondarySellerData.filter(
+            (entry) => entry.type === 'Seller',
+          );
+          sellerData = [
+            ...sortedSellerData,
+            {
+              seller_central_name: response?.data?.Seller?.seller_central_name,
+              merchant_id: response?.data?.Seller?.merchant_id,
+              advertiser_name: response?.data?.Seller?.advertiser_name,
+              advertiser_id: response?.data?.Seller?.advertiser_id,
+              marketplace: response?.data?.marketplace?.id,
+              id: response?.data?.Seller?.id,
+            },
+          ];
+        } else {
+          const secondarySellerData = response?.data?.secondary_marketplaces.map(
+            (entry) => {
+              return {
+                advertiser_name: entry?.Seller?.doesnt_advertise
+                  ? ' '
+                  : entry?.Seller?.advertiser_name,
+                advertiser_id: entry?.Seller?.doesnt_advertise
+                  ? ' '
+                  : entry?.Seller?.advertiser_id,
+                doesnt_advertise: entry?.Seller?.doesnt_advertise ?? false,
+                marketplace: entry?.id,
+                type: entry?.account_type,
+              };
+            },
+          );
+          const sortedSellerData = secondarySellerData.filter(
+            (entry) => entry.type === 'Seller',
+          );
+          sellerData = [
+            ...sortedSellerData,
+            {
+              seller_central_name: response?.data?.Seller?.seller_central_name,
+              merchant_id: response?.data?.Seller?.merchant_id,
+              advertiser_name: response?.data?.Seller?.advertiser_name,
+              advertiser_id: response?.data?.Seller?.advertiser_id,
+              marketplace: response?.data?.marketplace?.id,
+            },
+          ];
+        }
+
+        // Combine primary & secondary marketplaces of Vendor
+        if (response?.data?.Vendor?.no_amazon_account) {
+          const secondaryVendorData = response?.data?.secondary_marketplaces.map(
+            (entry) => {
+              return {
+                advertiser_name: entry?.Vendor?.doesnt_advertise
+                  ? ' '
+                  : entry?.Vendor?.advertiser_name,
+                advertiser_id: entry?.Vendor?.doesnt_advertise
+                  ? ' '
+                  : entry?.Vendor?.advertiser_id,
+                doesnt_advertise: entry?.Vendor?.doesnt_advertise ?? false,
+                marketplace: entry?.id,
+                type: entry?.account_type,
+                id: entry?.Vendor?.id,
+              };
+            },
+          );
+          const sortedVendorData = secondaryVendorData.filter(
+            (entry) => entry.type === 'Vendor',
+          );
+          vendorData = [
+            ...sortedVendorData,
+            {
+              vendor_central_name: response?.data?.Vendor?.vendor_central_name,
+              vendor_code: response?.data?.Vendor?.vendor_code,
+              advertiser_name: response?.data?.Vendor?.advertiser_name,
+              advertiser_id: response?.data?.Vendor?.advertiser_id,
+              marketplace: response?.data?.marketplace?.id,
+              id: response?.data?.Vendor?.id,
+            },
+          ];
+        } else {
+          const secondaryVendorData = response?.data?.secondary_marketplaces.map(
+            (entry) => {
+              return {
+                advertiser_name: entry?.Vendor?.doesnt_advertise
+                  ? ' '
+                  : entry?.Vendor?.advertiser_name,
+                advertiser_id: entry?.Vendor?.doesnt_advertise
+                  ? ' '
+                  : entry?.Vendor?.advertiser_id,
+                doesnt_advertise: entry?.Vendor?.doesnt_advertise ?? false,
+                marketplace: entry?.id,
+                type: entry?.account_type,
+              };
+            },
+          );
+          const sortedVendorData = secondaryVendorData.filter(
+            (entry) => entry.type === 'Vendor',
+          );
+          vendorData = [
+            ...sortedVendorData,
+            {
+              vendor_central_name: response?.data?.Vendor?.vendor_central_name,
+              vendor_code: response?.data?.Vendor?.vendor_code,
+              advertiser_name: response?.data?.Vendor?.advertiser_name,
+              advertiser_id: response?.data?.Vendor?.advertiser_id,
+              marketplace: response?.data?.marketplace?.id,
+            },
+          ];
+        }
+
+        const marketplaceNames = [];
+        const formattedSecondaryMarketplaces = [];
+
+        for (const marketplace of response?.data?.secondary_marketplaces) {
+          if (!marketplaceNames.includes(marketplace?.name?.value)) {
+            marketplaceNames.push(marketplace?.name?.value);
+            formattedSecondaryMarketplaces[marketplace?.name?.value] = {
+              name: marketplace?.name?.label,
+            };
+          }
+        }
+
+        for (const marketplace of response?.data?.secondary_marketplaces) {
+          if (marketplace.account_type === 'Seller') {
+            formattedSecondaryMarketplaces[
+              marketplace?.name?.value
+            ].seller_marketplace = marketplace;
+          } else {
+            formattedSecondaryMarketplaces[
+              marketplace?.name?.value
+            ].vendor_marketplace = marketplace;
+          }
+        }
+
+        const finalSecondaryMarketplace = [];
+
+        // eslint-disable-next-line guard-for-in
+        for (const key in formattedSecondaryMarketplaces) {
+          finalSecondaryMarketplace.push(formattedSecondaryMarketplaces[key]);
+        }
+
+        setSellerMarketplaces([...sellerData]);
+        setVendorMarketplaces([...vendorData]);
+        setSecondaryMarketplaces([...finalSecondaryMarketplace]);
+
         getVideoLink(localStorage.getItem('customer') || id, 'hybrid').then(
           (res) => {
             setVideoData(res.data);
@@ -163,6 +331,112 @@ export default function MainContainer() {
         setIsLoading({ loader: false, type: 'page' });
       }
     });
+  };
+
+  const addSellerID = () => {
+    const secondarySellerData = secondaryMarketplaces.map((entry) => {
+      const sellerFields = {
+        advertiser_name: entry?.seller_marketplace?.Seller?.doesnt_advertise
+          ? ' '
+          : entry?.seller_marketplace?.Seller?.advertiser_name,
+        advertiser_id: entry?.seller_marketplace?.Seller?.doesnt_advertise
+          ? ' '
+          : entry?.seller_marketplace?.Seller?.advertiser_id,
+        doesnt_advertise:
+          entry?.seller_marketplace?.Seller?.doesnt_advertise ?? false,
+        type: entry?.seller_marketplace?.account_type,
+        marketplace: entry?.seller_marketplace?.id,
+      };
+
+      if (entry?.seller_marketplace?.Seller?.id) {
+        sellerFields.id = entry?.seller_marketplace?.Seller?.id;
+      }
+      return sellerFields;
+    });
+
+    const sortedSellerData = secondarySellerData.filter(
+      (entry) => entry.type === 'Seller',
+    );
+
+    const primarySellerData = [
+      {
+        seller_central_name: marketplaceDetails?.Seller?.seller_central_name,
+        merchant_id: marketplaceDetails?.Seller?.merchant_id,
+        advertiser_name: marketplaceDetails?.Seller?.advertiser_name,
+        advertiser_id: marketplaceDetails?.Seller?.advertiser_id,
+        marketplace: marketplaceDetails?.marketplaceId,
+      },
+    ];
+
+    if (marketplaceDetails?.Seller?.id) {
+      primarySellerData[0].id = marketplaceDetails?.Seller?.id;
+    }
+
+    const sellerData = [...sortedSellerData, ...primarySellerData];
+
+    setSellerMarketplaces([...sellerData]);
+  };
+
+  const addVendorID = () => {
+    // console.log('secondary marketplaces vendor', secondaryMarketplaces);
+    const secondaryVendorData = secondaryMarketplaces.map((entry) => {
+      const vendorFields = {
+        advertiser_name: entry?.vendor_marketplace?.Vendor?.doesnt_advertise
+          ? ' '
+          : entry?.vendor_marketplace?.Vendor?.advertiser_name,
+        advertiser_id: entry?.vendor_marketplace?.Vendor?.doesnt_advertise
+          ? ' '
+          : entry?.vendor_marketplace?.Vendor?.advertiser_id,
+        doesnt_advertise:
+          entry?.vendor_marketplace?.Vendor?.doesnt_advertise ?? false,
+        type: entry?.vendor_marketplace?.account_type,
+        marketplace: entry?.vendor_marketplace?.id,
+      };
+
+      if (entry?.vendor_marketplace?.Vendor?.id) {
+        vendorFields.id = entry?.vendor_marketplace?.Vendor?.id;
+      }
+      return vendorFields;
+    });
+
+    const sortedVendorData = secondaryVendorData.filter(
+      (entry) => entry.type === 'Vendor',
+    );
+
+    const primaryVendorData = [
+      {
+        vendor_central_name: marketplaceDetails?.Vendor?.vendor_central_name,
+        vendor_code: marketplaceDetails?.Vendor?.vendor_code,
+        advertiser_name: marketplaceDetails?.Vendor?.advertiser_name,
+        advertiser_id: marketplaceDetails?.Vendor?.advertiser_id,
+        marketplace: marketplaceDetails?.marketplaceId,
+      },
+    ];
+
+    if (marketplaceDetails?.Vendor?.id) {
+      primaryVendorData[0].id = marketplaceDetails?.Vendor?.id;
+    }
+
+    const vendorData = [...sortedVendorData, ...primaryVendorData];
+
+    setVendorMarketplaces([...vendorData]);
+  };
+
+  const handleUpdate = () => {
+    switch (marketplaceDetails?.type) {
+      case 'Seller':
+        addSellerID();
+        break;
+      case 'Vendor':
+        addVendorID();
+        break;
+      case 'Hybrid':
+        addSellerID();
+        addVendorID();
+        break;
+      default:
+        break;
+    }
   };
 
   const getOnboardingStepData = (customerId) => {
@@ -372,6 +646,11 @@ export default function MainContainer() {
           setMarketplaceDetails={setMarketplaceDetails}
           setFormData={setFormData}
           formData={formData}
+          secondaryMarketplaces={secondaryMarketplaces}
+          sellerMarketplaces={sellerMarketplaces}
+          setSellerMarketplaces={setSellerMarketplaces}
+          vendorMarketplaces={vendorMarketplaces}
+          setVendorMarketplaces={setVendorMarketplaces}
         />
       );
     return '';
@@ -411,63 +690,18 @@ export default function MainContainer() {
         }>
         <label
           className="check-container customer-pannel "
-          htmlFor={
-            marketplaceDetails.type === 'Hybrid'
-              ? 'Seller'
-              : marketplaceDetails.type
-          }>
-          {marketplaceDetails && marketplaceDetails.type === 'Hybrid'
-            ? "Our company hasn't setup an Amazon Seller account yet"
-            : "Our company hasn't setup an Amazon account yet"}
+          htmlFor="no_amazon_account">
+          I don&apos;t have an Amazon account yet
           <input
             type="checkbox"
-            id={
-              marketplaceDetails.type === 'Hybrid'
-                ? 'Seller'
-                : marketplaceDetails.type
-            }
-            name={
-              marketplaceDetails.type === 'Hybrid'
-                ? 'Seller'
-                : marketplaceDetails.type
-            }
-            onChange={(event) => {
-              setNoAmazonAccount({
-                ...noAmazonAccount,
-                [marketplaceDetails.type === 'Hybrid'
-                  ? 'Seller'
-                  : marketplaceDetails.type]: event.target.checked,
-              });
-              setDisableBtn(false);
-              setApiError({});
-              if (
-                event.target.checked === false &&
-                history.location.pathname.includes(PATH_AMAZON_MERCHANT) &&
-                marketplaceDetails.Seller &&
-                marketplaceDetails.Seller.id
-              ) {
-                deleteAmazonAccount(
-                  'seller',
-                  marketplaceDetails.Seller.id,
-                ).then((res) => {
-                  if (res && res.status === 204) {
-                    setMarketplaceDetails({
-                      ...marketplaceDetails,
-                      Seller: {},
-                      Vendor: formData.Vendor || marketplaceDetails.Vendor,
-                    });
-                  }
-                });
-              }
+            id="no_amazon_account"
+            name="no_amazon_account"
+            onChange={() => {
+              setNoAmazonAccount(!noAmazonAccount);
+              handleUpdate();
             }}
             readOnly
-            checked={
-              noAmazonAccount[
-                marketplaceDetails.type === 'Hybrid'
-                  ? 'Seller'
-                  : marketplaceDetails.type
-              ]
-            }
+            checked={noAmazonAccount}
           />
           <span className="checkmark" />
         </label>

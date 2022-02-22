@@ -107,6 +107,10 @@ export const API_VERIFY_USER = `${API_USER}verify-user/`;
 export const API_AMAZON_ACCOUNT_DETAILS = `${API_CUSTOMER}:id/account-step-details/`;
 export const API_AMAZON_SELLER_ACCOUNT = '/seller-central/';
 export const API_AMAZON_VENDOR_ACCOUNT = '/vendor-central/';
+export const API_AMAZON_SELLER_CENTRAL_BULK_CREATE = `${API_AMAZON_SELLER_ACCOUNT}bulk-create/`;
+export const API_AMAZON_VENDOR_CENTRAL_BULK_CREATE = `${API_AMAZON_VENDOR_ACCOUNT}bulk-create/`;
+export const API_AMAZON_SELLER_CENTRAL_BULK_UPDATE = `${API_AMAZON_SELLER_ACCOUNT}bulk-update/`;
+export const API_AMAZON_VENDOR_CENTRAL_BULK_UPDATE = `${API_AMAZON_VENDOR_ACCOUNT}bulk-update/`;
 
 // Brand Assets
 export const API_ACCOUNT_ASSIGNEE_COUNT = `${API_CUSTOMER}:id/account-setup-completion/`;

@@ -188,6 +188,7 @@ import ReminderBell from './icons/reminder-bell-icons.png';
 import helpCircleIcon from './icons/helpCircleIcon.png';
 import HomePageIcon from './icons/home-page.png';
 import HomePageActiveIcon from './icons/home-page-active.png';
+import GreyClockIcon from './icons/grey-clock-icon.svg';
 
 export {
   BannerBg,
@@ -380,4 +381,5 @@ export {
   ReminderBell,
   HomePageIcon,
   HomePageActiveIcon,
+  GreyClockIcon,
 };
