@@ -54,7 +54,8 @@ export default function AgreementSellerVendorDetails({
           ?.threshold_type === 'Fixed'
       )
         return `Fixed ($${
-          agreement?.fee_structure?.[accountType[agreement.id]]?.sales_threshold
+          agreement?.fee_structure?.[accountType[agreement.id]]
+            ?.sales_threshold || 0
         })`;
       return (
         agreement?.fee_structure?.[accountType[agreement.id]]?.threshold_type ||
