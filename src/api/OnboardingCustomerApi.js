@@ -15,6 +15,10 @@ import {
   API_VERIFY_TOKEN,
   API_VERIFY_USER,
   API_VIDEO_LINKS,
+  API_AMAZON_SELLER_CENTRAL_BULK_CREATE,
+  API_AMAZON_VENDOR_CENTRAL_BULK_CREATE,
+  API_AMAZON_SELLER_CENTRAL_BULK_UPDATE,
+  API_AMAZON_VENDOR_CENTRAL_BULK_UPDATE,
 } from '../constants';
 
 export async function updateOnBoardCustomer(id, data) {
@@ -248,6 +252,58 @@ export async function saveAmazonVendorAccount(data, id, NoAmazonAccount) {
   }
   const result = await axiosInstance
     .post(API_AMAZON_VENDOR_ACCOUNT, data, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+//  Bulk create Seller primary & secondary marketplaces for Amazaon Account
+export async function saveAmazonSellerMarketplaces(data, id, noAmazonAccount) {
+  const params = { no_amazon_account: noAmazonAccount };
+
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_AMAZON_SELLER_CENTRAL_BULK_UPDATE}`, data, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(API_AMAZON_SELLER_CENTRAL_BULK_CREATE, data, { params })
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}
+
+//  Bulk create Vendor primary & secondary marketplaces for Amazaon Account
+export async function saveAmazonVendorMarketplaces(data, id, noAmazonAccount) {
+  const params = { no_amazon_account: noAmazonAccount };
+
+  if (id) {
+    const result = await axiosInstance
+      .patch(`${API_AMAZON_VENDOR_CENTRAL_BULK_UPDATE}`, data, { params })
+      .then((response) => {
+        return response;
+      })
+      .catch((error) => {
+        return error.response;
+      });
+    return result;
+  }
+  const result = await axiosInstance
+    .post(API_AMAZON_VENDOR_CENTRAL_BULK_CREATE, data, { params })
     .then((response) => {
       return response;
     })

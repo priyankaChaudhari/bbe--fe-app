@@ -178,13 +178,12 @@ export default function AskSomeone({
         className={
           (isLoading.loader && isLoading.type === 'check') ||
           (accountType === 'Hybrid'
-            ? noAmazonAccount.Seller &&
-              noAmazonAccount.Vendor &&
+            ? noAmazonAccount &&
               (stepData.email === undefined ||
                 stepData.email === '' ||
                 stepData.email === userInfo.email) &&
               stepData.is_completed
-            : noAmazonAccount[accountType] && !isChecked)
+            : noAmazonAccount && !isChecked)
             ? 'mt-1 mb-4 isDisabled'
             : 'mt-1 mb-4'
         }>
@@ -308,7 +307,7 @@ AskSomeone.defaultProps = {
   stepData: {},
   setDisableBtn: () => {},
   setOpenCollapse: () => {},
-  noAmazonAccount: { Seller: false, Vendor: false },
+  noAmazonAccount: false,
   accountType: null,
 };
 
@@ -334,9 +333,6 @@ AskSomeone.propTypes = {
   }),
   setDisableBtn: func,
   setOpenCollapse: func,
-  noAmazonAccount: shape({
-    Seller: bool,
-    Vendor: bool,
-  }),
+  noAmazonAccount: bool,
   accountType: string,
 };

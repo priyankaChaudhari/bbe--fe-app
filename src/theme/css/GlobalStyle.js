@@ -255,6 +255,11 @@ h6 {
   font-size: ${Theme.title};
   font-family: ${Theme.baseFontFamily};
   margin: 0;
+
+  &.small-title {
+    font-size: ${Theme.extraMedium};
+    font-family: ${Theme.titleFontFamily};
+  }
 }
 
 .medium-text-title {
@@ -314,6 +319,11 @@ p {
     color: ${Theme.black};
     font-size: ${Theme.normal};
   }
+  &.normal-text-grey {
+    color: ${Theme.gray80};
+    font-size: ${Theme.normal};
+  }
+
   &.no-result-found {
     color: ${Theme.gray40};
     font-size: ${Theme.normal};
