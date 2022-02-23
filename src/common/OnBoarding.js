@@ -31,6 +31,35 @@ const OnBoardingBody = styled.div`
     min-height: calc(100% - 70px);
   }
 
+  .amazon-merchant-collapse {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    li {
+      display: block;
+
+      .completed-status {
+        font-size: ${Theme.normal};
+        font-weight: 600;
+        .orange-check-collapse {
+          vertical-align: middle;
+        }
+      }
+      .orange-arrowdown-collapse {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  .seller-collapse {
+    height: 330px !important;
+  }
+
+  .vendor-collapse {
+    height: 325px !important;
+  }
+
   .white-card-base {
     background-color: ${Theme.white};
     border-radius: 8px;
@@ -162,6 +191,11 @@ const OnBoardingBody = styled.div`
         text-decoration: underline;
       }
     }
+    .open-link {
+      color: ${Theme.orange};
+      font-size: ${Theme.extraSmall};
+    }
+
     .info-text-gray {
       color: ${Theme.gray40};
       font-size: 14px;

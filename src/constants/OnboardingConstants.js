@@ -209,7 +209,7 @@ export const amazonSellerAccountDetails = [
   },
   { key: 'merchant_id', label: 'Merchant ID', section: 1 },
   { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
-  { key: 'advertiser_id', label: 'Advertiser Entity ID', section: 2 },
+  { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
 ];
 
 export const amazonVendorAccountDetails = [
@@ -220,7 +220,7 @@ export const amazonVendorAccountDetails = [
   },
   { key: 'vendor_code', label: 'Vendor Code', section: 1 },
   { key: 'advertiser_name', label: 'Advertiser Name', section: 2 },
-  { key: 'advertiser_id', label: 'Advertiser Entity ID', section: 2 },
+  { key: 'advertiser_id', label: 'Advertiser ID', section: 2 },
 ];
 
 export const authorizeLink =
