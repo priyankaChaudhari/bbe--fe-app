@@ -99,14 +99,16 @@ export default function AmazonAccount({ marketplaceData, customStyles }) {
   const singleMarketplaceOption = (dataProps) => (
     <SingleValue {...dataProps}>
       <span style={{ fontSize: '15px', color: '#000000' }}>
-        {dataProps.data.label} {dataProps.data.is_primary ? '(primary)' : ''}
+        {dataProps.data.label} {dataProps.data.is_primary}
+        {/* {dataProps.data.label} {dataProps.data.is_primary ? '(primary)' : ''} */}
       </span>
     </SingleValue>
   );
 
   const IconOption = (dataProps) => (
     <Option {...dataProps}>
-      {dataProps.data.label} {dataProps.data.is_primary ? '(primary)' : ''}
+      {dataProps.data.label} {dataProps.data.is_primary}
+      {/* {dataProps.data.label} {dataProps.data.is_primary ? '(primary)' : ''} */}
     </Option>
   );
 
