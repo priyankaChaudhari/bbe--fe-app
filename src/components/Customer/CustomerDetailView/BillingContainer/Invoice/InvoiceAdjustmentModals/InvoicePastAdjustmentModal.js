@@ -151,7 +151,16 @@ const InvoicePastAdjustmntModal = ({
           </div>
         </td>
         <td width="20%" className="small-label-text">
-          ${item.to_amount === null ? 0 : addThousandComma(item.to_amount, 0)}
+          $
+          {item.to_amount === null
+            ? 0
+            : addThousandComma(
+                item.to_amount +
+                  (item?.dsp_invoice_subtype.toLowerCase() === 'one time'
+                    ? item.from_amount
+                    : 0),
+                0,
+              )}
           <div className="marketplace">
             {item.to_date === 'Ongoing'
               ? item.to_date
@@ -280,7 +289,14 @@ const InvoicePastAdjustmntModal = ({
                         <div className="type">{`$${
                           item.to_amount === null
                             ? 0
-                            : addThousandComma(item.to_amount, 0)
+                            : addThousandComma(
+                                item.to_amount +
+                                  (item?.dsp_invoice_subtype.toLowerCase() ===
+                                  'one time'
+                                    ? item.from_amount
+                                    : 0),
+                                0,
+                              )
                         }`}</div>
                         <div className="marketplace">
                           {item.to_date === 'Ongoing'
