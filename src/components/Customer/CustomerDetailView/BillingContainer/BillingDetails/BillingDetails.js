@@ -115,7 +115,10 @@ export default function BillingDetails({
       if (res?.status === 200) {
         setFormData({ ...formData, dsp_contact: res?.data?.results?.[0] });
         if (res?.data?.is_dsp_contract) {
-          if (userInfo?.role === 'Customer') {
+          if (
+            userInfo?.role === 'Customer' ||
+            dspSignOffRoles.userRole[userInfo?.role]
+          ) {
             setShowDSPEdit(true);
           } else {
             for (const user of memberData) {
