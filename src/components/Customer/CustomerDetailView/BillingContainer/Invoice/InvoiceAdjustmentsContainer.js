@@ -6,7 +6,6 @@ import { arrayOf, func, shape, string } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 
 import InvoiceAdjustmentList from './InvoiceAdjustmentList';
-import { getDSPContact } from '../../../../../api';
 import { dspSignOffRoles } from '../../../../../constants';
 import { WhiteCard, Button } from '../../../../../common';
 import {
@@ -34,26 +33,46 @@ const InvoiceAdjustmentsContainer = ({
   const [count, setCount] = useState(0);
 
   const getDSPContactInfo = useCallback(() => {
-    getDSPContact(id).then((res) => {
-      if (res?.status === 200) {
-        if (dspSignOffRoles.userRole[userInfo?.role]) {
-          setIsAllowToCreateAdjustment(true);
-        } else if (res?.data?.is_dsp_contract) {
-          for (const user of memberData) {
-            if (user.user) {
-              if (
-                dspSignOffRoles.grpRole[user?.role_group?.name] &&
-                user?.user?.id === userInfo?.id
-              ) {
-                setIsAllowToCreateAdjustment(true);
-                break;
-              }
-            }
+    if (dspSignOffRoles.userRole[userInfo?.role]) {
+      setIsAllowToCreateAdjustment(true);
+    } else {
+      for (const user of memberData) {
+        if (user.user) {
+          if (
+            dspSignOffRoles.grpRole[user?.role_group?.name] &&
+            user?.user?.id === userInfo?.id
+          ) {
+            setIsAllowToCreateAdjustment(true);
+            break;
           }
         }
-      } else setIsAllowToCreateAdjustment(false);
-    });
-  }, [id, userInfo, memberData]);
+      }
+    }
+  }, [memberData, userInfo?.id, userInfo?.role]);
+
+  // ***********PLEASE NOT REMOVE THIS COMMENTED CODE***********
+
+  // const getDSPContactInfo = useCallback(() => {
+  //   getDSPContact(id).then((res) => {
+  //     if (res?.status === 200) {
+  //       if (dspSignOffRoles.userRole[userInfo?.role]) {
+  //         setIsAllowToCreateAdjustment(true);
+  //       } else if (res?.data?.is_dsp_contract) {
+  //         for (const user of memberData) {
+  //           if (user.user) {
+  //             if (
+  //               dspSignOffRoles.grpRole[user?.role_group?.name] &&
+  //               user?.user?.id === userInfo?.id
+  //             ) {
+  //               setIsAllowToCreateAdjustment(true);
+  //               break;
+  //             }
+  //           }
+  //         }
+  //       }
+  //     } else setIsAllowToCreateAdjustment(false);
+  //   });
+  // }, [id, userInfo, memberData]);
 
   useEffect(() => {
     getDSPContactInfo();
