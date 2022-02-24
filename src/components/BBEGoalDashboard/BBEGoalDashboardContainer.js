@@ -117,7 +117,9 @@ export default function BBEGoalDashboardContainer() {
         <div className="dashboard-container-body ">
           <div className="row">
             <div className="col-lg-8 col-md-8 col-6">
-              <h5 className="sub-title-text">Business Performance Snapshot</h5>
+              <h5 style={{ fontWeight: '500' }} className="sub-title-text">
+                Business Performance Snapshot
+              </h5>
               {updatedDate && (
                 <div className="sub-heading ">Last Updated {updatedDate}</div>
               )}

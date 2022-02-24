@@ -2,6 +2,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 import Theme from '../Theme';
+import NoahMedium from '../fonts/Noah/Noah/WEB/Noah-Medium.woff';
 import NoahBold from '../fonts/Noah/Noah/WEB/Noah-Bold.woff';
 import NoahRegular from '../fonts/Noah/Noah/WEB/Noah-Regular.woff';
 import NoahRegularItalic from '../fonts/Noah/Noah/WEB/Noah-RegularItalic.woff';
@@ -13,6 +14,11 @@ import HelveticaBold from '../fonts/Helvetica-Font/Helvetica-Bold.ttf';
 import { CalendarFontBackArrow } from '../images';
 
 const bodyStyles = createGlobalStyle`
+
+@font-face {
+  font-family: 'Noah-Medium';
+  src: url(${NoahMedium});
+}
 
   @font-face {
     font-family: 'Noah-Bold';
