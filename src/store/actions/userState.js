@@ -12,8 +12,6 @@ import {
   API_LOGIN,
   API_USER_ME,
   API_LOGOUT,
-} from '../../constants/ApiConstants';
-import {
   PATH_LOGIN,
   PATH_CUSTOMER_LIST,
   PATH_CUSTOMER_DETAILS,
@@ -23,7 +21,7 @@ import {
   PATH_BILLING_DETAILS,
   PATH_ACCOUNT_SETUP_CHOOSE,
   PATH_BBE_GOAL_DASHBOARD,
-} from '../../constants/index';
+} from '../../constants';
 
 export const userRequestInitiated = () => {
   return {
