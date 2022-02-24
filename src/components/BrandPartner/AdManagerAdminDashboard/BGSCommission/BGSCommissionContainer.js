@@ -208,7 +208,7 @@ const BGSCommissionContainer = () => {
               onChange={(date) => onDateChange(date)}
               startDate={range[0]}
               endDate={range[1]}
-              maxDate={new Date()}
+              maxDate={currentDate}
               selectsRange
               inline
               dateFormat="MM/yyyy"
