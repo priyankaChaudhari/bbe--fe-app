@@ -350,6 +350,10 @@ p {
       margin: 0;
     }
   }
+  &.in-active {
+    color:${Theme.gray25};
+    font-size: ${Theme.extraNormal};
+  }
 
   &.text-detail {
     color: ${Theme.gray90};
@@ -408,6 +412,8 @@ p {
       }
     }
   }
+
+  
 
   .radio-container {
     display: block;

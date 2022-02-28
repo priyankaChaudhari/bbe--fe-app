@@ -48,7 +48,7 @@ const InvoiceAdjustmentsContainer = ({
         }
       }
     }
-  }, [memberData, userInfo?.id, userInfo?.role]);
+  }, [memberData, userInfo]);
 
   // ***********PLEASE NOT REMOVE THIS COMMENTED CODE***********
 

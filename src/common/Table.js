@@ -16,6 +16,10 @@ const Table = styled.table`
     border-radius: 1px;
     font-family: ${Theme.baseFontFamily};
     width: 100%;
+    &.border-bottom td {
+      border-bottom: 1px solid ${Theme.gray11};
+    }
+
     th {
       padding: 13px 0px;
       text-transform: uppercase;

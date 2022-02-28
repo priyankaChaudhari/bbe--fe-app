@@ -10,6 +10,7 @@ import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 import Header from './Header';
 import LeftSideBar from './LeftSideBar';
 import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
+import ReportsSectionContainer from '../components/ReportsSection/ReportsSectionContainer';
 import { BBEGoalDashboardContainer } from '../components/BBEGoalDashboard';
 
 import { userMe } from '../store/actions/index';
@@ -53,6 +54,7 @@ import {
   PATH_FINANCE_DASHBOARD,
   PATH_BGS_ADMIN_DASHBOARD,
   PATH_BBE_GOAL_DASHBOARD,
+  PATH_REPORTS_SECTION,
 } from '../constants';
 
 export default function AuthenticationComponent() {
@@ -159,6 +161,12 @@ export default function AuthenticationComponent() {
           <Route
             path={PATH_BBE_GOAL_DASHBOARD}
             component={BBEGoalDashboardContainer}
+          />
+
+          {/* Report Section */}
+          <Route
+            path={PATH_REPORTS_SECTION}
+            component={ReportsSectionContainer}
           />
 
           {/* AD MANAGER DASHBOARD, BGS DASHBOARD, FINANCE DASHBOARD PATH */}

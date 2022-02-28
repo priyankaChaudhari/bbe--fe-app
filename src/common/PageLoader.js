@@ -123,6 +123,10 @@ const ButtonLoaderCss = styled.div`
     width: 20px;
     height: 20px;
   }
+
+  &.table-download-btn {
+    text-align: right;
+  }
 `;
 
 export default function PageLoader({
@@ -194,11 +198,16 @@ export default function PageLoader({
       </SideBarLoader>
     );
   }
-  return (
-    <ButtonLoaderCss>
-      <Loader type="Bars" color={color} height={18} width={100} />
-    </ButtonLoaderCss>
-  );
+  if (type === 'button') {
+    return (
+      <ButtonLoaderCss
+        className={
+          component === 'table-download-btn' ? 'table-download-btn' : ''
+        }>
+        <Loader type="Bars" color={color} height={18} width={100} />
+      </ButtonLoaderCss>
+    );
+  }
 }
 
 PageLoader.defaultProps = {

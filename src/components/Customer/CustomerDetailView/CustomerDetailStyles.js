@@ -9,6 +9,7 @@ export const CustomerDetailsBody = styled.div`
   padding-left: ${(props) =>
     props.role.includes('Customer') ? '45px' : '109px'};
   padding-right: 45px;
+
   .back-btn-link {
     color: ${Theme.gray85};
     font-size: ${Theme.extraNormal};

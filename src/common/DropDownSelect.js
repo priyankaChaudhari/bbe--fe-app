@@ -222,7 +222,7 @@ const DropDownSelect = styled.div`
       cursor: pointer;
       caret-color: transparent;
       .css-b8ldur-Input {
-        color: ${Theme.white};
+        color: ${(props) => props.inputColor || Theme.white};
       }
 
       .cross-icon {

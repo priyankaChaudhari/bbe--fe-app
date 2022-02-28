@@ -14,6 +14,8 @@ import {
   Speedometer,
   HomePageActiveIcon,
   HomePageIcon,
+  GraphIconActive,
+  GraphIconInActive,
 } from '../theme/images';
 
 import {
@@ -23,6 +25,7 @@ import {
   roleURLs,
   dashboardRolePaths,
   dashboardRole,
+  PATH_REPORTS_SECTION,
 } from '../constants';
 
 export default function LeftSideBar({ userInfo }) {
@@ -104,6 +107,29 @@ export default function LeftSideBar({ userInfo }) {
             onClick={() => history.push(PATH_ARTICLE_LIST)}>
             <img className="read-book-active" src={ReadBookIconActive} alt="" />
             <img className="read-book" src={ReadBookIcon} alt="" />
+          </li>
+
+          <li
+            className={
+              history.location.pathname?.includes('reports')
+                ? ' cursor active'
+                : ' cursor'
+            }
+            role="presentation"
+            onClick={() => history.push(PATH_REPORTS_SECTION)}>
+            {' '}
+            <img
+              width="28px"
+              className=" home-page-icon active"
+              src={GraphIconActive}
+              alt=""
+            />
+            <img
+              width="28px"
+              className=" home-page-icon  disactive"
+              src={GraphIconInActive}
+              alt=""
+            />
           </li>
         </ul>
       </LeftSideBars>
