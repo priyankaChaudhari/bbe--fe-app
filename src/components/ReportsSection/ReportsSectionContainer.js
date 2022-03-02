@@ -344,19 +344,17 @@ function ReportsSectionContainer() {
 
   const displayHeader = () => {
     return (
-      <>
-        <div className="dashboard-header-sticky">
-          <div className="container-fluid">
-            <div className="row">
-              <div className="col-lg-3 col-md-12">
-                <p className="black-heading-title ml-1 pt-1">Reports</p>
-              </div>
-
-              <div className="straight-line horizontal-line  d-lg-none d-md-block" />
+      <div className="dashboard-header-sticky">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-lg-3 col-md-12">
+              <p className="black-heading-title ml-1 pt-1">Reports</p>
             </div>
+
+            <div className="straight-line horizontal-line  d-lg-none d-md-block" />
           </div>
         </div>
-      </>
+      </div>
     );
   };
 

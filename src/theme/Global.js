@@ -263,9 +263,8 @@ export const BrandPartnerDashboard = styled.div`
 
 export const DashboardCard = styled.div`
   background: ${Theme.gray6};
-  height: 90vh;
   padding-top: 70px;
-  /* height: 100%; */
+  min-height: calc(100% - 120px);
 
   .dashboard-container-body {
     max-width: 1220px;
