@@ -4,18 +4,17 @@ import Modal from 'react-modal';
 import { useMediaQuery } from 'react-responsive';
 import { bool, func, shape, string } from 'prop-types';
 
+import Theme from '../../../../../theme/Theme';
 import { CloseIcon } from '../../../../../theme/images';
 import { CommissionResseque } from '../BGSCommissionContainerStyle';
 import { getBgsBrandPartners } from '../../../../../api';
 import { commissionsTableheader } from '../../../../../constants';
-
 import {
   HeaderDownloadFuntionality,
   ModalBox,
   PageLoader,
   TableGap,
 } from '../../../../../common';
-import numberWithCommas from '../../../../../hooks/numberWithCommas';
 
 const BrandPartnerModal = ({
   showModal,
@@ -23,6 +22,7 @@ const BrandPartnerModal = ({
   Bgs,
   startDate,
   endDate,
+  formatNumber,
 }) => {
   const isDesktop = useMediaQuery({ minWidth: 992 });
 
@@ -82,7 +82,7 @@ const BrandPartnerModal = ({
       {isLoading ? (
         <PageLoader
           component="comission-modal-loader"
-          color="#FF5933"
+          color={Theme.orange}
           type="page"
         />
       ) : (
@@ -138,18 +138,18 @@ const BrandPartnerModal = ({
                           {brandPartners?.records.map((partner) => (
                             <tr className="partners" key={partner.id}>
                               <td width="10%">{partner.company_name}</td>
-                              <td width="10%">{`$${numberWithCommas(
-                                partner.retainer,
-                              )}`}</td>
-                              <td width="10%">{`$${numberWithCommas(
-                                partner.rev_share,
-                              )}`}</td>
-                              <td width="8%">{`$${numberWithCommas(
-                                partner.dsp,
-                              )}`}</td>
-                              <td width="12%">{`$${numberWithCommas(
-                                partner.total_book_size,
-                              )}`}</td>
+                              <td width="10%">
+                                {formatNumber(partner.retainer, '$')}
+                              </td>
+                              <td width="10%">
+                                {formatNumber(partner.rev_share, '$')}
+                              </td>
+                              <td width="8%">
+                                {formatNumber(partner.dsp, '$')}
+                              </td>
+                              <td width="12%">
+                                {formatNumber(partner.total_book_size, '$')}
+                              </td>
                               <td width="12%" className="text-bold">
                                 -
                               </td>
@@ -158,7 +158,7 @@ const BrandPartnerModal = ({
                                   ? '-'
                                   : partner.upsell === null
                                   ? '$0.0'
-                                  : `$${numberWithCommas(partner.upsell)}`}
+                                  : formatNumber(partner.upsell, '$')}
                               </td>
                               <td width="12%" className="text-bold">
                                 {partner.upsell_commission === null &&
@@ -166,9 +166,10 @@ const BrandPartnerModal = ({
                                   ? '-'
                                   : partner.upsell_commission === null
                                   ? '$0.0'
-                                  : `$${numberWithCommas(
+                                  : formatNumber(
                                       partner.upsell_commission,
-                                    )}`}
+                                      '$',
+                                    )}
                               </td>
                               <td width="10%" className="text-bold">
                                 -
@@ -180,37 +181,41 @@ const BrandPartnerModal = ({
 
                           <tr className="all-partners">
                             <td width="10%">All Partners</td>
-                            <td width="10%">{`$${numberWithCommas(
-                              brandPartners.total.retainer,
-                            )}`}</td>
-                            <td width="10%">{`$${numberWithCommas(
-                              brandPartners.total.rev_share,
-                            )}`}</td>
-                            <td width="8%">{`$${numberWithCommas(
-                              brandPartners.total.dsp,
-                            )}`}</td>
+                            <td width="10%">
+                              {formatNumber(brandPartners.total.retainer, '$')}
+                            </td>
+                            <td width="10%">
+                              {formatNumber(brandPartners.total.rev_share, '$')}
+                            </td>
+                            <td width="8%">
+                              {formatNumber(brandPartners.total.dsp, '$')}
+                            </td>
                             <td width="12%">
-                              {`$${numberWithCommas(
+                              {formatNumber(
                                 brandPartners.total.total_book_size,
-                              )}`}
+                                '$',
+                              )}
                             </td>
                             <td width="12%" className="text-bold">
-                              {`$${numberWithCommas(
+                              {formatNumber(
                                 brandPartners.total.total_book_size_commission,
-                              )}`}
+                                '$',
+                              )}
                             </td>
-                            <td width="8%">{`$${numberWithCommas(
-                              brandPartners.total.upsell,
-                            )}`}</td>
+                            <td width="8%">
+                              {formatNumber(brandPartners.total.upsell, '$')}
+                            </td>
                             <td width="12%" className="text-bold">
-                              {`$${numberWithCommas(
+                              {formatNumber(
                                 brandPartners.total.upsell_commission,
-                              )}`}
+                                '$',
+                              )}
                             </td>
                             <td width="10%" className="text-bold">
-                              {`$${numberWithCommas(
+                              {formatNumber(
                                 brandPartners.total.total_commission,
-                              )}`}
+                                '$',
+                              )}
                             </td>
                           </tr>
                         </tbody>
@@ -240,26 +245,26 @@ const BrandPartnerModal = ({
                           </li>
                           <li>
                             <div className="label">retainer</div>
-                            <div className="label-info">{`$${numberWithCommas(
-                              partner.retainer,
-                            )}`}</div>
+                            <div className="label-info">
+                              {formatNumber(partner.retainer, '$')}
+                            </div>
                           </li>
                           <li>
                             <div className="label">rev share</div>
-                            <div className="label-info">{`$${numberWithCommas(
-                              partner.rev_share,
-                            )}`}</div>
+                            <div className="label-info">
+                              {formatNumber(partner.rev_share, '$')}
+                            </div>
                           </li>
                           <li>
                             <div className="label">DSP</div>
                             <div className="label-info">
-                              {`$${numberWithCommas(partner.dsp)}`}
+                              {formatNumber(partner.dsp, '$')}
                             </div>
                           </li>
                           <li>
                             <div className="label">total Book Size</div>
                             <div className="label-info ">
-                              {`$${numberWithCommas(partner.total_book_size)}`}
+                              {formatNumber(partner.total_book_size, '$')}
                             </div>
                           </li>
                           <li>
@@ -271,7 +276,7 @@ const BrandPartnerModal = ({
                             <div className="label-info label-info-dark">
                               {partner.upsell === null
                                 ? '-'
-                                : numberWithCommas(partner.upsell)}
+                                : formatNumber(partner.upsell, '$')}
                             </div>
                           </li>
                           <li>
@@ -279,9 +284,7 @@ const BrandPartnerModal = ({
                             <div className="label-info label-info-dark ">
                               {partner.upsell_commission === null
                                 ? '-'
-                                : `$${numberWithCommas(
-                                    partner.upsell_commission,
-                                  )}`}
+                                : formatNumber(partner.upsell_commission, '$')}
                             </div>
                           </li>
                           <li>
@@ -301,59 +304,61 @@ const BrandPartnerModal = ({
                       <li>
                         <div className="label">retainer</div>
                         <div className="label-info">
-                          {`$${numberWithCommas(brandPartners.total.retainer)}`}
+                          {formatNumber(brandPartners.total.retainer, '$')}
                         </div>
                       </li>
                       <li>
                         <div className="label">rev share</div>
                         <div className="label-info">
-                          {`$${numberWithCommas(
-                            brandPartners.total.rev_share,
-                          )}`}
+                          {formatNumber(brandPartners.total.rev_share, '$')}
                         </div>
                       </li>
                       <li>
                         <div className="label">DSP</div>
                         <div className="label-info">
-                          {`$${numberWithCommas(brandPartners.total.dsp)}`}
+                          {formatNumber(brandPartners.total.dsp, '$')}
                         </div>
                       </li>
                       <li>
                         <div className="label">total Book Size</div>
                         <div className="label-info ">
-                          {`$${numberWithCommas(
+                          {formatNumber(
                             brandPartners.total.total_book_size,
-                          )}`}
+                            '$',
+                          )}
                         </div>
                       </li>
                       <li>
                         <div className="label">BOOK Size Comm.</div>
                         <div className="label-info label-info-dark">
-                          {`$${numberWithCommas(
+                          {formatNumber(
                             brandPartners.total.total_book_size_commission,
-                          )}`}
+                            '$',
+                          )}
                         </div>
                       </li>
                       <li>
                         <div className="label">upsells </div>
                         <div className="label-info label-info-dark">
-                          {`$${numberWithCommas(brandPartners.total.upsell)}`}
+                          {formatNumber(brandPartners.total.upsell, '$')}
                         </div>
                       </li>
                       <li>
                         <div className="label">Upsells comm.</div>
                         <div className="label-info label-info-dark ">
-                          {`$${numberWithCommas(
+                          {formatNumber(
                             brandPartners.total.upsell_commission,
-                          )}`}
+                            '$',
+                          )}
                         </div>
                       </li>
                       <li>
                         <div className="label">total commission</div>
                         <div className="label-info label-info-dark ">
-                          {`$${numberWithCommas(
+                          {formatNumber(
                             brandPartners.total.total_commission,
-                          )}`}
+                            '$',
+                          )}
                         </div>
                       </li>
                     </ul>
@@ -379,4 +384,5 @@ BrandPartnerModal.propTypes = {
   Bgs: shape({}).isRequired,
   startDate: string.isRequired,
   endDate: string.isRequired,
+  formatNumber: func.isRequired,
 };

@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { arrayOf, number, string } from 'prop-types';
-import numberWithCommas from '../../../../../../../hooks/numberWithCommas';
+import { arrayOf, func, number, string } from 'prop-types';
 
 const OneTimeInvoiceAdjustConfirm = ({
   adjustmentData,
   totalCurrentBudget,
   totalNewBudget,
   totalChangeAmount,
+  formatNumber,
 }) => {
   const renderResponsiveView = () => {
     return (
@@ -30,7 +30,7 @@ const OneTimeInvoiceAdjustConfirm = ({
                   <div className="col-6 text-left">
                     <div className="label">Existing Budget</div>
                     <div className={textClass}>
-                      ${numberWithCommas(item.new_budget)}
+                      {formatNumber(item.new_budget, '$')}
                     </div>
                   </div>
                   <div className="col-6 text-left">
@@ -56,7 +56,7 @@ const OneTimeInvoiceAdjustConfirm = ({
           <div className="col-6 text-left">
             <div className="label">Existing budget</div>
             <div className="gray-normal-text">
-              ${numberWithCommas(totalCurrentBudget)}
+              {formatNumber(totalCurrentBudget, '$')}
             </div>
           </div>
           <div className="col-6 text-left">
@@ -98,7 +98,7 @@ const OneTimeInvoiceAdjustConfirm = ({
                 </div>
                 <div className="col-4 px-1 text-left">
                   <div className={textClass}>
-                    ${numberWithCommas(item.new_budget)}
+                    {formatNumber(item.new_budget, '$')}
                   </div>
                 </div>
                 <div className="col-4 pl-1 text-left">
@@ -120,7 +120,7 @@ const OneTimeInvoiceAdjustConfirm = ({
           <div className="col-4 px-1 text-left" />
           <div className="col-4 pl-1 text-left">
             <div className="normal-text text-bold">
-              ${numberWithCommas(totalNewBudget)}
+              {formatNumber(totalNewBudget, '$')}
             </div>
           </div>
         </div>
@@ -147,4 +147,5 @@ OneTimeInvoiceAdjustConfirm.propTypes = {
   totalCurrentBudget: number.isRequired,
   totalNewBudget: number.isRequired,
   totalChangeAmount: string.isRequired,
+  formatNumber: func.isRequired,
 };

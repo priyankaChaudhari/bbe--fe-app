@@ -33,3 +33,6 @@ export * from './ProductCatalogApi';
 
 // CompanyPerformanceApi
 export * from './CompanyPerformanceApi';
+
+// report Section
+export * from './ReportsSectionApi';

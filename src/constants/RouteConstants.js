@@ -57,6 +57,9 @@ export const PATH_BBE_GOAL_DASHBOARD = '/dashboard/bbe-Goal/';
 // Finance dashboard
 export const PATH_FINANCE_DASHBOARD = '/dashboard/finance/';
 
+// Report Section
+export const PATH_REPORTS_SECTION = '/reports';
+
 // Brand Assets
 export const PATH_CHOOSE_BRAND_DELEGATE = `${PATH_CUSTOMER_DETAILS}/choose-delegate/:brandId`;
 export const PATH_BRAND_ASSET = `${PATH_CUSTOMER_DETAILS}/brand-asset/:brandId`;

@@ -19,6 +19,7 @@ import {
   DateRangeDropDown,
   DropDownSelectMonthPicker,
 } from './BGSCommissionContainerStyle';
+import useFormatNumber from '../../../../hooks/useFormatNumber';
 
 const BGSCommissionContainer = () => {
   const mounted = useRef(false);
@@ -314,6 +315,7 @@ const BGSCommissionContainer = () => {
           endDate={`${timeFrame[1].getFullYear()}-${
             timeFrame[1].getMonth() + 1
           }-${timeFrame[1].getDate()}`}
+          formatNumber={useFormatNumber}
         />
       ) : null}
     </>

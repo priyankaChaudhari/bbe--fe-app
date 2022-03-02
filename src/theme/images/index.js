@@ -189,6 +189,10 @@ import helpCircleIcon from './icons/helpCircleIcon.png';
 import HomePageIcon from './icons/home-page.png';
 import HomePageActiveIcon from './icons/home-page-active.png';
 import GreyClockIcon from './icons/grey-clock-icon.svg';
+import DownloadIconActive from './icons/DownloadActive.svg';
+import DownloadIconInActive from './icons/DownloadIcon-Inactive.svg';
+import GraphIconInActive from './icons/graphiconInactive.png';
+import GraphIconActive from './icons/graphiconActive.png';
 
 export {
   BannerBg,
@@ -382,4 +386,8 @@ export {
   HomePageIcon,
   HomePageActiveIcon,
   GreyClockIcon,
+  DownloadIconActive,
+  DownloadIconInActive,
+  GraphIconInActive,
+  GraphIconActive,
 };

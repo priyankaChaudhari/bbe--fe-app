@@ -23,6 +23,7 @@ import {
   PATH_SUMMARY,
   roleURLs,
   dashboardRolePaths,
+  PATH_REPORTS_SECTION,
 } from '../constants';
 import {
   NextLogo,
@@ -40,6 +41,8 @@ import {
   HandShake,
   HomePageActiveIcon,
   HomePageIcon,
+  GraphIconInActive,
+  GraphIconActive,
 } from '../theme/images';
 
 export default function Header({ type, userInfo }) {
@@ -274,31 +277,32 @@ export default function Header({ type, userInfo }) {
             <SideContents>
               {' '}
               <ul className="side-bar-icon ">
-                <li
-                  className={
-                    history.location.pathname?.includes('bbe-Goal')
-                      ? ' cursor active'
-                      : ' cursor'
-                  }
-                  role="presentation"
-                  onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
-                  {history.location.pathname?.includes('bbe-Goal') ? (
-                    <img
-                      width="32px"
-                      className=" home-page-icon active"
-                      src={HomePageActiveIcon}
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      width="32px"
-                      className="home-page-icon  disactive"
-                      src={HomePageIcon}
-                      alt=""
-                    />
-                  )}
-                </li>
-
+                {!userInfo?.role?.includes('Customer') ? (
+                  <li
+                    className={
+                      history.location.pathname?.includes('bbe-Goal')
+                        ? ' cursor active'
+                        : ' cursor'
+                    }
+                    role="presentation"
+                    onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
+                    {history.location.pathname?.includes('bbe-Goal') ? (
+                      <img
+                        width="32px"
+                        className=" home-page-icon active"
+                        src={HomePageActiveIcon}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        width="32px"
+                        className="home-page-icon  disactive"
+                        src={HomePageIcon}
+                        alt=""
+                      />
+                    )}
+                  </li>
+                ) : null}
                 <li
                   className={
                     roleURLs.some((element) =>
@@ -362,6 +366,33 @@ export default function Header({ type, userInfo }) {
                   />
                   <img className="read-book" src={ReadBookIcon} alt="" />
                 </li>
+
+                {!userInfo?.role?.includes('Customer') ? (
+                  <li
+                    className={
+                      history.location.pathname?.includes('reports')
+                        ? ' cursor active'
+                        : ' cursor'
+                    }
+                    role="presentation"
+                    onClick={() => history.push(PATH_REPORTS_SECTION)}>
+                    {history.location.pathname?.includes('reports') ? (
+                      <img
+                        width="32px"
+                        className=" home-page-icon active"
+                        src={GraphIconActive}
+                        alt=""
+                      />
+                    ) : (
+                      <img
+                        width="32px"
+                        className="home-page-icon  disactive"
+                        src={GraphIconInActive}
+                        alt=""
+                      />
+                    )}
+                  </li>
+                ) : null}
               </ul>
             </SideContents>
           </div>

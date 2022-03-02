@@ -2,7 +2,6 @@ import React from 'react';
 
 import { arrayOf, func, shape, string } from 'prop-types';
 
-import numberWithCommas from '../../../../../../../hooks/numberWithCommas';
 import { Button, ModalBox } from '../../../../../../../common';
 import {
   EditOrangeIcon,
@@ -19,6 +18,7 @@ const InvoicePauseConfirm = ({
   selectedMonthYear,
   dspContact,
   onEditDspContact,
+  formatNumber,
 }) => {
   const { totalNewBudget } = returnTotalAmount();
   const renderResponsiveView = () => {
@@ -42,7 +42,7 @@ const InvoicePauseConfirm = ({
                   <div className="col-6 text-left">
                     <div className="label">Invoice Amount</div>
                     <div className={textClass}>
-                      ${numberWithCommas(item.new_budget)}
+                      {formatNumber(item.new_budget, '$')}
                     </div>
                   </div>
                   <div className="col-6 text-left">
@@ -66,7 +66,7 @@ const InvoicePauseConfirm = ({
           <div className="col-6 text-left">
             <div className="label">Invoice Amount</div>
             <div className="gray-normal-text">
-              ${numberWithCommas(totalChangeAmount)}
+              {formatNumber(totalChangeAmount, '$')}
             </div>
           </div>
         </div>
@@ -104,7 +104,7 @@ const InvoicePauseConfirm = ({
                 </div>
                 <div className="col-4 px-1 text-left">
                   <div className={textClass}>
-                    ${numberWithCommas(item.new_budget)}
+                    {formatNumber(item.new_budget, '$')}
                   </div>
                 </div>
                 <div className="col-4 pl-1 text-left">
@@ -123,7 +123,7 @@ const InvoicePauseConfirm = ({
           </div>
           <div className="col-4 px-1 text-left">
             <div className="normal-text text-bold">
-              ${numberWithCommas(totalNewBudget)}
+              {formatNumber(totalNewBudget, '$')}
             </div>
           </div>
           <div className="col-4 pl-1 text-left" />
@@ -234,4 +234,5 @@ InvoicePauseConfirm.propTypes = {
   onEditDspContact: func,
   selectedMonthYear: shape({}),
   dspContact: shape({}),
+  formatNumber: func.isRequired,
 };

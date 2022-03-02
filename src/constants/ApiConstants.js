@@ -39,6 +39,11 @@ export const API_ACCOUNT_MARKETPLACE = `${API_CUSTOMER}:id/marketplace/`;
 // BP Proposal
 export const API_BP_PROPOSAL = '/dsp-budget-proposal/';
 
+// Report Section API
+export const API_REPORTS_TYPES = `${API_CHOICES}report-type`;
+export const API_REPORTS_SECTION = '/bbe-reports/';
+export const API_REPORTS_DOWNLOAD = '/bbe-reports/download-report/';
+
 // Dashboard
 export const API_AD_MANAGER_ADMIN_DASHBOARD = '/manager-dashboard/';
 export const API_AD_DASHBOARD = '/ad-dashboard/';
