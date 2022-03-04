@@ -21,11 +21,13 @@ import { CustomerDetailsBody } from './CustomerDetailStyles';
 import { ProductCatalog } from '../index';
 import { SetupCheckList } from '../../BrandAssetGathering/index';
 import { LeftArrowIcon } from '../../../theme/images';
+
 import {
   billingNavigationOptions,
   PATH_BRAND_ASSET,
   PATH_CUSTOMER_LIST,
 } from '../../../constants';
+
 import {
   getCustomerDetails,
   setCustomerSelectedTab,

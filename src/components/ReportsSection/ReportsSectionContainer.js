@@ -23,6 +23,7 @@ import {
   DropdownIndicator,
   InputSearchWithRadius,
   CustomDateModal,
+  GlobalNavbar,
 } from '../../common';
 
 const _ = require('lodash');
@@ -405,82 +406,86 @@ function ReportsSectionContainer() {
   };
 
   return (
-    <BrandPartnerDashboard>
-      {displayHeader()}
-      <DashboardCard className="ad-manager-dashboard">
-        <div className="dashboard-container-body">
-          {' '}
-          <div className="row mt-3">
-            <div className="col-lg-3 col-md-12">
-              <ReportSectionFilters
-                bpList={bpList}
-                handleBPList={handleBPList}
-                isApiCall={isApiCall}
-                selectedBp={selectedBp}
-                setBpList={setBpList}
-                handleTimeFrame={handleTimeFrame}
-                selectedTimeFrame={selectedTimeFrame}
-                getBpList={getBpList}
-                setSelectedBp={setSelectedBp}
-                getTimeFrameSelectComponents={getTimeFrameSelectComponents}
-              />
-            </div>
-            <div className="col-lg-9 col-md-12">
-              <WhiteCard className="mb-3">
-                <div className="row">
-                  <div className="col-md-12 col-6">
-                    <p className="black-heading-title  mt-0 mb-3">
-                      Report List
-                    </p>
-                  </div>
-                  <div className=" col-6 d-md-none d-block text-right">
-                    <p
-                      onClick={() => handleResetFilter()}
-                      role="presentation"
-                      className="gray-normal-text mt-0 mb-3">
-                      Reset filters
-                    </p>
-                  </div>
-                </div>
-                {renderReportListFilters()}
-                <ReportSectionList
-                  loader={reportsLoader}
-                  itemLoader={itemLoader}
-                  reportsData={reportsData}
-                  selectedBp={selectedBp?.value}
+    <>
+      <GlobalNavbar />
+
+      <BrandPartnerDashboard>
+        {displayHeader()}
+        <DashboardCard className="ad-manager-dashboard">
+          <div className="dashboard-container-body">
+            {' '}
+            <div className="row mt-3">
+              <div className="col-lg-3 col-md-12">
+                <ReportSectionFilters
+                  bpList={bpList}
+                  handleBPList={handleBPList}
+                  isApiCall={isApiCall}
+                  selectedBp={selectedBp}
+                  setBpList={setBpList}
+                  handleTimeFrame={handleTimeFrame}
                   selectedTimeFrame={selectedTimeFrame}
-                  generateCustomDate={generateCustomDate}
-                  onDownload={onDownload}
-                  count={reportCount}
-                  pageNumber={pageNumber}
-                  handlePageChange={handlePageChange}
+                  getBpList={getBpList}
+                  setSelectedBp={setSelectedBp}
+                  getTimeFrameSelectComponents={getTimeFrameSelectComponents}
                 />
-              </WhiteCard>
+              </div>
+              <div className="col-lg-9 col-md-12">
+                <WhiteCard className="mb-3">
+                  <div className="row">
+                    <div className="col-md-12 col-6">
+                      <p className="black-heading-title  mt-0 mb-3">
+                        Report List
+                      </p>
+                    </div>
+                    <div className=" col-6 d-md-none d-block text-right">
+                      <p
+                        onClick={() => handleResetFilter()}
+                        role="presentation"
+                        className="gray-normal-text mt-0 mb-3">
+                        Reset filters
+                      </p>
+                    </div>
+                  </div>
+                  {renderReportListFilters()}
+                  <ReportSectionList
+                    loader={reportsLoader}
+                    itemLoader={itemLoader}
+                    reportsData={reportsData}
+                    selectedBp={selectedBp?.value}
+                    selectedTimeFrame={selectedTimeFrame}
+                    generateCustomDate={generateCustomDate}
+                    onDownload={onDownload}
+                    count={reportCount}
+                    pageNumber={pageNumber}
+                    handlePageChange={handlePageChange}
+                  />
+                </WhiteCard>
+              </div>
             </div>
           </div>
-        </div>
-        <CustomDateModal
-          id="BT-salesSponsoredDashboard-daterange"
-          isOpen={showAdCustomDateModal}
-          range={customDateState}
-          onClick={() => {
-            setShowAdCustomDateModal(false);
-            setCustomDateState([
-              {
-                startDate: currentDate,
-                endDate: currentDate,
-                key: 'reportSection',
-              },
-            ]);
-          }}
-          onChange={(item) => {
-            setCustomDateState([item.reportSection]);
-          }}
-          onApply={() => applyCustomDate()}
-          currentDate={currentDate}
-        />
-      </DashboardCard>
-    </BrandPartnerDashboard>
+          <CustomDateModal
+            id="BT-salesSponsoredDashboard-daterange"
+            isOpen={showAdCustomDateModal}
+            range={customDateState}
+            onClick={() => {
+              setShowAdCustomDateModal(false);
+              setCustomDateState([
+                {
+                  startDate: currentDate,
+                  endDate: currentDate,
+                  key: 'reportSection',
+                },
+              ]);
+            }}
+            onChange={(item) => {
+              setCustomDateState([item.reportSection]);
+            }}
+            onApply={() => applyCustomDate()}
+            currentDate={currentDate}
+          />
+        </DashboardCard>
+      </BrandPartnerDashboard>
+    </>
   );
 }
 

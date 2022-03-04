@@ -46,6 +46,7 @@ import AllocateBar from './AllocateBar';
 import ErrorMsgBox from './ErrorMsgBox';
 import TableGap from './TableGap';
 import TableMobileView from './TableMobileView';
+import GlobalNavbar from './GlobalNavbar';
 
 export {
   Button,
@@ -97,4 +98,5 @@ export {
   TableGap,
   DropDownIndicator as DropdownIndicator,
   TableMobileView,
+  GlobalNavbar,
 };

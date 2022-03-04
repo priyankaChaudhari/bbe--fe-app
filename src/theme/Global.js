@@ -210,6 +210,7 @@ export const BrandPartnerDashboard = styled.div`
   .dashboard-header-sticky {
     position: fixed;
     left: 64px;
+    top: 0px;
     right: 0;
     z-index: 1;
     background-color: ${Theme.white};
@@ -264,14 +265,13 @@ export const BrandPartnerDashboard = styled.div`
 export const DashboardCard = styled.div`
   background: ${Theme.gray6};
   padding-top: 70px;
-  min-height: calc(100% - 120px);
+  min-height: calc(100vh - 70px);
 
   .dashboard-container-body {
     max-width: 1220px;
     width: 100%;
     margin: 0 auto;
-    padding-top: 40px;
-    padding-left: 64px;
+    padding-top: 15px;
   }
   .dashboard-body {
     max-width: 1334px;

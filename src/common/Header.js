@@ -12,43 +12,27 @@ import GetInitialName from './GetInitialName';
 import ProfileModal from './Modals/ProfileModal';
 import ShareIdeaModal from './Modals/ShareIdeaModal';
 import { logout } from '../store/actions/userState';
-import { MainHeader, MobileSidebar, SideContents } from './Styles/HeaderStyles';
+import { MainHeader } from './Styles/HeaderStyles';
+
 import {
-  PATH_ARTICLE_LIST,
   PATH_CUSTOMER_LIST,
-  PATH_BBE_GOAL_DASHBOARD,
   helpDeskLink,
   managementLink,
   PATH_ACCOUNT_SETUP,
   PATH_SUMMARY,
-  roleURLs,
-  dashboardRolePaths,
-  PATH_REPORTS_SECTION,
 } from '../constants';
 import {
   NextLogo,
   EditIcons,
   LogOutIcons,
   LightBulb,
-  ReadBookIcon,
-  MenuIcon,
-  ReadBookIconActive,
-  OrganizationIcon,
-  OrganizationActiveIcon,
-  SpeedometerActive,
-  Speedometer,
   HelpDeskIcon,
   HandShake,
-  HomePageActiveIcon,
-  HomePageIcon,
-  GraphIconInActive,
-  GraphIconActive,
 } from '../theme/images';
 
 export default function Header({ type, userInfo }) {
   const history = useHistory();
   const dispatch = useDispatch();
-  const userRole = userInfo?.role;
   const [showModal, setShowModal] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
   const [showSuccessMsg, setShowSuccessMsg] = useState({
@@ -86,6 +70,7 @@ export default function Header({ type, userInfo }) {
   } else {
     $('#idea').show();
   }
+
   return (
     <div
       className={
@@ -102,13 +87,12 @@ export default function Header({ type, userInfo }) {
         autoClose={5000}
         pauseOnFocusLoss={false}
       />
-
       <MainHeader>
         <div className="container-fluid">
-          <div className="row">
+          <div className="row mb-3">
             <div className="col-4 ">
               <div
-                className="logo cursor"
+                className="logo cursor ml-3"
                 onClick={() =>
                   !userInfo?.role.includes('Customer')
                     ? history.push(PATH_CUSTOMER_LIST)
@@ -267,139 +251,6 @@ export default function Header({ type, userInfo }) {
           setShowArticleSuccess={setShowArticleSuccess}
         />
       </MainHeader>
-      {type !== 'onboarding' ? (
-        <MobileSidebar id="kBase">
-          <label htmlFor="mobilemenu-check" id="responsive-button">
-            <img src={MenuIcon} alt="Menu Lines" className="menu-icon cursor" />
-          </label>
-          <input type="checkbox" id="mobilemenu-check" />
-          <div id="ifp-sidebar-responsive">
-            <SideContents>
-              {' '}
-              <ul className="side-bar-icon ">
-                {!userInfo?.role?.includes('Customer') ? (
-                  <li
-                    className={
-                      history.location.pathname?.includes('bbe-Goal')
-                        ? ' cursor active'
-                        : ' cursor'
-                    }
-                    role="presentation"
-                    onClick={() => history.push(PATH_BBE_GOAL_DASHBOARD)}>
-                    {history.location.pathname?.includes('bbe-Goal') ? (
-                      <img
-                        width="32px"
-                        className=" home-page-icon active"
-                        src={HomePageActiveIcon}
-                        alt=""
-                      />
-                    ) : (
-                      <img
-                        width="32px"
-                        className="home-page-icon  disactive"
-                        src={HomePageIcon}
-                        alt=""
-                      />
-                    )}
-                  </li>
-                ) : null}
-                <li
-                  className={
-                    roleURLs.some((element) =>
-                      history.location.pathname?.includes(element),
-                    )
-                      ? ' cursor active'
-                      : ' cursor'
-                  }
-                  role="presentation"
-                  onClick={() => history.push(dashboardRolePaths[userRole])}>
-                  {' '}
-                  {roleURLs.some((element) =>
-                    history.location.pathname?.includes(element),
-                  ) ? (
-                    <img
-                      width="32px"
-                      className=" speed0meter-icon active"
-                      src={SpeedometerActive}
-                      alt=""
-                    />
-                  ) : (
-                    <img
-                      width="32px"
-                      className=" speed0meter-icon  disactive"
-                      src={Speedometer}
-                      alt=""
-                    />
-                  )}
-                </li>
-                <li
-                  className={
-                    history.location.pathname?.includes('customer')
-                      ? ' cursor active'
-                      : ' cursor'
-                  }
-                  role="presentation"
-                  onClick={() => history.push(PATH_CUSTOMER_LIST)}>
-                  <img
-                    className="user-group"
-                    src={OrganizationActiveIcon}
-                    alt=""
-                  />
-                  <img
-                    className="user-group-active "
-                    src={OrganizationIcon}
-                    alt=""
-                  />
-                </li>
-                <li
-                  className={
-                    history.location.pathname?.includes('collections')
-                      ? 'cursor active'
-                      : ' cursor'
-                  }
-                  role="presentation"
-                  onClick={() => history.push(PATH_ARTICLE_LIST)}>
-                  <img
-                    className="read-book-active"
-                    src={ReadBookIconActive}
-                    alt=""
-                  />
-                  <img className="read-book" src={ReadBookIcon} alt="" />
-                </li>
-
-                {!userInfo?.role?.includes('Customer') ? (
-                  <li
-                    className={
-                      history.location.pathname?.includes('reports')
-                        ? ' cursor active'
-                        : ' cursor'
-                    }
-                    role="presentation"
-                    onClick={() => history.push(PATH_REPORTS_SECTION)}>
-                    {history.location.pathname?.includes('reports') ? (
-                      <img
-                        width="32px"
-                        className=" home-page-icon active"
-                        src={GraphIconActive}
-                        alt=""
-                      />
-                    ) : (
-                      <img
-                        width="32px"
-                        className="home-page-icon  disactive"
-                        src={GraphIconInActive}
-                        alt=""
-                      />
-                    )}
-                  </li>
-                ) : null}
-              </ul>
-            </SideContents>
-          </div>
-        </MobileSidebar>
-      ) : (
-        ''
-      )}
     </div>
   );
 }

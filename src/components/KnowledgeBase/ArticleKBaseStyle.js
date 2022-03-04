@@ -5,7 +5,7 @@ export const GrayBody = styled.div`
   .graycontainer-fluid {
     /* width: 98%; */
     margin: 0 auto;
-    padding-left: 64px;
+    padding-left: 20px;
   }
   .drop-down-option {
     width: 100%;
@@ -205,7 +205,6 @@ export const GrayBody = styled.div`
     .graycontainer-fluid {
       width: 100%;
       margin: 0 auto;
-      padding-left: 60px;
     }
   }
 

@@ -2,13 +2,12 @@ import styled from 'styled-components';
 import Theme from '../../../theme/Theme';
 
 export const CustomerListPage = styled.div`
-  padding-left: 62px;
   background-color: ${Theme.gray6};
   padding-top: 60px;
   height: 100%;
 
   .main-body-container {
-    width: 93%;
+    width: 96%;
     margin: 0 auto;
     height: 100%;
     .table-container {
@@ -19,18 +18,18 @@ export const CustomerListPage = styled.div`
       overflow-x: hidden;
       overflow: auto;
       border-radius: 15px;
-      top: 130px;
-      width: 66%;
+      top: 155px;
+      width: 71%;
       position: fixed;
       padding: 15px;
       background: ${Theme.white};
       .fixed-customer-header {
         position: fixed;
-        max-width: 64%;
+        max-width: 69%;
         width: 100%;
         background-color: ${Theme.white};
         z-index: 2;
-        top: 129px;
+        top: 153px;
         padding-top: 5px;
       }
     }
@@ -40,7 +39,7 @@ export const CustomerListPage = styled.div`
     box-shadow: none;
     position: fixed !important;
     z-index: 1;
-    max-width: 64%;
+    max-width: 69%;
     width: 100%;
     margin: 0;
     height: 40px;
@@ -161,7 +160,7 @@ export const CustomerListPage = styled.div`
           background: #2684ff;
           color: ${Theme.white};
         }
-        &:selected {
+        &.selected {
           background: #2684ff;
         }
       }
@@ -223,8 +222,8 @@ export const CustomerListPage = styled.div`
   }
   .footer-sticky {
     position: fixed;
-    width: 66%;
-    bottom: 3%;
+    width: 71%;
+    bottom: 0;
     background: white;
     margin: 0 -14px;
     border-radius: 15px;
@@ -302,7 +301,7 @@ export const CustomerListPage = styled.div`
         .fixed-customer-header {
           max-width: 100%;
           background: ${Theme.gray6};
-          top: 80px;
+          top: 130px;
         }
       }
     }
@@ -380,10 +379,10 @@ export const CustomerLeftPannel = styled.div`
   overflow-x: hidden;
   overflow: auto;
   border-radius: 15px;
-  top: 130px;
+  top: 155px;
   width: 100%;
   position: fixed;
-  max-width: 21.5%;
+  max-width: 23.5%;
   background: ${Theme.white};
   .customer-list-pannel {
     overflow: auto;

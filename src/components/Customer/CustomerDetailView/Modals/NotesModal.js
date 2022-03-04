@@ -24,6 +24,7 @@ export default function NotesModal({
       inset: '0% 0% 0% auto',
       marginRight: '0',
       borderRadius: '0px !important',
+      // marginTop: '113px',
     },
   };
 

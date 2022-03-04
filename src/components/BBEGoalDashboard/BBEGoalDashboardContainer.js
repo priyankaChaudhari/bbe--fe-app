@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import BBEGoalHighLevelMetrics from './BBEGoalHighLevelMetrics';
 import BBEGoalRevShareContribution from './BBEGoalRevShareContribution';
 import { DashboardCard } from '../../theme/Global';
-import { Button, CustomDateRange } from '../../common';
+import { Button, CustomDateRange, GlobalNavbar } from '../../common';
 import {
   DateRangeDropDown,
   DropDownSelectMonthPicker,
@@ -113,7 +113,8 @@ export default function BBEGoalDashboardContainer() {
 
   return (
     <>
-      <DashboardCard className="pt-md-0 pt-0">
+      <GlobalNavbar />
+      <DashboardCard>
         <div className="dashboard-container-body ">
           <div className="row">
             <div className="col-lg-8 col-md-8 col-6">

@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Route, Switch, Redirect, useHistory } from 'react-router-dom';
 
 import Header from './Header';
-import LeftSideBar from './LeftSideBar';
 import CustomerMainContainer from '../components/Customer/CustomerDetailView/CustomerMainContainer';
 import ReportsSectionContainer from '../components/ReportsSection/ReportsSectionContainer';
 import { BBEGoalDashboardContainer } from '../components/BBEGoalDashboard';
@@ -100,8 +99,6 @@ export default function AuthenticationComponent() {
           <div className="common-header-sticky">
             <Header userInfo={userInfo} />
           </div>
-
-          <LeftSideBar userInfo={userInfo} />
         </>
       );
     return '';

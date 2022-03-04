@@ -23,6 +23,7 @@ import {
   Button,
   GetInitialName,
   DropdownIndicator,
+  GlobalNavbar,
 } from '../../../common';
 import {
   PATH_AGREEMENT,
@@ -1798,6 +1799,7 @@ export default function CustomerList() {
       </ul>
     );
   };
+
   const generateContractDetails = (item) => {
     return (
       <tr
@@ -2126,134 +2128,140 @@ export default function CustomerList() {
     }
     return <>{generateContractDetails(item)}</>;
   };
-  return (
-    <CustomerListPage>
-      <div className="main-body-container">
-        {' '}
-        {renderCustomDateModal()}
-        <div className="row">
-          <div className="col-12 col-lg-3">
-            <CustomerListLeftSidePanel
-              handleFilters={handleFilters}
-              handleSearch={handleSearch}
-              generateDropdown={generateDropdown}
-              filters={filters}
-              setFilters={setFilters}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-              status={status}
-              showAdPerformance={showAdPerformance}
-              showDspAdPerformance={showDspAdPerformance}
-              accountType={accountType}
-            />
-          </div>
-          <div className="col-md-12 col-lg-9">
-            <div className="table-container">
-              <div className="fixed-customer-header ">
-                <CustomerListFilters
-                  handleFilters={handleFilters}
-                  handleSearch={handleSearch}
-                  generateDropdown={generateDropdown}
-                  filters={filters}
-                  setFilters={setFilters}
-                  searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  showContractDetails={showContractDetails}
-                  showPerformance={showPerformance}
-                  showAdPerformance={showAdPerformance}
-                  showDspAdPerformance={showDspAdPerformance}
-                  showOrderOption={showOrderOption}
-                  status={status}
-                  selectInputRefMobile={selectInputRefMobile}
-                  accountType={accountType}
-                />
-              </div>
-              <>
-                {isDesktop ? (
-                  <>
-                    <div className="table-part">
-                      <div className="sticky-header">
-                        <div className="table-header">{renderHeaders()}</div>
-                      </div>
-                      {isLoading.loader && isLoading.type === 'page' ? (
-                        <PageLoader
-                          component="customer-list-loader"
-                          color={Theme.baseColor}
-                          type="page"
-                        />
-                      ) : (
-                        <Table className="customer-list">
-                          <tbody>
-                            {data && data.length === 0 ? (
-                              <tr>
-                                <td>
-                                  <NoRecordFound type="customer-list" />
-                                </td>
-                              </tr>
-                            ) : (
-                              data &&
-                              data.map((item) => renderCustomerDetails(item))
-                            )}
-                          </tbody>
-                        </Table>
-                      )}
-                    </div>
-                    {data && data.length > 0 ? (
-                      <div className="footer-sticky">
-                        <div
-                          className={
-                            data.length < 9 && count < 10
-                              ? ''
-                              : 'straight-line horizontal-line'
-                          }
-                        />
 
-                        <CommonPagination
-                          count={count}
-                          pageNumber={
-                            JSON.parse(localStorage.getItem('page')) ||
-                            pageNumber
-                          }
-                          handlePageChange={handlePageChange}
-                        />
-                      </div>
-                    ) : null}
-                  </>
-                ) : (
-                  <CustomerListTablet
-                    data={data}
-                    history={history}
-                    count={count}
-                    pageNumber={pageNumber}
-                    handlePageChange={handlePageChange}
-                    isLoading={isLoading}
+  return (
+    <>
+      <GlobalNavbar />
+      <CustomerListPage>
+        <div className="main-body-container">
+          {' '}
+          {renderCustomDateModal()}
+          <div className="row">
+            <div className="col-12 col-lg-3 ">
+              <CustomerListLeftSidePanel
+                handleFilters={handleFilters}
+                handleSearch={handleSearch}
+                generateDropdown={generateDropdown}
+                filters={filters}
+                setFilters={setFilters}
+                searchQuery={searchQuery}
+                setSearchQuery={setSearchQuery}
+                status={status}
+                showAdPerformance={showAdPerformance}
+                showDspAdPerformance={showDspAdPerformance}
+                accountType={accountType}
+              />
+            </div>
+            <div className="col-md-12 col-lg-9 ">
+              <div className="table-container">
+                <div className="fixed-customer-header ">
+                  <CustomerListFilters
+                    handleFilters={handleFilters}
+                    handleSearch={handleSearch}
+                    generateDropdown={generateDropdown}
+                    filters={filters}
+                    setFilters={setFilters}
+                    searchQuery={searchQuery}
+                    setSearchQuery={setSearchQuery}
                     showContractDetails={showContractDetails}
-                    setShowContractDetails={setShowContractDetails}
                     showPerformance={showPerformance}
-                    setShowPerformance={setShowPerformance}
                     showAdPerformance={showAdPerformance}
-                    setShowAdPerformance={setShowAdPerformance}
                     showDspAdPerformance={showDspAdPerformance}
-                    setShowDspAdPerformance={setShowDspAdPerformance}
-                    setStatus={status}
-                    brandGrowthStrategist={brandGrowthStrategist}
-                    salesSortOptions={salesSortOptions}
-                    sponsorAdSortOptions={sponsorAdSortOptions}
-                    dspAdSortOptions={dspAdSortOptions}
-                    showContracts={showContracts}
-                    setShowContracts={setShowContracts}
+                    showOrderOption={showOrderOption}
+                    status={status}
+                    selectInputRefMobile={selectInputRefMobile}
                     accountType={accountType}
-                    generateLogoCompanyNameAndGs={generateLogoCompanyNameAndGs}
-                    generateCompanyStatus={generateCompanyStatus}
-                    generatePerformance={generatePerformance}
-                    showContractsList={showContractsList}
                   />
-                )}
-              </>
+                </div>
+                <>
+                  {isDesktop ? (
+                    <>
+                      <div className="table-part">
+                        <div className="sticky-header">
+                          <div className="table-header">{renderHeaders()}</div>
+                        </div>
+                        {isLoading.loader && isLoading.type === 'page' ? (
+                          <PageLoader
+                            component="customer-list-loader"
+                            color={Theme.baseColor}
+                            type="page"
+                          />
+                        ) : (
+                          <Table className="customer-list">
+                            <tbody>
+                              {data && data.length === 0 ? (
+                                <tr>
+                                  <td>
+                                    <NoRecordFound type="customer-list" />
+                                  </td>
+                                </tr>
+                              ) : (
+                                data &&
+                                data.map((item) => renderCustomerDetails(item))
+                              )}
+                            </tbody>
+                          </Table>
+                        )}
+                      </div>
+                      {data && data.length > 0 ? (
+                        <div className="footer-sticky">
+                          <div
+                            className={
+                              data.length < 9 && count < 10
+                                ? ''
+                                : 'straight-line horizontal-line'
+                            }
+                          />
+
+                          <CommonPagination
+                            count={count}
+                            pageNumber={
+                              JSON.parse(localStorage.getItem('page')) ||
+                              pageNumber
+                            }
+                            handlePageChange={handlePageChange}
+                          />
+                        </div>
+                      ) : null}
+                    </>
+                  ) : (
+                    <CustomerListTablet
+                      data={data}
+                      history={history}
+                      count={count}
+                      pageNumber={pageNumber}
+                      handlePageChange={handlePageChange}
+                      isLoading={isLoading}
+                      showContractDetails={showContractDetails}
+                      setShowContractDetails={setShowContractDetails}
+                      showPerformance={showPerformance}
+                      setShowPerformance={setShowPerformance}
+                      showAdPerformance={showAdPerformance}
+                      setShowAdPerformance={setShowAdPerformance}
+                      showDspAdPerformance={showDspAdPerformance}
+                      setShowDspAdPerformance={setShowDspAdPerformance}
+                      setStatus={status}
+                      brandGrowthStrategist={brandGrowthStrategist}
+                      salesSortOptions={salesSortOptions}
+                      sponsorAdSortOptions={sponsorAdSortOptions}
+                      dspAdSortOptions={dspAdSortOptions}
+                      showContracts={showContracts}
+                      setShowContracts={setShowContracts}
+                      accountType={accountType}
+                      generateLogoCompanyNameAndGs={
+                        generateLogoCompanyNameAndGs
+                      }
+                      generateCompanyStatus={generateCompanyStatus}
+                      generatePerformance={generatePerformance}
+                      showContractsList={showContractsList}
+                    />
+                  )}
+                </>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </CustomerListPage>
+      </CustomerListPage>
+    </>
   );
 }

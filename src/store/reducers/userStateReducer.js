@@ -62,6 +62,7 @@ const userStateReducer = (state = initialState, action) => {
         error: null,
         showResetMsg: action.showResetMsg,
       };
+
     default:
       return state;
   }

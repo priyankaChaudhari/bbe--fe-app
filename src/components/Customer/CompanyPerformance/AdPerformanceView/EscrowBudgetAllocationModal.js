@@ -309,8 +309,8 @@ export default function EscrowBudgetAllocationModal({
                     key={item.key}
                     className={
                       selectedMarketplace === item.value
-                        ? 'active scrollable-tab mt-1'
-                        : ' scrollable-tab mt-1 '
+                        ? 'active scrollable-tab small-font-size mt-1'
+                        : ' scrollable-tab small-font-size mt-1 '
                     }
                     onClick={() => {
                       setSelectedMarketplace(item.value);

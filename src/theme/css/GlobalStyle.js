@@ -891,6 +891,7 @@ fieldset {
 .__react_component_tooltip.show { 
      opacity: 1.9 !important;
      background: #162c50 !important;
+     z-index: 99 !important;
   }
 
 .react-datepicker-wrapper {

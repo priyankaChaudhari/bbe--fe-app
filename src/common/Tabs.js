@@ -24,6 +24,7 @@ const Tabs = styled.div`
     &.scrollable-container {
       border-bottom: 1px solid ${Theme.gray11};
       display: -webkit-inline-box;
+      width: 100%;
     }
     li {
       display: inline-block;
@@ -51,6 +52,9 @@ const Tabs = styled.div`
 
       &.scrollable-tab {
         display: block;
+        font-size: ${Theme.normal};
+      }
+      &.small-font-size {
         font-size: 14px;
       }
 

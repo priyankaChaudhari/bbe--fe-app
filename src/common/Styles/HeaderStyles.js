@@ -4,12 +4,12 @@ import Theme from '../../theme/Theme';
 
 export const MainHeader = styled.div`
   background-color: ${Theme.white};
-  height: 70px;
-  border-bottom: 1px solid ${Theme.gray7};
+  min-height: 70px;
+  /* border-bottom: 1px solid ${Theme.gray7}; */
   padding-top: 13px;
   position: fixed;
   width: 100%;
-  z-index: 9;
+  z-index: 99 !important;
   top: 0;
   .logo {
     img {
@@ -260,7 +260,7 @@ export const MainHeader = styled.div`
       display: block;
       width: 80px;
       margin-top: 4px;
-      margin-left: 60px;
+      margin-left: 10px;
     }
   }
 
@@ -594,6 +594,35 @@ export const PasswordFormContainer = styled.div`
       top: 0;
       max-width: 100%;
       padding: 0 20px;
+    }
+  }
+`;
+
+// contract container.js
+export const GlobalMenu = styled.div`
+  background: ${Theme.white};
+  position: fixed;
+  z-index: 52;
+  width: 100%;
+  padding-top: 10px;
+
+  @media only screen and (max-width: 767px) {
+    /* padding-top: 120px; */
+    background: ${Theme.white};
+    position: fixed;
+    z-index: 9;
+    width: 100%;
+    .tabs {
+      li {
+        padding: 15px 20px;
+        &:hover {
+          padding-bottom: 15px;
+        }
+
+        &.active {
+          padding-bottom: 15px;
+        }
+      }
     }
   }
 `;

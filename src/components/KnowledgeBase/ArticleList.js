@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 
 import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 import Theme from '../../theme/Theme';
-import LeftSideBar from '../../common/LeftSideBar';
 import ArticleSearch from './ArticleSearch';
-import { PageLoader } from '../../common';
+import { GlobalNavbar, PageLoader } from '../../common';
 import { getArticleCollections } from '../../api';
 import { PATH_ARTICLE_DETAILS, collectionDetails } from '../../constants';
 
@@ -15,7 +13,6 @@ export default function ArticleList() {
   const [isLoading, setIsLoading] = useState({ loader: true, type: 'page' });
   const history = useHistory();
   const [data, setData] = useState([]);
-  const userInfo = useSelector((state) => state.userState.userInfo);
 
   useEffect(() => {
     getArticleCollections().then((response) => {
@@ -35,7 +32,7 @@ export default function ArticleList() {
 
   return (
     <>
-      <LeftSideBar userInfo={userInfo} />
+      <GlobalNavbar />
       <GrayBody>
         <div className="graycontainer">
           <h3 className="gray-text pt-5">Knowledge Base</h3>
@@ -94,6 +91,7 @@ const GrayBody = styled.div`
     width: 100%;
     margin: 0 auto;
     padding-left: 64px;
+    padding-top: 30px;
   }
   .article-card {
     background-color: ${Theme.white};
@@ -190,6 +188,7 @@ const GrayBody = styled.div`
     // height: 100%;
     .graycontainer {
       max-width: 85%;
+      padding-top: 40px;
       .article-card {
         background-color: ${Theme.white};
         border-radius: 12px;
@@ -216,6 +215,7 @@ const GrayBody = styled.div`
   @media only screen and (min-width: 1700px) and (max-width: 1920px) {
     .graycontainer {
       max-width: 1534px;
+      padding-top: 40px;
     }
     .small-para {
       color: ${Theme.gray90};
@@ -243,11 +243,12 @@ const GrayBody = styled.div`
   @media only screen and (max-width: 1400px) {
     .graycontainer {
       padding-left: 100px;
+      padding-top: 40px;
     }
   }
   @media only screen and (max-width: 991.98px) {
     .graycontainer {
-      padding: 0 45px;
+      padding: 45px 0 45px 30px;
     }
     .article-card {
       padding: 15px;

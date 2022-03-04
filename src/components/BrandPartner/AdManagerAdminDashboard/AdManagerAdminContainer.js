@@ -76,10 +76,20 @@ export default function AdManagerAdminContainer({ userInfo }) {
         return '';
     }
   };
+  const dashboardHeaders = {
+    'Ad Manager': 'Ad Manager Dashboard',
+    'Ad Manager Admin': 'Advertising Dashboard',
+    BGS: 'Dashboard',
+    'BGS Manager': 'Dashboard',
+    'BGS Admin': 'Dashboard',
+    Finance: 'Dashboard',
+  };
   return (
     <DashboardCard className="ad-manager-dashboard">
       <div className="dashboard-container-body">
-        {' '}
+        <h5 className="sub-title-text mb-4">
+          {dashboardHeaders[userInfo?.role]}
+        </h5>{' '}
         <Tabs>
           <ul className="tabs">
             <li
