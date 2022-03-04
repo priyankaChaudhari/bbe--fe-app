@@ -1058,7 +1058,7 @@ export default function AgreementSidePanel({
           event.target.name,
           event.target.value.trim(),
         );
-      } else if (event.target.value.includes('$')) {
+      } else if (event.target.value.includes(selectedCurrency)) {
         let value = event.target.value.slice(1);
 
         if (event.target.name === 'dsp_fee') {
