@@ -316,3 +316,15 @@ export async function getPaymentTermsOptions() {
     });
   return result;
 }
+
+export async function getCurrencyOptions() {
+  const result = await axiosInstance
+    .get(`${API_CHOICES}currency`)
+    .then((response) => {
+      return response;
+    })
+    .catch((error) => {
+      return error.response;
+    });
+  return result;
+}

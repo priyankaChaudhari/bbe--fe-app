@@ -15,6 +15,7 @@ import {
   contractStatus,
 } from '../../../constants/FieldConstants';
 import { InfoIcon, SearchIcon } from '../../../theme/images';
+import { pipelineChoices } from '../../../constants';
 
 function CustomerListLeftSidePanel({
   handleFilters,
@@ -143,6 +144,33 @@ function CustomerListLeftSidePanel({
                     </CheckBox>
                   </li>
                 ))}
+            </ul>
+            <div className="label mt-4 pt-2">Customer Pipeline</div>
+            <div className="clear-fix" />
+            <ul className="check-box-list">
+              {pipelineChoices.map((item) => (
+                <li key={item.value}>
+                  {' '}
+                  <ModalRadioCheck>
+                    <label
+                      className=" checkboxes radio-container customer-list"
+                      htmlFor={item.value}>
+                      {item.label}
+                      <input
+                        type="radio"
+                        name="radio1"
+                        id={item.value}
+                        value={item.value}
+                        onChange={(event) =>
+                          handleFilters(event, item, 'radio', 'pipeline')
+                        }
+                        defaultChecked={filters?.pipeline === item.value || ''}
+                      />
+                      <span className="checkmark checkmark-customer-list" />
+                    </label>
+                  </ModalRadioCheck>
+                </li>
+              ))}
             </ul>
             <div className="label mt-4 pt-2">Account Type</div>
             <div className="clear-fix" />
@@ -274,6 +302,7 @@ CustomerListLeftSidePanel.propTypes = {
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
+    pipeline: PropTypes.shape({}),
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
   searchQuery: PropTypes.string,

@@ -2776,6 +2776,8 @@ export default function ContractContainer() {
     return errorCount;
   };
 
+  console.log(formData?.currency);
+
   const saveChanges = (apis) => {
     axios
       .all(apis)
@@ -3290,7 +3292,7 @@ export default function ContractContainer() {
         );
       }
 
-      if (updatedFormData?.fee_structure) {
+      if (updatedFormData?.fee_structure || updatedFormData?.currency) {
         const type = formData?.seller_type?.label?.toLowerCase();
         if (type === 'hybrid') {
           sellerFeeStructureApi = saveFeeStructure(
@@ -3299,6 +3301,7 @@ export default function ContractContainer() {
               ...getUpdatedFeeStructure('seller'),
               account_type: 'Seller',
               contract: formData.id,
+              currency: formData?.currency,
             },
           );
           vendorFeeStructureApi = saveFeeStructure(
@@ -3307,6 +3310,7 @@ export default function ContractContainer() {
               ...getUpdatedFeeStructure('vendor'),
               account_type: 'Vendor',
               contract: formData.id,
+              currency: formData?.currency,
             },
           );
         } else {
@@ -3318,6 +3322,7 @@ export default function ContractContainer() {
 
                 account_type: type === 'seller' ? 'Seller' : 'Vendor',
                 contract: formData.id,
+                currency: formData?.currency,
               },
             );
           }
@@ -3328,6 +3333,7 @@ export default function ContractContainer() {
                 ...getUpdatedFeeStructure('vendor'),
                 account_type: type === 'seller' ? 'Seller' : 'Vendor',
                 contract: formData.id,
+                currency: formData?.currency,
               },
             );
           }

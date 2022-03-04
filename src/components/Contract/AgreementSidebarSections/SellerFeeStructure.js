@@ -26,6 +26,7 @@ export default function SellerFeeStructure({
   sectionError,
   feeStructureErrors,
   setFeeStructureErrors,
+  selectedCurrency,
 }) {
   const checkMandatoryFieldsOfFeeType = (event) => {
     let errorCount = sectionError?.[section]?.feeType;
@@ -703,14 +704,14 @@ export default function SellerFeeStructure({
           <InputFormField className="mt-3">
             <label htmlFor="Monthly Retainer">Monthly Retainer</label>
             <div className="input-container">
-              <span className="input-icon">$ </span>
+              <span className="input-icon">{selectedCurrency} </span>
               {generateHTML({
                 value: 'monthly_retainer',
                 label: 'Monthly Retainer',
                 key: 'monthly_retainer',
                 type: 'number-currency',
                 isMandatory: true,
-                prefix: '$',
+                prefix: selectedCurrency,
               })}
             </div>
             <ErrorMsg>
@@ -726,7 +727,7 @@ export default function SellerFeeStructure({
                   <label htmlFor={field.key}>{field.label}</label>
                   <div className="input-container">
                     {field.prefix ? (
-                      <span className="input-icon">{field.prefix} </span>
+                      <span className="input-icon">{selectedCurrency} </span>
                     ) : (
                       ''
                     )}
@@ -781,12 +782,15 @@ export default function SellerFeeStructure({
                       setFormData={setFormData}
                       section={section}
                       feeStructureErrors={feeStructureErrors}
+                      selectedCurrency={selectedCurrency}
                     />
                   ) : (
                     <>
                       <div className="input-container">
                         {field.prefix ? (
-                          <span className="input-icon ">{field.prefix} </span>
+                          <span className="input-icon ">
+                            {selectedCurrency}{' '}
+                          </span>
                         ) : (
                           ''
                         )}
@@ -870,4 +874,5 @@ SellerFeeStructure.propTypes = {
   sectionError: shape({}),
   feeStructureErrors: shape({}),
   setFeeStructureErrors: func,
+  selectedCurrency: string.isRequired,
 };

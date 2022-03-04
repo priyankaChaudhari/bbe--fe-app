@@ -306,3 +306,8 @@ export const adjustInvoiceChoices = [
     name: 'one time',
   },
 ];
+
+export const pipelineChoices = [
+  { value: 'all', label: 'All Pipeline' },
+  { value: 'europe', label: 'Europe Pipeline' },
+];

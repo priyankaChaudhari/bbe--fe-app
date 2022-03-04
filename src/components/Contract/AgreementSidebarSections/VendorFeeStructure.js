@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Select from 'react-select';
-import { shape, func, bool } from 'prop-types';
+import { shape, func, bool, string } from 'prop-types';
 
 import SellerFeeStructure from './SellerFeeStructure';
 import { vendorReportOptions } from '../../../constants';
@@ -21,6 +21,7 @@ export default function VendorFeeStructure({
   setFeeStructureErrors,
   setVendorSameAsSeller,
   vendorSameAsSeller,
+  selectedCurrency,
 }) {
   const handleCheckbox = (event) => {
     showFooter(true);
@@ -268,6 +269,7 @@ export default function VendorFeeStructure({
         vendorSameAsSeller={vendorSameAsSeller}
         feeStructureErrors={feeStructureErrors}
         setFeeStructureErrors={setFeeStructureErrors}
+        selectedCurrency={selectedCurrency}
       />
     </>
   );
@@ -305,4 +307,5 @@ VendorFeeStructure.propTypes = {
   setFeeStructureErrors: func,
   setVendorSameAsSeller: func,
   vendorSameAsSeller: bool.isRequired,
+  selectedCurrency: string.isRequired,
 };

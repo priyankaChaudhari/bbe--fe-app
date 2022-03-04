@@ -14,6 +14,7 @@ export default function RevenueThreshold({
   generateHTML,
   section,
   feeStructureErrors,
+  selectedCurrency,
 }) {
   const thresholdOptions = [
     { value: 'None', label: 'None', type: `${section}_none` },
@@ -27,7 +28,7 @@ export default function RevenueThreshold({
       return (
         <InputFormField className="mt-3">
           <div className="input-container">
-            <span className="input-icon ">$ </span>
+            <span className="input-icon ">{selectedCurrency} </span>
             {generateHTML({
               key: 'sales_threshold',
               type: 'number-currency',
@@ -52,7 +53,7 @@ export default function RevenueThreshold({
                 </div>
                 <div className="col-8">
                   <div className="input-container">
-                    <span className="input-icon">$ </span>
+                    <span className="input-icon">{selectedCurrency} </span>
                     {generateHTML(item)}
                   </div>
                 </div>
@@ -77,7 +78,7 @@ export default function RevenueThreshold({
                 </div>
                 <div className="col-8">
                   <div className="input-container">
-                    <span className="input-icon">$ </span>
+                    <span className="input-icon">{selectedCurrency} </span>
                     {generateHTML(item)}
                   </div>
                 </div>
@@ -156,4 +157,5 @@ RevenueThreshold.propTypes = {
   generateHTML: func,
   section: string.isRequired,
   feeStructureErrors: shape({}),
+  selectedCurrency: string.isRequired,
 };

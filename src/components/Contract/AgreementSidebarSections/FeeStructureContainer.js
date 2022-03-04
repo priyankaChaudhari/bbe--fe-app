@@ -40,10 +40,33 @@ export default function FeeStructureContainer({
   showRightTick,
   getFeeStructureDetails,
   manageErrorCount,
+  agreementCurrency,
+  selectedCurrency,
+  setSelectedCurrency,
 }) {
   const [vendorSameAsSeller, setVendorSameAsSeller] = useState(
     formData?.fee_structure?.vendor?.vendor_same_as_seller || false,
   );
+
+  let feeStructureArray;
+
+  if (formData?.customer_id?.pipeline === 'europe') {
+    let feeStructureWithCurrencyDetails = [];
+    feeStructureWithCurrencyDetails = [
+      ...feeStructureContainerDetails,
+      {
+        key: 'currency',
+        label: 'Agreement Currency',
+        type: 'choice',
+        placeholder: 'Select Agreement Currency',
+        isMandatory: true,
+        part: 'fee structure',
+      },
+    ];
+    feeStructureArray = [...feeStructureWithCurrencyDetails];
+  } else {
+    feeStructureArray = [...feeStructureContainerDetails];
+  }
 
   const clearError = (event, key) => {
     if (event && event.value) {
@@ -63,6 +86,7 @@ export default function FeeStructureContainer({
 
   const handleChange = (event, key) => {
     showFooter(true);
+    if (key === 'currency') setSelectedCurrency(event.label);
     if (key === 'primary_marketplace') {
       setAdditionalMarketplaces(
         marketPlacesOptions.filter((op) => op.value !== event.value),
@@ -72,8 +96,7 @@ export default function FeeStructureContainer({
         ...updatedFormData,
         [key]: event?.value,
       });
-    }
-    if (key === 'seller_type') {
+    } else if (key === 'seller_type') {
       if (
         formData?.fee_structure?.vendor?.vendor_same_as_seller &&
         formData.seller_type?.value !== 'Hybrid' &&
@@ -97,6 +120,12 @@ export default function FeeStructureContainer({
       });
       setFeeStructureErrors({});
       getMonthlyServices(event?.value);
+    } else {
+      setFormData({ ...formData, [key]: event?.value });
+      setUpdatedFormData({
+        ...updatedFormData,
+        [key]: event?.value,
+      });
     }
     clearError(event, key);
   };
@@ -156,6 +185,15 @@ export default function FeeStructureContainer({
                   label: formData.primary_marketplace,
                 }
               : null
+            : item.key === 'currency'
+            ? {
+                value: agreementCurrency.find(
+                  (op) => op.value === formData[item.key],
+                )?.value,
+                label: agreementCurrency.find(
+                  (op) => op.value === formData[item.key],
+                )?.label,
+              }
             : formData[item.key] && formData[item.key].label
             ? {
                 value: formData[item.key].label,
@@ -166,6 +204,8 @@ export default function FeeStructureContainer({
         options={
           item.key === 'primary_marketplace'
             ? marketPlacesOptions
+            : item.key === 'currency'
+            ? agreementCurrency
             : accountTypeOptions
         }
         name={item.key}
@@ -225,9 +265,9 @@ export default function FeeStructureContainer({
         {loader ? null : (
           <ul className="collapse-inner">
             <li>
-              {feeStructureContainerDetails.map((item) => (
+              {feeStructureArray?.map((item) => (
                 <ContractInputSelect
-                  className={item.key === 'seller_type' ? 'mt-3' : ''}
+                  className={item.key !== 'primary_marketplace' ? 'mt-3' : ''}
                   key={item.key}>
                   <label htmlFor={item.key}>{item.label}</label>
                   {generateDropdown(item)}
@@ -250,6 +290,7 @@ export default function FeeStructureContainer({
                   feeStructureErrors={feeStructureErrors}
                   setFeeStructureErrors={setFeeStructureErrors}
                   vendorSameAsSeller={vendorSameAsSeller}
+                  selectedCurrency={selectedCurrency}
                 />
               ) : formData?.seller_type?.label === 'Vendor' ? (
                 <VendorFeeStructure
@@ -268,6 +309,7 @@ export default function FeeStructureContainer({
                   vendorSameAsSeller={vendorSameAsSeller}
                   setVendorSameAsSeller={setVendorSameAsSeller}
                   manageErrorCount={manageErrorCount}
+                  selectedCurrency={selectedCurrency}
                 />
               ) : formData?.seller_type?.label === 'Hybrid' ? (
                 <>
@@ -285,6 +327,7 @@ export default function FeeStructureContainer({
                     feeStructureErrors={feeStructureErrors}
                     setFeeStructureErrors={setFeeStructureErrors}
                     vendorSameAsSeller={vendorSameAsSeller}
+                    selectedCurrency={selectedCurrency}
                   />
                   <VendorFeeStructure
                     setFormData={setFormData}
@@ -302,6 +345,7 @@ export default function FeeStructureContainer({
                     vendorSameAsSeller={vendorSameAsSeller}
                     setVendorSameAsSeller={setVendorSameAsSeller}
                     manageErrorCount={manageErrorCount}
+                    selectedCurrency={selectedCurrency}
                   />
                 </>
               ) : null}
@@ -347,6 +391,7 @@ FeeStructureContainer.defaultProps = {
   getFeeStructureDetails: () => {},
   manageErrorCount: () => {},
   // checkMandatoryFieldsOfFeeType: () => {},
+  setSelectedCurrency: () => {},
 };
 
 FeeStructureContainer.propTypes = {
@@ -380,5 +425,8 @@ FeeStructureContainer.propTypes = {
   showRightTick: func,
   getFeeStructureDetails: func,
   manageErrorCount: func,
+  agreementCurrency: shape({}).isRequired,
+  selectedCurrency: string.isRequired,
+  setSelectedCurrency: func,
   // checkMandatoryFieldsOfFeeType: func,
 };

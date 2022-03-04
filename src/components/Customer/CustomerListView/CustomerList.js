@@ -729,7 +729,7 @@ export default function CustomerList() {
           'filters',
           JSON.stringify({
             ...filters,
-            cd_user: event.value,
+            cd_user: event?.value,
           }),
         );
       }
@@ -781,6 +781,7 @@ export default function CustomerList() {
         ad_user: [],
         dsp_user: [],
         searchQuery: '',
+        pipeline: [],
       });
       localStorage.setItem(
         'filters',
@@ -795,6 +796,7 @@ export default function CustomerList() {
           ad_user: [],
           dsp_user: [],
           searchQuery: '',
+          pipeline: [],
         }),
       );
     }
@@ -864,6 +866,7 @@ export default function CustomerList() {
         );
       }
     }
+
     // for account type
     if (type === 'customer_account_type' && key !== 'unselected') {
       if (
@@ -1049,23 +1052,31 @@ export default function CustomerList() {
 
     if (type === 'radio') {
       if (event.target.checked) {
-        setFilters({
-          ...filters,
-          contract_type:
-            event.target.value === 'any'
-              ? event.target.value
-              : event.target.value,
-        });
-        localStorage.setItem(
-          'filters',
-          JSON.stringify({
+        if (action === 'pipeline') {
+          setFilters({
             ...filters,
-            contract_type:
-              event.target.value === 'any'
-                ? event.target.value
-                : event.target.value,
-          }),
-        );
+            pipeline: event.target.value,
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+              pipeline: event.target.value,
+            }),
+          );
+        } else {
+          setFilters({
+            ...filters,
+            contract_type: event.target.value,
+          });
+          localStorage.setItem(
+            'filters',
+            JSON.stringify({
+              ...filters,
+              contract_type: event.target.value,
+            }),
+          );
+        }
       }
     }
   };
@@ -1344,8 +1355,8 @@ export default function CustomerList() {
 
   const redirectIfContractExists = (type, id) => {
     getcontract(type.contract_id).then((res) => {
-      if (res && res.status === 200) {
-        if (res && res.data && res.data.contract_url) {
+      if (res?.status === 200) {
+        if (res?.data?.contract_url) {
           history.push({
             pathname: `${PATH_AGREEMENT.replace(':id', id).replace(
               ':contract_id',

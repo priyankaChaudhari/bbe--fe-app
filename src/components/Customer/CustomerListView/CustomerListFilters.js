@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import PropTypes from 'prop-types';
+import PropTypes, { shape } from 'prop-types';
 import { DebounceInput } from 'react-debounce-input';
 import ReactTooltip from 'react-tooltip';
 import { useMediaQuery } from 'react-responsive';
@@ -18,6 +18,7 @@ import {
 } from '../../../constants/FieldConstants';
 import { SideContent } from './CustomerListStyle';
 import { CaretUp, InfoIcon, SearchIcon } from '../../../theme/images';
+import { pipelineChoices } from '../../../constants';
 
 function CustomerListFilters({
   handleFilters,
@@ -245,6 +246,44 @@ function CustomerListFilters({
                                   </CheckBox>
                                 </li>
                               ))}
+                          </ul>
+                        ) : (
+                          ''
+                        )}
+                        <div className="label mt-4 pt-2">Customer Pipeline</div>
+                        <div className="clear-fix" />
+                        {!isDesktop ? (
+                          <ul className="check-box-list">
+                            {pipelineChoices.map((item) => (
+                              <li key={item.value}>
+                                {' '}
+                                <ModalRadioCheck>
+                                  <label
+                                    className="checkboxes radio-container customer-list"
+                                    htmlFor={item.value}>
+                                    {item.label}
+                                    <input
+                                      type="radio"
+                                      name="radio1"
+                                      id={item.value}
+                                      value={item.value}
+                                      onChange={(event) =>
+                                        handleFilters(
+                                          event,
+                                          item,
+                                          'radio',
+                                          'pipeline',
+                                        )
+                                      }
+                                      checked={
+                                        filters?.pipeline === item.value || ''
+                                      }
+                                    />
+                                    <span className="checkmark checkmark-customer-list" />
+                                  </label>
+                                </ModalRadioCheck>
+                              </li>
+                            ))}
                           </ul>
                         ) : (
                           ''
@@ -486,6 +525,7 @@ CustomerListFilters.propTypes = {
       PropTypes.string,
       PropTypes.arrayOf(PropTypes.string),
     ]),
+    pipeline: shape({}),
   }).isRequired,
   setFilters: PropTypes.func.isRequired,
   searchQuery: PropTypes.string,

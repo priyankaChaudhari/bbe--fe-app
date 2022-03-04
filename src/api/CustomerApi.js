@@ -83,27 +83,19 @@ export async function getCustomerList(
   }
 
   let accountTypeParams = {};
-  if (
-    filterOptions &&
-    filterOptions.customer_account_type &&
-    filterOptions.customer_account_type.length
-  ) {
+  if (filterOptions?.customer_account_type?.length) {
     accountTypeParams = queryString.stringify({
       customer_account_type: filterOptions.customer_account_type,
     });
   }
   let statusParams = {};
-  if (filterOptions && filterOptions.status && filterOptions.status.length) {
+  if (filterOptions?.status?.length) {
     statusParams = queryString.stringify({
       status: filterOptions.status,
     });
   }
   let contractStatusParams = {};
-  if (
-    filterOptions &&
-    filterOptions.contract_status &&
-    filterOptions.contract_status.length
-  ) {
+  if (filterOptions?.contract_status?.length) {
     const index = filterOptions.contract_status.indexOf('signed');
     if (index !== -1) {
       filterOptions.contract_status[index] = 'active';
@@ -115,59 +107,42 @@ export async function getCustomerList(
 
   let bgsParams = {};
 
-  if (
-    filterOptions &&
-    filterOptions.cd_user &&
-    filterOptions.cd_user.length &&
-    contractDetails
-  ) {
+  if (filterOptions?.cd_user?.length && contractDetails) {
     bgsParams = queryString.stringify({ user: filterOptions.cd_user });
     params = {
       ...params,
     };
   }
 
-  if (
-    filterOptions &&
-    filterOptions.user &&
-    filterOptions.user.length &&
-    performance
-  ) {
+  if (filterOptions?.user?.length && performance) {
     bgsParams = queryString.stringify({ user: filterOptions.user });
     params = {
       ...params,
     };
   }
 
-  if (
-    filterOptions &&
-    filterOptions.ad_user &&
-    filterOptions.ad_user.length &&
-    adPerformance
-  ) {
+  if (filterOptions?.ad_user?.length && adPerformance) {
     bgsParams = queryString.stringify({ user: filterOptions.ad_user });
   }
 
-  if (
-    filterOptions &&
-    filterOptions.dsp_user &&
-    filterOptions.dsp_user.length &&
-    dspAdPerformance
-  ) {
+  if (filterOptions?.dsp_user?.length && dspAdPerformance) {
     bgsParams = queryString.stringify({ user: filterOptions.dsp_user });
   }
 
   let contract = {};
-  if (
-    filterOptions &&
-    filterOptions.contract_type &&
-    filterOptions.contract_type.length
-  ) {
+  if (filterOptions?.contract_type?.length) {
     contract = queryString.stringify({
       contract_type:
         filterOptions.contract_type === 'any'
           ? []
           : filterOptions.contract_type,
+    });
+  }
+
+  let pipeline = {};
+  if (filterOptions?.pipeline?.length) {
+    pipeline = queryString.stringify({
+      pipeline: filterOptions.pipeline === 'all' ? [] : filterOptions.pipeline,
     });
   }
 
@@ -185,7 +160,7 @@ export async function getCustomerList(
         accountTypeParams && accountTypeParams.length
           ? `&${accountTypeParams}`
           : ''
-      }`,
+      }${pipeline && pipeline.length ? `&${pipeline}` : ''}`,
       { params },
     )
     .then((response) => {

@@ -17,7 +17,12 @@ import {
   agreementDefaultProptypes,
   agreementSidePanelPropTypes,
 } from './PropTypesConstants/AgreementSidePanelProptypes';
-import { getLength, getRevenueShare, createAddendum } from '../../api';
+import {
+  getLength,
+  getRevenueShare,
+  createAddendum,
+  getCurrencyOptions,
+} from '../../api';
 import {
   AgreementDetails,
   StatementDetails,
@@ -134,6 +139,8 @@ export default function AgreementSidePanel({
   const [revShare, setRevShare] = useState([]);
   const [amazonService, setSelectedAmazonStorePackService] = useState({});
   const [selectedThreshold, setSelectedThreshold] = useState('');
+  const [agreementCurrency, setAgreementCurrency] = useState([]);
+  const [selectedCurrency, setSelectedCurrency] = useState(formData?.currency);
 
   const customer = formData?.customer_id;
   const additionalOneTimeServicesLength =
@@ -270,6 +277,15 @@ export default function AgreementSidePanel({
       setRevShare(rev?.data);
     });
   }, []);
+
+  useEffect(() => {
+    getCurrencyOptions().then((currency) => {
+      setAgreementCurrency(currency?.data);
+      setSelectedCurrency(
+        currency?.data?.find((op) => op.value === formData?.currency)?.label,
+      );
+    });
+  }, [formData]);
 
   const customStyleDesktopTabs = {
     width: '50%',
@@ -1318,7 +1334,7 @@ export default function AgreementSidePanel({
           name={item.key}
           defaultValue={formData[item.key]}
           placeholder={item.placeholder ? item.placeholder : item.label}
-          prefix={item.type === 'number-currency' ? '$' : ''}
+          prefix={item.type === 'number-currency' ? selectedCurrency : ''}
           suffix={item.type === 'number-percent' ? '%' : ''}
           onChange={(event) => handleChange(event, item.key)}
           thousandSeparator={item.key !== 'zip_code'}
@@ -1754,6 +1770,9 @@ export default function AgreementSidePanel({
                   getFeeStructureDetails={getFeeStructureDetails}
                   manageErrorCount={manageErrorCount}
                   checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
+                  agreementCurrency={agreementCurrency}
+                  setSelectedCurrency={setSelectedCurrency}
+                  selectedCurrency={selectedCurrency}
                 />
               ) : (
                 ''
