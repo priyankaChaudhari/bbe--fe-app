@@ -25,6 +25,7 @@ function Discount({
   getAmendmentData,
   getServicesAccordingToAccType,
   getContractActivityLogInfo,
+  selectedCurrency,
 }) {
   const [showAmountInput, setShowAmountInput] = useState(false);
   const [selectedDiscountType, setSelectedDiscountType] = useState('none');
@@ -151,7 +152,7 @@ function Discount({
     return discountType === 'percentage' ? (
       <span className="input-icon end">%</span>
     ) : (
-      <span className="input-icon">$</span>
+      <span className="input-icon">{selectedCurrency}</span>
     );
   };
 
@@ -278,7 +279,7 @@ function Discount({
             'fixedAmount',
             'fixed amount',
             'Fixed Amount',
-            '$',
+            selectedCurrency,
           )}
           {handleModalRadioCheck('percentage', 'percentage', 'Percentage', '%')}
         </ul>
@@ -342,6 +343,7 @@ Discount.defaultProps = {
   getAmendmentData: () => {},
   getServicesAccordingToAccType: () => {},
   getContractActivityLogInfo: () => {},
+  selectedCurrency: '$',
 };
 Discount.propTypes = {
   discountFlag: shape({}),
@@ -364,5 +366,6 @@ Discount.propTypes = {
   getAmendmentData: func,
   getServicesAccordingToAccType: func,
   getContractActivityLogInfo: func,
+  selectedCurrency: string,
 };
 export default Discount;

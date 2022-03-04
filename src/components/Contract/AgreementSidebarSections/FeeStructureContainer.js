@@ -187,12 +187,18 @@ export default function FeeStructureContainer({
               : null
             : item.key === 'currency'
             ? {
-                value: agreementCurrency.find(
-                  (op) => op.value === formData[item.key],
-                )?.value,
-                label: agreementCurrency.find(
-                  (op) => op.value === formData[item.key],
-                )?.label,
+                value:
+                  agreementCurrency.find(
+                    (op) => op.value === formData[item.key],
+                  )?.value ||
+                  agreementCurrency.find((op) => op.label === selectedCurrency)
+                    ?.value,
+                label:
+                  agreementCurrency.find(
+                    (op) => op.value === formData[item.key],
+                  )?.label ||
+                  agreementCurrency.find((op) => op.label === selectedCurrency)
+                    ?.label,
               }
             : formData[item.key] && formData[item.key].label
             ? {
@@ -392,6 +398,7 @@ FeeStructureContainer.defaultProps = {
   manageErrorCount: () => {},
   // checkMandatoryFieldsOfFeeType: () => {},
   setSelectedCurrency: () => {},
+  selectedCurrency: '$',
 };
 
 FeeStructureContainer.propTypes = {
@@ -426,7 +433,7 @@ FeeStructureContainer.propTypes = {
   getFeeStructureDetails: func,
   manageErrorCount: func,
   agreementCurrency: shape({}).isRequired,
-  selectedCurrency: string.isRequired,
+  selectedCurrency: string,
   setSelectedCurrency: func,
   // checkMandatoryFieldsOfFeeType: func,
 };

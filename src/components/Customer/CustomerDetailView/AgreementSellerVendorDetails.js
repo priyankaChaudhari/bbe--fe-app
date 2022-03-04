@@ -18,6 +18,7 @@ export default function AgreementSellerVendorDetails({
   setAccountType,
   accountType,
   multipleAgreement,
+  showCurrencySign,
 }) {
   useEffect(() => {
     for (const item of multipleAgreement) {
@@ -39,12 +40,12 @@ export default function AgreementSellerVendorDetails({
 
   const mapDefaultValues = (item, threshold) => {
     if (threshold === 'quarter')
-      return `$${
+      return `${showCurrencySign(agreement?.currency)}${
         agreement?.fee_structure?.[accountType[agreement.id]]
           ?.quarterly_rev_share?.[item.key]
       }`;
     if (threshold === 'month')
-      return `$${
+      return `${showCurrencySign(agreement?.currency)}${
         agreement?.fee_structure?.[accountType[agreement.id]]
           ?.monthly_rev_share?.[item.key]
       }`;
@@ -53,7 +54,7 @@ export default function AgreementSellerVendorDetails({
         agreement?.fee_structure?.[accountType[agreement.id]]
           ?.threshold_type === 'Fixed'
       )
-        return `Fixed ($${
+        return `Fixed (${showCurrencySign(agreement?.currency)}${
           agreement?.fee_structure?.[accountType[agreement.id]]
             ?.sales_threshold || 0
         })`;
@@ -79,7 +80,7 @@ export default function AgreementSellerVendorDetails({
         key: 'monthly_retainer',
         type: 'number-currency',
         isMandatory: true,
-        prefix: '$',
+        prefix: showCurrencySign(agreement?.currency),
       },
     ];
   } else if (
@@ -118,7 +119,7 @@ export default function AgreementSellerVendorDetails({
               displayType="text"
               value={mapDefaultValues(field, 'month')}
               thousandSeparator
-              prefix="$"
+              prefix={showCurrencySign(agreement?.currency)}
             />
           </div>
         </div>
@@ -137,7 +138,7 @@ export default function AgreementSellerVendorDetails({
               displayType="text"
               value={mapDefaultValues(field, 'quarter')}
               thousandSeparator
-              prefix="$"
+              prefix={showCurrencySign(agreement?.currency)}
             />
           </div>
         </div>
@@ -159,7 +160,7 @@ export default function AgreementSellerVendorDetails({
               item.key === 'rev_share_threshold' ||
               !agreement?.fee_structure?.[accountType[agreement.id]]?.[item.key]
                 ? ''
-                : '$'
+                : showCurrencySign(agreement?.currency)
             }
             suffix={item.key === 'rev_share' ? '%' : ''}
             isNumericString
@@ -173,6 +174,7 @@ export default function AgreementSellerVendorDetails({
 AgreementSellerVendorDetails.defaultProps = {
   setAccountType: () => {},
   accountType: {},
+  showCurrencySign: () => {},
 };
 
 AgreementSellerVendorDetails.propTypes = {
@@ -180,4 +182,5 @@ AgreementSellerVendorDetails.propTypes = {
   setAccountType: func,
   accountType: shape({}),
   multipleAgreement: oneOfType([array, object]).isRequired,
+  showCurrencySign: func,
 };

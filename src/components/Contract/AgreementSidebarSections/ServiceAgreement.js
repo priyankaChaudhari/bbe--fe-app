@@ -49,6 +49,7 @@ function ServiceAgreement({
   updateAdditionalOnetimeServicesSelectedData,
   discountData,
   servicesFees,
+  selectedCurrency,
 }) {
   const contractType = formData?.contract_type;
   const additionalOneTimeServicesLength =
@@ -156,6 +157,7 @@ function ServiceAgreement({
                         }
                         discountData={discountData}
                         servicesFees={servicesFees}
+                        selectedCurrency={selectedCurrency}
                       />
                     </>
                   ) : (
@@ -230,6 +232,7 @@ ServiceAgreement.defaultProps = {
   updateAdditionalOnetimeServicesSelectedData: () => {},
   discountData: [],
   servicesFees: [],
+  selectedCurrency: '$',
 };
 
 ServiceAgreement.propTypes = {
@@ -278,4 +281,5 @@ ServiceAgreement.propTypes = {
   updateAdditionalOnetimeServicesSelectedData: func,
   discountData: arrayOf(shape({})),
   servicesFees: arrayOf(shape({})),
+  selectedCurrency: string,
 };

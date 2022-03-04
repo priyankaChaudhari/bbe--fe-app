@@ -127,6 +127,12 @@ export default function AgreementDetails({
     });
   }, [dispatch, id]);
 
+  const showCurrencySign = (currency) => {
+    if (currency === 'EUR') return '€';
+    if (currency === 'GBP') return '£';
+    return '$';
+  };
+
   const countDays = (value) => {
     const date1 = new Date();
     const date2 = new Date(value);
@@ -626,6 +632,7 @@ export default function AgreementDetails({
                           setAccountType={setAccountType}
                           accountType={accountType}
                           multipleAgreement={multipleAgreement}
+                          showCurrencySign={showCurrencySign}
                         />
                         <div className=" col-lg-3 col-md-3 mb-3 col-6 ">
                           <div className="label">Content Optimization</div>
@@ -647,7 +654,7 @@ export default function AgreementDetails({
                           displayType="text"
                           value={agreement.dsp_fee || 0}
                           thousandSeparator
-                          prefix="$"
+                          prefix={showCurrencySign(agreement?.currency)}
                         />
                       </div>
                     ) : (
@@ -749,7 +756,7 @@ export default function AgreementDetails({
                                 displayType="text"
                                 value={agreement.dsp_fee || 0}
                                 thousandSeparator
-                                prefix="$"
+                                prefix={showCurrencySign(agreement?.currency)}
                               />
                             </div>
                           </div>

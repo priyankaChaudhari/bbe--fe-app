@@ -38,6 +38,7 @@ function DiscountModal({
   getAmendmentData,
   getServicesAccordingToAccType,
   getContractActivityLogInfo,
+  selectedCurrency,
 }) {
   return (
     <Modal
@@ -67,6 +68,7 @@ function DiscountModal({
           getAmendmentData={getAmendmentData}
           getServicesAccordingToAccType={getServicesAccordingToAccType}
           getContractActivityLogInfo={getContractActivityLogInfo}
+          selectedCurrency={selectedCurrency}
         />
       </ModalBox>
     </Modal>
@@ -91,6 +93,7 @@ DiscountModal.defaultProps = {
   getAmendmentData: () => {},
   getServicesAccordingToAccType: () => {},
   getContractActivityLogInfo: () => {},
+  selectedCurrency: '$',
 };
 
 DiscountModal.propTypes = {
@@ -121,4 +124,5 @@ DiscountModal.propTypes = {
   getAmendmentData: func,
   getServicesAccordingToAccType: func,
   getContractActivityLogInfo: func,
+  selectedCurrency: string,
 };

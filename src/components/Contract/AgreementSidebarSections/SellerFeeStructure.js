@@ -856,6 +856,7 @@ SellerFeeStructure.defaultProps = {
   vendorSameAsSeller: false,
   feeStructureErrors: {},
   setFeeStructureErrors: () => {},
+  selectedCurrency: '$',
 };
 
 SellerFeeStructure.propTypes = {
@@ -874,5 +875,5 @@ SellerFeeStructure.propTypes = {
   sectionError: shape({}),
   feeStructureErrors: shape({}),
   setFeeStructureErrors: func,
-  selectedCurrency: string.isRequired,
+  selectedCurrency: string,
 };

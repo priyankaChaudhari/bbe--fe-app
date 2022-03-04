@@ -18,6 +18,7 @@ export default function Agreement({
   servicesFees,
   discountData,
   mapServiceTotal,
+  selectedCurrency,
 }) {
   const customerId = formData?.customer_id;
   const customerAddress = customerId?.address;
@@ -94,7 +95,11 @@ export default function Agreement({
   const customAmazonStorePrice = (fee) => {
     return `<td style="border: 1px solid black;padding: 13px;">
       <span style=" background:#ffe5df; padding: 4px 9px;"> 
-        ${fee ? `$${displayNumber(fee)}` : '$0'}
+        ${
+          fee
+            ? `${selectedCurrency}${displayNumber(fee)}`
+            : `${selectedCurrency}0`
+        }
         </span>
       </td>`;
   };
@@ -103,8 +108,8 @@ export default function Agreement({
       <span style=" background:#ffe5df; padding: 4px 9px;"> 
           ${
             service.quantity && fee
-              ? `$${displayNumber(service.quantity * fee)}`
-              : '$0'
+              ? `${selectedCurrency}${displayNumber(service.quantity * fee)}`
+              : `${selectedCurrency}0`
           }
           </span>
         </td>
@@ -144,9 +149,9 @@ export default function Agreement({
                       ? service.custom_amazon_store_price
                         ? `<td style="border: 1px solid black;padding: 13px;">
                           <span style=" background:#ffe5df; padding: 4px 9px;"> 
-                                $${displayNumber(
-                                  service.custom_amazon_store_price,
-                                )} 
+                                ${selectedCurrency}${displayNumber(
+                            service.custom_amazon_store_price,
+                          )} 
                               </span> </td>`
                         : customAmazonStorePrice(
                             fixedFee && fixedFee[0] && fixedFee[0].fee,
@@ -257,7 +262,7 @@ export default function Agreement({
             <td class="total-service-borderless" colspan="3" style="border-bottom: hidden; padding: 5px 13px" text-align:left">Sub-total</td>
             <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px" text-align: right;">
             <span style=" background:#ffe5df; padding: 4px 9px; "> 
-            $${displayNumber(totalFees?.oneTimeSubTotal)}
+            ${selectedCurrency}${displayNumber(totalFees?.oneTimeSubTotal)}
             </span>
             </td>
          </tr>`
@@ -276,7 +281,9 @@ export default function Agreement({
             </td>
             <td class="total-service-borderless text-right" style="border-bottom: hidden; padding: 5px 13px; text-align: right;"> 
             <span style=" background:#ffe5df; padding: 4px 9px; ">  
-            -$${displayNumber(totalFees?.oneTimeAmountAfterDiscount)}
+            -${selectedCurrency}${displayNumber(
+                totalFees?.oneTimeAmountAfterDiscount,
+              )}
             </span>
             </td>
          </tr>`
@@ -286,7 +293,7 @@ export default function Agreement({
             <td class="total-service" colspan="3" style="border: 1px solid black; padding-top: 5px; text-align:left"> Total</td>
             <td class="total-service text-right" style="border: 1px solid black; padding-top: 5px; text-align: right;"> 
             <span style=" background:#ffe5df; padding: 4px 9px; "> 
-            $${displayNumber(totalFees?.oneTimeTotal)} 
+            ${selectedCurrency}${displayNumber(totalFees?.oneTimeTotal)} 
             </span>
             </td>
          </tr>
@@ -401,6 +408,7 @@ Agreement.defaultProps = {
   servicesFees: {},
   discountData: [],
   mapServiceTotal: () => {},
+  selectedCurrency: '$',
 };
 
 Agreement.propTypes = {
@@ -488,4 +496,5 @@ Agreement.propTypes = {
   ),
   discountData: arrayOf(shape({})),
   mapServiceTotal: func,
+  selectedCurrency: string,
 };

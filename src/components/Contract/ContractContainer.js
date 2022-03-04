@@ -219,6 +219,7 @@ export default function ContractContainer() {
   const [servicesFees, setServicesFees] = useState({});
   const [amendmentData, setAmendmentData] = useState({});
   const [sidebarSection, setSidebarSection] = useState('edit');
+  const [selectedCurrency, setSelectedCurrency] = useState('$');
 
   const detailsId = details?.id;
   const contractStatusValue = details?.contract_status?.value;
@@ -872,6 +873,7 @@ export default function ContractContainer() {
 
           setDetails(res.data);
           setFormData(res.data);
+          setSelectedCurrency(res?.data?.currency);
           setOriginalData(res.data);
           getFeeStructureDetails(res?.data?.seller_type?.value, res?.data);
 
@@ -1195,7 +1197,7 @@ export default function ContractContainer() {
       if (details && details[key] === 'Fixed') {
         return `Fixed: <span style=" background:#ffe5df;padding: 4px 9px;font-weight: bold">${
           details && details.sales_threshold
-            ? `$${displayNumber(details?.sales_threshold)}`
+            ? `${selectedCurrency}${displayNumber(details?.sales_threshold)}`
             : `Enter ${label}.`
         }</span>`;
       }
@@ -1203,9 +1205,9 @@ export default function ContractContainer() {
 
     if (type && type.includes('number')) {
       if (details && details[key]) {
-        return `${type === 'number-currency' ? '$' : '%'}${displayNumber(
-          details[key],
-        )}`;
+        return `${
+          type === 'number-currency' ? selectedCurrency : '%'
+        }${displayNumber(details[key])}`;
       }
       return `Enter ${label}`;
     }
@@ -1236,9 +1238,9 @@ export default function ContractContainer() {
             </tr>
              <tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Monthly Retainer</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
-                 formData?.fee_structure?.[type]?.monthly_retainer,
-               )} </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${displayNumber(
+        formData?.fee_structure?.[type]?.monthly_retainer,
+      )} </span> </td>
               <td style="border: 1px solid black;padding: 13px;">Monthly fee for the main Amazon marketplace as a retainer for services.
               This retainer is billed in advance for the month in which services are to be rendered. </td>
               </tr>
@@ -1265,9 +1267,9 @@ export default function ContractContainer() {
                  formData?.fee_structure?.[type]?.billing_minimum
                    ? `<tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Billing Minimum</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
-                 formData?.fee_structure?.[type]?.billing_minimum || 0,
-               )} </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${displayNumber(
+                       formData?.fee_structure?.[type]?.billing_minimum || 0,
+                     )} </span> </td>
               <td style="border: 1px solid black;padding: 13px;">We will charge the greater of the value shown here or the % of revenue listed above. </td></tr>`
                    : ''
                }
@@ -1275,9 +1277,9 @@ export default function ContractContainer() {
                 formData?.fee_structure?.[type]?.billing_cap
                   ? `<tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Billing Cap</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
-                 formData?.fee_structure?.[type]?.billing_cap || 0,
-               )} </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${displayNumber(
+                      formData?.fee_structure?.[type]?.billing_cap || 0,
+                    )} </span> </td>
               <td style="border: 1px solid black;padding: 13px;">We will charge no more than the amount listed here. </td></tr>`
                   : ''
               }
@@ -1299,9 +1301,9 @@ export default function ContractContainer() {
             </tr>
             <tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Monthly Retainer</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
-                 formData?.fee_structure?.[type]?.monthly_retainer || 0,
-               )} </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${displayNumber(
+        formData?.fee_structure?.[type]?.monthly_retainer || 0,
+      )} </span> </td>
               <td style="border: 1px solid black;padding: 13px;">Monthly fee for the main Amazon marketplace as a retainer for services. 
               This retainer is billed in advance for the month in which services are to be rendered. </td>
               </tr>
@@ -1317,9 +1319,9 @@ export default function ContractContainer() {
                 formData?.fee_structure?.[type]?.threshold_type === 'Fixed'
                   ? ` <tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Fixed Threshold </span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
-                 formData?.fee_structure?.[type]?.sales_threshold || 0,
-               )} </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${displayNumber(
+                      formData?.fee_structure?.[type]?.sales_threshold || 0,
+                    )} </span> </td>
               <td style="border: 1px solid black;padding: 13px;">We will bill our revenue share % on any value above this threshold for Amazon Channel Sales (
                 retail dollars, net customer returns) each month through the Amazon Seller Central and/or Vendor Central account(s) that BBE manages for Client. </td></tr>`
                   : formData?.fee_structure?.[type]?.threshold_type ===
@@ -1327,34 +1329,34 @@ export default function ContractContainer() {
                   ? ` <tr  style="vertical-align: text-top;">
              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Quarterly Threshold </span></td>
              <td style="border: 1px solid black;padding: 13px;">
-                 1st Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                   displayNumber(
-                     formData?.fee_structure?.[type]?.quarterly_rev_share?.[
-                       '1st quarterly'
-                     ],
-                   ) || 0
-                 } </span><br>
-                  2nd Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.quarterly_rev_share?.[
-                        '2nd quarterly'
-                      ],
-                    ) || 0
-                  } </span><br>
-                  3rd Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.quarterly_rev_share?.[
-                        '3rd quarterly'
-                      ],
-                    ) || 0
-                  }</span><br>
-                  4th Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.quarterly_rev_share?.[
-                        '4th quarterly'
-                      ],
-                    ) || 0
-                  }</span><br>
+                 1st Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                          '1st quarterly'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  2nd Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                          '2nd quarterly'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  3rd Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                          '3rd quarterly'
+                        ],
+                      ) || 0
+                    }</span><br>
+                  4th Quarter:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.quarterly_rev_share?.[
+                          '4th quarterly'
+                        ],
+                      ) || 0
+                    }</span><br>
                </td>
             <td style="border: 1px solid black;padding: 13px;">We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
             (retail dollars, net customer returns) each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.
@@ -1365,90 +1367,90 @@ export default function ContractContainer() {
                   ? ` <tr  style="vertical-align: text-top;">
              <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";>Monthly Threshold </span></td>
              <td style="border: 1px solid black;padding: 13px;">
-                 January:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                   displayNumber(
-                     formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                       'january month'
-                     ],
-                   ) || 0
-                 } </span><br>
-                  February:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'february month'
-                      ],
-                    ) || 0
-                  } </span><br>
-                  March:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'march month'
-                      ],
-                    ) || 0
-                  }</span><br>
-                  April:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'april month'
-                      ],
-                    ) || 0
-                  }</span><br>
-                   May:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                     displayNumber(
-                       formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                         'may month'
-                       ],
-                     ) || 0
-                   } </span><br>
-                  June:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'june month'
-                      ],
-                    ) || 0
-                  } </span><br>
-                  July:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'july month'
-                      ],
-                    ) || 0
-                  }</span><br>
-                  August:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'august month'
-                      ],
-                    ) || 0
-                  }</span><br>
-                   September:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                     displayNumber(
-                       formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                         'september month'
-                       ],
-                     ) || 0
-                   } </span><br>
-                  October:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> $ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'october month'
-                      ],
-                    ) || 0
-                  } </span><br>
-                  November:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'november month'
-                      ],
-                    ) || 0
-                  }</span><br>
-                  December:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${
-                    displayNumber(
-                      formData?.fee_structure?.[type]?.monthly_rev_share?.[
-                        'december month'
-                      ],
-                    ) || 0
-                  }</span><br>
+                 January:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'january month'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  February:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'february month'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  March:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'march month'
+                        ],
+                      ) || 0
+                    }</span><br>
+                  April:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'april month'
+                        ],
+                      ) || 0
+                    }</span><br>
+                   May:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'may month'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  June:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'june month'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  July:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'july month'
+                        ],
+                      ) || 0
+                    }</span><br>
+                  August:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'august month'
+                        ],
+                      ) || 0
+                    }</span><br>
+                   September:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'september month'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  October:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";> ${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'october month'
+                        ],
+                      ) || 0
+                    } </span><br>
+                  November:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'november month'
+                        ],
+                      ) || 0
+                    }</span><br>
+                  December:<span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency} ${
+                      displayNumber(
+                        formData?.fee_structure?.[type]?.monthly_rev_share?.[
+                          'december month'
+                        ],
+                      ) || 0
+                    }</span><br>
                </td>
             <td style="border: 1px solid black;padding: 13px;">We will bill our revenue share % on any value above this threshold for Amazon Channel Sales 
             (retail dollars, net customer returns) each month through the Amazon Seller Central and Vendor Central account(s) that BBE manages for Client.
@@ -1460,9 +1462,9 @@ export default function ContractContainer() {
                 formData?.fee_structure?.[type]?.billing_cap
                   ? `<tr  style="vertical-align: text-top;">
               <td style="border: 1px solid black;padding: 13px;"> <span style=" font-weight: bold";> Billing Cap</span></td>
-               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>$ ${displayNumber(
-                 formData?.fee_structure?.[type]?.billing_cap || 0,
-               )} </span> </td>
+               <td style="border: 1px solid black;padding: 13px;"><span style=" background:#ffe5df;padding: 4px 9px; font-weight: bold";>${selectedCurrency}${displayNumber(
+                      formData?.fee_structure?.[type]?.billing_cap || 0,
+                    )} </span> </td>
               <td style="border: 1px solid black;padding: 13px;">We will charge no more than the amount listed here. </td></tr>`
                   : ''
               }
@@ -1496,7 +1498,11 @@ export default function ContractContainer() {
   const customAmazonStorePrice = (fee) => {
     return `<td style="border: 1px solid black;padding: 13px;">
       <span style=" background:#ffe5df; padding: 4px 9px;"> 
-        ${fee ? `$${displayNumber(fee)}` : '$0'}
+        ${
+          fee
+            ? `${selectedCurrency}${displayNumber(fee)}`
+            : `${selectedCurrency}0`
+        }
         </span>
       </td>`;
   };
@@ -1505,8 +1511,8 @@ export default function ContractContainer() {
       <span style=" background:#ffe5df; padding: 4px 9px;"> 
           ${
             service.quantity && fee
-              ? `$${displayNumber(service.quantity * fee)}`
-              : '$0'
+              ? `${selectedCurrency}${displayNumber(service.quantity * fee)}`
+              : `${selectedCurrency}0`
           }
           </span>
         </td>
@@ -1537,13 +1543,13 @@ export default function ContractContainer() {
                     ? `<td style="border: 1px solid black;padding: 13px;">
                      <span style=" background:#ffe5df; padding: 4px 9px;"> 
                     
-                    $${
-                      item.service
-                        ? `${displayNumber(item.service.fee)}`
-                        : item.fee
-                        ? displayNumber(item.fee)
-                        : ''
-                    } /month
+                    ${selectedCurrency}${
+                        item.service
+                          ? `${displayNumber(item.service.fee)}`
+                          : item.fee
+                          ? displayNumber(item.fee)
+                          : ''
+                      } /month
                     </span>
                   </td>`
                     : (
@@ -1560,8 +1566,10 @@ export default function ContractContainer() {
 
                     ${
                       fixedFee && fixedFee[0] && fixedFee[0].fee
-                        ? `$${displayNumber(fixedFee[0].fee)} /month`
-                        : '$0'
+                        ? `${selectedCurrency}${displayNumber(
+                            fixedFee[0].fee,
+                          )} /month`
+                        : `${selectedCurrency}0`
                     }
                     </span>
                     </td>`
@@ -1604,9 +1612,9 @@ export default function ContractContainer() {
                 ? service.custom_amazon_store_price
                   ? `<td style="border: 1px solid black;padding: 13px;">
                     <span style=" background:#ffe5df; padding: 4px 9px;"> 
-                  $${displayNumber(
-                    service.custom_amazon_store_price,
-                  )}</span></td>`
+                  ${selectedCurrency}${displayNumber(
+                      service.custom_amazon_store_price,
+                    )}</span></td>`
                   : customAmazonStorePrice(
                       fixedFee && fixedFee[0] && fixedFee[0].fee,
                     )
@@ -1654,20 +1662,22 @@ export default function ContractContainer() {
                 ? `<td style="border: 1px solid black;padding: 13px;">
                      <span style=" background:#ffe5df; padding: 4px 9px;"> 
 
-                $${
-                  item.service
-                    ? displayNumber(item.service.fee)
-                    : item.fee
-                    ? displayNumber(item.fee)
-                    : ''
-                }
+                ${selectedCurrency}${
+                    item.service
+                      ? displayNumber(item.service.fee)
+                      : item.fee
+                      ? displayNumber(item.fee)
+                      : ''
+                  }
                 /month
                 </span>
               </td>`
                 : `<td>
                      <span style=" background:#ffe5df; padding: 4px 9px;"> 
                 
-                $${displayNumber(additionaMarketplaceAmount)} /month
+                ${selectedCurrency}${displayNumber(
+                    additionaMarketplaceAmount,
+                  )} /month
                 </span>
                 </td>`
             }
@@ -1694,7 +1704,7 @@ export default function ContractContainer() {
                     <td style="border: 1px solid black;padding: 13px;"> 
                      <span style=" background:#ffe5df; padding: 4px 9px;"> 
 
-                  25% of recovered $<span>&#39;</span>s
+                  25% of recovered ${selectedCurrency}<span>&#39;</span>s
                   </span>
                   </td>
                     </tr>`,
@@ -1833,7 +1843,7 @@ export default function ContractContainer() {
             <td class="total-service text-right" style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">
                      <span style=" background:#ffe5df; padding: 4px 9px;"> 
 
-            $${displayNumber(totalFees.monthlySubTotal)}
+            ${selectedCurrency}${displayNumber(totalFees.monthlySubTotal)}
             </span>
             </td>
          </tr>`
@@ -1851,11 +1861,11 @@ export default function ContractContainer() {
             <td class="total-service text-right"style="border-bottom: hidden; border-left: 1px solid black; padding: 5px 13px; text-align:right">
                      <span style=" background:#ffe5df; padding: 4px 9px;"> 
             
-            -$${
-              totalFees?.monthlyAmountAfterDiscount
-                ? displayNumber(totalFees?.monthlyAmountAfterDiscount)
-                : 0
-            }
+            -${selectedCurrency}${
+            totalFees?.monthlyAmountAfterDiscount
+              ? displayNumber(totalFees?.monthlyAmountAfterDiscount)
+              : 0
+          }
             </span>
             </td>
          </tr>`
@@ -1866,9 +1876,9 @@ export default function ContractContainer() {
         <td class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right"> 
                      <span style=" background:#ffe5df; padding: 4px 9px;"> 
 
-          $${
-            totalFees?.monthlyTotal ? displayNumber(totalFees.monthlyTotal) : 0
-          }
+          ${selectedCurrency}${
+      totalFees?.monthlyTotal ? displayNumber(totalFees.monthlyTotal) : 0
+    }
           </span>
         </td>
       </tr>`;
@@ -1883,7 +1893,7 @@ export default function ContractContainer() {
             <td  class="total-service" colspan="3" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px;"> Sub-total</td>
             <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">
             <span style=" background:#ffe5df; padding: 4px 9px;"> 
-            $${displayNumber(totalFees?.oneTimeSubTotal)}
+            ${selectedCurrency}${displayNumber(totalFees?.oneTimeSubTotal)}
             </span>
             </td>
          </tr>`
@@ -1900,7 +1910,9 @@ export default function ContractContainer() {
             }</td>
             <td class="total-service text-right" style="border-bottom: hidden;border-left: 1px solid black; padding: 5px 13px; text-align:right">
             <span style=" background:#ffe5df; padding: 4px 9px;"> 
-            -$${displayNumber(totalFees?.oneTimeAmountAfterDiscount)}
+            -${selectedCurrency}${displayNumber(
+            totalFees?.oneTimeAmountAfterDiscount,
+          )}
             </span>
             </td>
          </tr>`
@@ -1910,7 +1922,7 @@ export default function ContractContainer() {
             <td class="total-service" colspan="3" style="border: 1px solid black;padding: 5px 13px ; font-weight: 800"> Total</td>
             <td  class="total-service text-right" style="border: 1px solid black;padding: 5px 13px ;font-weight: 800; text-align:right">
             <span style=" background:#ffe5df; padding: 4px 9px;"> 
-            $${displayNumber(totalFees?.oneTimeTotal)}
+            ${selectedCurrency}${displayNumber(totalFees?.oneTimeTotal)}
             </span>
             </td>
          </tr>
@@ -2166,11 +2178,13 @@ export default function ContractContainer() {
       if (formData?.dsp_fee) {
         const fee = parseInt(formData?.dsp_fee, 10);
         const FinalFee = fee + fee / 2;
-        return `$${displayNumber(FinalFee)}`;
+        return `${selectedCurrency}${displayNumber(FinalFee)}`;
       }
     }
     if (formData?.dsp_fee) {
-      return `$${formData?.dsp_fee && displayNumber(formData.dsp_fee)}`;
+      return `${selectedCurrency}${
+        formData?.dsp_fee && displayNumber(formData.dsp_fee)
+      }`;
     }
     return 'Enter DSP Fee ';
   };
@@ -2775,8 +2789,6 @@ export default function ContractContainer() {
 
     return errorCount;
   };
-
-  console.log(formData?.currency);
 
   const saveChanges = (apis) => {
     axios
@@ -3606,6 +3618,7 @@ export default function ContractContainer() {
             servicesFees={servicesFees}
             discountData={discountData}
             mapServiceTotal={mapServiceTotal}
+            selectedCurrency={selectedCurrency}
           />
         </div>
 
@@ -3620,6 +3633,7 @@ export default function ContractContainer() {
               notIncludedMonthlyServices={notIncludedMonthlyServices}
               servicesFees={servicesFees}
               discountData={discountData}
+              selectedCurrency={selectedCurrency}
             />
           </div>
         )}
@@ -3641,6 +3655,7 @@ export default function ContractContainer() {
               setThirdMonthDate={setThirdMonthDate}
               endMonthDate={endMonthDate}
               setEndDate={setEndDate}
+              selectedCurrency={selectedCurrency}
             />
           </div>
         ) : (
@@ -3787,6 +3802,8 @@ export default function ContractContainer() {
         checkMandatoryFieldsOfFeeType={checkMandatoryFieldsOfFeeType}
         servicesFees={servicesFees}
         getData={getData}
+        setSelectedCurrency={setSelectedCurrency}
+        selectedCurrency={selectedCurrency}
       />
     );
   };
@@ -4108,6 +4125,7 @@ export default function ContractContainer() {
             getAmendmentData={getAmendmentData}
             getServicesAccordingToAccType={getServicesAccordingToAccType}
             getContractActivityLogInfo={getContractActivityLogInfo}
+            selectedCurrency={selectedCurrency}
           />
 
           <ContractEditConfirmation

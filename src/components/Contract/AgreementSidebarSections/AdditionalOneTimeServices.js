@@ -46,6 +46,7 @@ function AdditionalOneTimeServices({
   updateAdditionalOnetimeServicesSelectedData,
   discountData,
   servicesFees,
+  selectedCurrency,
 }) {
   const additionalOneTimeServicesLength =
     formData?.additional_one_time_services?.length;
@@ -170,9 +171,9 @@ function AdditionalOneTimeServices({
   const getAmazonStoreFee = () => {
     const basic = servicesFees?.find((op) => op?.name?.includes('Basic'));
     const plus = servicesFees?.find((op) => op?.name?.includes('Plus'));
-    return `Basic - 1 page ($ ${displayNumber(
+    return `Basic - 1 page (${selectedCurrency} ${displayNumber(
       basic?.fee || 1500,
-    )}), Plus - 1 home page + up to 5 pages/sub-pages ($ ${displayNumber(
+    )}), Plus - 1 home page + up to 5 pages/sub-pages (${selectedCurrency} ${displayNumber(
       plus?.fee || 2400,
     )}), Custom - Will vary`;
   };
@@ -482,7 +483,7 @@ function AdditionalOneTimeServices({
                           : 'form-control '
                       }
                       type="text"
-                      prefix="$"
+                      prefix={selectedCurrency}
                       value={
                         additionalOneTimeServicesLength &&
                         formData.additional_one_time_services.find((item) =>
@@ -564,6 +565,7 @@ AdditionalOneTimeServices.defaultProps = {
   updateAdditionalOnetimeServicesSelectedData: () => {},
   discountData: [],
   servicesFees: [],
+  selectedCurrency: '$',
 };
 
 AdditionalOneTimeServices.propTypes = {
@@ -596,4 +598,5 @@ AdditionalOneTimeServices.propTypes = {
   updateAdditionalOnetimeServicesSelectedData: func,
   discountData: arrayOf(shape()),
   servicesFees: arrayOf(shape({})),
+  selectedCurrency: string,
 };

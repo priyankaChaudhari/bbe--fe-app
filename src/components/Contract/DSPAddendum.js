@@ -27,6 +27,7 @@ export default function DSPAddendum({
   setThirdMonthDate,
   endMonthDate,
   setEndDate,
+  selectedCurrency,
 }) {
   function addDays(theDate, days) {
     return new Date(theDate.getTime() + days * 24 * 60 * 60 * 1000);
@@ -162,7 +163,7 @@ export default function DSPAddendum({
     if (type && type.includes('number')) {
       return `
       
-      ${type === 'number-currency' ? '$' : '%'}${
+      ${type === 'number-currency' ? selectedCurrency : '%'}${
         formData && formData[key]
           ? `${formData[key].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`
           : `Enter ${label}.`
@@ -197,11 +198,17 @@ export default function DSPAddendum({
       if (formData?.dsp_fee) {
         const fee = parseInt(formData?.dsp_fee, 10);
         const FinalFee = fee + fee / 2;
-        return `$${FinalFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+        return `${selectedCurrency}${FinalFee.toString().replace(
+          /\B(?=(\d{3})+(?!\d))/g,
+          ',',
+        )}`;
       }
     }
     if (formData?.dsp_fee) {
-      return `$${formData?.dsp_fee?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+      return `${selectedCurrency}${formData?.dsp_fee?.replace(
+        /\B(?=(\d{3})+(?!\d))/g,
+        ',',
+      )}`;
     }
     return 'Enter DSP Fee ';
   };
@@ -343,6 +350,7 @@ DSPAddendum.defaultProps = {
   setThirdMonthDate: () => {},
   endMonthDate: '',
   setEndDate: () => {},
+  selectedCurrency: '$',
 };
 
 DSPAddendum.propTypes = {
@@ -358,6 +366,7 @@ DSPAddendum.propTypes = {
   setThirdMonthDate: func,
   endMonthDate: oneOfType([string, instanceOf(Date)]),
   setEndDate: func,
+  selectedCurrency: string,
   formData: shape({
     dsp_fee: string,
     dsp_length: oneOfType([

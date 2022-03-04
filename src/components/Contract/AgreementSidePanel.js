@@ -134,13 +134,14 @@ export default function AgreementSidePanel({
   checkMandatoryFieldsOfFeeType,
   servicesFees,
   getData,
+  setSelectedCurrency,
+  selectedCurrency,
 }) {
   const [accountLength, setAccountLength] = useState([]);
   const [revShare, setRevShare] = useState([]);
   const [amazonService, setSelectedAmazonStorePackService] = useState({});
   const [selectedThreshold, setSelectedThreshold] = useState('');
   const [agreementCurrency, setAgreementCurrency] = useState([]);
-  const [selectedCurrency, setSelectedCurrency] = useState(formData?.currency);
 
   const customer = formData?.customer_id;
   const additionalOneTimeServicesLength =
@@ -285,7 +286,7 @@ export default function AgreementSidePanel({
         currency?.data?.find((op) => op.value === formData?.currency)?.label,
       );
     });
-  }, [formData]);
+  }, [formData.currency]);
 
   const customStyleDesktopTabs = {
     width: '50%',
@@ -732,7 +733,10 @@ export default function AgreementSidePanel({
           );
 
         if (itemInList) {
-          if (event.target.value && event.target.value.includes('$')) {
+          if (
+            event.target.value &&
+            event.target.value.includes(selectedCurrency)
+          ) {
             let value = event.target.value.slice(1);
             value = value.replace(/,/g, '');
             itemInList[event.target.name] = value;
@@ -1739,6 +1743,7 @@ export default function AgreementSidePanel({
                 }
                 discountData={discountData}
                 servicesFees={servicesFees}
+                selectedCurrency={selectedCurrency}
               />
 
               {agreementData &&
@@ -1843,6 +1848,7 @@ export default function AgreementSidePanel({
                 discountData={discountData}
                 servicesFees={servicesFees}
                 getData={getData}
+                selectedCurrency={selectedCurrency}
               />
               <DspAdvertising
                 executeScroll={executeScroll}

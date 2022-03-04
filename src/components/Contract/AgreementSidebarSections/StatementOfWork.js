@@ -74,6 +74,7 @@ function StatementOfWork({
   discountData,
   servicesFees,
   getData,
+  selectedCurrency,
 }) {
   const contractType = formData?.contract_type;
   const additionalOneTimeServicesLength =
@@ -305,6 +306,7 @@ function StatementOfWork({
                 }
                 discountData={discountData}
                 servicesFees={servicesFees}
+                selectedCurrency={selectedCurrency}
               />
 
               {accountType === 'Hybrid' ? (
@@ -464,6 +466,7 @@ StatementOfWork.defaultProps = {
   discountData: [],
   servicesFees: {},
   getData: () => {},
+  selectedCurrency: '$',
 };
 
 StatementOfWork.propTypes = {
@@ -545,4 +548,5 @@ StatementOfWork.propTypes = {
   discountData: [],
   servicesFees: shape({}),
   getData: func,
+  selectedCurrency: string,
 };

@@ -147,6 +147,7 @@ RevenueThreshold.defaultProps = {
   generateHTML: () => {},
   formData: {},
   feeStructureErrors: {},
+  selectedCurrency: '$',
 };
 
 RevenueThreshold.propTypes = {
@@ -157,5 +158,5 @@ RevenueThreshold.propTypes = {
   generateHTML: func,
   section: string.isRequired,
   feeStructureErrors: shape({}),
-  selectedCurrency: string.isRequired,
+  selectedCurrency: string,
 };
