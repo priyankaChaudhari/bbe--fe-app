@@ -3313,7 +3313,7 @@ export default function ContractContainer() {
         );
       }
 
-      if (updatedFormData?.fee_structure || updatedFormData?.currency) {
+      if (updatedFormData?.fee_structure) {
         const type = formData?.seller_type?.label?.toLowerCase();
         if (type === 'hybrid') {
           sellerFeeStructureApi = saveFeeStructure(
