@@ -20,7 +20,7 @@ export default function OneTimeAgreement({
   userRole,
 }) {
   const loader = useSelector((state) => state.accountState.isLoading);
-
+  // console.log("@@@")
   const addNewOneTime = () => {
     const data = {
       customer_id: id,
