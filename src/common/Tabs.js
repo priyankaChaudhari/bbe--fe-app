@@ -36,6 +36,10 @@ const Tabs = styled.div`
       cursor: pointer;
       padding: 0 15px 15px 15px;
 
+      &:first-child {
+        margin-left: 16px;
+      }
+
       &:last-child {
         margin-right: 0;
       }
@@ -45,7 +49,7 @@ const Tabs = styled.div`
       }
 
       &.active {
-        border-bottom: 2px solid ${Theme.orange};
+        border-bottom: 3px solid ${Theme.orange};
         color: ${Theme.black};
         font-family: ${Theme.titleFontFamily};
       }
