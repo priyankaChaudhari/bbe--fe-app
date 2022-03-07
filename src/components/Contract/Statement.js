@@ -401,7 +401,7 @@ export default function Statement({
               <td style="border: 1px solid black;padding: 13px;">${
                 item.service ? item.service.name : item?.name
               }</td>
-              <td style="border: 1px solid black;padding: 13px;">  <span style=" background:#ffe5df; padding: 4px 9px;"> 25% of recovered $<span>&#39;</span>s </span></td>
+              <td style="border: 1px solid black;padding: 13px;">  <span style=" background:#ffe5df; padding: 4px 9px;"> 25% of recovered ${selectedCurrency}<span>&#39;</span>s </span></td>
             </tr>`,
           );
         }
@@ -722,7 +722,11 @@ export default function Statement({
     return `<td style="border: 1px solid black;padding: 13px;">
      <span style=" background:#ffe5df; padding: 4px 9px;"> 
                 
-        ${fee ? `$${displayNumber(fee)}` : '$0'}
+        ${
+          fee
+            ? `${selectedCurrency}${displayNumber(fee)}`
+            : `${selectedCurrency}0`
+        }
         </span>
       </td>`;
   };
@@ -739,6 +743,7 @@ export default function Statement({
         </td>
         `;
   };
+
   const mapMonthlyServices = (key, data) => {
     const fields = [];
     if (key !== 'additional_one_time_services') {

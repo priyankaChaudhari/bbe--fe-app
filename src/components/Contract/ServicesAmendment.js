@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { arrayOf, shape } from 'prop-types';
+import { arrayOf, shape, string } from 'prop-types';
 
 import { ArrowRightIcon } from '../../theme/images';
 import {
@@ -20,7 +20,7 @@ import {
   vendorReportOptions,
 } from '../../constants';
 
-function ServicesAmendment({ amendmentData }) {
+function ServicesAmendment({ amendmentData, selectedCurrency }) {
   const allFields = [
     ...AgreementDetails,
     ...StatementDetails,
@@ -51,7 +51,7 @@ function ServicesAmendment({ amendmentData }) {
       if (value === null) {
         return 'None';
       }
-      return `$${
+      return `${selectedCurrency}${
         value && value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
       }`;
     }
@@ -226,6 +226,7 @@ export default ServicesAmendment;
 
 ServicesAmendment.defaultProps = {
   amendmentData: {},
+  selectedCurrency: '$',
 };
 ServicesAmendment.propTypes = {
   amendmentData: shape({
@@ -234,4 +235,5 @@ ServicesAmendment.propTypes = {
     monthly_services: arrayOf(shape({})),
     updated: arrayOf(shape({})),
   }),
+  selectedCurrency: string,
 };

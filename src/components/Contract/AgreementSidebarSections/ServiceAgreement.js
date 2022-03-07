@@ -55,6 +55,25 @@ function ServiceAgreement({
   const additionalOneTimeServicesLength =
     formData?.additional_one_time_services?.length;
 
+  let serviceAgreementArray;
+
+  if (formData?.customer_id?.pipeline === 'europe') {
+    let agreementWithCurrencyDetails = [];
+
+    agreementWithCurrencyDetails = [...AgreementDetails];
+    agreementWithCurrencyDetails.splice(3, 0, {
+      key: 'currency',
+      label: 'Agreement Currency',
+      type: 'choice',
+      placeholder: 'Select Agreement Currency',
+      isMandatory: true,
+      part: 'agreement',
+    });
+    serviceAgreementArray = [...agreementWithCurrencyDetails];
+  } else {
+    serviceAgreementArray = [...AgreementDetails];
+  }
+
   return (
     <>
       <div
@@ -102,7 +121,7 @@ function ServiceAgreement({
       <Collapse isOpened={openCollapse.agreement}>
         {loader ? null : (
           <ul className="collapse-inner">
-            {AgreementDetails.map((item) =>
+            {serviceAgreementArray.map((item) =>
               item.key !== 'contract_address' ? (
                 <React.Fragment key={item.key}>
                   {item.key === 'length' &&

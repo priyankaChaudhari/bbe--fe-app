@@ -40,33 +40,12 @@ export default function FeeStructureContainer({
   showRightTick,
   getFeeStructureDetails,
   manageErrorCount,
-  agreementCurrency,
   selectedCurrency,
   setSelectedCurrency,
 }) {
   const [vendorSameAsSeller, setVendorSameAsSeller] = useState(
     formData?.fee_structure?.vendor?.vendor_same_as_seller || false,
   );
-
-  let feeStructureArray;
-
-  if (formData?.customer_id?.pipeline === 'europe') {
-    let feeStructureWithCurrencyDetails = [];
-    feeStructureWithCurrencyDetails = [
-      ...feeStructureContainerDetails,
-      {
-        key: 'currency',
-        label: 'Agreement Currency',
-        type: 'choice',
-        placeholder: 'Select Agreement Currency',
-        isMandatory: true,
-        part: 'fee structure',
-      },
-    ];
-    feeStructureArray = [...feeStructureWithCurrencyDetails];
-  } else {
-    feeStructureArray = [...feeStructureContainerDetails];
-  }
 
   const clearError = (event, key) => {
     if (event && event.value) {
@@ -185,21 +164,6 @@ export default function FeeStructureContainer({
                   label: formData.primary_marketplace,
                 }
               : null
-            : item.key === 'currency'
-            ? {
-                value:
-                  agreementCurrency.find(
-                    (op) => op.value === formData[item.key],
-                  )?.value ||
-                  agreementCurrency.find((op) => op.label === selectedCurrency)
-                    ?.value,
-                label:
-                  agreementCurrency.find(
-                    (op) => op.value === formData[item.key],
-                  )?.label ||
-                  agreementCurrency.find((op) => op.label === selectedCurrency)
-                    ?.label,
-              }
             : formData[item.key] && formData[item.key].label
             ? {
                 value: formData[item.key].label,
@@ -210,8 +174,6 @@ export default function FeeStructureContainer({
         options={
           item.key === 'primary_marketplace'
             ? marketPlacesOptions
-            : item.key === 'currency'
-            ? agreementCurrency
             : accountTypeOptions
         }
         name={item.key}
@@ -271,7 +233,7 @@ export default function FeeStructureContainer({
         {loader ? null : (
           <ul className="collapse-inner">
             <li>
-              {feeStructureArray?.map((item) => (
+              {feeStructureContainerDetails?.map((item) => (
                 <ContractInputSelect
                   className={item.key !== 'primary_marketplace' ? 'mt-3' : ''}
                   key={item.key}>
@@ -432,7 +394,6 @@ FeeStructureContainer.propTypes = {
   showRightTick: func,
   getFeeStructureDetails: func,
   manageErrorCount: func,
-  agreementCurrency: shape({}).isRequired,
   selectedCurrency: string,
   setSelectedCurrency: func,
   // checkMandatoryFieldsOfFeeType: func,

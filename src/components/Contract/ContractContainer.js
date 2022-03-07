@@ -873,7 +873,13 @@ export default function ContractContainer() {
 
           setDetails(res.data);
           setFormData(res.data);
-          setSelectedCurrency(res?.data?.currency);
+          setSelectedCurrency(
+            res?.data?.currency === 'EUR'
+              ? '€'
+              : res?.data?.currency === 'GBP'
+              ? '£'
+              : '$',
+          );
           setOriginalData(res.data);
           getFeeStructureDetails(res?.data?.seller_type?.value, res?.data);
 
@@ -1820,7 +1826,10 @@ export default function ContractContainer() {
 
   const mapServiceTotal = () => {
     const totalFees = calculateTotalFee('onetime');
-    return `$${(totalFees?.oneTimeTotal ? totalFees?.oneTimeTotal : 0)
+    return `${selectedCurrency}${(totalFees?.oneTimeTotal
+      ? totalFees?.oneTimeTotal
+      : 0
+    )
       .toString()
       .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
   };
